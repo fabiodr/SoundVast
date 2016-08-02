@@ -1,0 +1,29 @@
+﻿@model CommentListViewModel
+
+<div class="col-md-12">
+    <div id="comment-count">
+        @Model.CommentCount
+    </div>
+
+    @Html.EditorFor(x => x.CreateCommentViewModel)
+
+    <div class="sort">
+        <ul class="outer">
+            <li class="title-holder">
+                <div class="rating title">Filter</div>
+                <ul class="menu">
+                    <li>
+                        <a asp-action="TopRated">Top Rated</a>
+                    </li>
+                    <li>
+                        <a asp-action="Newest">Newest</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div id="comments" data-url="@Url.Action("InfiniteScroll")">
+        @await Component.InvokeAsync("TopRated", new { audioId = Model.AudioId, sortDescending = true })
+    </div>
+</div>

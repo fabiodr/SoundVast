@@ -1,0 +1,6 @@
+﻿@model LikedPlaylistViewModel
+
+<a asp-action="Playlist" asp-controller="Playlists" class="cover-image playlist-cover">
+    <img src="@Model.ImagePath"/>
+</a>
+<label asp-for="Name"></label>

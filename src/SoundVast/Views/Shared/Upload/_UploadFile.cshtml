@@ -1,0 +1,26 @@
+﻿<form asp-action="HandleFiles" asp-controller="UploadFile" method="get" enctype="multipart/form-data" class="dropzone" id="file">
+</form>
+
+<br />
+<form asp-action="UploadFile" asp-controller="UploadFile" method="post" class="upload file">
+    @Html.AntiForgeryToken()
+
+    @Html.Hidden("NameTags", Url.Action("GetAudioNames", "UploadFile"))
+
+    <ul class="nav nav-tabs fileStream-detail-tabs">
+        <li class="active">
+            <a data-toggle="tab" href="#upload-file-required-tab">Required Details</a>
+        </li>
+        <li>
+            <a data-toggle="tab" href="#upload-file-additional-tab">Additional Data</a>
+        </li>
+    </ul>
+
+    <br />
+    <div class="tab-content">
+        <div id="upload-file-required-tab" class="tab-pane fade in active"></div>
+        <div id="upload-file-additional-tab" class="tab-pane fade"></div>
+    </div>
+
+    <input type="submit" class="btn btn-1" value="Upload" />
+</form>

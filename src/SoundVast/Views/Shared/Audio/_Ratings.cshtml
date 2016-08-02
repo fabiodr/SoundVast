@@ -1,0 +1,14 @@
+﻿@model IRatable
+
+<!--Like percent number is calculated and assigned to .like-percentage in jquery-->
+<span class="like-percentage">
+    <i class="fa fa-thumbs-up" data-toggle="tooltip" data-placement="bottom" title="Like percentage"></i>
+</span>
+
+<div class="ratings-container">
+    <div class="ratings-bar">
+        <!-- Set width in jquery based on likes/dislikes -->
+        <div class='like-bar' data-likes="@Model.Likes"></div>
+        <div class='dislike-bar' data-dislikes="@Model.Dislikes"></div>
+    </div>
+</div>

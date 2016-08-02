@@ -1,0 +1,12 @@
+﻿@model SearchViewModel
+
+<form asp-action="Search" asp-controller="Audio" id="search" data-tags-url="@Url.Action("SetSearchTags")">
+    <i class="fa fa-search"></i>
+    <input type="search" placeholder="Search" id="search" name="search" />
+
+    <div id="filter">
+        <span><strong>Filter</strong></span>
+        <label asp-for="SelectedFiltersDisplay"></label>
+        <input asp-for="SelectedFilter" hidden/>
+    </div>
+</form>

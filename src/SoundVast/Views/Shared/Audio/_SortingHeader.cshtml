@@ -1,0 +1,70 @@
+﻿<div class="row" id="body-header">
+    <ul class="outer col-md-3"></ul>
+    <ul class="outer col-md-6">
+        <li class="title-holder">
+            <a asp-action="Categories" class="categories title">Categories</a>
+        </li>
+        <li class="title-holder">
+            <a asp-action="Genres" class="genres title">Genres</a>
+        </li>
+        <li class="title-holder">
+            <a asp-action="Newest" asp-route-category="@Context.Session.GetString("Category")" asp-route-genre="@Context.Session.GetString("Genre")" class="newest title">Newest</a>
+        </li>
+        <li class="title-holder">
+            <div class="rating title">Top Rated</div>
+            <ul class="menu">
+                <li>
+                    <a asp-action="TopRated" asp-route-dateFrom="@SoundVast.Utilities.DateFrom.Today" asp-route-category="@Context.Session.GetString("Category")" asp-route-genre="@Context.Session.GetString("Genre")" class="rating">Today</a>
+                </li>
+                <li>
+                    <a asp-action="TopRated" asp-route-dateFrom="@SoundVast.Utilities.DateFrom.Weekly" asp-route-category="@Context.Session.GetString("Category")" asp-route-genre="@Context.Session.GetString("Genre")" class="rating">Weekly</a>
+                </li>
+                <li>
+                    <a asp-action="TopRated" asp-route-dateFrom="@SoundVast.Utilities.DateFrom.Monthly" asp-route-category="@Context.Session.GetString("Category")" asp-route-genre="@Context.Session.GetString("Genre")" class="rating">30 Day's</a>
+                </li>
+                <li>
+                    <a asp-action="TopRated" asp-route-dateFrom="@SoundVast.Utilities.DateFrom.AllTime" asp-route-category="@Context.Session.GetString("Category")" asp-route-genre="@Context.Session.GetString("Genre")" class="rating">All Time</a>
+                </li>
+            </ul>
+        </li>
+        <li class="title-holder">
+            <div class="commented title">Most Commented</div>
+            <ul class="menu">
+                <li>
+                    <a asp-action="MostCommented" asp-route-dateFrom="@SoundVast.Utilities.DateFrom.AllTime" asp-route-category="@Context.Session.GetString("Category")" asp-route-genre="@Context.Session.GetString("Genre")" class="comment">Today</a>
+                </li>
+                <li>
+                    <a asp-action="MostCommented" asp-route-dateFrom="@SoundVast.Utilities.DateFrom.Weekly" asp-route-category="@Context.Session.GetString("Category")" asp-route-genre="@Context.Session.GetString("Genre")" class="comment">Weekly</a>
+                </li>
+                <li>
+                    <a asp-action="MostCommented" asp-route-dateFrom="@SoundVast.Utilities.DateFrom.Monthly" asp-route-category="@Context.Session.GetString("Category")" asp-route-genre="@Context.Session.GetString("Genre")" class="comment">30 Day's</a>
+                </li>
+                <li>
+                    <a asp-action="MostCommented" asp-route-dateFrom="@SoundVast.Utilities.DateFrom.AllTime" asp-route-category="@Context.Session.GetString("Category")" asp-route-genre="@Context.Session.GetString("Genre")" class="comment">All Time</a>
+                </li>
+            </ul>
+        </li>
+        <li class="title-holder">
+            <div class="played title">Most Played</div>
+            <ul class="menu">
+                <li>
+                    <a asp-action="MostPlayed" asp-route-dateFrom="@SoundVast.Utilities.DateFrom.Today" asp-route-category="@Context.Session.GetString("Category")" asp-route-genre="@Context.Session.GetString("Genre")" class="played">Today</a>
+                </li>
+                <li>
+                    <a asp-action="MostPlayed" asp-route-dateFrom="@SoundVast.Utilities.DateFrom.Weekly" asp-route-category="@Context.Session.GetString("Category")" asp-route-genre="@Context.Session.GetString("Genre")" class="played">Weekly</a>
+                </li>
+                <li>
+                    <a asp-action="MostPlayed" asp-route-dateFrom="@SoundVast.Utilities.DateFrom.Monthly" asp-route-category="@Context.Session.GetString("Category")" asp-route-genre="@Context.Session.GetString("Genre")" class="played">30 Day's</a>
+                </li>
+                <li>
+                    <a asp-action="MostPlayed" asp-route-dateFrom="@SoundVast.Utilities.DateFrom.AllTime" asp-route-category="@Context.Session.GetString("Category")" asp-route-genre="@Context.Session.GetString("Genre")" class="played">All Time</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <ul class="outer col-md-3">
+        <li class="pull-right">
+            <i class="fa fa-random" data-toggle="tooltip" data-placement="bottom" title="Play random"></i>
+        </li>
+    </ul>
+</div>

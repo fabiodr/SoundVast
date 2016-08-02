@@ -1,0 +1,29 @@
+﻿@model ProfileViewModel
+
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<div class="content-layout">
+    <label asp-for="UserName"></label>
+
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a data-toggle="tab" href="#playlist-tab">Playlist</a>
+        </li>
+        <li>
+            <a data-toggle="tab" href="#likes-tab">Likes</a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="playlist-tab" class="tab-pane fade in active">
+            @await Component.InvokeAsync("Playlist")
+        </div>
+        <div id="likes-tab" class="tab-pane fade">
+            @await Component.InvokeAsync("Likes")        
+        </div>
+    </div>
+</div>
+
+@{ Html.RenderPartial("_RootPlugin"); }

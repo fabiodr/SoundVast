@@ -1,0 +1,13 @@
+{
+  "name": "jQuery.grab",
+  "homepage": "https://github.com/jussi-kalliokoski/jQuery.grab",
+  "_release": "decbba1bbf",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "decbba1bbffc7118464d876f422e490564722a9f"
+  },
+  "_source": "https://github.com/jussi-kalliokoski/jQuery.grab.git",
+  "_target": "*",
+  "_originalSource": "https://github.com/jussi-kalliokoski/jQuery.grab.git"
+}

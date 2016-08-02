@@ -1,0 +1,46 @@
+﻿@{
+    ViewData["Title"] = "Upload";
+}
+
+@Html.Hidden("LiveStreamCreateUrl", Url.Action("LiveStreamCreate", "UploadLiveStream"))
+
+<div class="content-layout">
+    <div class="upload-tabs-container">
+        <h3>Upload Audio.</h3>
+
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a data-toggle="tab" href="#upload-file-tab">From File</a>
+            </li>
+            <li>
+                <a data-toggle="tab" href="#upload-livestream-tab">From Live Stream</a>
+            </li>
+        </ul>
+        <br />
+    </div>
+
+    <div class="tab-content">
+        <div id="upload-file-tab" class="tab-pane active">
+            @{ Html.RenderPartial("Upload/_UploadFile"); }
+        </div>
+        <div id="upload-livestream-tab" class="tab-pane">
+            @{ Html.RenderPartial("Upload/_UploadLiveStream"); }
+        </div>
+        <br />
+        <br />
+        <p class="tos fine-print">
+            By sharing fileStreams on SoundVast, you comply with our <a asp-action="TermsOfUse" asp-controller="Content">Terms of use</a>
+            and don't infringe on anyone else's rights.
+            Please check our <a asp-action="Copyright" asp-controller="Content">Copyright information</a> if you are unsure
+            (it's user friendly, promise!), as your upload will be taken down otherwise.
+        </p>
+    </div>
+</div>
+
+@{ Html.RenderPartial("_RootPlugin"); }
+
+@section Scripts{
+    <script>
+        initUploadAudio();
+    </script>
+}
