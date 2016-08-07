@@ -172,6 +172,21 @@ namespace SoundVast.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("SoundVast.Models.CommentModels.CommentRatingJoin", b =>
+                {
+                    b.Property<int>("CommentId");
+
+                    b.Property<int>("CommentRatingId");
+
+                    b.HasKey("CommentId", "CommentRatingId");
+
+                    b.HasIndex("CommentId");
+
+                    b.HasIndex("CommentRatingId");
+
+                    b.ToTable("CommentRatingJoin");
+                });
+
             modelBuilder.Entity("SoundVast.Models.IdentityModels.Audio", b =>
                 {
                     b.Property<int>("Id")
@@ -256,6 +271,8 @@ namespace SoundVast.Migrations
 
                     b.Property<int?>("OriginalCommentId");
 
+                    b.Property<int?>("RatingCountId");
+
                     b.Property<string>("UserId");
 
                     b.HasKey("Id");
@@ -263,6 +280,8 @@ namespace SoundVast.Migrations
                     b.HasIndex("AudioId");
 
                     b.HasIndex("OriginalCommentId");
+
+                    b.HasIndex("RatingCountId");
 
                     b.HasIndex("UserId");
 
@@ -355,6 +374,20 @@ namespace SoundVast.Migrations
                     b.HasDiscriminator<string>("Discriminator").HasValue("Rating");
                 });
 
+            modelBuilder.Entity("SoundVast.Models.IdentityModels.RatingCount", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Dislikes");
+
+                    b.Property<int>("Likes");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RatingCount");
+                });
+
             modelBuilder.Entity("SoundVast.Models.IdentityModels.Report", b =>
                 {
                     b.Property<int>("Id")
@@ -445,10 +478,6 @@ namespace SoundVast.Migrations
                 {
                     b.HasBaseType("SoundVast.Models.IdentityModels.Rating");
 
-                    b.Property<int>("CommentId");
-
-                    b.HasIndex("CommentId")
-                        .IsUnique();
 
                     b.ToTable("CommentRating");
 
@@ -505,6 +534,19 @@ namespace SoundVast.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("SoundVast.Models.CommentModels.CommentRatingJoin", b =>
+                {
+                    b.HasOne("SoundVast.Models.IdentityModels.Comment", "Comment")
+                        .WithMany("CommentRatingJoins")
+                        .HasForeignKey("CommentId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("SoundVast.Models.CommentModels.CommentRating", "CommentRating")
+                        .WithMany("CommentRatingJoins")
+                        .HasForeignKey("CommentRatingId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("SoundVast.Models.IdentityModels.Audio", b =>
                 {
                     b.HasOne("SoundVast.Models.IdentityModels.Category", "Category")
@@ -550,6 +592,10 @@ namespace SoundVast.Migrations
                         .WithMany("Replies")
                         .HasForeignKey("OriginalCommentId");
 
+                    b.HasOne("SoundVast.Models.IdentityModels.RatingCount", "RatingCount")
+                        .WithMany()
+                        .HasForeignKey("RatingCountId");
+
                     b.HasOne("SoundVast.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
@@ -593,14 +639,6 @@ namespace SoundVast.Migrations
                     b.HasOne("SoundVast.Models.IdentityModels.AudioFile", "AudioFile")
                         .WithMany()
                         .HasForeignKey("AudioFileId");
-                });
-
-            modelBuilder.Entity("SoundVast.Models.CommentModels.CommentRating", b =>
-                {
-                    b.HasOne("SoundVast.Models.IdentityModels.Comment", "Comment")
-                        .WithOne("Rating")
-                        .HasForeignKey("SoundVast.Models.CommentModels.CommentRating", "CommentId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("SoundVast.Models.CommentModels.CommentReport", b =>

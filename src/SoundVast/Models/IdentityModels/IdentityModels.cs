@@ -221,9 +221,11 @@ namespace SoundVast.Models.IdentityModels
 
         public string Body { get; set; }
         public DateTime Date { get; set; }
+        public virtual RatingCount RatingCount { get; set; }
         public virtual Audio Audio { get; set; }
+        public string UserId { get; set; }
         public virtual ApplicationUser User { get; set; }
-        public virtual CommentRating Rating { get; set; }
+        public virtual ICollection<CommentRatingJoin> CommentRatingJoins { get; set; }
         public virtual ICollection<CommentReport> Reports { get; set; }
         public virtual ICollection<Comment> Replies { get; set; }
         public virtual Comment OriginalComment { get; set; }
@@ -238,6 +240,22 @@ namespace SoundVast.Models.IdentityModels
         {
             Date = DateTime.Now;
             Body = body;
+        }
+    }
+
+    public class RatingCount : Entity
+    {
+        public int Likes { get; set; }
+        public int Dislikes { get; set; }
+
+        public void ModifyLike(RatingValue ratingValue)
+        {
+            Likes += (int)ratingValue;
+        }
+
+        public void ModifyDislike(RatingValue ratingValue)
+        {
+            Dislikes += (int)ratingValue;
         }
     }
 }

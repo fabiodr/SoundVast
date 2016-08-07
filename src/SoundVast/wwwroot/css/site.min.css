@@ -769,7 +769,7 @@ header {
         padding: 0;
     }
 
-        header .outer .links-container {
+        header .outer .nav-dropdown {
             border: none;
             color: #157bf8;
             cursor: pointer;
@@ -794,14 +794,12 @@ header {
             position: relative;
         }
 
-        header .outer .links-container > span,
+        header .outer .nav-dropdown > span,
         header .outer a.nav-link {
             font-weight: bold;
         }
 
-            header .outer a.nav-link:hover,
-            header .outer .misc-links:hover,
-            header .outer .user-links:hover {
+            header .outer a.nav-link:hover {
                 background-color: #cccccc;
                 text-decoration: none;
             }

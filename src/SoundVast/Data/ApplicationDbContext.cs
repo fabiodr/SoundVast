@@ -15,6 +15,7 @@ namespace SoundVast.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+        public DbSet<RatingCount> RatingCount { get; set; }
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<Link> Links { get; set; }
         public DbSet<Genre> Genres { get; set; }
@@ -37,9 +38,10 @@ namespace SoundVast.Data
         {
             modelBuilder.Entity<AudioGenre>().HasKey(x => new { x.AudioId, x.GenreId });
             modelBuilder.Entity<FileStream>().HasMany(x => x.Links).WithOne().OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<CommentRatingJoin>().HasKey(x => new { x.CommentId, x.CommentRatingId });
             modelBuilder.Entity<Comment>().HasMany(x => x.Reports).WithOne(x => x.Comment).OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<Comment>().HasMany(x => x.Replies).WithOne(x => x.OriginalComment);
-            modelBuilder.Entity<Comment>().HasOne(x => x.Rating).WithOne(x => x.Comment).HasForeignKey<CommentRating>(x => x.CommentId);
+            //modelBuilder.Entity<Comment>().HasMany(x => x.Ratings).WithOne(x => x.Comment).HasForeignKey(x => x.CommentId);
 
             //  modelBuilder.Entity<Comment>().HasOptional(x => x.User);
 

@@ -8,13 +8,16 @@ using SoundVast.Repository;
 using Microsoft.EntityFrameworkCore;
 using SoundVast.Models;
 using System.Linq.Expressions;
+using SoundVast.CustomHelpers;
 
 namespace SoundVast.ServiceLayer
 {
     public interface ICommentService
     {
         Comment GetComment(int id);
-        Comment GetComment(int id, params Expression<Func<Comment, object>>[] includeExpressions);
+        Comment GetCommentForRating(int id);
+        Comment GetCommentForDelete(int id);
+        Comment GetOriginalComment(int id);
         ICollection<Comment> GetCommentsForAudio(int audioId, int pageNumber, int commentsPerPage);
         ICollection<Comment> GetSortedCommentsForAudio<TKey>(int audioId, int pageNumber, OrderingOption<Comment, TKey> orderingOption);
         ICollection<Comment> GetReplies(int id);
@@ -44,23 +47,46 @@ namespace SoundVast.ServiceLayer
             return _repository.Get(id);
         }
 
-        public Comment GetComment(int id, params Expression<Func<Comment, object>>[] includeExpressions)
+        public Comment GetCommentForRating(int id)
         {
-            return _repository.Include(includeExpressions).SingleOrDefault(x => x.Id == id);
+            return _repository.GetAll()
+                .Include(x => x.CommentRatingJoins)
+                .ThenInclude(x => x.CommentRating)
+                .Include(x => x.User)
+                .Include(x => x.Audio)
+                .Include(x => x.RatingCount)
+                .SingleOrDefault(x => x.Id == id);
+        }
+
+        public Comment GetCommentForDelete(int id)
+        {
+            return _repository.GetAll()
+                .Include(x => x.Audio)
+                .Include(x => x.Replies)
+                .Include(x => x.User)
+                .SingleOrDefault(x => x.Id == id);
+        }
+
+        public Comment GetOriginalComment(int id)
+        {
+            return _repository.GetAll()
+                .Include(x => x.Replies)
+                .Include(x => x.Audio)
+                .SingleOrDefault(x => x.Id == id);
         }
 
         public ICollection<Comment> GetCommentsForAudio(int audioId, int pageNumber, int commentsPerPage)
         {
             var startIndex = (pageNumber - 1) * commentsPerPage;
             return _repository.GetAll().ToList();
-       //     return _repository.GetAll().ForAudio(audioId).Where(x => x.OriginalComment == null).Skip(startIndex).Take(commentsPerPage).ToList();
+            //     return _repository.GetAll().ForAudio(audioId).Where(x => x.OriginalComment == null).Skip(startIndex).Take(commentsPerPage).ToList();
         }
 
         public ICollection<Comment> GetSortedCommentsForAudio<TKey>(int audioId, int pageNumber, OrderingOption<Comment, TKey> orderingOption)
         {
             var startIndex = (pageNumber - 1) * Comment.CommentsPerPage;
             var comments = _repository.GetAll().Include(x => x.User).Include(x => x.Replies).ForAudio(audioId)
-                .Where(x => x.Replies.Any())/*.WithOrdering(orderingOption)*/;
+                .Where(x => x.OriginalComment == null).WithOrdering(orderingOption);
 
             foreach (var comment in comments)
             {
@@ -94,12 +120,9 @@ namespace SoundVast.ServiceLayer
 
         public bool Edit(Comment comment, string body, ApplicationUser user)
         {
-            //This is needed to load the user into memory so we can assign null to it.
-            var dummy = comment.User;
-
             comment.Body = body;
-            comment.User = user;
 
+            comment.UserId = null;
             if (!Validate(comment))
                 return false;
 

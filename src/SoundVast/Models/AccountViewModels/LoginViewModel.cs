@@ -9,11 +9,13 @@ namespace SoundVast.Models.AccountViewModels
     public class LoginViewModel
     {
         [Required]
-        [EmailAddress]
-        public string Email { get; set; }
+        [StringLength(15, MinimumLength = 3, ErrorMessage = "Your username will be between 3-15 characters")]
+        [RegularExpression(@"^[a-zA-Z0-9]+$", ErrorMessage = "Your username will only contain letters and/or numbers")]
+        public string UserName { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
+        [Display(Name = "Password")]
         public string Password { get; set; }
 
         [Display(Name = "Remember me?")]

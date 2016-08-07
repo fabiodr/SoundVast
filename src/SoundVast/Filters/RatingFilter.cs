@@ -9,10 +9,10 @@ namespace SoundVast.Filters
 {
     public static class RatingFilter
     {
-        public static CommentRating SingleExistingComment(this IEnumerable<CommentRating> source, int commentId, string userId)
-        {
-            return source.SingleOrDefault(x => x.Comment.Id == commentId && x.User.Id == userId);
-        }
+        //public static CommentRating SingleExistingComment(this IEnumerable<CommentRating> source, int commentId, string userId)
+        //{
+        //    return source.SingleOrDefault(x => x.Comment.Id == commentId && x.User.Id == userId);
+        //}
 
         //public static TRating SingleExistingAudio<TRating>(this IEnumerable<TRating> source, int audioId, string userId)
         //    where TRating : Rating

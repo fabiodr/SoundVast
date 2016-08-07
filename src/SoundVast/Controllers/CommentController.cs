@@ -49,20 +49,28 @@ namespace SoundVast.Controllers
         [HttpPost]
         public JsonResult Rate(int id, bool liked)
         {
-            var comment = _commentService.GetComment(id, x => x.Rating, x => x.User, x => x.Rating, x => x.Audio);
-            var existingRating = comment.Rating;
+            var comment = _commentService.GetCommentForRating(id);
+            var existingRating = comment.CommentRatingJoins.SingleOrDefault(x => x.CommentRating.User.Id == User.FindFirst(ClaimTypes.NameIdentifier).Value && x.Comment.Id == id);
+
+            comment.RatingCount = comment.RatingCount ?? new RatingCount();
 
             var newRating = new CommentRating
             {
-                Comment = comment,
+                CommentRatingJoins = new List<CommentRatingJoin>(),
                 User = comment.User,
                 Liked = liked
             };
 
-            _ratingService.Add(comment.Rating, newRating, existingRating, liked);
+            newRating.CommentRatingJoins.Add(new CommentRatingJoin { Comment = comment, CommentRating = newRating } );
 
-            var rating = new { /*comment.Rating.Likes, comment.Rating.Dislikes*/ };
-            var e = _ratingService.GetRating(newRating.Id, x => x.Comment, x => x.User);
+            _ratingService.Add(comment.RatingCount, newRating, existingRating?.CommentRating, liked);
+
+            var rating = new
+            {
+                likes = comment.RatingCount.Likes,
+                dislikes = comment.RatingCount.Dislikes
+            };
+
             return Json(rating);
         }
 
@@ -163,7 +171,7 @@ namespace SoundVast.Controllers
         public async Task<IActionResult> Reply(ReplyCommentViewModel replyCommentViewModel)
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
-            var originalComment = _commentService.GetComment(replyCommentViewModel.OriginalCommentId, x => x.Audio, x => x.Replies);
+            var originalComment = _commentService.GetOriginalComment(replyCommentViewModel.OriginalCommentId);
 
             //ToDo: Notify the original user about the reply
             var originalUser = originalComment.User;
@@ -191,7 +199,7 @@ namespace SoundVast.Controllers
         [HttpPost]
         public IActionResult Delete(int id)
         {
-            var comment = _commentService.GetComment(id, x => x.Replies);
+            var comment = _commentService.GetCommentForDelete(id);
 
             if (!comment.Replies.Any())
             {
@@ -215,7 +223,8 @@ namespace SoundVast.Controllers
             var comment = new Comment(createCommentViewModel.Body)
             {
                 Audio = _audioService.GetAudio(createCommentViewModel.AudioId),
-                User = user
+                User = user,
+                UserId = user.Id
             };
 
             if (!_commentService.Add(comment))

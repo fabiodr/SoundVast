@@ -1,0 +1,35 @@
+@model ExternalLoginListViewModel
+@inject SignInManager<ApplicationUser> SignInManager
+
+@{
+    var loginProviders = SignInManager.GetExternalAuthenticationSchemes().ToList();
+
+    if (loginProviders.Count == 0)
+    {
+        <div>
+            <p>
+                There are no external authentication services configured. Please refresh the page. If the problem persists, contact us.
+            </p>
+        </div>
+    }
+    else
+    {
+        <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+            <div id="social-login-list">
+                <div class="row-eq-height">
+                    @foreach (var provider in loginProviders)
+                    {
+                        <div class="col-centered">
+                            <button type="submit" class="no-button" value="@provider.AuthenticationScheme" name="provider" title="Log in using your @provider.DisplayName account)">
+                                <img class="social-login" id="@provider.AuthenticationScheme" src="@Url.Content(string.Format($"~/images/social-logins/{@provider.AuthenticationScheme}_40.png"))" alt="@provider.DisplayName External Login" )" />
+                            </button>
+                        </div>
+                    }
+                </div>
+            </div>
+            <hr class="hr-popup" />
+        </form>
+    }
+}
+
+

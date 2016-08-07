@@ -24,7 +24,7 @@ namespace SoundVast.ViewComponents
 
         public IViewComponentResult Invoke(int audioId, bool sortDescending, int pageNumber = 1)
         {
-            var comments = _commentService.GetSortedCommentsForAudio(audioId, pageNumber, new OrderingOption<Comment, int>(x => 3 /*x.Rating.Likes*/, sortDescending));
+            var comments = _commentService.GetSortedCommentsForAudio(audioId, pageNumber, new OrderingOption<Comment, int>(x => x.RatingCount.Likes, sortDescending));
             var commentViewModels = _mapper.Map<IEnumerable<CommentViewModel>>(comments);
 
             return View(commentViewModels);

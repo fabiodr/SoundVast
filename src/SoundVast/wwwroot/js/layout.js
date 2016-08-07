@@ -20,25 +20,14 @@ $(function () {
 
     $("[data-toggle=\"tooltip\"]").tooltip();
 
-    $(".misc-links").mouseenter(function () {
+    $(".nav-dropdown").mouseenter(function () {
         $(this).children("ul.menu").fadeIn("fast");
     });
 
-    $(".misc-links").mouseleave(function () {
-        if (!($(".misc-links").is(":hover")) &&
-            !($(".misc-links > .menu").is(":hover"))) {
-            $(".misc-links > .menu").fadeOut("fast");
-        }
-    });
-
-    $(".user-links").mouseenter(function () {
-        $(this).children("ul.menu").fadeIn("fast");
-    });
-
-    $(".user-links, .user-links + .menu").mouseleave(function () {
-        if (!($(".user-links").is(":hover")) &&
-            !($(".user-links > .menu").is(":hover"))) {
-            $(".user-links > .menu").fadeOut("fast");
+    $(".nav-dropdown").mouseleave(function () {
+        if (!($(".nav-dropdown").is(":hover")) &&
+            !($(".nav-dropdown > .menu").is(":hover"))) {
+            $(".nav-dropdown > .menu").fadeOut("fast");
         }
     });
 
@@ -68,29 +57,59 @@ $(function () {
         rate($(this), $(this).siblings(".fa-arrow-up"), $(this).data().url);
     });
 
-    ajaxLinkRegister(".nav-link.logo");
-    ajaxLinkRegister(".nav-link.audio", initFrontpageAudio);
-    ajaxLinkRegister(".nav-link.live-stream", initLiveStream);
-    ajaxLinkRegister(".nav-link.upload", initUploadAudio);
-    ajaxLinkRegister(".nav-link.profile", initProfile);
-    ajaxLinkRegister(".nav-link#login-link");
-    ajaxLinkRegister(".nav-link#register-link");
-    ajaxLinkRegister(".nav-link.about-us");
-    ajaxLinkRegister(".nav-link.privacy");
-    ajaxLinkRegister(".nav-link.copyright");
-    ajaxLinkRegister(".nav-link.terms-of-use");
+    $(".popup-link").click(function (e) {
+        e.preventDefault();
 
-    function ajaxLinkRegister(selector, initFunction) {
-        $(selector).click(function (e) {
+        $.get($(this).attr("href")).success(function (data) {
+            showPopup(data)
+        });
+    });
+
+    $(".nav-link.logo, .nav-link.audio").click(function () {
+        $.get($(this).attr("href")).success(function (data) {
+            $("#body-content").html(data);
+            updateHistory(e.currentTarget.pathname);
+            initFrontpageAudio();
+        });
+    });
+
+    $(".nav-link.live-stream").click(function () {
+        $.get($(this).attr("href")).success(function (data) {
+            $("#body-content").html(data);
+            updateHistory(e.currentTarget.pathname);
+            initLiveStream();
+        });
+    });
+
+    $(".nav-link.upload").click(function () {
+        $.get($(this).attr("href")).success(function (data) {
+            $("#body-content").html(data);
+            updateHistory(e.currentTarget.pathname);
+            initUploadAudio();
+        });
+    });
+
+    $(".nav-link.profile").click(function () {
+        $.get($(this).attr("href")).success(function (data) {
+            $("#body-content").html(data);
+            updateHistory(e.currentTarget.pathname);
+            initProfile();
+        });
+    });
+
+    var navLinkStandardSelectors = [
+        ".nav-link.about-us",
+        ".nav-link.privacy",
+        ".nav-link.copyright",
+        ".nav-link.terms-of-use"
+    ];
+
+    for (i in navLinkStandardSelectors) {
+        $(navLinkStandardSelectors[i]).click(function (e) {
             e.preventDefault();
-
-            $.get($(this).attr("href"), function (data) {
+            $.get($(this).attr("href")).success(function (data) {
                 $("#body-content").html(data);
                 updateHistory(e.currentTarget.pathname);
-
-                if (typeof (initFunction) !== "undefined") {
-                    initFunction();
-                }
             });
         });
     }
@@ -176,19 +195,13 @@ function initFooterPlayer(playlistData) {
     });
 }
 
-function changePlayOrInitPlayer(jPlayerPlaylist, url, audioId, initjPlayerPlaylistFunc) {
-    //There is no jPlayer instansiated
-    if (typeof (jPlayerPlaylist) === "undefined") {
-        $.ajax({
-            url: url,
-            method: "post",
-            success: function (data) {
-                initjPlayerPlaylistFunc(data);
-            }
-        });
-        return;
-    }
+function initPlayer(url, initjPlayerPlaylistFunc) {
+    $.post(url).success(function (data) {
+        initjPlayerPlaylistFunc(data);
+    });
+}
 
+function changeOrPlayPlayer(jPlayerPlaylist, url, audioId) {
     //If the audio the user clicked is already in the playlist then play it, else change playlists
     var current = $.grep(jPlayerPlaylist.playlist, function (o, i) {
         //Same audio
@@ -205,12 +218,8 @@ function changePlayOrInitPlayer(jPlayerPlaylist, url, audioId, initjPlayerPlayli
 
     //Audio that the user clicked on is not in the playlist
     if (!current.length) {
-        $.ajax({
-            url: url,
-            method: "post",
-            success: function (data) {
-                jPlayerPlaylist.setPlaylist(data);
-            }
+        $.post(url).success(function (data) {
+            jPlayerPlaylist.setPlaylist(data);
         });
     }
 }
@@ -305,8 +314,8 @@ function rate($elem, $otherElem, url) {
         method: "post",
         dataType: "json",
         success: function (data) {
-            $elem.siblings(".likes").html(data.Likes);
-            $elem.siblings(".dislikes").html(data.Dislikes);
+            $elem.closest(".rating").find(".likes").html(data.likes);
+            $elem.closest(".rating").find(".dislikes").html(data.dislikes);
 
             if ($elem.hasClass("clicked")) {
                 //User has already rated, so set color to default

@@ -57,18 +57,6 @@ namespace SoundVast.Repository
             return paths.Aggregate(query, (current, path) => current.Include(path));
         }
 
-        //public IQueryable<T> ThenInclude(params Expression<Func<T, object>>[] paths)
-        //{
-        //    var query = Context.Set<T>().AsQueryable();
-
-        //    foreach (var include in includes)
-        //    {
-                
-        //    }
-
-        //    return paths.Aggregate(query, (current, path) => current.Include(path));
-        //}
-
         public virtual void Add(T entity)
         {
             Context.Set<T>().Add(entity);

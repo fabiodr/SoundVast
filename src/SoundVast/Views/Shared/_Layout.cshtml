@@ -74,7 +74,7 @@
                             @if (User.Identity.IsAuthenticated)
                             {
                                 <li>
-                                    <div class="user-links links-container">
+                                    <div class="nav-dropdown">
                                         <span>@User.Identity.Name</span>
                                         <ul class="menu">
                                             <li>
@@ -84,7 +84,7 @@
                                                 <form asp-action="Logout" asp-controller="Account" name="logout-form" id="logout-form">
                                                     @Html.AntiForgeryToken()
 
-                                                    <input type="submit" value="Logout" class="user-link" />
+                                                    <input type="submit" value="Logout" />
                                                 </form>
                                             </li>
                                         </ul>
@@ -101,32 +101,32 @@
                                 </li>
                             }
                             <li>
-                                <div class="misc-links links-container">
+                                <div class="nav-dropdown">
                                     <span><i class="fa fa-bars"></i></span>
                                     <ul class="menu">
                                         <li>
-                                            <a asp-action="AboutUs" asp-controller="Content" class="misc-link about-us">About us</a>
+                                            <a asp-action="AboutUs" asp-controller="Content" class="nav-link about-us">About us</a>
                                         </li>
                                         <li>
-                                            <a asp-action="Privacy" asp-controller="Content" class="misc-link privacy">Privacy</a>
+                                            <a asp-action="Privacy" asp-controller="Content" class="nav-link privacy">Privacy</a>
                                         </li>
                                         <li>
-                                            <a asp-action="Copyright" asp-controller="Content" class="misc-link copyright">Copyright</a>
+                                            <a asp-action="Copyright" asp-controller="Content" class="nav-link copyright">Copyright</a>
                                         </li>
                                         <li>
-                                            <a asp-action="TermsOfUse" asp-controller="Content" class="misc-link terms-of-use">Terms of Use</a>
+                                            <a asp-action="TermsOfUse" asp-controller="Content" class="nav-link terms-of-use">Terms of Use</a>
                                         </li>
 
                                         @if (User.IsInRole("Admin") && User.Identity.IsAuthenticated)
                                         {
                                             <li>
-                                                <a asp-action="Index" asp-controller="RolesAdmin" class="misc-link admin-roles">Admin Roles</a>
+                                                <a asp-action="Index" asp-controller="RolesAdmin" class="nav-link admin-roles">Admin Roles</a>
                                             </li>
                                             <li>
-                                                <a asp-action="Index" asp-controller="UsersAdmin" class="misc-link admin-user">Admin User</a>
+                                                <a asp-action="Index" asp-controller="UsersAdmin" class="nav-link admin-user">Admin User</a>
                                             </li>
                                             <li>
-                                                <a asp-action="ReportFileStreams" asp-controller="FileStream" class="misc-link report-file-stream">Report FileStreams</a>
+                                                <a asp-action="ReportFileStreams" asp-controller="FileStream" class="nav-link report-file-stream">Report FileStreams</a>
                                             </li>
                                         }
                                     </ul>

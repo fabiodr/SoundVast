@@ -13,7 +13,15 @@ namespace SoundVast.Models.CommentModels
 
     public class CommentRating : Rating
     {
+        public ICollection<CommentRatingJoin> CommentRatingJoins { get; set; }
+    }
+
+    public class CommentRatingJoin
+    {
         public int CommentId { get; set; }
         public virtual Comment Comment { get; set; }
+
+        public int CommentRatingId { get; set; }
+        public virtual CommentRating CommentRating { get; set; }
     }
 }

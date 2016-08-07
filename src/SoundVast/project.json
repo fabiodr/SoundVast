@@ -52,7 +52,10 @@
     "ExpressiveAnnotations": "2.8.0",
     "routedebugger": "2.1.5",
     "AutoMapper": "5.0.2",
-    "BundlerMinifier.Core": "2.1.258"
+    "BundlerMinifier.Core": "2.1.258",
+    "Microsoft.AspNetCore.Authentication.Facebook": "1.0.0",
+    "Microsoft.AspNetCore.Authentication.Google": "1.0.0",
+    "Microsoft.AspNetCore.Authentication.Twitter": "1.0.0"
   },
 
   "tools": {

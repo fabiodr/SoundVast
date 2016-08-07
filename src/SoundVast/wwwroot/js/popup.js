@@ -6,9 +6,13 @@
     $("#cover").fadeOut("fast");
 }
 
-function showPopup(data) {
+function showPopup(data, bShowWidePopup) {
     $("#popup").hide().html(data).fadeIn("fast");
     $("#cover").fadeIn("fast");
+
+    if (bShowWidePopup) {
+        $("#popup").addClass("popup-wide");
+    }
 }
 
 $("#cover").click(function () {

@@ -14,6 +14,8 @@ using SoundVast.Models.LiveStreamModels;
 using SoundVast.Models.LiveStreamViewModels;
 using SoundVast.Models.QuoteViewModels;
 using SoundVast.Models.UserViewModels;
+using SoundVast.ServiceLayer;
+using SoundVast.Models.CommentModels;
 
 namespace SoundVast
 {
@@ -43,7 +45,7 @@ namespace SoundVast
                     .ForMember(vm => vm.UserName, m => m.MapFrom(z => z.User.UserName))
                     .ForMember(vm => vm.ReplyViewModels, m => m.MapFrom(z => z.Replies))
                     .ForMember(vm => vm.OriginalCommentUserName, m => m.MapFrom(z => z.OriginalComment.User.UserName))
-                    .ForMember(vm => vm.OriginalCommentId, m => m.MapFrom(z => z.OriginalComment != null ? z.OriginalComment.Id : z.Id));                    
+                    .ForMember(vm => vm.OriginalCommentId, m => m.MapFrom(z => z.OriginalComment != null ? z.OriginalComment.Id : z.Id));
 
                 x.CreateMap<Category, CategoryViewModel>()
                     .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => _azureConfig.ContainerImage.GetBlockBlobReference(src.ImageFile.Name).Uri.AbsoluteUri))

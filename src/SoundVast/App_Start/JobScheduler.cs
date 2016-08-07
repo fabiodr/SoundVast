@@ -14,7 +14,7 @@ namespace SoundVast
             //IScheduler scheduler = StdSchedulerFactory.GetDefaultScheduler();
             //scheduler.Start();
 
-            //IJobDetail job = JobBuilder.Create<UpdateGenreJob>().Build();
+            //IJobDetail job = JobBuilder.Create<UpdateRating>().Build();
 
             //ITrigger trigger = TriggerBuilder.Create()
             //    .WithDailyTimeIntervalSchedule

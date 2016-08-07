@@ -9,11 +9,19 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using SoundVast.Models;
 using SoundVast.Utilities;
+using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 
 namespace SoundVast.CustomHelpers
 {
     public static class ExtensionMethod
     {
+        public static IQueryable<T> ThenInclude<T>(this IQueryable<T> query, params Expression<Func<T, object>>[] paths)
+            where T : class
+        {
+            return paths.Aggregate(query, (current, path) => current.Include(path));
+        }
+
         public static string FormatTime(this TimeSpan timeSpan)
         {
             if (timeSpan.Days > 0)

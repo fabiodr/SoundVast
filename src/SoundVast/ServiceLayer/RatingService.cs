@@ -10,8 +10,8 @@ namespace SoundVast.ServiceLayer
 {
     public interface IRatingService<T> where T : Rating
     {
-        T GetRating(int id, params Expression<Func<T, object>>[] includeExpressions);
-        bool Add(Rating rating, T newRating, T existingRating, bool liked);
+        ICollection<T> GetRatings();
+        bool Add(RatingCount ratingCount, T newRating, T existingRating, bool liked);
     }
 
     public class RatingService<T> : IRatingService<T> where T : Rating
@@ -30,19 +30,24 @@ namespace SoundVast.ServiceLayer
             return _validationDictionary.IsValid;
         }
 
-        //private void ModifyRating(Rating rating, bool liked, RatingValue value)
-        //{
-        //    if (liked)
-        //    {
-        //        rating.Audio.Rating.ModifyLike(value);
-        //    }
-        //    else
-        //    {
-        //        rating.Audio.Rating.ModifyDislike(value);
-        //    }
-        //}
+        public ICollection<T> GetRatings()
+        {
+            return _repository.GetAll().ToList();
+        }
 
-        public bool Add(Rating rating, T newRating, T existingRating, bool liked)
+        private void ModifyRating(RatingCount ratingCount, bool liked, RatingValue value)
+        {
+            if (liked)
+            {
+                ratingCount.ModifyLike(value);
+            }
+            else
+            {
+                ratingCount.ModifyDislike(value);
+            }
+        }
+
+        public bool Add(RatingCount ratingCount, T newRating, T existingRating, bool liked)
         {
             //Rating already exists 
             if (existingRating != null)
@@ -53,12 +58,12 @@ namespace SoundVast.ServiceLayer
                 if (existingRating.Liked == liked)
                 {
                     //If the user clicked on the same button again then remove the like or dislike
-                 //   ModifyRating(rating, liked, RatingValue.Decrement);
+                    ModifyRating(ratingCount, liked, RatingValue.Decrement);
                 }
                 //User clicked on the other button but the like/dislike also exists for that so remove it
                 else
                 {
-                 //   ModifyRating(rating, !liked, RatingValue.Decrement);
+                    ModifyRating(ratingCount, !liked, RatingValue.Decrement);
                 }
                 _repository.Save();
             }
@@ -66,7 +71,7 @@ namespace SoundVast.ServiceLayer
             //If user clicked on the other rating or none have been clicked
             if (existingRating?.Liked != liked)
             {
-              //  ModifyRating(rating, liked, RatingValue.Increment);
+                ModifyRating(ratingCount, liked, RatingValue.Increment);
 
                 if (!Validate(newRating))
                     return false;
@@ -74,11 +79,6 @@ namespace SoundVast.ServiceLayer
                 _repository.Add(newRating);
             }
             return true;
-        }
-
-        public T GetRating(int id, params Expression<Func<T, object>>[] includeExpressions)
-        {
-            return _repository.Include(includeExpressions).SingleOrDefault(x => x.Id == id);
         }
     }
 }

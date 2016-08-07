@@ -8,7 +8,7 @@
         var $self = $(this);
         var sortDescending = $self.data("sortDescending");
 
-        $.post($self.attr("action"), { audioId: audioId, sortDescending: sortDescending }).success(function (data) {
+        $.post($self.attr("href"), { audioId: audioId, sortDescending: sortDescending }).success(function (data) {
             $("#comments").html(data);
             $self.data("sortDescending", !sortDescending);
         });
@@ -28,14 +28,13 @@
 
     $("#comments .rating a").on("click", function (e) {
         e.preventDefault();
-        debugger;
         rate($(this).children(), $(this).siblings("a").children(), $(this).attr("href"));
     });
 
     $("#comments").on("click", ".fa-flag", function (e) {
         e.preventDefault();
 
-        $.get($self.attr("href")).success(function (data) {
+        $.get($(this).parent().attr("href")).success(function (data) {
             showPopup(data);
             $("#popup").addClass("popup-wide");
         });
@@ -49,7 +48,7 @@
 
         $commentBody.data("PreviousHtml", $commentBody.html());
 
-        $.get($self.attr("href")).success(function (data) {
+        $.get($self.parent().attr("href")).success(function (data) {
             $commentBody.html(data);
         });
     });
@@ -113,7 +112,7 @@
 
         var $self = $(this);
 
-        $.post($self.attr("href")).success(function (data) {
+        $.post($self.parent().attr("href")).success(function (data) {
             if (!data) {
                 $self.closest(".comment").remove();
             } else {
@@ -127,7 +126,7 @@
 
         var $self = $(this);
 
-        $.get($(this).data().url, function (data) {
+        $.get($self.attr("href"), function (data) {
             $self.closest(".comment").append(data);
             $self.hide();
         });

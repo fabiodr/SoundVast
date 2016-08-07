@@ -11,28 +11,28 @@
         <input type="hidden" asp-for="Id"/>
 
         <div class="form-group">
-            <div class="col-md-12">               
-                <input type="checkbox" asp-for="Reason" value="Spam" class="radio-button-list"/> Commercial advertising or spam
+            <div class="col-md-12">             
+                <input type="radio" asp-for="Reason" value="Spam" class="radio-button-list"/> Commercial advertising or spam
                 <span asp-validation-for="Reason" class="text-danger"></span>
             </div>
 
             <div class="col-md-12">
-                <input type="checkbox" asp-for="Reason" value="Pornography" class="radio-button-list" /> Pornography or sexually explicit material
+                <input type="radio" asp-for="Reason" value="Pornography" class="radio-button-list" /> Pornography or sexually explicit material
                 <span asp-validation-for="Reason" class="text-danger"></span>
             </div>
 
             <div class="col-md-12">
-                <input type="checkbox" asp-for="Reason" value="Harassment" class="radio-button-list" />  Harassment or bullying
+                <input type="radio" asp-for="Reason" value="Harassment" class="radio-button-list" />  Harassment or bullying
                 <span asp-validation-for="Reason" class="text-danger"></span>
             </div>
 
             <div class="col-md-12">
-                <input type="checkbox" asp-for="Reason" value="Copyright" class="radio-button-list" /> Copyrighted material
+                <input type="radio" asp-for="Reason" value="Copyright" class="radio-button-list" /> Copyrighted material
                 <span asp-validation-for="Reason" class="text-danger"></span>
             </div>
 
             <div class="col-md-12">
-                <input type="checkbox" asp-for="Reason" value="Other" class="radio-button-list" /> Other
+                <input type="radio" asp-for="Reason" value="Other" class="radio-button-list" /> Other
                 <span asp-validation-for="Reason" class="text-danger"></span>
             </div>
 

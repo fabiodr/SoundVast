@@ -1,5 +1,9 @@
 ﻿@model CommentViewModel
 
+@{ 
+    var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+}
+
 <div class="comment">
     @Model.DateSince
 
@@ -35,19 +39,19 @@
 
         @if (Model.UserId != null)
         {
-            if (Model.UserId == User.FindFirst(ClaimTypes.NameIdentifier).Value)
+            if (Model.UserId == currentUserId)
             {
-                <a asp-action="Edit" asp-route-id="@Model.Id" asp-route-liked="false">
+                <a asp-action="Edit" asp-route-id="@Model.Id">
                     <i class="fa fa-pencil" data-toggle="tooltip" data-placement="bottom" title="Edit"></i>
                 </a>
             }
-            <a asp-action="Report" asp-route-id="@Model.Id" asp-route-liked="false">
+            <a asp-action="Report" asp-route-id="@Model.Id">
                 <i class="fa fa-flag" data-toggle="tooltip" data-placement="bottom" title="Report"></i>
             </a>
 
-            if (Model.UserId == User.FindFirst(ClaimTypes.NameIdentifier).Value || User.IsInRole("Admin"))
+            if (Model.UserId == currentUserId || User.IsInRole("Admin"))
             {
-                <a asp-action="Delete" asp-route-id="@Model.Id" asp-route-liked="false">
+                <a asp-action="Delete" asp-route-id="@Model.Id">
                     <i class="fa fa-times" data-toggle="tooltip" data-placement="bottom" title="Delete"></i>
                 </a>
             }
@@ -55,7 +59,7 @@
     </div>
 
     <div class="reply-body">
-        <a asp-action="Reply" asp-route-originalCommentId="@Model.OriginalCommentId" class="@(Model.UserId == User.FindFirst(ClaimTypes.NameIdentifier).Value ? "disabledd" : "")">
+        <a asp-action="Reply" asp-route-originalCommentId="@Model.OriginalCommentId" class="@(Model.UserId == currentUserId ? "disabledd" : "")">
             Reply
         </a>
     </div>
