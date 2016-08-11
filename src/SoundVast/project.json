@@ -2,10 +2,18 @@
   "userSecretsId": "aspnet-SoundVast-3ec4d738-ff3f-4379-9b2d-6ff6e59dee40",
 
   "dependencies": {
+    "AutoMapper": "5.0.2",
+    "AzureSDK2.2DLLs": "1.0.0",
+    "BundlerMinifier.Core": "2.1.258",
+    "cloudscribe.Web.Pagination": "1.0.2-*",
     "elmah": "1.2.2",
     "elmah.corelibrary": "1.2.2",
     "Elmah.Mvc": "2.1.2",
+    "ExpressiveAnnotations": "2.8.0",
     "Microsoft.AspNetCore.Authentication.Cookies": "1.0.0",
+    "Microsoft.AspNetCore.Authentication.Facebook": "1.0.0",
+    "Microsoft.AspNetCore.Authentication.Google": "1.0.0",
+    "Microsoft.AspNetCore.Authentication.Twitter": "1.0.0",
     "Microsoft.AspNetCore.Diagnostics": "1.0.0",
     "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": "1.0.0",
     "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "1.0.0",
@@ -16,6 +24,7 @@
     },
     "Microsoft.AspNetCore.Server.IISIntegration": "1.0.0",
     "Microsoft.AspNetCore.Server.Kestrel": "1.0.0",
+    "Microsoft.AspNetCore.Session": "1.0.0",
     "Microsoft.AspNetCore.StaticFiles": "1.0.0",
     "Microsoft.EntityFrameworkCore.SqlServer": "1.0.0",
     "Microsoft.EntityFrameworkCore.SqlServer.Design": {
@@ -45,17 +54,8 @@
     "Microsoft.WindowsAzure.ConfigurationManager": "3.2.1",
     "Newtonsoft.Json": "9.0.1",
     "Quartz": "2.3.3",
-    "WindowsAzure.Storage": "7.1.2",
-    "cloudscribe.Web.Pagination": "1.0.2-*",
-    "Microsoft.AspNetCore.Session": "1.0.0",
-    "AzureSDK2.2DLLs": "1.0.0",
-    "ExpressiveAnnotations": "2.8.0",
     "routedebugger": "2.1.5",
-    "AutoMapper": "5.0.2",
-    "BundlerMinifier.Core": "2.1.258",
-    "Microsoft.AspNetCore.Authentication.Facebook": "1.0.0",
-    "Microsoft.AspNetCore.Authentication.Google": "1.0.0",
-    "Microsoft.AspNetCore.Authentication.Twitter": "1.0.0"
+    "WindowsAzure.Storage": "7.1.2"
   },
 
   "tools": {

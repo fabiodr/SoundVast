@@ -5,6 +5,7 @@ using SoundVast.Repository;
 using SoundVast.Filters;
 using SoundVast.Models.IdentityModels;
 using System.Linq.Expressions;
+using SoundVast.Models;
 
 namespace SoundVast.ServiceLayer
 {
@@ -79,6 +80,11 @@ namespace SoundVast.ServiceLayer
                 _repository.Add(newRating);
             }
             return true;
+        }
+
+        public void HandleRating(ApplicationUser user)
+        {
+
         }
     }
 }

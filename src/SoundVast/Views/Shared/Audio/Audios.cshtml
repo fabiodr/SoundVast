@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<AudiosViewModel>
 
 @{
-    ViewBag.Title = Context.Session.GetString("Category") + "s";
+    ViewData["Title"] = Context.Session.GetString("Category") + "s";
 }
 
 @section SortingSection
@@ -27,5 +27,5 @@
 </script>
 
 @section Scripts{
-    <script>initFrontpageAudio();</script>
+    @*<script>initFrontpageAudio();</script>*@
 }

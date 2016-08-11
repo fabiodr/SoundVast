@@ -128,6 +128,20 @@ namespace SoundVast.Models.IdentityModels
         }
     }
 
+    public class AudioRating : Rating
+    {
+        public ICollection<AudioRatingJoin> AudioRatingJoins { get; set; }
+    }
+
+    public class AudioRatingJoin
+    {
+        public int AudioId { get; set; }
+        public virtual Audio Audio { get; set; }
+
+        public int AudioRatingId { get; set; }
+        public virtual AudioRating AudioRating { get; set; }
+    }
+
     public class Audio : Entity, ICategorizable
     {
         public static int PageSize { get; } = 50;
@@ -138,12 +152,13 @@ namespace SoundVast.Models.IdentityModels
         public int UniqueViews { get; private set; }
         public DateTimeOffset UploadDate { get; private set; }
         public string UserId { get; set; }
-        //public virtual Rating Rating { get; set; }
         public virtual ApplicationUser User { get; set; }
         public virtual ImageFile ImageFile { get; set; }
         public virtual Category Category { get; set; }
+        public virtual RatingCount RatingCount { get; set; } = new RatingCount();
         public virtual ICollection<AudioGenre> Genres { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<AudioRatingJoin> AudioRatingJoins { get; set; }
 
         public Audio()
         {
@@ -221,7 +236,7 @@ namespace SoundVast.Models.IdentityModels
 
         public string Body { get; set; }
         public DateTime Date { get; set; }
-        public virtual RatingCount RatingCount { get; set; }
+        public virtual RatingCount RatingCount { get; set; } = new RatingCount();
         public virtual Audio Audio { get; set; }
         public string UserId { get; set; }
         public virtual ApplicationUser User { get; set; }

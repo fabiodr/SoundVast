@@ -640,7 +640,7 @@ nav input.search-focus {
     width: 300px;
 }
 
-.ui-autocomplete-genre {
+.ui-autocomplete-category {
     font-weight: bold;
     background-color: #b0c4de;
 }
@@ -650,7 +650,7 @@ nav input.search-focus {
     text-align: left;
 }
 
-    .ui-autocomplete > li:hover:not(.ui-autocomplete-genre) {
+    .ui-autocomplete > li:hover:not(.ui-autocomplete-category) {
         border-color: #6dcff6;
         box-shadow: 0 0 5px rgba(109, 207, 246, 0.5);
     }

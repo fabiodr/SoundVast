@@ -11,7 +11,9 @@
     "jPlayer": "https://github.com/happyworm/jPlayer.git#^2.9.2",
     "jquery-validation": "https://github.com/jzaefferer/jquery-validation.git#^1.15.0",
     "jQuery.grab": "https://github.com/jussi-kalliokoski/jQuery.grab.git",
-    "lodash": "https://github.com/lodash/lodash.git#^4.13.1"
+    "lodash": "https://github.com/lodash/lodash.git#^4.13.1",
+    "react": "^15.3.0",
+    "react-router": "^2.6.1"
   },
   "name": "SoundVast",
   "private": true,

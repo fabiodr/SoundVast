@@ -34,7 +34,7 @@ namespace SoundVast.Data
 
                 var fileStreamCategoryResources = FileStreamCategories.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
                 var radioStationCategoryResources = LiveStreamCategories.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
-                var placeHolderImage = new ImageFile("Placeholder-Genres.jpg");
+                var placeHolderImage = new ImageFile("Placeholder.jpg");
 
                 InitializeQuotes(context);
                 InitializeCategories<FileStreamCategory>(context, fileStreamCategoryResources, placeHolderImage);

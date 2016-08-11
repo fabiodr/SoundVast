@@ -17,7 +17,10 @@ namespace SoundVast.ServiceLayer
     {
         T GetAudio(int id);
         T GetAudio(int id, params Expression<Func<T, object>>[] includeExpressions);
+        T GetAudioForRating(int id);
         ICollection<T> GetAudios();
+        ICollection<T> GetAudiosForSearch();
+        ICollection<T> GetAudiosForSearchTags();
         ICollection<T> GetAudiosInGenreAndCategory(string category, string genre);
         ICollection<T> GetLikedAudiosForUser(string userId);
         ICollection<T> GetAudiosForUser(string userId);
@@ -52,6 +55,16 @@ namespace SoundVast.ServiceLayer
             return _repository.Get(id);
         }
 
+        public T GetAudioForRating(int id)
+        {
+            return _repository.GetAll()
+                .Include(x => x.AudioRatingJoins)
+                .ThenInclude(x => x.AudioRating)
+                .Include(x => x.User)
+                .Include(x => x.RatingCount)
+                .SingleOrDefault(x => x.Id == id);
+        }
+
         public T GetAudio(int id, params Expression<Func<T, object>>[] includeExpressions)
         {
             return _repository.Include(includeExpressions).SingleOrDefault(x => x.Id == id);
@@ -60,6 +73,16 @@ namespace SoundVast.ServiceLayer
         public ICollection<T> GetAudios()
         {
             return _repository.GetAll().ToList();
+        }
+
+        public ICollection<T> GetAudiosForSearch()
+        {
+            return _repository.GetAll().Include(x => x.ImageFile).ToList();
+        }
+
+        public ICollection<T> GetAudiosForSearchTags()
+        {
+            return _repository.GetAll().Include(x => x.Category).ToList();
         }
 
         public ICollection<T> GetAudiosInGenreAndCategory(string category, string genre)
@@ -81,8 +104,8 @@ namespace SoundVast.ServiceLayer
         public ICollection<T> OrderAudiosInGenreAndCategoryFromDate<TKey>(OrderingOption<T, TKey> orderingOption, DateTime date, string category, 
             string genre)
         {
-            return genre != null ? _repository.GetAll().WhereCategory(category).WhereGenre(genre).WhereDateFrom(date).WithOrdering(orderingOption).ToList()
-                                   : _repository.GetAll().WhereCategory(category).WhereDateFrom(date).WithOrdering(orderingOption).ToList();
+            return genre != null ? _repository.GetAll().Include(x => x.ImageFile).WhereCategory(category).WhereGenre(genre).WhereDateFrom(date).WithOrdering(orderingOption).ToList()
+                                   : _repository.GetAll().Include(x => x.ImageFile).WhereCategory(category).WhereDateFrom(date).WithOrdering(orderingOption).ToList();
         }
 
         public ICollection<T> GetPlaylist(int idToStart, int numberToTake, string category, string genre)

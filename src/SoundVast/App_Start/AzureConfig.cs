@@ -45,14 +45,14 @@ namespace SoundVast
         //   public LocalResource SoftwareResource { get; set; }
         public string FFmpegExePath { get; set; }
 
-        public AzureConfig()
+        public AzureConfig(string connectionString)
         {
-            Initialize();
+            Initialize(connectionString);
         }
 
-        private void Initialize()
+        private void Initialize(string connectionString)
         {
-            var storageAccount = CloudStorageAccount.Parse("UseDevelopmentStorage=true");
+            var storageAccount = CloudStorageAccount.Parse(connectionString);
             var blobClient = storageAccount.CreateCloudBlobClient();
 
             ContainerAudio = blobClient.GetContainerReference("audio");

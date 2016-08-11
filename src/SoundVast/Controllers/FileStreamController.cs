@@ -28,11 +28,12 @@ using SoundVast.Models.IdentityModels;
 using DateFrom = SoundVast.Utilities.DateFrom;
 using FileStream = SoundVast.Models.FileStreamModels.FileStream;
 using Stream = SoundVast.Utilities.Stream;
+using Microsoft.AspNetCore.Identity;
+using SoundVast.Models;
 
 namespace SoundVast.Controllers
 {
-    public class FileStreamController : AudioController<FileStream, FileStreamCategory, FileStreamGenre, FileStreamReport,
-        FileStreamRating>
+    public class FileStreamController : AudioController<FileStream, FileStreamCategory, FileStreamGenre, FileStreamReport>
     {
         private readonly IFileStreamService _fileStreamService;
         private readonly IAzureConfig _azureConfig;
@@ -45,8 +46,9 @@ namespace SoundVast.Controllers
             ICategoryService<FileStreamCategory> categoryService,
             IGenreService<FileStreamGenre> genreService,
             IReportService<FileStreamReport> reportService,
-            IRatingService<FileStreamRating> ratingService)
-            : base(mapper, serviceProvider, fileStreamService, categoryService, genreService, reportService, ratingService)
+            IRatingService<AudioRating> ratingService,
+            UserManager<ApplicationUser> userManager)
+            : base(mapper, serviceProvider, fileStreamService, categoryService, genreService, reportService, ratingService, userManager)
         {
             _fileStreamService = fileStreamService;
             _azureConfig = azureConfig;
@@ -57,7 +59,7 @@ namespace SoundVast.Controllers
         {
             var playlistData = new List<object>();
 
-            foreach (var audio in _fileStreamService.GetPlaylist(id, Models.IdentityModels.Audio.PlaylistCount,
+            foreach (var audio in _fileStreamService.GetPlaylist(id, Audio.PlaylistCount,
                 HttpContext.Session.GetString("Category"), HttpContext.Session.GetString("Genre")))
             {
                 playlistData.Add(new
@@ -75,12 +77,12 @@ namespace SoundVast.Controllers
 
         public IActionResult Genres()
         {
-            return ViewOrPartial(Genres<GenreViewModel>());
+            return ViewOrPartial("Audio/Genres", Genres<GenreViewModel>());
         }
 
         public IActionResult Categories()
         {
-            return ViewOrPartial(Categories<CategoryViewModel>());
+            return ViewOrPartial("Audio/Categories", Categories<CategoryViewModel>());
         }
 
         [Route("Newest/{category}/{genre?}")]
@@ -110,14 +112,9 @@ namespace SoundVast.Controllers
 
         public IActionResult FileStreams(string genre, string category = "Song", int pageNumber = 1)
         {
-            var e = _fileStreamService.GetAudios();
-            return ViewOrPartial("Audio/Audios", Audios<FileStreamsViewModel>(genre, category, pageNumber));
-        }
+            ViewBag.SortingText = genre + " audios in the " + category + " category";
 
-        [Route("Search/{searchString}")]
-        public IActionResult Search(string searchString, int pageNumber = 1)
-        {
-            return ViewOrPartial("Audio/Audios", Search<FileStreamsViewModel>(searchString));
+            return ViewOrPartial("Audio/Audios", Audios<FileStreamsViewModel>(genre, category, pageNumber));
         }
 
         //[AjaxAuthorize(Roles = "Admin")]

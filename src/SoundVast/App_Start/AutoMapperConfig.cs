@@ -71,9 +71,6 @@ namespace SoundVast
                 x.CreateMap<Audio, SimilarFileStreamViewModel>()
                     .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => _azureConfig.ContainerImage.GetBlockBlobReference(src.ImageFile.Name).Uri.AbsoluteUri));
 
-                x.CreateMap<Audio, AudiosViewModel>()
-                   .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => _azureConfig.ContainerImage.GetBlockBlobReference(src.ImageFile.Name).Uri.AbsoluteUri));
-
                 x.CreateMap<FileStream, LikedFileStreamViewModel>()
                     .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => _azureConfig.ContainerImage.GetBlockBlobReference(src.ImageFile.Name).Uri.AbsoluteUri));
 

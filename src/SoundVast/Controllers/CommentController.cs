@@ -47,31 +47,23 @@ namespace SoundVast.Controllers
         }
 
         [HttpPost]
-        public JsonResult Rate(int id, bool liked)
+        public async Task<JsonResult> Rate(int id, bool liked)
         {
+            var currentUser = await _userManager.GetUserAsync(User);
             var comment = _commentService.GetCommentForRating(id);
-            var existingRating = comment.CommentRatingJoins.SingleOrDefault(x => x.CommentRating.User.Id == User.FindFirst(ClaimTypes.NameIdentifier).Value && x.Comment.Id == id);
-
-            comment.RatingCount = comment.RatingCount ?? new RatingCount();
-
+            var existingRating = comment.CommentRatingJoins.SingleOrDefault(x => x.CommentRating.User.Id == currentUser.Id && x.Comment.Id == id);
             var newRating = new CommentRating
             {
                 CommentRatingJoins = new List<CommentRatingJoin>(),
-                User = comment.User,
+                User = currentUser,
                 Liked = liked
             };
 
-            newRating.CommentRatingJoins.Add(new CommentRatingJoin { Comment = comment, CommentRating = newRating } );
+            newRating.CommentRatingJoins.Add(new CommentRatingJoin { Comment = comment, CommentRating = newRating });
 
             _ratingService.Add(comment.RatingCount, newRating, existingRating?.CommentRating, liked);
 
-            var rating = new
-            {
-                likes = comment.RatingCount.Likes,
-                dislikes = comment.RatingCount.Dislikes
-            };
-
-            return Json(rating);
+            return Json(comment.RatingCount);
         }
 
         [HttpPost]

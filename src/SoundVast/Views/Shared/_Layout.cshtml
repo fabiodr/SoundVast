@@ -14,7 +14,7 @@
 
     <environment names="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-        <link rel="stylesheet" href="~/css/site.min.css" />
+        <link rel="stylesheet" href="~/css/site.css" />
         <link rel="stylesheet" href="~/lib/lib.min.css" />
     </environment>
     <environment names="Staging, Production">
@@ -46,7 +46,16 @@
     </environment>
 </head>
 <body>
-    <div class="row">
+
+<div id="app">
+    @RenderSection("SortingSection", false)
+
+    <section id="body-content">
+        @ViewBag.UserMessage
+        @RenderBody()
+    </section>
+</div>
+@*<div class="row">
         <div class="col-xs-12">
             <header>
                 <div class="wrapper container">
@@ -67,7 +76,7 @@
                                 <a asp-action="Upload" asp-controller="UploadMain" class="nav-link upload">Upload</a>
                             </li>
                             <li>
-                                @await Component.InvokeAsync("Search")
+                                @{ Html.RenderPartial("Search", new SearchViewModel()); }
                             </li>
                         </ul>
                         <ul class="outer pull-right">
@@ -205,30 +214,37 @@
                 </div>
             </div>
         </div>
-    </footer>
+    </footer>*@
 
-    <environment names="Development">
-        <script src="~/lib/jquery/dist/jquery.js"></script>
+<environment names="Development">
+    <script src="~/js/app.min.js"></script>
+    @*<script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/react/react.js"></script>
+        <script src="~/lib/react/react-dom.js"></script>
+        <script src="https://npmcdn.com/react-router/umd/ReactRouter.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/lib/jquery-ui/jquery-ui.js"></script>
         <script src="~/lib/select2/dist/js/select2.js"></script>
         <script src="~/lib/lib.min.js"></script>
         <script src="~/extended/extended.min.js"></script>
-        <script src="~/js/site.min.js" asp-append-version="true"></script>
-    </environment>
-    <environment names="Staging,Production">
-        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js" asp-fallback-src="~/lib/jquery/dist/jquery.min.js" asp-fallback-test="window.jQuery"></script>
-        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js" asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"></script>
-        <script src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.11.4/jquery-ui.min.js" asp-fallback-src="~/lib/jquery-ui/jquery-ui.min.js" asp-fallback-test="$.ui"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js" asp-fallback-src="~/lib/select2/dist/js/select2.min.js" asp-fallback-test="$.fn.select2"></script>
-        <script src="~/lib/lib.min.js"></script>
-        <script src="~/extended/extended.min.js" asp-append-version="true"></script>
-        <script src="~/js/site.min.js" asp-append-version="true"></script>
-    </environment>
+        <script src="~/js/site.min.js" asp-append-version="true"></script>*@
+</environment>
+<environment names="Staging,Production">
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js" asp-fallback-src="~/lib/jquery/dist/jquery.min.js" asp-fallback-test="window.jQuery"></script>
+    <script src="https://npmcdn.com/react@15.3.0/dist/react-with-addons.min.js" asp-fallback-src="~/lib/react/react.min.js" asp-fallback-test="require('react')"></script>
+    <script src="https://npmcdn.com/react-dom@15.3.0/dist/react-dom.min.js" asp-fallback-src="~/lib/react/react-dom.min.js" asp-fallback-test="require('react-dom')"></script>
+    <script src="https://npmcdn.com/react-router/umd/ReactRouter.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js" asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.11.4/jquery-ui.min.js" asp-fallback-src="~/lib/jquery-ui/jquery-ui.min.js" asp-fallback-test="$.ui"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js" asp-fallback-src="~/lib/select2/dist/js/select2.min.js" asp-fallback-test="$.fn.select2"></script>
+    <script src="~/lib/lib.min.js"></script>
+    <script src="~/extended/extended.min.js" asp-append-version="true"></script>
+    <script src="~/js/site.min.js" asp-append-version="true"></script>
+</environment>
 
-    <script type="text/loading-template">
+<script type="text/loading-template">
         <img class="loading" src="images/ajax-loader.gif" alt="loading" />
     </script>
-    @RenderSection("Scripts", false)
+@RenderSection("Scripts", false)
 </body>
 </html>

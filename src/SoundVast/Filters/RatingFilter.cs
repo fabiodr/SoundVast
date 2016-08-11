@@ -17,7 +17,7 @@ namespace SoundVast.Filters
         //public static TRating SingleExistingAudio<TRating>(this IEnumerable<TRating> source, int audioId, string userId)
         //    where TRating : Rating
         //{
-        //    return source.SingleOrDefault(x => x.Audio.Id == audioId && x.User.Id == userId);
+        //    return source.SingleOrDefault(x => x.AudioRating.User.Id == currentUser.Id && x.Audio.Id == id);
         //}
     }
 }

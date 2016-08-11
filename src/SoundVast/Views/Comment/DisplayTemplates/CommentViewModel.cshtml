@@ -1,6 +1,6 @@
 ﻿@model CommentViewModel
 
-@{ 
+@{
     var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 }
 
@@ -21,21 +21,19 @@
     </div>
 
     <div class="controls">
-        <div class="rating">
-            <div class="likes">
-                @Model.Likes
-            </div>
-            <a asp-action="Rate" asp-route-id="@Model.Id" asp-route-liked="true">
-                <i class="fa fa-arrow-up" data-toggle="tooltip" data-placement="bottom" title="Like"></i>
-            </a>
-
-            <div class="dislikes">
-                @Model.Dislikes
-            </div>
-            <a asp-action="Rate" asp-route-id="@Model.Id" asp-route-liked="false">
-                <i class="fa fa-arrow-down" data-toggle="tooltip" data-placement="bottom" title="Dislike"></i>
-            </a>
+        <div class="likes">
+            @Model.Likes
         </div>
+        <a asp-action="Rate" asp-route-id="@Model.Id" asp-route-liked="true" class="rating">
+            <i class="fa fa-arrow-up" data-toggle="tooltip" data-placement="bottom" title="Like"></i>
+        </a>
+
+        <div class="dislikes">
+            @Model.Dislikes
+        </div>
+        <a asp-action="Rate" asp-route-id="@Model.Id" asp-route-liked="false" class="rating">
+            <i class="fa fa-arrow-down" data-toggle="tooltip" data-placement="bottom" title="Dislike"></i>
+        </a>
 
         @if (Model.UserId != null)
         {

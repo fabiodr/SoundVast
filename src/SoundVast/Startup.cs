@@ -69,7 +69,7 @@ namespace SoundVast
             services.AddMvc();
             services.AddCloudscribePagination();
 
-            var azureConfig = new AzureConfig();
+            var azureConfig = new AzureConfig(Configuration.GetSection("ConnectionStrings:StorageConnectionString").Value);
 
             // Add application services.
             services.AddSingleton<IAzureConfig>(azureConfig);
@@ -86,7 +86,7 @@ namespace SoundVast
             services.AddScoped<IRepository<FileStreamGenre>, Repository<FileStreamGenre, ApplicationDbContext>>();
             services.AddScoped<IRepository<FileStreamCategory>, Repository<FileStreamCategory, ApplicationDbContext>>();
             services.AddScoped<IRepository<FileStreamReport>, Repository<FileStreamReport, ApplicationDbContext>>();
-            services.AddScoped<IRepository<FileStreamRating>, Repository<FileStreamRating, ApplicationDbContext>>();
+            services.AddScoped<IRepository<AudioRating>, Repository<AudioRating, ApplicationDbContext>>();
             services.AddScoped<IRepository<LiveStream>, Repository<LiveStream, ApplicationDbContext>>();
             services.AddScoped<IRepository<LiveStreamGenre>, Repository<LiveStreamGenre, ApplicationDbContext>>();
             services.AddScoped<IRepository<LiveStreamCategory>, Repository<LiveStreamCategory, ApplicationDbContext>>();
@@ -103,7 +103,7 @@ namespace SoundVast
             services.AddScoped<IGenreService<FileStreamGenre>, GenreService<FileStreamGenre>>();
             services.AddScoped<ICategoryService<FileStreamCategory>, CategoryService<FileStreamCategory>>();
             services.AddScoped<IReportService<FileStreamReport>, ReportService<FileStreamReport>>();
-            services.AddScoped<IRatingService<FileStreamRating>, RatingService<FileStreamRating>>();
+            services.AddScoped<IRatingService<AudioRating>, RatingService<AudioRating>>();
             services.AddScoped<ILiveStreamService, LiveStreamService>();
             services.AddScoped<IGenreService<LiveStreamGenre>, GenreService<LiveStreamGenre>>();
             services.AddScoped<ICategoryService<LiveStreamCategory>, CategoryService<LiveStreamCategory>>();
@@ -118,8 +118,6 @@ namespace SoundVast
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            var token = Configuration.GetSection("ConnectionStrings:StorageConnectionString");
-
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
@@ -155,7 +153,7 @@ namespace SoundVast
                 ClientId = Configuration["Authentication:Google:ClientId"],
                 ClientSecret = Configuration["Authentication:Google:ClientSecret"]
             });
-
+          
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
             app.SeedData();
             app.UseSession();

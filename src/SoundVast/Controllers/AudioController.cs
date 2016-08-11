@@ -24,30 +24,33 @@ using SoundVast.Models.LiveStreamModels;
 using SoundVast.Models.LiveStreamViewModels;
 using SoundVast.Models.SearchViewModels;
 using DateFrom = SoundVast.Utilities.DateFrom;
+using System.IdentityModel.Claims;
+using SoundVast.Models;
+using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
 
 namespace SoundVast.Controllers
 {
-    public abstract class AudioController<TAudio, TCategory, TGenre, TReport, TRating> : CustomBaseController
+    public abstract class AudioController<TAudio, TCategory, TGenre, TReport> : CustomBaseController
         where TAudio : Audio, new()
         where TCategory : Category, new()
         where TGenre : Genre, new()
         where TReport : Report, new()
-        where TRating : Rating, new()
     {
         private readonly IAudioService<TAudio> _audioService;
         private readonly ICategoryService<TCategory> _categoryService;
         private readonly IGenreService<TGenre> _genreService;
         private readonly IReportService<TReport> _reportService;
-        private readonly IRatingService<TRating> _ratingService;
+        private readonly IRatingService<AudioRating> _ratingService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         protected AudioController() 
         {
-            
         }
 
         protected AudioController(IMapper mapper, IServiceProvider serviceProvider, IAudioService<TAudio> audioService, 
-            ICategoryService<TCategory> categoryService,  IGenreService<TGenre> genreService, IReportService<TReport> reportservice, 
-            IRatingService<TRating> ratingService)
+            ICategoryService<TCategory> categoryService, IGenreService<TGenre> genreService, IReportService<TReport> reportservice,
+            IRatingService<AudioRating> ratingService, UserManager<ApplicationUser> userManager)
             : base(mapper, serviceProvider)
         {
             _audioService = audioService;
@@ -55,6 +58,7 @@ namespace SoundVast.Controllers
             _genreService = genreService;
             _reportService = reportservice;
             _ratingService = ratingService;
+            _userManager = userManager;
         }
 
         //public JsonResult Playlist(int id)
@@ -129,62 +133,64 @@ namespace SoundVast.Controllers
         }
 
         [HttpPost]
-        public JsonResult Rate(int id, bool liked)
+        public async Task<JsonResult> Rate(int id, bool liked)
         {
-            //var audio = _audioService.GetAudio(id);
-            //var existingRating = (TRating)audio.Ratings.SingleExistingAudio(audio.Id, audio.User.Id);
-            //var newRating = new TRating
-            //{
-            //    Audio = audio,
-            //    User = audio.User,
-            //    Liked = liked
-            //};
+            var currentUser = await _userManager.GetUserAsync(User);
+            var audio = _audioService.GetAudioForRating(id);
+            var existingRating = audio.AudioRatingJoins.SingleOrDefault(x => x.AudioRating.User.Id == currentUser.Id && x.Audio.Id == id);
 
-            //_ratingService.Add(audio.Rating, newRating, existingRating, liked);
-
-            var rating = new { /*audio.Rating.Likes, audio.Rating.Dislikes*/ };
-
-            return Json(rating);
-        }
-
-        public IActionResult Search(SearchViewModel searchViewModel)
-        {
-            switch (searchViewModel.SelectedFilter)
+            var newRating = new AudioRating
             {
-                case SelectedFilter.None:
-                    var audiosViewModels = new List<AudiosViewModel>();
-                    var audios = _audioService.GetAudios();
-                    var fileStreams = audios.OfType<FileStream>();
-                    var liveStreams = audios.OfType<LiveStream>();
+                AudioRatingJoins = new List<AudioRatingJoin>(),
+                User = currentUser,
+                Liked = liked
+            };
 
-                    audiosViewModels.AddRange(Mapper.Map<IEnumerable<FileStreamsViewModel>>(fileStreams));
-                    audiosViewModels.AddRange(Mapper.Map<IEnumerable<LiveStreamsViewModel>>(liveStreams));
+            newRating.AudioRatingJoins.Add(new AudioRatingJoin { Audio = audio, AudioRating = newRating });
 
-                    foreach (var audiosViewModel in audiosViewModels)
-                    {
-                        audiosViewModel.LevenshteinScore = Levenshtein.iLD(audiosViewModel.Name, searchViewModel.Search.ToUrlFriendlyString());
-                    }
-                    audiosViewModels = audiosViewModels.AsQueryable().WithOrdering(new OrderingOption<AudiosViewModel, int>(x => x.LevenshteinScore)).ToList();
+            _ratingService.Add(audio.RatingCount, newRating, existingRating?.AudioRating, liked);
 
-                    return ViewOrPartial("Audios", audiosViewModels);
-                case SelectedFilter.FileStreams:
-                    return RedirectToAction("Search", "FileStream", new { searchString = searchViewModel.Search.ToUrlFriendlyString() });
-                case SelectedFilter.Albums:
-                    Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    break;
-                case SelectedFilter.Artists:
-                    Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    break;
-                case SelectedFilter.Stations:
-                    return RedirectToAction("Search", "LiveStream", new { searchString = searchViewModel.Search.ToUrlFriendlyString() });
-                case SelectedFilter.Podcasts:
-                    Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(searchViewModel.SelectedFilter), searchViewModel.SelectedFilter, null);
-            }
-            return new EmptyResult();
+            return Json(audio.RatingCount);
         }
+
+        //public IActionResult Search(SearchViewModel searchViewModel)
+        //{
+        //    switch (searchViewModel.SelectedFilter)
+        //    {
+        //        case SelectedFilter.None:
+        //            var audiosViewModels = new List<AudiosViewModel>();
+        //            var audios = _audioService.GetAudios();
+        //            var fileStreams = audios.OfType<FileStream>();
+        //            var liveStreams = audios.OfType<LiveStream>();
+
+        //            audiosViewModels.AddRange(Mapper.Map<IEnumerable<FileStreamsViewModel>>(fileStreams));
+        //            audiosViewModels.AddRange(Mapper.Map<IEnumerable<LiveStreamsViewModel>>(liveStreams));
+
+        //            foreach (var audiosViewModel in audiosViewModels)
+        //            {
+        //                audiosViewModel.LevenshteinScore = Levenshtein.iLD(audiosViewModel.Name, searchViewModel.Search.ToUrlFriendlyString());
+        //            }
+        //            audiosViewModels = audiosViewModels.AsQueryable().WithOrdering(new OrderingOption<AudiosViewModel, int>(x => x.LevenshteinScore)).ToList();
+
+        //            return ViewOrPartial("Audios", audiosViewModels);
+        //        case SelectedFilter.FileStreams:
+        //            return RedirectToAction("Search", "FileStream", new { searchString = searchViewModel.Search.ToUrlFriendlyString() });
+        //        case SelectedFilter.Albums:
+        //            Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+        //            break;
+        //        case SelectedFilter.Artists:
+        //            Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+        //            break;
+        //        case SelectedFilter.Stations:
+        //            return RedirectToAction("Search", "LiveStream", new { searchString = searchViewModel.Search.ToUrlFriendlyString() });
+        //        case SelectedFilter.Podcasts:
+        //            Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+        //            break;
+        //        default:
+        //            throw new ArgumentOutOfRangeException(nameof(searchViewModel.SelectedFilter), searchViewModel.SelectedFilter, null);
+        //    }
+        //    return new EmptyResult();
+        //}
 
         protected virtual IEnumerable<TGenreViewModel> Genres<TGenreViewModel>()
             where TGenreViewModel : GenreViewModel
@@ -218,7 +224,6 @@ namespace SoundVast.Controllers
             where TAudiosViewModel : AudiosViewModel
         {
             var audios = _audioService.GetAudiosInGenreAndCategory(category, genre);
-
             var audioViewModels = Mapper.Map<IEnumerable<TAudiosViewModel>>(audios);
 
             HttpContext.Session.SetString("Category", category);
@@ -227,8 +232,6 @@ namespace SoundVast.Controllers
             {
                 HttpContext.Session.SetString("Genre", genre);
             }
-
-            ViewBag.SortingText = genre + " audios in the " + category + " category";
 
             return audioViewModels;
         }
@@ -251,22 +254,6 @@ namespace SoundVast.Controllers
 
         //    return PartialView("_CreatePlaylist", createPlaylistViewModel);
         //}
-
-        protected virtual IEnumerable<TAudiosViewModel> Search<TAudiosViewModel>(string searchString, int pageNumber = 1)
-            where TAudiosViewModel : AudiosViewModel
-        {
-            var audios = _audioService.GetAudios();
-            var audioViewModels = Mapper.Map<IEnumerable<TAudio>, ICollection<TAudiosViewModel>>(audios);
-
-            foreach (var audioViewModel in audioViewModels)
-            {
-                audioViewModel.LevenshteinScore = Levenshtein.iLD(audioViewModel.Name, searchString);
-            }
-
-            audioViewModels.AsQueryable().WithOrdering(new OrderingOption<TAudiosViewModel, int>(x => x.LevenshteinScore));
-
-            return audioViewModels;
-        }
 
         //protected virtual IEnumerable<TReportsViewModel> Reports<TReportsViewModel>(int pageNumber = 1)
         //    where TReportsViewModel : ReportsViewModel

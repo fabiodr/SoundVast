@@ -1,8 +1,6 @@
 ﻿@model CreateCommentViewModel
 
 <form asp-action="CreateComment" method="post" id="create-comment"> 
-    @Html.AntiForgeryToken()
-
     <input type="hidden" asp-for="AudioId"/>
 
     <div class="resize-container">

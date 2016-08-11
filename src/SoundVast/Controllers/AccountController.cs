@@ -37,6 +37,19 @@ namespace SoundVast.Controllers
             _logger = loggerFactory.CreateLogger<AccountController>();
         }
 
+        [HttpPost]
+        public async Task<JsonResult> GetCurrentUserDetails()
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+
+            return Json(new
+            {
+                isAuthenticated = user != null,
+                isAdmin = User.IsInRole("Admin"),
+                userName = user?.UserName
+            });
+        }
+
         //
         // GET: /Account/Login
         [HttpGet]

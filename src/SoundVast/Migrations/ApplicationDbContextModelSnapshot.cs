@@ -203,6 +203,8 @@ namespace SoundVast.Migrations
 
                     b.Property<string>("Name");
 
+                    b.Property<int?>("RatingCountId");
+
                     b.Property<int>("UniqueViews");
 
                     b.Property<DateTimeOffset>("UploadDate");
@@ -214,6 +216,8 @@ namespace SoundVast.Migrations
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("ImageFileId");
+
+                    b.HasIndex("RatingCountId");
 
                     b.HasIndex("UserId");
 
@@ -235,6 +239,21 @@ namespace SoundVast.Migrations
                     b.HasIndex("GenreId");
 
                     b.ToTable("AudioGenres");
+                });
+
+            modelBuilder.Entity("SoundVast.Models.IdentityModels.AudioRatingJoin", b =>
+                {
+                    b.Property<int>("AudioId");
+
+                    b.Property<int>("AudioRatingId");
+
+                    b.HasKey("AudioId", "AudioRatingId");
+
+                    b.HasIndex("AudioId");
+
+                    b.HasIndex("AudioRatingId");
+
+                    b.ToTable("AudioRatingJoin");
                 });
 
             modelBuilder.Entity("SoundVast.Models.IdentityModels.Category", b =>
@@ -312,6 +331,9 @@ namespace SoundVast.Migrations
 
                     b.Property<int?>("CategoryId");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired();
+
                     b.Property<int?>("ImageFileId");
 
                     b.Property<string>("Name");
@@ -323,6 +345,8 @@ namespace SoundVast.Migrations
                     b.HasIndex("ImageFileId");
 
                     b.ToTable("Genres");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Genre");
                 });
 
             modelBuilder.Entity("SoundVast.Models.IdentityModels.Link", b =>
@@ -434,6 +458,19 @@ namespace SoundVast.Migrations
                     b.HasDiscriminator().HasValue("FileStream");
                 });
 
+            modelBuilder.Entity("SoundVast.Models.LiveStreamModels.LiveStream", b =>
+                {
+                    b.HasBaseType("SoundVast.Models.IdentityModels.Audio");
+
+                    b.Property<string>("AudioUrl");
+
+                    b.Property<string>("WebsiteUrl");
+
+                    b.ToTable("LiveStream");
+
+                    b.HasDiscriminator().HasValue("LiveStream");
+                });
+
             modelBuilder.Entity("SoundVast.Models.FileStreamModels.FileStreamCategory", b =>
                 {
                     b.HasBaseType("SoundVast.Models.IdentityModels.Category");
@@ -474,6 +511,26 @@ namespace SoundVast.Migrations
                     b.HasDiscriminator().HasValue("ImageFile");
                 });
 
+            modelBuilder.Entity("SoundVast.Models.FileStreamModels.FileStreamGenre", b =>
+                {
+                    b.HasBaseType("SoundVast.Models.IdentityModels.Genre");
+
+
+                    b.ToTable("FileStreamGenre");
+
+                    b.HasDiscriminator().HasValue("FileStreamGenre");
+                });
+
+            modelBuilder.Entity("SoundVast.Models.LiveStreamModels.LiveStreamGenre", b =>
+                {
+                    b.HasBaseType("SoundVast.Models.IdentityModels.Genre");
+
+
+                    b.ToTable("LiveStreamGenre");
+
+                    b.HasDiscriminator().HasValue("LiveStreamGenre");
+                });
+
             modelBuilder.Entity("SoundVast.Models.CommentModels.CommentRating", b =>
                 {
                     b.HasBaseType("SoundVast.Models.IdentityModels.Rating");
@@ -482,6 +539,16 @@ namespace SoundVast.Migrations
                     b.ToTable("CommentRating");
 
                     b.HasDiscriminator().HasValue("CommentRating");
+                });
+
+            modelBuilder.Entity("SoundVast.Models.IdentityModels.AudioRating", b =>
+                {
+                    b.HasBaseType("SoundVast.Models.IdentityModels.Rating");
+
+
+                    b.ToTable("AudioRating");
+
+                    b.HasDiscriminator().HasValue("AudioRating");
                 });
 
             modelBuilder.Entity("SoundVast.Models.CommentModels.CommentReport", b =>
@@ -557,6 +624,10 @@ namespace SoundVast.Migrations
                         .WithMany()
                         .HasForeignKey("ImageFileId");
 
+                    b.HasOne("SoundVast.Models.IdentityModels.RatingCount", "RatingCount")
+                        .WithMany()
+                        .HasForeignKey("RatingCountId");
+
                     b.HasOne("SoundVast.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
@@ -572,6 +643,19 @@ namespace SoundVast.Migrations
                     b.HasOne("SoundVast.Models.IdentityModels.Genre", "Genre")
                         .WithMany("Audios")
                         .HasForeignKey("GenreId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("SoundVast.Models.IdentityModels.AudioRatingJoin", b =>
+                {
+                    b.HasOne("SoundVast.Models.IdentityModels.Audio", "Audio")
+                        .WithMany("AudioRatingJoins")
+                        .HasForeignKey("AudioId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("SoundVast.Models.IdentityModels.AudioRating", "AudioRating")
+                        .WithMany("AudioRatingJoins")
+                        .HasForeignKey("AudioRatingId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

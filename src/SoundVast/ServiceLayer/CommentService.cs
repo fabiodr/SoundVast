@@ -53,7 +53,6 @@ namespace SoundVast.ServiceLayer
                 .Include(x => x.CommentRatingJoins)
                 .ThenInclude(x => x.CommentRating)
                 .Include(x => x.User)
-                .Include(x => x.Audio)
                 .Include(x => x.RatingCount)
                 .SingleOrDefault(x => x.Id == id);
         }

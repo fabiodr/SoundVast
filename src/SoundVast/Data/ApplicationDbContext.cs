@@ -20,6 +20,8 @@ namespace SoundVast.Data
         public DbSet<Link> Links { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<FileStreamGenre> FileStreamGenres { get; set; }
+        public DbSet<LiveStreamGenre> LiveStreamGenres { get; set; }
         public DbSet<FileStreamCategory> FileStreamCategories { get; set; }
         public DbSet<LiveStreamCategory> LiveStreamCategories { get; set; }
         public DbSet<Report> Reports { get; set; }
@@ -28,6 +30,7 @@ namespace SoundVast.Data
         public DbSet<File> Files { get; set; }
         public DbSet<AudioGenre> AudioGenres { get; set; }
         public DbSet<Audio> Audios { get; set; }
+        public DbSet<LiveStream> LiveStreams { get; set; }
 
         public ApplicationDbContext(DbContextOptions options)
             : base(options)
@@ -41,7 +44,7 @@ namespace SoundVast.Data
             modelBuilder.Entity<CommentRatingJoin>().HasKey(x => new { x.CommentId, x.CommentRatingId });
             modelBuilder.Entity<Comment>().HasMany(x => x.Reports).WithOne(x => x.Comment).OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<Comment>().HasMany(x => x.Replies).WithOne(x => x.OriginalComment);
-            //modelBuilder.Entity<Comment>().HasMany(x => x.Ratings).WithOne(x => x.Comment).HasForeignKey(x => x.CommentId);
+            modelBuilder.Entity<AudioRatingJoin>().HasKey(x => new { x.AudioId, x.AudioRatingId });
 
             //  modelBuilder.Entity<Comment>().HasOptional(x => x.User);
 

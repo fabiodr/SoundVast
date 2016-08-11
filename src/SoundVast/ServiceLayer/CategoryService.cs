@@ -7,6 +7,7 @@ using SoundVast.Filters;
 using SoundVast.Models;
 using SoundVast.Models.IdentityModels;
 using SoundVast.QueryOptions;
+using Microsoft.EntityFrameworkCore;
 
 namespace SoundVast.ServiceLayer
 {
@@ -28,7 +29,7 @@ namespace SoundVast.ServiceLayer
 
         public ICollection<T> GetCategories()
         {
-            return _repository.GetAll().ToList();
+            return _repository.GetAll().Include(x => x.ImageFile).ToList();
         }
 
         public ICollection<T> GetSelectedCategories(int[] selectedCategoryIds)
