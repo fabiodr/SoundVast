@@ -4,13 +4,13 @@
     ViewData["Title"] = Context.Session.GetString("Category") + "s";
 }
 
-@section SortingSection
+@*@section SortingSection
 {
     <section id="sorting-text"></section>
-}
+}*@
 
 <div class="container-fluid">
-    @{ Html.RenderPartial("Audio/_SortingHeader"); }
+    @*@{ Html.RenderPartial("Audio/_SortingHeader"); }*@
     <section class="grid-audio">
         @Html.DisplayForModel()
     </section>
@@ -26,6 +26,6 @@
     @ViewBag.SortingText
 </script>
 
-@section Scripts{
-    @*<script>initFrontpageAudio();</script>*@
-}
+@*@section Scripts{
+    <script>initFrontpageAudio();</script>
+}*@

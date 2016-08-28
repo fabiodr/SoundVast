@@ -38,15 +38,15 @@ namespace SoundVast.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> GetCurrentUserDetails()
+        [AllowAnonymous]
+        public async Task<JsonResult> UserDetails()
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
 
             return Json(new
             {
-                isAuthenticated = user != null,
-                isAdmin = User.IsInRole("Admin"),
-                userName = user?.UserName
+                user,
+                IsAdmin = User.IsInRole("Admin")
             });
         }
 

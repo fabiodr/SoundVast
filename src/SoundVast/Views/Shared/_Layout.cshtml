@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using System.Configuration
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -13,9 +14,10 @@
     <title>@ViewData["Title"] - SoundVast</title>
 
     <environment names="Development">
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css"/>
+        <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.css" />
         <link rel="stylesheet" href="~/css/site.css" />
-        <link rel="stylesheet" href="~/lib/lib.min.css" />
+        <link rel="stylesheet" href="~/css/jPlayer.css" />
     </environment>
     <environment names="Staging, Production">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css" asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
@@ -46,108 +48,168 @@
     </environment>
 </head>
 <body>
-
-<div id="app">
-    @RenderSection("SortingSection", false)
-
-    <section id="body-content">
-        @ViewBag.UserMessage
-        @RenderBody()
-    </section>
-</div>
-@*<div class="row">
-        <div class="col-xs-12">
-            <header>
-                <div class="wrapper container">
-                    <nav>
-                        <ul class="outer pull-left">
-                            <li>
-                                <a asp-action="FileStreams" asp-controller="FileStream" class="nav-link logo">
-                                    <img src="~/images/soundvast-nav-logo.png" alt="SoundVast" />
-                                </a>
-                            </li>
-                            <li>
-                                <a asp-action="FileStreams" asp-controller="FileStream" class="nav-link audio">Audios</a>
-                            </li>
-                            <li>
-                                <a asp-action="LiveStreams" asp-controller="LiveStream" class="nav-link live-stream">Live Streams</a>
-                            </li>
-                            <li>
-                                <a asp-action="Upload" asp-controller="UploadMain" class="nav-link upload">Upload</a>
-                            </li>
-                            <li>
-                                @{ Html.RenderPartial("Search", new SearchViewModel()); }
-                            </li>
-                        </ul>
-                        <ul class="outer pull-right">
-                            @if (User.Identity.IsAuthenticated)
-                            {
+    <div id="app">
+        @*<div class="row">
+            <div class="col-xs-12">
+                <header>
+                    <div class="wrapper container">
+                        <nav>
+                            <ul class="outer pull-left">
                                 <li>
-                                    <div class="nav-dropdown">
-                                        <span>@User.Identity.Name</span>
-                                        <ul class="menu">
-                                            <li>
-                                                <a asp-action="Profile" asp-controller="User" class="nav-link profile">Profile</a>
-                                            </li>
-                                            <li>
-                                                <form asp-action="Logout" asp-controller="Account" name="logout-form" id="logout-form">
-                                                    @Html.AntiForgeryToken()
-
-                                                    <input type="submit" value="Logout" />
-                                                </form>
-                                            </li>
-                                        </ul>
-                                    </div>
+                                    <a asp-action="FileStreams" asp-controller="FileStream" class="nav-link logo">
+                                        <img src="~/images/soundvast-nav-logo.png" alt="SoundVast" />
+                                    </a>
                                 </li>
+                                <li>
+                                    <a asp-action="FileStreams" asp-controller="FileStream" class="nav-link audio">Audios</a>
+                                </li>
+                                <li>
+                                    <a asp-action="LiveStreams" asp-controller="LiveStream" class="nav-link live-stream">Live Streams</a>
+                                </li>
+                                <li>
+                                    <a asp-action="Upload" asp-controller="UploadMain" class="nav-link upload">Upload</a>
+                                </li>
+                                <li>
+                                    @{ Html.RenderPartial("Search", new SearchViewModel()); }
+                                </li>
+                            </ul>
+                            <ul class="outer pull-right">
+                                @if (User.Identity.IsAuthenticated)
+                            {
+                            <li>
+                                <div class="nav-dropdown">
+                                    <span>@User.Identity.Name</span>
+                                    <ul class="menu">
+                                        <li>
+                                            <a asp-action="Profile" asp-controller="User" class="nav-link profile">Profile</a>
+                                        </li>
+                                        <li>
+                                            <form asp-action="Logout" asp-controller="Account" name="logout-form" id="logout-form">
+                                                @Html.AntiForgeryToken()
+
+                                                <input type="submit" value="Logout" />
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
                             }
                             else
                             {
-                                <li>
-                                    <a asp-action="LogIn" asp-controller="Account" class="nav-link popup-link" id="login-link">Login</a>
-                                </li>
-                                <li>
-                                    <a asp-action="Register" asp-controller="Account" class="nav-link popup-link" id="register-link">Register</a>
-                                </li>
-                            }
                             <li>
-                                <div class="nav-dropdown">
-                                    <span><i class="fa fa-bars"></i></span>
-                                    <ul class="menu">
-                                        <li>
-                                            <a asp-action="AboutUs" asp-controller="Content" class="nav-link about-us">About us</a>
-                                        </li>
-                                        <li>
-                                            <a asp-action="Privacy" asp-controller="Content" class="nav-link privacy">Privacy</a>
-                                        </li>
-                                        <li>
-                                            <a asp-action="Copyright" asp-controller="Content" class="nav-link copyright">Copyright</a>
-                                        </li>
-                                        <li>
-                                            <a asp-action="TermsOfUse" asp-controller="Content" class="nav-link terms-of-use">Terms of Use</a>
-                                        </li>
-
-                                        @if (User.IsInRole("Admin") && User.Identity.IsAuthenticated)
-                                        {
-                                            <li>
-                                                <a asp-action="Index" asp-controller="RolesAdmin" class="nav-link admin-roles">Admin Roles</a>
-                                            </li>
-                                            <li>
-                                                <a asp-action="Index" asp-controller="UsersAdmin" class="nav-link admin-user">Admin User</a>
-                                            </li>
-                                            <li>
-                                                <a asp-action="ReportFileStreams" asp-controller="FileStream" class="nav-link report-file-stream">Report FileStreams</a>
-                                            </li>
-                                        }
-                                    </ul>
-                                </div>
-                                <div id="cover"></div>
-                                <div id="popup"></div>
+                                <a asp-action="LogIn" asp-controller="Account" class="nav-link popup-link" id="login-link">Login</a>
                             </li>
-                        </ul>
-                    </nav>
-                </div>
-            </header>
+                            <li>
+                                <a asp-action="Register" asp-controller="Account" class="nav-link popup-link" id="register-link">Register</a>
+                            </li>
+                            }
+                                <li>
+                                    <div class="nav-dropdown">
+                                        <span><i class="fa fa-bars"></i></span>
+                                        <ul class="menu">
+                                            <li>
+                                                <a asp-action="AboutUs" asp-controller="Content" class="nav-link about-us">About us</a>
+                                            </li>
+                                            <li>
+                                                <a asp-action="Privacy" asp-controller="Content" class="nav-link privacy">Privacy</a>
+                                            </li>
+                                            <li>
+                                                <a asp-action="Copyright" asp-controller="Content" class="nav-link copyright">Copyright</a>
+                                            </li>
+                                            <li>
+                                                <a asp-action="TermsOfUse" asp-controller="Content" class="nav-link terms-of-use">Terms of Use</a>
+                                            </li>
+
+                                            @if (User.IsInRole("Admin") && User.Identity.IsAuthenticated)
+                                        {
+                                        <li>
+                                            <a asp-action="Index" asp-controller="RolesAdmin" class="nav-link admin-roles">Admin Roles</a>
+                                        </li>
+                                        <li>
+                                            <a asp-action="Index" asp-controller="UsersAdmin" class="nav-link admin-user">Admin User</a>
+                                        </li>
+                                        <li>
+                                            <a asp-action="ReportFileStreams" asp-controller="FileStream" class="nav-link report-file-stream">Report FileStreams</a>
+                                        </li>
+                                        }
+                                        </ul>
+                                    </div>
+                                    <div id="cover"></div>
+                                    <div id="popup"></div>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </header>
+            </div>
         </div>
+
+        <div id="jp_container_playlist">
+            <div class="jp-playlist">
+                <ul>
+                    <li></li>
+                </ul>
+            </div>
+        </div>
+
+        @RenderSection("SortingSection", false)
+
+        <section id="body-content">
+            @ViewBag.UserMessage
+            @RenderBody()
+        </section>
+
+        <div id="comments-sidebar"></div>*@
+        @RenderBody()
+        @*<footer>
+                <div id="jquery_jplayer_footer_player" class="jp-jplayer"></div>
+                <div id="jp_container_footer_player" class="jp-audio">
+                    <div class="jp-type-footer">
+                        <div class="jp-controls">
+                            <a class="jp-play">
+                                <i class="fa fa-play"></i>
+                            </a>
+                            <a class="jp-pause">
+                                <i class="fa fa-pause"></i>
+                            </a>
+                            <a class="jp-mute">
+                                <i class="fa fa-volume-up"></i>
+                            </a>
+                            <a class="jp-repeat">
+                                <i class="fa fa-bars"></i>
+                                <i class="fa fa-repeat"></i>
+                            </a>
+                            <a class="jp-shuffle">
+                                <i class="fa fa-random"></i>
+                            </a>
+                            <a class="jp-previous">
+                                <i class="fa fa-step-backward"></i>
+                            </a>
+                            <a class="jp-next">
+                                <i class="fa fa-step-forward"></i>
+                            </a>
+                            <div class="jp-volume-bar">
+                                <div class="jp-volume-bar-value"></div>
+                            </div>
+                            <a class="jp-playlist-options">
+                                <i class="fa fa-ellipsis-h"></i>
+                                <i class="fa fa-comment"></i>
+                            </a>
+                        </div>
+                        <div class="jp-progress">
+                            <div class="jp-seek-bar">
+                                <div class="jp-play-bar"></div>
+                                <div class="jp-current-time"></div>
+                                <div class="jp-duration"></div>
+                            </div>
+                        </div>
+                        <div class="jp-no-solution">
+                            Media Player Error<br>
+                            Update your browser or Flash plugin
+                        </div>
+                    </div>
+                </div>
+            </footer>*@
     </div>
 
     <div id="jp_container_playlist">
@@ -157,94 +219,30 @@
             </ul>
         </div>
     </div>
-
-    @RenderSection("SortingSection", false)
-
-    <section id="body-content">
-        @ViewBag.UserMessage
-        @RenderBody()
-    </section>
-
-    <div id="comments-sidebar"></div>
-    <footer>
-        <div id="jquery_jplayer_footer_player" class="jp-jplayer"></div>
-        <div id="jp_container_footer_player" class="jp-audio">
-            <div class="jp-type-footer">
-                <div class="jp-controls">
-                    <a class="jp-play">
-                        <i class="fa fa-play"></i>
-                    </a>
-                    <a class="jp-pause">
-                        <i class="fa fa-pause"></i>
-                    </a>
-                    <a class="jp-mute">
-                        <i class="fa fa-volume-up"></i>
-                    </a>
-                    <a class="jp-repeat">
-                        <i class="fa fa-bars"></i>
-                        <i class="fa fa-repeat"></i>
-                    </a>
-                    <a class="jp-shuffle">
-                        <i class="fa fa-random"></i>
-                    </a>
-                    <a class="jp-previous">
-                        <i class="fa fa-step-backward"></i>
-                    </a>
-                    <a class="jp-next">
-                        <i class="fa fa-step-forward"></i>
-                    </a>
-                    <div class="jp-volume-bar">
-                        <div class="jp-volume-bar-value"></div>
-                    </div>
-                    <a class="jp-playlist-options">
-                        <i class="fa fa-ellipsis-h"></i>
-                        <i class="fa fa-comment"></i>
-                    </a>
-                </div>
-                <div class="jp-progress">
-                    <div class="jp-seek-bar">
-                        <div class="jp-play-bar"></div>
-                        <div class="jp-current-time"></div>
-                        <div class="jp-duration"></div>
-                    </div>
-                </div>
-                <div class="jp-no-solution">
-                    Media Player Error<br>
-                    Update your browser or Flash plugin
-                </div>
-            </div>
-        </div>
-    </footer>*@
-
-<environment names="Development">
-    <script src="~/js/app.min.js"></script>
-    @*<script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/react/react.js"></script>
-        <script src="~/lib/react/react-dom.js"></script>
-        <script src="https://npmcdn.com/react-router/umd/ReactRouter.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-        <script src="~/lib/jquery-ui/jquery-ui.js"></script>
-        <script src="~/lib/select2/dist/js/select2.js"></script>
+    <environment names="Development">
+        <script src="~/build/vendor.bundle.js"></script> 
+        <script src="~/build/app.bundle.js"></script>
+        @*<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+            <script src="~/lib/select2/dist/js/select2.js"></script>
+            <script src="~/extended/extended.min.js"></script>
+            <script src="~/js/old/site.min.js"></script>*@
+    </environment>
+    <environment names="Staging,Production">
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js" asp-fallback-src="~/lib/jquery/dist/jquery.min.js" asp-fallback-test="window.jQuery"></script>
+        <script src="https://npmcdn.com/react@15.3.0/dist/react-with-addons.min.js" asp-fallback-src="~/lib/react/react.min.js" asp-fallback-test="require('react')"></script>
+        <script src="https://npmcdn.com/react-dom@15.3.0/dist/react-dom.min.js" asp-fallback-src="~/lib/react/react-dom.min.js" asp-fallback-test="require('react-dom')"></script>
+        <script src="https://npmcdn.com/react-router/umd/ReactRouter.min.js"></script>
+        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js" asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"></script>
+        <script src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.11.4/jquery-ui.min.js" asp-fallback-src="~/lib/jquery-ui/jquery-ui.min.js" asp-fallback-test="$.ui"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js" asp-fallback-src="~/lib/select2/dist/js/select2.min.js" asp-fallback-test="$.fn.select2"></script>
         <script src="~/lib/lib.min.js"></script>
-        <script src="~/extended/extended.min.js"></script>
-        <script src="~/js/site.min.js" asp-append-version="true"></script>*@
-</environment>
-<environment names="Staging,Production">
-    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js" asp-fallback-src="~/lib/jquery/dist/jquery.min.js" asp-fallback-test="window.jQuery"></script>
-    <script src="https://npmcdn.com/react@15.3.0/dist/react-with-addons.min.js" asp-fallback-src="~/lib/react/react.min.js" asp-fallback-test="require('react')"></script>
-    <script src="https://npmcdn.com/react-dom@15.3.0/dist/react-dom.min.js" asp-fallback-src="~/lib/react/react-dom.min.js" asp-fallback-test="require('react-dom')"></script>
-    <script src="https://npmcdn.com/react-router/umd/ReactRouter.min.js"></script>
-    <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js" asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"></script>
-    <script src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.11.4/jquery-ui.min.js" asp-fallback-src="~/lib/jquery-ui/jquery-ui.min.js" asp-fallback-test="$.ui"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js" asp-fallback-src="~/lib/select2/dist/js/select2.min.js" asp-fallback-test="$.fn.select2"></script>
-    <script src="~/lib/lib.min.js"></script>
-    <script src="~/extended/extended.min.js" asp-append-version="true"></script>
-    <script src="~/js/site.min.js" asp-append-version="true"></script>
-</environment>
+        <script src="~/extended/extended.min.js" asp-append-version="true"></script>
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+    </environment>
 
-<script type="text/loading-template">
+    <script type="text/loading-template">
         <img class="loading" src="images/ajax-loader.gif" alt="loading" />
     </script>
-@RenderSection("Scripts", false)
+    @RenderSection("Scripts", false)
 </body>
 </html>

@@ -1,5 +1,6 @@
 ﻿html,
-body {
+body,
+#app {
     margin: 0;
     padding: 0;
     height: 100%;
@@ -166,7 +167,7 @@ footer {
     background-color: #efefef;
     border-top: solid 1px #d8d8d8;
     bottom: 0;
-    display: none;
+    /*display: none;*/
     height: 50px;
     position: fixed;
     width: 100%;
@@ -923,8 +924,7 @@ form.upload.fileStream input[type="submit"], .fileStream-detail-tabs {
     max-width: 100%;
 }
 
-.poster-wrapper .fa-play,
-.poster-wrapper .fa-pause {
+.poster-wrapper .fa-play {
     color: white;
     cursor: pointer;
     font-size: 70px;
@@ -937,8 +937,7 @@ form.upload.fileStream input[type="submit"], .fileStream-detail-tabs {
     margin: 0 auto;
 }
 
-    .poster-wrapper .fa-play:hover,
-    .poster-wrapper .fa-pause:hover {
+    .poster-wrapper .fa-play:hover {
         color: #ccc;
     }
 

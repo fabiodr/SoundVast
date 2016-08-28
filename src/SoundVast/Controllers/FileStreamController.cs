@@ -110,11 +110,17 @@ namespace SoundVast.Controllers
             return ViewOrPartial("Audio/Audios", Sort<FileStreamsViewModel, int>(dateFrom, genre, category, " Top Rated ", x => x.CommentCount /*x => x.Rating.Likes*/));
         }
 
-        public IActionResult FileStreams(string genre, string category = "Song", int pageNumber = 1)
+        public IActionResult Index()
+        {
+            return ViewOrPartial();
+        }
+
+        public JsonResult FileStreams(string genre, string category = "Song", int pageNumber = 1)
         {
             ViewBag.SortingText = genre + " audios in the " + category + " category";
 
-            return ViewOrPartial("Audio/Audios", Audios<FileStreamsViewModel>(genre, category, pageNumber));
+            return Json(Audios<FileStreamsViewModel>(genre, category, pageNumber));
+            //  return ViewOrPartial("Audio/Audios", Audios<FileStreamsViewModel>(genre, category, pageNumber));
         }
 
         //[AjaxAuthorize(Roles = "Admin")]

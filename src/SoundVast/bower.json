@@ -1,19 +1,12 @@
 {
   "dependencies": {
-    "bootstrap": "^3.3.6",
-    "jquery": "^2.2.1",
-    "jquery-ui": "^1.11.4",
-    "jquery-ajax-unobtrusive": "^3.2.4",
-    "jquery-validation-unobtrusive": "^3.2.6",
     "select2": "^4.0.2",
     "dropzone": "^4.3.0",
     "font-awesome": "^4.5.0",
-    "jPlayer": "https://github.com/happyworm/jPlayer.git#^2.9.2",
-    "jquery-validation": "https://github.com/jzaefferer/jquery-validation.git#^1.15.0",
-    "jQuery.grab": "https://github.com/jussi-kalliokoski/jQuery.grab.git",
     "lodash": "https://github.com/lodash/lodash.git#^4.13.1",
     "react": "^15.3.0",
-    "react-router": "^2.6.1"
+    "react-router": "^2.6.1",
+    "bootstrap": "3.3.6"
   },
   "name": "SoundVast",
   "private": true,

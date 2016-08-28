@@ -158,18 +158,25 @@ namespace SoundVast
             app.SeedData();
             app.UseSession();
 
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    "default_2",
-                    "{controller=FileStream}/{action=FileStreams}/{id?}");
-            });
+            //app.UseMvc(routes =>
+            //{
+            //    routes.MapRoute(
+            //        "default_2",
+            //        "{controller=FileStream}/{action=FileStreams}/{id?}");
+            //});
+
+            //app.UseMvc(routes =>
+            //{
+            //    routes.MapRoute(
+            //        "default",
+            //        "{controller=FileStream}/{action=FileStreams}/{genre?}/{category=Song}/{pageNumber=1}");
+            //});
 
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     "default",
-                    "{controller=FileStream}/{action=FileStreams}/{genre?}/{category=Song}/{pageNumber=1}");
+                    "{controller=FileStream}/{action=Index}");
             });
         }
     }
