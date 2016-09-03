@@ -163,15 +163,15 @@ h4 {
     padding-top: 0;
 }
 
-footer {
+/*footer {
     background-color: #efefef;
     border-top: solid 1px #d8d8d8;
     bottom: 0;
-    /*display: none;*/
-    height: 50px;
+    display: none;
+    height: 250px;
     position: fixed;
     width: 100%;
-}
+}*/
 
 input[type="radio"] {
     margin-top: 3px;

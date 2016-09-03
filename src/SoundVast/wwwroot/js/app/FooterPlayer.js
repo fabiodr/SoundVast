@@ -48,6 +48,10 @@ export default function FooterPlayer (jPlayerPlaylist) {
                     </div>
                 </div>
             </div>
+            <div class="jp-no-solution" style={this.state.noSolutionStyle}>
+            <span>Update Required</span>
+                To play the media you will need to update your browser to a recent version.
+            </div>
         </div>
     );
 }

@@ -555,7 +555,7 @@ export default class JPlayerPlaylist extends React.Component {
 
         return (
             <JPlayer ref={(jPlayer) => this.jPlayer = jPlayer} {...this.props.jPlayerPlaylistOptions} instance={this} customEvent={this.event}>
-                {this.props.children.type}
+                {/*this.props.children.type*/}
             </JPlayer>
         );
     }
