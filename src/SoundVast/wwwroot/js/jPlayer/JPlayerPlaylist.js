@@ -1,5 +1,4 @@
 import React from "react";
-import _ from "lodash";
 
 import JPlayer from "./JPlayer";
 
@@ -552,9 +551,8 @@ export default class JPlayerPlaylist extends React.Component {
         this._setup();
     }
     render() {
-
         return (
-            <JPlayer ref={(jPlayer) => this.jPlayer = jPlayer} {...this.props.jPlayerPlaylistOptions} instance={this} customEvent={this.event}>
+            <JPlayer ref={(jPlayer) => this.jPlayer = jPlayer} {...this.props.jPlayerPlaylistOptions} instance={this}>
                 {/*this.props.children.type*/}
             </JPlayer>
         );

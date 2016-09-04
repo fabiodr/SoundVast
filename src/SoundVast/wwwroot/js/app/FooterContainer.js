@@ -15,7 +15,6 @@ class FooterContainer extends React.Component {
                 cssClassAncestor: "jp-type-footer",
                 smoothPlaybar: true,
                 muted: true,
-                loop: false,
                 sizeFull: {
                     width: "90%",
                     height: "90%"
@@ -45,13 +44,9 @@ class FooterContainer extends React.Component {
             }
         };
     }
-    test(){
-        this.setState(previousState => previousState.jPlayerPlaylistOptions = Object.assign({}, previousState.jPlayerPlaylistOptions, {loop: !previousState.jPlayerPlaylistOptions.loop}));
-    }
     render() {
         return (
             <div>
-                <div onClick={this.test.bind(this)}>Click Me</div>
                 <JPlayerPlaylist jPlayerPlaylistOptions={this.state.jPlayerPlaylistOptions} />
             </div>
         );
