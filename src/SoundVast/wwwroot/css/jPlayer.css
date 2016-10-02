@@ -7,11 +7,6 @@
     color: #157bf8;
 }
 
-.jp-type-footer {
-    width: 100%;
-    background-color: transparent;
-}
-
 .jp-state-full-screen .jp-jplayer {
     margin: 0 auto;
 }
@@ -21,11 +16,16 @@
         margin: 0 auto;
     }
 
+.jp-type-footer .jp-audio {
+    width: 100%;
+    background-color: transparent;
+}
+
 .jp-type-footer .jp-gui {
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     color: #000000;
     font-family: 'Source Sans Pro', sans-serif;
-    font-size: 0;
+    font-size: 14px;
     line-height: 0;
     margin: 0;
     padding: 0;
@@ -73,7 +73,7 @@
         top: -16px;
     }
 
-    .jp-type-footer .jp-controls .jp-test {
+    /*.jp-type-footer .jp-controls .jp-test {
         font-size: 15px;
         left: 40px;
         position: absolute;
@@ -83,7 +83,7 @@
         line-height: 42px;
         padding-left: 32px;
         text-decoration: none;
-    }
+    }*/
 
     .jp-type-footer .jp-controls .jp-repeat {
         font-size: 15px;
@@ -110,11 +110,11 @@
         text-decoration: none;
     }
 
-.jp-type-footer .jp-controls .jp-play .fa-play:before {
-    content: "\f04b";
-}
+        .jp-controls .jp-play .fa-play:before {
+            content: "\f04b";
+        }
 
-.jp-type-footer.jp-state-playing .jp-controls .jp-play .fa-play:before {
+.jp-state-playing .jp-controls .jp-play .fa-play:before {
     content: "\f04c";
 }
 
@@ -333,7 +333,7 @@
     }
 
 .jp-playlist {
-    display: none;
+    /*display: none;*/
 }
 
     .jp-playlist ul {

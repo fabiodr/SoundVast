@@ -1,159 +1,172 @@
 import React from "react";
-
 import JPlayer from "./JPlayer";
+import merge from "lodash/merge";
 
 export default class JPlayerPlaylist extends React.Component {
+    static get defaultProps(){
+		return {
+            autoPlay: false,
+            loopOnPrevious: false,
+            shuffleOnLoop: true,
+            enableRemoveControls: false,
+            displayTime: 'slow',
+            addTime: 'fast',
+            removeTime: 'fast',
+            shuffleTime: 'slow',
+            itemClass: "jp-playlist-item",
+            freeGroupClass: "jp-free-media",
+            freeItemClass: "jp-playlist-item-free",
+            removeItemClass: "jp-playlist-item-remove"
+        }
+    }
     constructor(props)
     {
         super();
 
         this.event = {};
+        this.state = props;
+
+        var jPlayerPlaylistOptions = {
+            html: {
+                additionalControls: [
+                    <a class="jp-shuffle" key={0} onClick={this._shuffleOnClick} style={this.state.shuffleStyle}>{props.html.shuffle}</a>,
+                    <a class="jp-shuffleOff" key={1} style={this.state.shuffleOffClick} onClick={this._shuffleOffClick} style={this.state.shuffleOffStyle}>{props.html.shuffleOff}</a>,
+                    <a class="jp-previous" key={2} onClick={this._previousOnClick}>{props.html.previous}</a>,
+					<a class="jp-next" key={3} onClick={this._nextOnClick}>{props.html.next}</a>,
+                    <a class="jp-playlist-options" key={4}>{props.html.playlistOptions}</a>
+                ]
+            }
+        }
+
+        merge(this.state, jPlayerPlaylistOptions); 
     }
-    _test = () => {}
+    _shuffleOnClick = (e) => {
+         e.preventDefault();
+
+        if (this.shuffled && this.jPlayer.useStateClassSkin) {
+            this.shuffle(false);
+        } else {
+            this.shuffle(true);
+        }
+        this.blur(e.target);
+    }
+    _shuffleOffClick = (e) => {
+        e.preventDefault();
+        this.shuffle(false);
+        this.blur(e.target);
+        this.setState(previousState => previousState.shuffleOffClick = Object.assign({}, previousState.shuffleOffClick, {display: "none"}));
+    }
+    _previousOnClick = (e) => {
+        e.preventDefault();
+        this.previous();
+        this.blur(e.target);
+    }
+    _nextOnClick = (e) => {
+        e.preventDefault();
+        this.next();
+        this.blur(e.target);
+    }
     _setup = () => {
-        // this.current = 0;
-        // this.shuffled = false;
-        // this.removing = false; // Flag is true during remove animation, disabling the remove() method until complete.
+        this.current = 0;
+        this.shuffled = false;
+        this.removing = false; // Flag is true during remove animation, disabling the remove() method until complete.
 
-        // this.cssSelector = _.assign({}, this._cssSelector, this.props.cssSelector); // Object: Containing the css selectors for jPlayer and its cssSelectorAncestor
+        this.cssSelector = Object.assign({}, {cssPlaylistOptionsSelector: this.state.cssSelector.cssSelectorAncestor}, this.state.cssSelector);
 
-        // //Set the initial loop to the options loop
-        // this.loop = this.props.options.loop;
+        //Set the initial loop to the options loop
+        this.loop = this.state.loop;
 
-        // this.options = _.merge({
-        //     keyBindings: {
-        //         next: {
-        //             key: 221, // ]
-        //             fn: function () {
-        //                 self.next();
-        //             }
-        //         },
-        //         previous: {
-        //             key: 219, // [
-        //             fn: function () {
-        //                 self.previous();
-        //             }
-        //         },
-        //         shuffle: {
-        //             key: 83, // s
-        //             fn: function () {
-        //                 self.shuffle();
-        //             }
-        //         }
-        //     },
-        //     stateClass: {
-        //         shuffled: "jp-state-shuffled"
-        //     }
-        // }, this._options, this.props.options); // Object: The jPlayer constructor options for this playlist and the playlist options
+        this.options = merge({
+            keyBindings: {
+                next: {
+                    key: 221, // ]
+                    fn: function () {
+                        self.next();
+                    }
+                },
+                previous: {
+                    key: 219, // [
+                    fn: function () {
+                        self.previous();
+                    }
+                },
+                shuffle: {
+                    key: 83, // s
+                    fn: function () {
+                        self.shuffle();
+                    }
+                }
+            },
+            stateClass: {
+                shuffled: "jp-state-shuffled"
+            }
+        }, this.state.options);
 
-        // this.playlist = []; // Array of Objects: The current playlist displayed (Un-shuffled or Shuffled)
-        // this.original = []; // Array of Objects: The original playlist
+        this.playlist = []; // Array of Objects: The current playlist displayed (Un-shuffled or Shuffled)
+        this.original = []; // Array of Objects: The original playlist
 
-        // this._initPlaylist(this.props.playlist); // Copies playlist to this.original. Then mirrors this.original to this.playlist. Creating two arrays, where the element pointers match. (Enables pointer comparison.)
+        this._initPlaylist(this.state.playlist); // Copies playlist to this.original. Then mirrors this.original to this.playlist. Creating two arrays, where the element pointers match. (Enables pointer comparison.)
 
-        // // Setup the css selectors for the extra interface items used by the playlist.
-        // this.cssSelector.details = this.cssSelector.cssSelectorAncestor + " .jp-details"; // Note that jPlayer controls the text in the title element.
-        // this.cssSelector.playlist = this.cssSelector.cssPlaylistOptionsSelector + " .jp-playlist";
-        // this.cssSelector.next = this.cssSelector.cssSelectorAncestor + " .jp-next";
-        // this.cssSelector.previous = this.cssSelector.cssSelectorAncestor + " .jp-previous";
-        // this.cssSelector.shuffle = this.cssSelector.cssSelectorAncestor + " .jp-shuffle";
-        // this.cssSelector.shuffleOff = this.cssSelector.cssSelectorAncestor + " .jp-shuffle-off";
+        // Setup the css selectors for the extra interface items used by the playlist.
+        this.cssSelector.details = this.cssSelector.cssSelectorAncestor + " .jp-details"; // Note that jPlayer controls the text in the title element.
+        this.cssSelector.playlist = this.cssSelector.cssPlaylistOptionsSelector + " .jp-playlist";
+        this.cssSelector.next = this.cssSelector.cssSelectorAncestor + " .jp-next";
+        this.cssSelector.previous = this.cssSelector.cssSelectorAncestor + " .jp-previous";
+        this.cssSelector.shuffle = this.cssSelector.cssSelectorAncestor + " .jp-shuffle";
+        this.cssSelector.shuffleOff = this.cssSelector.cssSelectorAncestor + " .jp-shuffle-off";
 
-        // // Override the cssSelectorAncestor given in options
-        // this.options.cssSelectorAncestor = this.cssSelector.cssSelectorAncestor;
+        this.options.cssSelectorAncestor = this.cssSelector.cssSelectorAncestor;
 
-        // // Override the default repeat event handler
-        // this.options.repeat = (event) => {
-        //     this.loop = event.jPlayer.options.loop;
-        // };
-            
-        // // Create a ready event handler to initialize the playlist
-        // this.jPlayer.jPlayerElement.addEventListener(this.jPlayer.event.ready, () => {
-        //     this._init();
-        // });
+        this.options.repeat = () => this.loop = event.jPlayer.options.loop;         
+        this.event.onEnded = () => this.next();
+        this.event.onPlay = () => this.jPlayer.pauseOthers();
+        this.jPlayer.jPlayerElement.addEventListener(this.jPlayer.event.ready, () => this._init());
+        this.jPlayer.jPlayerElement.addEventListener(this.jPlayer.event.resize, () => {
+            if (event.jPlayer.options.fullScreen) {
+                this.setState(previousState => previousState.detailsStyle = Object.assign({}, previousState.detailsStyle, {display: ""}));
+            } else {
+                this.setState(previousState => previousState.detailsStyle = Object.assign({}, previousState.detailsStyle, {display: "none"}));
+            }
+        });
 
-        // //Create an ended event handler to move to the next item
-        // this.event.onEnded = () => this.next();
+        // Put the title in its initial display state
+        if (!this.options.fullScreen) {
+            this.setState(previousState => previousState.detailsStyle = Object.assign({}, previousState.detailsStyle, {display: "none"}));
+        }
 
-        // // Create a play event handler to pause other instances
-        // this.event.onPlay = () => this.pauseOthers();
-       
-        // // Create a resize event handler to show the title in full screen mode.
-        // this.jPlayer.jPlayerElement.addEventListener(this.jPlayer.event.resize, (event) => {
-        //     // if (event.jPlayer.options.fullScreen) {
-        //     //     $(self.cssSelector.details).show();
-        //     // } else {
-        //     //     $(self.cssSelector.details).hide();
-        //     // }
-        // });
+        // Create .on() handlers for the playlist items along with the free media and remove controls.
+        this._createItemHandlers();
 
-        // // Create click handlers for the extra buttons that do playlist functions.
-        // this.event.nextOnClick = (e) => {
-        //     e.preventDefault();
-        //     this.previous();
-        //     this.blur(this);
-        // }
+        //Remove the looped class from the jPlayer as it's initialy incorrectly set in the original _updateButtons
+        //$(this.cssSelector.jPlayer).data().jPlayer.removeStateClass("looped");
 
-        // this.event.shuffleOnClick = (e) => {
-        //     e.preventDefault();
+        //Add a new stateClass for the extra loop option
+        merge(this.options,{
+            stateClass: {
+                looped_playlist: "jp-state-looped-playlist"
+            }
+        });
 
-        //     // if (this.shuffled && $(this.cssSelector.jPlayer).jPlayer("option", "useStateClassSkin")) {
-        //     //     this.shuffle(false);
-        //     // } else {
-        //     //     this.shuffle(true);
-        //     // }
-        //     // this.blur(this);
-        // };
+        //Set the jPlayer options to extend these options
+        //$.extend(true, $(this.cssSelector.jPlayer).data().jPlayer.options, this.options);
 
-        // this.event.shuffleOffClick = (e) => {
-        //     e.preventDefault();
-        //     this.shuffle(false);
-        //     this.blur(this);
-        //     // .hide();
-        // }
+        this.event.onRepeat = () => {
+            var guiAction = typeof event === "object"; // Flags GUI click events so we know this was not a direct command, but an action taken by the user on the GUI.
+            if (guiAction && this.options.useStateClassSkin && this.options.loop === "loop-playlist") {
+                this._loop("off");
+            } else if (guiAction && this.options.useStateClassSkin && this.options.loop === "off") {
+                this._loop("loop");
+                this.addStateClass("looped");
+            }
+            else {
+                this.addStateClass("looped_playlist");
+                this.removeStateClass("looped");
+                this._loop("loop-playlist");
+            }
+        };
 
-        // // Put the title in its initial display state
-        // if (!this.options.fullScreen) {
-        //     $(this.cssSelector.details).hide();
-        // }
-
-        // // Remove the empty <li> from the page HTML. Allows page to be valid HTML, while not interfereing with display animations
-        // $(this.cssSelector.playlist + " ul").empty();
-
-        // // Create .on() handlers for the playlist items along with the free media and remove controls.
-        // this._createItemHandlers();
-
-        // // Instance jPlayer
-        // $(this.cssSelector.jPlayer).jPlayer(this.options);
-
-        // //Remove the looped class from the jPlayer as it's initialy incorrectly set in the original _updateButtons
-        // $(this.cssSelector.jPlayer).data().jPlayer.removeStateClass("looped");
-
-        // //Add a new stateClass for the extra loop option
-        // $.extend(true, this.options, {
-        //     stateClass: {
-        //         looped_playlist: "jp-state-looped-playlist"
-        //     }
-        // });
-
-        // //Set the jPlayer options to extend these options
-        // $.extend(true, $(this.cssSelector.jPlayer).data().jPlayer.options, this.options);
-
-        // $(this.cssSelector.jPlayer).data().jPlayer.repeat = function () {
-        //     var guiAction = typeof event === "object"; // Flags GUI click events so we know this was not a direct command, but an action taken by the user on the GUI.
-        //     if (guiAction && this.options.useStateClassSkin && this.options.loop === "loop-playlist") {
-        //         this._loop("off");
-        //     } else if (guiAction && this.options.useStateClassSkin && this.options.loop === "off") {
-        //         this._loop("loop");
-        //         this.addStateClass("looped");
-        //     }
-        //     else {
-        //         this.addStateClass("looped_playlist");
-        //         this.removeStateClass("looped");
-        //         this._loop("loop-playlist");
-        //     }
-        // };
-
+        this.setState({playlistComponent: this.playlist.map((media, i) => this._createListItem(media, i))});
+        
         // $(this.cssSelector.jPlayer).data().jPlayer._updateButtons = function (playing) {
         //     if (playing === undefined) {
         //         playing = !this.status.paused;
@@ -251,7 +264,7 @@ export default class JPlayerPlaylist extends React.Component {
         this.current = 0;
         this.shuffled = false;
         this.removing = false;
-        this.original = _.assign([], playlist); // Copy the Array of Objects
+        this.original = Object.assign([], playlist); // Copy the Array of Objects
         this._originalPlaylist();
     }
     _originalPlaylist = () => {
@@ -266,124 +279,140 @@ export default class JPlayerPlaylist extends React.Component {
             */
         var self = this;
 
-        if (instant && !$.isFunction(instant)) {
-            $(this.cssSelector.playlist + " ul").empty();
-            $.each(this.playlist, function (i) {
-                $(self.cssSelector.playlist + " ul").append(self._createListItem(self.playlist[i]));
-            });
-            this._updateControls();
-        } else {
-            var displayTime = $(this.cssSelector.playlist + " ul").children().length ? this.options.playlistOptions.displayTime : 0;
+        // if (instant && !$.isFunction(instant)) {
+        //     $(this.cssSelector.playlist + " ul").empty();
+        //     $.each(this.playlist, function (i) {
+        //         $(self.cssSelector.playlist + " ul").append(self._createListItem(self.playlist[i]));
+        //     });
+        //     this._updateControls();
+        // } else {
+        //     var displayTime = $(this.cssSelector.playlist + " ul").children().length ? this.options.playlistOptions.displayTime : 0;
 
-            $(this.cssSelector.playlist + " ul").slideUp(displayTime, function () {
-                var $this = $(this);
-                $(this).empty();
+        //     $(this.cssSelector.playlist + " ul").slideUp(displayTime, function () {
+        //         var $this = $(this);
+        //         $(this).empty();
 
-                $.each(self.playlist, function (i) {
-                    $this.append(self._createListItem(self.playlist[i]));
-                });
-                self._updateControls();
-                if ($.isFunction(instant)) {
-                    instant();
-                }
-                if (self.playlist.length) {
-                    $(this).slideDown(self.options.playlistOptions.displayTime);
-                } else {
-                    $(this).show();
-                }
-            });
-        }
+        //         $.each(self.playlist, function (i) {
+        //             $this.append(self._createListItem(self.playlist[i]));
+        //         });
+        //         self._updateControls();
+        //         if ($.isFunction(instant)) {
+        //             instant();
+        //         }
+        //         if (self.playlist.length) {
+        //             $(this).slideDown(self.options.playlistOptions.displayTime);
+        //         } else {
+        //             $(this).show();
+        //         }
+        //     });
+        // }
     }
-    _createListItem = (media) => {
-        var self = this;
-
-        // Wrap the <li> contents in a <div>
-        var listItem = "<li><div>";
-
-        // Create remove control
-        listItem += "<a href='javascript:;' class='" + this.options.playlistOptions.removeItemClass + "'>&times;</a>";
-
+    _createListItem = (media, index) => {
+        var freeMedia;
+        
         // Create links to free media
-        if (media.free) {
-            var first = true;
-            listItem += "<span class='" + this.options.playlistOptions.freeGroupClass + "'>(";
-            $.each(media, function (property, value) {
-                if ($.jPlayer.prototype.format[property]) { // Check property is a media format.
-                    if (first) {
-                        first = false;
-                    } else {
-                        listItem += " | ";
-                    }
-                    listItem += "<a class='" + self.options.playlistOptions.freeItemClass + "' href='" + value + "' tabindex='-1'>" + property + "</a>";
-                }
-            });
-            listItem += ")</span>";
-        }
+        // if (media.free) {
+        //     var first = true;
+        //     listItem += "<span class='" + this.props.freeGroupClass + "'>(";
 
-        // The title is given next in the HTML otherwise the float:right on the free media corrupts in IE6/7
-        listItem += "<a href='javascript:;' class='" + this.options.playlistOptions.itemClass + "' tabindex='0'>" + "<img src='" + media.poster + "' />" + media.title + "</a>";
-        listItem += (media.artist ? " <span class='jp-artist'>by " + media.artist + "</span>" : "");
-        listItem += "</div></li>";
+        //     for(var i = 0; i < media.length; i++){
+        //         var value = media[i];
+
+        //         // Check property is a media format.
+        //         if (this.jPlayer.format[i]){
+        //             if (first) {
+        //                 first = false;
+        //             } else {
+        //                 listItem += " | ";
+        //             }
+        //             listItem += "<a class='" + this.props.freeItemClass + "' href='" + value + "' tabindex='-1'>" + i + "</a>";
+        //         }
+        //     }
+        //     listItem += ")</span>";
+        // }
+
+        var listItem = (     
+            <li key={index} class={this.state["currentPlaylistClass_" + index]}>
+                <div>
+                    <a href="javascript:;" class={this.props.removeItemClass}>&times;</a>
+                    {/*The title is given next in the HTML otherwise the float:right on the free media corrupts in IE6/7*/}
+                    <a href="javascript:;" class={this.props.itemClass} tabIndex="0"> 
+                        <img src={media.poster}/>
+                        {media.title}                 
+                        {(media.artist ? <span class="jp-artist">by {media.artist}</span> : null)}
+                    </a>
+                </div>
+            </li>
+        );
 
         return listItem;
     }
     _createItemHandlers = () => {
         var self = this;
 
-        // Create live handlers for the playlist items
-        $(this.cssSelector.playlist).off("click", "a." + this.options.playlistOptions.itemClass).on("click", "a." + this.options.playlistOptions.itemClass, function (e) {
-            e.preventDefault();
-            var index = $(this).parent().parent().index();
-            if (self.current !== index) {
-                self.play(index);
-            } else {
-                $(self.cssSelector.jPlayer).jPlayer("play");
-            }
-            self.blur(this);
-        });
+        // // Create live handlers for the playlist items
+        // $(this.cssSelector.playlist).off("click", "a." + this.options.playlistOptions.itemClass).on("click", "a." + this.options.playlistOptions.itemClass, function (e) {
+        //     e.preventDefault();
+        //     var index = $(this).parent().parent().index();
+        //     if (self.current !== index) {
+        //         self.play(index);
+        //     } else {
+        //         $(self.cssSelector.jPlayer).jPlayer("play");
+        //     }
+        //     self.blur(this);
+        // });
 
-        // Create live handlers that disable free media links to force access via right click
-        $(this.cssSelector.playlist).off("click", "a." + this.options.playlistOptions.freeItemClass).on("click", "a." + this.options.playlistOptions.freeItemClass, function (e) {
-            e.preventDefault();
-            $(this).parent().parent().find("." + self.options.playlistOptions.itemClass).click();
-            self.blur(this);
-        });
+        // // Create live handlers that disable free media links to force access via right click
+        // $(this.cssSelector.playlist).off("click", "a." + this.options.playlistOptions.freeItemClass).on("click", "a." + this.options.playlistOptions.freeItemClass, function (e) {
+        //     e.preventDefault();
+        //     $(this).parent().parent().find("." + self.options.playlistOptions.itemClass).click();
+        //     self.blur(this);
+        // });
 
-        // Create live handlers for the remove controls
-        $(this.cssSelector.playlist).off("click", "a." + this.options.playlistOptions.removeItemClass).on("click", "a." + this.options.playlistOptions.removeItemClass, function (e) {
-            e.preventDefault();
-            var index = $(this).parent().parent().index();
-            self.remove(index);
-            self.blur(this);
-        });
+        // // Create live handlers for the remove controls
+        // $(this.cssSelector.playlist).off("click", "a." + this.options.playlistOptions.removeItemClass).on("click", "a." + this.options.playlistOptions.removeItemClass, function (e) {
+        //     e.preventDefault();
+        //     var index = $(this).parent().parent().index();
+        //     self.remove(index);
+        //     self.blur(this);
+        // });
     }
     _updateControls = () => {
         if (this.options.playlistOptions.enableRemoveControls) {
-            $(this.cssSelector.playlist + " ." + this.options.playlistOptions.removeItemClass).show();
+            this.setState(previousState => previousState.removeItemClassStyle = Object.assign({}, previousState.removeItemClassStyle, {display: ""}));
         } else {
-            $(this.cssSelector.playlist + " ." + this.options.playlistOptions.removeItemClass).hide();
+            this.setState(previousState => previousState.removeItemClassStyle = Object.assign({}, previousState.removeItemClassStyle, {display: "none"}));
         }
 
         if (this.shuffled) {
-            $(this.cssSelector.jPlayer).jPlayer("addStateClass", "shuffled");
+            this.jPlayer.addStateClass("shuffled");
         } else {
-            $(this.cssSelector.jPlayer).jPlayer("removeStateClass", "shuffled");
+            this.jPlayer.removeStateClass("shuffled");
         }
-        if ($(this.cssSelector.shuffle).length && $(this.cssSelector.shuffleOff).length) {
+        if (!this.options.useStateClassSkin) {
             if (this.shuffled) {
-                $(this.cssSelector.shuffleOff).show();
-                $(this.cssSelector.shuffle).hide();
+                this.setState(previousState => previousState.shuffleOffStyle = Object.assign({}, previousState.shuffleOffStyle, {display: ""}));
+                this.setState(previousState => previousState.shuffle = Object.assign({}, previousState.shuffle, {display: "none"}));
             } else {
-                $(this.cssSelector.shuffleOff).hide();
-                $(this.cssSelector.shuffle).show();
+                this.setState(previousState => previousState.shuffleOffStyle = Object.assign({}, previousState.shuffleOffStyle, {display: "none"}));
+                this.setState(previousState => previousState.shuffle = Object.assign({}, previousState.shuffle, {display: ""}));
             }
         }
     }
     _highlight = (index) => {
+        var currentPlaylistClass = "currentPlaylistClass_" + index;
+
         if (this.playlist.length && index !== undefined) {
-            $(this.cssSelector.playlist + " .jp-playlist-current").removeClass("jp-playlist-current");
-            $(this.cssSelector.playlist + " li:nth-child(" + (index + 1) + ")").addClass("jp-playlist-current").find(".jp-playlist-item").addClass("jp-playlist-current");
-            // $(this.cssSelector.details + " li").html("<span class='jp-title'>" + this.playlist[index].title + "</span>" + (this.playlist[index].artist ? " <span class='jp-artist'>by " + this.playlist[index].artist + "</span>" : ""));
+            this.setState(previousState => { 
+                if (previousState[currentPlaylistClass]) {
+                    return ({currentPlaylistClass: previousState[currentPlaylistClass].replace("jp-playlist-current", "").trim()})
+                }
+            });
+            this.setState(previousState => {
+			    if (previousState[currentPlaylistClass] && !previousState[currentPlaylistClass].includes("jp-playlist-current")){
+				    return { currentPlaylistClass: previousState[currentPlaylistClass] + " " + "jp-playlist-current" }
+                }
+            });
         }
     }
     setPlaylist = (playlist) => {
@@ -410,7 +439,7 @@ export default class JPlayerPlaylist extends React.Component {
         if (index === undefined) {
             this._initPlaylist([]);
             this._refresh(function () {
-                $(self.cssSelector.jPlayer).jPlayer("clearMedia");
+                this.jPlayer.clearMedia();
             });
             return true;
         } else {
@@ -465,7 +494,7 @@ export default class JPlayerPlaylist extends React.Component {
         if (0 <= index && index < this.playlist.length) {
             this.current = index;
             this._highlight(index);
-            $(this.cssSelector.jPlayer).jPlayer("setMedia", this.playlist[this.current]);
+            this.jPlayer.setMedia(this.playlist[this.current]);
         } else {
             this.current = 0;
         }
@@ -475,14 +504,14 @@ export default class JPlayerPlaylist extends React.Component {
         if (0 <= index && index < this.playlist.length) {
             if (this.playlist.length) {
                 this.select(index);
-                $(this.cssSelector.jPlayer).jPlayer("play");
+                this.jPlayer.play();
             }
         } else if (index === undefined) {
-            $(this.cssSelector.jPlayer).jPlayer("play");
+            this.jPlayer.play();
         }
     }
     pause = () => {
-        $(this.cssSelector.jPlayer).jPlayer("pause");
+        this.jPlayer.pause();
     }
     next = (forcePlayNextTrack) => {
         var index = (this.current + 1 < this.playlist.length) ? this.current + 1 : 0;
@@ -543,18 +572,28 @@ export default class JPlayerPlaylist extends React.Component {
         }
     }
     blur = (that) => {
-        if ($(this.cssSelector.jPlayer).jPlayer("option", "autoBlur")) {
-            $(that).blur();
+        if (this.jPlayer.options.autoBlur) {
+            that.blur();
         }
     }
     componentDidMount(){
         this._setup();
     }
     render() {
+        //Todo: fix options
         return (
-            <JPlayer ref={(jPlayer) => this.jPlayer = jPlayer} {...this.props.jPlayerPlaylistOptions} instance={this}>
-                {/*this.props.children.type*/}
-            </JPlayer>
+            <div>
+                <div id="jp_container_playlist">
+                    <div class="jp-playlist">
+                        <ul>    
+                            {this.state.playlistComponent}   
+                        </ul>
+                    </div>
+                </div>
+                <JPlayer ref={(jPlayer) => this.jPlayer = jPlayer} {...this.state} {...this.event} >
+                    {/*this.props.children.type*/}
+                </JPlayer>
+            </div>
         );
     }
 }

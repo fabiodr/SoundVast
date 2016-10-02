@@ -9,19 +9,10 @@ class FooterContainer extends React.Component {
         super();
         
         this.state = {
-            jPlayerPlaylistOptions: {
-                jPlayerSelector: "#jplayer_footer_player",
-                cssSelectorAncestor: "#jp_container_footer_player",
-                cssClassAncestor: "jp-type-footer",
-                smoothPlaybar: true,
-                muted: true,
-                sizeFull: {
-                    width: "90%",
-                    height: "90%"
-                },
-                size: {
-                    width: 300,
-                    height: 200
+            jPlayerPlaylistConfig: {
+                cssSelector: {
+                    jPlayerSelector: "#jplayer_footer_player",
+                    cssSelectorAncestor: "#jp_container_footer_player"
                 },
                 html: {
                     //Toggle between play and pause in css based on playing or not
@@ -29,7 +20,39 @@ class FooterContainer extends React.Component {
                     mute: <i class="fa fa-volume-up"></i>,
                     fullScreen: <i class="fa fa-expand"></i>,
                     repeat: <div><i class="fa fa-repeat"></i><i class="fa fa-bars"></i></div>,
+                    shuffle: <i class="fa fa-random"></i>,
+                    previous: <i class="fa fa-step-backward"></i>,
+                    next: <i class="fa fa-step-forward"></i>,
+                    playlistOptions: <div><i class="fa fa-ellipsis-h"></i><i class="fa fa-comment"></i></div>
                 },
+                options: {
+                    smoothPlaybar: true,
+                    muted: true,
+                    sizeFull: {
+                        width: "90%",
+                        height: "90%"
+                    },
+                    size: {
+                        width: 300,
+                        height: 200
+                    }
+                },
+                playlist: [
+                    {
+                        title:"Cro Magnon Man",
+                        artist:"The Stark Palace",
+                        mp3:"http://www.jplayer.org/audio/mp3/TSP-01-Cro_magnon_man.mp3",
+                        oga:"http://www.jplayer.org/audio/ogg/TSP-01-Cro_magnon_man.ogg",
+                        poster: "http://www.jplayer.org/audio/poster/The_Stark_Palace_640x360.png"
+                    },
+                    {
+                        title:"Tempered Song",
+                        artist:"Miaow",
+                        mp3:"http://www.jplayer.org/audio/mp3/Miaow-01-Tempered-song.mp3",
+                        oga:"http://www.jplayer.org/audio/ogg/Miaow-01-Tempered-song.ogg",
+                        poster: "http://www.jplayer.org/audio/poster/Miaow_640x360.png"
+                    }
+                ],
                 ready: function(){
                     this.setMedia({
                         title: "Bubble",
@@ -46,8 +69,8 @@ class FooterContainer extends React.Component {
     }
     render() {
         return (
-            <div>
-                <JPlayerPlaylist jPlayerPlaylistOptions={this.state.jPlayerPlaylistOptions} />
+            <div class="jp-type-footer" >
+                <JPlayerPlaylist {...this.state.jPlayerPlaylistConfig} />
             </div>
         );
     }

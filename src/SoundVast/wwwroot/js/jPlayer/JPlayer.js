@@ -1,9 +1,37 @@
 import React from "react";
 import {Motion, spring} from "react-motion";
+import merge from "lodash/merge";
 
 export default class JPlayer extends React.Component {
 	static get propTypes() {
 
+	}
+	static get defaultProps(){
+		return {
+			onAbort: () => {},
+			onCanPlay: () => {},
+			onCanPlayThrough: () => {},
+			onDurationChange: () => {},
+			onEmptied: () => {},
+			onEncrypted: () => {},
+			onEnded: () => {},
+			onError: () => {},
+			onLoadedData: () => {},
+			onLoadedMetadata: () => {},
+			onLoadStart: () => {},
+			onPause: () => {},
+			onPlay: () => {},
+			onPlaying: () => {},
+			onProgress: () => {},
+			onRateChange: () => {},
+			onSeeked: () => {},
+			onSeeking: () => {},
+			onStalled: () => {},
+			onSuspend: () => {},
+			onTimeUpdate: () => {},
+			onVolumeChange: () => {},
+			onWaiting: () => {}
+		}
 	}
     constructor(props, context){
         super();
@@ -26,8 +54,10 @@ export default class JPlayer extends React.Component {
 			},
 			//These options need to be in the state as either they modify reacts virtual attributes
 			options: {			
-				cssSelectorAncestor: props.cssSelectorAncestor || "#jp_container_1",
-				jPlayerSelector: props.jPlayerSelector || "#jplayer_1",
+				cssSelector: {
+					cssSelectorAncestor: props.cssSelector.cssSelectorAncestor || "#jp_container_1",
+					jPlayerSelector: props.cssSelector.jPlayerSelector || "#jplayer_1",
+				},			
 				preload: props.preload || "metadata", // HTML5 Spec values: none, metadata, auto.
 				autoPlay: props.autoPlay || false,
 				muted: props.muted || false,
@@ -226,7 +256,7 @@ export default class JPlayer extends React.Component {
 				delete options[key];
 			}
 		}
-			debugger
+
 		this.options = merge({
 			solution: "html", // Valid solutions: html. Order defines priority. 1st is highest,
 			supplied: "mp3", // Defines which formats jPlayer will try and support and the priority by the order. 1st is highest,		
@@ -407,6 +437,7 @@ export default class JPlayer extends React.Component {
 					this._updateInterface();
 					this._trigger(this.event.progress);
 				}
+				this.props.onProgress();
 			},
 			onLoadedData: () => {
 				if(this.html.audio.gate || this.html.video.gate) {
@@ -421,6 +452,7 @@ export default class JPlayer extends React.Component {
 					}
 					this._trigger(this.event.loadeddata);
 				}
+				this.props.onLoadedData();
 			},
 			onTimeUpdate: () => {
 				if(this.html.audio.gate || this.html.video.gate) {
@@ -428,6 +460,7 @@ export default class JPlayer extends React.Component {
 					this._updateInterface();
 					this._trigger(this.event.timeupdate);
 				}
+				this.props.onTimeUpdate();
 			},
 			onDurationChange: () => {
 				if(this.html.audio.gate || this.html.video.gate) {
@@ -435,6 +468,7 @@ export default class JPlayer extends React.Component {
 					this._updateInterface();
 					this._trigger(this.event.durationchange);
 				}
+				this.props.onDurationChange();
 			},
 			onPlay: () => {
 				if(this.html.audio.gate || this.html.video.gate) {
@@ -442,6 +476,7 @@ export default class JPlayer extends React.Component {
 					this._html_checkWaitForPlay(); // So the native controls update this variable and puts the hidden interface in the correct state. Affects toggling native controls.
 					this._trigger(this.event.play);
 				}
+				this.props.onPlay();
 			},
 			onPlaying: () => {
 				if(this.html.audio.gate || this.html.video.gate) {
@@ -449,30 +484,35 @@ export default class JPlayer extends React.Component {
 					this._seeked();
 					this._trigger(this.event.playing);
 				}
+				this.props.onPlaying();
 			},
 			onPause: () => {
 				if(this.html.audio.gate || this.html.video.gate) {
 					this._updateButtons(false);
 					this._trigger(this.event.pause);
 				}
+				this.props.onPause();
 			},
 			onWaiting: () => {
 				if(this.html.audio.gate || this.html.video.gate) {
 					this._seeking();
 					this._trigger(this.event.waiting);
 				}
+				this.props.onWaiting();
 			},
 			onSeeking: () => {
 				if(this.html.audio.gate || this.html.video.gate) {
 					this._seeking();
 					this._trigger(this.event.seeking);
 				}
+				this.props.onSeeking();
 			},
 			onSeeked: () => {
 				if(this.html.audio.gate || this.html.video.gate) {
 					this._seeked();
 					this._trigger(this.event.seeked);
 				}
+				this.props.onSeeked();
 			},
 			onVolumeChange: () => {
 				if(this.html.audio.gate || this.html.video.gate) {
@@ -483,6 +523,7 @@ export default class JPlayer extends React.Component {
 					this._updateVolume();
 					this._trigger(this.event.volumechange);
 				}
+				this.props.onVolumeChange();
 			},
 			onRateChange: () => {
 				if(this.html.audio.gate || this.html.video.gate) {		
@@ -492,12 +533,14 @@ export default class JPlayer extends React.Component {
 					this._updatePlaybackRate();
 					this._trigger(this.event.ratechange);
 				}
+				this.props.onRateChange();
 			},
 			onSuspend: () => { // Seems to be the only way of capturing that the iOS4 browser did not actually play the media from the page code. ie., It needs a user gesture.
 				if(this.html.audio.gate || this.html.video.gate) {
 					this._seeked();
 					this._trigger(this.event.suspend);
 				}
+				this.props.onSuspend();
 			},
 			onEnded: () => {
 				var media = this.currentMedia;
@@ -514,6 +557,7 @@ export default class JPlayer extends React.Component {
 					this._updateInterface();
 					this._trigger(this.event.ended);
 				}
+				this.props.onEnded();
 			},
 			onError: () => {
 				if(this.html.audio.gate || this.html.video.gate) {
@@ -539,15 +583,16 @@ export default class JPlayer extends React.Component {
 						});
 					}
 				}
+				this.props.onError();
 			},
 			// Create all the other event listeners that bubble up to a jPlayer event from html, without being used by jPlayer.
-			onLoadStart: () => this._bubbleEventListener("loadstart"),
-			onAbort: () =>  this._bubbleEventListener("abort"),
-			onEmptied: () => this._bubbleEventListener("emptied"),
-			onStalled: () => this._bubbleEventListener("stalled"),
-			onLoadedMetadata: () => this._bubbleEventListener("loadedmetadata"),
-			onCanPlay: () => this._bubbleEventListener("canplay"),
-			onCanPlayThrough: () => this._bubbleEventListener("canplaythrough")
+			onLoadStart: () => {this._bubbleEventListener("loadstart"); this.props.onLoadStart();},
+			onAbort: () =>  {this._bubbleEventListener("abort"); this.props.onAbort();},
+			onEmptied: () => {this._bubbleEventListener("emptied"); this.props.onEmptied();},
+			onStalled: () => {this._bubbleEventListener("stalled"); this.props.onStalled();},
+			onLoadedMetadata: () => {this._bubbleEventListener("loadedmetadata"); this.props.onLoadedMetadata();},
+			onCanPlay: () => {this._bubbleEventListener("canplay"); this.props.onCanPlay();},
+			onCanPlayThrough: () => {this._bubbleEventListener("canplaythrough"); this.props.onCanPlayThrough();}
 		};
 	}
 	_setupErrors = () => {
@@ -693,15 +738,13 @@ export default class JPlayer extends React.Component {
 			this.require[JPlayer.format[format].media] = true;
 		}
 
-		var cssClassAncestor = !!this.props.cssClassAncestor ? " " + this.props.cssClassAncestor : "";
-
 		// Now required types are known, finish the options default settings.
 		if(this.require.video) {
 			this.options = merge({}, this.optionsVideo, this.options);
-			this.setState({stateClass: "jp-video" + cssClassAncestor});
+			this.setState({stateClass: "jp-video"});
 		} else {
 			this.options = merge({}, this.optionsAudio, this.options);
-			this.setState({stateClass: "jp-audio" + cssClassAncestor});
+			this.setState({stateClass: "jp-audio"});
 		}
 		
 		this._setSize(); // update status and jPlayer element size
@@ -807,7 +850,7 @@ export default class JPlayer extends React.Component {
 		this._resetGate();
 
 		// Set up the css selectors for the control and feedback entities.
-		this._cssSelectorAncestor(this.state.options.cssSelectorAncestor);
+		this._cssSelectorAncestor(this.state.options.cssSelector.cssSelectorAncestor);
 
 		// If html is not being used by this browser, then media playback is not possible. Trigger an error event.
 		if(!(this.html.used)) {
@@ -1002,9 +1045,9 @@ export default class JPlayer extends React.Component {
 
 		event.jPlayer = {
 			version: Object.assign({}, JPlayer.version),
-			options: merge.assign({}, this.options), // Deep copy
-			status: merge.assign({}, this.status), // Deep copy
-			html: merge.assign({}, this.html), // Deep copy
+			options: merge({}, this.options), // Deep copy
+			status: merge({}, this.status), // Deep copy
+			html: merge({}, this.html), // Deep copy
 			error: (error) ? Object.assign({}, error) : null,
 			warning: (warning) ? Object.assign({}, warning) : null
 		};
@@ -1487,7 +1530,7 @@ export default class JPlayer extends React.Component {
 		}
 	}
 	_cssSelectorAncestor = (ancestor) => {
-		this.setState(previousState => previousState.options = Object.assign({}, previousState.options, {cssSelectorAncestor: ancestor}));
+		this.setState(previousState => previousState.options.cssSelector = Object.assign({}, previousState.options.cssSelector, {cssSelectorAncestor: ancestor}));
 		this._removeUiClass();
 
 		var ancestorElements = document.querySelector(ancestor);
@@ -1520,7 +1563,7 @@ export default class JPlayer extends React.Component {
 		if(typeof cssSel === 'string') {
 			if(this.options.cssSelector[fn]) {
 				this.options.cssSelector[fn] = cssSel;
-				this.css.cs[fn] = this.state.options.cssSelectorAncestor + " " + cssSel;
+				this.css.cs[fn] = this.state.options.cssSelector.cssSelectorAncestor + " " + cssSel;
 				var elements = document.querySelectorAll(this.css.cs[fn]);
 
 				if(elements.length && this[fn]) {
@@ -1657,9 +1700,9 @@ export default class JPlayer extends React.Component {
 	_setOption = (key, value) => {
 		// The ability to set options is limited at this time.
 		switch(key) {
-			case "html" :
-				this.setState(previousState => previousState.options.html = Object.assign({}, previousState.options.html, previousState.options.html[key] = value));
-			break;
+			// case "html" :
+			// 	this.setState(previousState => previousState.options.html = Object.assign({}, previousState.options.html, previousState.options.html[key] = value));
+			// 	break;
 			case "volume" :
 				this.volume(value);
 				break;
@@ -1673,7 +1716,7 @@ export default class JPlayer extends React.Component {
 				this._cssSelectorAncestor(value); // Set and refresh all associations for the new ancestor.
 				break;
 			case "cssSelector" :
-				for (var fn = 0; fn < array.length; fn++) {
+				for (var fn = 0; fn < value.length; fn++) {
 					var cssSel = value[fn];
 
 					this._cssSelector(fn, cssSel); // NB: The option is set inside this function, after further validity checks.
@@ -1936,7 +1979,7 @@ export default class JPlayer extends React.Component {
 		}
 	}
 	_requestFullscreen = () => {
-		var e = document.querySelector(this.state.options.cssSelectorAncestor),
+		var e = document.querySelector(this.state.options.cssSelector.cssSelectorAncestor),
 			fs = this.nativeFeatures.fullscreen;
 
 		// This method needs the video element. For iOS and Android.
@@ -2247,10 +2290,14 @@ export default class JPlayer extends React.Component {
 		};
 		var media = this.state.renderMedia ? [this._renderPoster(), this._renderAudio(mediaAttribute), this._renderVideo(mediaAttribute)] : null;
 		var playBar = this.options.smoothPlaybar ? this._renderAnimatedPlaybar() : <div class="jp-play-bar" style={this.state.playBarStyle} />;
+		var additionalControls = [];
+		for (var i = 0; i < this.props.level; i++) {
+			indents.push(<span className='indent' key={i}></span>);
+		}
 
 		return (
-			<div id={this.state.options.cssSelectorAncestor.slice(1)} class={this.state.stateClass}>
-				<div ref={(jPlayerElement) => this.jPlayerElement = jPlayerElement} id={this.state.options.jPlayerSelector.slice(1)} class="jp-jplayer" style={this.state.jPlayerStyle}>
+			<div id={this.state.options.cssSelector.cssSelectorAncestor.slice(1)} class={this.state.stateClass}>
+				<div ref={(jPlayerElement) => this.jPlayerElement = jPlayerElement} id={this.state.options.cssSelector.jPlayerSelector.slice(1)} class="jp-jplayer" style={this.state.jPlayerStyle}>
 					{media}
 				</div>
 				<div class="jp-gui">			
@@ -2271,21 +2318,12 @@ export default class JPlayer extends React.Component {
 							{this.state.options.html.repeat}			
 						</a>
 						<a class="jp-repeat-off" style={this.state.repeatOffStyle} onClick={this.state.repeatOffOnClick}>							
-							{this.state.options.html.repeatOff}			
-						</a>
-						<a class="jp-shuffle">
-							<i class="fa fa-random"></i>
-						</a>
-						<a class="jp-previous">
-							<i class="fa fa-step-backward"></i>
-						</a>
-						<a class="jp-next">
-							<i class="fa fa-step-forward"></i>
-						</a>
-						<a class="jp-full-screen jp-test" style={this.state.fullScreenStyle} onClick={this.state.fullScreenOnClick}>
+							{this.state.options.html.repeatOff}	
+						</a>																
+						<a class="jp-full-screen" style={this.state.fullScreenStyle} onClick={this.state.fullScreenOnClick}>
 							{this.state.options.html.fullScreen}
 						</a>
-						<a class="jp-restore-screen jp-test" style={this.state.restoreScreenStyle} onClick={this.state.restoreScreenOnClick}>
+						<a class="jp-restore-screen" style={this.state.restoreScreenStyle} onClick={this.state.restoreScreenOnClick}>
 							{this.state.options.html.restoreScreen}
 						</a>
 						<a class="jp-volume-max" style={this.state.volumeMaxStyle} onClick={this.state.volumeMaxOnClick}>
@@ -2294,14 +2332,15 @@ export default class JPlayer extends React.Component {
 						<div class="jp-volume-bar" style={this.state.volumeBarStyle} onClick={this.state.volumeBarOnClick}>
 							<div class="jp-volume-bar-value" style={this.state.volumeBarValueStyle} />
 						</div>
-						<div class="jp-title">{this.state.titleText}</div>
+						{
+						/*<div class="jp-title">
+							{this.state.titleText}
+						</div>*/
+						}
 						<div class="jp-playback-rate-bar" style={this.state.playbackRateBarStyle} onClick={this.state.playbackRateBarOnClick}>
 							<div class="jp-playback-rate-bar-value" style={this.state.playbackRateBarValueStyle} />
-						</div>
-						<a class="jp-playlist-options">
-							<i class="fa fa-ellipsis-h"></i>
-							<i class="fa fa-comment"></i>
-						</a>
+						</div>						
+						{this.state.options.html.additionalControls}	
 					</div>
 					<div class="jp-progress">
 						<div class={this.state.seekBarClass} style={this.state.seekBarStyle} onClick={this.state.seekBarOnClick}>                         
@@ -2590,32 +2629,3 @@ JPlayer._getOffset = (el) => {
 JPlayer._getWidth = (el) => el.getBoundingClientRect().width;
 JPlayer._getHeight = (el) => el.getBoundingClientRect().height;
 JPlayer._isFunction = (obj) => Object.prototype.toString.call(obj) == '[object Function]';
-
-/**
- * Simple is object check.
- * @param item
- * @returns {boolean}
- */
-function isObject(item) {
-  return (item && typeof item === 'object' && !Array.isArray(item) && item !== null);
-}
-
-/**
- * Deep merge two objects.
- * @param target
- * @param source
- */
-function merge(target, source) {
-  if (isObject(target) && isObject(source)) {
-    for (const key in source) {
-		debugger;
-      if (isObject(source[key])) {
-        if (!target[key]) Object.assign(target, { [key]: {} });
-        merge(target[key], source[key]);
-      } else {
-        Object.assign(target, { [key]: source[key] });
-      }
-    }
-  }
-  return target;
-}
