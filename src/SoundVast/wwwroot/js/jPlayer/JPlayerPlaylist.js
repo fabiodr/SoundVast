@@ -46,7 +46,7 @@ export default class JPlayerPlaylist extends React.Component {
     }
     _shuffleOnClick = (e) => {
          e.preventDefault();
-
+debugger
         if (this.shuffled && this.jPlayer.useStateClassSkin) {
             this.shuffle(false);
         } else {
@@ -547,35 +547,29 @@ export default class JPlayerPlaylist extends React.Component {
         }
     }
     shuffle = (shuffled, playNow) => {
-        if (shuffled === undefined) {
-            shuffled = !this.shuffled;
-        }
-
-        if (shuffled || shuffled !== this.shuffled) {
-            this.setState({startShuffle: true});  
-        }
+        this.setState({slideUp: shuffled});
+        this.playNow = playNow;  
     }
-    _shuffleAnimation = (styleValueToInterpTo) => {
-        if (styleValueToInterpTo === this.state.shuffleToMax){
-            this.shuffled = shuffled;
-            if (shuffled) {
-                this.playlist.sort(function () {
-                    return 0.5 - Math.random();
-                });
-            } else {
-                this._originalPlaylist();
-            }
-            this._refresh(true); // Instant
+    _shuffleAnimationCallback = () => {
+        debugger;
+        this.shuffled = !this.shuffled;
 
-            if (playNow || !$(this.cssSelector.jPlayer).data("jPlayer").status.paused) {
-                this.play(0);
-            } else {
-                this.select(0);
-            }
-            this.setState({shuffleAnimTo: 0});
+        if (this.shuffled) {
+            this.playlist.sort(function () {
+                return 0.5 - Math.random();
+            });
+        } else {
+            this._originalPlaylist();
         }
+        this._refresh(true); // Instant
 
-        return styleValueToInterpTo;
+        if (this.playNow || !this.jPlayer.status.paused) {
+            this.play(0);
+        } else {
+            this.select(0);
+        }
+        this.setState({shuffleAnimTo: 0});
+        this.setState(previousState => {debugger; return previousState.slideUp = !previousState.slideUp});
     }
     blur = (that) => {
         if (this.jPlayer.options.autoBlur) {
@@ -584,15 +578,12 @@ export default class JPlayerPlaylist extends React.Component {
     }
     componentDidMount(){
         this._setup();
-        if (this.state.shuffleAnimTo === this.shuffleToMax){
-            this.setState({startShuffle: false});
-        }
     }
     render() {
         //    <div id="jp_container_playlist">
         //             <div class="jp-playlist">
         //             <Motion defaultStyle={{heightToInterpTo: this.shuffleToMax}} style={{heightToInterpTo: spring(this.state.shuffleAnimTo, this.state.shuffleTime)}}>
-        //                 {(values) => {debugger; return <ul style={{height: this.state.startShuffle ? this._shuffleAnimation(values.heightToInterpTo) + "%" : null}}>{this.state.playlistComponent}</ul>}}
+        //                 {(values) => {debugger; return <ul style={{height: this.state.startShuffleAnim ? this._shuffleAnimation(values.heightToInterpTo) + "%" : null}}>{this.state.playlistComponent}</ul>}}
         //             </Motion>
         //             </div>
         //         </div>
@@ -600,9 +591,9 @@ export default class JPlayerPlaylist extends React.Component {
             <div>
                 <div id="jp_container_playlist">
                     <div class="jp-playlist">
-                    <Motion defaultStyle={{heightToInterpTo: this.shuffleToMax}} style={{heightToInterpTo: spring(100, this.state.shuffleTime)}}>
-                        {(values) => {debugger; return <ul style={{height: this.state.startShuffle ? this._shuffleAnimation(values.heightToInterpTo) + "%" : null}}>{this.state.playlistComponent}</ul>}}
-                    </Motion>
+                        <Motion defaultStyle={{heightToInterpTo: 100}} style={{heightToInterpTo: spring(this.state.slideUp ? 0 : 100)}} onRest={() => this._shuffleAnimationCallback()}>
+                            {(values) => { return <ul style={{height: values.heightToInterpTo + "%"}}>{this.state.playlistComponent}</ul>}}
+                        </Motion>       
                     </div>
                 </div>
                 <JPlayer ref={(jPlayer) => this.jPlayer = jPlayer} {...this.state} {...this.event} >

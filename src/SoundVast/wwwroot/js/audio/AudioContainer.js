@@ -10,7 +10,6 @@ class AudioContainer extends React.Component {
         this.props.loadAudios();        
     }
     render(){   
-        debugger;
         const model = this.props.audio || [];
 
         return (

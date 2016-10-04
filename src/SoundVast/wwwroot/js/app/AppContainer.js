@@ -14,8 +14,8 @@ class AppContainer extends React.Component {
     render() {
         return (
             <div style={{height: "100%"}}>{/*Remove Style*/}
-                <Nav isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} userName={this.props.userName} />
-                <Body />
+                {/*<Nav isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} userName={this.props.userName} />
+                <Body />*/}
                 <FooterContainer />
             </div>
         );
