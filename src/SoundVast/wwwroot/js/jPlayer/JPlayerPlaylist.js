@@ -1,4 +1,5 @@
 import React from "react";
+import {Motion, spring} from "react-motion";
 import JPlayer from "./JPlayer";
 import merge from "lodash/merge";
 
@@ -12,11 +13,12 @@ export default class JPlayerPlaylist extends React.Component {
             displayTime: 'slow',
             addTime: 'fast',
             removeTime: 'fast',
-            shuffleTime: 'slow',
+            shuffleTime: 400,
             itemClass: "jp-playlist-item",
             freeGroupClass: "jp-free-media",
             freeItemClass: "jp-playlist-item-free",
-            removeItemClass: "jp-playlist-item-remove"
+            removeItemClass: "jp-playlist-item-remove",
+            
         }
     }
     constructor(props)
@@ -25,6 +27,8 @@ export default class JPlayerPlaylist extends React.Component {
 
         this.event = {};
         this.state = props;
+        this.shuffleToMin = 0;
+        this.shuffleToMax = 100;
 
         var jPlayerPlaylistOptions = {
             html: {
@@ -38,7 +42,7 @@ export default class JPlayerPlaylist extends React.Component {
             }
         }
 
-        merge(this.state, jPlayerPlaylistOptions); 
+        merge(this.state, jPlayerPlaylistOptions, {shuffleAnimTo: this.shuffleToMin}); 
     }
     _shuffleOnClick = (e) => {
          e.preventDefault();
@@ -100,7 +104,7 @@ export default class JPlayerPlaylist extends React.Component {
             stateClass: {
                 shuffled: "jp-state-shuffled"
             }
-        }, this.state.options);
+        }, this.state);
 
         this.playlist = []; // Array of Objects: The current playlist displayed (Un-shuffled or Shuffled)
         this.original = []; // Array of Objects: The original playlist
@@ -514,6 +518,7 @@ export default class JPlayerPlaylist extends React.Component {
         this.jPlayer.pause();
     }
     next = (forcePlayNextTrack) => {
+        debugger
         var index = (this.current + 1 < this.playlist.length) ? this.current + 1 : 0;
 
         if (this.loop === "loop" && !forcePlayNextTrack) {
@@ -542,34 +547,35 @@ export default class JPlayerPlaylist extends React.Component {
         }
     }
     shuffle = (shuffled, playNow) => {
-        var self = this;
-
         if (shuffled === undefined) {
             shuffled = !this.shuffled;
         }
 
         if (shuffled || shuffled !== this.shuffled) {
-
-            $(this.cssSelector.playlist + " ul").slideUp(this.options.playlistOptions.shuffleTime, function () {
-                self.shuffled = shuffled;
-                if (shuffled) {
-                    self.playlist.sort(function () {
-                        return 0.5 - Math.random();
-                    });
-                } else {
-                    self._originalPlaylist();
-                }
-                self._refresh(true); // Instant
-
-                if (playNow || !$(self.cssSelector.jPlayer).data("jPlayer").status.paused) {
-                    self.play(0);
-                } else {
-                    self.select(0);
-                }
-
-                $(this).slideDown(self.options.playlistOptions.shuffleTime);
-            });
+            this.setState({startShuffle: true});  
         }
+    }
+    _shuffleAnimation = (styleValueToInterpTo) => {
+        if (styleValueToInterpTo === this.state.shuffleToMax){
+            this.shuffled = shuffled;
+            if (shuffled) {
+                this.playlist.sort(function () {
+                    return 0.5 - Math.random();
+                });
+            } else {
+                this._originalPlaylist();
+            }
+            this._refresh(true); // Instant
+
+            if (playNow || !$(this.cssSelector.jPlayer).data("jPlayer").status.paused) {
+                this.play(0);
+            } else {
+                this.select(0);
+            }
+            this.setState({shuffleAnimTo: 0});
+        }
+
+        return styleValueToInterpTo;
     }
     blur = (that) => {
         if (this.jPlayer.options.autoBlur) {
@@ -578,16 +584,25 @@ export default class JPlayerPlaylist extends React.Component {
     }
     componentDidMount(){
         this._setup();
+        if (this.state.shuffleAnimTo === this.shuffleToMax){
+            this.setState({startShuffle: false});
+        }
     }
     render() {
-        //Todo: fix options
+        //    <div id="jp_container_playlist">
+        //             <div class="jp-playlist">
+        //             <Motion defaultStyle={{heightToInterpTo: this.shuffleToMax}} style={{heightToInterpTo: spring(this.state.shuffleAnimTo, this.state.shuffleTime)}}>
+        //                 {(values) => {debugger; return <ul style={{height: this.state.startShuffle ? this._shuffleAnimation(values.heightToInterpTo) + "%" : null}}>{this.state.playlistComponent}</ul>}}
+        //             </Motion>
+        //             </div>
+        //         </div>
         return (
             <div>
                 <div id="jp_container_playlist">
                     <div class="jp-playlist">
-                        <ul>    
-                            {this.state.playlistComponent}   
-                        </ul>
+                    <Motion defaultStyle={{heightToInterpTo: this.shuffleToMax}} style={{heightToInterpTo: spring(100, this.state.shuffleTime)}}>
+                        {(values) => {debugger; return <ul style={{height: this.state.startShuffle ? this._shuffleAnimation(values.heightToInterpTo) + "%" : null}}>{this.state.playlistComponent}</ul>}}
+                    </Motion>
                     </div>
                 </div>
                 <JPlayer ref={(jPlayer) => this.jPlayer = jPlayer} {...this.state} {...this.event} >

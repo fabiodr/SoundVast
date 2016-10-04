@@ -1774,20 +1774,20 @@ export default class JPlayer extends React.Component {
 					this._refreshSize();
 				}
 				break;
-			case "size" :
-				if(!this.options.fullWindow && this.options[key].cssClass !== value.cssClass) {
-					this._removeUiClass();
-				}
-				this.options[key] = Object.assign({}, this.options[key], value); // store a merged copy of it, incase not all properties changed.
-				this._refreshSize();
-				break;
-			case "sizeFull" :
-				if(this.options.fullWindow && this.options[key].cssClass !== value.cssClass) {
-					this._removeUiClass();
-				}
-				this.options[key] = Object.assign({}, this.options[key], value); // store a merged copy of it, incase not all properties changed.
-				this._refreshSize();
-				break;
+			// case "size" :
+			// 	if(!this.options.fullWindow && this.options[key].cssClass !== value.cssClass) {
+			// 		this._removeUiClass();
+			// 	}
+			// 	this.options[key] = Object.assign({}, this.options[key], value); // store a merged copy of it, incase not all properties changed.
+			// 	this._refreshSize();
+			// 	break;
+			// case "sizeFull" :
+			// 	if(this.options.fullWindow && this.options[key].cssClass !== value.cssClass) {
+			// 		this._removeUiClass();
+			// 	}
+			// 	this.options[key] = Object.assign({}, this.options[key], value); // store a merged copy of it, incase not all properties changed.
+			// 	this._refreshSize();
+			// 	break;
 			case "autohide" :
 				this.options[key] = Object.assign({}, this.options[key], value); // store a merged copy of it, incase not all properties changed.
 				this._updateAutohide();
@@ -2290,10 +2290,6 @@ export default class JPlayer extends React.Component {
 		};
 		var media = this.state.renderMedia ? [this._renderPoster(), this._renderAudio(mediaAttribute), this._renderVideo(mediaAttribute)] : null;
 		var playBar = this.options.smoothPlaybar ? this._renderAnimatedPlaybar() : <div class="jp-play-bar" style={this.state.playBarStyle} />;
-		var additionalControls = [];
-		for (var i = 0; i < this.props.level; i++) {
-			indents.push(<span className='indent' key={i}></span>);
-		}
 
 		return (
 			<div id={this.state.options.cssSelector.cssSelectorAncestor.slice(1)} class={this.state.stateClass}>

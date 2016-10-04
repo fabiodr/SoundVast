@@ -9,7 +9,7 @@ class FooterContainer extends React.Component {
         super();
         
         this.state = {
-            jPlayerPlaylistConfig: {
+            jPlayerPlaylistOptions: {
                 cssSelector: {
                     jPlayerSelector: "#jplayer_footer_player",
                     cssSelectorAncestor: "#jp_container_footer_player"
@@ -24,18 +24,16 @@ class FooterContainer extends React.Component {
                     previous: <i class="fa fa-step-backward"></i>,
                     next: <i class="fa fa-step-forward"></i>,
                     playlistOptions: <div><i class="fa fa-ellipsis-h"></i><i class="fa fa-comment"></i></div>
+                },      
+                smoothPlaybar: true,
+                muted: true,
+                sizeFull: {
+                    width: "90%",
+                    height: "90%"
                 },
-                options: {
-                    smoothPlaybar: true,
-                    muted: true,
-                    sizeFull: {
-                        width: "90%",
-                        height: "90%"
-                    },
-                    size: {
-                        width: 300,
-                        height: 200
-                    }
+                size: {
+                    width: 300,
+                    height: 200
                 },
                 playlist: [
                     {
@@ -70,7 +68,7 @@ class FooterContainer extends React.Component {
     render() {
         return (
             <div class="jp-type-footer" >
-                <JPlayerPlaylist {...this.state.jPlayerPlaylistConfig} />
+                <JPlayerPlaylist {...this.state.jPlayerPlaylistOptions} />
             </div>
         );
     }
