@@ -25,12 +25,13 @@ export default class JPlayerPlaylist extends React.Component {
     {
         super();
 
-        this.event = {};
-        this.state = props;
         this.shuffleToMin = 0;
         this.shuffleToMax = 100;
 
-        var jPlayerPlaylistOptions = {
+        this.state = {};
+        this.state = merge(
+        {
+            slideUp: false,
             html: {
                 additionalControls: [
                     <a class="jp-shuffle" key={0} onClick={this._shuffleOnClick} style={this.state.shuffleStyle}>{props.html.shuffle}</a>,
@@ -38,15 +39,17 @@ export default class JPlayerPlaylist extends React.Component {
                     <a class="jp-previous" key={2} onClick={this._previousOnClick}>{props.html.previous}</a>,
 					<a class="jp-next" key={3} onClick={this._nextOnClick}>{props.html.next}</a>,
                     <a class="jp-playlist-options" key={4}>{props.html.playlistOptions}</a>
-                ]
+                ],
             }
-        }
+        }, props);
 
-        merge(this.state, jPlayerPlaylistOptions, {shuffleAnimTo: this.shuffleToMin}); 
+        this.event = {};
+
+        document.getElementById("app").addEventListener("click", this.handleMouseDown);
     }
     _shuffleOnClick = (e) => {
          e.preventDefault();
-debugger
+
         if (this.shuffled && this.jPlayer.useStateClassSkin) {
             this.shuffle(false);
         } else {
@@ -551,7 +554,6 @@ debugger
         this.playNow = playNow;  
     }
     _shuffleAnimationCallback = () => {
-        debugger;
         this.shuffled = !this.shuffled;
 
         if (this.shuffled) {
@@ -568,8 +570,8 @@ debugger
         } else {
             this.select(0);
         }
-        this.setState({shuffleAnimTo: 0});
-        this.setState(previousState => {debugger; return previousState.slideUp = !previousState.slideUp});
+
+        this.setState({slideUp: false});
     }
     blur = (that) => {
         if (this.jPlayer.options.autoBlur) {
@@ -580,20 +582,17 @@ debugger
         this._setup();
     }
     render() {
-        //    <div id="jp_container_playlist">
-        //             <div class="jp-playlist">
-        //             <Motion defaultStyle={{heightToInterpTo: this.shuffleToMax}} style={{heightToInterpTo: spring(this.state.shuffleAnimTo, this.state.shuffleTime)}}>
-        //                 {(values) => {debugger; return <ul style={{height: this.state.startShuffleAnim ? this._shuffleAnimation(values.heightToInterpTo) + "%" : null}}>{this.state.playlistComponent}</ul>}}
-        //             </Motion>
-        //             </div>
-        //         </div>
         return (
             <div>
                 <div id="jp_container_playlist">
                     <div class="jp-playlist">
                         <Motion defaultStyle={{heightToInterpTo: 100}} style={{heightToInterpTo: spring(this.state.slideUp ? 0 : 100)}} onRest={() => this._shuffleAnimationCallback()}>
-                            {(values) => { return <ul style={{height: values.heightToInterpTo + "%"}}>{this.state.playlistComponent}</ul>}}
-                        </Motion>       
+                            {(values) => { debugger; return <ul style={{
+                                WebkitTransform: `translate3d(0, ${values.heightToInterpTo}%, 0)`,
+                                transform: `translate3d(0, ${values.heightToInterpTo}%, 0)`,}}>
+                                    {this.state.playlistComponent}
+                                </ul>}}
+                        </Motion>      
                     </div>
                 </div>
                 <JPlayer ref={(jPlayer) => this.jPlayer = jPlayer} {...this.state} {...this.event} >
