@@ -25,8 +25,8 @@ export default class JPlayerPlaylist extends React.Component {
     {
         super();
 
-        this.shuffleAnimMinHeight, this.removeAnimMinHeight = 0;
-        this.shuffleAnimMaxHeight, this.removeAnimMaxHeight = 100;
+        this.shuffleAnimMinHeight = this.removeAnimMinHeight = 0;
+        this.shuffleAnimMaxHeight = this.removeAnimMaxHeight = 1;
 
         this.state = {};
         this.state = merge(
@@ -45,6 +45,8 @@ export default class JPlayerPlaylist extends React.Component {
         }, props);
 
         this.event = {};
+        this.playlist = []; // Array of Objects: The current playlist displayed (Un-shuffled or Shuffled)
+        this.original = []; // Array of Objects: The original playlist
     }
     _shuffleOnClick = (e) => {
          e.preventDefault();
@@ -75,7 +77,6 @@ export default class JPlayerPlaylist extends React.Component {
     _setup = () => {
         this.current = 0;
         this.shuffled = false;
-        this.removing = false; // Flag is true during remove animation, disabling the remove() method until complete.
 
         this.cssSelector = Object.assign({}, {cssPlaylistOptionsSelector: this.state.cssSelector.cssSelectorAncestor}, this.state.cssSelector);
 
@@ -107,9 +108,6 @@ export default class JPlayerPlaylist extends React.Component {
                 shuffled: "jp-state-shuffled"
             }
         }, this.state);
-
-        this.playlist = []; // Array of Objects: The current playlist displayed (Un-shuffled or Shuffled)
-        this.original = []; // Array of Objects: The original playlist
 
         this._initPlaylist(this.state.playlist); // Copies playlist to this.original. Then mirrors this.original to this.playlist. Creating two arrays, where the element pointers match. (Enables pointer comparison.)
 
@@ -171,7 +169,7 @@ export default class JPlayerPlaylist extends React.Component {
             }
         };
 
-        this.setState({playlistComponent: this.playlist.map((media, i) => this._createListItem(media, i))});
+        // this.setState({playlistComponent: this.playlist.map((media, i) => this._createListItem(media, i))});
         
         // $(this.cssSelector.jPlayer).data().jPlayer._updateButtons = function (playing) {
         //     if (playing === undefined) {
@@ -258,7 +256,7 @@ export default class JPlayerPlaylist extends React.Component {
     }
     _init = () => {
         this._refresh(function () {
-            if (this.options.playlistOptions.autoPlay) {
+            if (this.options.autoPlay) {
                 this.play(this.current);
             } else {
                 this.select(this.current);
@@ -268,7 +266,6 @@ export default class JPlayerPlaylist extends React.Component {
     _initPlaylist = (playlist) => {
         this.current = 0;
         this.shuffled = false;
-        this.removing = false;
         this.original = Object.assign([], playlist); // Copy the Array of Objects
         this._originalPlaylist();
     }
@@ -290,7 +287,7 @@ export default class JPlayerPlaylist extends React.Component {
         //     });
         //     this._updateControls();
         // } else {
-        //     var displayTime = $(this.cssSelector.playlist + " ul").children().length ? this.options.playlistOptions.displayTime : 0;
+        //     var displayTime = $(this.cssSelector.playlist + " ul").children().length ? this.options.displayTime : 0;
 
         //     $(this.cssSelector.playlist + " ul").shuffleSlideUp(displayTime, function () {
         //         var $this = $(this);
@@ -304,7 +301,7 @@ export default class JPlayerPlaylist extends React.Component {
         //             instant();
         //         }
         //         if (this.playlist.length) {
-        //             $(this).slideDown(this.options.playlistOptions.displayTime);
+        //             $(this).slideDown(this.options.displayTime);
         //         } else {
         //             $(this).show();
         //         }
@@ -334,35 +331,18 @@ export default class JPlayerPlaylist extends React.Component {
         //     }
         //     listItem += ")</span>";
         // }
-        <Motion style={{heightToInterpTo: spring(this.state.shuffleSlideUp ? this.shuffleAnimMaxHeight : this.shuffleAnimMinHeight, this.props.shuffleAnimation)}} onRest={() => this.state.shuffleSlideUp ? this._shuffleAnimationCallback() : null}>
-            {(values) => <ul style={{
-                transform: `translate3d(0, ${values.heightToInterpTo}%, 0)`}}>
-                    {this.state.playlistComponent}
-                </ul>}
-        </Motion>      
-        var listItem = (   
-            <Motion key={index} style={{heightToInterpTo: spring(this.state.removeSlideUp ? this.removeAnimMaxHeight : this.removeAnimMinHeight, this.props.removeAnimation)}} onRest={() => this._removeAnimationCallback()}>                
-                {(values) => 
-                    <li style={{transform: `translate3d(0, ${values.heightToInterpTo}%, 0)`}}>
-                        <div>
-                            <a href="javascript:;" class={this.props.removeItemClass} onClick={this.remove}>&times;</a>
-                            {/*The title is given next in the HTML otherwise the float:right on the free media corrupts in IE6/7*/}
-                            <a href="javascript:;" class={this.props.itemClass} tabIndex="0"> 
-                                <img src={media.poster}/>
-                                {media.title}                 
-                                {(media.artist ? <span class="jp-artist">by {media.artist}</span> : null)}
-                            </a>
-                        </div>
-                    </li>
-                }
-            </Motion>     
-        );
+        // <Motion style={{heightToInterpTo: spring(this.state.shuffleSlideUp ? this.shuffleAnimMaxHeight : this.shuffleAnimMinHeight, this.props.shuffleAnimation)}} onRest={() => this.state.shuffleSlideUp ? this._shuffleAnimationCallback() : null}>
+        //     {(values) => <ul style={{
+        //         transform: `translate3d(0, ${values.heightToInterpTo}%, 0)`}}>
+        //             {this.state.playlistComponent}
+        //         </ul>}
+        // </Motion>      
 
         return listItem;
     }
     _createItemHandlers = () => {
         // // Create live handlers for the playlist items
-        // $(this.cssSelector.playlist).off("click", "a." + this.options.playlistOptions.itemClass).on("click", "a." + this.options.playlistOptions.itemClass, function (e) {
+        // $(this.cssSelector.playlist).off("click", "a." + this.options.itemClass).on("click", "a." + this.options.itemClass, function (e) {
         //     e.preventDefault();
         //     var index = $(this).parent().parent().index();
         //     if (this.current !== index) {
@@ -374,14 +354,14 @@ export default class JPlayerPlaylist extends React.Component {
         // });
 
         // // Create live handlers that disable free media links to force access via right click
-        // $(this.cssSelector.playlist).off("click", "a." + this.options.playlistOptions.freeItemClass).on("click", "a." + this.options.playlistOptions.freeItemClass, function (e) {
+        // $(this.cssSelector.playlist).off("click", "a." + this.options.freeItemClass).on("click", "a." + this.options.freeItemClass, function (e) {
         //     e.preventDefault();
-        //     $(this).parent().parent().find("." + this.options.playlistOptions.itemClass).click();
+        //     $(this).parent().parent().find("." + this.options.itemClass).click();
         //     this.blur(this);
         // });
 
         // // Create live handlers for the remove controls
-        // $(this.cssSelector.playlist).off("click", "a." + this.options.playlistOptions.removeItemClass).on("click", "a." + this.options.playlistOptions.removeItemClass, function (e) {
+        // $(this.cssSelector.playlist).off("click", "a." + this.options.removeItemClass).on("click", "a." + this.options.removeItemClass, function (e) {
         //     e.preventDefault();
         //     var index = $(this).parent().parent().index();
         //     this.remove(index);
@@ -389,7 +369,7 @@ export default class JPlayerPlaylist extends React.Component {
         // });
     }
     _updateControls = () => {
-        if (this.options.playlistOptions.enableRemoveControls) {
+        if (this.options.enableRemoveControls) {
             this.setState(previousState => previousState.removeItemClassStyle = Object.assign({}, previousState.removeItemClassStyle, {display: ""}));
         } else {
             this.setState(previousState => previousState.removeItemClassStyle = Object.assign({}, previousState.removeItemClassStyle, {display: "none"}));
@@ -431,7 +411,7 @@ export default class JPlayerPlaylist extends React.Component {
         this._init();
     }
     add = (media, playNow) => {
-        $(this.cssSelector.playlist + " ul").append(this._createListItem(media)).find("li:last-child").hide().slideDown(this.options.playlistOptions.addTime);
+        $(this.cssSelector.playlist + " ul").append(this._createListItem(media)).find("li:last-child").hide().slideDown(this.options.addTime);
         this._updateControls();
         this.original.push(media);
         this.playlist.push(media); // Both array elements share the same object pointer. Comforms with _initPlaylist(p) system.
@@ -444,9 +424,8 @@ export default class JPlayerPlaylist extends React.Component {
             }
         }
     }
-    remove = (e, index) => {
-        debugger
-        if (e === undefined) {
+    remove = (index) => {
+        if (index === undefined) {
             this._initPlaylist([]);
             this._refresh(function () {
                 this.jPlayer.clearMedia();
@@ -454,6 +433,7 @@ export default class JPlayerPlaylist extends React.Component {
             return true;
         } else {           
             this.setState({removeSlideUp: true});
+            this.setState({removeIndex: index});
         }
     }
     select = (index) => {
@@ -488,7 +468,7 @@ export default class JPlayerPlaylist extends React.Component {
         }
         else if (this.loop === "loop-playlist") {
             // See if we need to shuffle before looping to start, and only shuffle if more than 1 item.
-            if (index === 0 && this.shuffled && this.options.playlistOptions.shuffleOnLoop && this.playlist.length > 1) {
+            if (index === 0 && this.shuffled && this.options.shuffleOnLoop && this.playlist.length > 1) {
                 this.shuffle(true, true); // playNow
             } else {
                 this.play(index);
@@ -504,7 +484,7 @@ export default class JPlayerPlaylist extends React.Component {
     previous = () => {
         var index = (this.current - 1 >= 0) ? this.current - 1 : this.playlist.length - 1;
 
-        if (this.loop === "loop-playlist" && this.options.playlistOptions.loopOnPrevious || index < this.playlist.length - 1) {
+        if (this.loop === "loop-playlist" && this.options.loopOnPrevious || index < this.playlist.length - 1) {
             this.play(index);
         }
     }
@@ -514,37 +494,33 @@ export default class JPlayerPlaylist extends React.Component {
     }
     _removeAnimationCallback = (index) => {
         debugger
-        // $(this).remove();
+        if (this.shuffled) {
+            var item = this.playlist[index];
+            for (var i = 0; i < this.original.length; i++){
+                if (this.original[i] === item) {
+                    this.original.splice(i, 1);
+                    break;
+                }
+            }
+            this.playlist.splice(index, 1);
+        } else {
+            this.original.splice(index, 1);
+            this.playlist.splice(index, 1);
+        }
 
-        // if (this.shuffled) {
-        //     var item = this.playlist[index];
-        //     for (var i = 0; i < this.original.length; i++){
-        //         if (this.original[i] === item) {
-        //             this.original.splice(i, 1);
-        //             break;
-        //         }
-        //     }
-        //     this.playlist.splice(index, 1);
-        // } else {
-        //     this.original.splice(index, 1);
-        //     this.playlist.splice(index, 1);
-        // }
-
-        // if (this.original.length) {
-        //     if (index === this.current) {
-        //         this.current = (index < this.original.length) ? this.current : this.original.length - 1; // To cope when last element being selected when it was removed
-        //         this.select(this.current);
-        //     } else if (index < this.current) {
-        //         this.current--;
-        //     }
-        // } else {
-        //     this.jPlayer.clearMedia();
-        //     this.current = 0;
-        //     this.shuffled = false;
-        //     this._updateControls();
-        // }
-
-        // this.removing = false;
+        if (this.original.length) {
+            if (index === this.current) {
+                this.current = (index < this.original.length) ? this.current : this.original.length - 1; // To cope when last element being selected when it was removed
+                this.select(this.current);
+            } else if (index < this.current) {
+                this.current--;
+            }
+        } else {
+            this.jPlayer.clearMedia();
+            this.current = 0;
+            this.shuffled = false;
+            this._updateControls();
+        }
     }
     _shuffleAnimationCallback = () => {
         this.shuffled = !this.shuffled;
@@ -579,10 +555,26 @@ export default class JPlayerPlaylist extends React.Component {
             <div>
                 <div id="jp_container_playlist">
                     <div class="jp-playlist">
-                        <Motion style={{heightToInterpTo: spring(this.state.shuffleSlideUp ? this.shuffleAnimMaxHeight : this.shuffleAnimMinHeight, this.props.shuffleAnimation)}} onRest={() => this.state.shuffleSlideUp ? this._shuffleAnimationCallback() : null}>
-                            {(values) => <ul style={{
-                                transform: `translate3d(0, ${values.heightToInterpTo}%, 0)`}}>
-                                    {this.state.playlistComponent}
+                        <Motion style={{heightToInterpTo: spring(this.state.shuffleSlideUp ? this.shuffleAnimMinHeight : this.shuffleAnimMaxHeight, this.props.shuffleAnimation)}} onRest={() => this.state.shuffleSlideUp ? this._shuffleAnimationCallback() : null}>
+                            {(values) =>
+                                <ul style={{transform: `scaleY(${values.heightToInterpTo})`, transformOrigin: "50% bottom"}}>
+                                    {this.playlist.map((media, index) =>
+                                        <Motion key={index} style={{heightToInterpTo: spring(this.state.removeSlideUp && this.state.removeIndex === index ? this.removeAnimMinHeight : this.removeAnimMaxHeight, this.props.removeAnimation)}} 
+                                                onRest={() => this._removeAnimationCallback(index)}>                
+                                            {(values) => <li style={{transform: `scaleY(${values.heightToInterpTo})`, transformOrigin: "50% bottom"}}>
+                                                <div>
+                                                    <a href="javascript:;" class={this.props.removeItemClass} onClick={() => this.remove(index)}>&times;</a>
+                                                    <a href="javascript:;" class={this.props.itemClass} tabIndex="0"> 
+                                                        <img src={media.poster}/>
+                                                        {media.title}                 
+                                                        {(media.artist ? <span class="jp-artist">by {media.artist}</span> : null)}
+                                                    </a>
+                                                </div>
+                                            </li>
+                                            }
+                                        </Motion>
+                                        )
+                                    }
                                 </ul>}
                         </Motion>      
                     </div>
