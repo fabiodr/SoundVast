@@ -49,6 +49,20 @@ class FooterContainer extends React.Component {
                         mp3:"http://www.jplayer.org/audio/mp3/Miaow-01-Tempered-song.mp3",
                         oga:"http://www.jplayer.org/audio/ogg/Miaow-01-Tempered-song.ogg",
                         poster: "http://www.jplayer.org/audio/poster/Miaow_640x360.png"
+                    },
+                    {
+                        title:"Das Song",
+                        artist:"Miaow",
+                        mp3:"http://www.jplayer.org/audio/mp3/Miaow-01-Tempered-song.mp3",
+                        oga:"http://www.jplayer.org/audio/ogg/Miaow-01-Tempered-song.ogg",
+                        poster: "http://www.jplayer.org/audio/poster/Miaow_640x360.png"
+                    },
+                    {
+                        title:"Song",
+                        artist:"Miaow",
+                        mp3:"http://www.jplayer.org/audio/mp3/Miaow-01-Tempered-song.mp3",
+                        oga:"http://www.jplayer.org/audio/ogg/Miaow-01-Tempered-song.ogg",
+                        poster: "http://www.jplayer.org/audio/poster/Miaow_640x360.png"
                     }
                 ],
                 ready: function(){

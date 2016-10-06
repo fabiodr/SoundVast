@@ -1,5 +1,6 @@
 import React from "react";
 import {Motion, spring, presets} from "react-motion";
+import update from "react-addons-update";
 import JPlayer from "./JPlayer";
 import merge from "lodash/merge";
 
@@ -41,12 +42,11 @@ export default class JPlayerPlaylist extends React.Component {
 					<a class="jp-next" key={3} onClick={this._nextOnClick}>{props.html.next}</a>,
                     <a class="jp-playlist-options" key={4}>{props.html.playlistOptions}</a>
                 ],
-            }
+            },
+            playlist: [] // Array of Objects: The current playlist displayed (Un-shuffled or Shuffled)
         }, props);
 
         this.event = {};
-        this.playlist = []; // Array of Objects: The current playlist displayed (Un-shuffled or Shuffled)
-        this.original = []; // Array of Objects: The original playlist
     }
     _shuffleOnClick = (e) => {
          e.preventDefault();
@@ -108,8 +108,6 @@ export default class JPlayerPlaylist extends React.Component {
                 shuffled: "jp-state-shuffled"
             }
         }, this.state);
-
-        this._initPlaylist(this.state.playlist); // Copies playlist to this.original. Then mirrors this.original to this.playlist. Creating two arrays, where the element pointers match. (Enables pointer comparison.)
 
         // Setup the css selectors for the extra interface items used by the playlist.
         this.cssSelector.details = this.cssSelector.cssSelectorAncestor + " .jp-details"; // Note that jPlayer controls the text in the title element.
@@ -267,11 +265,16 @@ export default class JPlayerPlaylist extends React.Component {
         this.current = 0;
         this.shuffled = false;
         this.original = Object.assign([], playlist); // Copy the Array of Objects
+
+        for(var i = 0; i < this.original.length; i++){
+            this.original[i].key = i;
+        }
+
         this._originalPlaylist();
     }
     _originalPlaylist = () => {
         // Make both arrays point to the same object elements. Gives us 2 different arrays, each pointing to the same actual object. ie., Not copies of the object.
-        this.playlist = [...this.original]; 
+        this.setState({playlist: [...this.original]});
     }
     _refresh = (instant) => {
         /* instant: Can be undefined, true or a function.
@@ -393,7 +396,7 @@ export default class JPlayerPlaylist extends React.Component {
     _highlight = (index) => {
         var currentPlaylistClass = "currentPlaylistClass_" + index;
 
-        if (this.playlist.length && index !== undefined) {
+        if (this.state.playlist.length && index !== undefined) {
             this.setState(previousState => { 
                 if (previousState[currentPlaylistClass]) {
                     return ({currentPlaylistClass: previousState[currentPlaylistClass].replace("jp-playlist-current", "").trim()})
@@ -414,10 +417,10 @@ export default class JPlayerPlaylist extends React.Component {
         $(this.cssSelector.playlist + " ul").append(this._createListItem(media)).find("li:last-child").hide().slideDown(this.options.addTime);
         this._updateControls();
         this.original.push(media);
-        this.playlist.push(media); // Both array elements share the same object pointer. Comforms with _initPlaylist(p) system.
+        this.setState(previousState => {debugger; return previousState.playlist = Object.assign({}, previousState.playlist, previousStateplaylist.push(media))});
 
         if (playNow) {
-            this.play(this.playlist.length - 1);
+            this.play(this.state.playlist.length - 1);
         } else {
             if (this.original.length === 1) {
                 this.select(0);
@@ -433,23 +436,23 @@ export default class JPlayerPlaylist extends React.Component {
             return true;
         } else {           
             this.setState({removeSlideUp: true});
-            this.setState({removeIndex: index});
+            this.setState(previousState => previousState.playlist[index] = Object.assign({}, previousState.playlist[index], {removing: true}));
         }
     }
     select = (index) => {
         index = (index < 0) ? this.original.length + index : index; // Negative index relates to end of array.
-        if (0 <= index && index < this.playlist.length) {
+        if (0 <= index && index < this.state.playlist.length) {
             this.current = index;
             this._highlight(index);
-            this.jPlayer.setMedia(this.playlist[this.current]);
+            this.jPlayer.setMedia(this.state.playlist[this.current]);
         } else {
             this.current = 0;
         }
     }
     play = (index) => {
         index = (index < 0) ? this.original.length + index : index; // Negative index relates to end of array.
-        if (0 <= index && index < this.playlist.length) {
-            if (this.playlist.length) {
+        if (0 <= index && index < this.state.playlist.length) {
+            if (this.state.playlist.length) {
                 this.select(index);
                 this.jPlayer.play();
             }
@@ -461,14 +464,14 @@ export default class JPlayerPlaylist extends React.Component {
         this.jPlayer.pause();
     }
     next = (forcePlayNextTrack) => {
-        var index = (this.current + 1 < this.playlist.length) ? this.current + 1 : 0;
+        var index = (this.current + 1 < this.state.playlist.length) ? this.current + 1 : 0;
 
         if (this.loop === "loop" && !forcePlayNextTrack) {
             this.play(this.current);
         }
         else if (this.loop === "loop-playlist") {
             // See if we need to shuffle before looping to start, and only shuffle if more than 1 item.
-            if (index === 0 && this.shuffled && this.options.shuffleOnLoop && this.playlist.length > 1) {
+            if (index === 0 && this.shuffled && this.options.shuffleOnLoop && this.state.playlist.length > 1) {
                 this.shuffle(true, true); // playNow
             } else {
                 this.play(index);
@@ -482,9 +485,9 @@ export default class JPlayerPlaylist extends React.Component {
         }
     }
     previous = () => {
-        var index = (this.current - 1 >= 0) ? this.current - 1 : this.playlist.length - 1;
+        var index = (this.current - 1 >= 0) ? this.current - 1 : this.state.playlist.length - 1;
 
-        if (this.loop === "loop-playlist" && this.options.loopOnPrevious || index < this.playlist.length - 1) {
+        if (this.loop === "loop-playlist" && this.options.loopOnPrevious || index < this.state.playlist.length - 1) {
             this.play(index);
         }
     }
@@ -493,19 +496,18 @@ export default class JPlayerPlaylist extends React.Component {
         this.playNow = playNow;  
     }
     _removeAnimationCallback = (index) => {
-        debugger
         if (this.shuffled) {
-            var item = this.playlist[index];
+            var item = this.state.playlist[index];
             for (var i = 0; i < this.original.length; i++){
                 if (this.original[i] === item) {
                     this.original.splice(i, 1);
                     break;
                 }
             }
-            this.playlist.splice(index, 1);
+            this.setState({playlist: update(this.state.playlist, {$splice: [[index, 1]]})});
         } else {
             this.original.splice(index, 1);
-            this.playlist.splice(index, 1);
+            this.setState({playlist: update(this.state.playlist, {$splice: [[index, 1]]})});
         }
 
         if (this.original.length) {
@@ -526,9 +528,7 @@ export default class JPlayerPlaylist extends React.Component {
         this.shuffled = !this.shuffled;
         
         if (this.shuffled) {
-            this.playlist.sort(function () {
-                return 0.5 - Math.random();
-            });
+            this.setState(previousState => previousState.playlist = previousState.playlist.sort(() => 0.5 - Math.random()));
         } else {
             this._originalPlaylist();
         }
@@ -550,6 +550,9 @@ export default class JPlayerPlaylist extends React.Component {
     componentDidMount(){
         this._setup();
     }
+    componentWillMount(){
+        this._initPlaylist(this.state.playlist);
+    }
     render() {
         return (
             <div>
@@ -558,8 +561,7 @@ export default class JPlayerPlaylist extends React.Component {
                         <Motion style={{heightToInterpTo: spring(this.state.shuffleSlideUp ? this.shuffleAnimMinHeight : this.shuffleAnimMaxHeight, this.props.shuffleAnimation)}} onRest={() => this.state.shuffleSlideUp ? this._shuffleAnimationCallback() : null}>
                             {(values) =>
                                 <ul style={{transform: `scaleY(${values.heightToInterpTo})`, transformOrigin: "50% bottom"}}>
-                                    {this.playlist.map((media, index) =>
-                                        <Motion key={index} style={{heightToInterpTo: spring(this.state.removeSlideUp && this.state.removeIndex === index ? this.removeAnimMinHeight : this.removeAnimMaxHeight, this.props.removeAnimation)}} 
+                                    {this.state.playlist.map((media, index) => <Motion key={media.key} style={{heightToInterpTo: spring(this.state.removeSlideUp && media.removing ? this.removeAnimMinHeight : this.removeAnimMaxHeight, this.props.removeAnimation)}} 
                                                 onRest={() => this._removeAnimationCallback(index)}>                
                                             {(values) => <li style={{transform: `scaleY(${values.heightToInterpTo})`, transformOrigin: "50% bottom"}}>
                                                 <div>
@@ -570,10 +572,9 @@ export default class JPlayerPlaylist extends React.Component {
                                                         {(media.artist ? <span class="jp-artist">by {media.artist}</span> : null)}
                                                     </a>
                                                 </div>
-                                            </li>
-                                            }
+                                            </li>}
                                         </Motion>
-                                        )
+                                    )
                                     }
                                 </ul>}
                         </Motion>      
