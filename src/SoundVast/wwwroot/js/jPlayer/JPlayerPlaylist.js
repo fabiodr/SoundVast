@@ -3,6 +3,7 @@ import {Motion, spring, presets} from "react-motion";
 import update from "react-addons-update";
 import JPlayer from "./JPlayer";
 import merge from "lodash/merge";
+import maxBy from "lodash/maxBy";
 
 export default class JPlayerPlaylist extends React.Component {
     static get defaultProps(){
@@ -26,14 +27,13 @@ export default class JPlayerPlaylist extends React.Component {
     {
         super();
 
-        this.shuffleAnimMinHeight = this.removeAnimMinHeight = 0;
-        this.shuffleAnimMaxHeight = this.removeAnimMaxHeight = 1;
+        this.playlistContainerMinHeight = this.playlistItemAnimMinHeight = 0;
+        this.playlistContainerMaxHeight = this.playlistItemAnimMaxHeight = 1;
 
         this.state = {};
         this.state = merge(
         {
-            shuffleSlideUp: false,
-            removeSlideUp: false,
+            isPlaylistContainerSlidingUp: false,
             html: {
                 additionalControls: [
                     <a class="jp-shuffle" key={0} onClick={this._shuffleOnClick} style={this.state.shuffleStyle}>{props.html.shuffle}</a>,
@@ -292,7 +292,7 @@ export default class JPlayerPlaylist extends React.Component {
         // } else {
         //     var displayTime = $(this.cssSelector.playlist + " ul").children().length ? this.options.displayTime : 0;
 
-        //     $(this.cssSelector.playlist + " ul").shuffleSlideUp(displayTime, function () {
+        //     $(this.cssSelector.playlist + " ul").isPlaylistContainerSlidingUp(displayTime, function () {
         //         var $this = $(this);
         //         $(this).empty();
 
@@ -334,7 +334,7 @@ export default class JPlayerPlaylist extends React.Component {
         //     }
         //     listItem += ")</span>";
         // }
-        // <Motion style={{heightToInterpTo: spring(this.state.shuffleSlideUp ? this.shuffleAnimMaxHeight : this.shuffleAnimMinHeight, this.props.shuffleAnimation)}} onRest={() => this.state.shuffleSlideUp ? this._shuffleAnimationCallback() : null}>
+        // <Motion style={{heightToInterpTo: spring(this.state.isPlaylistContainerSlidingUp ? this.playlistContainerMaxHeight : this.playlistContainerMinHeight, this.props.shuffleAnimation)}} onRest={() => this.state.isPlaylistContainerSlidingUp ? this._shuffleAnimationCallback() : null}>
         //     {(values) => <ul style={{
         //         transform: `translate3d(0, ${values.heightToInterpTo}%, 0)`}}>
         //             {this.state.playlistComponent}
@@ -414,10 +414,11 @@ export default class JPlayerPlaylist extends React.Component {
         this._init();
     }
     add = (media, playNow) => {
-        $(this.cssSelector.playlist + " ul").append(this._createListItem(media)).find("li:last-child").hide().slideDown(this.options.addTime);
-        this._updateControls();
         this.original.push(media);
-        this.setState(previousState => {debugger; return previousState.playlist = Object.assign({}, previousState.playlist, previousStateplaylist.push(media))});
+        media.key = maxBy(this.state.playlist, "key").key + 1;
+        media.isRemoving = false;
+
+        this.setState({playlist: update(this.state.playlist, {$push: [media]})});
 
         if (playNow) {
             this.play(this.state.playlist.length - 1);
@@ -435,8 +436,7 @@ export default class JPlayerPlaylist extends React.Component {
             });
             return true;
         } else {           
-            this.setState({removeSlideUp: true});
-            this.setState(previousState => previousState.playlist[index] = Object.assign({}, previousState.playlist[index], {removing: true}));
+            this.setState(previousState => previousState.playlist[index] = Object.assign({}, previousState.playlist[index], {isRemoving: true}));
         }
     }
     select = (index) => {
@@ -492,7 +492,7 @@ export default class JPlayerPlaylist extends React.Component {
         }
     }
     shuffle = (shuffled, playNow) => {
-        this.setState({shuffleSlideUp: shuffled});
+        this.setState({isPlaylistContainerSlidingUp: shuffled});
         this.playNow = playNow;  
     }
     _removeAnimationCallback = (index) => {
@@ -540,15 +540,24 @@ export default class JPlayerPlaylist extends React.Component {
             this.select(0);
         }
 
-        setTimeout(() => this.setState({shuffleSlideUp: false}), 0);
+        setTimeout(() => this.setState({isPlaylistContainerSlidingUp: false}), 0);
     }
     blur = (that) => {
         if (this.jPlayer.options.autoBlur) {
             that.blur();
         }
     }
+    test = () => {
+        this.add({title:"Cro Magnon Man",
+                    artist:"The Stark Palace",
+                    mp3:"http://www.jplayer.org/audio/mp3/TSP-01-Cro_magnon_man.mp3",
+                    oga:"http://www.jplayer.org/audio/ogg/TSP-01-Cro_magnon_man.ogg",
+                    poster: "http://www.jplayer.org/audio/poster/The_Stark_Palace_640x360.png"
+                });
+    }
     componentDidMount(){
         this._setup();
+        document.querySelector(".jp-gui").addEventListener("click", this.test);
     }
     componentWillMount(){
         this._initPlaylist(this.state.playlist);
@@ -558,12 +567,14 @@ export default class JPlayerPlaylist extends React.Component {
             <div>
                 <div id="jp_container_playlist">
                     <div class="jp-playlist">
-                        <Motion style={{heightToInterpTo: spring(this.state.shuffleSlideUp ? this.shuffleAnimMinHeight : this.shuffleAnimMaxHeight, this.props.shuffleAnimation)}} onRest={() => this.state.shuffleSlideUp ? this._shuffleAnimationCallback() : null}>
+                        <Motion style={{heightToInterpTo: spring(this.state.isPlaylistContainerSlidingUp ? this.playlistContainerMinHeight : this.playlistContainerMaxHeight, this.props.shuffleAnimation)}} 
+                                onRest={() => this.state.isPlaylistContainerSlidingUp ? this._shuffleAnimationCallback() : null}>
                             {(values) =>
-                                <ul style={{transform: `scaleY(${values.heightToInterpTo})`, transformOrigin: "50% bottom"}}>
-                                    {this.state.playlist.map((media, index) => <Motion key={media.key} style={{heightToInterpTo: spring(this.state.removeSlideUp && media.removing ? this.removeAnimMinHeight : this.removeAnimMaxHeight, this.props.removeAnimation)}} 
-                                                onRest={() => this._removeAnimationCallback(index)}>                
-                                            {(values) => <li style={{transform: `scaleY(${values.heightToInterpTo})`, transformOrigin: "50% bottom"}}>
+                                <ul style={{transform: `scaleY(${values.heightToInterpTo})`, transformOrigin: "50% top"}}>
+                                    {this.state.playlist.map((media, index) => 
+                                       <Motion defaultStyle={{heightToInterpTo: this.playlistItemAnimMinHeight}} key={media.key} style={{heightToInterpTo: spring(media.isRemoving ? this.playlistItemAnimMinHeight : this.playlistItemAnimMaxHeight, this.props.playlistItemAnimation)}} 
+                                                onRest={() => media.isRemoving ? this._removeAnimationCallback(index) : null}>                
+                                            {(values) => <li style={{transform: `scaleY(${values.heightToInterpTo})`, transformOrigin: "50% top"}}>
                                                 <div>
                                                     <a href="javascript:;" class={this.props.removeItemClass} onClick={() => this.remove(index)}>&times;</a>
                                                     <a href="javascript:;" class={this.props.itemClass} tabIndex="0"> 
@@ -574,7 +585,7 @@ export default class JPlayerPlaylist extends React.Component {
                                                 </div>
                                             </li>}
                                         </Motion>
-                                    )
+                                        )
                                     }
                                 </ul>}
                         </Motion>      
