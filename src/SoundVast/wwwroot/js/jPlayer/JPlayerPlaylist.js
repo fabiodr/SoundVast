@@ -10,6 +10,7 @@ export default class JPlayerPlaylist extends React.Component {
 		return {
             autoPlay: false,
             loopOnPrevious: false,
+            loop: false,
             shuffleOnLoop: true,
             enableRemoveControls: false,
             displayTime: 'slow',
@@ -153,6 +154,7 @@ export default class JPlayerPlaylist extends React.Component {
         //$.extend(true, $(this.cssSelector.jPlayer).data().jPlayer.options, this.options);
 
         this.event.onRepeat = () => {
+            debugger
             var guiAction = typeof event === "object"; // Flags GUI click events so we know this was not a direct command, but an action taken by the user on the GUI.
             if (guiAction && this.options.useStateClassSkin && this.options.loop === "loop-playlist") {
                 this._loop("off");
@@ -166,8 +168,6 @@ export default class JPlayerPlaylist extends React.Component {
                 this._loop("loop-playlist");
             }
         };
-
-        // this.setState({playlistComponent: this.playlist.map((media, i) => this._createListItem(media, i))});
         
         // $(this.cssSelector.jPlayer).data().jPlayer._updateButtons = function (playing) {
         //     if (playing === undefined) {
@@ -557,7 +557,6 @@ export default class JPlayerPlaylist extends React.Component {
     }
     componentDidMount(){
         this._setup();
-        document.querySelector(".jp-gui").addEventListener("click", this.test);
     }
     componentWillMount(){
         this._initPlaylist(this.state.playlist);
@@ -567,34 +566,62 @@ export default class JPlayerPlaylist extends React.Component {
             <div>
                 <div id="jp_container_playlist">
                     <div class="jp-playlist">
-                        <Motion style={{heightToInterpTo: spring(this.state.isPlaylistContainerSlidingUp ? this.playlistContainerMinHeight : this.playlistContainerMaxHeight, this.props.shuffleAnimation)}} 
-                                onRest={() => this.state.isPlaylistContainerSlidingUp ? this._shuffleAnimationCallback() : null}>
-                            {(values) =>
-                                <ul style={{transform: `scaleY(${values.heightToInterpTo})`, transformOrigin: "50% top"}}>
-                                    {this.state.playlist.map((media, index) => 
-                                       <Motion defaultStyle={{heightToInterpTo: this.playlistItemAnimMinHeight}} key={media.key} style={{heightToInterpTo: spring(media.isRemoving ? this.playlistItemAnimMinHeight : this.playlistItemAnimMaxHeight, this.props.playlistItemAnimation)}} 
-                                                onRest={() => media.isRemoving ? this._removeAnimationCallback(index) : null}>                
-                                            {(values) => <li style={{transform: `scaleY(${values.heightToInterpTo})`, transformOrigin: "50% top"}}>
-                                                <div>
-                                                    <a href="javascript:;" class={this.props.removeItemClass} onClick={() => this.remove(index)}>&times;</a>
-                                                    <a href="javascript:;" class={this.props.itemClass} tabIndex="0"> 
-                                                        <img src={media.poster}/>
-                                                        {media.title}                 
-                                                        {(media.artist ? <span class="jp-artist">by {media.artist}</span> : null)}
-                                                    </a>
-                                                </div>
-                                            </li>}
-                                        </Motion>
-                                        )
-                                    }
-                                </ul>}
-                        </Motion>      
+                        <Playlist isSlidingUp={this.state.isPlaylistContainerSlidingUp} config={this.props.shuffleAnimation} onRest={this._shuffleAnimationCallback}>
+                            {this.state.playlist.map((media, index) => 
+                                <Media key={media.key} media={media} config={this.props.playlistItemAnimation} remove={() => this.remove(index)} onRest={() => this._removeAnimationCallback(index)}
+                                    removeItemClass={this.state.removeItemClass} itemClass={this.state.itemClass}/>)
+                            }   
+                        </Playlist> 
                     </div>
                 </div>
-                <JPlayer ref={(jPlayer) => this.jPlayer = jPlayer} {...this.state} {...this.event} >
+                <JPlayer ref={(jPlayer) => this.jPlayer = jPlayer} {...this.state} {...this.event}>
                     {/*this.props.children.type*/}
                 </JPlayer>
             </div>
         );
     }
+}
+
+const Playlist = (props) => (
+    <Motion style={{heightToInterpTo: spring(props.isSlidingUp ? props.minHeight : props.maxHeight, props.config)}} onRest={props.isSlidingUp ? props.onRest : null}>
+        {(values) =>
+            <ul style={{transform: `scaleY(${values.heightToInterpTo})`, transformOrigin: "50% top"}}>
+                {props.children}     
+            </ul>
+        }
+    </Motion>   
+);
+
+Playlist.defaultProps = {
+    minHeight: 0,
+    maxHeight: 1
+};
+
+Playlist.propTypes = {
+    children: React.PropTypes.array.isRequired
+}
+
+const Media = (props) => (
+    <Motion defaultStyle={{heightToInterpTo: props.minHeight}} style={{heightToInterpTo: spring(props.media.isRemoving ? props.minHeight : props.maxHeight, props.config)}} 
+            onRest={props.media.isRemoving ? props.onRest : null}>                
+        {(values) => <li style={{transform: `scaleY(${values.heightToInterpTo})`, transformOrigin: "50% top"}}>
+            <div>
+                <a href="javascript:;" class={props.removeItemClass} onClick={props.remove}>&times;</a>
+                <a href="javascript:;" class={props.itemClass} tabIndex="0"> 
+                    <img src={props.media.poster}/>
+                    {props.media.title}
+                    {props.media.artist ? <span class="jp-artist">by {props.media.artist}</span> : null}
+                </a>
+            </div>
+        </li>}
+    </Motion>
+);
+
+Media.defaultProps = {
+    minHeight: 0,
+    maxHeight: 1
+};
+
+Media.propTypes = {
+    media: React.PropTypes.object.isRequired
 }
