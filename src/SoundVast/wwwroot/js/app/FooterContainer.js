@@ -10,10 +10,8 @@ class FooterContainer extends React.Component {
         
         this.state = {
             jPlayerPlaylistOptions: {
-                cssSelector: {
-                    jPlayerSelector: "#jplayer_footer_player",
-                    cssSelectorAncestor: "#jp_container_footer_player"
-                },
+                jPlayerSelector: "#jplayer_footer_player",
+                cssSelectorAncestor: "#jp_container_footer_player",
                 html: {
                     //Toggle between play and pause in css based on playing or not
                     play: <i class="fa fa-play"></i>,
@@ -40,15 +38,16 @@ class FooterContainer extends React.Component {
                         title:"Cro Magnon Man",
                         artist:"The Stark Palace",
                         mp3:"http://www.jplayer.org/audio/mp3/TSP-01-Cro_magnon_man.mp3",
-                        oga:"http://www.jplayer.org/audio/ogg/TSP-01-Cro_magnon_man.ogg",
-                        poster: "http://www.jplayer.org/audio/poster/The_Stark_Palace_640x360.png"
+                        poster: "http://www.jplayer.org/audio/poster/The_Stark_Palace_640x360.png",
+                        free: true
                     },
                     {
                         title:"Tempered Song",
                         artist:"Miaow",
                         mp3:"http://www.jplayer.org/audio/mp3/Miaow-01-Tempered-song.mp3",
                         oga:"http://www.jplayer.org/audio/ogg/Miaow-01-Tempered-song.ogg",
-                        poster: "http://www.jplayer.org/audio/poster/Miaow_640x360.png"
+                        poster: "http://www.jplayer.org/audio/poster/Miaow_640x360.png",
+                        free: true
                     },
                     {
                         title:"Das Song",
@@ -62,20 +61,11 @@ class FooterContainer extends React.Component {
                         artist:"Miaow",
                         mp3:"http://www.jplayer.org/audio/mp3/Miaow-01-Tempered-song.mp3",
                         oga:"http://www.jplayer.org/audio/ogg/Miaow-01-Tempered-song.ogg",
-                        poster: "http://www.jplayer.org/audio/poster/Miaow_640x360.png"
+                        poster: "http://www.jplayer.org/audio/poster/Miaow_640x360.png",
+                        free: true
                     }
                 ],
-                ready: function(){
-                    this.setMedia({
-                        title: "Bubble",
-                        artist: "The Stark Palace",
-                        mp3: "http://jplayer.org/audio/mp3/Miaow-07-Bubble.mp3",
-                        poster: "http://www.jplayer.org/audio/poster/The_Stark_Palace_640x360.png"
-                    });
-                },
-                error: function(e){
-                    console.error(e.jPlayer.error);
-                }
+                onError: (jPlayer) => console.error(jPlayer.error)               
             }
         };
     }

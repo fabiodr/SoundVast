@@ -1,16 +1,14 @@
 import React from "react";
 import {Motion, spring, presets} from "react-motion";
 import update from "react-addons-update";
-import JPlayer from "./JPlayer";
-import merge from "lodash/merge";
+import JPlayer, {DefaultProps} from "./JPlayer";
+import merge from "lodash.merge";
 import maxBy from "lodash/maxBy";
 
 export default class JPlayerPlaylist extends React.Component {
     static get defaultProps(){
-		return {
-            autoPlay: false,
+		return Object.assign({
             loopOnPrevious: false,
-            loop: false,
             shuffleOnLoop: true,
             enableRemoveControls: false,
             displayTime: 'slow',
@@ -18,11 +16,10 @@ export default class JPlayerPlaylist extends React.Component {
             removeTime: 'fast',
             shuffleTime: 400,
             itemClass: "jp-playlist-item",
-            freeGroupClass: "jp-free-media",
             freeItemClass: "jp-playlist-item-free",
             removeItemClass: "jp-playlist-item-remove",
-            
-        }
+            freeGroupClass: "jp-free-media",
+        }, DefaultProps);
     }
     constructor(props)
     {
@@ -31,26 +28,47 @@ export default class JPlayerPlaylist extends React.Component {
         this.playlistContainerMinHeight = this.playlistItemAnimMinHeight = 0;
         this.playlistContainerMaxHeight = this.playlistItemAnimMaxHeight = 1;
 
-        this.state = {};
         this.state = merge(
         {
             isPlaylistContainerSlidingUp: false,
-            html: {
-                additionalControls: [
-                    <a class="jp-shuffle" key={0} onClick={this._shuffleOnClick} style={this.state.shuffleStyle}>{props.html.shuffle}</a>,
-                    <a class="jp-shuffleOff" key={1} style={this.state.shuffleOffClick} onClick={this._shuffleOffClick} style={this.state.shuffleOffStyle}>{props.html.shuffleOff}</a>,
-                    <a class="jp-previous" key={2} onClick={this._previousOnClick}>{props.html.previous}</a>,
-					<a class="jp-next" key={3} onClick={this._nextOnClick}>{props.html.next}</a>,
-                    <a class="jp-playlist-options" key={4}>{props.html.playlistOptions}</a>
-                ],
-            },
             playlist: [] // Array of Objects: The current playlist displayed (Un-shuffled or Shuffled)
         }, props);
+        
+        this.event = {
+            onRepeat: (jPlayer) => this.loop = jPlayer.options.loop,
+            onEnded: () => this.next(),
+            onPlay: () => this.jPlayer.pauseOthers(),
+            onReady: () => this._init(),
+            onResize: () => {
+                if (this.props.fullScreen) {
+                    this.setState(previousState => previousState.detailsStyle = Object.assign({}, previousState.detailsStyle, {display: ""}));
+                } else {
+                    this.setState(previousState => previousState.detailsStyle = Object.assign({}, previousState.detailsStyle, {display: "none"}));
+                }
+            }
+        }
+        this.loop = props.loop;
 
-        this.event = {};
+        //Add a new stateClass for the extra loop option
+        this.stateClass = merge({}, {playlistLooped: "jp-state-playlist-looped"}, props.stateClass);   
+    }
+    _removeMediaOnClick = (index) => {
+        event.preventDefault();
+        
+        this.remove(index);
+        this.blur(this);
+    }
+    _mediaLinkOnClick = (index) => {
+        event.preventDefault();
+
+        if(this.current !== index) {
+            this.play(index);
+        } else {
+            this.jPlayer.play();
+        }
     }
     _shuffleOnClick = (e) => {
-         e.preventDefault();
+        event.preventDefault();
 
         if (this.shuffled && this.jPlayer.useStateClassSkin) {
             this.shuffle(false);
@@ -60,18 +78,18 @@ export default class JPlayerPlaylist extends React.Component {
         this.blur(e.target);
     }
     _shuffleOffClick = (e) => {
-        e.preventDefault();
+        event.preventDefault();
         this.shuffle(false);
         this.blur(e.target);
         this.setState(previousState => previousState.shuffleOffClick = Object.assign({}, previousState.shuffleOffClick, {display: "none"}));
     }
     _previousOnClick = (e) => {
-        e.preventDefault();
+        event.preventDefault();
         this.previous();
         this.blur(e.target);
     }
     _nextOnClick = (e) => {
-        e.preventDefault();
+        event.preventDefault();
         this.next();
         this.blur(e.target);
     }
@@ -79,28 +97,25 @@ export default class JPlayerPlaylist extends React.Component {
         this.current = 0;
         this.shuffled = false;
 
-        this.cssSelector = Object.assign({}, {cssPlaylistOptionsSelector: this.state.cssSelector.cssSelectorAncestor}, this.state.cssSelector);
-
-        //Set the initial loop to the options loop
-        this.loop = this.state.loop;
+        this.cssSelector = Object.assign({}, {cssPlaylistOptionsSelector: this.state.cssSelectorAncestor}, this.state.cssSelector);
 
         this.options = merge({
             keyBindings: {
                 next: {
                     key: 221, // ]
-                    fn: function () {
+                    fn: () => {
                         this.next();
                     }
                 },
                 previous: {
                     key: 219, // [
-                    fn: function () {
+                    fn: () => {
                         this.previous();
                     }
                 },
                 shuffle: {
                     key: 83, // s
-                    fn: function () {
+                    fn: () => {
                         this.shuffle();
                     }
                 }
@@ -110,126 +125,43 @@ export default class JPlayerPlaylist extends React.Component {
             }
         }, this.state);
 
-        // Setup the css selectors for the extra interface items used by the playlist.
-        this.cssSelector.details = this.cssSelector.cssSelectorAncestor + " .jp-details"; // Note that jPlayer controls the text in the title element.
-        this.cssSelector.playlist = this.cssSelector.cssPlaylistOptionsSelector + " .jp-playlist";
-        this.cssSelector.next = this.cssSelector.cssSelectorAncestor + " .jp-next";
-        this.cssSelector.previous = this.cssSelector.cssSelectorAncestor + " .jp-previous";
-        this.cssSelector.shuffle = this.cssSelector.cssSelectorAncestor + " .jp-shuffle";
-        this.cssSelector.shuffleOff = this.cssSelector.cssSelectorAncestor + " .jp-shuffle-off";
-
-        this.options.cssSelectorAncestor = this.cssSelector.cssSelectorAncestor;
-
-        this.options.repeat = () => this.loop = event.jPlayer.options.loop;         
-        this.event.onEnded = () => this.next();
-        this.event.onPlay = () => this.jPlayer.pauseOthers();
-        this.jPlayer.jPlayerElement.addEventListener(this.jPlayer.event.ready, () => this._init());
-        this.jPlayer.jPlayerElement.addEventListener(this.jPlayer.event.resize, () => {
-            if (event.jPlayer.options.fullScreen) {
-                this.setState(previousState => previousState.detailsStyle = Object.assign({}, previousState.detailsStyle, {display: ""}));
-            } else {
-                this.setState(previousState => previousState.detailsStyle = Object.assign({}, previousState.detailsStyle, {display: "none"}));
-            }
-        });
-
         // Put the title in its initial display state
-        if (!this.options.fullScreen) {
+        if (!this.props.fullScreen) {
             this.setState(previousState => previousState.detailsStyle = Object.assign({}, previousState.detailsStyle, {display: "none"}));
         }
 
         // Create .on() handlers for the playlist items along with the free media and remove controls.
         this._createItemHandlers();
-
-        //Remove the looped class from the jPlayer as it's initialy incorrectly set in the original _updateButtons
-        //$(this.cssSelector.jPlayer).data().jPlayer.removeStateClass("looped");
-
-        //Add a new stateClass for the extra loop option
-        merge(this.options,{
-            stateClass: {
-                looped_playlist: "jp-state-looped-playlist"
-            }
-        });
-
-        //Set the jPlayer options to extend these options
-        //$.extend(true, $(this.cssSelector.jPlayer).data().jPlayer.options, this.options);
-
-        this.event.onRepeat = () => {
-            debugger
+        
+        //Overwrite the jPlayer repeat
+        this.jPlayer.repeat = (event) => {
             var guiAction = typeof event === "object"; // Flags GUI click events so we know this was not a direct command, but an action taken by the user on the GUI.
-            if (guiAction && this.options.useStateClassSkin && this.options.loop === "loop-playlist") {
-                this._loop("off");
-            } else if (guiAction && this.options.useStateClassSkin && this.options.loop === "off") {
-                this._loop("loop");
-                this.addStateClass("looped");
+
+            if (this.props.useStateClassSkin){
+                if (guiAction && this.loop === "playlist-loop") {
+                    this.jPlayer._loop("off");
+                    this.jPlayer.removeStateClass("playlistLooped");
+                } else if (guiAction && this.loop === "off") {
+                    this.jPlayer._loop("loop");
+                    this.jPlayer.addStateClass("looped");
+                }
+                else {
+                    this.jPlayer.removeStateClass("looped");
+                    this.jPlayer.addStateClass("playlistLooped");
+                    this.jPlayer._loop("playlist-loop");
+                }
             }
             else {
-                this.addStateClass("looped_playlist");
-                this.removeStateClass("looped");
-                this._loop("loop-playlist");
+                if(this.loop === "playlist-loop") {
+                    this.setState(previousState => previousState.repeatPlaylistStyle = Object.assign({}, previousState.repeatPlaylistStyle, {display: ""}));
+                    this.setState(previousState => previousState.repeatOffStyle = Object.assign({}, previousState.repeatOffStyle, {display: "none"}));
+                    this.setState(previousState => previousState.repeatOffStyle = Object.assign({}, previousState.repeatOffStyle, {display: "none"}));
+                }
+                else {
+                    this.setState(previousState => previousState.repeatPlaylistStyle = Object.assign({}, previousState.repeatPlaylistStyle, {display: "none"}));
+                }
             }
         };
-        
-        // $(this.cssSelector.jPlayer).data().jPlayer._updateButtons = function (playing) {
-        //     if (playing === undefined) {
-        //         playing = !this.status.paused;
-        //     } else {
-        //         this.status.paused = !playing;
-        //     }
-        //     // Apply the state classes. (For the useStateClassSkin:true option)
-        //     if (playing) {
-        //         this.addStateClass("playing");
-        //     } else {
-        //         this.removeStateClass("playing");
-        //     }
-        //     if (!this.status.noFullWindow && this.options.fullWindow) {
-        //         this.addStateClass("fullScreen");
-        //     } else {
-        //         this.removeStateClass("fullScreen");
-        //     }
-        //     //Three types of loop states: Off, Loop, Loop-Playlist
-        //     if (this.options.loop === "loop") {
-        //         this.addStateClass("looped");
-        //     }
-        //     else if (this.options.loop === "loop-playlist") {
-        //         this.addStateClass("looped_playlist");
-        //         this.removeStateClass("looped");
-        //     }
-        //     else {
-        //         this.removeStateClass("looped_playlist");
-        //     }
-
-        //     // Toggle the GUI element pairs. (For the useStateClassSkin:false option)
-        //     if (this.css.jq.play.length && this.css.jq.pause.length) {
-        //         if (playing) {
-        //             this.css.jq.play.hide();
-        //             this.css.jq.pause.show();
-        //         } else {
-        //             this.css.jq.play.show();
-        //             this.css.jq.pause.hide();
-        //         }
-        //     }
-        //     if (this.css.jq.restoreScreen.length && this.css.jq.fullScreen.length) {
-        //         if (this.status.noFullWindow) {
-        //             this.css.jq.fullScreen.hide();
-        //             this.css.jq.restoreScreen.hide();
-        //         } else if (this.options.fullWindow) {
-        //             this.css.jq.fullScreen.hide();
-        //             this.css.jq.restoreScreen.show();
-        //         } else {
-        //             this.css.jq.fullScreen.show();
-        //             this.css.jq.restoreScreen.hide();
-        //         }
-        //     }
-        //     if (this.css.jq.repeat.length && this.css.jq.repeatOff.length) {
-        //         if (this.options.loop) {
-        //             this.css.jq.repeat.hide();
-        //             this.css.jq.repeatOff.show();
-        //         } else {
-        //             this.css.jq.repeat.show();
-        //             this.css.jq.repeatOff.hide();
-        //         }
-        //     }
-        // }
     }
     option = (option, value) => { // For changing playlist options only
         if (value === undefined) {
@@ -254,7 +186,7 @@ export default class JPlayerPlaylist extends React.Component {
     }
     _init = () => {
         this._refresh(function () {
-            if (this.options.autoPlay) {
+            if (this.props.autoPlay) {
                 this.play(this.current);
             } else {
                 this.select(this.current);
@@ -372,7 +304,7 @@ export default class JPlayerPlaylist extends React.Component {
         // });
     }
     _updateControls = () => {
-        if (this.options.enableRemoveControls) {
+        if (this.props.enableRemoveControls) {
             this.setState(previousState => previousState.removeItemClassStyle = Object.assign({}, previousState.removeItemClassStyle, {display: ""}));
         } else {
             this.setState(previousState => previousState.removeItemClassStyle = Object.assign({}, previousState.removeItemClassStyle, {display: "none"}));
@@ -383,7 +315,7 @@ export default class JPlayerPlaylist extends React.Component {
         } else {
             this.jPlayer.removeStateClass("shuffled");
         }
-        if (!this.options.useStateClassSkin) {
+        if (!this.props.useStateClassSkin) {
             if (this.shuffled) {
                 this.setState(previousState => previousState.shuffleOffStyle = Object.assign({}, previousState.shuffleOffStyle, {display: ""}));
                 this.setState(previousState => previousState.shuffle = Object.assign({}, previousState.shuffle, {display: "none"}));
@@ -444,7 +376,9 @@ export default class JPlayerPlaylist extends React.Component {
         if (0 <= index && index < this.state.playlist.length) {
             this.current = index;
             this._highlight(index);
-            this.jPlayer.setMedia(this.state.playlist[this.current]);
+            //Plays the media after the src has been set in the setState callback in jPlayer. 
+            //The play function must be in the callback otherwise the media load will interupt the call to play.
+            this.jPlayer.setMedia(this.state.playlist[this.current], this.jPlayer.play);
         } else {
             this.current = 0;
         }
@@ -454,7 +388,6 @@ export default class JPlayerPlaylist extends React.Component {
         if (0 <= index && index < this.state.playlist.length) {
             if (this.state.playlist.length) {
                 this.select(index);
-                this.jPlayer.play();
             }
         } else if (index === undefined) {
             this.jPlayer.play();
@@ -469,9 +402,9 @@ export default class JPlayerPlaylist extends React.Component {
         if (this.loop === "loop" && !forcePlayNextTrack) {
             this.play(this.current);
         }
-        else if (this.loop === "loop-playlist") {
+        else if (this.loop === "playlist-loop") {
             // See if we need to shuffle before looping to start, and only shuffle if more than 1 item.
-            if (index === 0 && this.shuffled && this.options.shuffleOnLoop && this.state.playlist.length > 1) {
+            if (index === 0 && this.shuffled && this.props.shuffleOnLoop && this.state.playlist.length > 1) {
                 this.shuffle(true, true); // playNow
             } else {
                 this.play(index);
@@ -487,7 +420,7 @@ export default class JPlayerPlaylist extends React.Component {
     previous = () => {
         var index = (this.current - 1 >= 0) ? this.current - 1 : this.state.playlist.length - 1;
 
-        if (this.loop === "loop-playlist" && this.options.loopOnPrevious || index < this.state.playlist.length - 1) {
+        if (this.loop === "playlist-loop" && this.jPlayer.state.loopOnPrevious || index < this.state.playlist.length - 1) {
             this.play(index);
         }
     }
@@ -543,17 +476,33 @@ export default class JPlayerPlaylist extends React.Component {
         setTimeout(() => this.setState({isPlaylistContainerSlidingUp: false}), 0);
     }
     blur = (that) => {
-        if (this.jPlayer.options.autoBlur) {
+        if (this.props.autoBlur) {
             that.blur();
         }
     }
-    test = () => {
-        this.add({title:"Cro Magnon Man",
-                    artist:"The Stark Palace",
-                    mp3:"http://www.jplayer.org/audio/mp3/TSP-01-Cro_magnon_man.mp3",
-                    oga:"http://www.jplayer.org/audio/ogg/TSP-01-Cro_magnon_man.ogg",
-                    poster: "http://www.jplayer.org/audio/poster/The_Stark_Palace_640x360.png"
-                });
+    _aditionalControls = () => {
+        return [<a class="jp-shuffleOff" key={0} onClick={this._shuffleOffClick} style={this.state.shuffleOffStyle}>{this.props.html.shuffleOff}</a>,
+                <a class="jp-shuffle" key={1} onClick={this._shuffleOnClick} style={this.state.shuffleStyle}>{this.props.html.shuffle}</a>,
+                <a class="jp-previous" key={3} onClick={this._previousOnClick}>{this.props.html.previous}</a>,
+                <a class="jp-next" key={4} onClick={this._nextOnClick}>{this.props.html.next}</a>,
+                <a class="jp-playlist-options" key={5}>{this.props.html.playlistOptions}</a>,
+                <a class="jp-repeat-playlist" key={6} onClick={this.state.repeatOnClick} style={this.state.repeatPlaylistStyle}>{this.props.html.loopPlaylist}</a>
+        ];
+    }
+    _getFreeMediaLinks = (media) => {
+        var freeMediaLinks = [];
+        var firstMediaLinkAdded = true;
+
+        for (var property in media) {
+            // Check property is a media format
+            if (JPlayer.format[property]){
+                var value = media[property];
+
+                firstMediaLinkAdded ? firstMediaLinkAdded = false : freeMediaLinks.push(",");
+                freeMediaLinks.push(<a class={this.props.freeItemClass} href={value} tabIndex="-1">{property}</a>);
+            }
+        }
+        return freeMediaLinks;
     }
     componentDidMount(){
         this._setup();
@@ -567,16 +516,25 @@ export default class JPlayerPlaylist extends React.Component {
                 <div id="jp_container_playlist">
                     <div class="jp-playlist">
                         <Playlist isSlidingUp={this.state.isPlaylistContainerSlidingUp} config={this.props.shuffleAnimation} onRest={this._shuffleAnimationCallback}>
-                            {this.state.playlist.map((media, index) => 
-                                <Media key={media.key} media={media} config={this.props.playlistItemAnimation} remove={() => this.remove(index)} onRest={() => this._removeAnimationCallback(index)}
-                                    removeItemClass={this.state.removeItemClass} itemClass={this.state.itemClass}/>)
+                            {this.state.playlist.map((media, index) =>
+                                <Media key={media.key} id={media.key} isRemoving={media.isRemoving} config={this.props.playlistItemAnimation} onRest={() => this._removeAnimationCallback(index)}>
+                                    <a href="javascript:;" class={this.state.removeItemClass} onClick={() => this._mediaLinkOnClick(index)}>&times;</a>
+                                    {media.free ? 
+                                        <span class={this.props.freeGroupClass}>
+                                            ({this._getFreeMediaLinks(media)})
+                                        </span> 
+                                    : null}
+                                    <a href="javascript:;" class={this.state.itemClass} onClick={() => this._removeMediaOnClick(index)} tabIndex="0"> 
+                                        <img src={media.poster}/>
+                                        {media.title}
+                                        {media.artist ? <span class="jp-artist">by {media.artist}</span> : null}
+                                    </a>
+                                </Media>)
                             }   
                         </Playlist> 
                     </div>
                 </div>
-                <JPlayer ref={(jPlayer) => this.jPlayer = jPlayer} {...this.state} {...this.event}>
-                    {/*this.props.children.type*/}
-                </JPlayer>
+                <JPlayer ref={(jPlayer) => this.jPlayer = jPlayer} {...this.state} {...this.event} additionalControls={this._aditionalControls()} stateClass={this.stateClass}/>
             </div>
         );
     }
@@ -602,18 +560,12 @@ Playlist.propTypes = {
 }
 
 const Media = (props) => (
-    <Motion defaultStyle={{heightToInterpTo: props.minHeight}} style={{heightToInterpTo: spring(props.media.isRemoving ? props.minHeight : props.maxHeight, props.config)}} 
-            onRest={props.media.isRemoving ? props.onRest : null}>                
-        {(values) => <li style={{transform: `scaleY(${values.heightToInterpTo})`, transformOrigin: "50% top"}}>
-            <div>
-                <a href="javascript:;" class={props.removeItemClass} onClick={props.remove}>&times;</a>
-                <a href="javascript:;" class={props.itemClass} tabIndex="0"> 
-                    <img src={props.media.poster}/>
-                    {props.media.title}
-                    {props.media.artist ? <span class="jp-artist">by {props.media.artist}</span> : null}
-                </a>
-            </div>
-        </li>}
+    <Motion defaultStyle={{heightToInterpTo: props.minHeight}} style={{heightToInterpTo: spring(props.isRemoving ? props.minHeight : props.maxHeight, props.config)}} onRest={props.isRemoving ? props.onRest : null}>                
+        {(values) => 
+            <li style={{transform: `scaleY(${values.heightToInterpTo})`, transformOrigin: "50% top"}}>
+                {props.children}       
+            </li>
+        }
     </Motion>
 );
 
@@ -621,7 +573,3 @@ Media.defaultProps = {
     minHeight: 0,
     maxHeight: 1
 };
-
-Media.propTypes = {
-    media: React.PropTypes.object.isRequired
-}
