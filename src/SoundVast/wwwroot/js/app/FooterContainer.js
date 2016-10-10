@@ -25,6 +25,7 @@ class FooterContainer extends React.Component {
                 },      
                 smoothPlaybar: true,
                 muted: true,
+                autoPlay: true,
                 sizeFull: {
                     width: "90%",
                     height: "90%"

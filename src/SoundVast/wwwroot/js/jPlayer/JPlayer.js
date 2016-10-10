@@ -7,11 +7,7 @@ export const DefaultProps = {
 	onReady: () => {},
 	onSetMedia: () => {}, // Fires when the media is set
 	onResize: () => {}, // Occurs when the size changes through a full/restore screen operation or if the size/sizeFull options are chan
-	onRepeat: function() { // Occurs when the repeat status changes. Usually through clicks on the repeat button of the interface.
-		if(this.state.loop === "loop") {
-			this.play();
-		}
-	}, 
+	onRepeat: () => {}, 
 	onClick: () => {}, // Occurs when the user clicks on one of the following: poster image, html video
 	onWarning: () => {},
 	//React native events
@@ -95,9 +91,7 @@ export default class JPlayer extends React.Component {
 					//Must use immutable update function for setState otherwise display: "" would just overwrite other values
 					this.setState((previousState) => previousState.posterStyle = Object.assign({}, previousState.posterStyle, {display: ""}));
 				}
-			},
-			muted: props.muted,
-			loop: props.loop // loop is now a string and not a bool because other classes that extend jPlayer such as jPlayerPlaylist may use additional loops such as a playlist-loop
+			}
 		};
 
 		this._setupInternalProperties();
@@ -285,6 +279,8 @@ export default class JPlayer extends React.Component {
 
 		this.dynamicOptions = {
 			volume: props.volume,
+			muted: props.muted,
+			loop: props.loop, // loop is now a string and not a bool because other classes that extend jPlayer such as jPlayerPlaylist may use additional loops such as a playlist-loop
 			defaultPlaybackRate: props.defaultPlaybackRate,
 			playbackRate: props.playbackRate
 		}
@@ -367,44 +363,44 @@ export default class JPlayer extends React.Component {
 			// Properties may be added to this object, in key/fn pairs, to enable other key controls. EG, for the playlist add-on.
 			play: {
 				key: 80, // p
-				fn: function(f) {
-					if(f.status.paused) {
-						f.play();
+				fn: () => {
+					if(this.status.paused) {
+						this.play();
 					} else {
-						f.pause();
+						this.pause();
 					}
 				}
 			},
 			fullScreen: {
 				key: 70, // f
-				fn: function(f) {
-					if(f.status.video || f.options.audioFullScreen) {
-						f._setOption("fullScreen", !f.options.fullScreen);
+				fn: () => {
+					if(this.status.video || this.options.audioFullScreen) {
+						this._setOption("fullScreen", !this.options.fullScreen);
 					}
 				}
 			},
 			muted: {
 				key: 77, // m
-				fn: function(f) {
-					f._muted(!f.state.muted);
+				fn: () => {
+					this._muted(!this.dynamicOptions.muted);
 				}
 			},
 			volumeUp: {
 				key: 190, // .
-				fn: function(f) {
-					f.volume(f.options.volume + 0.1);
+				fn: () => {
+					this.volume(this.options.volume + 0.1);
 				}
 			},
 			volumeDown: {
 				key: 188, // ,
-				fn: function(f) {
-					f.volume(f.options.volume - 0.1);
+				fn: () => {
+					this.volume(f.options.volume - 0.1);
 				}
 			},
 			loop: {
 				key: 76, // l
-				fn: function(f) {
-					f.state.loop === "loop" ? f._loop("loop") : f._loop("off");
+				fn: () => {
+					this.dynamicOptions === "loop" ? this._loop("loop") : this._loop("off");
 				}
 			}
 		}, props.keyBindings);
@@ -474,6 +470,7 @@ export default class JPlayer extends React.Component {
 				// Read the values back from the element as the Blackberry PlayBook shares the volume with the physical buttons master volume control.
 				// However, when tested 6th July 2011, those buttons do not generate an event. The physical play/pause button does though.
 				this.dynamicOptions.volume = this.currentMedia.volume;
+				this.dynamicOptions.muted = this.currentMedia.muted;
 				this._updateVolume();
 				this._trigger(this.props.onVolumeChange);
 			},
@@ -803,6 +800,10 @@ export default class JPlayer extends React.Component {
 		// Add the HTML solution if being used.
 		if(this.html.used) {
 			this.currentMedia.volume = this.dynamicOptions.volume;
+			this.currentMedia.muted = this.dynamicOptions.muted;
+			this.currentMedia.loop = this.dynamicOptions.loop === "loop" ? true : false;
+			this.currentMedia.preload = this.props.preload;
+			this.currentMedia.autoPlay = this.props.autoPlay;
 
 			if(this.status.playbackRateEnabled) {
 				this.currentMedia.defaultPlaybackRate = this.dynamicOptions.defaultPlaybackRate;
@@ -913,14 +914,6 @@ export default class JPlayer extends React.Component {
 		//Clear the object
 		this.cachedEvent = {};
 	}
-	_addEventlisteners = (event, listener) => {
-		this.cachedEvent[event] = {
-			event: event,
-			listener: listener
-		};
-
-		this.jPlayerElement.addEventListener(event, listener.bind(this));
-	}
 	_getHtmlStatus = (media, override) => {
 		var ct = 0, cpa = 0, sp = 0, cpr = 0;
 
@@ -967,7 +960,7 @@ export default class JPlayer extends React.Component {
 	_trigger = (func, error, warning) => {
 		var jPlayer = {
 			version: Object.assign({}, JPlayer.version),
-			options: {loop: this.state.loop, muted: this.state.muted},
+			options: {loop: this.dynamicOptions.loop, muted: this.dynamicOptions.muted},
 			status: merge({}, this.status), // Deep copy
 			html: merge({}, this.html), // Deep copy
 			error: Object.assign({}, error),
@@ -1022,7 +1015,7 @@ export default class JPlayer extends React.Component {
 				this.setState(previousState => previousState.restoreScreenStyle = Object.assign({}, previousState.restoreScreenStyle, {display: "none"}));
 			}
 	
-			if(this.state.loop === "loop") {
+			if(this.dynamicOptions.loop === "loop") {
 				this.setState(previousState => previousState.repeatStyle = Object.assign({}, previousState.repeatStyle, {display: "none"}));
 				this.setState(previousState => previousState.repeatOffStyle = Object.assign({}, previousState.repeatOffStyle, {display: ""}));
 			} else {
@@ -1129,7 +1122,7 @@ export default class JPlayer extends React.Component {
 	removeStateClass = (state) => {
 		this.setState(previousState => ({stateClass: previousState.stateClass.replace(this.stateClass[state], "").trim()}));
 	}
-	setMedia = (media, loadedCallback) => {
+	setMedia = (media, playWhenLoaded) => {
 		/*	media[format] = String: URL of format. Must contain all of the supplied option's video or audio formats.
 			*	media.poster = String: Video poster URL.
 			*	media.track = Array: Of objects defining the track element: kind, src, srclang, label, def.
@@ -1163,7 +1156,7 @@ export default class JPlayer extends React.Component {
 					if(isVideo) {
 						if(isHtml) {
 							this.html.video.gate = true;
-							this._html_setVideo(media, loadedCallback);
+							this._html_setVideo(media, playWhenLoaded);
 							this.html.active = true;
 						}
 
@@ -1172,7 +1165,7 @@ export default class JPlayer extends React.Component {
 					} else {
 						if(isHtml) {
 							this.html.audio.gate = true;
-							this._html_setAudio(media, loadedCallback);
+							this._html_setAudio(media, playWhenLoaded);
 							this.html.active = true;
 
 							// Setup the Android Fix - Only for HTML audio.
@@ -1348,12 +1341,12 @@ export default class JPlayer extends React.Component {
 	}
 	mutedWorker = (muted) => {
 		if(this.html.used) {
-			this.setState(previousState => previousState = Object.assign({}, previousState, {muted: muted}));
+			this.currentMedia.muted = muted;
 		}
 	}
 	mute = (mute) => {	 // mute is either: undefined (true), an event object (true) or a boolean (muted).									
 		var guiAction = typeof mute === "object"; // Flags GUI click events so we know this was not a direct command, but an action taken by the user on the GUI.
-		if(guiAction && this.props.useStateClassSkin && this.state.muted) {
+		if(guiAction && this.props.useStateClassSkin && this.dynamicOptions.muted) {
 			this._muted(false);
 		} else {
 			mute = mute === undefined ? true : !!mute;
@@ -1366,7 +1359,7 @@ export default class JPlayer extends React.Component {
 	}
 	_updateMute = (mute) => {
 		if(mute === undefined) {
-			mute = this.state.muted;
+			mute = this.dynamicOptions.muted;
 		}
 		if(mute) {
 			this.addStateClass('muted');
@@ -1420,7 +1413,7 @@ export default class JPlayer extends React.Component {
 			this.volume(x/w);
 		}
 
-		if(this.state.muted) {
+		if(this.dynamicOptions.muted) {
 			this._muted(false);
 		}
 	}
@@ -1428,7 +1421,7 @@ export default class JPlayer extends React.Component {
 		if(v === undefined) {
 			v = this.dynamicOptions.volume;
 		}
-		v = this.state.muted ? 0 : v;
+		v = this.dynamicOptions.muted ? 0 : v;
 
 		if(this.status.noVolume) {
 			this.addStateClass('noVolume');
@@ -1449,7 +1442,7 @@ export default class JPlayer extends React.Component {
 	}
 	volumeMax = () => {	 // Handles clicks on the volume max
 		this.volume(1);
-		if(this.state.muted) {
+		if(this.dynamicOptions.muted) {
 			this._muted(false);
 		}
 	}
@@ -1599,13 +1592,11 @@ export default class JPlayer extends React.Component {
 		this._loop("off");
 	}
 	_loop = (loop) => {
-		if(this.state.loop !== loop) {
-			//Call the functions in the callback otherwise the state might not have been updated yet
-			this.setState({loop: loop}, () => 
-			{ 
-				this._updateButtons(); 
-				this._trigger(this.props.onRepeat);
-			});
+		if(this.dynamicOptions.loop !== loop) {
+			this.dynamicOptions.loop = loop;
+			this.currentMedia.loop = this.dynamicOptions.loop === "loop" ? true : false;
+			this._updateButtons(); 
+			this._trigger(this.props.onRepeat);
 		}
 	}
 	_setOptions = (options) => {
@@ -1927,7 +1918,7 @@ export default class JPlayer extends React.Component {
 			fs.api.exitFullscreen(e);
 		}
 	}
-	_html_initMedia = (media, loadedCallback) => {
+	_html_initMedia = (media, playWhenLoaded) => {
 		var mediaArray = media.track || [];
 		var tracks = [];
 
@@ -1944,7 +1935,7 @@ export default class JPlayer extends React.Component {
 		}
 
 		this.setState({tracks: tracks});
-		this.setState({mediaSrc: this.status.src}, loadedCallback);
+		this.setState({mediaSrc: this.status.src}, playWhenLoaded ? this.play : null);
 
 		if(this.props.preload !== 'none') {
 			this._html_load(); // See function for comments
@@ -1964,16 +1955,16 @@ export default class JPlayer extends React.Component {
 			}
 		}
 	}
-	_html_setAudio = (media, loadedCallback) => {
+	_html_setAudio = (media, playWhenLoaded) => {
 		this._html_setFormat(media);							
-		this._html_initMedia(media, loadedCallback);
+		this._html_initMedia(media, playWhenLoaded);
 	}
-	_html_setVideo = (media, loadedCallback) => {
+	_html_setVideo = (media, playWhenLoaded) => {
 		this._html_setFormat(media);
 		if(this.status.nativeVideoControls) {
 			this.videoElement.poster = this._validString(media.poster) ? media.poster : "";
 		}
-		this._html_initMedia(media, loadedCallback);
+		this._html_initMedia(media, playWhenLoaded);
 	}
 	_html_resetMedia = () => {
 		var media = this.currentMedia;
@@ -2158,6 +2149,9 @@ export default class JPlayer extends React.Component {
 		this.dynamicOptions.volume = nextProps.volume;
 		this.dynamicOptions.defaultPlaybackRate = nextProps.defaultPlaybackRate;
 		this.dynamicOptions.playbackRate = nextProps.playbackRate;
+		this.dynamicOptions.muted = nextProps.muted;
+		this.dynamicOptions.preload = nextProps.preload;
+		this.dynamicOptions.autoPlay = nextProps.autoPlay;
 	}
 	componentWillUnmount = () => {
 		this._removeEventListeners();
@@ -2195,34 +2189,27 @@ export default class JPlayer extends React.Component {
 		<img key={this.internal.posterId} id={this.internal.posterId} src={this.state.posterSrc} style={this.state.posterStyle}
 		 			 onLoad={this.state.posterOnLoad} onClick={this.state.posterOnClick} />
 	)
-	_renderAudio = (mediaAttribute) => {
+	_renderAudio = () => {
 		if (this.require.audio){	
 			return (
-				<audio ref={(audioElement) => this.audioElement = audioElement} key={this.internal.audioId} src={this.state.mediaSrc} id={this.internal.audioId} {...mediaAttribute} 
-				{...this.mediaEvent}>
+				<audio ref={(audioElement) => this.audioElement = audioElement} key={this.internal.audioId} src={this.state.mediaSrc} id={this.internal.audioId} {...this.mediaEvent}>
 					{this.state.audioTracks}
 				</audio>
 			);
 		}
 	}
-	_renderVideo = (mediaAttribute) => {
+	_renderVideo = () => {
 		if (this.require.video){
 			return (
 				<video ref={(videoElement) => this.videoElement = videoElement} key={this.internal.videoId} style={this.state.videoStyle} src={this.state.mediaSrc} 
-					id={this.internal.videoId} onClick={this.state.videoOnClick} {...mediaAttribute} {...this.mediaEvent}>
+					id={this.internal.videoId} onClick={this.state.videoOnClick} {...this.mediaEvent}>
 					{this.state.videoTracks}
 				</video>
 			);
 		}
 	}
 	render = () => {
-		const mediaAttribute = {
-			preload: this.props.preload,
-			autoPlay: this.props.autoPlay,
-			muted: this.state.muted,
-			loop: this.state.loop === "loop" ? true : false
-		};
-		var media = this.state.renderMedia ? [this._renderPoster(), this._renderAudio(mediaAttribute), this._renderVideo(mediaAttribute)] : null;
+		var media = this.state.renderMedia ? [this._renderPoster(), this._renderAudio(), this._renderVideo()] : null;
 		var playBar = this.props.smoothPlaybar ? this._renderAnimatedPlaybar() : <div class="jp-play-bar" style={this.state.playBarStyle} />;
 
 		return (

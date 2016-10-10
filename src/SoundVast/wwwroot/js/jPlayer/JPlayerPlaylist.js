@@ -28,11 +28,10 @@ export default class JPlayerPlaylist extends React.Component {
         this.playlistContainerMinHeight = this.playlistItemAnimMinHeight = 0;
         this.playlistContainerMaxHeight = this.playlistItemAnimMaxHeight = 1;
 
-        this.state = merge(
-        {
+        this.state = {
             isPlaylistContainerSlidingUp: false,
-            playlist: [] // Array of Objects: The current playlist displayed (Un-shuffled or Shuffled)
-        }, props);
+            playlist: props.playlist // Array of Objects: The current playlist displayed (Un-shuffled or Shuffled)
+        }
         
         this.event = {
             onRepeat: (jPlayer) => this.loop = jPlayer.options.loop,
@@ -51,6 +50,23 @@ export default class JPlayerPlaylist extends React.Component {
 
         //Add a new stateClass for the extra loop option
         this.stateClass = merge({}, {playlistLooped: "jp-state-playlist-looped"}, props.stateClass);   
+    }
+    _freeMediaLinkIndex = 0
+    _addFreeMediaLinks = (media) => {
+        var firstMediaLinkAdded = true;
+
+        media.freeMediaLinks = [];
+
+        for (var property in media) {        
+            // Check property is a media format
+            if (JPlayer.format[property]){
+                var value = media[property];
+
+                firstMediaLinkAdded ? firstMediaLinkAdded = false : media.freeMediaLinks.push(",");
+                media.freeMediaLinks.push(<a key={this._freeMediaLinkIndex++} class={this.props.freeItemClass} href={value} tabIndex="-1">{property}</a>);
+            }
+        }
+
     }
     _removeMediaOnClick = (index) => {
         event.preventDefault();
@@ -162,6 +178,8 @@ export default class JPlayerPlaylist extends React.Component {
                 }
             }
         };
+
+        this.jPlayer.setMedia(this.state.playlist[0], this.props.autoPlay);
     }
     option = (option, value) => { // For changing playlist options only
         if (value === undefined) {
@@ -199,7 +217,8 @@ export default class JPlayerPlaylist extends React.Component {
         this.original = Object.assign([], playlist); // Copy the Array of Objects
 
         for(var i = 0; i < this.original.length; i++){
-            this.original[i].key = i;
+            this.original[i].key = i;          
+            this._addFreeMediaLinks(this.original[i]);
         }
 
         this._originalPlaylist();
@@ -346,10 +365,11 @@ export default class JPlayerPlaylist extends React.Component {
         this._init();
     }
     add = (media, playNow) => {
-        this.original.push(media);
+        this._addFreeMediaLinks(media);
         media.key = maxBy(this.state.playlist, "key").key + 1;
         media.isRemoving = false;
 
+        this.original.push(media);
         this.setState({playlist: update(this.state.playlist, {$push: [media]})});
 
         if (playNow) {
@@ -378,7 +398,7 @@ export default class JPlayerPlaylist extends React.Component {
             this._highlight(index);
             //Plays the media after the src has been set in the setState callback in jPlayer. 
             //The play function must be in the callback otherwise the media load will interupt the call to play.
-            this.jPlayer.setMedia(this.state.playlist[this.current], this.jPlayer.play);
+            this.jPlayer.setMedia(this.state.playlist[this.current], true);
         } else {
             this.current = 0;
         }
@@ -489,26 +509,11 @@ export default class JPlayerPlaylist extends React.Component {
                 <a class="jp-repeat-playlist" key={6} onClick={this.state.repeatOnClick} style={this.state.repeatPlaylistStyle}>{this.props.html.loopPlaylist}</a>
         ];
     }
-    _getFreeMediaLinks = (media) => {
-        var freeMediaLinks = [];
-        var firstMediaLinkAdded = true;
-
-        for (var property in media) {
-            // Check property is a media format
-            if (JPlayer.format[property]){
-                var value = media[property];
-
-                firstMediaLinkAdded ? firstMediaLinkAdded = false : freeMediaLinks.push(",");
-                freeMediaLinks.push(<a class={this.props.freeItemClass} href={value} tabIndex="-1">{property}</a>);
-            }
-        }
-        return freeMediaLinks;
-    }
     componentDidMount(){
         this._setup();
     }
     componentWillMount(){
-        this._initPlaylist(this.state.playlist);
+        this._initPlaylist(this.state.playlist);  
     }
     render() {
         return (
@@ -518,13 +523,13 @@ export default class JPlayerPlaylist extends React.Component {
                         <Playlist isSlidingUp={this.state.isPlaylistContainerSlidingUp} config={this.props.shuffleAnimation} onRest={this._shuffleAnimationCallback}>
                             {this.state.playlist.map((media, index) =>
                                 <Media key={media.key} id={media.key} isRemoving={media.isRemoving} config={this.props.playlistItemAnimation} onRest={() => this._removeAnimationCallback(index)}>
-                                    <a href="javascript:;" class={this.state.removeItemClass} onClick={() => this._mediaLinkOnClick(index)}>&times;</a>
+                                    <a href="javascript:;" class={this.props.removeItemClass} onClick={() => this._removeMediaOnClick(index)}>&times;</a>
                                     {media.free ? 
                                         <span class={this.props.freeGroupClass}>
-                                            ({this._getFreeMediaLinks(media)})
+                                            ({media.freeMediaLinks})
                                         </span> 
                                     : null}
-                                    <a href="javascript:;" class={this.state.itemClass} onClick={() => this._removeMediaOnClick(index)} tabIndex="0"> 
+                                    <a href="javascript:;" class={this.props.itemClass} onClick={() => this._mediaLinkOnClick(index)} tabIndex="0"> 
                                         <img src={media.poster}/>
                                         {media.title}
                                         {media.artist ? <span class="jp-artist">by {media.artist}</span> : null}
@@ -534,7 +539,7 @@ export default class JPlayerPlaylist extends React.Component {
                         </Playlist> 
                     </div>
                 </div>
-                <JPlayer ref={(jPlayer) => this.jPlayer = jPlayer} {...this.state} {...this.event} additionalControls={this._aditionalControls()} stateClass={this.stateClass}/>
+                <JPlayer ref={(jPlayer) => this.jPlayer = jPlayer} {...this.props} {...this.event} additionalControls={this._aditionalControls()} stateClass={this.stateClass}/>
             </div>
         );
     }
