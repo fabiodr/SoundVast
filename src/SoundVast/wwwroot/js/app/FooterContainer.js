@@ -34,6 +34,7 @@ class FooterContainer extends React.Component {
                     width: 300,
                     height: 200
                 },
+                keyEnabled: true,
                 playlist: [
                     {
                         title:"Cro Magnon Man",

@@ -49,7 +49,31 @@ export default class JPlayerPlaylist extends React.Component {
         this.loop = props.loop;
 
         //Add a new stateClass for the extra loop option
-        this.stateClass = merge({}, {playlistLooped: "jp-state-playlist-looped"}, props.stateClass);   
+        this.stateClass = merge({
+            shuffled: "jp-state-shuffled", 
+            playlistLooped: "jp-state-playlist-looped"
+        }, props.stateClass);   
+
+        this.keyBindings = merge({
+            keyBindings: {
+                next: {
+                    key: 221, // ]
+                    fn: () => this.next()
+                },
+                previous: {
+                    key: 219, // [
+                    fn: () => this.previous()
+                },
+                shuffle: {
+                    key: 83, // s
+                    fn: () => this.shuffle()
+                },
+                loop: {
+                    key: 76, // l
+                    fn: () => this._loop()
+                }
+            }
+        }, props.keyBindings);
     }
     _freeMediaLinkIndex = 0
     _addFreeMediaLinks = (media) => {
@@ -115,32 +139,6 @@ export default class JPlayerPlaylist extends React.Component {
 
         this.cssSelector = Object.assign({}, {cssPlaylistOptionsSelector: this.state.cssSelectorAncestor}, this.state.cssSelector);
 
-        this.options = merge({
-            keyBindings: {
-                next: {
-                    key: 221, // ]
-                    fn: () => {
-                        this.next();
-                    }
-                },
-                previous: {
-                    key: 219, // [
-                    fn: () => {
-                        this.previous();
-                    }
-                },
-                shuffle: {
-                    key: 83, // s
-                    fn: () => {
-                        this.shuffle();
-                    }
-                }
-            },
-            stateClass: {
-                shuffled: "jp-state-shuffled"
-            }
-        }, this.state);
-
         // Put the title in its initial display state
         if (!this.props.fullScreen) {
             this.setState(previousState => previousState.detailsStyle = Object.assign({}, previousState.detailsStyle, {display: "none"}));
@@ -153,19 +151,8 @@ export default class JPlayerPlaylist extends React.Component {
         this.jPlayer.repeat = (event) => {
             var guiAction = typeof event === "object"; // Flags GUI click events so we know this was not a direct command, but an action taken by the user on the GUI.
 
-            if (this.props.useStateClassSkin){
-                if (guiAction && this.loop === "playlist-loop") {
-                    this.jPlayer._loop("off");
-                    this.jPlayer.removeStateClass("playlistLooped");
-                } else if (guiAction && this.loop === "off") {
-                    this.jPlayer._loop("loop");
-                    this.jPlayer.addStateClass("looped");
-                }
-                else {
-                    this.jPlayer.removeStateClass("looped");
-                    this.jPlayer.addStateClass("playlistLooped");
-                    this.jPlayer._loop("playlist-loop");
-                }
+            if (this.props.useStateClassSkin && guiAction){
+                this._loop();
             }
             else {
                 if(this.loop === "playlist-loop") {
@@ -230,6 +217,20 @@ export default class JPlayerPlaylist extends React.Component {
     _originalPlaylist = (playlistSetCallback) => {
         // Make both arrays point to the same object elements. Gives us 2 different arrays, each pointing to the same actual object. ie., Not copies of the object.
         this.setState({playlist: [...this.original]}, playlistSetCallback);
+    }
+    _loop = () => {
+        if (this.loop === "playlist-loop") {
+            this.jPlayer._loop("off");
+            this.jPlayer.removeStateClass("playlistLooped");
+        } else if (this.loop === "off") {
+            this.jPlayer._loop("loop");
+            this.jPlayer.addStateClass("looped");
+        }
+        else {
+            this.jPlayer.removeStateClass("looped");
+            this.jPlayer.addStateClass("playlistLooped");
+            this.jPlayer._loop("playlist-loop");
+        }
     }
     _refresh = (instant) => {
         /* instant: Can be undefined, true or a function.
@@ -400,8 +401,6 @@ export default class JPlayerPlaylist extends React.Component {
         if (0 <= index && index < this.state.playlist.length) {
             this.current = index;
             this._highlight(index);
-            //Plays the media after the src has been set in the setState callback in jPlayer. 
-            //The play function must be in the callback otherwise the media load will interupt the call to play.
             this.jPlayer.setMedia(this.state.playlist[this.current]);
             this.jPlayer.play();
         } else {
@@ -546,7 +545,7 @@ export default class JPlayerPlaylist extends React.Component {
                         </Playlist> 
                     </div>
                 </div>
-                <JPlayer ref={(jPlayer) => this.jPlayer = jPlayer} {...this.props} {...this.state.event} additionalControls={this._aditionalControls()} stateClass={this.stateClass}/>
+                <JPlayer ref={(jPlayer) => this.jPlayer = jPlayer} {...this.props} {...this.keyBindings} {...this.state.event} additionalControls={this._aditionalControls()} stateClass={this.stateClass}/>
             </div>
         );
     }

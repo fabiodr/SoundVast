@@ -193,7 +193,7 @@ export default class JPlayer extends React.Component {
 			}
 
 			if(!ignoreKey) {
-				var keyBindings = f.options.keyBindings;
+				var keyBindings = f.keyBindings;
 
 				for (var action in keyBindings) {
 					var binding = keyBindings[action];
@@ -203,8 +203,9 @@ export default class JPlayer extends React.Component {
 						((typeof binding.key === 'number' && event.which === binding.key) ||
 						(typeof binding.key === 'string' && event.key === binding.key))
 					) {
+						debugger;
 						event.preventDefault(); // Key being used by jPlayer, so prevent default operation.
-						binding.fn(f);
+						binding.fn.bind(f)();
 						break;
 					}
 				}
@@ -363,7 +364,7 @@ export default class JPlayer extends React.Component {
 			// Properties may be added to this object, in key/fn pairs, to enable other key controls. EG, for the playlist add-on.
 			play: {
 				key: 80, // p
-				fn: () => {
+				fn: function() {
 					if(this.status.paused) {
 						this.play();
 					} else {
@@ -373,7 +374,7 @@ export default class JPlayer extends React.Component {
 			},
 			fullScreen: {
 				key: 70, // f
-				fn: () => {
+				fn: function() {
 					if(this.status.video || this.options.audioFullScreen) {
 						this._setOption("fullScreen", !this.options.fullScreen);
 					}
@@ -381,26 +382,26 @@ export default class JPlayer extends React.Component {
 			},
 			muted: {
 				key: 77, // m
-				fn: () => {
+				fn: function() {
 					this._muted(!this.dynamicOptions.muted);
 				}
 			},
 			volumeUp: {
 				key: 190, // .
-				fn: () => {
+				fn: function() {
 					this.volume(this.options.volume + 0.1);
 				}
 			},
 			volumeDown: {
 				key: 188, // ,
-				fn: () => {
+				fn: function() {
 					this.volume(f.options.volume - 0.1);
 				}
 			},
 			loop: {
 				key: 76, // l
-				fn: () => {
-					this.dynamicOptions === "loop" ? this._loop("loop") : this._loop("off");
+				fn: function() {
+					this.dynamicOptions.loop === "off" ? this._loop("loop") : this._loop("off");
 				}
 			}
 		}, props.keyBindings);
@@ -988,7 +989,7 @@ export default class JPlayer extends React.Component {
 			} else {
 				this.removeStateClass('fullScreen');
 			}
-			if(this.state.loop === "loop") {
+			if(this.dynamicOptions.loop === "loop") {
 				this.addStateClass('looped');
 			} else {
 				this.removeStateClass('looped');
@@ -1582,7 +1583,7 @@ export default class JPlayer extends React.Component {
 	}
 	repeat = (event) => {	 // Handle clicks on the repeat button
 		var guiAction = typeof event === "object"; // Flags GUI click events so we know this was not a direct command, but an action taken by the user on the GUI.
-		if(guiAction && this.props.useStateClassSkin && this.state.loop === "loop") {
+		if(guiAction && this.props.useStateClassSkin && this.dynamicOptions.loop === "loop") {
 			this._loop("off");
 		} else {
 			this._loop("loop");
