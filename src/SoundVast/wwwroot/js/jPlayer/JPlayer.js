@@ -1122,7 +1122,7 @@ export default class JPlayer extends React.Component {
 	removeStateClass = (state) => {
 		this.setState(previousState => ({stateClass: previousState.stateClass.replace(this.stateClass[state], "").trim()}));
 	}
-	setMedia = (media, playWhenLoaded) => {
+	setMedia = (media) => {
 		/*	media[format] = String: URL of format. Must contain all of the supplied option's video or audio formats.
 			*	media.poster = String: Video poster URL.
 			*	media.track = Array: Of objects defining the track element: kind, src, srclang, label, def.
@@ -1156,7 +1156,7 @@ export default class JPlayer extends React.Component {
 					if(isVideo) {
 						if(isHtml) {
 							this.html.video.gate = true;
-							this._html_setVideo(media, playWhenLoaded);
+							this._html_setVideo(media);
 							this.html.active = true;
 						}
 
@@ -1165,7 +1165,7 @@ export default class JPlayer extends React.Component {
 					} else {
 						if(isHtml) {
 							this.html.audio.gate = true;
-							this._html_setAudio(media, playWhenLoaded);
+							this._html_setAudio(media);
 							this.html.active = true;
 
 							// Setup the Android Fix - Only for HTML audio.
@@ -1918,7 +1918,7 @@ export default class JPlayer extends React.Component {
 			fs.api.exitFullscreen(e);
 		}
 	}
-	_html_initMedia = (media, playWhenLoaded) => {
+	_html_initMedia = (media) => {
 		var mediaArray = media.track || [];
 		var tracks = [];
 
@@ -1935,7 +1935,7 @@ export default class JPlayer extends React.Component {
 		}
 
 		this.setState({tracks: tracks});
-		this.setState({mediaSrc: this.status.src}, playWhenLoaded ? this.play : null);
+		this.currentMedia.src = this.status.src;
 
 		if(this.props.preload !== 'none') {
 			this._html_load(); // See function for comments
@@ -1955,16 +1955,16 @@ export default class JPlayer extends React.Component {
 			}
 		}
 	}
-	_html_setAudio = (media, playWhenLoaded) => {
+	_html_setAudio = (media) => {
 		this._html_setFormat(media);							
-		this._html_initMedia(media, playWhenLoaded);
+		this._html_initMedia(media);
 	}
-	_html_setVideo = (media, playWhenLoaded) => {
+	_html_setVideo = (media) => {
 		this._html_setFormat(media);
 		if(this.status.nativeVideoControls) {
 			this.videoElement.poster = this._validString(media.poster) ? media.poster : "";
 		}
-		this._html_initMedia(media, playWhenLoaded);
+		this._html_initMedia(media);
 	}
 	_html_resetMedia = () => {
 		var media = this.currentMedia;
@@ -1977,7 +1977,8 @@ export default class JPlayer extends React.Component {
 	}
 	_html_clearMedia = () => {
 		if(this.currentMedia) {
-			this.setState({mediaSrc: "about:blank"});
+			this.currentMedia.src = "about:blank";
+
 			// The following load() is only required for Firefox 3.6 (PowerMacs).
 			// Recent HTMl5 browsers only require the src change. Due to changes in W3C spec and load() effect.
 			this.currentMedia.load(); // Stops an old, "in progress" download from continuing the download. Triggers the loadstart, error and emptied events, due to the empty src. Also an abort event if a download was in progress.
@@ -2192,7 +2193,7 @@ export default class JPlayer extends React.Component {
 	_renderAudio = () => {
 		if (this.require.audio){	
 			return (
-				<audio ref={(audioElement) => this.audioElement = audioElement} key={this.internal.audioId} src={this.state.mediaSrc} id={this.internal.audioId} {...this.mediaEvent}>
+				<audio ref={(audioElement) => this.audioElement = audioElement} key={this.internal.audioId} id={this.internal.audioId} {...this.mediaEvent}>
 					{this.state.audioTracks}
 				</audio>
 			);
