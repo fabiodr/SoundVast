@@ -23,13 +23,12 @@ export default class JPlayerPlaylist extends React.Component {
         this.playlistContainerMaxHeight = this.playlistItemAnimMaxHeight = 1;
 
         this.state = {
-            isPlaylistContainerSlidingUp: false,
+            current: 0,
             playlist: props.playlist, // Array of Objects: The current playlist displayed (Un-shuffled or Shuffled)
             event: {
                 onRepeat: (jPlayer) => this.loop = jPlayer.options.loop,
                 onEnded: () => this.next(),
                 onPlay: () => this.jPlayer.pauseOthers(),
-                onReady: () => this._init(),
                 onResize: () => {
                     if (this.props.fullScreen) {
                         this.setState(previousState => previousState.detailsStyle = Object.assign({}, previousState.detailsStyle, {display: ""}));
@@ -85,8 +84,7 @@ export default class JPlayerPlaylist extends React.Component {
                 firstMediaLinkAdded ? firstMediaLinkAdded = false : media.freeMediaLinks.push(", ");
                 media.freeMediaLinks.push(<a key={this._freeMediaLinkIndex++} class={this.props.freeItemClass} href={value} tabIndex="-1">{property}</a>);
             }
-        }
-
+       }
     }
     _removeMediaOnClick = (index, event) => {
         event.preventDefault();
@@ -97,7 +95,7 @@ export default class JPlayerPlaylist extends React.Component {
     _mediaLinkOnClick = (index, event) => {
         event.preventDefault();
 
-        if(this.current !== index) {
+        if(this.state.current !== index) {
             this.play(index);
         } else {
             this.jPlayer.play();
@@ -134,7 +132,6 @@ export default class JPlayerPlaylist extends React.Component {
         this.blur(event.target);
     }
     _setup = () => {
-        this.current = 0;
         this.shuffled = false;
 
         this.cssSelector = Object.assign({}, {cssPlaylistOptionsSelector: this.state.cssSelectorAncestor}, this.state.cssSelector);
@@ -162,44 +159,17 @@ export default class JPlayerPlaylist extends React.Component {
                 }
             }
         };
-
-        this.jPlayer.setMedia(this.state.playlist[0]);
-
-        if (this.props.autoPlay){
-            this.jPlayer.play();
-        }
-    }
-    option = (option, value) => { // For changing playlist options only
-        if (value === undefined) {
-            return this.options.playlistOptions[option];
-        }
-
-        this.options.playlistOptions[option] = value;
-
-        switch (option) {
-            case "enableRemoveControls":
-                this._updateControls();
-                break;
-            case "itemClass":
-            case "freeGroupClass":
-            case "freeItemClass":
-            case "removeItemClass":
-                this._refresh(true); // Instant
-                break;
-        }
-        return this;
+        this._init();
     }
     _init = () => {
-        this._refresh(function () {
-            if (this.props.autoPlay) {
-                this.play(this.current);
-            } else {
-                this.select(this.current);
-            }
-        });
+        if (this.props.autoPlay) {
+            this.play(this.state.current);
+        } else {
+            this.select(this.state.current);
+        }
     }
     _initPlaylist = (playlist) => {
-        this.current = 0;
+        this.setState({current: 0});
         this.shuffled = false;
         this.original = [...playlist] // Copy the Array of Objects
 
@@ -228,78 +198,24 @@ export default class JPlayerPlaylist extends React.Component {
             this.jPlayer._loop("playlist-loop");
         }
     }
-    _refresh = (instant) => {
-        /* instant: Can be undefined, true or a function.
-            *	undefined -> use animation timings
-            *	true -> no animation
-            *	function -> use animation timings and excute function at half way point.
-            */
+    _highlight = (index) => {
+        // var currentPlaylistClass = "currentPlaylistClass_" + index;
 
-        // if (instant && !$.isFunction(instant)) {
-        //     $(this.cssSelector.playlist + " ul").empty();
-        //     $.each(this.playlist, function (i) {
-        //         $(this.cssSelector.playlist + " ul").append(this._createListItem(this.playlist[i]));
-        //     });
-        //     this._updateControls();
-        // } else {
-        //     var displayTime = $(this.cssSelector.playlist + " ul").children().length ? this.options.displayTime : 0;
-
-        //     $(this.cssSelector.playlist + " ul").isPlaylistContainerSlidingUp(displayTime, function () {
-        //         var $this = $(this);
-        //         $(this).empty();
-
-        //         $.each(this.playlist, function (i) {
-        //             $this.append(this._createListItem(this.playlist[i]));
-        //         });
-        //         this._updateControls();
-        //         if ($.isFunction(instant)) {
-        //             instant();
+        // if (this.state.playlist.length && index !== undefined) {
+        //     this.setState(previousState => { 
+        //         debugger;
+        //         if (previousState[currentPlaylistClass]) {
+        //             return ({currentPlaylistClass: previousState[currentPlaylistClass].replace("jp-playlist-current", "").trim()})
         //         }
-        //         if (this.playlist.length) {
-        //             $(this).slideDown(this.options.displayTime);
-        //         } else {
-        //             $(this).show();
+        //     });
+
+        //     this.setState(previousState => {
+        //         debugger;
+		// 	    if (previousState[currentPlaylistClass] && !previousState[currentPlaylistClass].includes("jp-playlist-current")){
+		// 		    return { currentPlaylistClass: previousState[currentPlaylistClass] + " " + "jp-playlist-current" }
         //         }
         //     });
         // }
-    }
-    _updateControls = () => {
-        if (this.props.enableRemoveControls) {
-            this.setState(previousState => previousState.removeItemClassStyle = Object.assign({}, previousState.removeItemClassStyle, {display: ""}));
-        } else {
-            this.setState(previousState => previousState.removeItemClassStyle = Object.assign({}, previousState.removeItemClassStyle, {display: "none"}));
-        }
-
-        if (this.shuffled) {
-            this.jPlayer.addStateClass("shuffled");
-        } else {
-            this.jPlayer.removeStateClass("shuffled");
-        }
-        if (!this.props.useStateClassSkin) {
-            if (this.shuffled) {
-                this.setState(previousState => previousState.shuffleOffStyle = Object.assign({}, previousState.shuffleOffStyle, {display: ""}));
-                this.setState(previousState => previousState.shuffle = Object.assign({}, previousState.shuffle, {display: "none"}));
-            } else {
-                this.setState(previousState => previousState.shuffleOffStyle = Object.assign({}, previousState.shuffleOffStyle, {display: "none"}));
-                this.setState(previousState => previousState.shuffle = Object.assign({}, previousState.shuffle, {display: ""}));
-            }
-        }
-    }
-    _highlight = (index) => {
-        var currentPlaylistClass = "currentPlaylistClass_" + index;
-
-        if (this.state.playlist.length && index !== undefined) {
-            this.setState(previousState => { 
-                if (previousState[currentPlaylistClass]) {
-                    return ({currentPlaylistClass: previousState[currentPlaylistClass].replace("jp-playlist-current", "").trim()})
-                }
-            });
-            this.setState(previousState => {
-			    if (previousState[currentPlaylistClass] && !previousState[currentPlaylistClass].includes("jp-playlist-current")){
-				    return { currentPlaylistClass: previousState[currentPlaylistClass] + " " + "jp-playlist-current" }
-                }
-            });
-        }
     }
     setPlaylist = (playlist) => {
         this._initPlaylist(playlist);
@@ -324,9 +240,7 @@ export default class JPlayerPlaylist extends React.Component {
     remove = (index) => {
         if (index === undefined) {
             this._initPlaylist([]);
-            this._refresh(function () {
-                this.jPlayer.clearMedia();
-            });
+            this.jPlayer.clearMedia();
             return true;
         } else {           
             this.setState(previousState => previousState.playlist[index] = Object.assign({}, previousState.playlist[index], {isRemoving: true}));
@@ -336,12 +250,12 @@ export default class JPlayerPlaylist extends React.Component {
     select = (index) => {
         index = (index < 0) ? this.original.length + index : index; // Negative index relates to end of array.
         if (0 <= index && index < this.state.playlist.length) {
-            this.current = index;
+            this.setState({current: index});
             this._highlight(index);
-            this.jPlayer.setMedia(this.state.playlist[this.current]);
+            this.jPlayer.setMedia(this.state.playlist[this.state.current]);
             this.jPlayer.play();
         } else {
-            this.current = 0;
+            this.setState({current: 0});
         }
     }
     play = (index) => {
@@ -358,10 +272,10 @@ export default class JPlayerPlaylist extends React.Component {
         this.jPlayer.pause();
     }
     next = (forcePlayNextTrack) => {
-        var index = (this.current + 1 < this.state.playlist.length) ? this.current + 1 : 0;
+        var index = (this.state.current + 1 < this.state.playlist.length) ? this.state.current + 1 : 0;
 
         if (this.loop === "loop" && !forcePlayNextTrack) {
-            this.play(this.current);
+            this.play(this.state.current);
         }
         else if (this.loop === "playlist-loop") {
             // See if we need to shuffle before looping to start, and only shuffle if more than 1 item.
@@ -379,7 +293,7 @@ export default class JPlayerPlaylist extends React.Component {
         }
     }
     previous = () => {
-        var index = (this.current - 1 >= 0) ? this.current - 1 : this.state.playlist.length - 1;
+        var index = (this.state.current - 1 >= 0) ? this.state.current - 1 : this.state.playlist.length - 1;
 
         if (this.loop === "playlist-loop" && this.props.loopOnPrevious || index < this.state.playlist.length - 1) {
             this.play(index);
@@ -411,18 +325,18 @@ export default class JPlayerPlaylist extends React.Component {
         }
 
         if (this.original.length) {
-            if (index === this.current) {
-                this.current = (index < this.original.length) ? this.current : this.original.length - 1; // To cope when last element being selected when it was removed
-                this.select(this.current);
-            } else if (index < this.current) {
-                this.current--;
+            if (index === this.state.current) {
+                this.state.current = (index < this.original.length) ? this.state.current : this.original.length - 1; // To cope when last element being selected when it was removed
+                this.select(this.state.current);
+            } else if (index < this.state.current) {
+                this.setState(previousState => [{current: previousState.current--}]);
             }
         } else {
             this.jPlayer.clearMedia();
-            this.current = 0;
+            this.setState({current: 0});
             this.shuffled = false;
-            this._updateControls();
         }
+
         this.setState({useRemoveConfig: false});
     }
     _shuffleAnimationCallback = () => {
@@ -441,11 +355,22 @@ export default class JPlayerPlaylist extends React.Component {
 
         if (this.shuffled) {
             this.setState({playlist: [...this.state.playlist].sort(() => 0.5 - Math.random())}, playlistSetCallback);
+            this.jPlayer.addStateClass("shuffled");
         } else {
-            this._originalPlaylist(playlistSetCallback);          
+            this._originalPlaylist(playlistSetCallback);  
+            this.jPlayer.removeStateClass("shuffled");        
         }
 
-        this._refresh(true); // Instant    
+        if (!this.props.useStateClassSkin) {
+            if (this.shuffled) {
+                this.setState(previousState => previousState.shuffleOffStyle = Object.assign({}, previousState.shuffleOffStyle, {display: ""}));
+                this.setState(previousState => previousState.shuffle = Object.assign({}, previousState.shuffle, {display: "none"}));
+            } else {
+                this.setState(previousState => previousState.shuffleOffStyle = Object.assign({}, previousState.shuffleOffStyle, {display: "none"}));
+                this.setState(previousState => previousState.shuffle = Object.assign({}, previousState.shuffle, {display: ""}));
+            }
+        }
+
         setTimeout(() => this.setState({isPlaylistContainerSlidingUp: false}), 0);
     }
     blur = (that) => {
@@ -474,8 +399,8 @@ export default class JPlayerPlaylist extends React.Component {
                 <div id="jp_container_playlist">
                     <div class="jp-playlist">
                         <Playlist isSlidingUp={this.state.isPlaylistContainerSlidingUp} config={this.state.useShuffleConfig ? this.props.shuffleAnimationConfig : this.props.displayAnimationConfig} onRest={this._shuffleAnimationCallback}>
-                            {this.state.playlist.map((media, index) =>
-                                <Media key={media.key} id={media.key} isRemoving={media.isRemoving} config={this.state.useRemoveConfig ? this.props.removeAnimationConfig : this.props.addAnimationConfig} onRest={() => this._removeAnimationCallback(index)}>
+                            {this.state.playlist.map((media, index) => 
+                                <Media key={media.key} id={media.key} isCurrent={index === this.state.current} isRemoving={media.isRemoving} config={this.state.useRemoveConfig ? this.props.removeAnimationConfig : this.props.addAnimationConfig} onRest={() => this._removeAnimationCallback(index)}>
                                     {this.props.enableRemoveControls ? 
                                         <a href="javascript:;" class={this.props.removeItemClass} onClick={this._removeMediaOnClick.bind(this, index)}>&times;</a>
                                     : null}
@@ -484,7 +409,7 @@ export default class JPlayerPlaylist extends React.Component {
                                             ({media.freeMediaLinks})
                                         </span> 
                                     : null}
-                                    <a href="javascript:;" class={this.props.itemClass} onClick={this._mediaLinkOnClick.bind(this, index)} tabIndex="0"> 
+                                    <a href="javascript:;"class={index === this.state.current ? this.props.itemClass + " jp-playlist-current" : this.props.itemClass} onClick={this._mediaLinkOnClick.bind(this, index)} tabIndex="0"> 
                                         <img src={media.poster}/>
                                         {media.title}
                                         {media.artist ? <span class="jp-artist">by {media.artist}</span> : null}
@@ -522,7 +447,7 @@ Playlist.propTypes = {
 const Media = (props) => (
     <Motion defaultStyle={{heightToInterpTo: props.minHeight}} style={{heightToInterpTo: spring(props.isRemoving ? props.minHeight : props.maxHeight, props.config)}} onRest={props.isRemoving ? props.onRest : null}>                
         {(values) => 
-            <li style={{transform: `scaleY(${values.heightToInterpTo})`, transformOrigin: "50% top"}}>
+            <li class={props.isCurrent ? "jp-playlist-current" : null} style={{transform: `scaleY(${values.heightToInterpTo})`, transformOrigin: "50% top"}}>
                 {props.children}       
             </li>
         }

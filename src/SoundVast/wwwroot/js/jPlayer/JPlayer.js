@@ -4,7 +4,6 @@ import merge from "lodash.merge";
 
 export const DefaultProps = {
 	//Custom events
-	onReady: () => {},
 	onSetMedia: () => {}, // Fires when the media is set
 	onResize: () => {}, // Occurs when the size changes through a full/restore screen operation or if the size/sizeFull options are chan
 	onRepeat: () => {}, 
@@ -820,7 +819,6 @@ export default class JPlayer extends React.Component {
 
 		if((this.html.used)) {
 			this.internal.ready = true;
-			this._trigger(this.props.onReady);
 		}
 
 		// Initialize the interface components with the options.
