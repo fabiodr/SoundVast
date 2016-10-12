@@ -374,8 +374,8 @@ export default class JPlayer extends React.Component {
 			fullScreen: {
 				key: 70, // f
 				fn: function() {
-					if(this.status.video || this.options.audioFullScreen) {
-						this._setOption("fullScreen", !this.options.fullScreen);
+					if(this.status.video || this.props.audioFullScreen) {
+						this._setOption("fullScreen", !this.props.fullScreen);
 					}
 				}
 			},
@@ -388,13 +388,13 @@ export default class JPlayer extends React.Component {
 			volumeUp: {
 				key: 190, // .
 				fn: function() {
-					this.volume(this.options.volume + 0.1);
+					this.volume(this.dynamicOptions.volume + 0.1);
 				}
 			},
 			volumeDown: {
 				key: 188, // ,
 				fn: function() {
-					this.volume(f.options.volume - 0.1);
+					this.volume(this.dynamicOptions.volume - 0.1);
 				}
 			},
 			loop: {

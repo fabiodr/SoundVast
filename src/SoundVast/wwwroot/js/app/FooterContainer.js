@@ -26,6 +26,24 @@ class FooterContainer extends React.Component {
                 smoothPlaybar: true,
                 muted: true,
                 autoPlay: true,
+                enableRemoveControls: true,
+                loopOnPrevious: true,
+                // shuffleAnimationConfig: {
+                //     stiffness: 220, 
+                //     damping: 14
+                // },
+                // displayAnimationConfig: {
+                //     stiffness: 2, 
+                //     damping: 20
+                // },
+                // removeAnimationConfig: {
+                //     stiffness: 220, 
+                //     damping: 14
+                // },
+                // addAnimationConfig: {
+                //     stiffness: 2, 
+                //     damping: 20
+                // },
                 sizeFull: {
                     width: "90%",
                     height: "90%"

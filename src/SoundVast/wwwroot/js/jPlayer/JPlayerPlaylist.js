@@ -8,13 +8,7 @@ import maxBy from "lodash/maxBy";
 export default class JPlayerPlaylist extends React.Component {
     static get defaultProps(){
 		return Object.assign({
-            loopOnPrevious: false,
             shuffleOnLoop: true,
-            enableRemoveControls: false,
-            displayTime: 'slow',
-            addTime: 'fast',
-            removeTime: 'fast',
-            shuffleTime: 400,
             itemClass: "jp-playlist-item",
             freeItemClass: "jp-playlist-item-free",
             removeItemClass: "jp-playlist-item-remove",
@@ -109,7 +103,6 @@ export default class JPlayerPlaylist extends React.Component {
     }
     _shuffleOnClick = (event) => {
         event.preventDefault();
-        debugger;
 
         if (this.shuffled && this.props.useStateClassSkin) {
             this.shuffle(false);
@@ -329,6 +322,7 @@ export default class JPlayerPlaylist extends React.Component {
         // });
     }
     _updateControls = () => {
+        debugger;
         if (this.props.enableRemoveControls) {
             this.setState(previousState => previousState.removeItemClassStyle = Object.assign({}, previousState.removeItemClassStyle, {display: ""}));
         } else {
@@ -374,7 +368,7 @@ export default class JPlayerPlaylist extends React.Component {
         this._addFreeMediaLinks(media);
         media.key = maxBy(this.state.playlist, "key").key + 1;
         media.isRemoving = false;
-
+        
         this.original.push(media);
         this.setState({playlist: update(this.state.playlist, {$push: [media]})});
 
@@ -396,6 +390,7 @@ export default class JPlayerPlaylist extends React.Component {
         } else {           
             this.setState(previousState => previousState.playlist[index] = Object.assign({}, previousState.playlist[index], {isRemoving: true}));
         }
+        this.setState({useRemoveConfig: true});
     }
     select = (index) => {
         index = (index < 0) ? this.original.length + index : index; // Negative index relates to end of array.
@@ -428,7 +423,6 @@ export default class JPlayerPlaylist extends React.Component {
             this.play(this.current);
         }
         else if (this.loop === "playlist-loop") {
-            debugger;
             // See if we need to shuffle before looping to start, and only shuffle if more than 1 item.
             if (index === 0 && this.shuffled && this.props.shuffleOnLoop && this.state.playlist.length > 1) {
                 this.shuffle(true, true); // playNow
@@ -451,15 +445,14 @@ export default class JPlayerPlaylist extends React.Component {
         }
     }
     shuffle = (shuffled, playNow) => {
-
-        this.setState({isPlaylistContainerSlidingUp: true});
-        this.playNow = playNow;  
-
         if(shuffled === undefined) {
             shuffled = !this.shuffled;
         }
 
         this.shuffled = shuffled;
+        this.playNow = playNow;
+        this.setState({isPlaylistContainerSlidingUp: true});
+        this.setState({useShuffleConfig: true});
     }
     _removeAnimationCallback = (index) => {
         if (this.shuffled) {
@@ -489,9 +482,14 @@ export default class JPlayerPlaylist extends React.Component {
             this.shuffled = false;
             this._updateControls();
         }
+        this.setState({useRemoveConfig: false});
     }
     _shuffleAnimationCallback = () => {
-        debugger
+        if (!this.state.isPlaylistContainerSlidingUp) {
+            this.setState({useShuffleConfig: false});
+            return;
+        }
+
         function playlistSetCallback() {
             if (this.playNow || !this.jPlayer.status.paused) {
                 this.play(0);
@@ -505,8 +503,8 @@ export default class JPlayerPlaylist extends React.Component {
         } else {
             this._originalPlaylist(playlistSetCallback);          
         }
-        this._refresh(true); // Instant    
 
+        this._refresh(true); // Instant    
         setTimeout(() => this.setState({isPlaylistContainerSlidingUp: false}), 0);
     }
     blur = (that) => {
@@ -534,10 +532,12 @@ export default class JPlayerPlaylist extends React.Component {
             <div>
                 <div id="jp_container_playlist">
                     <div class="jp-playlist">
-                        <Playlist isSlidingUp={this.state.isPlaylistContainerSlidingUp} config={this.props.shuffleAnimation} onRest={this._shuffleAnimationCallback}>
+                        <Playlist isSlidingUp={this.state.isPlaylistContainerSlidingUp} config={this.state.useShuffleConfig ? this.props.shuffleAnimationConfig : this.props.displayAnimationConfig} onRest={this._shuffleAnimationCallback}>
                             {this.state.playlist.map((media, index) =>
-                                <Media key={media.key} id={media.key} isRemoving={media.isRemoving} config={this.props.playlistItemAnimation} onRest={() => this._removeAnimationCallback(index)}>
-                                    <a href="javascript:;" class={this.props.removeItemClass} onClick={this._removeMediaOnClick.bind(this, index)}>&times;</a>
+                                <Media key={media.key} id={media.key} isRemoving={media.isRemoving} config={this.state.useRemoveConfig ? this.props.removeAnimationConfig : this.props.addAnimationConfig} onRest={() => this._removeAnimationCallback(index)}>
+                                    {this.props.enableRemoveControls ? 
+                                        <a href="javascript:;" class={this.props.removeItemClass} onClick={this._removeMediaOnClick.bind(this, index)}>&times;</a>
+                                    : null}
                                     {media.free ? 
                                         <span class={this.props.freeGroupClass}>
                                             ({media.freeMediaLinks})
@@ -560,7 +560,7 @@ export default class JPlayerPlaylist extends React.Component {
 }
 
 const Playlist = (props) => (
-    <Motion style={{heightToInterpTo: spring(props.isSlidingUp ? props.minHeight : props.maxHeight, props.config)}} onRest={props.isSlidingUp ? props.onRest : null}>
+    <Motion defaultStyle={{heightToInterpTo: props.minHeight}} style={{heightToInterpTo: spring(props.isSlidingUp ? props.minHeight : props.maxHeight, props.config)}} onRest={props.onRest}>
         {(values) =>
             <ul style={{transform: `scaleY(${values.heightToInterpTo})`, transformOrigin: "50% top"}}>
                 {props.children}     
