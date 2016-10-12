@@ -198,25 +198,6 @@ export default class JPlayerPlaylist extends React.Component {
             this.jPlayer._loop("playlist-loop");
         }
     }
-    _highlight = (index) => {
-        // var currentPlaylistClass = "currentPlaylistClass_" + index;
-
-        // if (this.state.playlist.length && index !== undefined) {
-        //     this.setState(previousState => { 
-        //         debugger;
-        //         if (previousState[currentPlaylistClass]) {
-        //             return ({currentPlaylistClass: previousState[currentPlaylistClass].replace("jp-playlist-current", "").trim()})
-        //         }
-        //     });
-
-        //     this.setState(previousState => {
-        //         debugger;
-		// 	    if (previousState[currentPlaylistClass] && !previousState[currentPlaylistClass].includes("jp-playlist-current")){
-		// 		    return { currentPlaylistClass: previousState[currentPlaylistClass] + " " + "jp-playlist-current" }
-        //         }
-        //     });
-        // }
-    }
     setPlaylist = (playlist) => {
         this._initPlaylist(playlist);
         this._init();
@@ -251,7 +232,6 @@ export default class JPlayerPlaylist extends React.Component {
         index = (index < 0) ? this.original.length + index : index; // Negative index relates to end of array.
         if (0 <= index && index < this.state.playlist.length) {
             this.setState({current: index});
-            this._highlight(index);
             this.jPlayer.setMedia(this.state.playlist[this.state.current]);
             this.jPlayer.play();
         } else {
