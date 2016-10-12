@@ -109,8 +109,9 @@ export default class JPlayerPlaylist extends React.Component {
     }
     _shuffleOnClick = (event) => {
         event.preventDefault();
+        debugger;
 
-        if (this.shuffled && this.jPlayer.useStateClassSkin) {
+        if (this.shuffled && this.props.useStateClassSkin) {
             this.shuffle(false);
         } else {
             this.shuffle(true);
@@ -427,6 +428,7 @@ export default class JPlayerPlaylist extends React.Component {
             this.play(this.current);
         }
         else if (this.loop === "playlist-loop") {
+            debugger;
             // See if we need to shuffle before looping to start, and only shuffle if more than 1 item.
             if (index === 0 && this.shuffled && this.props.shuffleOnLoop && this.state.playlist.length > 1) {
                 this.shuffle(true, true); // playNow
@@ -444,13 +446,20 @@ export default class JPlayerPlaylist extends React.Component {
     previous = () => {
         var index = (this.current - 1 >= 0) ? this.current - 1 : this.state.playlist.length - 1;
 
-        if (this.loop === "playlist-loop" && this.jPlayer.state.loopOnPrevious || index < this.state.playlist.length - 1) {
+        if (this.loop === "playlist-loop" && this.props.loopOnPrevious || index < this.state.playlist.length - 1) {
             this.play(index);
         }
     }
     shuffle = (shuffled, playNow) => {
-        this.setState({isPlaylistContainerSlidingUp: shuffled});
+
+        this.setState({isPlaylistContainerSlidingUp: true});
         this.playNow = playNow;  
+
+        if(shuffled === undefined) {
+            shuffled = !this.shuffled;
+        }
+
+        this.shuffled = shuffled;
     }
     _removeAnimationCallback = (index) => {
         if (this.shuffled) {
@@ -482,8 +491,7 @@ export default class JPlayerPlaylist extends React.Component {
         }
     }
     _shuffleAnimationCallback = () => {
-        this.shuffled = !this.shuffled;
-
+        debugger
         function playlistSetCallback() {
             if (this.playNow || !this.jPlayer.status.paused) {
                 this.play(0);

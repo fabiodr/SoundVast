@@ -203,7 +203,6 @@ export default class JPlayer extends React.Component {
 						((typeof binding.key === 'number' && event.which === binding.key) ||
 						(typeof binding.key === 'string' && event.key === binding.key))
 					) {
-						debugger;
 						event.preventDefault(); // Key being used by jPlayer, so prevent default operation.
 						binding.fn.bind(f)();
 						break;
