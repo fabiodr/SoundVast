@@ -71,6 +71,8 @@ export default class JPlayerPlaylist extends React.Component {
     }
     _freeMediaLinkIndex = 0
     _addFreeMediaLinks = (media) => {
+        if (!media.free) return;
+        
         var firstMediaLinkAdded = true;
 
         media.freeMediaLinks = [];
@@ -80,7 +82,7 @@ export default class JPlayerPlaylist extends React.Component {
             if (JPlayer.format[property]){
                 var value = media[property];
 
-                firstMediaLinkAdded ? firstMediaLinkAdded = false : media.freeMediaLinks.push(",");
+                firstMediaLinkAdded ? firstMediaLinkAdded = false : media.freeMediaLinks.push(", ");
                 media.freeMediaLinks.push(<a key={this._freeMediaLinkIndex++} class={this.props.freeItemClass} href={value} tabIndex="-1">{property}</a>);
             }
         }
@@ -100,6 +102,7 @@ export default class JPlayerPlaylist extends React.Component {
         } else {
             this.jPlayer.play();
         }
+        this.blur(event.target);
     }
     _shuffleOnClick = (event) => {
         event.preventDefault();
@@ -113,17 +116,20 @@ export default class JPlayerPlaylist extends React.Component {
     }
     _shuffleOffClick = (event) => {
         event.preventDefault();
+
         this.shuffle(false);
         this.blur(event.target);
         this.setState(previousState => previousState.shuffleOffClick = Object.assign({}, previousState.shuffleOffClick, {display: "none"}));
     }
     _previousOnClick = (event) => {
         event.preventDefault();
+
         this.previous();
         this.blur(event.target);
     }
     _nextOnClick = (event) => {
         event.preventDefault();
+
         this.next();
         this.blur(event.target);
     }
@@ -137,9 +143,6 @@ export default class JPlayerPlaylist extends React.Component {
         if (!this.props.fullScreen) {
             this.setState(previousState => previousState.detailsStyle = Object.assign({}, previousState.detailsStyle, {display: "none"}));
         }
-
-        // Create .on() handlers for the playlist items along with the free media and remove controls.
-        this._createItemHandlers();
         
         //Overwrite the jPlayer repeat
         this.jPlayer.repeat = (event) => {
@@ -182,7 +185,6 @@ export default class JPlayerPlaylist extends React.Component {
             case "freeItemClass":
             case "removeItemClass":
                 this._refresh(true); // Instant
-                this._createItemHandlers();
                 break;
         }
         return this;
@@ -199,7 +201,7 @@ export default class JPlayerPlaylist extends React.Component {
     _initPlaylist = (playlist) => {
         this.current = 0;
         this.shuffled = false;
-        this.original = Object.assign([], playlist); // Copy the Array of Objects
+        this.original = [...playlist] // Copy the Array of Objects
 
         for(var i = 0; i < this.original.length; i++){
             this.original[i].key = i;          
@@ -210,7 +212,7 @@ export default class JPlayerPlaylist extends React.Component {
     }
     _originalPlaylist = (playlistSetCallback) => {
         // Make both arrays point to the same object elements. Gives us 2 different arrays, each pointing to the same actual object. ie., Not copies of the object.
-        this.setState({playlist: [...this.original]}, playlistSetCallback);
+        this.setState({playlist: this.original}, playlistSetCallback); //todo: check equality comparer
     }
     _loop = () => {
         if (this.loop === "playlist-loop") {
@@ -261,68 +263,7 @@ export default class JPlayerPlaylist extends React.Component {
         //     });
         // }
     }
-    _createListItem = (media, index) => {
-        var freeMedia;
-        
-        // Create links to free media
-        // if (media.free) {
-        //     var first = true;
-        //     listItem += "<span class='" + this.props.freeGroupClass + "'>(";
-
-        //     for(var i = 0; i < media.length; i++){
-        //         var value = media[i];
-
-        //         // Check property is a media format.
-        //         if (this.jPlayer.format[i]){
-        //             if (first) {
-        //                 first = false;
-        //             } else {
-        //                 listItem += " | ";
-        //             }
-        //             listItem += "<a class='" + this.props.freeItemClass + "' href='" + value + "' tabindex='-1'>" + i + "</a>";
-        //         }
-        //     }
-        //     listItem += ")</span>";
-        // }
-        // <Motion style={{heightToInterpTo: spring(this.state.isPlaylistContainerSlidingUp ? this.playlistContainerMaxHeight : this.playlistContainerMinHeight, this.props.shuffleAnimation)}} onRest={() => this.state.isPlaylistContainerSlidingUp ? this._shuffleAnimationCallback() : null}>
-        //     {(values) => <ul style={{
-        //         transform: `translate3d(0, ${values.heightToInterpTo}%, 0)`}}>
-        //             {this.state.playlistComponent}
-        //         </ul>}
-        // </Motion>      
-
-        return listItem;
-    }
-    _createItemHandlers = () => {
-        // // Create live handlers for the playlist items
-        // $(this.cssSelector.playlist).off("click", "a." + this.options.itemClass).on("click", "a." + this.options.itemClass, function (e) {
-        //     e.preventDefault();
-        //     var index = $(this).parent().parent().index();
-        //     if (this.current !== index) {
-        //         this.play(index);
-        //     } else {
-        //         $(this.cssSelector.jPlayer).jPlayer("play");
-        //     }
-        //     this.blur(this);
-        // });
-
-        // // Create live handlers that disable free media links to force access via right click
-        // $(this.cssSelector.playlist).off("click", "a." + this.options.freeItemClass).on("click", "a." + this.options.freeItemClass, function (e) {
-        //     e.preventDefault();
-        //     $(this).parent().parent().find("." + this.options.itemClass).click();
-        //     this.blur(this);
-        // });
-
-        // // Create live handlers for the remove controls
-        // $(this.cssSelector.playlist).off("click", "a." + this.options.removeItemClass).on("click", "a." + this.options.removeItemClass, function (e) {
-        //     e.preventDefault();
-        //     var index = $(this).parent().parent().index();
-        //     this.remove(index);
-        //     this.blur(this);
-        // });
-    }
     _updateControls = () => {
-        debugger;
         if (this.props.enableRemoveControls) {
             this.setState(previousState => previousState.removeItemClassStyle = Object.assign({}, previousState.removeItemClassStyle, {display: ""}));
         } else {
