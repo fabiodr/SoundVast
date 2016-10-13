@@ -49,7 +49,6 @@ export const DefaultProps = {
 	minPlaybackRate: 0.5,
 	maxPlaybackRate: 4,
 	volume: 0.8, // The volume. Number 0 to 1.
-	useStateClassSkin: true, // A state class skin relies on the state classes to change the visual appearance. The single control toggles the effect, for example: play then pause, mute then unmute.
 	autoBlur: true, // GUI control handlers will drop focus after clicks.
 	smoothPlaybar: false, // Smooths the play bar transitions, which affects clicks and short media with big changes per second.
 	fullScreen: false, // Native Full Screen
@@ -974,52 +973,20 @@ export default class JPlayer extends React.Component {
 			this.status.paused = !playing;
 		}
 		
-		if (this.props.useStateClassSkin) {
-			// Apply the state classes. (For the useStateClassSkin:true option)
-			if(playing) {
-				this.addStateClass('playing');
-			} else {
-				this.removeStateClass('playing');
-			}
-			if(!this.status.noFullWindow && this.props.fullWindow) {
-				this.addStateClass('fullScreen');
-			} else {
-				this.removeStateClass('fullScreen');
-			}
-			if(this.dynamicOptions.loop === "loop") {
-				this.addStateClass('looped');
-			} else {
-				this.removeStateClass('looped');
-			}
+		if(playing) {
+			this.addStateClass('playing');
+		} else {
+			this.removeStateClass('playing');
 		}
-		else {
-			//Toggle the GUI element pairs. (For the useStateClassSkin:false option)
-			if(playing) {
-				this.setState(previousState => previousState.playStyle = Object.assign({}, previousState.playStyle, {display: "none"}));
-				this.setState(previousState => previousState.pauseStyle = Object.assign({}, previousState.pauseStyle, {display: ""}));
-			} else {
-				this.setState(previousState => previousState.playStyle = Object.assign({}, previousState.playStyle, {display: ""}));
-				this.setState(previousState => previousState.pauseStyle = Object.assign({}, previousState.pauseStyle, {display: "none"}));
-			}
-
-			if(this.status.noFullWindow) {
-				this.setState(previousState => previousState.fullScreenStyle = Object.assign({}, previousState.fullScreenStyle, {display: "none"}));
-				this.setState(previousState => previousState.restoreScreenStyle = Object.assign({}, previousState.restoreScreenStyle, {display: "none"}));
-			} else if(this.props.fullWindow) {
-				this.setState(previousState => previousState.fullScreenStyle = Object.assign({}, previousState.fullScreenStyle, {display: "none"}));
-				this.setState(previousState => previousState.restoreScreenStyle = Object.assign({}, previousState.restoreScreenStyle, {display: ""}));		
-			} else {
-				this.setState(previousState => previousState.fullScreenStyle = Object.assign({}, previousState.fullScreenStyle, {display: ""}));
-				this.setState(previousState => previousState.restoreScreenStyle = Object.assign({}, previousState.restoreScreenStyle, {display: "none"}));
-			}
-	
-			if(this.dynamicOptions.loop === "loop") {
-				this.setState(previousState => previousState.repeatStyle = Object.assign({}, previousState.repeatStyle, {display: "none"}));
-				this.setState(previousState => previousState.repeatOffStyle = Object.assign({}, previousState.repeatOffStyle, {display: ""}));
-			} else {
-				this.setState(previousState => previousState.repeatStyle = Object.assign({}, previousState.repeatStyle, {display: ""}));
-				this.setState(previousState => previousState.repeatOffStyle = Object.assign({}, previousState.repeatOffStyle, {display: "none"}));
-			}
+		if(!this.status.noFullWindow && this.props.fullWindow) {
+			this.addStateClass('fullScreen');
+		} else {
+			this.removeStateClass('fullScreen');
+		}
+		if(this.dynamicOptions.loop === "loop") {
+			this.addStateClass('looped');
+		} else {
+			this.removeStateClass('looped');
 		}
 	}
 	_updateInterface = () => {
@@ -1259,7 +1226,7 @@ export default class JPlayer extends React.Component {
 	}
 	play = (time) => {
 		var guiAction = typeof time === "object"; // Flags GUI click events so we know this was not a direct command, but an action taken by the user on the GUI.
-		if(guiAction && this.props.useStateClassSkin && !this.status.paused) {
+		if(guiAction && !this.status.paused) {
 			this.pause(time); // The time would be the click event, but passing it over so info is not lost.
 		} else {
 			time = (typeof time === "number") ? time : NaN; // Remove the event from click handler
@@ -1344,7 +1311,7 @@ export default class JPlayer extends React.Component {
 	}
 	mute = (mute) => {	 // mute is either: undefined (true), an event object (true) or a boolean (muted).									
 		var guiAction = typeof mute === "object"; // Flags GUI click events so we know this was not a direct command, but an action taken by the user on the GUI.
-		if(guiAction && this.props.useStateClassSkin && this.dynamicOptions.muted) {
+		if(guiAction && this.dynamicOptions.muted) {
 			this._muted(false);
 		} else {
 			mute = mute === undefined ? true : !!mute;
@@ -1363,21 +1330,7 @@ export default class JPlayer extends React.Component {
 			this.addStateClass('muted');
 		} else {
 			this.removeStateClass('muted');
-		}
-
-		if (!this.props.useStateClassSkin){
-			//Toggle GUI pairs
-			if(this.status.noVolume) {
-				this.setState(previousState => previousState.muteStyle = Object.assign({}, previousState.muteStyle, {display: "none"}));	
-				this.setState(previousState => previousState.unmuteStyle = Object.assign({}, previousState.unmuteStyle, {display: "none"}));
-			} else if(mute) {
-				this.setState(previousState => previousState.muteStyle = Object.assign({}, previousState.muteStyle, {display: "none"}));	
-				this.setState(previousState => previousState.unmuteStyle = Object.assign({}, previousState.unmuteStyle, {display: ""}));
-			} else {
-				this.setState(previousState => previousState.muteStyle = Object.assign({}, previousState.muteStyle, {display: ""}));	
-				this.setState(previousState => previousState.unmuteStyle = Object.assign({}, previousState.unmuteStyle, {display: "none"}));
-			}
-		}
+		}	
 	}
 	volume = (v) => {
 		this.volumeWorker(v);
@@ -1580,7 +1533,7 @@ export default class JPlayer extends React.Component {
 	}
 	repeat = (event) => {	 // Handle clicks on the repeat button
 		var guiAction = typeof event === "object"; // Flags GUI click events so we know this was not a direct command, but an action taken by the user on the GUI.
-		if(guiAction && this.props.useStateClassSkin && this.dynamicOptions.loop === "loop") {
+		if(guiAction && this.dynamicOptions.loop === "loop") {
 			this._loop("off");
 		} else {
 			this._loop("loop");
@@ -1858,7 +1811,7 @@ export default class JPlayer extends React.Component {
 	fullScreen = (event) => {
 		var guiAction = typeof event === "object"; // Flags GUI click events so we know this was not a direct command, but an action taken by the user on the GUI.
 
-		if(guiAction && this.props.useStateClassSkin && this.props.fullScreen) {
+		if(guiAction && this.props.fullScreen) {
 			this._setOption("fullScreen", false);
 		} else {
 			this._setOption("fullScreen", true);
@@ -2221,29 +2174,14 @@ export default class JPlayer extends React.Component {
 						<a class="jp-play" style={this.state.playStyle} onClick={this.state.playOnClick}>
 							{this.props.html.play}
 						</a>
-						<a class="jp-pause" style={this.state.pauseStyle} onClick={this.state.pauseOnClick}>
-							{this.props.html.pause}
-						</a>
 						<a class="jp-mute" style={this.state.muteStyle} onClick={this.state.muteOnClick}>
 							{this.props.html.mute}
 						</a>
-						<a class="jp-unmute" style={this.state.unmuteStyle} onClick={this.state.unmuteOnClick}>
-							{this.props.html.unmute}
-						</a>
 						<a class="jp-repeat" style={this.state.repeatStyle} onClick={this.state.repeatOnClick}>							
 							{this.props.html.repeat}			
-						</a>
-						<a class="jp-repeat-off" style={this.state.repeatOffStyle} onClick={this.state.repeatOffOnClick}>							
-							{this.props.html.repeatOff}	
 						</a>																
 						<a class="jp-full-screen" style={this.state.fullScreenStyle} onClick={this.state.fullScreenOnClick}>
 							{this.props.html.fullScreen}
-						</a>
-						<a class="jp-restore-screen" style={this.state.restoreScreenStyle} onClick={this.state.restoreScreenOnClick}>
-							{this.props.html.restoreScreen}
-						</a>
-						<a class="jp-volume-max" style={this.state.volumeMaxStyle} onClick={this.state.volumeMaxOnClick}>
-							{this.props.html.volumeMax}
 						</a>
 						<div class="jp-volume-bar" style={this.state.volumeBarStyle} onClick={this.state.volumeBarOnClick}>
 							<div class="jp-volume-bar-value" style={this.state.volumeBarValueStyle} />

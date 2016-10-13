@@ -105,11 +105,7 @@ export default class JPlayerPlaylist extends React.Component {
     _shuffleOnClick = (event) => {
         event.preventDefault();
 
-        if (this.shuffled && this.props.useStateClassSkin) {
-            this.shuffle(false);
-        } else {
-            this.shuffle(true);
-        }
+        this.shuffled ? this.shuffle(false) : this.shuffle(true);
         this.blur(event.target);
     }
     _shuffleOffClick = (event) => {
@@ -144,19 +140,9 @@ export default class JPlayerPlaylist extends React.Component {
         //Overwrite the jPlayer repeat
         this.jPlayer.repeat = (event) => {
             var guiAction = typeof event === "object"; // Flags GUI click events so we know this was not a direct command, but an action taken by the user on the GUI.
-
-            if (this.props.useStateClassSkin && guiAction){
+            
+            if (guiAction) {
                 this._loop();
-            }
-            else {
-                if(this.loop === "playlist-loop") {
-                    this.setState(previousState => previousState.repeatPlaylistStyle = Object.assign({}, previousState.repeatPlaylistStyle, {display: ""}));
-                    this.setState(previousState => previousState.repeatOffStyle = Object.assign({}, previousState.repeatOffStyle, {display: "none"}));
-                    this.setState(previousState => previousState.repeatOffStyle = Object.assign({}, previousState.repeatOffStyle, {display: "none"}));
-                }
-                else {
-                    this.setState(previousState => previousState.repeatPlaylistStyle = Object.assign({}, previousState.repeatPlaylistStyle, {display: "none"}));
-                }
             }
         };
         this._init();
@@ -184,7 +170,7 @@ export default class JPlayerPlaylist extends React.Component {
         // Make both arrays point to the same object elements. Gives us 2 different arrays, each pointing to the same actual object. ie., Not copies of the object.
         this.setState({playlist: this.original}, playlistSetCallback); //todo: check equality comparer
     }
-    _loop = () => {
+    _loop = () => { 
         if (this.loop === "playlist-loop") {
             this.jPlayer._loop("off");
             this.jPlayer.removeStateClass("playlistLooped");
@@ -196,7 +182,7 @@ export default class JPlayerPlaylist extends React.Component {
             this.jPlayer.removeStateClass("looped");
             this.jPlayer.addStateClass("playlistLooped");
             this.jPlayer._loop("playlist-loop");
-        }
+        } 
     }
     setPlaylist = (playlist) => {
         this._initPlaylist(playlist);
@@ -341,16 +327,6 @@ export default class JPlayerPlaylist extends React.Component {
             this.jPlayer.removeStateClass("shuffled");        
         }
 
-        if (!this.props.useStateClassSkin) {
-            if (this.shuffled) {
-                this.setState(previousState => previousState.shuffleOffStyle = Object.assign({}, previousState.shuffleOffStyle, {display: ""}));
-                this.setState(previousState => previousState.shuffle = Object.assign({}, previousState.shuffle, {display: "none"}));
-            } else {
-                this.setState(previousState => previousState.shuffleOffStyle = Object.assign({}, previousState.shuffleOffStyle, {display: "none"}));
-                this.setState(previousState => previousState.shuffle = Object.assign({}, previousState.shuffle, {display: ""}));
-            }
-        }
-
         setTimeout(() => this.setState({isPlaylistContainerSlidingUp: false}), 0);
     }
     blur = (that) => {
@@ -364,7 +340,7 @@ export default class JPlayerPlaylist extends React.Component {
                 <a class="jp-previous" key={3} onClick={this._previousOnClick}>{this.props.html.previous}</a>,
                 <a class="jp-next" key={4} onClick={this._nextOnClick}>{this.props.html.next}</a>,
                 <a class="jp-playlist-options" key={5}>{this.props.html.playlistOptions}</a>,
-                <a class="jp-repeat-playlist" key={6} onClick={this.state.repeatOnClick} style={this.state.repeatPlaylistStyle}>{this.props.html.loopPlaylist}</a>
+                <a class="jp-repeat-playlist" key={6} onClick={this.state.repeatOnClick} style={this.state.repeatPlaylistStyle}>{this.props.html.repeatPlaylist}</a>
         ];
     }
     componentDidMount(){
