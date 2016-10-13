@@ -50,7 +50,7 @@ export const DefaultProps = {
 	maxPlaybackRate: 4,
 	volume: 0.8, // The volume. Number 0 to 1.
 	autoBlur: true, // GUI control handlers will drop focus after clicks.
-	smoothPlaybar: false, // Smooths the play bar transitions, which affects clicks and short media with big changes per second.
+	smoothPlayBar: false, // Smooths the play bar transitions, which affects clicks and short media with big changes per second.
 	fullScreen: false, // Native Full Screen
 	fullWindow: false,
 	nativeVideoControls: {
@@ -629,10 +629,6 @@ export default class JPlayer extends React.Component {
 			}
 		}
 
-		this.internal.posterId = this.props.idPrefix + "_poster_" + JPlayer.count;
-		this.internal.audioId = this.props.idPrefix + "_audio_" + JPlayer.count;
-		this.internal.videoId = this.props.idPrefix + "_video_" + JPlayer.count;
-
 		this.internal.instance = "jp_" + JPlayer.count;
 
 		var solutionsSplit = this.props.solution.toLowerCase().split(",");
@@ -840,9 +836,9 @@ export default class JPlayer extends React.Component {
 
 		// Wrapping in a try/catch, just in case older HTML5 browsers throw and error.
 		try {
-			if('playbackRate' in this.audioElement) {
-				this.audioElement.playbackRate = rate;
-				return this.audioElement.playbackRate === rate;
+			if('playbackRate' in this.audio.element()) {
+				this.audio.element().playbackRate = rate;
+				return this.audio.element().playbackRate === rate;
 			} else {
 				return false;
 			}
@@ -992,7 +988,7 @@ export default class JPlayer extends React.Component {
 	_updateInterface = () => {
 		this.setState(previousState => previousState.seekBarStyle = Object.assign({}, previousState.seekBarStyle, {width: this.status.seekPercent+"%"}));		
 
-		if (!this.props.smoothPlaybar){
+		if (!this.props.smoothPlayBar){
 			this.setState(previousState => previousState.playBarStyle = Object.assign({}, previousState.playBarStyle, {width: this.status.currentPercentRelative+"%"}));		
 		}	
 
@@ -1862,7 +1858,7 @@ export default class JPlayer extends React.Component {
 
 		// This method needs the video element. For iOS and Android.
 		if(fs.used.webkitVideo) {
-			e = this.videoElement;
+			e = this.video.element();
 		}
 
 		if(fs.api.fullscreenEnabled) {
@@ -1913,7 +1909,7 @@ export default class JPlayer extends React.Component {
 	_html_setVideo = (media) => {
 		this._html_setFormat(media);
 		if(this.status.nativeVideoControls) {
-			this.videoElement.poster = this._validString(media.poster) ? media.poster : "";
+			this.video.element().poster = this._validString(media.poster) ? media.poster : "";
 		}
 		this._html_initMedia(media);
 	}
@@ -2120,54 +2116,35 @@ export default class JPlayer extends React.Component {
 				console.log("test")
 			}		
 		});
-		if (this.audioElement){
-			this.currentMedia = this.audioElement;
-			this.html.audio.available = !!this.audioElement.canPlayType && this._testCanPlayType(JPlayer.format.mp3.codec); // Test is for IE9 on Win Server 2008. 
+	
+		if (this.audio.element()){
+			this.currentMedia = this.audio.element();
+			this.html.audio.available = !!this.audio.element().canPlayType && this._testCanPlayType(JPlayer.format.mp3.codec); // Test is for IE9 on Win Server 2008. 
 		}
 
-		if (this.videoElement){
-			this.currentMedia = this.videoElement;
-			this.html.video.available = !!this.videoElement.canPlayType && this._testCanPlayType(JPlayer.format.m4v.codec);
+		if (this.video.element()){
+			this.currentMedia = this.video.element();
+			this.html.video.available = !!this.video.element().canPlayType && this._testCanPlayType(JPlayer.format.m4v.codec);
 		}
 
 		this._initAfterRender();
 	}
-	_renderAnimatedPlaybar = () => (
-		<Motion style={{smoothWidth: spring(this.status.currentPercentAbsolute, [250])}}>
-			{(values) => <div class="jp-play-bar" style={{width: values.smoothWidth + "%"}} /> }
-		</Motion>
-	)
-	_renderPoster = () => (
-		<img key={this.internal.posterId} id={this.internal.posterId} src={this.state.posterSrc} style={this.state.posterStyle}
-		 			 onLoad={this.state.posterOnLoad} onClick={this.state.posterOnClick} />
-	)
-	_renderAudio = () => {
-		if (this.require.audio){	
-			return (
-				<audio ref={(audioElement) => this.audioElement = audioElement} key={this.internal.audioId} id={this.internal.audioId} {...this.mediaEvent}>
-					{this.state.audioTracks}
-				</audio>
-			);
-		}
-	}
-	_renderVideo = () => {
-		if (this.require.video){
-			return (
-				<video ref={(videoElement) => this.videoElement = videoElement} key={this.internal.videoId} style={this.state.videoStyle} src={this.state.mediaSrc} 
-					id={this.internal.videoId} onClick={this.state.videoOnClick} {...this.mediaEvent}>
-					{this.state.videoTracks}
-				</video>
-			);
-		}
-	}
 	render = () => {
-		var media = this.state.renderMedia ? [this._renderPoster(), this._renderAudio(), this._renderVideo()] : null;
-		var playBar = this.props.smoothPlaybar ? this._renderAnimatedPlaybar() : <div class="jp-play-bar" style={this.state.playBarStyle} />;
-
 		return (
 			<div id={this.props.cssSelectorAncestor.slice(1)} class={this.state.stateClass}>
 				<div ref={(jPlayerElement) => this.jPlayerElement = jPlayerElement} id={this.props.jPlayerSelector.slice(1)} class="jp-jplayer" style={this.state.jPlayerStyle}>
-					{media}
+					{this.state.renderMedia ?
+						<div>
+							<Poster src={this.state.posterSrc} style={this.state.posterStyle} onLoad={this.state.posterOnLoad} onClick={this.state.posterOnClick} /> 
+							<Audio ref={(audio) => this.audio = audio} require={this.require.audio} events={this.mediaEvent}>
+								{this.state.videoTracks}
+							</Audio>
+							<Video ref={(video) => this.video = video} require={this.require.video} style={this.state.videoStyle} onClick={this.state.videoOnClick} events={this.mediaEvent}>
+								{this.state.videoTracks}
+							</Video>
+						</div>
+						: null
+					}
 				</div>
 				<div class="jp-gui">			
 					<div class="jp-controls">
@@ -2198,7 +2175,7 @@ export default class JPlayer extends React.Component {
 					</div>
 					<div class="jp-progress">
 						<div class={this.state.seekBarClass} style={this.state.seekBarStyle} onClick={this.state.seekBarOnClick}>                         
-							{playBar}
+							<PlayBar smoothPlayBar={this.props.smoothPlayBar} currentPercentAbsolute={this.status.currentPercentAbsolute} playBarStyle={this.state.playBarStyle} />
 							<div class="jp-current-time">{this.state.currentTimeText}</div>
 							<div class="jp-duration" onClick={this.state.durationOnClick}>{this.state.durationText}</div>
 						</div>
@@ -2209,6 +2186,44 @@ export default class JPlayer extends React.Component {
 					To play the media you will need to update your browser to a recent version.
 				</div>
 			</div>
+		);
+	}
+}
+
+const PlayBar = (props) => (
+	props.smoothPlayBar ? 
+	<Motion style={{smoothWidth: spring(props.currentPercentAbsolute, [250])}}>
+		{(values) => <div class="jp-play-bar" style={{width: values.smoothWidth + "%"}} />}
+	</Motion> 
+	: <div class="jp-play-bar" style={props.playBarStyle} />
+);
+
+const Poster = (props) => (
+	<img src={props.src} style={props.style} onLoad={props.onLoad} onClick={props.onClick} />
+);
+
+class Audio extends React.Component {
+	element = () => this.audioElement
+	render() {
+		return (
+			this.props.require ?
+				<audio ref={(audioElement) => this.audioElement = audioElement} {...this.props.events}>
+					{this.props.children}
+				</audio>
+			: null
+		);
+	}
+}
+
+class Video extends React.Component {
+	element = () => this.videoElement
+	render(){
+		return (
+			this.props.require ?
+				<video ref={(videoElement) => this.videoElement = videoElement} style={this.props.style} onClick={this.props.onClick} {...this.props.events}>
+					{this.props.children}
+				</video>
+			: null
 		);
 	}
 }
