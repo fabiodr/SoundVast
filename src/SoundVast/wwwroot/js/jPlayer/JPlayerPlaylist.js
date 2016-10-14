@@ -167,8 +167,7 @@ export default class JPlayerPlaylist extends React.Component {
         this._originalPlaylist();
     }
     _originalPlaylist = (playlistSetCallback) => {
-        // Make both arrays point to the same object elements. Gives us 2 different arrays, each pointing to the same actual object. ie., Not copies of the object.
-        this.setState({playlist: this.original}, playlistSetCallback); //todo: check equality comparer
+        this.setState({playlist: [...this.original]}, playlistSetCallback);
     }
     _loop = () => { 
         if (this.loop === "playlist-loop") {
@@ -276,10 +275,11 @@ export default class JPlayerPlaylist extends React.Component {
         this.setState({useShuffleConfig: true});
     }
     _removeAnimationCallback = (index) => {
+                debugger;
         if (this.shuffled) {
             var item = this.state.playlist[index];
             for (var i = 0; i < this.original.length; i++){
-                if (this.original[i] === item) {
+                if (this.original[i].key === item.key) {
                     this.original.splice(i, 1);
                     break;
                 }
