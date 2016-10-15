@@ -60,7 +60,10 @@ export const DefaultProps = {
 	audioFullScreen: false, // Enables keyboard controls to enter full screen with audio media.
 	verticalVolume: false, // Calculate volume from the bottom of the volume bar. Default is from the left. Also volume affects either width or height.
 	verticalPlaybackRate: false,
-	globalVolume: false // Set to make volume and muted changes affect all jPlayer instances with this option enabled
+	globalVolume: false, // Set to make volume and muted changes affect all jPlayer instances with this option enabled,
+	guiAnimation: {
+		stiffness: 40
+	}
 }
 
 export default class JPlayer extends React.Component {
@@ -82,7 +85,9 @@ export default class JPlayer extends React.Component {
 				if(!this.status.video || this.status.waitForPlay) {
 					this._show("posterStyle");
 				}
-			}
+			},
+			fullScreen: props.fullScreen,
+			fullWindow: props.fullWindow
 		};
 
 		this._setupInternalProperties(props);
@@ -301,7 +306,7 @@ export default class JPlayer extends React.Component {
 			full: true, // Controls the interface autohide feature.
 			fadeIn: 200, // Milliseconds. The period of the fadeIn anim.
 			fadeOut: 600, // Milliseconds. The period of the fadeOut anim.
-			hold: 1000 // Milliseconds. The period of the pause before autohide beings.
+			hold: 3000 // Milliseconds. The period of the pause before autohide beings.
 		}, props.autohide);
 
 		this.noFullWindow = merge({
@@ -348,7 +353,7 @@ export default class JPlayer extends React.Component {
 				key: 70, // f
 				fn: function() {
 					if(this.status.video || this.props.audioFullScreen) {
-						this._setOption("fullScreen", !this.props.fullScreen);
+						this._setOption("fullScreen", !this.state.fullScreen);
 					}
 				}
 			},
@@ -599,12 +604,12 @@ export default class JPlayer extends React.Component {
 
 		// Now required types are known, finish the options default settings.
 		if(this.require.video) {
-			this.size = merge({}, {width: "0px", height: "0px", cssClass: ""}, this.props.size);
-			this.sizeFull = merge({}, {width: "0px", height: "0px", cssClass: ""}, this.props.sizeFull);
-			this.setState({stateClass: "jp-video"});
-		} else {
 			this.size = merge({}, {width: "480px", height: "270px", cssClass: "jp-video-270p"}, this.props.size);
 			this.sizeFull = merge({}, {width: "100%", height: "100%", cssClass: "jp-video-full"}, this.props.sizeFull);
+			this.setState({stateClass: "jp-video"});
+		} else {
+			this.size = merge({}, {width: "0px", height: "0px", cssClass: ""}, this.props.size);
+			this.sizeFull = merge({}, {width: "0px", height: "0px", cssClass: ""}, this.props.sizeFull);
 			this.setState({stateClass: "jp-audio"});
 		}
 		
@@ -690,7 +695,6 @@ export default class JPlayer extends React.Component {
 		this.currentMedia.muted = this.dynamicOptions.muted;
 		this.currentMedia.loop = this.dynamicOptions.loop === "loop" ? true : false;
 		this.currentMedia.preload = this.props.preload;
-		this.currentMedia.autoPlay = this.props.autoPlay;
 
 		if(this.status.playbackRateEnabled) {
 			this.currentMedia.defaultPlaybackRate = this.dynamicOptions.defaultPlaybackRate;
@@ -763,8 +767,6 @@ export default class JPlayer extends React.Component {
 		if(this.html.video.available && this.html.used) {
 			// Turn the HTML Video controls on/off
 			this.setState({videoControls: this.status.nativeVideoControls});
-			// Show/hide the jPlayer GUI.
-			this._updateAutohide();
 			// For when option changed. The poster image is not updated, as it is dealt with in setMedia(). Acceptable degradation since seriously doubt these options will change on the fly. Can again review later.
 			if(this.status.nativeVideoControls && this.require.video) {
 				this._hide("posterStyle");
@@ -849,7 +851,7 @@ export default class JPlayer extends React.Component {
 		} else {
 			this.removeStateClass('playing');
 		}
-		if(!this.status.noFullWindow && this.props.fullWindow) {
+		if(!this.status.noFullWindow && this.state.fullWindow) {
 			this.addStateClass('fullScreen');
 		} else {
 			this.removeStateClass('fullScreen');
@@ -1254,7 +1256,6 @@ export default class JPlayer extends React.Component {
 		// Set the GUI to the current state.
 		this._updateInterface();
 		this._updateButtons();
-		this._updateAutohide();
 		this._updateVolume();
 		this._updateMute();
 	}
@@ -1395,32 +1396,31 @@ export default class JPlayer extends React.Component {
 
 			// 	this._updatePlaybackRate();
 			// 	break;
-			// case "fullScreen" :
-			// 	if(this.options[key] !== value) { // if changed
-			// 		var wkv = this.nativeFeatures.fullscreen.used.webkitVideo;
+			case "fullScreen" :
+				if(this.state.fullScreen !== value) { // if changed
+					var wkv = this.nativeFeatures.fullscreen.used.webkitVideo;
 
-			// 		if(!wkv || wkv && !this.status.waitForPlay) {
-			// 			if(!wkv) { // No sensible way to unset option on these devices.
-			// 				this.options[key] = value;
-			// 			}
-			// 			if(value) {
-			// 				this._requestFullscreen();
-			// 			} else {
-			// 				this._exitFullscreen();
-			// 			}
-			// 			if(!wkv) {
-			// 				this._setOption("fullWindow", value);
-			// 			}
-			// 		}
-			// 	}
-			// 	break;
-			// case "fullWindow" :
-			// 	if(this.options[key] !== value) { // if changed
-			// 		this._removeUiClass();
-			// 		this.options[key] = value;
-			// 		this._refreshSize();
-			// 	}
-			// 	break;
+					if(!wkv || wkv && !this.status.waitForPlay) {
+						if(!wkv) { // No sensible way to unset option on these devices.
+							this.setState({fullScreen: value});
+						}
+						if(value) {
+							this._requestFullscreen();
+						} else {
+							this._exitFullscreen();
+						}
+						if(!wkv) {
+							this._setOption("fullWindow", value);
+						}
+					}
+				}
+				break;
+			case "fullWindow" :
+				if(this.state.fullWindow !== value) { // if changed
+					this._removeUiClass();
+					this.setState({fullWindow: value}, this._refreshSize);
+				}
+				break;
 			// // case "size" :
 			// // 	if(!this.options.fullWindow && this.options[key].cssClass !== value.cssClass) {
 			// // 		this._removeUiClass();
@@ -1493,12 +1493,11 @@ export default class JPlayer extends React.Component {
 		this._addUiClass(); // update the ui class
 		this._updateSize(); // update internal sizes
 		this._updateButtons();
-		this._updateAutohide();
 		this._trigger(this.props.onResize);
 	}
 	_setSize = () => {
 		// Determine the current size from the options
-		if(this.props.fullWindow) {
+		if(this.state.fullWindow) {
 			this.status.width = this.sizeFull.width;
 			this.status.height = this.sizeFull.height;
 			this.status.cssClass = this.sizeFull.cssClass;
@@ -1530,68 +1529,10 @@ export default class JPlayer extends React.Component {
 			this._extendStyle("videoStyle", {width: this.status.width, height: this.status.height});
 		}
 	}
-	_updateAutohide = () => {
-		var	event = "mousemove.jPlayer",
-			namespace = ".jPlayerAutohide",
-			eventType = event + namespace,
-			handler = function(event) {
-				var moved = false,
-					deltaX, deltaY;
-				if(typeof this.internal.mouse !== "undefined") {
-					//get the change from last position to this position
-					deltaX = this.internal.mouse.x - event.pageX;
-					deltaY = this.internal.mouse.y - event.pageY;
-					moved = (Math.floor(deltaX) > 0) || (Math.floor(deltaY)>0);
-				} else {
-					moved = true;
-				}
-				// store current position for next method execution
-				this.internal.mouse = {
-						x : event.pageX,
-						y : event.pageY
-				};
-				// if mouse has been actually moved, do the gui fadeIn/fadeOut
-				if (moved) {
-					// this.css.jq.gui.fadeIn(this.options.autohide.fadeIn, function() {
-					// 	clearTimeout(this.internal.autohideId);
-					// 	this.internal.autohideId = setTimeout( function() {
-					// 		this.css.jq.gui.fadeOut(this.options.autohide.fadeOut);
-					// 	}, this.options.autohide.hold);
-					// });
-				}
-			};
-
-		//if(this.css.jq.gui.length) {
-
-			// // End animations first so that its callback is executed now.
-			// // Otherwise an in progress fadeIn animation still has the callback to fadeOut again.
-			// this.css.jq.gui.stop(true, true);
-
-			// // Removes the fadeOut operation from the fadeIn callback.
-			// clearTimeout(this.internal.autohideId);
-			// // undefine mouse
-			// delete this.internal.mouse;
-
-			// this.element.unbind(namespace);
-			// this.css.jq.gui.unbind(namespace);
-
-			// if(!this.status.nativeVideoControls) {
-			// 	if(this.options.fullWindow && this.options.autohide.full || !this.options.fullWindow && this.options.autohide.restored) {
-			// 		this.element.bind(eventType, handler);
-			// 		this.css.jq.gui.bind(eventType, handler);
-			//		this.css.jq.gui.hide();
-			// 	} else {
-			// 		this.css.jq.gui.show();
-			// 	}
-			// } else {
-			// 	this.css.jq.gui.hide();
-			// }
-		//}
-	}
 	fullScreen = (event) => {
 		var guiAction = typeof event === "object"; // Flags GUI click events so we know this was not a direct command, but an action taken by the user on the GUI.
 
-		if(guiAction && this.props.fullScreen) {
+		if(guiAction && this.state.fullScreen) {
 			this._setOption("fullScreen", false);
 		} else {
 			this._setOption("fullScreen", true);
@@ -1619,7 +1560,7 @@ export default class JPlayer extends React.Component {
 	}
 	_fullscreenchange = () => {
 		// If nothing is fullscreen, then we cannot be in fullscreen mode.
-		if(this.props.fullScreen && !this.nativeFeatures.fullscreen.api.fullscreenElement()) {
+		if(this.state.fullScreen && !this.nativeFeatures.fullscreen.api.fullscreenElement()) {
 			this._setOption("fullScreen", false);
 		}
 	}
@@ -1910,41 +1851,43 @@ export default class JPlayer extends React.Component {
 						: null
 					}
 				</div>
-				<div class="jp-gui">			
-					<div class="jp-controls">
-						<a class="jp-play" style={this.state.playStyle} onClick={this.play}>
-							{this.props.html.play}
-						</a>
-						<a class="jp-mute" style={this.state.muteStyle} onClick={this.mute}>
-							{this.props.html.mute}
-						</a>
-						<a class="jp-repeat" style={this.state.repeatStyle} onClick={this.repeat}>							
-							{this.props.html.repeat}			
-						</a>																
-						<a class="jp-full-screen" style={this.state.fullScreenStyle} onClick={this.fullScreen}>
-							{this.props.html.fullScreen}
-						</a>
-						<div class="jp-volume-bar" style={this.state.volumeBarStyle} onClick={this.volumeBar}>
-							<div class="jp-volume-bar-value" style={this.state.volumeBarValueStyle} />
+				{this.status.nativeVideoControls ? null : 
+					<GUI fullWindow={this.state.fullWindow} autohide={this.autohide} config={this.props.guiAnimation}>
+						<div class="jp-controls">
+							<a class="jp-play" style={this.state.playStyle} onClick={this.play}>
+								{this.props.html.play}
+							</a>
+							<a class="jp-mute" style={this.state.muteStyle} onClick={this.mute}>
+								{this.props.html.mute}
+							</a>
+							<a class="jp-repeat" style={this.state.repeatStyle} onClick={this.repeat}>							
+								{this.props.html.repeat}			
+							</a>																
+							<a class="jp-full-screen" style={this.state.fullScreenStyle} onClick={this.fullScreen}>
+								{this.props.html.fullScreen}
+							</a>
+							<div class="jp-volume-bar" style={this.state.volumeBarStyle} onClick={this.volumeBar}>
+								<div class="jp-volume-bar-value" style={this.state.volumeBarValueStyle} />
+							</div>
+							{
+							/*<div class="jp-title">
+								{this.state.titleText}
+							</div>*/
+							}
+							<div class="jp-playback-rate-bar" style={this.state.playbackRateBarStyle} onClick={this.playbackRateBar}>
+								<div class="jp-playback-rate-bar-value" style={this.state.playbackRateBarValueStyle} />
+							</div>						
+							{this.props.additionalControls}	
 						</div>
-						{
-						/*<div class="jp-title">
-							{this.state.titleText}
-						</div>*/
-						}
-						<div class="jp-playback-rate-bar" style={this.state.playbackRateBarStyle} onClick={this.playbackRateBar}>
-							<div class="jp-playback-rate-bar-value" style={this.state.playbackRateBarValueStyle} />
-						</div>						
-						{this.props.additionalControls}	
-					</div>
-					<div class="jp-progress">
-						<div class={this.state.seekBarClass} style={this.state.seekBarStyle} onClick={this.seekBar}>                         
-							<PlayBar smoothPlayBar={this.props.smoothPlayBar} currentPercentAbsolute={this.status.currentPercentAbsolute} playBarStyle={this.state.playBarStyle} />
-							<div class="jp-current-time">{this.state.currentTimeText}</div>
-							<div class="jp-duration" onClick={this.state.durationOnClick}>{this.state.durationText}</div>
+						<div class="jp-progress">
+							<div class={this.state.seekBarClass} style={this.state.seekBarStyle} onClick={this.seekBar}>                         
+								<PlayBar smoothPlayBar={this.props.smoothPlayBar} currentPercentAbsolute={this.status.currentPercentAbsolute} playBarStyle={this.state.playBarStyle} />
+								<div class="jp-current-time">{this.state.currentTimeText}</div>
+								<div class="jp-duration" onClick={this.state.durationOnClick}>{this.state.durationText}</div>
+							</div>
 						</div>
-					</div>
-				</div>
+					</GUI>
+				}
 				<div class="jp-no-solution" style={this.state.noSolutionStyle}>
 					<span>Update Required</span>
 					To play the media you will need to update your browser to a recent version.
@@ -1954,12 +1897,48 @@ export default class JPlayer extends React.Component {
 	}
 }
 
+class GUI extends React.Component {
+	constructor() {
+		super();
+		
+		this.state = {};
+		this.fadeHoldCallback
+	}
+	_setFading = (event) => {
+		if (!this.state.isFadingIn) {
+			this.fadeHoldTimeout = setTimeout(() => {
+				this.setState({isFadingIn: false});
+			}, this.props.autohide.hold);
+		}
+		
+		this.setState({isFadingIn: true});
+	}
+	_updateAutohide = () => {	
+		return (
+			<div>
+				<div onMouseMove={this._setFading} style={{width: "100%", height: "100%", position: "fixed", top: "0"}}>
+					<Motion defaultStyle={{opacityToInterpTo: 1}} style={{opacityToInterpTo: spring(this.state.isFadingIn ? 1 : 0, this.props.config)}}>
+						{(values) => <div class="jp-gui" onMouseLeave={() => this.setState({isFadingIn: false})} onMouseEnter={() => clearTimeout(this.fadeHoldTimeout)} style={{opacity: values.opacityToInterpTo, display: values.opacityToInterpTo <= 0.05 ? "none" : ""}}>{this.props.children}</div>}
+					</Motion>
+				</div>
+			</div>
+		);
+	}
+	render() {
+		return (
+			this.props.fullWindow && this.props.autohide.full || !this.props.fullWindow && this.props.autohide.restored ?
+				this._updateAutohide()  
+			:	<div class="jp-gui">{this.props.children}</div>
+		);
+	}
+};
+
 const PlayBar = (props) => (
 	props.smoothPlayBar ? 
-	<Motion style={{smoothWidth: spring(props.currentPercentAbsolute, [250])}}>
-		{(values) => <div class="jp-play-bar" style={{width: values.smoothWidth + "%"}} />}
-	</Motion> 
-	: <div class="jp-play-bar" style={props.playBarStyle} />
+		<Motion style={{smoothWidth: spring(props.currentPercentAbsolute, [250])}}>
+			{(values) => <div class="jp-play-bar" style={{width: values.smoothWidth + "%"}} />}
+		</Motion> 
+	:	<div class="jp-play-bar" style={props.playBarStyle} />
 );
 
 const Poster = (props) => (

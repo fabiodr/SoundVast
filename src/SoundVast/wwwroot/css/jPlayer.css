@@ -7,11 +7,11 @@
     color: #157bf8;
 }
 
-.jp-state-full-screen .jp-jplayer {
+.jp-state-full-screen {
     margin: 0 auto;
 }
 
-    .jp-state-full-screen .jp-jplayer img {
+    .jp-state-full-screen img {
         display: block;
         margin: 0 auto;
     }
@@ -71,43 +71,6 @@
         position: absolute;
         text-align: center;
         top: -16px;
-    }
-
-    /*.jp-type-footer .jp-controls .jp-test {
-        font-size: 15px;
-        left: 40px;
-        position: absolute;
-        text-align: center;
-        top: -16px;
-        color: #000000;
-        line-height: 42px;
-        padding-left: 32px;
-        text-decoration: none;
-    }*/
-
-    .jp-type-footer .jp-controls .jp-repeat {
-        font-size: 15px;
-        left: 70px;
-        position: absolute;
-        text-align: center;
-        top: -16px;
-    }
-
-    .jp-type-footer .jp-controls .jp-shuffle {
-        font-size: 15px;
-        left: 50px;
-        position: absolute;
-        text-align: center;
-        top: -16px;
-    }
-
-    .jp-type-footer .jp-controls .jp-play {
-        color: #000000;
-        font-size: 20px;
-        line-height: 42px;
-        padding-left: 12px;
-        text-align: center;
-        text-decoration: none;
     }
 
         .jp-controls .jp-play .fa-play:before {
@@ -278,14 +241,18 @@
     .jp-type-footer .jp-controls .jp-full-screen {
         color: #000000;
         font-size: 22px;
-        left: 575px;
+        left: 430px;
+        position: absolute;
+        text-align: center;
         top: 0;
     }
 
     .jp-type-footer .jp-controls .jp-repeat {
         color: #000000;
         font-size: 22px;
-        left: 80px;
+        left: 85px;
+        position: absolute;
+        text-align: center;
         top: 0;
     }
 
@@ -302,7 +269,7 @@
     .jp-type-footer .jp-controls .jp-shuffle {
         color: #000000;
         font-size: 22px;
-        left: 40px;
+        left: 50px;
         position: absolute;
         text-align: center;
         top: 0;
@@ -314,6 +281,7 @@
         position: absolute;
         right: 118px;
         text-align: center;
+        top: 0;
     }
 
     .jp-type-footer .jp-controls .jp-next {
@@ -322,6 +290,7 @@
         position: absolute;
         right: 54px;
         text-align: center;
+        top: 0;
     }
 
     .jp-type-footer .jp-controls .jp-play {

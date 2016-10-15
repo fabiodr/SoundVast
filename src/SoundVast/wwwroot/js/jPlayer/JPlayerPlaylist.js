@@ -218,7 +218,6 @@ export default class JPlayerPlaylist extends React.Component {
         if (0 <= index && index < this.state.playlist.length) {
             this.setState({current: index});
             this.jPlayer.setMedia(this.state.playlist[index]);
-            this.jPlayer.play();
         } else {
             this.setState({current: 0});
         }
@@ -353,9 +352,9 @@ export default class JPlayerPlaylist extends React.Component {
             <div>
                 <div id="jp_container_playlist">
                     <div class="jp-playlist">
-                        <Playlist isSlidingUp={this.state.isPlaylistContainerSlidingUp} config={this.state.useShuffleConfig ? this.props.shuffleAnimationConfig : this.props.displayAnimationConfig} onRest={this._shuffleAnimationCallback}>
+                        <Playlist isSlidingUp={this.state.isPlaylistContainerSlidingUp} config={this.state.useShuffleConfig ? this.props.shuffleAnimation : this.props.displayAnimation} onRest={this._shuffleAnimationCallback}>
                             {this.state.playlist.map((media, index) => 
-                                <Media key={media.key} id={media.key} isCurrent={index === this.state.current} isRemoving={media.isRemoving} config={this.state.useRemoveConfig ? this.props.removeAnimationConfig : this.props.addAnimationConfig} onRest={() => this._removeAnimationCallback(index)}>
+                                <Media key={media.key} id={media.key} isCurrent={index === this.state.current} isRemoving={media.isRemoving} config={this.state.useRemoveConfig ? this.props.removeAnimation : this.props.addAnimation} onRest={() => this._removeAnimationCallback(index)}>
                                     {this.props.enableRemoveControls ? 
                                         <a href="javascript:;" class={this.props.removeItemClass} onClick={this._removeMediaOnClick.bind(this, index)}>&times;</a>
                                     : null}
