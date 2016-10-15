@@ -61,7 +61,10 @@ export const DefaultProps = {
 	verticalVolume: false, // Calculate volume from the bottom of the volume bar. Default is from the left. Also volume affects either width or height.
 	verticalPlaybackRate: false,
 	globalVolume: false, // Set to make volume and muted changes affect all jPlayer instances with this option enabled,
-	guiAnimation: {
+	guiFadeInAnimation: {
+		stiffness: 40 // Velocity of the animation (higher the faster)
+	},
+	guiFadeOutAnimation: {
 		stiffness: 40
 	}
 }
@@ -304,9 +307,7 @@ export default class JPlayer extends React.Component {
 		this.autohide = merge({
 			restored: false, // Controls the interface autohide feature.
 			full: true, // Controls the interface autohide feature.
-			fadeIn: 200, // Milliseconds. The period of the fadeIn anim.
-			fadeOut: 600, // Milliseconds. The period of the fadeOut anim.
-			hold: 3000 // Milliseconds. The period of the pause before autohide beings.
+			hold: 2000 // Milliseconds. The period of the pause before autohide beings.
 		}, props.autohide);
 
 		this.noFullWindow = merge({
@@ -1852,7 +1853,7 @@ export default class JPlayer extends React.Component {
 					}
 				</div>
 				{this.status.nativeVideoControls ? null : 
-					<GUI fullWindow={this.state.fullWindow} autohide={this.autohide} config={this.props.guiAnimation}>
+					<GUI fullWindow={this.state.fullWindow} autohide={this.autohide} fadeInConfig={this.props.guiFadeInAnimation} fadeOutConfig={this.props.guiFadeOutAnimation}>
 						<div class="jp-controls">
 							<a class="jp-play" style={this.state.playStyle} onClick={this.play}>
 								{this.props.html.play}
@@ -1917,7 +1918,7 @@ class GUI extends React.Component {
 		return (
 			<div>
 				<div onMouseMove={this._setFading} style={{width: "100%", height: "100%", position: "fixed", top: "0"}}>
-					<Motion defaultStyle={{opacityToInterpTo: 1}} style={{opacityToInterpTo: spring(this.state.isFadingIn ? 1 : 0, this.props.config)}}>
+					<Motion defaultStyle={{opacityToInterpTo: 1}} style={{opacityToInterpTo: spring(this.state.isFadingIn ? 1 : 0, this.state.isFadingIn ? this.props.fadeInConfig : this.props.fadeOutConfig)}}>
 						{(values) => <div class="jp-gui" onMouseLeave={() => this.setState({isFadingIn: false})} onMouseEnter={() => clearTimeout(this.fadeHoldTimeout)} style={{opacity: values.opacityToInterpTo, display: values.opacityToInterpTo <= 0.05 ? "none" : ""}}>{this.props.children}</div>}
 					</Motion>
 				</div>
