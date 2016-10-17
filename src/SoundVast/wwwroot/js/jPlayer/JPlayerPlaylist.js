@@ -31,9 +31,9 @@ export default class JPlayerPlaylist extends React.Component {
                 onPlay: () => this.jPlayer.pauseOthers(),
                 onResize: () => {
                     if (this.props.fullScreen) {
-                        this.setState(previousState => previousState.detailsStyle = Object.assign({}, previousState.detailsStyle, {display: ""}));
+                        this.setState({hideDetails: false});
                     } else {
-                        this.setState(previousState => previousState.detailsStyle = Object.assign({}, previousState.detailsStyle, {display: "none"}));
+                        this.setState({hideDetails: true});
                     }
                 }
             }           
@@ -134,7 +134,7 @@ export default class JPlayerPlaylist extends React.Component {
 
         // Put the title in its initial display state
         if (!this.props.fullScreen) {
-            this.setState(previousState => previousState.detailsStyle = Object.assign({}, previousState.detailsStyle, {display: "none"}));
+            this.setState({hideDetails: true});
         }
         
         //Overwrite the jPlayer repeat
@@ -333,12 +333,12 @@ export default class JPlayerPlaylist extends React.Component {
         }
     }
     _aditionalControls = () => {
-        return [<a class="jp-shuffleOff" key={0} onClick={this._shuffleOffClick} style={this.state.shuffleOffStyle}>{this.props.html.shuffleOff}</a>,
-                <a class="jp-shuffle" key={1} onClick={this._shuffleOnClick} style={this.state.shuffleStyle}>{this.props.html.shuffle}</a>,
+        return [<a class="jp-shuffleOff" key={0} onClick={this._shuffleOffClick}>{this.props.html.shuffleOff}</a>,
+                <a class="jp-shuffle" key={1} onClick={this._shuffleOnClick}>{this.props.html.shuffle}</a>,
                 <a class="jp-previous" key={3} onClick={this._previousOnClick}>{this.props.html.previous}</a>,
                 <a class="jp-next" key={4} onClick={this._nextOnClick}>{this.props.html.next}</a>,
                 <a class="jp-playlist-options" key={5}>{this.props.html.playlistOptions}</a>,
-                <a class="jp-repeat-playlist" key={6} onClick={this.state.repeatOnClick} style={this.state.repeatPlaylistStyle}>{this.props.html.repeatPlaylist}</a>
+                <a class="jp-repeat-playlist" key={6} onClick={this.state.repeatOnClick}>{this.props.html.repeatPlaylist}</a>
         ];
     }
     componentDidMount(){
@@ -373,7 +373,7 @@ export default class JPlayerPlaylist extends React.Component {
                         </Playlist> 
                     </div>
                 </div>
-                <JPlayer ref={(jPlayer) => this.jPlayer = jPlayer} {...this.props} {...this.keyBindings} {...this.state.event} additionalControls={this._aditionalControls()} stateClass={this.stateClass}/>
+                <JPlayer ref={jPlayer => this.jPlayer = jPlayer} {...this.props} {...this.keyBindings} {...this.state.event} additionalControls={this._aditionalControls()} stateClass={this.stateClass}/>
             </div>
         );
     }

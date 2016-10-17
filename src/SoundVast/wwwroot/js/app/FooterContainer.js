@@ -85,14 +85,25 @@ class FooterContainer extends React.Component {
                         free: true
                     }
                 ],
-                onError: (jPlayer) => console.error(jPlayer.error)               
+                onError: (jPlayer) => console.error(jPlayer.error)       
             }
         };
     }
+    p = () => {
+        this.setState(previousState => previousState.jPlayerPlaylistOptions = Object.assign({}, previousState.jPlayerPlaylistOptions, {muted: true}));
+    }
+    test = () => {
+        this.setState(previousState => previousState.jPlayerPlaylistOptions = Object.assign({}, previousState.jPlayerPlaylistOptions, {volume: 0.2}));   
+    }
+    updateOptions = (newOptions) => this.setState(previousState => previousState.jPlayerPlaylistOptions = Object.assign({}, previousState.jPlayerPlaylistOptions, newOptions));
     render() {
         return (
-            <div class="jp-type-footer" >
-                <JPlayerPlaylist {...this.state.jPlayerPlaylistOptions} />
+            <div>
+                <div onClick={this.test}>Click MEEEE</div>
+                <div onClick={this.p}>Click MEEEE 22222</div>
+                <div class="jp-type-footer" >
+                    <JPlayerPlaylist ref={jPlayerPlaylist => this.jPlayerPlaylist = jPlayerPlaylist} {...this.state.jPlayerPlaylistOptions} updateOptions={this.updateOptions} />
+                </div>
             </div>
         );
     }
