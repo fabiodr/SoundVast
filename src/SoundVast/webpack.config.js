@@ -7,7 +7,7 @@ module.exports = {
     devtool: debug ? "inline-sourcemap" : null,
     entry: {
         app: "./wwwroot/js/store.js",
-        vendor: ["react", "react-dom", "react-router"]
+        vendor: ["react", "react-dom", "react-router", "./wwwroot/js/polyfill.js"]
     },
     module: {
         loaders: [

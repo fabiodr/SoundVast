@@ -23,23 +23,28 @@ export default class JPlayerPlaylist extends React.Component {
         this.playlistContainerMaxHeight = this.playlistItemAnimMaxHeight = 1;
 
         this.state = {
-            current: 0,
-            playlist: props.playlist, // Array of Objects: The current playlist displayed (Un-shuffled or Shuffled)
-            event: {
-                onRepeat: (jPlayer) => this.loop = jPlayer.options.loop,
-                onEnded: () => this.next(),
-                onPlay: () => this.jPlayer.pauseOthers(),
-                onResize: () => {
-                    if (this.props.fullScreen) {
-                        this.setState({hideDetails: false});
-                    } else {
-                        this.setState({hideDetails: true});
-                    }
-                }
-            }           
+            current: 0     
         }
 
-        this.loop = props.loop;
+        //TODO: // loop is now a string and not a bool because other classes that extend jPlayer such as jPlayerPlaylist may use additional loops such as a playlist-loop
+        this.event = {
+            onEnded: (jPlayer) => { 
+                this.next()
+                this._trigger(this.props.onEnded, jPlayer);
+            },
+            onPlay: (jPlayer) => { 
+                this.jPlayer.pauseOthers();
+                this._trigger(this.props.onPlay, jPlayer);
+             },
+            onResize: (jPlayer) => {
+                if (this.props.fullScreen) {
+                    this.setState({hideDetails: false});
+                } else {
+                    this.setState({hideDetails: true});
+                }
+                this._trigger(this.props.onResize, jPlayer);
+            }
+        }
 
         //Add a new stateClass for the extra loop option
         this.stateClass = merge({
@@ -60,13 +65,14 @@ export default class JPlayerPlaylist extends React.Component {
                 shuffle: {
                     key: 83, // s
                     fn: () => this.shuffle()
-                },
-                loop: {
-                    key: 76, // l
-                    fn: () => this._loop()
                 }
             }
         }, props.keyBindings);
+    }
+    _trigger = (func, jPlayer) => {
+        if (func !== undefined) {
+            func.bind(this)(jPlayer);
+        }
     }
     _freeMediaLinkIndex = 0
     _addFreeMediaLinks = (media) => {
@@ -113,7 +119,7 @@ export default class JPlayerPlaylist extends React.Component {
 
         this.shuffle(false);
         this.blur(event.target);
-        this.setState(previousState => previousState.shuffleOffClick = Object.assign({}, previousState.shuffleOffClick, {display: "none"}));
+        this.setState({hideShuffleOff: true});
     }
     _previousOnClick = (event) => {
         event.preventDefault();
@@ -139,12 +145,42 @@ export default class JPlayerPlaylist extends React.Component {
         
         //Overwrite the jPlayer repeat
         this.jPlayer.repeat = (event) => {
+            debugger;
             var guiAction = typeof event === "object"; // Flags GUI click events so we know this was not a direct command, but an action taken by the user on the GUI.
-            
-            if (guiAction) {
-                this._loop();
+
+            if (this.props.loop === "playlist-loop") {
+                this.props.updateOptions({loop: "off"});
+            }
+            else if (this.props.loop === "loop") {
+                this.props.updateOptions({loop: "playlist-loop"});             
+            }
+            else {
+                this.props.updateOptions({loop: "loop"});
             }
         };
+
+        //Overwrite the repeatOff
+        this.jPlayer.repeatOff = () => this.updateOptions({loop: "off"});
+
+        this.jPlayer._updateButtons = (() => {
+            var originalUpdateButtons = this.jPlayer._updateButtons;
+            debugger;
+            var self = this.jPlayer;
+            return function() {
+                debugger
+                originalUpdateButtons.apply(this, arguments);
+                debugger
+                // Don't need loop==="off' check because it was already set in jPlayer incorrectly because of true/false
+                if (this.props.loop === "loop") {
+                    this.jPlayer.removeStateClass('looped');
+                    this.jPlayer.addStateClass("playlistLooped");
+                } 
+                else {
+                    this.jPlayer.removeStateClass('looped'); // Incorrectly set so remove it
+                    this.jPlayer.removeStateClass("playlistLooped");
+                }
+            }.bind(this);
+        })();
         this._init();
     }
     _init = () => {
@@ -167,21 +203,7 @@ export default class JPlayerPlaylist extends React.Component {
         this._originalPlaylist();
     }
     _originalPlaylist = (playlistSetCallback) => {
-        this.setState({playlist: [...this.original]}, playlistSetCallback);
-    }
-    _loop = () => { 
-        if (this.loop === "playlist-loop") {
-            this.jPlayer._loop("off");
-            this.jPlayer.removeStateClass("playlistLooped");
-        } else if (this.loop === "off") {
-            this.jPlayer._loop("loop");
-            this.jPlayer.addStateClass("looped");
-        }
-        else {
-            this.jPlayer.removeStateClass("looped");
-            this.jPlayer.addStateClass("playlistLooped");
-            this.jPlayer._loop("playlist-loop");
-        } 
+        this.props.updateOptions({playlist: [...this.original], playlistSetCallback});
     }
     setPlaylist = (playlist) => {
         this._initPlaylist(playlist);
@@ -189,14 +211,14 @@ export default class JPlayerPlaylist extends React.Component {
     }
     add = (media, playNow) => {
         this._addFreeMediaLinks(media);
-        media.key = maxBy(this.state.playlist, "key").key + 1;
+        media.key = maxBy(this.props.playlist, "key").key + 1;
         media.isRemoving = false;
         
         this.original.push(media);
-        this.setState({playlist: update(this.state.playlist, {$push: [media]})});
+        this.props.updateOptions({playlist: update(this.props.playlist, {$push: [media]})});
 
         if (playNow) {
-            this.play(this.state.playlist.length - 1);
+            this.play(this.props.playlist.length - 1);
         } else {
             if (this.original.length === 1) {
                 this.select(0);
@@ -209,23 +231,23 @@ export default class JPlayerPlaylist extends React.Component {
             this.jPlayer.clearMedia();
             return true;
         } else {           
-            this.setState(previousState => previousState.playlist[index] = Object.assign({}, previousState.playlist[index], {isRemoving: true}));
+            this.props.updateOptions({playlist: {[index]: {isRemoving: true}}});
         }
         this.setState({useRemoveConfig: true});
     }
     select = (index) => {
         index = (index < 0) ? this.original.length + index : index; // Negative index relates to end of array.
-        if (0 <= index && index < this.state.playlist.length) {
+        if (0 <= index && index < this.props.playlist.length) {
             this.setState({current: index});
-            this.jPlayer.setMedia(this.state.playlist[index]);
+            this.jPlayer.setMedia(this.props.playlist[index]);
         } else {
             this.setState({current: 0});
         }
     }
     play = (index) => {
         index = (index < 0) ? this.original.length + index : index; // Negative index relates to end of array.
-        if (0 <= index && index < this.state.playlist.length) {
-            if (this.state.playlist.length) {
+        if (0 <= index && index < this.props.playlist.length) {
+            if (this.props.playlist.length) {
                 this.select(index);
             }
         } else if (index === undefined) {
@@ -236,14 +258,14 @@ export default class JPlayerPlaylist extends React.Component {
         this.jPlayer.pause();
     }
     next = (forcePlayNextTrack) => {
-        var index = (this.state.current + 1 < this.state.playlist.length) ? this.state.current + 1 : 0;
+        var index = (this.state.current + 1 < this.props.playlist.length) ? this.state.current + 1 : 0;
 
         if (this.loop === "loop" && !forcePlayNextTrack) {
             this.play(this.state.current);
         }
         else if (this.loop === "playlist-loop") {
             // See if we need to shuffle before looping to start, and only shuffle if more than 1 item.
-            if (index === 0 && this.shuffled && this.props.shuffleOnLoop && this.state.playlist.length > 1) {
+            if (index === 0 && this.shuffled && this.props.shuffleOnLoop && this.props.playlist.length > 1) {
                 this.shuffle(true, true); // playNow
             } else {
                 this.play(index);
@@ -257,9 +279,9 @@ export default class JPlayerPlaylist extends React.Component {
         }
     }
     previous = () => {
-        var index = (this.state.current - 1 >= 0) ? this.state.current - 1 : this.state.playlist.length - 1;
+        var index = (this.state.current - 1 >= 0) ? this.state.current - 1 : this.props.playlist.length - 1;
 
-        if (this.loop === "playlist-loop" && this.props.loopOnPrevious || index < this.state.playlist.length - 1) {
+        if (this.loop === "playlist-loop" && this.props.loopOnPrevious || index < this.props.playlist.length - 1) {
             this.play(index);
         }
     }
@@ -275,18 +297,17 @@ export default class JPlayerPlaylist extends React.Component {
     }
     _removeAnimationCallback = (index) => {
         if (this.shuffled) {
-            var item = this.state.playlist[index];
+            var item = this.props.playlist[index];
             for (var i = 0; i < this.original.length; i++){
                 if (this.original[i].key === item.key) {
                     this.original.splice(i, 1);
                     break;
                 }
             }
-            this.setState({playlist: update(this.state.playlist, {$splice: [[index, 1]]})});
         } else {
             this.original.splice(index, 1);
-            this.setState({playlist: update(this.state.playlist, {$splice: [[index, 1]]})});
         }
+        this.props.updateOptions({playlist: update(this.props.playlist, {$splice: [[index, 1]]})});
 
         if (this.original.length) {
             if (index === this.state.current) {
@@ -309,7 +330,7 @@ export default class JPlayerPlaylist extends React.Component {
             return;
         }
 
-        function playlistSetCallback() {
+        var playlistSetCallback = () => {
             if (this.playNow || !this.jPlayer.status.paused) {
                 this.play(0);
             } else {
@@ -318,7 +339,7 @@ export default class JPlayerPlaylist extends React.Component {
         }
 
         if (this.shuffled) {
-            this.setState({playlist: [...this.state.playlist].sort(() => 0.5 - Math.random())}, playlistSetCallback);
+            this.props.updateOptions({playlist: [...this.props.playlist].sort(() => 0.5 - Math.random())}, playlistSetCallback);
             this.jPlayer.addStateClass("shuffled");
         } else {
             this._originalPlaylist(playlistSetCallback);  
@@ -333,7 +354,7 @@ export default class JPlayerPlaylist extends React.Component {
         }
     }
     _aditionalControls = () => {
-        return [<a class="jp-shuffleOff" key={0} onClick={this._shuffleOffClick}>{this.props.html.shuffleOff}</a>,
+        return [<a class={this.props.hideShuffleOff ? "jp-shuffleOff " + JPlayer.className.hidden : "jp-shuffleOff"} key={0} onClick={this._shuffleOffClick}>{this.props.html.shuffleOff}</a>,
                 <a class="jp-shuffle" key={1} onClick={this._shuffleOnClick}>{this.props.html.shuffle}</a>,
                 <a class="jp-previous" key={3} onClick={this._previousOnClick}>{this.props.html.previous}</a>,
                 <a class="jp-next" key={4} onClick={this._nextOnClick}>{this.props.html.next}</a>,
@@ -345,7 +366,7 @@ export default class JPlayerPlaylist extends React.Component {
         this._setup();
     }
     componentWillMount(){
-        this._initPlaylist(this.state.playlist);  
+        this._initPlaylist(this.props.playlist);  
     }
     render() {
         return (
@@ -353,7 +374,7 @@ export default class JPlayerPlaylist extends React.Component {
                 <div id="jp_container_playlist">
                     <div class="jp-playlist">
                         <Playlist isSlidingUp={this.state.isPlaylistContainerSlidingUp} config={this.state.useShuffleConfig ? this.props.shuffleAnimation : this.props.displayAnimation} onRest={this._shuffleAnimationCallback}>
-                            {this.state.playlist.map((media, index) => 
+                            {this.props.playlist.map((media, index) => 
                                 <Media key={media.key} id={media.key} isCurrent={index === this.state.current} isRemoving={media.isRemoving} config={this.state.useRemoveConfig ? this.props.removeAnimation : this.props.addAnimation} onRest={() => this._removeAnimationCallback(index)}>
                                     {this.props.enableRemoveControls ? 
                                         <a href="javascript:;" class={this.props.removeItemClass} onClick={this._removeMediaOnClick.bind(this, index)}>&times;</a>
@@ -373,7 +394,7 @@ export default class JPlayerPlaylist extends React.Component {
                         </Playlist> 
                     </div>
                 </div>
-                <JPlayer ref={jPlayer => this.jPlayer = jPlayer} {...this.props} {...this.keyBindings} {...this.state.event} additionalControls={this._aditionalControls()} stateClass={this.stateClass}/>
+                <JPlayer ref={jPlayer => this.jPlayer = jPlayer} {...this.props} {...this.keyBindings} {...this.event} additionalControls={this._aditionalControls()} stateClass={this.stateClass}/>
             </div>
         );
     }

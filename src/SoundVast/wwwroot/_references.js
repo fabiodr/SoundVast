@@ -54,6 +54,7 @@
 /// <reference path="js/old/user-user-profile.js" />
 /// <reference path="js/playlistold/JPlayerPlaylist.js" />
 /// <reference path="js/playlistold/JPlayerPlaylistStore.js" />
+/// <reference path="js/polyfill.js" />
 /// <reference path="js/reducers.js" />
 /// <reference path="js/Routing.js" />
 /// <reference path="js/store.js" />

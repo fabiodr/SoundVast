@@ -85,22 +85,39 @@ class FooterContainer extends React.Component {
                         free: true
                     }
                 ],
+                onPlay: () => {debugger;var e = 3;},
                 onError: (jPlayer) => console.error(jPlayer.error)       
             }
         };
     }
-    p = () => {
-        this.setState(previousState => previousState.jPlayerPlaylistOptions = Object.assign({}, previousState.jPlayerPlaylistOptions, {muted: true}));
-    }
     test = () => {
-        this.setState(previousState => previousState.jPlayerPlaylistOptions = Object.assign({}, previousState.jPlayerPlaylistOptions, {volume: 0.2}));   
+        let i = 0;
+        document.addEventListener("keydown", (e) => {
+            i++;
+			if (e.keyCode == '38') {
+				this.setState(previousState => previousState.jPlayerPlaylistOptions = Object.assign({}, previousState.jPlayerPlaylistOptions, {
+                    fullWindow: true,
+                    size: {
+                        width: 5,
+                        height: 20,
+                        cssClass: "normal-mode"
+                    },                 
+                })); 
+			}		
+		});     
     }
-    updateOptions = (newOptions) => this.setState(previousState => previousState.jPlayerPlaylistOptions = Object.assign({}, previousState.jPlayerPlaylistOptions, newOptions));
+    updateOptions = (newOptions, callback) => { 
+        this.setState((previousState) => {
+            var p = Object.assign({}, previousState.jPlayerPlaylistOptions, newOptions);
+            return previousState.jPlayerPlaylistOptions = Object.assign({}, previousState.jPlayerPlaylistOptions, newOptions)
+        }, callback);
+    }
+    componentDidMount() {
+        this.test();
+    }
     render() {
         return (
             <div>
-                <div onClick={this.test}>Click MEEEE</div>
-                <div onClick={this.p}>Click MEEEE 22222</div>
                 <div class="jp-type-footer" >
                     <JPlayerPlaylist ref={jPlayerPlaylist => this.jPlayerPlaylist = jPlayerPlaylist} {...this.state.jPlayerPlaylistOptions} updateOptions={this.updateOptions} />
                 </div>
