@@ -25,7 +25,6 @@ class FooterContainer extends React.Component {
                 },      
                 smoothPlayBar: true,
                 muted: true,
-                autoPlay: true,
                 enableRemoveControls: true,
                 loopOnPrevious: true,
                 // shuffleAnimation: {
@@ -85,33 +84,18 @@ class FooterContainer extends React.Component {
                         free: true
                     }
                 ],
-                onPlay: () => {debugger;var e = 3;},
                 onError: (jPlayer) => console.error(jPlayer.error)       
             }
         };
     }
     test = () => {
-        let i = 0;
-        document.addEventListener("keydown", (e) => {
-            i++;
+        document.addEventListener("keydown", (e) => {   
 			if (e.keyCode == '38') {
-				this.setState(previousState => previousState.jPlayerPlaylistOptions = Object.assign({}, previousState.jPlayerPlaylistOptions, {
-                    fullWindow: true,
-                    size: {
-                        width: 5,
-                        height: 20,
-                        cssClass: "normal-mode"
-                    },                 
-                })); 
+				this.setState(previousState => previousState.jPlayerPlaylistOptions = Object.assign({}, previousState.jPlayerPlaylistOptions, {sizeFull: {cssClass: "tedfst"}})); 
 			}		
 		});     
     }
-    updateOptions = (newOptions, callback) => { 
-        this.setState((previousState) => {
-            var p = Object.assign({}, previousState.jPlayerPlaylistOptions, newOptions);
-            return previousState.jPlayerPlaylistOptions = Object.assign({}, previousState.jPlayerPlaylistOptions, newOptions)
-        }, callback);
-    }
+    updateOptions = (newOptions, callback) => this.setState(previousState => previousState.jPlayerPlaylistOptions = Object.assign({}, previousState.jPlayerPlaylistOptions, newOptions), callback);
     componentDidMount() {
         this.test();
     }
