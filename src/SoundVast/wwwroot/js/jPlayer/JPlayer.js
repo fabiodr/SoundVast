@@ -1040,7 +1040,7 @@ export default class JPlayer extends React.Component {
 		p = this._limitValue(p, 0, 100);
 		if(this.status.srcSet) {
 			if(this.html.active) {
-				this.__htmlPlayHead(p);
+				this._htmlPlayHead(p);
 			}
 		} else {
 			this._urlNotSetError("playHead");
@@ -1586,7 +1586,7 @@ export default class JPlayer extends React.Component {
 			this._htmlCheckWaitForPlay();
 		}
 	}
-	__htmlPlayHead = (percent) => {
+	_htmlPlayHead = (percent) => {
 		this._htmlLoad(); // Loads if required and clears any delayed commands.
 
 		// This playHead() method needs a refactor to apply the android fix.
