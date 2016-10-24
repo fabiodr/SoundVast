@@ -7,7 +7,9 @@ import maxBy from "lodash/maxBy";
 
 export default class JPlayerPlaylist extends React.Component {
     static get propTypes() {
-		return DefaultPropTypes
+		return {
+            updateOptions: React.PropTypes.func.isRequired
+        }
 	}
     static get defaultProps(){
 		return Object.assign({
@@ -55,19 +57,17 @@ export default class JPlayerPlaylist extends React.Component {
         }, props.stateClass);   
 
         this.keyBindings = merge({
-            keyBindings: {
-                next: {
-                    key: 221, // ]
-                    fn: () => this.next()
-                },
-                previous: {
-                    key: 219, // [
-                    fn: () => this.previous()
-                },
-                shuffle: {
-                    key: 83, // s
-                    fn: () => this.shuffle()
-                }
+            next: {
+                key: 221, // ]
+                fn: () => this.next()
+            },
+            previous: {
+                key: 219, // [
+                fn: () => this.previous()
+            },
+            shuffle: {
+                key: 83, // s
+                fn: () => this.shuffle()
             }
         }, props.keyBindings);
 

@@ -27,22 +27,6 @@ class FooterContainer extends React.Component {
                 muted: true,
                 enableRemoveControls: true,
                 loopOnPrevious: true,
-                // shuffleAnimation: {
-                //     stiffness: 220, 
-                //     damping: 14
-                // },
-                // displayAnimation: {
-                //     stiffness: 2, 
-                //     damping: 20
-                // },
-                // removeAnimation: {
-                //     stiffness: 220, 
-                //     damping: 14
-                // },
-                // addAnimation: {
-                //     stiffness: 2, 
-                //     damping: 20
-                // },
                 sizeFull: {
                     width: "90%",
                     height: "90%"
@@ -103,7 +87,7 @@ class FooterContainer extends React.Component {
         return (
             <div>
                 <div class="jp-type-footer" >
-                    <JPlayerPlaylist ref={jPlayerPlaylist => this.jPlayerPlaylist = jPlayerPlaylist} {...this.state.jPlayerPlaylistOptions} updateOptions={this.updateOptions} />
+                    <JPlayerPlaylist ref={jPlayerPlaylist => this.jPlayerPlaylist = jPlayerPlaylist} {...this.state.jPlayerPlaylistOptions}  />
                 </div>
             </div>
         );

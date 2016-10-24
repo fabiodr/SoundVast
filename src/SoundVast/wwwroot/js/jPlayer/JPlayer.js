@@ -20,132 +20,140 @@ export const DefaultProps = {
 		// Phone and tablet browsers can have problems with the controls disappearing.
 	},
 	guiFadeInAnimation: {
-		stiffness: 40 // Velocity of the animation (higher the faster)
+		stiffness: 40 // Velocity of the animation (higher the faster), other properties automatically set in the Motion component
 	},
 	guiFadeOutAnimation: {
-		stiffness: 40
-	}
-}
-
-export const DefaultPropTypes = {
-	jPlayerSelector: React.PropTypes.string,
-	cssSelectorAncestor: React.PropTypes.string,
-	html: React.PropTypes.shape({
-		play: React.PropTypes.element.isRequired,
-		mute: React.PropTypes.element,
-		fullScreen: React.PropTypes.element,
-		repeat: React.PropTypes.element,
-	}).isRequired,
-	supplied: React.PropTypes.array,
-	preload: React.PropTypes.string,
-	volume: React.PropTypes.number,
-	muted: React.PropTypes.bool,
-	remainingDuration: React.PropTypes.bool,
-	toggleDuration: React.PropTypes.bool,
-	captureDuration: React.PropTypes.bool,
-	playbackRate: React.PropTypes.number,
-	defaultPlaybackRate: React.PropTypes.number,
-	minPlaybackRate: React.PropTypes.number,
-	maxPlaybackRate: React.PropTypes.number,
-	stateClass: React.PropTypes.shape({
-		playing: React.PropTypes.string,
-		seeking: React.PropTypes.string,
-		muted: React.PropTypes.string,
-		looped: React.PropTypes.string,
-		fullScreen: React.PropTypes.string,
-		noVolume: React.PropTypes.string
-	}),
-	smoothPlayBar: React.PropTypes.bool,
-	fullScreen: React.PropTypes.bool,
-	fullWindow: React.PropTypes.bool,
-	autoHide: React.PropTypes.shape({
-		restored: React.PropTypes.bool, // Controls the interface autohide feature.
-		full: React.PropTypes.bool, // Controls the interface autohide feature.
-		hold: React.PropTypes.number, // Milliseconds. The period of the pause before autohide beings.
-	}),
-	loop: React.PropTypes.string,
-	nativeVideoControls: React.PropTypes.objectOf(React.PropTypes.string),
-	noFullWindow: React.PropTypes.shape({
-		msie: React.PropTypes.string,
-		ipad: React.PropTypes.string,
-		iphone: React.PropTypes.string,
-		ipod: React.PropTypes.string,
-		android_pad: React.PropTypes.string,
-		android_phone: React.PropTypes.string,
-		blackberry: React.PropTypes.string,
-		windows_ce: React.PropTypes.string,
-		iemobile: React.PropTypes.string,
-		webos: React.PropTypes.string,
-	}),
-	noVolume: React.PropTypes.shape({
-		ipad: React.PropTypes.string,
-		iphone: React.PropTypes.string,
-		ipod: React.PropTypes.string,
-		android_pad: React.PropTypes.string,
-		android_phone: React.PropTypes.string,
-		blackberry: React.PropTypes.string,
-		windows_ce: React.PropTypes.string,
-		iemobile: React.PropTypes.string,
-		webos: React.PropTypes.string,
-		playbook: React.PropTypes.string,
-	}),
-	timeFormat: React.PropTypes.shape({
-		showHour: React.PropTypes.bool,
-		showMin: React.PropTypes.bool,
-		showSec: React.PropTypes.bool,
-		padHour: React.PropTypes.bool,
-		padMin: React.PropTypes.bool,
-		padSec: React.PropTypes.bool,
-		sepHour: React.PropTypes.string,
-		sepMin: React.PropTypes.string,
-		sepSec: React.PropTypes.string
-	}),
-	keyEnabled: React.PropTypes.bool,
-	audioFullScreen: React.PropTypes.bool,
-	keyBindings: React.PropTypes.shape({
-		play: React.PropTypes.shape({
-			key: React.PropTypes.number, 
-			fn: React.PropTypes.func
-		}),
-		fullScreen: React.PropTypes.shape({
-			key: React.PropTypes.number, 
-			fn: React.PropTypes.func
-		}),
-		muted: React.PropTypes.shape({
-			key: React.PropTypes.number, 
-			fn: React.PropTypes.func
-		}),
-		volumeUp: React.PropTypes.shape({
-			key: React.PropTypes.number, 
-			fn: React.PropTypes.func
-		}),
-		volumeDown: React.PropTypes.shape({
-			key: React.PropTypes.number,
-			fn: React.PropTypes.func
-		}),
-		loop: React.PropTypes.shape({
-			key: React.PropTypes.number, 
-			fn: React.PropTypes.func
-		})
-	}),
-	verticalVolume: React.PropTypes.bool,
-	verticalPlaybackRate: React.PropTypes.bool,
-	globalVolume: React.PropTypes.bool, // Set to make volume and muted changes affect all jPlayer instances with this option enabled
-	size: React.PropTypes.shape({
-		width: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
-        height: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
-		cssClass: React.PropTypes.string
-	}),
-	sizeFull: React.PropTypes.shape({
-		width: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
-        height: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
-		cssClass: React.PropTypes.string
-	}),
+		stiffness: 40 
+	},
+	html: {}
 }
 
 export default class JPlayer extends React.Component {
 	static get propTypes() {
-		return DefaultPropTypes
+		return {
+			updateOptions: React.PropTypes.func.isRequired,
+			jPlayerSelector: React.PropTypes.string,
+			cssSelectorAncestor: React.PropTypes.string,
+			html: React.PropTypes.objectOf(React.PropTypes.element),
+			supplied: React.PropTypes.array,
+			preload: React.PropTypes.string,
+			volume: React.PropTypes.number,
+			muted: React.PropTypes.bool,
+			remainingDuration: React.PropTypes.bool,
+			toggleDuration: React.PropTypes.bool,
+			captureDuration: React.PropTypes.bool,
+			playbackRate: React.PropTypes.number,
+			defaultPlaybackRate: React.PropTypes.number,
+			minPlaybackRate: React.PropTypes.number,
+			maxPlaybackRate: React.PropTypes.number,
+			stateClass: React.PropTypes.objectOf(React.PropTypes.string),
+			smoothPlayBar: React.PropTypes.bool,
+			fullScreen: React.PropTypes.bool,
+			fullWindow: React.PropTypes.bool,
+			autoHide: React.PropTypes.shape({
+				restored: React.PropTypes.bool, // Controls the interface autohide feature.
+				full: React.PropTypes.bool, // Controls the interface autohide feature.
+				hold: React.PropTypes.number, // Milliseconds. The period of the pause before autohide beings.
+			}),
+			loop: React.PropTypes.string,
+			nativeVideoControls: React.PropTypes.objectOf(React.PropTypes.string),
+			noFullWindow: React.PropTypes.objectOf(React.PropTypes.string),
+			noVolume: React.PropTypes.objectOf(React.PropTypes.string),
+			timeFormat: React.PropTypes.shape({
+				showHour: React.PropTypes.bool,
+				showMin: React.PropTypes.bool,
+				showSec: React.PropTypes.bool,
+				padHour: React.PropTypes.bool,
+				padMin: React.PropTypes.bool,
+				padSec: React.PropTypes.bool,
+				sepHour: React.PropTypes.string,
+				sepMin: React.PropTypes.string,
+				sepSec: React.PropTypes.string
+			}),
+			keyEnabled: React.PropTypes.bool,
+			audioFullScreen: React.PropTypes.bool,
+			keyBindings: React.PropTypes.shape({
+				play: React.PropTypes.shape({
+					key: React.PropTypes.number, 
+					fn: React.PropTypes.func
+				}),
+				fullScreen: React.PropTypes.shape({
+					key: React.PropTypes.number, 
+					fn: React.PropTypes.func
+				}),
+				muted: React.PropTypes.shape({
+					key: React.PropTypes.number, 
+					fn: React.PropTypes.func
+				}),
+				volumeUp: React.PropTypes.shape({
+					key: React.PropTypes.number, 
+					fn: React.PropTypes.func
+				}),
+				volumeDown: React.PropTypes.shape({
+					key: React.PropTypes.number,
+					fn: React.PropTypes.func
+				}),
+				loop: React.PropTypes.shape({
+					key: React.PropTypes.number, 
+					fn: React.PropTypes.func
+				})
+			}),
+			verticalVolume: React.PropTypes.bool,
+			verticalPlaybackRate: React.PropTypes.bool,
+			globalVolume: React.PropTypes.bool, // Set to make volume and muted changes affect all jPlayer instances with this option enabled
+			size: React.PropTypes.shape({
+				width: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
+				height: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
+				cssClass: React.PropTypes.string
+			}),
+			sizeFull: React.PropTypes.shape({
+				width: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
+				height: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
+				cssClass: React.PropTypes.string
+			}),
+			shuffleAnimation: React.PropTypes.shape({
+				stiffness: React.PropTypes.number, 
+				damping: React.PropTypes.number, 
+				precision: React.PropTypes.number
+			}),
+			displayAnimation: React.PropTypes.shape({
+				stiffness: React.PropTypes.number, 
+				damping: React.PropTypes.number, 
+				precision: React.PropTypes.number
+			}),
+			removeAnimation: React.PropTypes.shape({
+				stiffness: React.PropTypes.number, 
+				damping: React.PropTypes.number, 
+				precision: React.PropTypes.number
+			}),
+			addAnimation: React.PropTypes.shape({
+				stiffness: React.PropTypes.number, 
+				damping: React.PropTypes.number, 
+				precision: React.PropTypes.number
+			}),
+			onProgress: React.PropTypes.func,
+			onLoadedData: React.PropTypes.func,
+			onTimeUpdate: React.PropTypes.func,
+			onDurationChange: React.PropTypes.func,
+			onPlay: React.PropTypes.func,
+			onPlaying: React.PropTypes.func,
+			onPause: React.PropTypes.func,
+			onWaiting: React.PropTypes.func,
+			onSeeking: React.PropTypes.func,
+			onSeeked: React.PropTypes.func,
+			onVolumeChange: React.PropTypes.func,
+			onRateChange: React.PropTypes.func,
+			onSuspend: React.PropTypes.func,
+			onEnded: React.PropTypes.func,
+			onError: React.PropTypes.func,
+			onLoadStart: React.PropTypes.func,
+			onAbort: React.PropTypes.func,
+			onEmptied: React.PropTypes.func,
+			onStalled: React.PropTypes.func,
+			onLoadedMetadata: React.PropTypes.func,
+			onCanPlay: React.PropTypes.func,
+			onCanPlayThrough: React.PropTypes.func,
+		}
 	}
 	static get defaultProps(){
 		return DefaultProps
@@ -975,7 +983,6 @@ export default class JPlayer extends React.Component {
 		}
 	}
 	play = (time) => {
-		debugger;
 		var guiAction = typeof time === "object"; // Flags GUI click events so we know this was not a direct command, but an action taken by the user on the GUI.
 		if(guiAction && !this.status.paused) {
 			this.pause(time); // The time would be the click event, but passing it over so info is not lost.
