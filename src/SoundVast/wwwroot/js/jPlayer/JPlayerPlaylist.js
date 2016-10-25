@@ -8,17 +8,31 @@ import maxBy from "lodash/maxBy";
 export default class JPlayerPlaylist extends React.Component {
     static get propTypes() {
 		return {
-            updateOptions: React.PropTypes.func.isRequired
+            updateOptions: React.PropTypes.func.isRequired,
+            playlist: React.PropTypes.arrayOf(
+                 React.PropTypes.shape({
+                    title: React.PropTypes.string,
+                    artist: React.PropTypes.string,
+                    mp3: React.PropTypes.string,
+                    poster: React.PropTypes.string,
+                    free: React.PropTypes.bool,
+                })
+            ),
+            shuffleOnLoop: React.PropTypes.bool,
+            itemClass: React.PropTypes.string,
+            freeItemClass: React.PropTypes.string,
+            removeItemClass: React.PropTypes.string,
+            freeGroupClass: React.PropTypes.string
         }
 	}
     static get defaultProps(){
-		return Object.assign({
+		return {
             shuffleOnLoop: true,
             itemClass: "jp-playlist-item",
             freeItemClass: "jp-playlist-item-free",
             removeItemClass: "jp-playlist-item-remove",
-            freeGroupClass: "jp-free-media",
-        }, DefaultProps);
+            freeGroupClass: "jp-free-media"
+        };
     }
     constructor(props)
     {
