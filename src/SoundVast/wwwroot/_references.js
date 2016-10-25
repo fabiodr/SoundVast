@@ -58,6 +58,7 @@
 /// <reference path="js/reducers.js" />
 /// <reference path="js/Routing.js" />
 /// <reference path="js/store.js" />
+/// <reference path="js/test/jplayer/jplayerplaylist.test.js" />
 /// <reference path="js/upload/upload.js" />
 /// <reference path="lib/bootstrap/dist/js/bootstrap.js" />
 /// <reference path="lib/dropzone/dist/min/dropzone.min.js" />

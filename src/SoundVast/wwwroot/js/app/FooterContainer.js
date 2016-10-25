@@ -87,7 +87,7 @@ class FooterContainer extends React.Component {
         return (
             <div>
                 <div class="jp-type-footer" >
-                    <JPlayerPlaylist ref={jPlayerPlaylist => this.jPlayerPlaylist = jPlayerPlaylist} {...this.state.jPlayerPlaylistOptions}  />
+                    <JPlayerPlaylist ref={jPlayerPlaylist => this.jPlayerPlaylist = jPlayerPlaylist} {...this.state.jPlayerPlaylistOptions} updateOptions={this.updateOptions} />
                 </div>
             </div>
         );
