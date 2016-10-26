@@ -372,9 +372,7 @@ export default class JPlayerPlaylist extends React.Component {
                         <Playlist isSlidingUp={this.state.isPlaylistContainerSlidingUp} config={this.state.useShuffleConfig ? this.props.shuffleAnimation : this.props.displayAnimation} onRest={this._shuffleAnimationCallback}>
                             {this.props.playlist.map((media, index) => 
                                 <Media key={media.key} id={media.key} isCurrent={index === this.state.current} isRemoving={media.isRemoving} config={this.state.useRemoveConfig ? this.props.removeAnimation : this.props.addAnimation} onRest={() => this._removeAnimationCallback(index)}>
-                                    {this.props.enableRemoveControls ?  
-                                        <a href="javascript:;" className={this.props.removeItemClass} onClick={this._removeMediaOnClick.bind(this, index)}>&times;</a>
-                                    : <a className="test"></a>}
+                                    {this.props.enableRemoveControls && <a href="javascript:;" className={this.props.removeItemClass} onClick={this._removeMediaOnClick.bind(this, index)}>&times;</a>}
                                     {media.free ? 
                                         <span className={this.props.freeGroupClass}>
                                             ({media.freeMediaLinks})
