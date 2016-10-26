@@ -56,39 +56,39 @@ class Audio extends React.Component {
         let faStateClass = (this.state.jPlayerPaused) ? "fa fa-play" : "fa fa-pause";
 
         return (
-            <div class="col-md-5ths">
-                <div class="audio-wrapper">
-                    <div class="poster-wrapper" onMouseEnter={this.onMouseEnterPoster} onMouseLeave={this.onMouseLeavePoster}>
-                        <img src={this.props.imagePath} class="cover-image" />
-                        <i class={faStateClass} style={{display: this.state.playButtonDisplay}} onClick={this.onClickStateClass}></i>
+            <div className="col-md-5ths">
+                <div className="audio-wrapper">
+                    <div className="poster-wrapper" onMouseEnter={this.onMouseEnterPoster} onMouseLeave={this.onMouseLeavePoster}>
+                        <img src={this.props.imagePath} className="cover-image" />
+                        <i className={faStateClass} style={{display: this.state.playButtonDisplay}} onClick={this.onClickStateClass}></i>
 
-                        <div class="controls">
-                            <Link to={`rate/${this.props.id}/true`} class="rating">
-                                <i class="fa fa-arrow-up"></i>
+                        <div className="controls">
+                            <Link to={`rate/${this.props.id}/true`} className="rating">
+                                <i className="fa fa-arrow-up"></i>
                             </Link>
-                            <Link to={`rate/${this.props.id}/false`} class="rating">
-                                <i class="fa fa-arrow-down"></i>
+                            <Link to={`rate/${this.props.id}/false`} className="rating">
+                                <i className="fa fa-arrow-down"></i>
                             </Link>
                             <Link to={`create-playlist/${this.props.id}`}>
-                                <i class="fa fa-plus"></i>
+                                <i className="fa fa-plus"></i>
                             </Link>
                             <Link to={`request-deletion/${this.props.id}`}>
-                                <i class="fa fa-flag"></i>
+                                <i className="fa fa-flag"></i>
                             </Link>
                             <Link to={`download/${this.props.id}`}>
-                                <i class="fa fa-download"></i>
+                                <i className="fa fa-download"></i>
                             </Link>
                         </div>
                     </div>
 
-                    <div class="display">
+                    <div className="display">
                         {this.props.name}
                         {this.props.artist}
                     </div>
 
-                    <div class="view-counts">
+                    <div className="view-counts">
                         {this.props.uniqueViews}
-                        <i class="fa fa-eye"></i>
+                        <i className="fa fa-eye"></i>
                     </div>
 
                     <Rating likes={this.props.likes} dislikes={this.props.dislikes}/>

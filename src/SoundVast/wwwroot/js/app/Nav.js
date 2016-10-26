@@ -7,50 +7,50 @@ import Search from "./Search";
 export default class Nav extends React.Component {
     render(){
         return (
-          <div class="row">
-            <div class="col-xs-12">
+          <div className="row">
+            <div className="col-xs-12">
                 <header>
-                    <div class="wrapper container">
+                    <div className="wrapper container">
                         <nav>
-                            <ul class="outer pull-left">
+                            <ul className="outer pull-left">
                                 <li>
-                                    <Link to="/" class="nav-link logo">
+                                    <Link to="/" className="nav-link logo">
                                         <img src="images/soundvast-nav-logo.png" alt="SoundVast" />
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link to="filestream/filestreams" class="nav-link audio">Audios</Link>
+                                    <Link to="filestream/filestreams" className="nav-link audio">Audios</Link>
                                 </li>
                                 <li>
-                                    <Link to="livestreams/livestream" class="nav-link live-stream">Live Streams</Link>
+                                    <Link to="livestreams/livestream" className="nav-link live-stream">Live Streams</Link>
                                 </li>
                                 <li>
-                                    <Link to="uploadmain/upload" class="nav-link upload">Upload</Link>
+                                    <Link to="uploadmain/upload" className="nav-link upload">Upload</Link>
                                 </li>
                                 <li>                                
                                     <Search></Search>
                                 </li>
                             </ul>
-                            <ul class="outer pull-right">
+                            <ul className="outer pull-right">
                                 {
                                     this.props.isAuthenticated ? <AuthorizedDropdown userName={this.props.userName} /> 
                                                                 : unAuthorizedDropdown()
                                 }
                                 <li>
-                                    <div class="nav-dropdown">
-                                        <span><i class="fa fa-bars"></i></span>
-                                        <ul class="menu">
+                                    <div className="nav-dropdown">
+                                        <span><i className="fa fa-bars"></i></span>
+                                        <ul className="menu">
                                             <li>
-                                                <Link to="content/aboutus" class="nav-link about-us">About us</Link>
+                                                <Link to="content/aboutus" className="nav-link about-us">About us</Link>
                                             </li>
                                             <li>
-                                                <Link to="content/privacy" class="nav-link privacy">Privacy</Link>
+                                                <Link to="content/privacy" className="nav-link privacy">Privacy</Link>
                                             </li>
                                             <li>
-                                                <Link to="content/copyright" class="nav-link copyright">Copyright</Link>
+                                                <Link to="content/copyright" className="nav-link copyright">Copyright</Link>
                                             </li>
                                             <li>
-                                                <Link to="content/termsofuse" class="nav-link terms-of-use">Terms of Use</Link>
+                                                <Link to="content/termsofuse" className="nav-link terms-of-use">Terms of Use</Link>
                                             </li>
                                             {this.props.isAdmin ? adminDropdown() : null}                                      
                                         </ul>
@@ -70,26 +70,26 @@ export default class Nav extends React.Component {
 
 const adminDropdown = () => (
     createFragment({
-        role: <li><Link to="rolesadmin/index" class="nav-link admin-roles">Admin Roles</Link></li>,
-        user: <li><Link to="usersadmin/index" class="nav-link admin-user">Admin User</Link></li>,
-        reportedStreams: <li><Link to="filestream/reportfilestreams" class="nav-link report-file-stream">Report FileStreams</Link></li>
+        role: <li><Link to="rolesadmin/index" className="nav-link admin-roles">Admin Roles</Link></li>,
+        user: <li><Link to="usersadmin/index" className="nav-link admin-user">Admin User</Link></li>,
+        reportedStreams: <li><Link to="filestream/reportfilestreams" className="nav-link report-file-stream">Report FileStreams</Link></li>
     })          
 );
 
 const unAuthorizedDropdown = () => (
     createFragment({
-        login: <li><Link to="account/login" class="nav-link popup-link" id="login-link">Login</Link></li>,
-        register: <li><Link to="account/register" class="nav-link popup-link" id="register-link">Register</Link></li>
+        login: <li><Link to="account/login" className="nav-link popup-link" id="login-link">Login</Link></li>,
+        register: <li><Link to="account/register" className="nav-link popup-link" id="register-link">Register</Link></li>
     })                  
 );
 
 const AuthorizedDropdown = (props) => (
     <li>
-        <div class="nav-dropdown">
+        <div className="nav-dropdown">
             <span>{props.userName}</span>
-            <ul class="menu">
+            <ul className="menu">
                 <li>
-                    <Link to="profile" class="nav-link profile">Profile</Link>
+                    <Link to="profile" className="nav-link profile">Profile</Link>
                 </li>
                 <li>
                     <form action="account/logout" name="logout-form" id="logout-form">

@@ -18,6 +18,7 @@ export default class JPlayerPlaylist extends React.Component {
                     free: React.PropTypes.bool,
                 })
             ),
+            enableRemoveControls: React.PropTypes.bool,
             shuffleOnLoop: React.PropTypes.bool,
             itemClass: React.PropTypes.string,
             freeItemClass: React.PropTypes.string,
@@ -105,7 +106,7 @@ export default class JPlayerPlaylist extends React.Component {
                 var value = media[property];
 
                 firstMediaLinkAdded ? firstMediaLinkAdded = false : media.freeMediaLinks.push(", ");
-                media.freeMediaLinks.push(<a key={this.freeMediaLinkIndex++} class={this.props.freeItemClass} href={value} tabIndex="-1">{property}</a>);
+                media.freeMediaLinks.push(<a key={this.freeMediaLinkIndex++} className={this.props.freeItemClass} href={value} tabIndex="-1">{property}</a>);
             }
        }
     }
@@ -349,12 +350,12 @@ export default class JPlayerPlaylist extends React.Component {
         }
     }
     _aditionalControls = () => {
-        return [<a class={this.props.hideShuffleOff ? "jp-shuffleOff " + JPlayer.className.hidden : "jp-shuffleOff"} key={0} onClick={this._shuffleOffClick}>{this.props.html.shuffleOff}</a>,
-                <a class="jp-shuffle" key={1} onClick={this._shuffleOnClick}>{this.props.html.shuffle}</a>,
-                <a class="jp-previous" key={3} onClick={this._previousOnClick}>{this.props.html.previous}</a>,
-                <a class="jp-next" key={4} onClick={this._nextOnClick}>{this.props.html.next}</a>,
-                <a class="jp-playlist-options" key={5}>{this.props.html.playlistOptions}</a>,
-                <a class="jp-repeat-playlist" key={6} onClick={this.state.repeatOnClick}>{this.props.html.repeatPlaylist}</a>
+        return [<a className={this.props.hideShuffleOff ? "jp-shuffleOff " + JPlayer.className.hidden : "jp-shuffleOff"} key={0} onClick={this._shuffleOffClick}>{this.props.html.shuffleOff}</a>,
+                <a className="jp-shuffle" key={1} onClick={this._shuffleOnClick}>{this.props.html.shuffle}</a>,
+                <a className="jp-previous" key={3} onClick={this._previousOnClick}>{this.props.html.previous}</a>,
+                <a className="jp-next" key={4} onClick={this._nextOnClick}>{this.props.html.next}</a>,
+                <a className="jp-playlist-options" key={5}>{this.props.html.playlistOptions}</a>,
+                <a className="jp-repeat-playlist" key={6} onClick={this.state.repeatOnClick}>{this.props.html.repeatPlaylist}</a>
         ];
     }
     componentDidMount(){
@@ -367,22 +368,22 @@ export default class JPlayerPlaylist extends React.Component {
         return (
             <div>
                 <div id="jp_container_playlist">
-                    <div class="jp-playlist">
+                    <div className="jp-playlist">
                         <Playlist isSlidingUp={this.state.isPlaylistContainerSlidingUp} config={this.state.useShuffleConfig ? this.props.shuffleAnimation : this.props.displayAnimation} onRest={this._shuffleAnimationCallback}>
                             {this.props.playlist.map((media, index) => 
                                 <Media key={media.key} id={media.key} isCurrent={index === this.state.current} isRemoving={media.isRemoving} config={this.state.useRemoveConfig ? this.props.removeAnimation : this.props.addAnimation} onRest={() => this._removeAnimationCallback(index)}>
-                                    {this.props.enableRemoveControls ? 
-                                        <a href="javascript:;" class={this.props.removeItemClass} onClick={this._removeMediaOnClick.bind(this, index)}>&times;</a>
-                                    : null}
+                                    {this.props.enableRemoveControls ?  
+                                        <a href="javascript:;" className={this.props.removeItemClass} onClick={this._removeMediaOnClick.bind(this, index)}>&times;</a>
+                                    : <a className="test"></a>}
                                     {media.free ? 
-                                        <span class={this.props.freeGroupClass}>
+                                        <span className={this.props.freeGroupClass}>
                                             ({media.freeMediaLinks})
                                         </span> 
                                     : null}
-                                    <a href="javascript:;"class={index === this.state.current ? this.props.itemClass + " jp-playlist-current" : this.props.itemClass} onClick={this._mediaLinkOnClick.bind(this, index)} tabIndex="0"> 
+                                    <a href="javascript:;" className={index === this.state.current ? this.props.itemClass + " jp-playlist-current" : this.props.itemClass} onClick={this._mediaLinkOnClick.bind(this, index)} tabIndex="0"> 
                                         <img src={media.poster}/>
                                         {media.title}
-                                        {media.artist ? <span class="jp-artist">by {media.artist}</span> : null}
+                                        {media.artist ? <span className="jp-artist">by {media.artist}</span> : null}
                                     </a>
                                 </Media>)
                             }   
@@ -418,7 +419,7 @@ Playlist.propTypes = {
 const Media = (props) => (
     <Motion defaultStyle={{heightToInterpTo: props.minHeight}} style={{heightToInterpTo: spring(props.isRemoving ? props.minHeight : props.maxHeight, props.config)}} onRest={props.isRemoving ? props.onRest : null}>                
         {(values) => 
-            <li class={props.isCurrent ? "jp-playlist-current" : null} style={{transform: `scaleY(${values.heightToInterpTo})`, transformOrigin: "50% top"}}>
+            <li className={props.isCurrent ? "jp-playlist-current" : null} style={{transform: `scaleY(${values.heightToInterpTo})`, transformOrigin: "50% top"}}>
                 {props.children}       
             </li>
         }

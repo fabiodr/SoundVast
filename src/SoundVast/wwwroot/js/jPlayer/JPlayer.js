@@ -1677,8 +1677,8 @@ export default class JPlayer extends React.Component {
 	}
 	render() {
 		return (
-			<div id={this.props.cssSelectorAncestor.slice(1)} class={this.state.stateClass.join(" ")}>
-				<div ref={(jPlayerElement) => this.jPlayerElement = jPlayerElement} id={this.props.jPlayerSelector.slice(1)} class="jp-jplayer" style={this.state.jPlayerStyle}>
+			<div id={this.props.cssSelectorAncestor.slice(1)} className={this.state.stateClass.join(" ")}>
+				<div ref={(jPlayerElement) => this.jPlayerElement = jPlayerElement} id={this.props.jPlayerSelector.slice(1)} className="jp-jplayer" style={this.state.jPlayerStyle}>
 					<Poster hidePoster={this.state.hidePoster} src={this.state.posterSrc} style={this.state.posterStyle} onLoad={this._posterLoad} onClick={() => this._trigger(this.props.onClick)} /> 
 					<Audio ref={(audio) => this.audio = audio} require={this.require.audio} events={this.mediaEvent}>
 						{this.state.videoTracks}
@@ -1688,41 +1688,41 @@ export default class JPlayer extends React.Component {
 					</Video>
 				</div>
 				<GUI nativeVideoControls={this.status.nativeVideoControls} fullWindow={this.props.fullWindow} autoHide={this.autoHide} fadeInConfig={this.props.guiFadeInAnimation} fadeOutConfig={this.props.guiFadeOutAnimation}>
-					<div class="jp-controls">
-						<a class="jp-play" onClick={this.play}>
+					<div className="jp-controls">
+						<a className="jp-play" onClick={this.play}>
 							{this.props.html.play}
 						</a>
-						<a class="jp-mute" onClick={this.mute}>
+						<a className="jp-mute" onClick={this.mute}>
 							{this.props.html.mute}
 						</a>
-						<a class="jp-repeat" onClick={this.repeat}>							
+						<a className="jp-repeat" onClick={this.repeat}>							
 							{this.props.html.repeat}			
 						</a>																
-						<a class="jp-full-screen" onClick={this.fullScreen}>
+						<a className="jp-full-screen" onClick={this.fullScreen}>
 							{this.props.html.fullScreen}
 						</a>
-						<div class={this.state.hideVolumeBar ? "jp-volume-bar " + JPlayer.className.hidden : "jp-volume-bar"} style={this.state.volumeBarStyle} onClick={this.volumeBar}>
-							<div class={this.state.hideVolumeBarValue ? "jp-volume-bar-value " + JPlayer.className.hidden : "jp-volume-bar-value"} style={this.state.volumeBarValueStyle} />
+						<div className={this.state.hideVolumeBar ? "jp-volume-bar " + JPlayer.className.hidden : "jp-volume-bar"} style={this.state.volumeBarStyle} onClick={this.volumeBar}>
+							<div className={this.state.hideVolumeBarValue ? "jp-volume-bar-value " + JPlayer.className.hidden : "jp-volume-bar-value"} style={this.state.volumeBarValueStyle} />
 						</div>
 						{
-						/*<div class="jp-title">
+						/*<div className="jp-title">
 							{this.state.titleText}
 						</div>*/
 						}
-						<div class={this.state.hidePlaybackRateBar ? "jp-playback-rate-bar " + JPlayer.className.hidden : "jp-playback-rate-bar"} style={this.state.playbackRateBarStyle} onClick={this.playbackRateBar}>
-							<div class={this.state.hidePlaybackRateBarValue ? "jp-playback-rate-bar-value " + JPlayer.className.hidden : "jp-playback-rate-bar-value"} style={this.state.playbackRateBarValueStyle} />
+						<div className={this.state.hidePlaybackRateBar ? "jp-playback-rate-bar " + JPlayer.className.hidden : "jp-playback-rate-bar"} style={this.state.playbackRateBarStyle} onClick={this.playbackRateBar}>
+							<div className={this.state.hidePlaybackRateBarValue ? "jp-playback-rate-bar-value " + JPlayer.className.hidden : "jp-playback-rate-bar-value"} style={this.state.playbackRateBarValueStyle} />
 						</div>						
 						{this.props.additionalControls}	
 					</div>
-					<div class="jp-progress">
-						<div class={this.state.seeking ? "jp-seek-bar " + JPlayer.className.seeking : "jp-seek-bar"} style={this.state.seekBarStyle} onClick={this.seekBar}>                         
+					<div className="jp-progress">
+						<div className={this.state.seeking ? "jp-seek-bar " + JPlayer.className.seeking : "jp-seek-bar"} style={this.state.seekBarStyle} onClick={this.seekBar}>                         
 							<PlayBar smoothPlayBar={this.props.smoothPlayBar} currentPercentAbsolute={this.status.currentPercentAbsolute} playBarStyle={this.state.playBarStyle} />
-							<div class="jp-current-time">{this.state.currentTimeText}</div>
-							<div class="jp-duration" onClick={this.state.durationOnClick}>{this.state.durationText}</div>
+							<div className="jp-current-time">{this.state.currentTimeText}</div>
+							<div className="jp-duration" onClick={this.state.durationOnClick}>{this.state.durationText}</div>
 						</div>
 					</div>
 				</GUI>
-				<div class={this.state.hideNoSolution ? "jp-no-solution " + JPlayer.className.hidden : "jp-no-solution"} style={this.state.noSolutionStyle}>
+				<div className={this.state.hideNoSolution ? "jp-no-solution " + JPlayer.className.hidden : "jp-no-solution"} style={this.state.noSolutionStyle}>
 					<span>Update Required</span>
 					To play the media you will need to update your browser to a recent version.
 				</div>
@@ -1747,9 +1747,9 @@ class GUI extends React.Component {
 		this.setState({isFadingIn: true});
 	}
 	_updateAutoHide = () => (
-		<div class={this.props.nativeVideoControls ? JPlayer.className.hidden : null} onMouseMove={this._setFading} style={{width: "100%", height: "100%", position: "fixed", top: "0"}}>
+		<div className={this.props.nativeVideoControls ? JPlayer.className.hidden : null} onMouseMove={this._setFading} style={{width: "100%", height: "100%", position: "fixed", top: "0"}}>
 			<Motion defaultStyle={{opacityToInterpTo: 1}} style={{opacityToInterpTo: spring(this.state.isFadingIn ? 1 : 0, this.state.isFadingIn ? this.props.fadeInConfig : this.props.fadeOutConfig)}}>
-				{(values) => <div class="jp-gui" onMouseLeave={() => this.setState({isFadingIn: false})} onMouseEnter={() => clearTimeout(this.fadeHoldTimeout)} style={{opacity: values.opacityToInterpTo, display: values.opacityToInterpTo <= 0.05 ? "none" : ""}}>{this.props.children}</div>}
+				{(values) => <div className="jp-gui" onMouseLeave={() => this.setState({isFadingIn: false})} onMouseEnter={() => clearTimeout(this.fadeHoldTimeout)} style={{opacity: values.opacityToInterpTo, display: values.opacityToInterpTo <= 0.05 ? "none" : ""}}>{this.props.children}</div>}
 			</Motion>
 		</div>
 	);
@@ -1757,7 +1757,7 @@ class GUI extends React.Component {
 		return (
 			this.props.fullWindow && this.props.autoHide.full || !this.props.fullWindow && this.props.autoHide.restored ?
 				this._updateAutoHide()  
-			:	<div class={this.props.nativeVideoControls ? "jp-gui " + JPlayer.className.hidden : "jp-gui"}>{this.props.children}</div>
+			:	<div className={this.props.nativeVideoControls ? "jp-gui " + JPlayer.className.hidden : "jp-gui"}>{this.props.children}</div>
 		);
 	}
 };
@@ -1765,13 +1765,13 @@ class GUI extends React.Component {
 const PlayBar = (props) => (
 	props.smoothPlayBar ? 
 		<Motion style={{smoothWidth: spring(props.currentPercentAbsolute, [250])}}>
-			{(values) => <div class="jp-play-bar" style={{width: values.smoothWidth + "%"}} />}
+			{(values) => <div className="jp-play-bar" style={{width: values.smoothWidth + "%"}} />}
 		</Motion> 
-	:	<div class="jp-play-bar" style={props.playBarStyle} />
+	:	<div className="jp-play-bar" style={props.playBarStyle} />
 );
 
 const Poster = (props) => (
-	<img class={props.hidePoster ? JPlayer.className.hidden : null} src={props.src} style={props.style} onLoad={props.onLoad} onClick={props.onClick} />
+	<img className={props.hidePoster ? JPlayer.className.hidden : null} src={props.src} style={props.style} onLoad={props.onLoad} onClick={props.onClick} />
 );
 
 class Audio extends React.Component {
@@ -1792,7 +1792,7 @@ class Video extends React.Component {
 	render(){
 		return (
 			this.props.require ?
-				<video ref={(videoElement) => this.videoElement = videoElement} class={this.props.hideVideo ? JPlayer.className.hidden : null} style={this.props.style} onClick={this.props.onClick} {...this.props.events}>
+				<video ref={(videoElement) => this.videoElement = videoElement} className={this.props.hideVideo ? JPlayer.className.hidden : null} style={this.props.style} onClick={this.props.onClick} {...this.props.events}>
 					{this.props.children}
 				</video>
 			: null

@@ -15,9 +15,9 @@ class AudioContainer extends React.Component {
         return (
             <div> 
                 <DocumentTitle title='Audio - SoundVast' />
-                <div class="container-fluid">
+                <div className="container-fluid">
                     <Sorting />
-                    <section class="grid-audio">
+                    <section className="grid-audio">
                         { model.map((o, i) => <Model {...o} key={i}/>) }
                     </section>
                 </div>

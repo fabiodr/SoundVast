@@ -14,14 +14,14 @@ class FooterContainer extends React.Component {
                 cssSelectorAncestor: "#jp_container_footer_player",
                 html: {
                     //Toggle between play and pause in css based on playing or not
-                    play: <i class="fa fa-play"></i>,
-                    mute: <i class="fa fa-volume-up"></i>,
-                    fullScreen: <i class="fa fa-expand"></i>,
-                    repeat: <div><i class="fa fa-repeat"></i><i class="fa fa-bars"></i></div>,
-                    shuffle: <i class="fa fa-random"></i>,
-                    previous: <i class="fa fa-step-backward"></i>,
-                    next: <i class="fa fa-step-forward"></i>,
-                    playlistOptions: <div><i class="fa fa-ellipsis-h"></i><i class="fa fa-comment"></i></div>
+                    play: <i className="fa fa-play"></i>,
+                    mute: <i className="fa fa-volume-up"></i>,
+                    fullScreen: <i className="fa fa-expand"></i>,
+                    repeat: <div><i className="fa fa-repeat"></i><i className="fa fa-bars"></i></div>,
+                    shuffle: <i className="fa fa-random"></i>,
+                    previous: <i className="fa fa-step-backward"></i>,
+                    next: <i className="fa fa-step-forward"></i>,
+                    playlistOptions: <div><i className="fa fa-ellipsis-h"></i><i className="fa fa-comment"></i></div>
                 },      
                 smoothPlayBar: true,
                 muted: true,
@@ -86,7 +86,7 @@ class FooterContainer extends React.Component {
     render() {
         return (
             <div>
-                <div class="jp-type-footer" >
+                <div className="jp-type-footer" >
                     <JPlayerPlaylist ref={jPlayerPlaylist => this.jPlayerPlaylist = jPlayerPlaylist} {...this.state.jPlayerPlaylistOptions} updateOptions={this.updateOptions} />
                 </div>
             </div>
