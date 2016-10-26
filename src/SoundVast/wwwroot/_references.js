@@ -1,4 +1,5 @@
 ﻿/// <autosync enabled="true" />
+/// <reference path="../setup.js" />
 /// <reference path="../webpack.config.js" />
 /// <reference path="build/app.bundle.js" />
 /// <reference path="build/vendor.bundle.js" />

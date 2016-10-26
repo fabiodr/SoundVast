@@ -16,8 +16,10 @@
     "lodash": "^4.15.0",
     "lodash.isequal": "^4.4.0",
     "mocha": "^3.1.2",
+    "node-inspector": "^0.12.8",
     "react": "^15.3.0",
     "react-addons-create-fragment": "^15.3.1",
+    "react-document-title": "^2.0.2",
     "react-dom": "^15.3.0",
     "react-motion": "^0.4.4",
     "react-redux": "^4.4.5",
@@ -33,6 +35,8 @@
     "babel-preset-es2015-native-modules": "^6.9.4",
     "babel-preset-es2015-without-strict": "0.0.4",
     "babel-preset-react": "^6.16.0",
+    "babel-preset-stage-0": "^6.16.0",
+    "babel-register": "^6.18.0",
     "enzyme": "^2.5.1",
     "eslint": "^3.8.1",
     "eslint-config-airbnb": "^12.0.0",
@@ -40,14 +44,23 @@
     "eslint-plugin-jsx-a11y": "^2.2.3",
     "eslint-plugin-react": "^6.4.1",
     "expect": "^1.20.2",
+    "jsdom": "^9.8.3",
     "mocha": "^3.1.2",
+    "node-inspector": "^0.12.8",
+    "npm-watch": "^0.1.6",
     "react-addons-test-utils": "^15.3.2",
+    "react-addons-update": "^15.3.2",
     "react-dom": "^15.3.2",
     "react-test-renderer": "^15.3.2",
-    "redux-devtools": "^3.3.1"
+    "redux-devtools": "^3.3.1",
+    "sinon": "^1.17.6"
+  },
+  "watch": {
+    "test": "wwwroot/js/**/*.js"
   },
   "scripts": {
-    "test": "mocha --compilers js:babel-core/register ./wwwroot/js/test/**/*.test.js"
+    "test": "mocha --require setup.js --compilers js:babel-core/register ./wwwroot/js/test/**/*.test.js",
+    "watch": "npm-watch"
   },
   "author": "",
   "license": "ISC"
