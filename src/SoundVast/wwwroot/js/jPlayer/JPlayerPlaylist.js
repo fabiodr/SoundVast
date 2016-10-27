@@ -253,10 +253,10 @@ export default class JPlayerPlaylist extends React.Component {
     pause = () => {
         this.jPlayer.pause();
     }
-    next = (forcePlayNextTrack) => {
+    next = () => {
         var index = (this.state.current + 1 < this.props.playlist.length) ? this.state.current + 1 : 0;
 
-        if (this.props.loop === "loop" && !forcePlayNextTrack) {
+        if (this.props.loop === "loop") {
             this.play(this.state.current);
         }
         if (this.props.loop === "loop-playlist") {
@@ -336,10 +336,10 @@ export default class JPlayerPlaylist extends React.Component {
 
         if (this.shuffled) {
             this.props.updateOptions({playlist: [...this.props.playlist].sort(() => 0.5 - Math.random())}, playlistSetCallback);
-            this.jPlayer.addStateClass("shuffled");
+            this.setState({stateClassesToAdd: "shuffled"});
         } else {
             this._originalPlaylist(playlistSetCallback);  
-            this.jPlayer.removeStateClass("shuffled");        
+            this.setState({stateClassesToRemove: "shuffled"});       
         }
 
         setTimeout(() => this.setState({isPlaylistContainerSlidingUp: false}), 0);
