@@ -1,6 +1,7 @@
 import React from "react";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
+import merge from "lodash/merge";
 
 import JPlayerPlaylist from "../jPlayer/JPlayerPlaylist";
 
@@ -75,11 +76,11 @@ class FooterContainer extends React.Component {
     test = () => {
         document.addEventListener("keydown", (e) => {   
 			if (e.keyCode == '38') {
-				this.setState(previousState => previousState.jPlayerPlaylistOptions = Object.assign({}, previousState.jPlayerPlaylistOptions, {sizeFull: {cssClass: "tedfst"}})); 
+				this.setState(previousState => previousState.jPlayerPlaylistOptions = Object.assign({}, previousState.jPlayerPlaylistOptions, {functions: ["play"]})); 
 			}		
 		});     
     }
-    updateOptions = (newOptions, callback) => this.setState(previousState => previousState.jPlayerPlaylistOptions = Object.assign({}, previousState.jPlayerPlaylistOptions, newOptions), callback);
+    updateOptions = (newOptions, callback) => {this.setState(previousState => previousState.jPlayerPlaylistOptions = merge({}, previousState.jPlayerPlaylistOptions, newOptions), callback)};
     componentDidMount() {
         this.test();
     }

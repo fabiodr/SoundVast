@@ -5,7 +5,7 @@ import sinon from 'sinon';
 
 import JPlayerPlaylist from "../../JPlayer/JPlayerPlaylist";
 
-describe("<JPlayerPlaylist />", () => {
+describe("shallow: <JPlayerPlaylist />", () => {
     let mockjPlayerPlaylistOptions;
     let newOptions;
     let updateOptions = (newOptions, callback) => {
@@ -67,7 +67,6 @@ describe("<JPlayerPlaylist />", () => {
             expect(newOptions).toBe(shuffleOnLoop);
         });
     };
-
     const enableRemoveControlsTest = (enableRemoveControls) => {
         it("prop: enableRemoveControls renders remove controls", () =>  {
             mockjPlayerPlaylistOptions.enableRemoveControls = enableRemoveControls;
@@ -76,9 +75,11 @@ describe("<JPlayerPlaylist />", () => {
             expect(defaultWrapper().find("." + mockjPlayerPlaylistOptions.removeItemClass).isEmpty()).toEqual(!enableRemoveControls); 
         });
     };
-
-    shuffleOnLoopTest(true);
-    // shuffleOnLoopTest(false);
+    suffleOnLoopTest(true);
     enableRemoveControlsTest(true);
     enableRemoveControlsTest(false);
+});
+
+describe("Full: <JPlayerPlaylist />", () => {
+    
 });

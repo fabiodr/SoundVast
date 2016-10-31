@@ -25,17 +25,20 @@ export const DefaultProps = {
 	guiFadeOutAnimation: {
 		stiffness: 40 
 	},
-	html: {}
+	html: {},
+	jPlayerStatus: () => {}
 }
 
 export default class JPlayer extends React.Component {
 	static get propTypes() {
 		return {
 			updateOptions: React.PropTypes.func.isRequired,
+            functions: React.PropTypes.array,
+			jPlayerStatus: React.PropTypes.func,
 			jPlayerSelector: React.PropTypes.string,
 			cssSelectorAncestor: React.PropTypes.string,
 			html: React.PropTypes.objectOf(React.PropTypes.element),
-			supplied: React.PropTypes.array,
+			supplied:  React.PropTypes.arrayOf(React.PropTypes.string),
 			preload: React.PropTypes.string,
 			volume: React.PropTypes.number,
 			muted: React.PropTypes.bool,
@@ -275,7 +278,7 @@ export default class JPlayer extends React.Component {
 				key: 80, // p
 				fn: () => {
 					if(this.status.paused) {
-						this.play();
+						this.props.updateOptions({play: true});
 					} else {
 						this.pause();
 					}
@@ -321,7 +324,7 @@ export default class JPlayer extends React.Component {
 				this.androidFix.setMedia = false; // Disable the fix after the first progress event.
 				if(this.androidFix.play) { // Play Android audio - performing the fix.
 					this.androidFix.play = false;
-					this.play(this.androidFix.time);
+					this.props.updateOptions({play: this.androidFix.time});
 				}
 				if(this.androidFix.pause) { // Pause Android audio at time - performing the fix.
 					this.androidFix.pause = false;
@@ -384,7 +387,8 @@ export default class JPlayer extends React.Component {
 				if(!JPlayer.platform.webkit) { // Chrome crashes if you do this in conjunction with a setMedia command in an ended event handler. ie., The playlist demo.
 					this.currentMedia.currentTime = 0; // Safari does not care about this command. ie., It works with or without this line. (Both Safari and Chrome are Webkit.)
 				}
-				this.currentMedia.pause(); // Pause otherwise a click on the progress bar will play from that point, when it shouldn't, since it stopped playback.
+
+				this.props.updateOptions({play: false}); // Pause otherwise a click on the progress bar will play from that point, when it shouldn't, since it stopped playback.
 				this._updateButtons(false);
 				this._getHtmlStatus(this.currentMedia, true); // With override true. Otherwise Chrome leaves progress at full.
 				this._updateInterface();		
@@ -863,89 +867,6 @@ export default class JPlayer extends React.Component {
 		//Use function overload of setState otherwise the queued changes from addStateClass won't have been updated yet and therefore it will act on a 'stale' state
 		this.setState(previousState => ({stateClass: previousState.stateClass.filter((el) => el !== this.stateClass[stateClass])}));
 	}); 
-	
-	setMedia = (media) => {
-		/*	media[format] = String: URL of format. Must contain all of the supplied option's video or audio formats.
-			*	media.poster = String: Video poster URL.
-			*	media.track = Array: Of objects defining the track element: kind, src, srclang, label, def.
-			*	media.stream = Boolean: * NOT IMPLEMENTED * Designating actual media streams. ie., "false/undefined" for files.
-			*/
-		var	supported = false,
-			posterChanged = this.status.media.poster !== media.poster; // Compare before reset. Important for OSX Safari as this.htmlElement.poster.src is absolute, even if original poster URL was relative.
-
-		this._resetMedia();
-		this._resetActive();
-
-		// Clear the Android Fix.
-		this.androidFix.setMedia = false;
-		this.androidFix.play = false;
-		this.androidFix.pause = false;
-
-		// Convert all media URLs to absolute URLs.
-		media = this._absoluteMediaUrls(media);
-
-		for (var formatPriority = 0; formatPriority < this.formats.length; formatPriority++) {
-			var format = this.formats[formatPriority];
-			var isVideo = JPlayer.format[format].media === 'video';
-
-			if(this.html.support[format] && this._validString(media[format])) { // Format supported in solution and url given for format.
-
-			if(isVideo) {
-				this._htmlSetVideo(media);
-				this.html.active = true;
-				this.status.video = true;
-				this.setState({hideVideoPlay: false});
-			} else {
-				this._htmlSetAudio(media);
-				this.html.active = true;
-
-				// Setup the Android Fix - Only for HTML audio.
-				if(JPlayer.platform.android) {
-					this.androidFix.setMedia = true;
-				}
-
-				this.status.video = false;
-				this.setState({hideVideoPlay: true});
-			}
-			supported = true;
-			break;
-			}
-		}
-
-		if(supported) {
-			if(!(this.status.nativeVideoControls && this.html.video.gate)) {
-				// Set poster IMG if native video controls are not being used
-				// Note: With IE the IMG onload event occurs immediately when cached.
-				// Note: Poster hidden by default in _resetMedia()
-				if(this._validString(media.poster)) {
-					if(posterChanged) { // Since some browsers do not generate img onload event.
-						this.setState({posterSrc: media.poster});
-					} else {
-						this.setState({hidePoster: false});
-					}
-				}
-			}
-
-			if(typeof media.title === 'string') {
-				this.setState({titleText: media.title});
-			}
-
-			this.status.srcSet = true;
-			this.status.media = Object.assign({}, media);
-			this._updateButtons(false);
-			this._updateInterface();
-
-			this._trigger(this.props.onSetMedia);
-		} else { // jPlayer cannot support any formats provided in this browser
-			// Send an error event
-			this._error( {
-				type: this.error.NO_SUPPORT,
-				context: "{supplied:'" + this.props.supplied.join(", ") + "'}",
-				message: this.errorMsg.NO_SUPPORT,
-				hint: this.errorHint.NO_SUPPORT
-			});
-		}
-	}
 	_resetMedia = () => {
 		this._resetStatus();
 		this._updateButtons(false);
@@ -982,34 +903,8 @@ export default class JPlayer extends React.Component {
 			JPlayer.focusInstance = this;
 		}
 	}
-	play = (time) => {
-		var guiAction = typeof time === "object"; // Flags GUI click events so we know this was not a direct command, but an action taken by the user on the GUI.
-		if(guiAction && !this.status.paused) {
-			this.pause(time); // The time would be the click event, but passing it over so info is not lost.
-		} else {
-			time = (typeof time === "number") ? time : NaN; // Remove the event from click handler
-			if(this.status.srcSet) {
-				this.focus();
-				if(this.html.active) {
-					this._htmlPlay(time);
-				}
-			} else {
-				this._urlNotSetError("play");
-			}
-		}
-	}
 	videoPlay = (e) => {// Handles clicks on the play button over the video poster
-		this.play();
-	}
-	pause = (time) => {
-		time = (typeof time === "number") ? time : NaN; // Remove the event from click handler
-		if(this.status.srcSet) {
-			if(this.html.active) {
-				this._htmlPause(time);
-			}
-		} else {
-			this._urlNotSetError("pause");
-		}
+		this.props.updateOptions({play: true});
 	}
 	tellOthers = (command, conditions, ...others) => {
 		var	hasConditions = typeof conditions === 'function';
@@ -1078,7 +973,6 @@ export default class JPlayer extends React.Component {
 	}
 	volumeBar = (e) => {	 // Handles clicks on the volumeBar
 		// Using $(e.currentTarget) to enable multiple volume bars
-
 		var bar = e.currentTarget,
 			offset = getOffset(bar),
 			x = e.pageX - offset.left,
@@ -1211,16 +1105,140 @@ export default class JPlayer extends React.Component {
 	_setOptions = (options) => {	
 		for (var key in options) {
 			var option = options[key];
-			
 			if (options.hasOwnProperty(key)) {
-				if (!isEqual(this.props[key], option)) {		
+				if (!isEqual(this.props[key], option)) {
 					this._setOption(key, option);
 				}
 			}
 		}
 	}
+	_setFunctions = (functions) => {
+		if (!functions)
+			return;
+
+		functions.forEach((func) => { 
+			Array.isArray(func) ? this._setFunction(func.shift(), ...func) : this._setFunction(func);
+		});
+		this.props.updateOptions({functions: null});
+	}
+	videoPlay = (e) => {// Handles clicks on the play button over the video poster
+		this.play();
+	}
+	_setFunction = (methodName, value) => {
+		switch (methodName) {
+			case "play":
+				if(!this.status.paused) {
+					this.pause(time);
+				} else {
+					const time = (typeof value === "number") ? time : NaN;
+
+					if(this.status.srcSet) {
+						this.focus();
+						if(this.html.active) {
+							this._htmlPlay(time);
+						}
+					} else {
+						this._urlNotSetError(methodName);
+					}
+				}
+				break;
+			case "pause":
+				const time = (typeof value === "number") ? time : NaN;
+
+				if(this.status.srcSet) {
+					if(this.html.active) {
+						this._htmlPause(time);
+					}
+				} else {
+					this._urlNotSetError(methodName);
+				}
+			case "setMedia":
+				/*	value[format] = String: URL of format. Must contain all of the supplied option's video or audio formats.
+				*	value.poster = String: Video poster URL.
+				*	value.track = Array: Of objects defining the track element: kind, src, srclang, label, def.
+				*	value.stream = Boolean: * NOT IMPLEMENTED * Designating actual value streams. ie., "false/undefined" for files.
+				*/
+				var	supported = false,
+					posterChanged = this.status.media.poster !== value.poster; // Compare before reset. Important for OSX Safari as this.htmlElement.poster.src is absolute, even if original poster URL was relative.
+
+				this._resetMedia();
+				this._resetActive();
+
+				// Clear the Android Fix.
+				this.androidFix.setMedia = false;
+				this.androidFix.play = false;
+				this.androidFix.pause = false;
+
+				// Convert all value URLs to absolute URLs.
+				value = this._absoluteMediaUrls(value);
+
+				for (var formatPriority = 0; formatPriority < this.formats.length; formatPriority++) {
+					var format = this.formats[formatPriority];
+					var isVideo = JPlayer.format[format].value === 'video';
+
+					if(this.html.support[format] && this._validString(value[format])) { // Format supported in solution and url given for format.
+
+					if(isVideo) {
+						this._htmlSetVideo(value);
+						this.html.active = true;
+						this.status.video = true;
+						this.setState({hideVideoPlay: false});
+					} else {
+						this._htmlSetAudio(value);
+						this.html.active = true;
+
+						// Setup the Android Fix - Only for HTML audio.
+						if(JPlayer.platform.android) {
+							this.androidFix.setMedia = true;
+						}
+
+						this.status.video = false;
+						this.setState({hideVideoPlay: true});
+					}
+					supported = true;
+					break;
+					}
+				}
+
+				if(supported) {
+					if(!(this.status.nativeVideoControls && this.html.video.gate)) {
+						// Set poster IMG if native video controls are not being used
+						// Note: With IE the IMG onload event occurs immediately when cached.
+						// Note: Poster hidden by default in _resetMedia()
+						if(this._validString(value.poster)) {
+							if(posterChanged) { // Since some browsers do not generate img onload event.
+								this.setState({posterSrc: value.poster});
+							} else {
+								this.setState({hidePoster: false});
+							}
+						}
+					}
+
+					if(typeof value.title === 'string') {
+						this.setState({titleText: value.title});
+					}
+
+					this.status.srcSet = true;
+					this.status.media = Object.assign({}, value);
+					this._updateButtons(false);
+					this._updateInterface();
+
+					this._trigger(this.props.onSetMedia);
+				} else { // jPlayer cannot support any formats provided in this browser
+					// Send an error event
+					this._error( {
+						type: this.error.NO_SUPPORT,
+						context: "{supplied:'" + this.props.supplied.join(", ") + "'}",
+						message: this.errorMsg.NO_SUPPORT,
+						hint: this.errorHint.NO_SUPPORT
+					});
+				}
+			break;
+			default: return;
+		}
+	}
 	_setOption = (key, value) => {
-		switch(key) {
+		switch (key) {	
 			case "volume":
 				if(this.html.used) {
 					this.currentMedia.volume = value;
@@ -1328,6 +1346,7 @@ export default class JPlayer extends React.Component {
 					JPlayer.focusInstance = null;
 				}
 				break;
+			default: return;
 		}
 	}
 	_refreshSize = () => {
@@ -1499,7 +1518,7 @@ export default class JPlayer extends React.Component {
 			this.setState({hideVideo: true});
 		}
 
-		this.currentMedia.pause();
+		//this.props.updateOptions({play: false});
 	}
 	_htmlClearMedia = () => {
 		if(this.currentMedia) {
@@ -1548,7 +1567,7 @@ export default class JPlayer extends React.Component {
 				}
 			} catch(err) {
 				this.internal.htmlDlyCmdId = setTimeout(() => {
-					this.play(time);
+					this.props.updateOptions({play: time});
 				}, 250);
 				return; // Cancel execution and wait for the delayed command.
 			}
@@ -1644,8 +1663,12 @@ export default class JPlayer extends React.Component {
 	_error = (error) => {
 		this._trigger(this.props.onError, error);
 	}
+	onPlayClick = () => {
+		this.props.updateOptions({play: this.status.paused});
+	}
 	componentWillReceiveProps(nextProps) {
-		this._setOptions(nextProps);
+		//this._setOptions(p);
+		this._setFunctions(nextProps.functions);
 
 		if (nextProps.stateClassesToAdd !== undefined) {
 			Array.isArray(nextProps.stateClassesToAdd) ? this.addStateClass(...nextProps.stateClassesToAdd) : this.addStateClass(nextProps.stateClassesToAdd);
@@ -1654,7 +1677,8 @@ export default class JPlayer extends React.Component {
 		if (nextProps.stateClassesToRemove !== undefined) {
 			Array.isArray(nextProps.stateClassesToRemove) ? this.removeStateClass(...nextProps.stateClassesToRemove) : this.removeStateClass(nextProps.stateClassesToRemove);
 		}
-	}
+		// nextProps.jPlayerStatus(this.status);
+	}	
 	componentWillUnmount() {
 		this._removeEventListeners();
 		document.documentElement.removeEventListener("keydown", this._keyBindings);
@@ -1689,7 +1713,7 @@ export default class JPlayer extends React.Component {
 				</div>
 				<GUI nativeVideoControls={this.status.nativeVideoControls} fullWindow={this.props.fullWindow} autoHide={this.autoHide} fadeInConfig={this.props.guiFadeInAnimation} fadeOutConfig={this.props.guiFadeOutAnimation}>
 					<div className="jp-controls">
-						<a className="jp-play" onClick={this.play}>
+						<a className="jp-play" onClick={this.onPlayClick}>
 							{this.props.html.play}
 						</a>
 						<a className="jp-mute" onClick={this.mute}>
@@ -1747,7 +1771,7 @@ class GUI extends React.Component {
 		this.setState({isFadingIn: true});
 	}
 	_updateAutoHide = () => (
-		<div className={this.props.nativeVideoControls ? JPlayer.className.hidden : null} onMouseMove={this._setFading} style={{width: "100%", height: "100%", position: "fixed", top: "0"}}>
+		<div className={this.props.nativeVideoControls && JPlayer.className.hidden} onMouseMove={this._setFading} style={{width: "100%", height: "100%", position: "fixed", top: "0"}}>
 			<Motion defaultStyle={{opacityToInterpTo: 1}} style={{opacityToInterpTo: spring(this.state.isFadingIn ? 1 : 0, this.state.isFadingIn ? this.props.fadeInConfig : this.props.fadeOutConfig)}}>
 				{(values) => <div className="jp-gui" onMouseLeave={() => this.setState({isFadingIn: false})} onMouseEnter={() => clearTimeout(this.fadeHoldTimeout)} style={{opacity: values.opacityToInterpTo, display: values.opacityToInterpTo <= 0.05 ? "none" : ""}}>{this.props.children}</div>}
 			</Motion>
@@ -1764,7 +1788,7 @@ class GUI extends React.Component {
 
 const PlayBar = (props) => (
 	props.smoothPlayBar ? 
-		<Motion style={{smoothWidth: spring(props.currentPercentAbsolute, [250])}}>
+		<Motion defaultStyle={{smoothWidth: 0}} style={{smoothWidth: spring(props.currentPercentAbsolute, [250])}}>
 			{(values) => <div className="jp-play-bar" style={{width: values.smoothWidth + "%"}} />}
 		</Motion> 
 	:	<div className="jp-play-bar" style={props.playBarStyle} />
