@@ -28,6 +28,7 @@ export default class JPlayerPlaylist extends React.Component {
 	}
     static get defaultProps(){
 		return {
+            functions: [],
             html: {},
             playlist: [],
             shuffleOnLoop: true,
@@ -43,6 +44,7 @@ export default class JPlayerPlaylist extends React.Component {
 
         this.playlistContainerMinHeight = this.playlistItemAnimMinHeight = 0;
         this.playlistContainerMaxHeight = this.playlistItemAnimMaxHeight = 1;
+        this.tempFunctions = [];
 
         this.state = {
             current: 0
@@ -235,8 +237,8 @@ export default class JPlayerPlaylist extends React.Component {
         index = (index < 0) ? this.original.length + index : index; // Negative index relates to end of array.
         if (0 <= index && index < this.props.playlist.length) {
             this.setState({current: index});
-            debugger;
             this.props.updateOptions({functions: update(this.props.functions, {$push: [["setMedia", this.props.playlist[index]]]})});
+            this.props.updateOptions({functions: update(this.props.functions, {$push: ["play"]})});
             //this.props.updateOptions({setMedia: this.props.playlist[index]}, () => this.props.updateOptions({play: play}));
         } else {
             this.setState({current: 0});
@@ -247,7 +249,6 @@ export default class JPlayerPlaylist extends React.Component {
         if (0 <= index && index < this.props.playlist.length) {
             if (this.props.playlist.length) {
                 this.select(index, true);
-                debugger;
                // this.props.updateOptions({functions: update(this.props.functions, {$push: ["play"]})});
             }
         } else if (index === undefined) {
@@ -369,6 +370,9 @@ export default class JPlayerPlaylist extends React.Component {
         this._setup();
     }
     componentWillMount() {
+        debugger
+        this.props.updateOptions(() => ({functions: this.tempFunctions = this.tempFunctions.concat(update(this.props.functions, {$push: [["setMedia", 3]]}))}));
+        this.props.updateOptions(() => ({functions: this.tempFunctions = this.tempFunctions.concat(update(this.props.functions, {$push: ["play"]}))}));
         this._initPlaylist(this.props.playlist);  
     }
     render() {

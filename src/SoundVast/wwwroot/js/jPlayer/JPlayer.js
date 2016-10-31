@@ -1091,6 +1091,9 @@ export default class JPlayer extends React.Component {
 		this._updateButtons(); 
 		this._trigger(this.props.onRepeat);
 	}
+	videoPlay = (e) => {// Handles clicks on the play button over the video poster
+		this.play();
+	}
 	_setNextProps = (nextProps = {}) => {
 		//Props that get updated within the JPlayer component as well as through props
 		this.nextProps = {
@@ -1102,27 +1105,19 @@ export default class JPlayer extends React.Component {
 			sizeFull: merge({}, this.nextProps === undefined ? {} : this.nextProps.sizeFull, this.props.sizeFull, nextProps.sizeFull)
 		};
 	}
-	_setOptions = (options) => {	
+	_setOptions = (options) => {
 		for (var key in options) {
 			var option = options[key];
-			if (options.hasOwnProperty(key)) {
-				if (!isEqual(this.props[key], option)) {
-					this._setOption(key, option);
-				}
+			if (JPlayer.dynamicOptions.find((v) => v === key) && !isEqual(this.props[key], option)) {
+				this._setOption(key, option);
 			}
 		}
 	}
 	_setFunctions = (functions) => {
-		if (!functions)
-			return;
-
 		functions.forEach((func) => { 
 			Array.isArray(func) ? this._setFunction(func.shift(), ...func) : this._setFunction(func);
 		});
-		this.props.updateOptions({functions: null});
-	}
-	videoPlay = (e) => {// Handles clicks on the play button over the video poster
-		this.play();
+		this.props.updateOptions({functions: []});
 	}
 	_setFunction = (methodName, value) => {
 		switch (methodName) {
@@ -1239,7 +1234,7 @@ export default class JPlayer extends React.Component {
 	}
 	_setOption = (key, value) => {
 		switch (key) {	
-			case "volume":
+			case JPlayer.dynamicOptions.volume:
 				if(this.html.used) {
 					this.currentMedia.volume = value;
 				}
@@ -1250,7 +1245,7 @@ export default class JPlayer extends React.Component {
 					}, value);
 				}
 				break;
-			case "muted":
+			case JPlayer.dynamicOptions.muted:
 				if(this.html.used) {
 					this.currentMedia.muted = value;
 				}
@@ -1261,31 +1256,31 @@ export default class JPlayer extends React.Component {
 					}, value);
 				}
 				break;
-			case "autoPlay":
+			case JPlayer.dynamicOptions.autoPlay:
 				if(this.html.used) {
 					this.currentMedia.autoplay = value;
 				}
 				break;
-			case "playbackRate":
+			case JPlayer.dynamicOptions.playbackRate:
 				if(this.html.used) {
 					this.currentMedia.playbackRate = value;
 				}
 				this._setNextProps({playbackRate: value});
 				this._updatePlaybackRate();
 				break;
-			case "defaultPlaybackRate":
+			case JPlayer.dynamicOptions.defaultPlaybackRate:
 				if(this.html.used) {
 					this.currentMedia.defaultPlaybackRate = value;
 				}
 				this._updatePlaybackRate();
 				break;
-			case "minPlaybackRate":
+			case JPlayer.dynamicOptions.minPlaybackRate:
 				this._updatePlaybackRate();
 				break;
-			case "maxPlaybackRate":
+			case JPlayer.dynamicOptions.maxPlaybackRate:
 				this._updatePlaybackRate();
 				break;
-			case "fullScreen":
+			case JPlayer.dynamicOptions.fullScreen:
 				var wkv = JPlayer.nativeFeatures.fullscreen.used.webkitVideo;
 				if(!wkv || wkv && !this.status.waitForPlay) {
 					if(value) {
@@ -1298,50 +1293,50 @@ export default class JPlayer extends React.Component {
 					}
 				}
 				break;
-			case "fullWindow":
+			case JPlayer.dynamicOptions.fullWindow:
 				this._removeUiClass();
 				this._setNextProps({fullWindow: value});
 				this._refreshSize();
 				break;
-			case "size":
+			case JPlayer.dynamicOptions.size:
 				if(!this.props.fullWindow && this.props[key].cssClass !== value.cssClass) {
 					this._removeUiClass();
 				}
 				this._setNextProps({size: value});
 				this._refreshSize();
 				break;
-			case "sizeFull":
+			case JPlayer.dynamicOptions.sizeFull:
 				if(this.props.fullWindow && this.props[key].cssClass !== value.cssClass) {
 					this._removeUiClass();
 				}
 				this._setNextProps({sizeFull: value});
 				this._refreshSize();
 				break;
-			case "loop":
+			case JPlayer.dynamicOptions.loop:
 				this._setNextProps({loop: value});
 				this._loop();
 				break;
-			case "remainingDuration":
+			case JPlayer.dynamicOptions.remainingDuration:
 				this._setNextProps({remainingDuration: value});
 				this._updateInterface();
 				break;
-			case "nativeVideoControls":
+			case JPlayer.dynamicOptions.nativeVideoControls:
 				this.status.nativeVideoControls = this._uaBlocklist(this.props.nativeVideoControls);
 				this._restrictNativeVideoControls();
 				this._updateNativeVideoControls();
 				break;
-			case "noFullWindow":
+			case JPlayer.dynamicOptions.noFullWindow:
 				this.status.nativeVideoControls = this._uaBlocklist(this.props.nativeVideoControls); // Need to check again as noFullWindow can depend on this flag and the restrict() can override it.
 				this.status.noFullWindow = this._uaBlocklist(this.props.noFullWindow);
 				this._restrictNativeVideoControls();
 				this._updateButtons();
 				break;
-			case "noVolume":
+			case JPlayer.dynamicOptions.noVolume:
 				this.status.noVolume = this._uaBlocklist(this.props.noVolume);
 				this._updateVolume();
 				this._updateMute();
 				break;
-			case "keyEnabled" :
+			case JPlayer.dynamicOptions.keyEnabled:
 				if(!value && this === JPlayer.focusInstance) {
 					JPlayer.focusInstance = null;
 				}
@@ -1664,10 +1659,12 @@ export default class JPlayer extends React.Component {
 		this._trigger(this.props.onError, error);
 	}
 	onPlayClick = () => {
-		this.props.updateOptions({play: this.status.paused});
+		debugger
+		this.status.paused ? this.props.updateOptions({functions: update(this.props.functions, {$push: ["play"]})}) : this.props.updateOptions({functions: update(this.props.functions, {$push: ["pause"]})});
 	}
 	componentWillReceiveProps(nextProps) {
-		//this._setOptions(p);
+		debugger
+		this._setOptions(nextProps);
 		this._setFunctions(nextProps.functions);
 
 		if (nextProps.stateClassesToAdd !== undefined) {
@@ -2128,6 +2125,26 @@ JPlayer.instances = {};
 JPlayer.version = {
 	script: "2.9.2"
 }
+
+JPlayer.dynamicOptions = [
+	"volume",
+	"muted",
+	"autoPlay",
+	"playbackRate",
+	"defaultPlaybackRate",
+	"minPlaybackRate",
+	"maxPlaybackRate",
+	"fullScreen",
+	"fullWindow",
+	"size",
+	"sizeFull",
+	"loop",
+	"remainingDuration",
+	"nativeVideoControls",
+	"noFullWindow",
+	"noVolume",
+	"keyEnabled"
+];
 
 // 'MPEG-4 support' : canPlayType('video/mp4; codecs="mp4v.20.8"')
 JPlayer.format = {

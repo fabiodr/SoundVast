@@ -80,7 +80,8 @@ class FooterContainer extends React.Component {
 			}		
 		});     
     }
-    updateOptions = (newOptions, callback) => {this.setState(previousState => previousState.jPlayerPlaylistOptions = merge({}, previousState.jPlayerPlaylistOptions, newOptions), callback)};
+    updateOptions = (newOptions, callback) => this.setState((previousState) => {debugger; return previousState.jPlayerPlaylistOptions = Object.assign({}, previousState.jPlayerPlaylistOptions, newOptions())});
+    //updateOptions = (newOptions, callback) => { this.setState(previousState => {return previousState.jPlayerPlaylistOptions = merge({}, previousState.jPlayerPlaylistOptions, newOptions), callback})};
     componentDidMount() {
         this.test();
     }
