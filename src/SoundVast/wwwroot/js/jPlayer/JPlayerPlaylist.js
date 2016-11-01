@@ -2,6 +2,7 @@ import React from "react";
 import {Motion, spring} from "react-motion";
 import update from "react-addons-update";
 import JPlayer, {DefaultProps, DefaultPropTypes} from "./JPlayer";
+import JPlayerHelpers from "./JPlayerHelpers";
 import merge from "lodash.merge";
 import maxBy from "lodash/maxBy";
 
@@ -370,9 +371,12 @@ export default class JPlayerPlaylist extends React.Component {
         this._setup();
     }
     componentWillMount() {
-        debugger
-        this.props.updateOptions(() => ({functions: this.tempFunctions = this.tempFunctions.concat(update(this.props.functions, {$push: [["setMedia", 3]]}))}));
-        this.props.updateOptions(() => ({functions: this.tempFunctions = this.tempFunctions.concat(update(this.props.functions, {$push: ["play"]}))}));
+        debugger;
+        //this.setState((previousState) => previousState.jPlayerPlaylistOptions = Object.assign({}, previousState.jPlayerPlaylistOptions, newOptions()));
+        JPlayerHelpers.updateFunctions([["setMedia", 3]], {key: "functions"});
+        // this.props.updateOptions(function(jPlayerPlaylistOptions) {debugger; this.setState((previousState) => {debugger; return previousState.jPlayerPlaylistOptions.functions = Object.assign({}, previousState.jPlayerPlaylistOptions.functions, update(jPlayerPlaylistOptions.functions, {$push: ["play"]}))})});
+       // this.props.updateOptions(() => ({functions: this.tempFunctions = this.tempFunctions.concat(update(this.props.functions, {$push: [["setMedia", 3]]}))}));
+      //  this.props.updateOptions(() => ({functions: this.tempFunctions = this.tempFunctions.concat(update(this.props.functions, {$push: ["play"]}))}));
         this._initPlaylist(this.props.playlist);  
     }
     render() {

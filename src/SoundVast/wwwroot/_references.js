@@ -26,6 +26,7 @@
 /// <reference path="js/footer-old.js" />
 /// <reference path="js/index.js" />
 /// <reference path="js/jplayer/jplayer.js" />
+/// <reference path="js/jplayer/jplayerhelpers.js" />
 /// <reference path="js/jplayer/jplayerplaylist.js" />
 /// <reference path="js/old/_create-playlist.js" />
 /// <reference path="js/old/audios.js" />

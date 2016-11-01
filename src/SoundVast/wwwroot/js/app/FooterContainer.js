@@ -1,7 +1,6 @@
 import React from "react";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
-import merge from "lodash/merge";
 
 import JPlayerPlaylist from "../jPlayer/JPlayerPlaylist";
 
@@ -80,8 +79,8 @@ class FooterContainer extends React.Component {
 			}		
 		});     
     }
-    updateOptions = (newOptions, callback) => this.setState((previousState) => {debugger; return previousState.jPlayerPlaylistOptions = Object.assign({}, previousState.jPlayerPlaylistOptions, newOptions())});
-    //updateOptions = (newOptions, callback) => { this.setState(previousState => {return previousState.jPlayerPlaylistOptions = merge({}, previousState.jPlayerPlaylistOptions, newOptions), callback})};
+    updateOptions = (updateFunction) => updateFunction.bind(this)();
+   // updateOptions = (newOptions, callback) => this.setState((previousState) => previousState.jPlayerPlaylistOptions = Object.assign({}, previousState.jPlayerPlaylistOptions, newOptions()));
     componentDidMount() {
         this.test();
     }
