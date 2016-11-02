@@ -57,7 +57,7 @@ export default class JPlayerPlaylist extends React.Component {
                 this._trigger(this.props.onEnded, jPlayer);
             },
             onPlay: (jPlayer) => { 
-                this.props.updateOptions({functions: update(this.props.functions, {$push: ["pauseOthers"]})});
+                JPlayerHelpers.addFunctions.call(this, ["pauseOthers"]);
                 this._trigger(this.props.onPlay, jPlayer);
              },
             onResize: (jPlayer) => {
@@ -127,7 +127,7 @@ export default class JPlayerPlaylist extends React.Component {
         if(this.state.current !== index) {
             this.play(index);
         } else {
-            this.props.updateOptions({functions: update(this.props.functions, {$push: ["play"]})});
+            JPlayerHelpers.addFunctions.call(this, ["play"]);
         }
         this.blur(event.target);
     }
@@ -202,7 +202,7 @@ export default class JPlayerPlaylist extends React.Component {
         this._originalPlaylist();
     }
     _originalPlaylist = (playlistSetCallback) => {
-        this.props.updateOptions({playlist: [...this.original]}, playlistSetCallback);
+        JPlayerHelpers.updateOptions.call(this, {playlist: [...this.original]}, playlistSetCallback);
     }
     setPlaylist = (playlist) => {
         this._initPlaylist(playlist);
@@ -214,7 +214,7 @@ export default class JPlayerPlaylist extends React.Component {
         media.isRemoving = false;
         
         this.original.push(media);
-        this.props.updateOptions({playlist: update(this.props.playlist, {$push: [media]})});
+        JPlayerHelpers.updateOptions.call(this, {playlist: update(this.props.playlist, {$push: [media]})});
 
         if (playNow) {
             this.play(this.props.playlist.length - 1);
@@ -227,20 +227,19 @@ export default class JPlayerPlaylist extends React.Component {
     remove = (index) => {
         if (index === undefined) {
             this._initPlaylist([]);
-            this.props.updateOptions({functions: update(this.props.functions, {$push: ["clearMedia"]})});
+            JPlayerHelpers.updateOptions.call(this, {playlist: update(this.props.playlist, {$push: [media]})});
+            JPlayerHelpers.addFunctions.call(this, ["clearMedia"]);
             return true;
         } else {           
-            this.props.updateOptions({playlist: {[index]: {isRemoving: true}}});
+            JPlayerHelpers.updateOptions.call(this, {playlist: {[index]: {isRemoving: true}}});
         }
         this.setState({useRemoveConfig: true});
     }
-    select = (index, play = false) => {
+    select = (index) => {
         index = (index < 0) ? this.original.length + index : index; // Negative index relates to end of array.
         if (0 <= index && index < this.props.playlist.length) {
             this.setState({current: index});
-            this.props.updateOptions({functions: update(this.props.functions, {$push: [["setMedia", this.props.playlist[index]]]})});
-            this.props.updateOptions({functions: update(this.props.functions, {$push: ["play"]})});
-            //this.props.updateOptions({setMedia: this.props.playlist[index]}, () => this.props.updateOptions({play: play}));
+            JPlayerHelpers.addFunctions.call(this, [["setMedia", this.props.playlist[index]]]);
         } else {
             this.setState({current: 0});
         }
@@ -250,15 +249,13 @@ export default class JPlayerPlaylist extends React.Component {
         if (0 <= index && index < this.props.playlist.length) {
             if (this.props.playlist.length) {
                 this.select(index, true);
-               // this.props.updateOptions({functions: update(this.props.functions, {$push: ["play"]})});
+                JPlayerHelpers.addFunctions.call(this, ["play"]);
             }
         } else if (index === undefined) {
-            this.props.updateOptions({functions: update(this.props.functions, {$push: ["play"]})});
+            JPlayerHelpers.addFunctions.call(this, ["play"]);
         }
     }
-    pause = () => {
-        this.props.updateOptions({functions: update(this.props.functions, {$push: ["pause"]})});
-    }
+    pause = () => JPlayerHelpers.addFunctions.call(this, ["pause"])
     next = () => {
         var index = (this.state.current + 1 < this.props.playlist.length) ? this.state.current + 1 : 0;
 
@@ -309,7 +306,7 @@ export default class JPlayerPlaylist extends React.Component {
         } else {
             this.original.splice(index, 1);
         }
-        this.props.updateOptions({playlist: update(this.props.playlist, {$splice: [[index, 1]]})});
+        JPlayerHelpers.updateOptions.call(this, update(this.props.playlist, {$splice: [[index, 1]]}));
 
         if (this.original.length) {
             if (index === this.state.current) {
@@ -319,7 +316,7 @@ export default class JPlayerPlaylist extends React.Component {
                 this.setState(previousState => [{current: previousState.current--}]);
             }
         } else {
-            this.props.updateOptions({functions: update(this.props.functions, {$push: ["clearMedia"]})});
+            JPlayerHelpers.addFunctions.call(this, ["clearMedia"]);
             this.setState({current: 0});
             this.shuffled = false;
         }
@@ -344,7 +341,7 @@ export default class JPlayerPlaylist extends React.Component {
         }
 
         if (this.shuffled) {
-            this.props.updateOptions({playlist: [...this.props.playlist].sort(() => 0.5 - Math.random())}, playlistSetCallback);
+            JPlayerHelpers.updateOptions.call(this, {playlist: [...this.props.playlist].sort(() => 0.5 - Math.random())}, playlistSetCallback);
             this.setState({stateClassesToAdd: "shuffled"});
         } else {
             this._originalPlaylist(playlistSetCallback);  
@@ -370,13 +367,7 @@ export default class JPlayerPlaylist extends React.Component {
     componentDidMount() {
         this._setup();
     }
-    componentWillMount() {
-        debugger;
-        //this.setState((previousState) => previousState.jPlayerPlaylistOptions = Object.assign({}, previousState.jPlayerPlaylistOptions, newOptions()));
-        JPlayerHelpers.updateFunctions([["setMedia", 3]], {key: "functions"});
-        // this.props.updateOptions(function(jPlayerPlaylistOptions) {debugger; this.setState((previousState) => {debugger; return previousState.jPlayerPlaylistOptions.functions = Object.assign({}, previousState.jPlayerPlaylistOptions.functions, update(jPlayerPlaylistOptions.functions, {$push: ["play"]}))})});
-       // this.props.updateOptions(() => ({functions: this.tempFunctions = this.tempFunctions.concat(update(this.props.functions, {$push: [["setMedia", 3]]}))}));
-      //  this.props.updateOptions(() => ({functions: this.tempFunctions = this.tempFunctions.concat(update(this.props.functions, {$push: ["play"]}))}));
+    componentWillMount() { 
         this._initPlaylist(this.props.playlist);  
     }
     render() {

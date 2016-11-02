@@ -79,8 +79,7 @@ class FooterContainer extends React.Component {
 			}		
 		});     
     }
-    updateOptions = (updateFunction) => updateFunction.bind(this)();
-   // updateOptions = (newOptions, callback) => this.setState((previousState) => previousState.jPlayerPlaylistOptions = Object.assign({}, previousState.jPlayerPlaylistOptions, newOptions()));
+    updateOptions = (update) => update.call(this);
     componentDidMount() {
         this.test();
     }
@@ -88,7 +87,7 @@ class FooterContainer extends React.Component {
         return (
             <div>
                 <div className="jp-type-footer" >
-                    <JPlayerPlaylist ref={jPlayerPlaylist => this.jPlayerPlaylist = jPlayerPlaylist} {...this.state.jPlayerPlaylistOptions} updateOptions={this.updateOptions} />
+                    <JPlayerPlaylist ref={jPlayerPlaylist => this.jPlayerPlaylist = jPlayerPlaylist} {...this.state.jPlayerPlaylistOptions} updateOptions={this.updateOptions} updateOptionsd={this.updateOptionsd} />
                 </div>
             </div>
         );
