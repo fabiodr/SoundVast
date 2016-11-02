@@ -1,7 +1,7 @@
 import React from "react";
 import {Motion, spring} from "react-motion";
 import update from "react-addons-update";
-import JPlayer, {DefaultProps, DefaultPropTypes} from "./JPlayer";
+import JPlayer from "./JPlayer";
 import JPlayerHelpers from "./JPlayerHelpers";
 import merge from "lodash.merge";
 import maxBy from "lodash/maxBy";
@@ -331,13 +331,14 @@ export default class JPlayerPlaylist extends React.Component {
         }
 
         var playlistSetCallback = () => {
-            this.setState({jPlayerStatus: this._jPlayerStatus }, () => {
-                if (this.playNow || !this.status.paused) {
-                    this.play(0);
-                } else {
-                    this.select(0);
-                }
-            });
+            //ToDO: Get status
+            // this.setState({jPlayerStatus: this._jPlayerStatus }, () => {
+            //     if (this.playNow || !this.status.paused) {
+            //         this.play(0);
+            //     } else {
+            //         this.select(0);
+            //     }
+            // });
         }
 
         if (this.shuffled) {
