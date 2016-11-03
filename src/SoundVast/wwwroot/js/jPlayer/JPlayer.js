@@ -10,6 +10,7 @@ export default class JPlayer extends React.Component {
 		return {
 			updateOptions: React.PropTypes.func.isRequired,
             functions: React.PropTypes.array,
+			overrideFunctions: React.PropTypes.array,
 			jPlayerStatus: React.PropTypes.func,
 			jPlayerSelector: React.PropTypes.string,
 			cssSelectorAncestor: React.PropTypes.string,
@@ -157,7 +158,9 @@ export default class JPlayer extends React.Component {
 				stiffness: 40 
 			},
 			html: {},
-			jPlayerStatus: () => {}
+			jPlayerStatus: () => {},
+			overrideFunctions: [],
+			functions: []
 		}
 	}
     constructor(props){
@@ -1253,16 +1256,34 @@ export default class JPlayer extends React.Component {
 			}
 		}
 	}
+	_overrideFunctions = (functions) => {
+		if (!functions.length) {
+			return;
+		}
+
+		functions.forEach((func) => {
+			const originalFunctionName = func.shift();
+
+			this[originalFunctionName] = func[0](this[originalFunctionName]);
+		});
+
+		JPlayerHelpers.updateOptions.call(this, {[JPlayerHelpers.overrideFunctionsKey]: []});
+	}
 	_setFunctions = (functions) => {
 		if (!functions.length) {
 			return;
 		}
 
 		functions.forEach((func) => { 
-			Array.isArray(func) ? this[func.shift()](...func) : this[func]();
+			if (isFunction(func)) {
+				func(this.status);			
+			}
+			else {
+				Array.isArray(func) ? this[func.shift()](...func) : this[func]();
+			}					
 		});
 
-		JPlayerHelpers.updateOptions.call(this, {functions: []});
+		JPlayerHelpers.updateOptions.call(this, {[JPlayerHelpers.functionsKey]: []});
 	}
 	_refreshSize = () => {
 		this._setSize(); // update status and jPlayer element size
@@ -1635,16 +1656,8 @@ export default class JPlayer extends React.Component {
 	onFullScreenClick = () => JPlayerHelpers.updateOptions.call(this, {fullScreen: !this.props.fullScreen})
 	componentWillReceiveProps(nextProps) {							
 		this._setOptions(nextProps);
-		this._setFunctions(nextProps.functions);
-
-		if (nextProps.stateClassesToAdd !== undefined) {
-			Array.isArray(nextProps.stateClassesToAdd) ? this.addStateClass(...nextProps.stateClassesToAdd) : this.addStateClass(nextProps.stateClassesToAdd);
-		}
-
-		if (nextProps.stateClassesToRemove !== undefined) {
-			Array.isArray(nextProps.stateClassesToRemove) ? this.removeStateClass(...nextProps.stateClassesToRemove) : this.removeStateClass(nextProps.stateClassesToRemove);
-		}
-		// nextProps.jPlayerStatus(this.status);
+		this._setFunctions(nextProps.functions);	
+		this._overrideFunctions(nextProps.overrideFunctions);	
 	}	
 	componentWillUnmount() {
 		this._removeEventListeners();
