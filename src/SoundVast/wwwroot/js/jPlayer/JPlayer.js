@@ -163,7 +163,7 @@ export default class JPlayer extends React.Component {
 			functions: []
 		}
 	}
-    constructor(props){
+    constructor(props) {
         super();
 
 		this.state = {

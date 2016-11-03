@@ -27,7 +27,7 @@ export default class JPlayerPlaylist extends React.Component {
             freeGroupClass: React.PropTypes.string
         }
 	}
-    static get defaultProps(){
+    static get defaultProps() {
 		return {
             functions: [],
             html: {},
@@ -39,8 +39,7 @@ export default class JPlayerPlaylist extends React.Component {
             freeGroupClass: "jp-free-media"
         };
     }
-    constructor(props)
-    {
+    constructor(props) {
         super();
 
         this.playlistContainerMinHeight = this.playlistItemAnimMinHeight = 0;
@@ -131,12 +130,12 @@ export default class JPlayerPlaylist extends React.Component {
         }
         this.blur(event.target);
     }
-    _shuffleOnClick = (event) => {
-        event.preventDefault();
+    // _shuffleOnClick = (event) => {
+    //     event.preventDefault();
 
-        this.shuffled ? this.shuffle(false) : this.shuffle(true);
-        this.blur(event.target);
-    }
+    //     this.shuffled ? this.shuffle(false) : this.shuffle(true);
+    //     this.blur(event.target);
+    // }
     _shuffleOffClick = (event) => {
         event.preventDefault();
 
@@ -353,15 +352,6 @@ export default class JPlayerPlaylist extends React.Component {
             that.blur();
         }
     }
-    _aditionalControls = () => {
-        return [<a className={this.props.hideShuffleOff ? "jp-shuffleOff " + JPlayer.className.hidden : "jp-shuffleOff"} key={0} onClick={this._shuffleOffClick}>{this.props.html.shuffleOff}</a>,
-                <a className="jp-shuffle" key={1} onClick={this._shuffleOnClick}>{this.props.html.shuffle}</a>,
-                <a className="jp-previous" key={3} onClick={this._previousOnClick}>{this.props.html.previous}</a>,
-                <a className="jp-next" key={4} onClick={this._nextOnClick}>{this.props.html.next}</a>,
-                <a className="jp-playlist-options" key={5}>{this.props.html.playlistOptions}</a>,
-                <a className="jp-repeat-playlist" key={6} onClick={this.state.repeatOnClick}>{this.props.html.repeatPlaylist}</a>
-        ];
-    }
     componentWillMount() { 
         this._initPlaylist(this.props.playlist);  
         this._setup();
@@ -390,9 +380,34 @@ export default class JPlayerPlaylist extends React.Component {
                         </Playlist> 
                     </div>
                 </div>
-                <JPlayer ref={jPlayer => this.jPlayer = jPlayer} {...this.props} {...this.keyBindings} 
-                    {...this.event} additionalControls={this._aditionalControls()} stateClass={this.stateClass} loopOptions={"loop-playlist"} />
+                <JPlayer ref={jPlayer => this.jPlayer = jPlayer} {...this.props} {...this.keyBindings} {...this.event} stateClass={this.stateClass} loopOptions={"loop-playlist"}>
+                    <AdditionalControls hideShuffleOff={this.props.hideShuffleOff} JPlayerPlaylist={this} />
+                </JPlayer>
             </div>
+        );
+    }
+} 
+
+class AdditionalControls extends React.Component {
+    constructor(props) {
+        super();
+
+        _shuffleOnClick = _shuffleOnClick.bind(props.JPlayerPlaylist)
+    }
+    _shuffleOnClick(event) {
+        event.preventDefault();
+
+        this.shuffled ? this.shuffle(false) : this.shuffle(true);
+        this.blur(event.target);
+    }
+    render() {
+        return (
+            <a className={props.hideShuffleOff ? "jp-shuffleOff " + JPlayer.className.hidden : "jp-shuffleOff"} key={0} onClick={this._shuffleOffClick}>{props.html.shuffleOff}</a>,
+            <a className="jp-shuffle" key={1} onClick={this._shuffleOnClick}>{props.html.shuffle}</a>,
+            <a className="jp-previous" key={3} onClick={this._previousOnClick}>{props.html.previous}</a>,
+            <a className="jp-next" key={4} onClick={this._nextOnClick}>{props.html.next}</a>,
+            <a className="jp-playlist-options" key={5}>{props.html.playlistOptions}</a>,
+            <a className="jp-repeat-playlist" key={6} onClick={this.state.repeatOnClick}>{props.html.repeatPlaylist}</a>
         );
     }
 }
