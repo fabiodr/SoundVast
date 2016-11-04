@@ -1716,7 +1716,7 @@ export default class JPlayer extends React.Component {
 						<div className={this.state.hidePlaybackRateBar ? "jp-playback-rate-bar " + JPlayer.className.hidden : "jp-playback-rate-bar"} style={this.state.playbackRateBarStyle} onClick={this.onPlaybackRateBarClick}>
 							<div className={this.state.hidePlaybackRateBarValue ? "jp-playback-rate-bar-value " + JPlayer.className.hidden : "jp-playback-rate-bar-value"} style={this.state.playbackRateBarValueStyle} />
 						</div>						
-						{this.props.additionalControls}	
+						{this.props.children}	
 					</div>
 					<div className="jp-progress">
 						<div className={this.state.seeking ? "jp-seek-bar " + JPlayer.className.seeking : "jp-seek-bar"} style={this.state.seekBarStyle} onClick={this.onSeekBarClick}>                         
