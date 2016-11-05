@@ -21,7 +21,8 @@ class FooterContainer extends React.Component {
                     shuffle: <i className="fa fa-random"></i>,
                     previous: <i className="fa fa-step-backward"></i>,
                     next: <i className="fa fa-step-forward"></i>,
-                    playlistOptions: <div><i className="fa fa-ellipsis-h"></i><i className="fa fa-comment"></i></div>
+                    playlistOptions: <div><i className="fa fa-ellipsis-h"></i><i className="fa fa-comment"></i></div>,
+                    repeatPlaylist: <i className="fa fa-step-forward"></i>
                 },      
                 smoothPlayBar: true,
                 muted: true,
@@ -79,7 +80,7 @@ class FooterContainer extends React.Component {
 			}		
 		});     
     }
-    updateOptions = (update) => update.call(this);
+    updateOptions = (update) => this.setState((prevState) => prevState.jPlayerPlaylistOptions = update(prevState.jPlayerPlaylistOptions));
     componentDidMount() {
         this.test();
     }
@@ -87,7 +88,7 @@ class FooterContainer extends React.Component {
         return (
             <div>
                 <div className="jp-type-footer" >
-                    <JPlayerPlaylist ref={jPlayerPlaylist => this.jPlayerPlaylist = jPlayerPlaylist} {...this.state.jPlayerPlaylistOptions} updateOptions={this.updateOptions} updateOptionsd={this.updateOptionsd} />
+                    <JPlayerPlaylist ref={jPlayerPlaylist => this.jPlayerPlaylist = jPlayerPlaylist} {...this.state.jPlayerPlaylistOptions} updateOptions={this.updateOptions} />
                 </div>
             </div>
         );
