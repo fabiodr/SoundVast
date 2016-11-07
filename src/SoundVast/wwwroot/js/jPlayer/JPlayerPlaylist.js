@@ -154,13 +154,7 @@ export default class JPlayerPlaylist extends React.Component {
 
         this._originalPlaylist();
     }
-    _originalPlaylist = (playlistSetCallback) => {
-        JPlayerHelpers.updateOptions.call(this, {playlist: [...this.original]});
-
-        if (playlistSetCallback !== undefined) {
-            JPlayerHelpers.modifyOptionsArray.call(this, [playlistSetCallback], Array.prototype.concat, JPlayerHelpers.key.functions);
-        }          
-    }
+    _originalPlaylist = (playlistSetCallback) => JPlayerHelpers.updateOptions.call(this, {playlist: [...this.original]}, playlistSetCallback)
     setPlaylist = (playlist) => {
         this._initPlaylist(playlist);
         this._init();
@@ -186,7 +180,7 @@ export default class JPlayerPlaylist extends React.Component {
             JPlayerHelpers.modifyOptionsArray.call(this, ["clearMedia"], Array.prototype.concat, JPlayerHelpers.key.functions);
             return true;
         } else {           
-            JPlayerHelpers.mergeOptions.call(this, {[index]: {isRemoving: true}}, JPlayerPlaylistHelpers.key.playlist);
+            JPlayerHelpers.mergeOptions.call(this, {playlist: {[index]: {isRemoving: true}}});
         }
         this.setState({useRemoveConfig: true});
     }
@@ -284,8 +278,8 @@ export default class JPlayerPlaylist extends React.Component {
             return;
         }
 
-         var playlistSetCallback = (jPlayerStatus) => { 
-            if (this.playNow || !jPlayerStatus.paused) {
+         var playlistSetCallback = () => { 
+            if (this.playNow || !this.props.status.paused) {
                 this.play(0);
             } else {
                 this.select(0);
@@ -294,7 +288,7 @@ export default class JPlayerPlaylist extends React.Component {
 
         if (this.shuffled) {
             JPlayerHelpers.updateOptions.call(this, {playlist: [...this.props.playlist].sort(() => 0.5 - Math.random())});
-            JPlayerHelpers.modifyOptionsArray.call(this, [playlistSetCallback, ["addStateClass", "shuffled"]], Array.prototype.concat, JPlayerHelpers.key.functions);
+            JPlayerHelpers.modifyOptionsArray.call(this, [["addStateClass", "shuffled"]], Array.prototype.concat, JPlayerHelpers.key.functions, playlistSetCallback);
         } else {
             this._originalPlaylist(playlistSetCallback);
             JPlayerHelpers.modifyOptionsArray.call(this, [["removeStateClass", "shuffled"]], Array.prototype.concat, JPlayerHelpers.key.functions);

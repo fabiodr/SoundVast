@@ -11,6 +11,7 @@ export default class JPlayer extends React.Component {
 			updateOptions: React.PropTypes.func.isRequired,
             functions: React.PropTypes.array,
 			overrideFunctions: React.PropTypes.array,
+			status: React.PropTypes.object,
 			jPlayerStatus: React.PropTypes.func,
 			jPlayerSelector: React.PropTypes.string,
 			cssSelectorAncestor: React.PropTypes.string,
@@ -160,7 +161,39 @@ export default class JPlayer extends React.Component {
 			html: {},
 			jPlayerStatus: () => {},
 			overrideFunctions: [],
-			functions: []
+			functions: [],
+			status: {
+				src: "",
+				media: {},
+				paused: true,
+				format: {},
+				formatType: "",
+				waitForPlay: true, // Same as waitForLoad except in case where preloading.
+				waitForLoad: true,
+				srcSet: false,
+				video: false, // True if playing a video
+				seekPercent: 0,
+				currentPercentRelative: 0,
+				currentPercentAbsolute: 0,
+				currentTime: 0,
+				duration: 0,
+				remaining: 0,
+				videoWidth: 0, // Intrinsic width of the video in pixels.
+				videoHeight: 0, // Intrinsic height of the video in pixels.
+				readyState: 0,
+				networkState: 0,
+				playbackRate: 1, // Warning - Now both an option and a status property
+				ended: 0
+
+			/*		Persistant status properties created dynamically at _init():
+					width
+					height
+					cssClass
+					nativeVideoControls
+					noFullWindow
+					noVolume
+					playbackRateEnabled
+			*/}
 		}
 	}
     constructor(props) {
@@ -180,40 +213,6 @@ export default class JPlayer extends React.Component {
 		this.setState(previousState => previousState[styleKey] = Object.assign({}, previousState[styleKey], values));
 	}
 	_setupInternalProperties = () => {
-		this.defaultStatus = { // Instanced in _init()
-			src: "",
-			media: {},
-			paused: true,
-			format: {},
-			formatType: "",
-			waitForPlay: true, // Same as waitForLoad except in case where preloading.
-			waitForLoad: true,
-			srcSet: false,
-			video: false, // True if playing a video
-			seekPercent: 0,
-			currentPercentRelative: 0,
-			currentPercentAbsolute: 0,
-			currentTime: 0,
-			duration: 0,
-			remaining: 0,
-			videoWidth: 0, // Intrinsic width of the video in pixels.
-			videoHeight: 0, // Intrinsic height of the video in pixels.
-			readyState: 0,
-			networkState: 0,
-			playbackRate: 1, // Warning - Now both an option and a status property
-			ended: 0
-
-	/*		Persistant status properties created dynamically at _init():
-				width
-				height
-				cssClass
-				nativeVideoControls
-				noFullWindow
-				noVolume
-				playbackRateEnabled
-	*/
-		};
-		this.status = Object.assign({}, this.defaultStatus);
 		this.solution = "html";
 		this.timeFormat = merge(JPlayer.timeFormat, this.props.timeFormat);
 		this.internal = {
@@ -277,12 +276,12 @@ export default class JPlayer extends React.Component {
 			// Properties may be added to this object, in key/fn pairs, to enable other key controls. EG, for the playlist add-on.
 			play: {
 				key: 80, // p
-				fn: () => this.status.paused ? this.play() : this.pause()
+				fn: () => this.props.status.paused ? this.play() : this.pause()
 			},
 			fullScreen: {
 				key: 70, // f
 				fn: () => {
-					if(this.status.video || this.props.audioFullScreen) {
+					if(this.props.status.video || this.props.audioFullScreen) {
 						JPlayerHelpers.updateOptions.call(this, {fullScreen: !this.props.fullScreen});
 					}
 				}
@@ -311,9 +310,10 @@ export default class JPlayer extends React.Component {
 				if(this.internal.cmdsIgnored && this.readyState > 0) { // Detect iOS executed the command
 					this.internal.cmdsIgnored = false;
 				}
-				this._getHtmlStatus(this.currentMedia);
-				this._updateInterface();
-				this._trigger(this.props.onProgress);
+				this._getHtmlStatus(this.currentMedia, null, () => {
+					this._updateInterface();
+					this._trigger(this.props.onProgress);
+				});				
 			},
 			onLoadedData: () => {				
 				this.androidFix.setMedia = false; // Disable the fix after the first progress event.
@@ -328,14 +328,16 @@ export default class JPlayer extends React.Component {
 				this._trigger(this.props.onLoadedData);
 			},
 			onTimeUpdate: () => {			
-				this._getHtmlStatus(this.currentMedia);
-				this._updateInterface();
-				this._trigger(this.props.onTimeUpdate);
+				this._getHtmlStatus(this.currentMedia, null, () => {
+					this._updateInterface();
+					this._trigger(this.props.onTimeUpdate);
+				});
 			},
 			onDurationChange: () => {			
-				this._getHtmlStatus(this.currentMedia);
-				this._updateInterface();
-				this._trigger(this.props.onDurationChange);
+				this._getHtmlStatus(this.currentMedia, null, () => {
+					this._updateInterface();
+					this._trigger(this.props.onDurationChange);
+				});	
 			},
 			onPlay: () => {			
 				this._updateButtons(true);
@@ -385,34 +387,40 @@ export default class JPlayer extends React.Component {
 				// Pause otherwise a click on the progress bar will play from that point, when it shouldn't, since it stopped playback.
 				this.pause();
 				this._updateButtons(false);
-				this._getHtmlStatus(this.currentMedia, true); // With override true. Otherwise Chrome leaves progress at full.
-				this._updateInterface();		
-				this._trigger(this.props.onEnded);
+				// With override true. Otherwise Chrome leaves progress at full.
+				this._getHtmlStatus(this.currentMedia, true, () => {
+					this._updateInterface();		
+					this._trigger(this.props.onEnded);
 
-				if (this.props.loop === "loop") {	
-					this._trigger(this.props.onRepeat);
-				}
+					if (this.props.loop === "loop") {	
+						this._trigger(this.props.onRepeat);
+					}
+				});
 			},
 			onError: () => {		
 				this._updateButtons(false);
 				this._seeked();
-				if(this.status.srcSet) { // Deals with case of clearMedia() causing an error event.
+				if(this.props.status.srcSet) { // Deals with case of clearMedia() causing an error event.
 					clearTimeout(this.internal.htmlDlyCmdId); // Clears any delayed commands used in the HTML solution.
-					this.status.waitForLoad = true; // Allows the load operation to try again.
-					this.status.waitForPlay = true; // Reset since a play was captured.
+					JPlayerHelpers.mergeOptions.call(this, {status: 
+						{
+							waitForLoad: true, // Allows the load operation to try again.
+							waitForPlay: true // Reset since a play was captured.
+						}
+					});
 					
-					if(this.status.video && !this.status.nativeVideoControls) {
+					if(this.props.status.video && !this.props.status.nativeVideoControls) {
 						JPlayerHelpers.addClass.call(this, JPlayerHelpers.className.hidden, JPlayerHelpers.key.videoClass);
 					}
 
-					if(this._validString(this.status.media.poster) && !this.status.nativeVideoControls) {
+					if(this._validString(this.props.status.media.poster) && !this.props.status.nativeVideoControls) {
 						JPlayerHelpers.removeClass.call(this, JPlayerHelpers.className.hidden, JPlayerHelpers.key.posterClass);
 					}
 					JPlayerHelpers.removeClass.call(this, JPlayerHelpers.className.hidden, JPlayerHelpers.key.videoPlayClass);
 
 					this._error( {
 						type: this.error.URL,
-						context: this.status.src, // this.src shows absolute urls. Want context to show the url given.
+						context: this.props.status.src, // this.src shows absolute urls. Want context to show the url given.
 						message: this.errorMsg.URL,
 						hint: this.errorHint.URL
 					});
@@ -451,6 +459,7 @@ export default class JPlayer extends React.Component {
 		};
 	}
 	_initBeforeRender = () => {
+		//Todo: remove all key calls and use object nesting instead
 		JPlayerHelpers.addClass.call(this, "jp-volume-max", JPlayerHelpers.key.volumeMaxClass);
 		JPlayerHelpers.addClass.call(this, "jp-volume-bar", JPlayerHelpers.key.volumeBarClass);
 		JPlayerHelpers.addClass.call(this, "jp-volume-bar-value", JPlayerHelpers.key.volumeBarValueClass);
@@ -537,22 +546,23 @@ export default class JPlayer extends React.Component {
 		}
 
 		this._setNextProps();
+		this._extendStyle("posterStyle", {width: this.props.status.width, height: this.props.status.height});
 		
-		this._extendStyle("posterStyle", {width: this.status.width, height: this.status.height});
 		JPlayerHelpers.addClass.call(this, JPlayerHelpers.className.hidden, JPlayerHelpers.key.posterClass);
 
 		// Determine the status for Blocklisted options.
-		this.status.nativeVideoControls = this._uaBlocklist(this.props.nativeVideoControls);
-		this.status.noVolume = this._uaBlocklist(this.props.noVolume);
-		this.status.noFullWindow = this._uaBlocklist(this.noFullWindow);
+		JPlayerHelpers.mergeOptions.call(this, {status: 
+			{
+				nativeVideoControls: this._uaBlocklist(this.props.nativeVideoControls),
+				noVolume: this._uaBlocklist(this.props.noVolume),
+				noFullWindow: this._uaBlocklist(this.props.noFullWindow)
+			}
+		}, this._restrictNativeVideoControls()); // The native controls are only for video and are disabled when audio is also used.
 
 		// Create event handlers if native fullscreen is supported
 		if(JPlayer.nativeFeatures.fullscreen.api.fullscreenEnabled) {
 			this._fullscreenAddEventListeners();
 		}
-
-		// The native controls are only for video and are disabled when audio is also used.
-		this._restrictNativeVideoControls();
 	}
 	_initAfterRender = () => {
 		this.currentMedia.volume = this.props.volume;
@@ -597,8 +607,7 @@ export default class JPlayer extends React.Component {
 			JPlayerHelpers.updateOptions.call(this, {preload: this.props.preload !== 'auto' ? 'metadata' : 'auto'});
 		}
 
-		// Init solution active state and the event gates to false.
-		this._resetActive();
+		this.html.active = false;
 
 		// Set up the css selectors for the control and feedback entities.
 		this._cssSelectorAncestor(this.props.cssSelectorAncestor);
@@ -617,27 +626,28 @@ export default class JPlayer extends React.Component {
 		}
 
 		// Using the audio element capabilities for playbackRate. ie., Assuming video element is the same.
-		this.status.playbackRateEnabled = this._testPlaybackRate();
+		JPlayerHelpers.mergeOptions.call(this, {status: {playbackRateEnabled: this._testPlaybackRate(this.props.nativeVideoControls)}},
+		() => {
+			if(this.props.status.playbackRateEnabled) {
+				this.currentMedia.defaultPlaybackRate = this.props.defaultPlaybackRate;
+				this.currentMedia.playbackRate = this.props.playbackRate;
+			}
 
-		if(this.status.playbackRateEnabled) {
-			this.currentMedia.defaultPlaybackRate = this.props.defaultPlaybackRate;
-			this.currentMedia.playbackRate = this.props.playbackRate;
-		}
+			this._updatePlaybackRate();
+		
+			if(this.props.status.nativeVideoControls) {
+				JPlayerHelpers.removeClass.call(this, JPlayerHelpers.className.hidden, JPlayerHelpers.key.videoClass);
+				this._extendStyle("videoStyle", {width: this.props.status.width, height: this.props.status.height})
+			} else {
+				JPlayerHelpers.addClass.call(this, JPlayerHelpers.className.hidden, JPlayerHelpers.key.videoClass);
+			}
 
-		this._updatePlaybackRate();
-	
-		if(this.status.nativeVideoControls) {
-			JPlayerHelpers.removeClass.call(this, JPlayerHelpers.className.hidden, JPlayerHelpers.key.videoClass);
-			this._extendStyle("videoStyle", {width: this.status.width, height: this.status.height})
-		} else {
-			JPlayerHelpers.addClass.call(this, JPlayerHelpers.className.hidden, JPlayerHelpers.key.videoClass);
-		}
+			// Initialize the interface components with the options.
+			this._updateNativeVideoControls();
 
-		// Initialize the interface components with the options.
-		this._updateNativeVideoControls();
-
-		// The other controls are now setup in _cssSelectorAncestor()
-		JPlayerHelpers.addClass.call(this, JPlayerHelpers.className.hidden, JPlayerHelpers.key.videoPlayClass);
+			// The other controls are now setup in _cssSelectorAncestor()
+			JPlayerHelpers.addClass.call(this, JPlayerHelpers.className.hidden, JPlayerHelpers.key.videoPlayClass);
+		});
 	}
 	_testCanPlayType = (codec) => {
 		// IE9 on Win Server 2008 did not implement canPlayType(), but it has the property.
@@ -680,24 +690,23 @@ export default class JPlayer extends React.Component {
 
 		return block;
 	}
-	_restrictNativeVideoControls = () => {
+	_restrictNativeVideoControls = (controlsRestrictedCallback) => {
 		// Fallback to noFullWindow when nativeVideoControls is true and audio media is being used. Affects when both media types are used.
 		if(this.require.audio) {
-			if(this.status.nativeVideoControls) {
-				this.status.nativeVideoControls = false;
-				this.status.noFullWindow = true;
+			if(this.props.status.nativeVideoControls) {
+				JPlayerHelpers.mergeOptions.call(this, {status: {nativeVideoControls: false, noFullWindow: true}}, controlsRestrictedCallback);
 			}
 		}
 	}
 	_updateNativeVideoControls = () => {
 		if(this.html.video.available && this.html.used) {
 			// Turn the HTML Video controls on/off
-			this.setState({videoControls: this.status.nativeVideoControls});
+			this.setState({videoControls: this.props.status.nativeVideoControls});
 			// For when option changed. The poster image is not updated, as it is dealt with in setMedia(). Acceptable degradation since seriously doubt these options will change on the fly. Can again review later.
-			if(this.status.nativeVideoControls && this.require.video) {
+			if(this.props.status.nativeVideoControls && this.require.video) {
 				JPlayerHelpers.addClass.call(this, JPlayerHelpers.className.hidden, JPlayerHelpers.key.posterClass);
-				this._extendStyle("videoStyle", {width: this.status.width, height: this.status.height});
-			} else if(this.status.waitForPlay && this.status.video) {
+				this._extendStyle("videoStyle", {width: this.props.status.width, height: this.props.status.height});
+			} else if(this.props.status.waitForPlay && this.props.status.video) {
 				JPlayerHelpers.removeClass.call(this, JPlayerHelpers.className.hidden, JPlayerHelpers.key.posterClass);
 				JPlayerHelpers.removeClass.call(this, JPlayerHelpers.className.hidden, JPlayerHelpers.key.videoClass);
 			}
@@ -711,54 +720,53 @@ export default class JPlayer extends React.Component {
 			document.removeEventListener(fs.event.fullscreenchange, this.internal.fullscreenchangeHandler, false);
 		}
 	}
-	_getHtmlStatus = (media, override) => {
+	_getHtmlStatus = (media, override, statusSetCallback) => {
 		var ct = 0, cpa = 0, sp = 0, cpr = 0;
+
+		const setStatus = () => {
+			ct = media.currentTime;
+			cpa = (this.props.status.duration > 0) ? 100 * ct / this.props.status.duration : 0;
+			if((typeof media.seekable === "object") && (media.seekable.length > 0)) {
+				sp = (this.props.status.duration > 0) ? 100 * media.seekable.end(media.seekable.length-1) / this.props.status.duration : 100;
+				cpr = (this.props.status.duration > 0) ? 100 * media.currentTime / media.seekable.end(media.seekable.length-1) : 0; // Duration conditional for iOS duration bug. ie., seekable.end is a NaN in that case.
+			} else {
+				sp = 100;
+				cpr = cpa;
+			}
+
+			if(override) {
+				ct = 0;
+				cpr = 0;
+				cpa = 0;
+			}
+
+			JPlayerHelpers.mergeOptions.call(this, {status: 
+				{
+					seekPercent: sp,
+					currentPercentRelative: cpr,
+					currentPercentAbsolute: cpa,
+					currentTime: ct,
+					remaining: this.props.status.duration - ct,
+					videoWidth: media.videoWidth,
+					videoHeight: media.videoHeight,
+					readyState: media.readyState,
+					networkState: media.networkState,
+					playbackRate: media.playbackRate,
+					ended: media.ended
+				}
+			});			
+			statusSetCallback();
+		};
 
 		// Fixes the duration bug in iOS, where the durationchange event occurs when media.duration is not always correct.
 		// Fixes the initial duration bug in BB OS7, where the media.duration is infinity and displays as NaN:NaN due to Date() using inifity.
-		if(isFinite(media.duration)) {
-			this.status.duration = media.duration;
-		}
-
-		ct = media.currentTime;
-		cpa = (this.status.duration > 0) ? 100 * ct / this.status.duration : 0;
-		if((typeof media.seekable === "object") && (media.seekable.length > 0)) {
-			sp = (this.status.duration > 0) ? 100 * media.seekable.end(media.seekable.length-1) / this.status.duration : 100;
-			cpr = (this.status.duration > 0) ? 100 * media.currentTime / media.seekable.end(media.seekable.length-1) : 0; // Duration conditional for iOS duration bug. ie., seekable.end is a NaN in that case.
-		} else {
-			sp = 100;
-			cpr = cpa;
-		}
-
-		if(override) {
-			ct = 0;
-			cpr = 0;
-			cpa = 0;
-		}
-
-		this.status.seekPercent = sp;
-		this.status.currentPercentRelative = cpr;
-		this.status.currentPercentAbsolute = cpa;
-		this.status.currentTime = ct;
-
-		this.status.remaining = this.status.duration - this.status.currentTime;
-
-		this.status.videoWidth = media.videoWidth;
-		this.status.videoHeight = media.videoHeight;
-
-		this.status.readyState = media.readyState;
-		this.status.networkState = media.networkState;
-		this.status.playbackRate = media.playbackRate;
-		this.status.ended = media.ended;
-	}
-	_resetStatus = () => {
-		this.status = Object.assign({}, this.status, this.defaultStatus); // Maintains the status properties that persist through a reset.
+		isFinite(media.duration) ? JPlayerHelpers.mergeOptions.call(this, {status: {duration: media.duration}}, setStatus) : setStatus();
 	}
 	_trigger = (func, error) => {
 		var jPlayer = {
 			version: Object.assign({}, JPlayer.version),
 			element: this.currentMedia,
-			status: merge({}, this.status), // Deep copy
+			//status: merge({}, this.status), // Deep copy
 			html: merge({}, this.html), // Deep copy
 			error: Object.assign({}, error)
 		}
@@ -769,9 +777,9 @@ export default class JPlayer extends React.Component {
 	}
 	_updateButtons = (playing) => {
 		if(playing === undefined) {
-			playing = !this.status.paused;
+			playing = !this.props.status.paused;
 		} else {
-			this.status.paused = !playing;
+			JPlayerHelpers.mergeOptions.call(this, {status: {paused: !playing}});
 		}
 
 		if(playing) {
@@ -779,7 +787,7 @@ export default class JPlayer extends React.Component {
 		} else {
 			this.removeStateClass('playing');
 		}
-		if(!this.status.noFullWindow && this.nextProps.fullWindow) {
+		if(!this.props.status.noFullWindow && this.nextProps.fullWindow) {
 			this.addStateClass('fullScreen');
 		} else {
 			this.removeStateClass('fullScreen');
@@ -791,26 +799,27 @@ export default class JPlayer extends React.Component {
 		}
 	}
 	_updateInterface = () => {
-		this._extendStyle("seekBarStyle", {width: this.status.seekPercent+"%"});	
+		debugger
+		this._extendStyle("seekBarStyle", {width: this.props.status.seekPercent+"%"});	
 
 		if (this.props.smoothPlayBar) {
-			this._extendStyle("playBarStyle", {width: this.status.currentPercentRelative+"%"});		
+			this._extendStyle("playBarStyle", {width: this.props.status.currentPercentRelative+"%"});		
 		}	
 
-		var currentTimeText = this._convertTime(this.status.currentTime);
+		var currentTimeText = this._convertTime(this.props.status.currentTime);
 
 		this.setState({currentTimeText: currentTimeText});
 
 		var durationText = '',
-			duration = this.status.duration,
-			remaining = this.status.remaining;
+			duration = this.props.status.duration,
+			remaining = this.props.status.remaining;
 
-		if(typeof this.status.media.duration === 'string') {
-			durationText = this.status.media.duration;
+		if(this.props.status.media.duration === 'string') {
+			durationText = this.props.status.media.duration;
 		} else {
-			if(typeof this.status.media.duration === 'number') {
-				duration = this.status.media.duration;
-				remaining = duration - this.status.currentTime;
+			if(this.props.status.media.duration === 'number') {
+				duration = this.props.status.media.duration;
+				remaining = duration - this.props.status.currentTime;
 			}
 			if(this.nextProps.remainingDuration) {
 				durationText = (remaining > 0 ? '-' : '') + this._convertTime(remaining);
@@ -829,9 +838,6 @@ export default class JPlayer extends React.Component {
 	_seeked = () => {
 		JPlayerHelpers.removeClass.call(this, JPlayerHelpers.className.hidden, JPlayerHelpers.key.seekBarClass);
 		this.removeStateClass('seeking');
-	}
-	_resetActive = () => {
-		this.html.active = false;
 	}
 	_escapeHtml = (s) => {
 		return s.split('&').join('&amp;').split('<').join('&lt;').split('>').join('&gt;').split('"').join('&quot;');
@@ -878,88 +884,90 @@ export default class JPlayer extends React.Component {
 		*	media.track = Array: Of objects defining the track element: kind, src, srclang, label, def.
 		*	media.stream = Boolean: * NOT IMPLEMENTED * Designating actual media streams. ie., "false/undefined" for files.
 		*/
+		
 		var	supported = false,
-			posterChanged = this.status.media.poster !== media.poster; // Compare before reset. Important for OSX Safari as this.htmlElement.poster.src is absolute, even if original poster URL was relative.
+			posterChanged = this.props.status.media.poster !== media.poster; // Compare before reset. Important for OSX Safari as this.htmlElement.poster.src is absolute, even if original poster URL was relative.
 
-		this._resetMedia();
-		this._resetActive();
+		this._resetMedia(() => {
+			this.html.active = false;
 
-		// Clear the Android Fix.
-		this.androidFix.setMedia = false;
-		this.androidFix.play = false;
-		this.androidFix.pause = false;
+			//Clear the Android Fix.
+			this.androidFix.setMedia = false;
+			this.androidFix.play = false;
+			this.androidFix.pause = false;
 
-		// Convert all media URLs to absolute URLs.
-		media = this._absoluteMediaUrls(media);
+			// Convert all media URLs to absolute URLs.
+			media = this._absoluteMediaUrls(media);
 
-		for (var formatPriority = 0; formatPriority < this.formats.length; formatPriority++) {
-			var format = this.formats[formatPriority];
-			var isVideo = JPlayer.format[format].media === 'video';
+			for (var formatPriority = 0; formatPriority < this.formats.length; formatPriority++) {
+				var format = this.formats[formatPriority];
+				var isVideo = JPlayer.format[format].media === 'video';
 
-			if(this.html.support[format] && this._validString(media[format])) { // Format supported in solution and url given for format.
+				if(this.html.support[format] && this._validString(media[format])) { // Format supported in solution and url given for format.
 
-			if(isVideo) {
-				this._htmlSetVideo(media);
-				this.html.active = true;
-				this.status.video = true;
-				JPlayerHelpers.removeClass.call(this, JPlayerHelpers.className.hidden, JPlayerHelpers.key.videoPlayClass);
-			} else {
-				this._htmlSetAudio(media);
-				this.html.active = true;
+				if(isVideo) {
+					this._htmlSetVideo(media);
+					this.html.active = true;
+					JPlayerHelpers.mergeOptions.call(this, {status: {video: true}});
+					JPlayerHelpers.removeClass.call(this, JPlayerHelpers.className.hidden, JPlayerHelpers.key.videoPlayClass);
+				} else {
+					this._htmlSetAudio(media);
+					this.html.active = true;
 
-				// Setup the Android Fix - Only for HTML audio.
-				if(JPlayer.platform.android) {
-					this.androidFix.setMedia = true;
+					// Setup the Android Fix - Only for HTML audio.
+					if(JPlayer.platform.android) {
+						this.androidFix.setMedia = true;
+					}
+
+					JPlayerHelpers.mergeOptions.call(this, {status: {video: false}});
+					JPlayerHelpers.addClass.call(this, JPlayerHelpers.className.hidden, JPlayerHelpers.key.videoPlayClass);
 				}
-
-				this.status.video = false;
-				JPlayerHelpers.addClass.call(this, JPlayerHelpers.className.hidden, JPlayerHelpers.key.videoPlayClass);
+				supported = true;
+				break;
+				}
 			}
-			supported = true;
-			break;
-			}
-		}
 
-		if(supported) {
-			if(!(this.status.nativeVideoControls && this.html.video.gate)) {
-				// Set poster IMG if native video controls are not being used
-				// Note: With IE the IMG onload event occurs immediately when cached.
-				// Note: Poster hidden by default in _resetMedia()
-				if(this._validString(media.poster)) {
-					if(posterChanged) { // Since some browsers do not generate img onload event.
-						this.setState({posterSrc: media.poster});
-					} else {
-						JPlayerHelpers.removeClass.call(this, JPlayerHelpers.className.hidden, JPlayerHelpers.key.posterClass);
+			if(supported) {
+				if(!(this.props.status.nativeVideoControls && this.html.video.gate)) {
+					// Set poster IMG if native video controls are not being used
+					// Note: With IE the IMG onload event occurs immediately when cached.
+					// Note: Poster hidden by default in _resetMedia()
+					if(this._validString(media.poster)) {
+						if(posterChanged) { // Since some browsers do not generate img onload event.
+							this.setState({posterSrc: media.poster});
+						} else {
+							JPlayerHelpers.removeClass.call(this, JPlayerHelpers.className.hidden, JPlayerHelpers.key.posterClass);
+						}
 					}
 				}
-			}
 
-			if(typeof media.title === 'string') {
-				this.setState({titleText: media.title});
+				if(typeof media.title === 'string') {
+					this.setState({titleText: media.title});
+				}
+				
+				JPlayerHelpers.mergeOptions.call(this, {status: {srcSet: true, media: media}},() => {
+					this._updateButtons(false);
+					this._updateInterface();
+					this._trigger(this.props.onSetMedia);
+				});
+			} else { // jPlayer cannot support any formats provided in this browser
+				// Send an error event
+				this._error( {
+					type: this.error.NO_SUPPORT,
+					context: "{supplied:'" + this.props.supplied.join(", ") + "'}",
+					message: this.errorMsg.NO_SUPPORT,
+					hint: this.errorHint.NO_SUPPORT
+				});
 			}
-			
-			this.status.srcSet = true;
-			this.status.media = Object.assign({}, media);
-			this._updateButtons(false);
-			this._updateInterface();
-
-			this._trigger(this.props.onSetMedia);
-		} else { // jPlayer cannot support any formats provided in this browser
-			// Send an error event
-			this._error( {
-				type: this.error.NO_SUPPORT,
-				context: "{supplied:'" + this.props.supplied.join(", ") + "'}",
-				message: this.errorMsg.NO_SUPPORT,
-				hint: this.errorHint.NO_SUPPORT
-			});
-		}
+		});
 	}
-	_resetMedia = () => {
-		this._resetStatus();
+	_resetMedia = (mediaResetCallback) => {
 		this._updateButtons(false);
 		this._updateInterface();
 		this._seeked();
 		JPlayerHelpers.addClass.call(this, JPlayerHelpers.className.hidden, JPlayerHelpers.key.posterClass);
+		// Maintains the status properties that persist through a reset.	
+		JPlayerHelpers.mergeOptions.call(this, {status: undefined}, mediaResetCallback);
 
 		clearTimeout(this.internal.htmlDlyCmdId);
 
@@ -974,10 +982,10 @@ export default class JPlayer extends React.Component {
 			this._htmlClearMedia();
 		}
 
-		this._resetActive();
+		this.html.active = false;
 	}
 	load = () => {
-		if(this.status.srcSet) {
+		if(this.props.status.srcSet) {
 			if(this.html.active) {
 				this._htmlLoad();
 			}
@@ -991,12 +999,12 @@ export default class JPlayer extends React.Component {
 		}
 	}
 	play = (time) => {
-		if(!this.status.paused) {
+		if(!this.props.status.paused) {
 			this.pause(time);
 		} else {
 			time = (typeof value === "number") ? time : NaN;
 
-			if(this.status.srcSet) {
+			if(this.props.status.srcSet) {
 				this.focus();
 				if(this.html.active) {
 					this._htmlPlay(time);
@@ -1009,7 +1017,7 @@ export default class JPlayer extends React.Component {
 	pause = (time) => {
 		time = (typeof value === "number") ? time : NaN;
 
-		if(this.status.srcSet) {
+		if(this.props.status.srcSet) {
 			if(this.html.active) {
 				this._htmlPause(time);
 			}
@@ -1037,11 +1045,11 @@ export default class JPlayer extends React.Component {
 	pauseOthers = (time) => {
 		this.tellOthers("pause", function() {
 			// In the conditions function, the "this" context is the other instance's jPlayer object.
-			return this.status.srcSet;
+			return this.props.status.srcSet;
 		}, time);
 	}
 	stop = () => {
-		if(this.status.srcSet) {
+		if(this.props.status.srcSet) {
 			if(this.html.active) {
 				this._htmlPause(0);
 			}
@@ -1051,7 +1059,7 @@ export default class JPlayer extends React.Component {
 	}
 	playHead = (p) => {
 		p = this._limitValue(p, 0, 100);
-		if(this.status.srcSet) {
+		if(this.props.status.srcSet) {
 			if(this.html.active) {
 				this._htmlPlayHead(p);
 			}
@@ -1088,7 +1096,7 @@ export default class JPlayer extends React.Component {
 		}
 		v = this.props.muted ? 0 : v;
 
-		if(this.status.noVolume) {
+		if(this.props.status.noVolume) {
 			this.addStateClass('noVolume');
 
 			JPlayerHelpers.addClass.call(this, JPlayerHelpers.className.hidden, JPlayerHelpers.key.volumeBarClass);
@@ -1108,8 +1116,8 @@ export default class JPlayer extends React.Component {
 		}
 	}
 	_cssSelectorAncestor = (ancestor) => {
-		JPlayerHelpers.removeClass.call(this, this.status.cssClass, JPlayerHelpers.key.stateClass);
-		JPlayerHelpers.addClass.call(this, this.status.cssClass, JPlayerHelpers.key.stateClass);
+		JPlayerHelpers.removeClass.call(this, this.props.status.cssClass, JPlayerHelpers.key.stateClass);
+		JPlayerHelpers.addClass.call(this, this.props.status.cssClass, JPlayerHelpers.key.stateClass);
 							
 		// Set the GUI to the current state.
 		this._updateInterface();
@@ -1128,7 +1136,7 @@ export default class JPlayer extends React.Component {
 	_updatePlaybackRate = () => {
 		var pbr = this.nextProps.playbackRate,
 			ratio = (pbr - this.props.minPlaybackRate) / (this.props.maxPlaybackRate - this.props.minPlaybackRate);
-		if(this.status.playbackRateEnabled) {
+		if(this.props.status.playbackRateEnabled) {
 		
 			JPlayerHelpers.removeClass.call(this, JPlayerHelpers.className.hidden, JPlayerHelpers.key.playbackRateBarClass);
 			JPlayerHelpers.removeClass.call(this, JPlayerHelpers.className.hidden, JPlayerHelpers.key.playbackRateBarValueClass);
@@ -1213,7 +1221,7 @@ export default class JPlayer extends React.Component {
 			maxPlaybackRate: () => this._updatePlaybackRate(),
 			fullScreen: (value) => { 
 				var wkv = JPlayer.nativeFeatures.fullscreen.used.webkitVideo;
-				if(!wkv || wkv && !this.status.waitForPlay) {
+				if(!wkv || wkv && !this.props.status.waitForPlay) {
 					if(value) {
 						this._requestFullscreen();
 					} else {
@@ -1225,20 +1233,20 @@ export default class JPlayer extends React.Component {
 				}
 			},
 			fullWindow: (value) => { 
-				JPlayerHelpers.removeClass.call(this, this.status.cssClass, JPlayerHelpers.key.stateClass);
+				JPlayerHelpers.removeClass.call(this, this.props.status.cssClass, JPlayerHelpers.key.stateClass);
 				this._setNextProps({fullWindow: value});
 				this._refreshSize();
 			},
 			size: (value) => { 
 				if(!this.props.fullWindow && this.props[key].cssClass !== value.cssClass) {
-					JPlayerHelpers.removeClass.call(this, this.status.cssClass, JPlayerHelpers.key.stateClass);
+					JPlayerHelpers.removeClass.call(this, this.props.status.cssClass, JPlayerHelpers.key.stateClass);
 				}
 				this._setNextProps({size: value});
 				this._refreshSize();
 			},
 			sizeFull: (value) => { 
 				if(this.props.fullWindow && this.props[key].cssClass !== value.cssClass) {
-					JPlayerHelpers.removeClass.call(this, this.status.cssClass, JPlayerHelpers.key.stateClass);
+					JPlayerHelpers.removeClass.call(this, this.props.status.cssClass, JPlayerHelpers.key.stateClass);
 				}
 				this._setNextProps({sizeFull: value});
 				this._refreshSize();
@@ -1252,18 +1260,16 @@ export default class JPlayer extends React.Component {
 				this._updateInterface();
 			},
 			nativeVideoControls: () => { 
-				this.status.nativeVideoControls = this._uaBlocklist(this.props.nativeVideoControls);
-				this._restrictNativeVideoControls();
-				this._updateNativeVideoControls();
+				//this.props.status.nativeVideoControls = this._uaBlocklist(this.props.nativeVideoControls);
+				this._restrictNativeVideoControls(() => this._updateNativeVideoControls);
 			},
 			noFullWindow: () => { 
-				this.status.nativeVideoControls = this._uaBlocklist(this.props.nativeVideoControls); // Need to check again as noFullWindow can depend on this flag and the restrict() can override it.
-				this.status.noFullWindow = this._uaBlocklist(this.props.noFullWindow);
-				this._restrictNativeVideoControls();
-				this._updateButtons();
+				//this.props.status.nativeVideoControls = this._uaBlocklist(this.props.nativeVideoControls); // Need to check again as noFullWindow can depend on this flag and the restrict() can override it.
+				//this.props.status.noFullWindow = this._uaBlocklist(this.props.noFullWindow);
+				this._restrictNativeVideoControls(() => this._updateButtons);
 			},
 			noVolume: () => { 
-				this.status.noVolume = this._uaBlocklist(this.props.noVolume);
+				//this.props.status.noVolume = this._uaBlocklist(this.props.noVolume);
 				this._updateVolume();
 				this._updateMute();
 			},
@@ -1299,45 +1305,40 @@ export default class JPlayer extends React.Component {
 		}
 
 		functions.forEach((func) => { 
-			if (isFunction(func)) {
-				func(this.status);			
-			}
-			else {
-				Array.isArray(func) ? this[func.shift()](...func) : this[func]();
-			}					
+			Array.isArray(func) ? this[func.shift()](...func) : this[func]();				
 		});
 
 		JPlayerHelpers.updateOptions.call(this, {[JPlayerHelpers.key.functions]: []});
 	}
 	_refreshSize = () => {
 		this._setSize(); // update status and jPlayer element size
-		JPlayerHelpers.addClass.call(this, this.status.cssClass, JPlayerHelpers.key.stateClass);
+		JPlayerHelpers.addClass.call(this, this.props.status.cssClass, JPlayerHelpers.key.stateClass);
 		this._updateSize(); // update internal sizes
 		this._updateButtons();
 		this._trigger(this.props.onResize);
 	}
 	_setSize = () => {
 		// Determine the current size from the options
-		if(this.nextProps.fullWindow) {
-			this.status.width = this.nextProps.sizeFull.width;
-			this.status.height = this.nextProps.sizeFull.height;
-			this.status.cssClass = this.nextProps.sizeFull.cssClass;
-		} else {
-			this.status.width = this.nextProps.size.width;
-			this.status.height = this.nextProps.size.height;
-			this.status.cssClass = this.nextProps.size.cssClass;
-		}
+		let sizeKey = this.nextProps.fullWindow ? "sizeFull" : "size";
+
+		JPlayerHelpers.mergeOptions.call(this, {status: 
+			{
+				width: this.nextProps[sizeKey].width,
+				height: this.nextProps[sizeKey].height,
+				cssClass: this.nextProps[sizeKey].cssClass
+			}
+		});
 
 		// Set the size of the jPlayer area.
-		this._extendStyle("jPlayerStyle", {width: this.status.width, height: this.status.height});
+		this._extendStyle("jPlayerStyle", {width: this.props.status.width, height: this.props.status.height});
 	}
 	_updateSize = () => {
-		this._extendStyle("posterStyle", {width: this.status.width, height: this.status.height});
+		this._extendStyle("posterStyle", {width: this.props.status.width, height: this.props.status.height});
 
 		// Video html resized if necessary at this time, or if native video controls being used.
-		if(!this.status.waitForPlay && this.html.active && this.status.video
-				|| this.html.video.available && this.html.used && this.status.nativeVideoControls) {
-			this._extendStyle("videoStyle", {width: this.status.width, height: this.status.height});
+		if(!this.props.status.waitForPlay && this.html.active && this.props.status.video
+				|| this.html.video.available && this.html.used && this.props.status.nativeVideoControls) {
+			this._extendStyle("videoStyle", {width: this.props.status.width, height: this.props.status.height});
 		}
 	}
 	_fullscreenAddEventListeners = () => {
@@ -1377,7 +1378,7 @@ export default class JPlayer extends React.Component {
 		}
 	}
 	_posterLoad = () => {
-		if(!this.status.video || this.status.waitForPlay) {
+		if(!this.props.status.video || this.props.status.waitForPlay) {
 			JPlayerHelpers.removeClass.call(this, JPlayerHelpers.className.hidden, JPlayerHelpers.key.posterClass);
 		}
 	}
@@ -1411,40 +1412,44 @@ export default class JPlayer extends React.Component {
 		}
 
 		this.setState({tracks: tracks});
-		this.currentMedia.src = this.status.src;
+		this.currentMedia.src = this.props.status.src;
 
 		if(this.props.preload !== 'none') {
 			this._htmlLoad(); // See function for comments
 		}
 		this._trigger(this.props.onTimeUpdate);
 	}
-	_htmlSetFormat = (media) => {
+	_htmlSetFormat = (media, formatSetCallback) => {
 		// Always finds a format due to checks in setMedia()
 		for (var priority = 0; priority < this.formats.length; priority++) {
 			var format = this.formats[priority];
 
 			if(this.html.support[format] && media[format]) {
-				this.status.src = media[format];
-				this.status.format[format] = true;
-				this.status.formatType = format;
+				JPlayerHelpers.mergeOptions.call(this, {status: 
+					{
+						src: media[format],
+						formatType: format,
+						format: {
+							[format]: true
+						}					
+					}
+				}, formatSetCallback);
 				break;
 			}
 		}
 	}
 	_htmlSetAudio = (media) => {
-		this._htmlSetFormat(media);							
-		this._htmlInitMedia(media);
+		this._htmlSetFormat(media, () => this._htmlInitMedia(media));
 	}
 	_htmlSetVideo = (media) => {
-		this._htmlSetFormat(media);
-		if(this.status.nativeVideoControls) {
+		this._htmlSetFormat(media, () => this._htmlInitMedia(media));
+		if(this.props.status.nativeVideoControls) {
 			this.video.element().poster = this._validString(media.poster) ? media.poster : "";
 		}
-		this._htmlInitMedia(media);
 	}
 	_htmlResetMedia = () => {
 		if(this.currentMedia) {
-			if(!this.status.nativeVideoControls) {
+			if(!this.props.status.nativeVideoControls) {
 				JPlayerHelpers.addClass.call(this, JPlayerHelpers.className.hidden, JPlayerHelpers.key.videoClass);
 			}
 			this.currentMedia.pause();
@@ -1463,8 +1468,8 @@ export default class JPlayer extends React.Component {
 		// This function remains to allow the early HTML5 browsers to work, such as Firefox 3.6
 		// A change in the W3C spec for the media.load() command means that this is no longer necessary.
 		// This command should be removed and actually causes minor undesirable effects on some browsers. Such as loading the whole file and not only the metadata.
-		if(this.status.waitForLoad) {
-			this.status.waitForLoad = false;
+		if(this.props.status.waitForLoad) {
+			JPlayerHelpers.mergeOptions.call(this, {status: {waitForLoad: false}});
 			this.currentMedia.load();
 		}
 		clearTimeout(this.internal.htmlDlyCmdId);
@@ -1561,18 +1566,18 @@ export default class JPlayer extends React.Component {
 			}, 250);
 			return; // Cancel execution and wait for the delayed command.
 		}
-		if(!this.status.waitForLoad) {
+		if(!this.props.status.waitForLoad) {
 			this._htmlCheckWaitForPlay();
 		}
 	}
 	_htmlCheckWaitForPlay = () => {
-		if(this.status.waitForPlay) {
-			this.status.waitForPlay = false;
+		if(this.props.status.waitForPlay) {
+			JPlayerHelpers.mergeOptions.call(this, {status: {waitForPlay: false}});
 			JPlayerHelpers.addClass.call(this, JPlayerHelpers.className.hidden, JPlayerHelpers.key.videoPlayClass);
 
-			if(this.status.video) {
+			if(this.props.status.video) {
 				JPlayerHelpers.addClass.call(this, JPlayerHelpers.className.hidden, JPlayerHelpers.key.posterClass);
-				this._extendStyle("videoStyle", {width: this.status.width, height: this.status.height});
+				this._extendStyle("videoStyle", {width: this.props.status.width, height: this.props.status.height});
 			}
 		}
 	}
@@ -1594,11 +1599,11 @@ export default class JPlayer extends React.Component {
 		this._trigger(this.props.onError, error);
 	}
 	onPlayClick = () => {
-		const funcName = this.status.paused ? "play" : "pause";
+		const funcName = this.props.status.paused ? "play" : "pause";
 
 		this[funcName]();
 	}
-	onSeekBarClick = (e) => {
+	onSeekBarClick = (e) => {	
 		// Using $(e.currentTarget) to enable multiple seek bars
 		var bar = e.currentTarget,
 			offset = getOffset(bar),
@@ -1699,7 +1704,7 @@ export default class JPlayer extends React.Component {
 						{this.state.videoTracks}
 					</Video>
 				</div>
-				<GUI nativeVideoControls={this.status.nativeVideoControls} fullWindow={this.props.fullWindow} autoHide={this.autoHide} fadeInConfig={this.props.guiFadeInAnimation} fadeOutConfig={this.props.guiFadeOutAnimation}>
+				<GUI nativeVideoControls={this.props.status.nativeVideoControls} fullWindow={this.props.fullWindow} autoHide={this.autoHide} fadeInConfig={this.props.guiFadeInAnimation} fadeOutConfig={this.props.guiFadeOutAnimation}>
 					<div className="jp-controls">
 						<a className="jp-play" onClick={this.onPlayClick}>
 							{this.props.html.play}
@@ -1728,7 +1733,7 @@ export default class JPlayer extends React.Component {
 					</div>
 					<div className="jp-progress">
 						<div className={this.state.seekBarClass.join(" ")} style={this.state.seekBarStyle} onClick={this.onSeekBarClick}>                         
-							<PlayBar smoothPlayBar={this.props.smoothPlayBar} currentPercentAbsolute={this.status.currentPercentAbsolute} playBarStyle={this.state.playBarStyle} />
+							<PlayBar smoothPlayBar={this.props.smoothPlayBar} currentPercentAbsolute={this.props.status.currentPercentAbsolute} playBarStyle={this.state.playBarStyle} />
 							<div className="jp-current-time">{this.state.currentTimeText}</div>
 							<div className="jp-duration" onClick={this.state.durationOnClick}>{this.state.durationText}</div>
 						</div>
