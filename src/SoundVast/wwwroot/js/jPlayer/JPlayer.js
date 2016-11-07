@@ -327,7 +327,7 @@ export default class JPlayer extends React.Component {
 				}
 				this._trigger(this.props.onLoadedData);
 			},
-			onTimeUpdate: () => {			
+			onTimeUpdate: () => {		
 				this._getHtmlStatus(this.currentMedia, null, () => {
 					this._updateInterface();
 					this._trigger(this.props.onTimeUpdate);
@@ -361,7 +361,7 @@ export default class JPlayer extends React.Component {
 				this._seeking();
 				this._trigger(this.props.onSeeking);
 			},
-			onSeeked: () => {				
+			onSeeked: () => {			
 				this._seeked();
 				this._trigger(this.props.onSeeked);
 			},
@@ -739,7 +739,7 @@ export default class JPlayer extends React.Component {
 				cpr = 0;
 				cpa = 0;
 			}
-
+			
 			JPlayerHelpers.mergeOptions.call(this, {status: 
 				{
 					seekPercent: sp,
@@ -754,8 +754,7 @@ export default class JPlayer extends React.Component {
 					playbackRate: media.playbackRate,
 					ended: media.ended
 				}
-			});			
-			statusSetCallback();
+			}, statusSetCallback);			
 		};
 
 		// Fixes the duration bug in iOS, where the durationchange event occurs when media.duration is not always correct.
@@ -799,7 +798,6 @@ export default class JPlayer extends React.Component {
 		}
 	}
 	_updateInterface = () => {
-		debugger
 		this._extendStyle("seekBarStyle", {width: this.props.status.seekPercent+"%"});	
 
 		if (this.props.smoothPlayBar) {
@@ -884,7 +882,6 @@ export default class JPlayer extends React.Component {
 		*	media.track = Array: Of objects defining the track element: kind, src, srclang, label, def.
 		*	media.stream = Boolean: * NOT IMPLEMENTED * Designating actual media streams. ie., "false/undefined" for files.
 		*/
-		
 		var	supported = false,
 			posterChanged = this.props.status.media.poster !== media.poster; // Compare before reset. Important for OSX Safari as this.htmlElement.poster.src is absolute, even if original poster URL was relative.
 
@@ -945,7 +942,7 @@ export default class JPlayer extends React.Component {
 					this.setState({titleText: media.title});
 				}
 				
-				JPlayerHelpers.mergeOptions.call(this, {status: {srcSet: true, media: media}},() => {
+				JPlayerHelpers.mergeOptions.call(this, {status: {srcSet: true, media: media}}, () => {
 					this._updateButtons(false);
 					this._updateInterface();
 					this._trigger(this.props.onSetMedia);
@@ -1327,10 +1324,7 @@ export default class JPlayer extends React.Component {
 				height: this.nextProps[sizeKey].height,
 				cssClass: this.nextProps[sizeKey].cssClass
 			}
-		});
-
-		// Set the size of the jPlayer area.
-		this._extendStyle("jPlayerStyle", {width: this.props.status.width, height: this.props.status.height});
+		}, () => this._extendStyle("jPlayerStyle", {width: this.props.status.width, height: this.props.status.height}));
 	}
 	_updateSize = () => {
 		this._extendStyle("posterStyle", {width: this.props.status.width, height: this.props.status.height});
@@ -1414,10 +1408,15 @@ export default class JPlayer extends React.Component {
 		this.setState({tracks: tracks});
 		this.currentMedia.src = this.props.status.src;
 
+		let loaded = false;
+
 		if(this.props.preload !== 'none') {
-			this._htmlLoad(); // See function for comments
+			loaded = this._htmlLoad(() => this._trigger(this.props.onTimeUpdate));
 		}
-		this._trigger(this.props.onTimeUpdate);
+
+		if (!loaded) {
+			this._trigger(this.props.onTimeUpdate);	
+		}
 	}
 	_htmlSetFormat = (media, formatSetCallback) => {
 		// Always finds a format due to checks in setMedia()
@@ -1464,33 +1463,32 @@ export default class JPlayer extends React.Component {
 			this.currentMedia.load(); // Stops an old, "in progress" download from continuing the download. Triggers the loadstart, error and emptied events, due to the empty src. Also an abort event if a download was in progress.
 		}
 	}
-	_htmlLoad = () => {
+	_htmlLoad = (mediaLoadedCallback) => {
 		// This function remains to allow the early HTML5 browsers to work, such as Firefox 3.6
 		// A change in the W3C spec for the media.load() command means that this is no longer necessary.
 		// This command should be removed and actually causes minor undesirable effects on some browsers. Such as loading the whole file and not only the metadata.
 		if(this.props.status.waitForLoad) {
-			JPlayerHelpers.mergeOptions.call(this, {status: {waitForLoad: false}});
+			JPlayerHelpers.mergeOptions.call(this, {status: {waitForLoad: false}}, mediaLoadedCallback);
 			this.currentMedia.load();
+			return true;
 		}
 		clearTimeout(this.internal.htmlDlyCmdId);
+		return false;
 	}
 	_htmlPlay = (time) => {
 		this.androidFix.pause = false; // Cancel the pause fix.
 
-		this._htmlLoad(); // Loads if required and clears any delayed commands.
+		const loaded = this._htmlLoad(this._htmlCheckWaitForPlay); // Loads if required and clears any delayed commands.
 
 		// Setup the Android Fix.
 		if(this.androidFix.setMedia) {
 			this.androidFix.play = true;
 			this.androidFix.time = time;
-
 		} else if(!isNaN(time)) {
-
 			// Attempt to play it, since iOS has been ignoring commands
 			if(this.internal.cmdsIgnored) {
 				this.currentMedia.play();
 			}
-
 			try {
 				// !this.currentMedia.seekable is for old HTML5 browsers, like Firefox 3.6.
 				// Checking seekable.length is important for iOS6 to work with setMedia().play(time)
@@ -1510,13 +1508,20 @@ export default class JPlayer extends React.Component {
 			this.currentMedia.play();
 		}
 
-		this._htmlCheckWaitForPlay();
+		if (!loaded) {
+			this._htmlCheckWaitForPlay();
+		}
 	}
 	_htmlPause = (time) => {
 		this.androidFix.play = false; // Cancel the play fix.
+		let loaded = false;
 
 		if(time > 0) { // We do not want the stop() command, which does pause(0), causing a load operation.
-			this._htmlLoad(); // Loads if required and clears any delayed commands.
+			loaded = this._htmlLoad(() => {
+				if(time > 0) { // Avoids a setMedia() followed by stop() or pause(0) hiding the video play button.
+					this._htmlCheckWaitForPlay();
+				}
+			});
 		} else {
 			clearTimeout(this.internal.htmlDlyCmdId);
 		}
@@ -1543,15 +1548,20 @@ export default class JPlayer extends React.Component {
 				return; // Cancel execution and wait for the delayed command.
 			}
 		}
-		if(time > 0) { // Avoids a setMedia() followed by stop() or pause(0) hiding the video play button.
+
+		if (!loaded) {
 			this._htmlCheckWaitForPlay();
 		}
 	}
 	_htmlPlayHead = (percent) => {
-		this._htmlLoad(); // Loads if required and clears any delayed commands.
+		// const loaded = this._htmlLoad(() => {
+		// 	if (!this.props.status.waitForLoad) {
+		// 		this._htmlCheckWaitForPlay();
+		// 	}
+		// }); 
+		const loaded = null;
 
 		// This playHead() method needs a refactor to apply the android fix.
-
 		try {
 			if(typeof this.currentMedia.seekable === "object" && this.currentMedia.seekable.length > 0) {
 				this.currentMedia.currentTime = percent * this.currentMedia.seekable.end(this.currentMedia.seekable.length-1) / 100;
@@ -1561,14 +1571,15 @@ export default class JPlayer extends React.Component {
 				throw "e";
 			}
 		} catch(err) {
-			this.internal.htmlDlyCmdId = setTimeout(() => {
-				this.playHead(percent);
-			}, 250);
+			// this.internal.htmlDlyCmdId = setTimeout(() => {
+			// 	this.playHead(percent);
+			// }, 250);
 			return; // Cancel execution and wait for the delayed command.
 		}
-		if(!this.props.status.waitForLoad) {
-			this._htmlCheckWaitForPlay();
-		}
+
+		// if (!loaded) {
+		// 	this._htmlCheckWaitForPlay();
+		// }
 	}
 	_htmlCheckWaitForPlay = () => {
 		if(this.props.status.waitForPlay) {
@@ -1781,11 +1792,15 @@ class GUI extends React.Component {
 
 const PlayBar = (props) => (
 	props.smoothPlayBar ? 
-		<Motion defaultStyle={{smoothWidth: 0}} style={{smoothWidth: spring(props.currentPercentAbsolute, [250])}}>
+		<Motion style={{smoothWidth: spring(props.currentPercentAbsolute, [250])}}>
 			{(values) => <div className="jp-play-bar" style={{width: values.smoothWidth + "%"}} />}
-		</Motion> 
+		</Motion>
 	:	<div className="jp-play-bar" style={props.playBarStyle} />
 );
+
+PlayBar.defaultProps = {
+    currentPercentAbsolute: 0
+};
 
 const Poster = (props) => (
 	<img className={props.posterClass} src={props.src} style={props.style} onLoad={props.onLoad} onClick={props.onClick} />
