@@ -157,7 +157,7 @@ export default class JPlayerPlaylist extends React.Component {
     _originalPlaylist = (playlistSetCallback) => {
         JPlayerHelpers.updateOptions.call(this, {playlist: [...this.original]});
 
-        if (playlistSetCallback) {
+        if (playlistSetCallback !== undefined) {
             JPlayerHelpers.modifyOptionsArray.call(this, [playlistSetCallback], Array.prototype.concat, JPlayerHelpers.key.functions);
         }          
     }
@@ -296,7 +296,7 @@ export default class JPlayerPlaylist extends React.Component {
             JPlayerHelpers.updateOptions.call(this, {playlist: [...this.props.playlist].sort(() => 0.5 - Math.random())});
             JPlayerHelpers.modifyOptionsArray.call(this, [playlistSetCallback, ["addStateClass", "shuffled"]], Array.prototype.concat, JPlayerHelpers.key.functions);
         } else {
-            this._originalPlaylist(playlistSetCallback);  
+            this._originalPlaylist(playlistSetCallback);
             JPlayerHelpers.modifyOptionsArray.call(this, [["removeStateClass", "shuffled"]], Array.prototype.concat, JPlayerHelpers.key.functions);
         }
 
@@ -366,7 +366,6 @@ class AdditionalControls extends React.Component {
         this.props.blur(event.target);
     }
     _onRepeatPlaylistClick = (event) => {
-        debugger
         event.preventDefault();
         
         JPlayerHelpers.updateOptions.call(this, {loop: "loop-playlist"});

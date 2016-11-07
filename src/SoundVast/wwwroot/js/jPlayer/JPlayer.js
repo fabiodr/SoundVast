@@ -227,9 +227,8 @@ export default class JPlayer extends React.Component {
 		this.loopOptions = [
 			"off",
 			"loop"
-		].concat(this.props.loopOptions);
-		this.currentLoopIndex = this.props.loop !== undefined ? this.props.loopOptions.indexOf(props.loop) : 0;
-
+		].concat(this.props.loopOptions);	
+		
 		// Classes added to the cssSelectorAncestor to indicate the state.
 		this.stateClass = merge({ 
 			playing: "jp-state-playing",
@@ -302,7 +301,7 @@ export default class JPlayer extends React.Component {
 			},
 			loop: {
 				key: 76, // l
-				fn: () => JPlayerHelpers.updateOptions.call(this, {loop: this._getCurrentLoop()}, () => this.currentMedia.loop = this.props.loop === "loop" ? true : false) //Todo: change callback
+				fn: () => JPlayerHelpers.updateOptions.call(this, {loop: this._incrementCurrentLoop()})
 			}
 		}, this.props.keyBindings);
 	}
@@ -1145,11 +1144,13 @@ export default class JPlayer extends React.Component {
 			JPlayerHelpers.addClass.call(this, JPlayerHelpers.className.hidden, JPlayerHelpers.key.playbackRateBarValueClass);
 		}
 	}
-	_getCurrentLoop = () => {	
-		if (this.currentLoopIndex >= this.loopOptions.length - 1) {
-			this.currentLoopIndex = -1;
+	_incrementCurrentLoop = () => {	
+		var loopIndex = this.loopOptions.indexOf(this.props.loop || this.loopOptions[0]);
+
+		if (loopIndex >= this.loopOptions.length - 1) {
+			loopIndex = -1;
 		}
-		return this.loopOptions[++this.currentLoopIndex];
+		return this.loopOptions[++loopIndex];
 	}
 	_loop = () => {
 		this._updateButtons(); 
@@ -1655,7 +1656,7 @@ export default class JPlayer extends React.Component {
 	}
 	onVideoPlayClick = () => this.play()
 	onMuteClick = () => JPlayerHelpers.updateOptions.call(this, {muted: !this.props.muted})
-	onRepeatClick = () => JPlayerHelpers.updateOptions.call(this, {loop: this._getCurrentLoop()}, () => this.currentMedia.loop = this.props.loop === "loop" ? true : false)
+	onRepeatClick = () => JPlayerHelpers.updateOptions.call(this, {loop: this._incrementCurrentLoop()})
 	onRepeatOffClick = () => JPlayerHelpers.updateOptions.call(this, {loop: "off"})
 	onFullScreenClick = () => JPlayerHelpers.updateOptions.call(this, {fullScreen: !this.props.fullScreen})
 	componentWillReceiveProps(nextProps) {							
@@ -1669,6 +1670,9 @@ export default class JPlayer extends React.Component {
 	}
 	componentWillMount() {
 		this._initBeforeRender();
+	}
+	componentDidUpdate() {
+		this.currentMedia.loop = this.props.loop === "loop" ? true : false;
 	}
 	componentDidMount() {
 		if (this.audio.element()){
