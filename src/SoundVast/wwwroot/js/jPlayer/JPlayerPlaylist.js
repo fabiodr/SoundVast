@@ -54,15 +54,11 @@ export default class JPlayerPlaylist extends React.Component {
                 this._trigger(this.props.onEnded, jPlayer);
             },
             onPlay: (jPlayer) => { 
-                JPlayerHelpers.modifyOptionsArray.call(this, ["pauseOthers"], Array.prototype.concat, JPlayerHelpers.key.functions);
+                this._updateFunctions("pauseOthers");
                 this._trigger(this.props.onPlay, jPlayer);
              },
             onResize: (jPlayer) => {
-                if (this.props.fullScreen) {
-                    JPlayerHelpers.removeClass.call(this, JPlayerHelpers.className.hidden, JPlayerPlaylistHelpers.key.detailsClass);
-                } else {
-                    JPlayerHelpers.addClass.call(this, JPlayerHelpers.className.hidden, JPlayerPlaylistHelpers.key.detailsClass);
-                }
+                this.props.fullScreen ? this._showDetails() : this._hideDetails();
                 this._trigger(this.props.onResize, jPlayer);
             }
         }
@@ -90,6 +86,12 @@ export default class JPlayerPlaylist extends React.Component {
 
         this.freeMediaLinkIndex = 0;
     }
+    _updateFunctions = (params, callback) => JPlayerHelpers.modifyOptionsArray.call(this, params, Array.prototype.concat, "functions", callback)
+    _overrideFunctions = (params, callback) => JPlayerHelpers.modifyOptionsArray.call(this, params, Array.prototype.concat, "overrideFunctions", callback)
+    _hideDetails = () => JPlayerHelpers.addClass.call(this, JPlayerHelpers.className.hidden, JPlayerPlaylistHelpers.key.detailsClass)
+    _showDetails = () => JPlayerHelpers.removeClass.call(this, JPlayerHelpers.className.hidden, JPlayerPlaylistHelpers.key.detailsClass);
+    _hideShuffleOff = () => JPlayerHelpers.addClass.call(this, JPlayerHelpers.className.hidden, JPlayerPlaylistHelpers.key.shuffleOffClass);
+    _showShuffleOff = () => JPlayerHelpers.removeClass.call(this, JPlayerHelpers.className.hidden, JPlayerPlaylistHelpers.key.shuffleOffClass);
     _trigger = (func, jPlayer) => {
         if (func !== undefined) {
             func.bind(this)(jPlayer);
@@ -119,19 +121,17 @@ export default class JPlayerPlaylist extends React.Component {
 
         // Put the title in its initial display state
         if (!this.props.fullScreen) {
-            JPlayerHelpers.addClass.call(this, JPlayerHelpers.className.hidden, JPlayerPlaylistHelpers.key.detailsClass);
+            this._hideDetails();
         }
 
          const newUpdateButtonCallback = (originalFunction) => {
             return function() {
                 originalFunction.apply(this, arguments);
                 const stateClassMethod = this.props.loop === "loop-playlist" ? "addStateClass" : "removeStateClass";
-
-                JPlayerHelpers.modifyOptionsArray.call(this, [[stateClassMethod, "loopedPlaylist"]], Array.prototype.concat, JPlayerHelpers.key.functions);
+                this._updateFunctions([[stateClassMethod, "loopedPlaylist"]]);
             }.bind(this);
         };
-
-        JPlayerHelpers.modifyOptionsArray.call(this, [["_updateButtons", newUpdateButtonCallback]], Array.prototype.concat, JPlayerHelpers.key.overrideFunctions)
+        this._overrideFunctions(["_updateButtons", newUpdateButtonCallback]);
 
         this._init();
     }
@@ -164,7 +164,7 @@ export default class JPlayerPlaylist extends React.Component {
         media.key = maxBy(this.props.playlist, "key").key + 1;
         
         this.original.push(media);
-        JPlayerHelpers.modifyOptionsArray.call(this, [media], Array.prototype.concat, JPlayerPlaylistHelpers.key.playlist);
+        JPlayerHelpers.modifyOptionsArray.call(this, media, Array.prototype.concat, JPlayerPlaylistHelpers.key.playlist);
 
         if (playNow) {
             this.play(this.props.playlist.length - 1);
@@ -177,7 +177,7 @@ export default class JPlayerPlaylist extends React.Component {
     remove = (index) => {
         if (index === undefined) {
             this._initPlaylist([]);
-            JPlayerHelpers.modifyOptionsArray.call(this, ["clearMedia"], Array.prototype.concat, JPlayerHelpers.key.functions);
+            this._updateFunctions("clearMedia");
             return true;
         } else {           
             JPlayerHelpers.mergeOptions.call(this, {playlist: {[index]: {isRemoving: true}}});
@@ -188,7 +188,7 @@ export default class JPlayerPlaylist extends React.Component {
         index = (index < 0) ? this.original.length + index : index; // Negative index relates to end of array.
         if (0 <= index && index < this.props.playlist.length) {
             this.setState({current: index});
-            JPlayerHelpers.modifyOptionsArray.call(this, [["setMedia", this.props.playlist[index]]], Array.prototype.concat, JPlayerHelpers.key.functions);
+            this._updateFunctions(["setMedia", this.props.playlist[index]]);
         } else {
             this.setState({current: 0});
         }
@@ -198,13 +198,13 @@ export default class JPlayerPlaylist extends React.Component {
         if (0 <= index && index < this.props.playlist.length) {
             if (this.props.playlist.length) {
                 this.select(index, true);
-                JPlayerHelpers.modifyOptionsArray.call(this, ["play"], Array.prototype.concat, JPlayerHelpers.key.functions);
+                this._updateFunctions("play");
             }
         } else if (index === undefined) {
-            JPlayerHelpers.modifyOptionsArray.call(this, ["play"], Array.prototype.concat, JPlayerHelpers.key.functions);
+            this._updateFunctions("play");
         }
     }
-    pause = () => JPlayerHelpers.modifyOptionsArray.call(this, ["pause"], Array.prototype.concat, JPlayerHelpers.key.functions);
+    pause = () => this._updateFunctions("pause");
     next = () => {
         var index = (this.state.current + 1 < this.props.playlist.length) ? this.state.current + 1 : 0;
 
@@ -265,7 +265,7 @@ export default class JPlayerPlaylist extends React.Component {
                 this.setState(previousState => [{current: previousState.current--}]);
             }
         } else {
-            JPlayerHelpers.modifyOptionsArray.call(this, ["clearMedia"], Array.prototype.concat, JPlayerHelpers.key.functions);
+            this._updateFunctions("clearMedia");
             this.setState({current: 0});
             this.shuffled = false;
         }
@@ -288,11 +288,12 @@ export default class JPlayerPlaylist extends React.Component {
 
         if (this.shuffled) {
             JPlayerHelpers.updateOptions.call(this, {playlist: [...this.props.playlist].sort(() => 0.5 - Math.random())});
-            JPlayerHelpers.modifyOptionsArray.call(this, [["addStateClass", "shuffled"]], Array.prototype.concat, JPlayerHelpers.key.functions, playlistSetCallback);
+             this._updateFunctions(["addStateClass", "shuffled"], playlistSetCallback);
         } else {
             this._originalPlaylist(playlistSetCallback);
-            JPlayerHelpers.modifyOptionsArray.call(this, [["removeStateClass", "shuffled"]], Array.prototype.concat, JPlayerHelpers.key.functions);
+            this._updateFunctions(["removeStateClass", "shuffled"]);
         }
+        
 
         setTimeout(() => this.setState({isPlaylistContainerSlidingUp: false}), 0);
     }
@@ -339,7 +340,7 @@ class AdditionalControls extends React.Component {
 
         this.props.shuffle(false);
         this.props.blur(event.target);
-        JPlayerHelpers.addClass.call(this, JPlayerHelpers.className.hidden, JPlayerPlaylistHelpers.key.shuffleOffClass);
+        this._hideShuffleOff();
     }
     _onShuffleClick = (event) => {
         event.preventDefault();
@@ -406,7 +407,7 @@ class Media extends React.Component {
         if(this.props.current !== index) {
             this.props.play(index);
         } else {
-            JPlayerHelpers.modifyOptionsArray.call(this, ["play"], Array.prototype.concat, JPlayerHelpers.key.functions);
+            this._updateFunctions("play");
         }
         this.props.blur(event.target);
     }

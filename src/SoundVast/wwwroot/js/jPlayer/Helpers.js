@@ -8,7 +8,7 @@ export default {
         this.props.updateOptions((prevJPlayerOptions) => merge({}, prevJPlayerOptions, newOption), callback);
     },
     modifyOptionsArray: function(newOptions, arrayMethod, key, callback) {
-        const handleNewOptions = (prevOptions = []) => arrayMethod.call(prevOptions, newOptions);
+        const handleNewOptions = (prevOptions = []) => arrayMethod.call(prevOptions, [newOptions]);
 
         this.props.updateOptions((prevJPlayerOptions) => Object.assign({}, prevJPlayerOptions, {[key]: handleNewOptions(prevJPlayerOptions[key])}), callback);
     },
