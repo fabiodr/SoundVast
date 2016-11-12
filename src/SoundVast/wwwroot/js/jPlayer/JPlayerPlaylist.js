@@ -86,12 +86,12 @@ export default class JPlayerPlaylist extends React.Component {
 
         this.freeMediaLinkIndex = 0;
     }
-    _updateFunctions = (params, callback) => JPlayerHelpers.modifyOptionsArray.call(this, params, Array.prototype.concat, "functions", callback)
-    _overrideFunctions = (params, callback) => JPlayerHelpers.modifyOptionsArray.call(this, params, Array.prototype.concat, "overrideFunctions", callback)
+    _updateFunctions = (params, callback) => JPlayerHelpers.modifyOptionsArray.call(this, [params], Array.prototype.concat, JPlayerHelpers.key.functions, callback)
+    _overrideFunctions = (params, callback) => JPlayerHelpers.modifyOptionsArray.call(this, [params], Array.prototype.concat, JPlayerHelpers.key.overrideFunctions, callback)
     _hideDetails = () => JPlayerHelpers.addClass.call(this, JPlayerHelpers.className.hidden, JPlayerPlaylistHelpers.key.detailsClass)
-    _showDetails = () => JPlayerHelpers.removeClass.call(this, JPlayerHelpers.className.hidden, JPlayerPlaylistHelpers.key.detailsClass);
-    _hideShuffleOff = () => JPlayerHelpers.addClass.call(this, JPlayerHelpers.className.hidden, JPlayerPlaylistHelpers.key.shuffleOffClass);
-    _showShuffleOff = () => JPlayerHelpers.removeClass.call(this, JPlayerHelpers.className.hidden, JPlayerPlaylistHelpers.key.shuffleOffClass);
+    _showDetails = () => JPlayerHelpers.removeClass.call(this, JPlayerHelpers.className.hidden, JPlayerPlaylistHelpers.key.detailsClass)
+    _hideShuffleOff = () => JPlayerHelpers.addClass.call(this, JPlayerHelpers.className.hidden, JPlayerPlaylistHelpers.key.shuffleOffClass)
+    _showShuffleOff = () => JPlayerHelpers.removeClass.call(this, JPlayerHelpers.className.hidden, JPlayerPlaylistHelpers.key.shuffleOffClass)
     _trigger = (func, jPlayer) => {
         if (func !== undefined) {
             func.bind(this)(jPlayer);
@@ -128,7 +128,7 @@ export default class JPlayerPlaylist extends React.Component {
             return function() {
                 originalFunction.apply(this, arguments);
                 const stateClassMethod = this.props.loop === "loop-playlist" ? "addStateClass" : "removeStateClass";
-                this._updateFunctions([[stateClassMethod, "loopedPlaylist"]]);
+                this._updateFunctions([stateClassMethod, "loopedPlaylist"]);
             }.bind(this);
         };
         this._overrideFunctions(["_updateButtons", newUpdateButtonCallback]);
@@ -154,7 +154,7 @@ export default class JPlayerPlaylist extends React.Component {
 
         this._originalPlaylist();
     }
-    _originalPlaylist = (playlistSetCallback) => JPlayerHelpers.updateOptions.call(this, {playlist: [...this.original]}, playlistSetCallback)
+    _originalPlaylist = (playlistSetCallback) => JPlayerHelpers.assignOptions.call(this, {playlist: [...this.original]}, playlistSetCallback)
     setPlaylist = (playlist) => {
         this._initPlaylist(playlist);
         this._init();
@@ -184,11 +184,11 @@ export default class JPlayerPlaylist extends React.Component {
         }
         this.setState({useRemoveConfig: true});
     }
-    select = (index) => {
+    select = (index, setMediaCallback) => {
         index = (index < 0) ? this.original.length + index : index; // Negative index relates to end of array.
         if (0 <= index && index < this.props.playlist.length) {
             this.setState({current: index});
-            this._updateFunctions(["setMedia", this.props.playlist[index]]);
+            this._updateFunctions(["setMedia", this.props.playlist[index]], setMediaCallback);
         } else {
             this.setState({current: 0});
         }
@@ -197,8 +197,7 @@ export default class JPlayerPlaylist extends React.Component {
         index = (index < 0) ? this.original.length + index : index; // Negative index relates to end of array.
         if (0 <= index && index < this.props.playlist.length) {
             if (this.props.playlist.length) {
-                this.select(index, true);
-                this._updateFunctions("play");
+                this.select(index, () => this._updateFunctions("play"));
             }
         } else if (index === undefined) {
             this._updateFunctions("play");
@@ -287,8 +286,8 @@ export default class JPlayerPlaylist extends React.Component {
         }
 
         if (this.shuffled) {
-            JPlayerHelpers.updateOptions.call(this, {playlist: [...this.props.playlist].sort(() => 0.5 - Math.random())});
-             this._updateFunctions(["addStateClass", "shuffled"], playlistSetCallback);
+            JPlayerHelpers.assignOptions.call(this, {playlist: [...this.props.playlist].sort(() => 0.5 - Math.random())});
+            this._updateFunctions(["addStateClass", "shuffled"], playlistSetCallback);
         } else {
             this._originalPlaylist(playlistSetCallback);
             this._updateFunctions(["removeStateClass", "shuffled"]);
@@ -363,7 +362,7 @@ class AdditionalControls extends React.Component {
     _onRepeatPlaylistClick = (event) => {
         event.preventDefault();
         
-        JPlayerHelpers.updateOptions.call(this, {loop: "loop-playlist"});
+        JPlayerHelpers.assignOptions.call(this, {loop: "loop-playlist"});
         this.props.blur(event.target);
     }
     componentWillMount() {

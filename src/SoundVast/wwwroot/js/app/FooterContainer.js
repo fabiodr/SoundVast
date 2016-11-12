@@ -28,14 +28,6 @@ class FooterContainer extends React.Component {
                 muted: true,
                 enableRemoveControls: true,
                 loopOnPrevious: true,
-                sizeFull: {
-                    width: "90%",
-                    height: "90%"
-                },
-                size: {
-                    width: 300,
-                    height: 200
-                },
                 keyEnabled: true,
                 playlist: [
                     {
