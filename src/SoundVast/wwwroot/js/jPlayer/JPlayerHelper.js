@@ -35,31 +35,9 @@ export default {
     key: {
         functions: "functions",
         overrideFunctions: "overrideFunctions",
-        stateClass: "stateClass",
-        volumeBarClass: "volumeBarClass",
-        volumeBarValueClass: "volumeBarValueClass",
-        volumeMaxClass: "volumeMaxClass",
-        playbackRateBarClass: "playbackRateBarClass",
-        playbackRateBarValueClass: "playbackRateBarValueClass",
-        seekBarClass: "seekBarClass",
-        noSolutionClass: "noSolutionClass",
-        posterClass: "posterClass",
-        videoClass: "videoClass",
-        videoPlayClass: "videoPlayClass"
+        stateClass: "stateClass"
     },
     className: {
-        hidden: "jp-hidden",
-        seeking: "jp-seeking-bg",
+        hidden: "jp-hidden"
     }
 };
-
-export const JPlayerPlaylistHelpers = {
-    key: {
-        playlist: "playlist",
-        detailsClass: "detailsClass",
-        shuffleOffClass: "shuffleOffClass"
-    },
-    className: {
-        currentMedia: "jp-playlist-current"
-    }
-}

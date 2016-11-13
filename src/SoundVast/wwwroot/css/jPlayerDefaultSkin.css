@@ -35,7 +35,7 @@
     border: 0;
     bottom: 0;
     /*display: none;*/
-    height: 50px;
+    height: 350px;
     position: fixed;
     width: 100%;
 }
@@ -61,11 +61,6 @@
     width: 40px;
     height: 40px;
 }
-
-/*.jp-audio.jp-state-full-screen img {
-    width: 700px;
-    height: 700px;
-}*/
 
     .jp-type-footer .jp-controls .jp-volume-bar {
         background: url("Images/jplayer.blue.monday.jpg") 0 -250px repeat-x;
@@ -316,6 +311,15 @@
         font-size: 30px;
         position: absolute;
         right: 80px;
+        text-decoration: none;
+    }
+
+    .jp-test {
+        color: #000000;
+        font-size: 30px;
+        position: absolute;
+        right: 80px;
+        top: 40px;
         text-decoration: none;
     }
 

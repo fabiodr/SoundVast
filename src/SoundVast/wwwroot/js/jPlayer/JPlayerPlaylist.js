@@ -1,7 +1,7 @@
 import React from "react";
 import {Motion, spring} from "react-motion";
 import JPlayer from "./JPlayer";
-import JPlayerHelpers, {JPlayerPlaylistHelpers} from "./Helpers";
+import sharedHelper from "./JPlayerHelper";
 import merge from "lodash.merge";
 import maxBy from "lodash/maxBy";
 
@@ -62,6 +62,12 @@ export default class JPlayerPlaylist extends React.Component {
                 this._trigger(this.props.onResize, jPlayer);
             }
         }
+        
+        this.key = {
+            playlist: "playlist",
+            detailsClass: "detailsClass",
+            shuffleOffClass: "shuffleOffClass"
+        };
 
         //Add a new stateClass for the extra loop option
         this.stateClass = merge({
@@ -86,12 +92,10 @@ export default class JPlayerPlaylist extends React.Component {
 
         this.freeMediaLinkIndex = 0;
     }
-    _updateFunctions = (params, callback) => JPlayerHelpers.modifyOptionsArray.call(this, [params], Array.prototype.concat, JPlayerHelpers.key.functions, callback)
-    _overrideFunctions = (params, callback) => JPlayerHelpers.modifyOptionsArray.call(this, [params], Array.prototype.concat, JPlayerHelpers.key.overrideFunctions, callback)
-    _hideDetails = () => JPlayerHelpers.addClass.call(this, JPlayerHelpers.className.hidden, JPlayerPlaylistHelpers.key.detailsClass)
-    _showDetails = () => JPlayerHelpers.removeClass.call(this, JPlayerHelpers.className.hidden, JPlayerPlaylistHelpers.key.detailsClass)
-    _hideShuffleOff = () => JPlayerHelpers.addClass.call(this, JPlayerHelpers.className.hidden, JPlayerPlaylistHelpers.key.shuffleOffClass)
-    _showShuffleOff = () => JPlayerHelpers.removeClass.call(this, JPlayerHelpers.className.hidden, JPlayerPlaylistHelpers.key.shuffleOffClass)
+    _updateFunctions = (params, callback) => sharedHelper.modifyOptionsArray.call(this, [params], Array.prototype.concat, sharedHelper.key.functions, callback)
+    _overrideFunctions = (params, callback) => sharedHelper.modifyOptionsArray.call(this, [params], Array.prototype.concat, sharedHelper.key.overrideFunctions, callback)
+    _hideDetails = () => sharedHelper.addClass.call(this, sharedHelper.className.hidden, this.key.detailsClass)
+    _showDetails = () => sharedHelper.removeClass.call(this, sharedHelper.className.hidden, this.key.detailsClass)
     _trigger = (func, jPlayer) => {
         if (func !== undefined) {
             func.bind(this)(jPlayer);
@@ -154,7 +158,7 @@ export default class JPlayerPlaylist extends React.Component {
 
         this._originalPlaylist();
     }
-    _originalPlaylist = (playlistSetCallback) => JPlayerHelpers.assignOptions.call(this, {playlist: [...this.original]}, playlistSetCallback)
+    _originalPlaylist = (playlistSetCallback) => sharedHelper.assignOptions.call(this, {playlist: [...this.original]}, playlistSetCallback)
     setPlaylist = (playlist) => {
         this._initPlaylist(playlist);
         this._init();
@@ -164,7 +168,7 @@ export default class JPlayerPlaylist extends React.Component {
         media.key = maxBy(this.props.playlist, "key").key + 1;
         
         this.original.push(media);
-        JPlayerHelpers.modifyOptionsArray.call(this, media, Array.prototype.concat, JPlayerPlaylistHelpers.key.playlist);
+        sharedHelper.modifyOptionsArray.call(this, media, Array.prototype.concat, this.key.playlist);
 
         if (playNow) {
             this.play(this.props.playlist.length - 1);
@@ -180,7 +184,7 @@ export default class JPlayerPlaylist extends React.Component {
             this._updateFunctions("clearMedia");
             return true;
         } else {           
-            JPlayerHelpers.mergeOptions.call(this, {playlist: {[index]: {isRemoving: true}}});
+            sharedHelper.mergeOptions.call(this, {playlist: {[index]: {isRemoving: true}}});
         }
         this.setState({useRemoveConfig: true});
     }
@@ -254,7 +258,7 @@ export default class JPlayerPlaylist extends React.Component {
         } else {
             this.original.splice(index, 1);
         }
-        JPlayerHelpers.modifyOptionsArray.call(this, function(_, i) {return i !== index}, Array.prototype.filter, JPlayerPlaylistHelpers.key.playlist);
+        sharedHelper.modifyOptionsArray.call(this, function(_, i) {return i !== index}, Array.prototype.filter, this.key.playlist);
 
         if (this.original.length) {
             if (index === this.state.current) {
@@ -286,7 +290,7 @@ export default class JPlayerPlaylist extends React.Component {
         }
 
         if (this.shuffled) {
-            JPlayerHelpers.assignOptions.call(this, {playlist: [...this.props.playlist].sort(() => 0.5 - Math.random())});
+            sharedHelper.assignOptions.call(this, {playlist: [...this.props.playlist].sort(() => 0.5 - Math.random())});
             this._updateFunctions(["addStateClass", "shuffled"], playlistSetCallback);
         } else {
             this._originalPlaylist(playlistSetCallback);
@@ -320,7 +324,7 @@ export default class JPlayerPlaylist extends React.Component {
                     </div>
                 </div>
                 <JPlayer ref={jPlayer => this.jPlayer = jPlayer} {...this.props} {...this.keyBindings} {...this.event} stateClass={this.stateClass} loopOptions={"loop-playlist"}>
-                    <AdditionalControls blur={this.blur} shuffle={this.shuffle} next={this.next} previous={this.previous}
+                    <PlaylistControls blur={this.blur} shuffle={this.shuffle} next={this.next} previous={this.previous}
                         shuffled={this.shuffled} html={this.props.html} updateOptions={this.props.updateOptions} />
                 </JPlayer>
             </div>
@@ -328,18 +332,18 @@ export default class JPlayerPlaylist extends React.Component {
     }
 } 
 
-class AdditionalControls extends React.Component {
+class PlaylistControls extends React.Component {
     constructor(props) {
         super();
         
         this.state = {};
-    }
-    _onShuffleOffClick = (event) => {
-        event.preventDefault();
-
-        this.props.shuffle(false);
-        this.props.blur(event.target);
-        this._hideShuffleOff();
+        this.className = {
+            details: "jp-details",
+            shuffle: "jp-shuffle",
+            previous: "jp-previous",
+            next: "jp-next",
+            extraControls: "jp-extra-controls"
+        };
     }
     _onShuffleClick = (event) => {
         event.preventDefault();
@@ -359,24 +363,13 @@ class AdditionalControls extends React.Component {
         this.props.next();
         this.props.blur(event.target);
     }
-    _onRepeatPlaylistClick = (event) => {
-        event.preventDefault();
-        
-        JPlayerHelpers.assignOptions.call(this, {loop: "loop-playlist"});
-        this.props.blur(event.target);
-    }
-    componentWillMount() {
-        JPlayerHelpers.addClass.call(this, "jp-shuffleOff", JPlayerPlaylistHelpers.key.shuffleOffClass);
-    }
     render() {
         return (
             <div className="jp-playlist-controls">
-                <a className={this.state.shuffleOffClass.join(" ")} onClick={this._onShuffleOffClick}>{this.props.html.shuffleOff}</a>
-                <a className="jp-shuffle" onClick={this._onShuffleClick}>{this.props.html.shuffle}</a>
-                <a className="jp-previous" onClick={this._onPreviousClick}>{this.props.html.previous}</a>
-                <a className="jp-next" onClick={this._onNextClick}>{this.props.html.next}</a>
-                <a className="jp-playlist-options">{this.props.html.playlistOptions}</a>
-                <a className="jp-repeat-playlist" onClick={this._onRepeatPlaylistClick}>{this.props.html.repeatPlaylist}</a>
+                <a className={this.className.shuffle} onClick={this._onShuffleClick}>{this.props.html.shuffle}</a>
+                <a className={this.className.previous} onClick={this._onPreviousClick}>{this.props.html.previous}</a>
+                <a className={this.className.next} onClick={this._onNextClick}>{this.props.html.next}</a>
+                <a className={this.className.extraControls}>{this.props.html.playlistOptions}</a>
             </div>
         );
     }
@@ -393,6 +386,9 @@ class Media extends React.Component {
         super(props);
         
         this.state = {};
+        this.className = {
+            currentMedia: "jp-playlist-current",
+        };
     }
     _onRemoveMediaClick = (index, event) => {
         event.preventDefault();
@@ -415,8 +411,8 @@ class Media extends React.Component {
             <div>
             {this.props.medias.map((media, index) => {
                     const animationHeight = media.isRemoving ? this.props.minHeight : this.props.maxHeight;
-                    const mediaListClass = this.props.current === index ? JPlayerPlaylistHelpers.className.currentMedia : null;
-                    const mediaLinkClass = this.props.current === index ? `${this.props.itemClass} ${JPlayerPlaylistHelpers.className.currentMedia}` : this.props.itemClass        
+                    const mediaListClass = this.props.current === index ? this.className.currentMedia : null;
+                    const mediaLinkClass = this.props.current === index ? `${this.props.itemClass} ${this.className.currentMedia}` : this.props.itemClass        
                     const onRest = media.isRemoving ? () => this.props.onRest(index) : null;
 
                     return <Motion key={media.key} defaultStyle={{heightToInterpTo: this.props.minHeight}} style={{heightToInterpTo: spring(animationHeight, this.props.config)}} onRest={onRest}>                

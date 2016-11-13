@@ -22,9 +22,9 @@ class FooterContainer extends React.Component {
                     previous: <i className="fa fa-step-backward"></i>,
                     next: <i className="fa fa-step-forward"></i>,
                     playlistOptions: <div><i className="fa fa-ellipsis-h"></i><i className="fa fa-comment"></i></div>,
-                    repeatPlaylist: <i className="fa fa-step-forward"></i>
+                    stop: <i className="fa fa-step-forward jp-test"></i>
                 },      
-                smoothPlayBar: true,
+                smoothPlayBar: false,
                 muted: true,
                 enableRemoveControls: true,
                 loopOnPrevious: true,
