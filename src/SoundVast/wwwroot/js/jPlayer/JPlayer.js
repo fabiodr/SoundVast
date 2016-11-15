@@ -5,11 +5,11 @@ import update from "react-addons-update";
 import isEqual from "lodash/isEqual";
 import sharedHelper from "./JPlayerHelper";
 
-export default class JPlayer extends React.Component {
+export const JPlayer = (WrappedComponent) => class extends React.Component {
 	static get propTypes() {
 		return {
 			updateOptions: React.PropTypes.func.isRequired,
-            functions: React.PropTypes.array,
+			functions: React.PropTypes.array,
 			overrideFunctions: React.PropTypes.array,
 			status: React.PropTypes.object,
 			jPlayerStatus: React.PropTypes.func,
@@ -157,18 +157,16 @@ export default class JPlayer extends React.Component {
 			status: defaultStatus
 		}
 	}
-    constructor(props) {
-        super(props);
-
-		this.state = {
-			
-		};	
+	constructor(props) {
+		super(props);
+debugger
+		this.state = {};	
 
 		this._setupInternalProperties();
 		this._setupOptions();
 		this._setupEvents();
 		this._setupErrors();
-    }
+	}
 	_updateStatus = (newOption, callback) => sharedHelper.mergeOptions.call(this, {status: newOption}, callback)
 	_setupInternalProperties = () => {
 		this.solution = "html";
@@ -304,10 +302,10 @@ export default class JPlayer extends React.Component {
 				if(this.internal.cmdsIgnored && this.readyState > 0) { // Detect iOS executed the command
 					this.internal.cmdsIgnored = false;
 				}
-				 this._getHtmlStatus(this.currentMedia, null, () => {
-				 	this._updateInterface();
-				 	this._trigger(this.props.onProgress);
-				 });				
+				this._getHtmlStatus(this.currentMedia, null, () => {
+					this._updateInterface();
+					this._trigger(this.props.onProgress);
+				});				
 			},
 			onLoadedData: () => {				
 				this.androidFix.setMedia = false; // Disable the fix after the first progress event.
@@ -798,7 +796,7 @@ export default class JPlayer extends React.Component {
 		sharedHelper.assignStyle.call(this, {width: `${this.props.status.seekPercent}%`}, "seekBarStyle");
 
 		this.props.smoothPlayBar ? sharedHelper.assignStyle.call(this, {width: `${this.props.status.currentPercentAbsolute}%`}, "playBarStyle")
-								 : sharedHelper.assignStyle.call(this, {width: `${this.props.status.currentPercentRelative}%`}, "playBarStyle");
+								: sharedHelper.assignStyle.call(this, {width: `${this.props.status.currentPercentRelative}%`}, "playBarStyle");
 		
 		var currentTimeText = this._convertTime(this.props.status.currentTime);
 
@@ -1628,59 +1626,62 @@ export default class JPlayer extends React.Component {
 
 		this._initAfterRender();
 	}
+	updateOptions = (update, callback) => this.setState((prevState) => prevState.jPlayerPlaylistOptions = update(prevState.jPlayerPlaylistOptions), callback);
 	render() {
 		return (
-			<div id={this.props.cssSelectorAncestor.slice(1)} className={this.state.stateClass.join(" ")}>
-				<div ref={(jPlayerElement) => this.jPlayerElement = jPlayerElement} id={this.props.jPlayerSelector.slice(1)} className="jp-jplayer" style={this.state.jPlayerStyle}>
-					<Poster posterClass={this.state.posterClass.join(" ")} src={this.state.posterSrc} onLoad={this._posterLoad} onClick={() => this._trigger(this.props.onClick)} /> 
-					<Audio ref={(audio) => this.audio = audio} require={this.require.audio} events={this.mediaEvent}>
-						{this.state.videoTracks}
-					</Audio>
-					<Video ref={(video) => this.video = video} require={this.require.video} videoClass={this.state.videoClass.join(" ")} style={this.state.videoStyle} onClick={() => this._trigger(this.props.onClick)} events={this.mediaEvent}>
-						{this.state.videoTracks}
-					</Video>
-				</div>
-				<GUI nativeVideoControls={this.props.status.nativeVideoControls} fullWindow={this.props.fullWindow} autoHide={this.autoHide} fadeInConfig={this.props.guiFadeInAnimation} fadeOutConfig={this.props.guiFadeOutAnimation}>
-					<div className="jp-controls">
-						<a className={this.className.play} onClick={this.onPlayClick}>
-							{this.props.html.play}
-						</a>
-						<a className={this.className.mute} onClick={this.onMuteClick}>
-							{this.props.html.mute}
-						</a>
-						<a className={this.className.volumeMax} onClick={this.onVolumeMaxClick}>
-							{this.props.html.volumeMax}
-						</a>
-						<a className={this.state.repeatClass.join(" ")} onClick={this.onRepeatClick}>							
-							{this.props.html.repeat}			
-						</a>																
-						<a className={this.state.fullScreenClass.join(" ")} onClick={this.onFullScreenClick}>
-							{this.props.html.fullScreen}
-						</a>		
-						<div className={this.state.volumeBarClass.join(" ")} style={this.state.volumeBarStyle} onClick={this.onVolumeBarClick}>
-							<div className={this.state.volumeBarValueClass.join(" ")} style={this.state.volumeBarValueStyle} />
-						</div>
-						<div className={this.className.title}>
-							{this.state.titleText}
-						</div>
-						<div className={this.state.playbackRateBarClass.join(" ")} style={this.state.playbackRateBarStyle} onClick={this.onPlaybackRateBarClick}>
-							<div className={this.state.playbackRateBarValueClass.join(" ")} style={this.state.playbackRateBarValueStyle} />
-						</div>						
-						{this.props.children}	
+			<WrappedComponent playd={this.play}>
+				<div id={this.props.cssSelectorAncestor.slice(1)} className={this.state.stateClass.join(" ")}>
+					<div ref={(jPlayerElement) => this.jPlayerElement = jPlayerElement} id={this.props.jPlayerSelector.slice(1)} className="jp-jplayer" style={this.state.jPlayerStyle}>
+						<Poster posterClass={this.state.posterClass.join(" ")} src={this.state.posterSrc} onLoad={this._posterLoad} onClick={() => this._trigger(this.props.onClick)} /> 
+						<Audio ref={(audio) => this.audio = audio} require={this.require.audio} events={this.mediaEvent}>
+							{this.state.videoTracks}
+						</Audio>
+						<Video ref={(video) => this.video = video} require={this.require.video} videoClass={this.state.videoClass.join(" ")} style={this.state.videoStyle} onClick={() => this._trigger(this.props.onClick)} events={this.mediaEvent}>
+							{this.state.videoTracks}
+						</Video>
 					</div>
-					<div className="jp-progress">
-						<div className={this.state.seekBarClass.join(" ")} style={this.state.seekBarStyle} onClick={this.onSeekBarClick}>                         
-							<PlayBar smoothPlayBar={this.props.smoothPlayBar} currentPercentAbsolute={this.props.status.currentPercentAbsolute} playBarStyle={this.state.playBarStyle} />
-							<div className={this.className.currentTime}>{this.state.currentTimeText}</div>
-							<div className={this.className.duration} onClick={this.state.durationOnClick}>{this.state.durationText}</div>
+					<GUI nativeVideoControls={this.props.status.nativeVideoControls} fullWindow={this.props.fullWindow} autoHide={this.autoHide} fadeInConfig={this.props.guiFadeInAnimation} fadeOutConfig={this.props.guiFadeOutAnimation}>
+						<div className="jp-controls">
+							<a className={this.className.play} onClick={this.onPlayClick}>
+								{this.props.html.play}
+							</a>
+							<a className={this.className.mute} onClick={this.onMuteClick}>
+								{this.props.html.mute}
+							</a>
+							<a className={this.className.volumeMax} onClick={this.onVolumeMaxClick}>
+								{this.props.html.volumeMax}
+							</a>
+							<a className={this.state.repeatClass.join(" ")} onClick={this.onRepeatClick}>							
+								{this.props.html.repeat}			
+							</a>																
+							<a className={this.state.fullScreenClass.join(" ")} onClick={this.onFullScreenClick}>
+								{this.props.html.fullScreen}
+							</a>		
+							<div className={this.state.volumeBarClass.join(" ")} style={this.state.volumeBarStyle} onClick={this.onVolumeBarClick}>
+								<div className={this.state.volumeBarValueClass.join(" ")} style={this.state.volumeBarValueStyle} />
+							</div>
+							<div className={this.className.title}>
+								{this.state.titleText}
+							</div>
+							<div className={this.state.playbackRateBarClass.join(" ")} style={this.state.playbackRateBarStyle} onClick={this.onPlaybackRateBarClick}>
+								<div className={this.state.playbackRateBarValueClass.join(" ")} style={this.state.playbackRateBarValueStyle} />
+							</div>						
+							{this.props.children}	
 						</div>
+						<div className="jp-progress">
+							<div className={this.state.seekBarClass.join(" ")} style={this.state.seekBarStyle} onClick={this.onSeekBarClick}>                         
+								<PlayBar smoothPlayBar={this.props.smoothPlayBar} currentPercentAbsolute={this.props.status.currentPercentAbsolute} playBarStyle={this.state.playBarStyle} />
+								<div className={this.className.currentTime}>{this.state.currentTimeText}</div>
+								<div className={this.className.duration} onClick={this.state.durationOnClick}>{this.state.durationText}</div>
+							</div>
+						</div>
+					</GUI>
+					<div className={this.state.noSolutionClass.join(" ")} style={this.state.noSolutionStyle}>
+						<span>Update Required</span>
+						To play the media you will need to update your browser to a recent version.
 					</div>
-				</GUI>
-				<div className={this.state.noSolutionClass.join(" ")} style={this.state.noSolutionStyle}>
-					<span>Update Required</span>
-					To play the media you will need to update your browser to a recent version.
 				</div>
-			</div>
+			</WrappedComponent>
 		);
 	}
 }

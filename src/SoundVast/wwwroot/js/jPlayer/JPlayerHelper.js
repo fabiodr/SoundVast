@@ -2,15 +2,15 @@ import merge from "lodash.merge";
 
 export default {
     assignOptions: function(newOption, callback) {
-        this.props.updateOptions((prevJPlayerOptions) => Object.assign({}, prevJPlayerOptions, newOption), callback);
+       // this.props.updateOptions((prevJPlayerOptions) => Object.assign({}, prevJPlayerOptions, newOption), callback);
     },
     mergeOptions: function(newOption, callback) {
-        this.props.updateOptions((prevJPlayerOptions) => merge({}, prevJPlayerOptions, newOption), callback);
+       // this.props.updateOptions((prevJPlayerOptions) => merge({}, prevJPlayerOptions, newOption), callback);
     },
     modifyOptionsArray: function(newOptions, arrayMethod, key, callback) {
-        const handleNewOptions = (prevOptions = []) => arrayMethod.call(prevOptions, newOptions);
+      //  const handleNewOptions = (prevOptions = []) => arrayMethod.call(prevOptions, newOptions);
 
-        this.props.updateOptions((prevJPlayerOptions) => Object.assign({}, prevJPlayerOptions, {[key]: handleNewOptions(prevJPlayerOptions[key])}), callback);
+       // this.props.updateOptions((prevJPlayerOptions) => Object.assign({}, prevJPlayerOptions, {[key]: handleNewOptions(prevJPlayerOptions[key])}), callback);
     },
     addClass: function(classToAdd, key) {
 		//Use function overload of setState to make sure we have up to date values

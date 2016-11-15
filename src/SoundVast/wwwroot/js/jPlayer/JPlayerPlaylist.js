@@ -1,11 +1,11 @@
 import React from "react";
 import {Motion, spring} from "react-motion";
-import JPlayer from "./JPlayer";
+import {JPlayer} from "./JPlayer";
 import sharedHelper from "./JPlayerHelper";
 import merge from "lodash.merge";
 import maxBy from "lodash/maxBy";
 
-export default class JPlayerPlaylist extends React.Component {
+export const JPlayerPlaylist = (WrappedComponent) => class extends React.Component {
     static get propTypes() {
 		return {
             updateOptions: React.PropTypes.func.isRequired,
@@ -35,12 +35,13 @@ export default class JPlayerPlaylist extends React.Component {
             itemClass: "jp-playlist-item",
             freeItemClass: "jp-playlist-item-free",
             removeItemClass: "jp-playlist-item-remove",
-            freeGroupClass: "jp-free-media"
+            freeGroupClass: "jp-free-media",
+            updateOptions: (update, callback) => {}
         };
     }
     constructor(props) {
         super(props);
-
+debugger
         this.playlistContainerMinHeight = this.playlistItemAnimMinHeight = 0;
         this.playlistContainerMaxHeight = this.playlistItemAnimMaxHeight = 1;
 
@@ -323,10 +324,11 @@ export default class JPlayerPlaylist extends React.Component {
                         </Playlist> 
                     </div>
                 </div>
-                <JPlayer ref={jPlayer => this.jPlayer = jPlayer} {...this.props} {...this.keyBindings} {...this.event} stateClass={this.stateClass} loopOptions={"loop-playlist"}>
+                <WrappedComponent testd={this.blur}/>
+                {/*<JPlayer ref={jPlayer => this.jPlayer = jPlayer} {...this.props} {...this.keyBindings} {...this.event} stateClass={this.stateClass} loopOptions={"loop-playlist"} updateOptions={this.updateOptions}>
                     <PlaylistControls blur={this.blur} shuffle={this.shuffle} next={this.next} previous={this.previous}
                         shuffled={this.shuffled} html={this.props.html} updateOptions={this.props.updateOptions} />
-                </JPlayer>
+                </JPlayer>*/}
             </div>
         );
     }

@@ -2,12 +2,13 @@ import React from "react";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 
-import JPlayerPlaylist from "../jPlayer/JPlayerPlaylist";
+import {JPlayerPlaylist} from "../jPlayer/JPlayerPlaylist";
+import {JPlayer} from "../jPlayer/JPlayer";
 
 class FooterContainer extends React.Component {
-    constructor(){
-        super();
-        
+    constructor(props){
+        super(props);
+        debugger
         this.state = {
             jPlayerPlaylistOptions: {
                 jPlayerSelector: "#jplayer_footer_player",
@@ -80,11 +81,11 @@ class FooterContainer extends React.Component {
         return (
             <div>
                 <div className="jp-type-footer" >
-                    <JPlayerPlaylist ref={jPlayerPlaylist => this.jPlayerPlaylist = jPlayerPlaylist} {...this.state.jPlayerPlaylistOptions} updateOptions={this.updateOptions} />
+                    {/*<JPlayerPlaylist ref={jPlayerPlaylist => this.jPlayerPlaylist = jPlayerPlaylist} {...this.state.jPlayerPlaylistOptions} updateOptions={this.updateOptions} />*/}
                 </div>
             </div>
         );
     }
 }
 
-export default connect()(FooterContainer);
+export default connect()(JPlayer(JPlayerPlaylist(FooterContainer)));
