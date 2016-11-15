@@ -2,15 +2,42 @@ import React from "react";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 
-import {JPlayerPlaylist} from "../jPlayer/JPlayerPlaylist";
-import {JPlayer} from "../jPlayer/JPlayer";
+import {jPlayerPlaylist} from "../jPlayer/JPlayerPlaylist";
+import {jPlayer} from "../jPlayer/JPlayer";
 
 class FooterContainer extends React.Component {
     constructor(props){
         super(props);
         debugger
+        this.state = {};
+    }
+    test = () => {
+        document.addEventListener("keydown", (e) => {   
+			if (e.keyCode == '38') {
+				
+			}		
+		});     
+    }
+    updateOptions = (update, callback) => this.setState((prevState) => prevState.jPlayerPlaylistOptions = update(prevState.jPlayerPlaylistOptions), callback);
+    componentDidMount() {
+        this.test();
+    }
+    render() {
+        return (
+            <div>
+                <div className="jp-type-footer" >
+                    {/*<JPlayerPlaylist ref={jPlayerPlaylist => this.jPlayerPlaylist = jPlayerPlaylist} {...this.state.jPlayerPlaylistOptions} updateOptions={this.updateOptions} />*/}
+                </div>
+            </div>
+        );
+    }
+}
+
+class Test extends React.Component {
+    constructor(props){
+        super(props); 
         this.state = {
-            jPlayerPlaylistOptions: {
+            jPlayerOptions: {
                 jPlayerSelector: "#jplayer_footer_player",
                 cssSelectorAncestor: "#jp_container_footer_player",
                 html: {
@@ -62,30 +89,19 @@ class FooterContainer extends React.Component {
                         free: true
                     }
                 ],
-                onError: (jPlayer) => console.error(jPlayer.error)       
+                onError: (jPlayer) => console.error(jPlayer.error)                       
             }
         };
-    }
-    test = () => {
-        document.addEventListener("keydown", (e) => {   
-			if (e.keyCode == '38') {
-				this.setState(previousState => previousState.jPlayerPlaylistOptions = Object.assign({}, previousState.jPlayerPlaylistOptions, {functions: ["play"]})); 
-			}		
-		});     
-    }
-    updateOptions = (update, callback) => this.setState((prevState) => prevState.jPlayerPlaylistOptions = update(prevState.jPlayerPlaylistOptions), callback);
-    componentDidMount() {
-        this.test();
     }
     render() {
         return (
             <div>
-                <div className="jp-type-footer" >
-                    {/*<JPlayerPlaylist ref={jPlayerPlaylist => this.jPlayerPlaylist = jPlayerPlaylist} {...this.state.jPlayerPlaylistOptions} updateOptions={this.updateOptions} />*/}
-                </div>
+                <JPlayer {...this.state.jPlayerOptions} />
             </div>
         );
     }
 }
 
-export default connect()(JPlayer(JPlayerPlaylist(FooterContainer)));
+const JPlayer = jPlayer(jPlayerPlaylist(FooterContainer));
+
+export default connect()(Test);

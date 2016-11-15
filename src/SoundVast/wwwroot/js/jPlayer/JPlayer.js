@@ -5,7 +5,7 @@ import update from "react-addons-update";
 import isEqual from "lodash/isEqual";
 import sharedHelper from "./JPlayerHelper";
 
-export const JPlayer = (WrappedComponent) => class extends React.Component {
+export const jPlayer = (WrappedComponent) => class extends React.Component {
 	static get propTypes() {
 		return {
 			updateOptions: React.PropTypes.func.isRequired,
@@ -170,7 +170,7 @@ debugger
 	_updateStatus = (newOption, callback) => sharedHelper.mergeOptions.call(this, {status: newOption}, callback)
 	_setupInternalProperties = () => {
 		this.solution = "html";
-		this.timeFormat = merge(JPlayer.timeFormat, this.props.timeFormat);
+		this.timeFormat = merge(jPlayer.timeFormat, this.props.timeFormat);
 		this.internal = {
 			// instance: undefined
 			// htmlDlyCmdId: undefined
@@ -369,7 +369,7 @@ debugger
 			onEnded: () => {			
 				// Order of the next few commands are important. Change the time and then pause.
 				// Solves a bug in Firefox, where issuing pause 1st causes the media to play from the start. ie., The pause is ignored.
-				if(!JPlayer.platform.webkit) { // Chrome crashes if you do this in conjunction with a setMedia command in an ended event handler. ie., The playlist demo.
+				if(!jPlayer.platform.webkit) { // Chrome crashes if you do this in conjunction with a setMedia command in an ended event handler. ie., The playlist demo.
 					this.currentMedia.currentTime = 0; // Safari does not care about this command. ie., It works with or without this line. (Both Safari and Chrome are Webkit.)
 				}
 				// Pause otherwise a click on the progress bar will play from that point, when it shouldn't, since it stopped playback.
@@ -458,11 +458,11 @@ debugger
 		sharedHelper.addClass.call(this, this.className.noSolution, this.key.noSolutionClass);
 
 		// On iOS, assume commands will be ignored before user initiates them.
-		this.internal.cmdsIgnored = JPlayer.platform.ipad || JPlayer.platform.iphone || JPlayer.platform.ipod;
+		this.internal.cmdsIgnored = jPlayer.platform.ipad || jPlayer.platform.iphone || jPlayer.platform.ipod;
 
 		// Add key bindings focusInstance to 1st jPlayer instanced with key control enabled.
-		if(this.props.keyEnabled && !JPlayer.focusInstance) {
-			JPlayer.focusInstance = this;
+		if(this.props.keyEnabled && !jPlayer.focusInstance) {
+			jPlayer.focusInstance = this;
 		}
 
 		// A fix for Android where older (2.3) and even some 4.x devices fail to work when changing the *audio* SRC and then playing immediately.
@@ -491,7 +491,7 @@ debugger
 		for (var index1 = 0; index1 < this.props.supplied.length; index1++) {
 			var format = this.props.supplied[index1].replace(/^\s+|\s+$/g, ""); //trim
 
-			if(JPlayer.format[format]) { // Check format is valid.
+			if(jPlayer.format[format]) { // Check format is valid.
 				var dupFound = false;
 
 				for (var index2 = 0; index2 < this.formats.length; index2++) {
@@ -516,7 +516,7 @@ debugger
 		for (var priority in this.formats) {
 			var format = this.formats[priority];
 
-			this.require[JPlayer.format[format].media] = true;
+			this.require[jPlayer.format[format].media] = true;
 		}
 
 		const updateCssClass = () => {
@@ -557,7 +557,7 @@ debugger
 		});
 
 		// Create event handlers if native fullscreen is supported
-		if(JPlayer.nativeFeatures.fullscreen.api.fullscreenEnabled) {
+		if(jPlayer.nativeFeatures.fullscreen.api.fullscreenEnabled) {
 			this._fullscreenAddEventListeners();
 		}
 	}
@@ -567,7 +567,7 @@ debugger
 		this.currentMedia.autoplay = this.props.autoPlay;
 		this.currentMedia.loop = this.props.loop === "loop" ? true : false;
 
-		JPlayer.instances[this.internal.instance] = this;
+		jPlayer.instances[this.internal.instance] = this;
 
 		// The native controls are only for video and are disabled when audio is also used.
 		this._restrictNativeVideoControls(); 
@@ -576,7 +576,7 @@ debugger
 			var format = this.formats[priority];
 
 			this.html.canPlay = {
-				[format]: this.html[JPlayer.format[format].media].available && "" !== this._testCanPlayType(JPlayer.format[format].codec)
+				[format]: this.html[jPlayer.format[format].media].available && "" !== this._testCanPlayType(jPlayer.format[format].codec)
 			}
 		}
 
@@ -603,7 +603,7 @@ debugger
 			}
 		}
 
-		if (JPlayer.platform.android) {
+		if (jPlayer.platform.android) {
 			sharedHelper.assignOptions.call(this, {preload: this.props.preload !== 'auto' ? 'metadata' : 'auto'});
 		}
 
@@ -712,7 +712,7 @@ debugger
 	}
 	_removeEventListeners = () => {
 		//Remove the fullscreen event listeners
-		var fs = JPlayer.nativeFeatures.fullscreen;
+		var fs = jPlayer.nativeFeatures.fullscreen;
 
 		if(this.internal.fullscreenchangeHandler) {
 			document.removeEventListener(fs.event.fullscreenchange, this.internal.fullscreenchangeHandler, false);
@@ -758,7 +758,7 @@ debugger
 	}
 	_trigger = (func, error) => {
 		var jPlayer = {
-			version: Object.assign({}, JPlayer.version),
+			version: Object.assign({}, jPlayer.version),
 			element: this.currentMedia,
 			//status: merge({}, this.status), // Deep copy
 			html: merge({}, this.html), // Deep copy
@@ -843,7 +843,7 @@ debugger
 		for (var type in media) {
 			var url = media[type];
 
-			if(url && JPlayer.format[type] && url.substr(0, 5) !== "data:") {
+			if(url && jPlayer.format[type] && url.substr(0, 5) !== "data:") {
 				media[type] = this._qualifyURL(url);
 			}
 		}
@@ -875,7 +875,7 @@ debugger
 
 		for (var formatPriority = 0; formatPriority < this.formats.length; formatPriority++) {
 			var format = this.formats[formatPriority];
-			var isVideo = JPlayer.format[format].media === 'video';
+			var isVideo = jPlayer.format[format].media === 'video';
 
 			if(this.html.support[format] && this._validString(media[format])) { // Format supported in solution and url given for format.
 
@@ -889,7 +889,7 @@ debugger
 				this.html.active = true;
 
 				// Setup the Android Fix - Only for HTML audio.
-				if(JPlayer.platform.android) {
+				if(jPlayer.platform.android) {
 					this.androidFix.setMedia = true;
 				}
 				this._updateStatus({video: false});
@@ -966,7 +966,7 @@ debugger
 	}
 	focus = () => {
 		if(this.props.keyEnabled) {
-			JPlayer.focusInstance = this;
+			jPlayer.focusInstance = this;
 		}
 	}
 	play = (time) => {
@@ -1003,8 +1003,8 @@ debugger
 			return; // Return undefined to maintain chaining.
 		}
 
-		for (var index in JPlayer.instances) {
-			var instance = JPlayer.instances[index];
+		for (var index in jPlayer.instances) {
+			var instance = jPlayer.instances[index];
 
 			if(this.jPlayerElement !== instance.jPlayerElement) { // Do not tell this instance.
 				if(!hasConditions || conditions.bind(instance)()) {
@@ -1134,7 +1134,7 @@ debugger
 		this._trigger(this.props.onRepeat);
 	}
 	_setNextProps = (nextProps = {}) => {
-		//props that get updated within the JPlayer component as well as through props
+		//props that get updated within the jPlayer component as well as through props
 		this.nextProps = {
 			playbackRate: nextProps.playbackRate === undefined ? this.props.playbackRate : nextProps.playbackRate,
 			fullWindow: nextProps.fullWindow === undefined ? this.props.fullWindow : nextProps.fullWindow,
@@ -1189,7 +1189,7 @@ debugger
 			minPlaybackRate: () => this._updatePlaybackRate(),
 			maxPlaybackRate: () => this._updatePlaybackRate(),
 			fullScreen: (value) => { 
-				var wkv = JPlayer.nativeFeatures.fullscreen.used.webkitVideo;
+				var wkv = jPlayer.nativeFeatures.fullscreen.used.webkitVideo;
 				if(!wkv || wkv && !this.props.status.waitForPlay) {
 					if(value) {
 						this._requestFullscreen();
@@ -1231,8 +1231,8 @@ debugger
 				this._updateMute();
 			},
 			keyEnabled: (value) => { 
-				if(!value && this === JPlayer.focusInstance) {
-					JPlayer.focusInstance = null;
+				if(!value && this === jPlayer.focusInstance) {
+					jPlayer.focusInstance = null;
 				}
 			}
 		};
@@ -1274,7 +1274,7 @@ debugger
 		}
 	}
 	_fullscreenAddEventListeners = () => {
-		var	fs = JPlayer.nativeFeatures.fullscreen;
+		var	fs = jPlayer.nativeFeatures.fullscreen;
 
 		if(fs.api.fullscreenEnabled) {
 			if(fs.event.fullscreenchange) {
@@ -1292,13 +1292,13 @@ debugger
 	}
 	_fullscreenchange = () => {
 		// If nothing is fullscreen, then we cannot be in fullscreen mode.
-		if(this.props.fullScreen && !JPlayer.nativeFeatures.fullscreen.api.fullscreenElement()) {
+		if(this.props.fullScreen && !jPlayer.nativeFeatures.fullscreen.api.fullscreenElement()) {
 			sharedHelper.assignOptions.call(this, {fullScreen: false});
 		}
 	}
 	_requestFullscreen = () => {
 		var e = document.querySelector(this.props.cssSelectorAncestor),
-			fs = JPlayer.nativeFeatures.fullscreen;
+			fs = jPlayer.nativeFeatures.fullscreen;
 
 		// This method needs the video element. For iOS and Android.
 		if(fs.used.webkitVideo) {
@@ -1315,7 +1315,7 @@ debugger
 		}
 	}
 	_exitFullscreen = () => {
-		var fs = JPlayer.nativeFeatures.fullscreen,
+		var fs = jPlayer.nativeFeatures.fullscreen,
 			e;
 
 		// This method needs the video element. For iOS and Android.
@@ -1616,12 +1616,12 @@ debugger
 	componentDidMount() {
 		if (this.audio.element()){
 			this.currentMedia = this.audio.element();
-			this.html.audio.available = !!this.audio.element().canPlayType && this._testCanPlayType(JPlayer.format.mp3.codec); // Test is for IE9 on Win Server 2008. 
+			this.html.audio.available = !!this.audio.element().canPlayType && this._testCanPlayType(jPlayer.format.mp3.codec); // Test is for IE9 on Win Server 2008. 
 		}
 
 		if (this.video.element()){
 			this.currentMedia = this.video.element();
-			this.html.video.available = !!this.video.element().canPlayType && this._testCanPlayType(JPlayer.format.m4v.codec);
+			this.html.video.available = !!this.video.element().canPlayType && this._testCanPlayType(jPlayer.format.m4v.codec);
 		}
 
 		this._initAfterRender();
@@ -1760,14 +1760,14 @@ class Video extends React.Component {
 }
 
 var keyBindings = (event) => {
-	var f = JPlayer.focusInstance,
+	var f = jPlayer.focusInstance,
 		ignoreKey;
 
 	//A jPlayer instance must be in focusInstance. ie., keyEnabled and the last one played.
 	if(f) {
 		// What generated the key press?
-		for (var index = 0; index < JPlayer.keyIgnoreElementNames.length; index++) {
-			var name = JPlayer.keyIgnoreElementNames[index];
+		for (var index = 0; index < jPlayer.keyIgnoreElementNames.length; index++) {
+			var name = jPlayer.keyIgnoreElementNames[index];
 
 			if(event.target.nodeName.toUpperCase() === name.toUpperCase()) {
 				ignoreKey = true;
@@ -1827,7 +1827,7 @@ const defaultStatus = {
 	*/
 };
 
-JPlayer.keys = ((en) => {
+jPlayer.keys = ((en) => {
 	var event = "keydown";
 
 	// Remove any binding, just in case enabled more than once.
@@ -1838,7 +1838,7 @@ JPlayer.keys = ((en) => {
 	}
 })(true);
 
-JPlayer.timeFormat = {
+jPlayer.timeFormat = {
 	showHour: false,
 	showMin: true,
 	showSec: true,
@@ -1850,10 +1850,10 @@ JPlayer.timeFormat = {
 	sepSec: ""
 };
 
-JPlayer.keyIgnoreElementNames = ["A", "INPUT", "TEXTAREA", "SELECT", "BUTTON"];
-JPlayer.focusInstance = null;
+jPlayer.keyIgnoreElementNames = ["A", "INPUT", "TEXTAREA", "SELECT", "BUTTON"];
+jPlayer.focusInstance = null;
 
-JPlayer.uaBrowser = (userAgent) => {
+jPlayer.uaBrowser = (userAgent) => {
 	var ua = userAgent.toLowerCase();
 
 	// Useragent RegExp
@@ -1871,7 +1871,7 @@ JPlayer.uaBrowser = (userAgent) => {
 	return { browser: match[1] || "", version: match[2] || "0" };
 }
 
-JPlayer.uaPlatform = (userAgent) => {
+jPlayer.uaPlatform = (userAgent) => {
 	var ua = userAgent.toLowerCase();
 
 	// Useragent RegExp
@@ -1894,10 +1894,10 @@ JPlayer.uaPlatform = (userAgent) => {
 
 // Internet Explorer (IE) Browser Document Mode Sniffer. Based on code at:
 // http://msdn.microsoft.com/en-us/library/cc288325%28v=vs.85%29.aspx#GetMode
-JPlayer.getDocMode = () => {
+jPlayer.getDocMode = () => {
 	var docMode;
 
-	if (JPlayer.browser.msie) {
+	if (jPlayer.browser.msie) {
 		if (document.documentMode) { // IE8 or later
 			docMode = document.documentMode;
 		} else { // IE 5-7
@@ -1911,27 +1911,27 @@ JPlayer.getDocMode = () => {
 	return docMode;
 }
 
-JPlayer.browser = {};
-JPlayer.platform = {};
+jPlayer.browser = {};
+jPlayer.platform = {};
 
-var browserMatch = JPlayer.uaBrowser(navigator.userAgent);
+var browserMatch = jPlayer.uaBrowser(navigator.userAgent);
 
 if (browserMatch.browser) {
-	JPlayer.browser[browserMatch.browser] = true;
-	JPlayer.browser.version = browserMatch.version;
+	jPlayer.browser[browserMatch.browser] = true;
+	jPlayer.browser.version = browserMatch.version;
 }
 
-var platformMatch = JPlayer.uaPlatform(navigator.userAgent);
+var platformMatch = jPlayer.uaPlatform(navigator.userAgent);
 
 if (platformMatch.platform) {
-	JPlayer.platform[platformMatch.platform] = true;
-	JPlayer.platform.mobile = !platformMatch.tablet;
-	JPlayer.platform.tablet = !!platformMatch.tablet;
+	jPlayer.platform[platformMatch.platform] = true;
+	jPlayer.platform.mobile = !platformMatch.tablet;
+	jPlayer.platform.tablet = !!platformMatch.tablet;
 }
 
-JPlayer.browser.documentMode = JPlayer.getDocMode();
+jPlayer.browser.documentMode = jPlayer.getDocMode();
 
-JPlayer.nativeFeatures = {
+jPlayer.nativeFeatures = {
 	init: function() {
 		/* Fullscreen function naming influenced by W3C naming.
 			* No support for: Mozilla Proposal: https://wiki.mozilla.org/Gecko:FullScreenAPI
@@ -2050,7 +2050,7 @@ JPlayer.nativeFeatures = {
 		}
 	}
 }
-JPlayer.nativeFeatures.init();
+jPlayer.nativeFeatures.init();
 
 var ConvertTime = function() {
 	this.init();
@@ -2059,7 +2059,7 @@ var ConvertTime = function() {
 ConvertTime.prototype = {
 	init: function() {
 		this.options = {
-			timeFormat: JPlayer.timeFormat
+			timeFormat: jPlayer.timeFormat
 		};
 	},
 	time: function(s) {
@@ -2084,15 +2084,15 @@ ConvertTime.prototype = {
 
 var myConvertTime = new ConvertTime();
 
-JPlayer.convertTime = (s) => myConvertTime.time(s);
+jPlayer.convertTime = (s) => myConvertTime.time(s);
 
-JPlayer.instances = {};
-JPlayer.version = {
+jPlayer.instances = {};
+jPlayer.version = {
 	script: "2.9.2"
 }
 
 // 'MPEG-4 support' : canPlayType('video/mp4; codecs="mp4v.20.8"')
-JPlayer.format = {
+jPlayer.format = {
 	mp3: {
 		codec: 'audio/mpeg',
 		media: 'audio'
