@@ -5,7 +5,7 @@ import update from "react-addons-update";
 import isEqual from "lodash/isEqual";
 import sharedHelper from "./JPlayerHelper";
 
-export const jPlayer = (WrappedComponent) => class extends WrappedComponent {
+export const jPlayer = (WrappedComponent) => class extends React.Component {
 	static get propTypes() {
 		return {
 			updateOptions: React.PropTypes.func.isRequired,

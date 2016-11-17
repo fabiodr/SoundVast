@@ -5,7 +5,7 @@ import sharedHelper from "./JPlayerHelper";
 import merge from "lodash.merge";
 import maxBy from "lodash/maxBy";
 
-export const jPlayerPlaylist = (WrappedComponent) => class extends WrappedComponent {
+export const jPlayerPlaylist = (WrappedComponent) => class extends React.Component {
     static get propTypes() {
 		return {
             updateOptions: React.PropTypes.func.isRequired,

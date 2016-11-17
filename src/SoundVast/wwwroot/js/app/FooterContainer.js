@@ -103,17 +103,18 @@ class Test extends React.Component {
 			}
 		});
     }
+    update = (val, callback) => this.setState((prevState) => prevState = val, callback)
     render() {
         debugger
 
         return (
             <div>
-                <JPlayer {...this.state.jPlayerOptions} {...this.props}/>
+                <JPlayer {...this.state.jPlayerOptions} {...this.props} />
             </div>
         );
     }
 }
 
-let JPlayer = jPlayerPlaylist(jPlayer(FooterContainer));
+let JPlayer = jPlayer(jPlayerPlaylist(FooterContainer));
 
 export default connect()(Test);
