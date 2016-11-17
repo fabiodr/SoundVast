@@ -1,11 +1,11 @@
 import React from "react";
 import {Motion, spring} from "react-motion";
-import {JPlayer} from "./JPlayer";
+import {jPlayer} from "./jPlayer";
 import sharedHelper from "./JPlayerHelper";
 import merge from "lodash.merge";
 import maxBy from "lodash/maxBy";
 
-export const jPlayerPlaylist = (WrappedComponent) => class extends React.Component {
+export const jPlayerPlaylist = (WrappedComponent) => class extends WrappedComponent {
     static get propTypes() {
 		return {
             updateOptions: React.PropTypes.func.isRequired,
@@ -41,7 +41,7 @@ export const jPlayerPlaylist = (WrappedComponent) => class extends React.Compone
     }
     constructor(props) {
         super(props);
-debugger
+        debugger;
         this.playlistContainerMinHeight = this.playlistItemAnimMinHeight = 0;
         this.playlistContainerMaxHeight = this.playlistItemAnimMaxHeight = 1;
 
@@ -111,7 +111,7 @@ debugger
 
         for (var property in media) {        
             // Check property is a media format
-            if (JPlayer.format[property]){
+            if (jPlayer.format[property]){
                 var value = media[property];
 
                 firstMediaLinkAdded ? firstMediaLinkAdded = false : media.freeMediaLinks.push(", ");
@@ -309,6 +309,7 @@ debugger
     componentWillMount() { 
         this._initPlaylist(this.props.playlist);  
         this._setup();
+        debugger;
     }
     render() {
         const MediaAnimationConfig = this.state.useRemoveConfig ? this.props.removeAnimation : this.props.addAnimation
@@ -324,11 +325,10 @@ debugger
                         </Playlist> 
                     </div>
                 </div>
-                <WrappedComponent testd={this.blur}/>
-                {/*<JPlayer ref={jPlayer => this.jPlayer = jPlayer} {...this.props} {...this.keyBindings} {...this.event} stateClass={this.stateClass} loopOptions={"loop-playlist"} updateOptions={this.updateOptions}>
+                <WrappedComponent {...this.props} {...this.keyBindings} {...this.event} stateClass={this.stateClass} loopOptions={"loop-playlist"} updateOptions={this.updateOptions}>
                     <PlaylistControls blur={this.blur} shuffle={this.shuffle} next={this.next} previous={this.previous}
                         shuffled={this.shuffled} html={this.props.html} updateOptions={this.props.updateOptions} />
-                </JPlayer>*/}
+                </WrappedComponent>
             </div>
         );
     }

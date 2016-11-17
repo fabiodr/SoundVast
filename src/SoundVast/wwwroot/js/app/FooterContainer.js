@@ -1,31 +1,34 @@
 import React from "react";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
+import merge from "lodash.merge";
 
-import {jPlayerPlaylist} from "../jPlayer/JPlayerPlaylist";
-import {jPlayer} from "../jPlayer/JPlayer";
+import {jPlayerPlaylist} from "../jPlayer/jPlayerPlaylist";
+import {jPlayer} from "../jPlayer/jPlayer";
 
 class FooterContainer extends React.Component {
     constructor(props){
         super(props);
-        debugger
+
         this.state = {};
     }
     test = () => {
-        document.addEventListener("keydown", (e) => {   
+        document.addEventListener("keydown", (e) => {
 			if (e.keyCode == '38') {
-				
-			}		
-		});     
+
+			}
+		});
     }
     updateOptions = (update, callback) => this.setState((prevState) => prevState.jPlayerPlaylistOptions = update(prevState.jPlayerPlaylistOptions), callback);
     componentDidMount() {
         this.test();
     }
     render() {
+    debugger
         return (
             <div>
-                <div className="jp-type-footer" >
+                <div className="jp-type-footer">               
+                    <button onClick={this.play.bind(this)}>Play</button>
                     {/*<JPlayerPlaylist ref={jPlayerPlaylist => this.jPlayerPlaylist = jPlayerPlaylist} {...this.state.jPlayerPlaylistOptions} updateOptions={this.updateOptions} />*/}
                 </div>
             </div>
@@ -35,7 +38,7 @@ class FooterContainer extends React.Component {
 
 class Test extends React.Component {
     constructor(props){
-        super(props); 
+        super(props);
         this.state = {
             jPlayerOptions: {
                 jPlayerSelector: "#jplayer_footer_player",
@@ -51,7 +54,7 @@ class Test extends React.Component {
                     next: <i className="fa fa-step-forward"></i>,
                     playlistOptions: <div><i className="fa fa-ellipsis-h"></i><i className="fa fa-comment"></i></div>,
                     stop: <i className="fa fa-step-forward jp-test"></i>
-                },      
+                },
                 smoothPlayBar: false,
                 muted: true,
                 enableRemoveControls: true,
@@ -89,19 +92,28 @@ class Test extends React.Component {
                         free: true
                     }
                 ],
-                onError: (jPlayer) => console.error(jPlayer.error)                       
+                onError: (jPlayer) => console.error(jPlayer.error)
             }
         };
     }
+    test = () => {
+        document.addEventListener("keydown", (e) => {
+			if (e.keyCode == '38') {
+				this.setState({test:"ds"});
+			}
+		});
+    }
     render() {
+        debugger
+
         return (
             <div>
-                <JPlayer {...this.state.jPlayerOptions} />
+                <JPlayer {...this.state.jPlayerOptions} {...this.props}/>
             </div>
         );
     }
 }
 
-const JPlayer = jPlayer(jPlayerPlaylist(FooterContainer));
+let JPlayer = jPlayerPlaylist(jPlayer(FooterContainer));
 
 export default connect()(Test);
