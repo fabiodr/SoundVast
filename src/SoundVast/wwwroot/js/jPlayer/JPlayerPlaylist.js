@@ -41,7 +41,12 @@ export const jPlayerPlaylist = (WrappedComponent) => class extends React.Compone
     }
     constructor(props) {
         super(props);
-        debugger;
+debugger
+        WrappedComponent = jPlayer(WrappedComponent, 
+        <PlaylistControls blur={this.blur} shuffle={this.shuffle} next={this.next} previous={this.previous}
+                            shuffled={this.shuffled} html={this.props.html} />
+        );
+
         this.playlistContainerMinHeight = this.playlistItemAnimMinHeight = 0;
         this.playlistContainerMaxHeight = this.playlistItemAnimMaxHeight = 1;
 
@@ -309,9 +314,9 @@ export const jPlayerPlaylist = (WrappedComponent) => class extends React.Compone
     componentWillMount() { 
         this._initPlaylist(this.props.playlist);  
         this._setup();
-        debugger;
     }
     render() {
+        debugger
         const MediaAnimationConfig = this.state.useRemoveConfig ? this.props.removeAnimation : this.props.addAnimation
 
         return (
@@ -324,20 +329,19 @@ export const jPlayerPlaylist = (WrappedComponent) => class extends React.Compone
                                 remove={this.remove} blur={this.blur} play={this.play} updateOptions={this.props.updateOptions} />
                         </Playlist> 
                     </div>
-                </div>
-                <WrappedComponent {...this.props} {...this.keyBindings} {...this.event} stateClass={this.stateClass} loopOptions={"loop-playlist"} updateOptions={this.updateOptions}>
-                    <PlaylistControls blur={this.blur} shuffle={this.shuffle} next={this.next} previous={this.previous}
-                        shuffled={this.shuffled} html={this.props.html} updateOptions={this.props.updateOptions} />
+                </div>        
+                <WrappedComponent {...this.props} {...this.keyBindings} {...this.event} stateClass={this.stateClass} loopOptions={"loop-playlist"} updateOptions={this.updateOptions}>                                   
+                    {this.props.children}
                 </WrappedComponent>
             </div>
         );
     }
 } 
 
-class PlaylistControls extends React.Component {
+export class PlaylistControls extends React.Component {
     constructor(props) {
         super();
-        
+
         this.state = {};
         this.className = {
             details: "jp-details",

@@ -12,23 +12,12 @@ class FooterContainer extends React.Component {
 
         this.state = {};
     }
-    test = () => {
-        document.addEventListener("keydown", (e) => {
-			if (e.keyCode == '38') {
-
-			}
-		});
-    }
-    updateOptions = (update, callback) => this.setState((prevState) => prevState.jPlayerPlaylistOptions = update(prevState.jPlayerPlaylistOptions), callback);
-    componentDidMount() {
-        this.test();
-    }
     render() {
-    debugger
+        debugger
         return (
             <div>
-                <div className="jp-type-footer">               
-                    <button onClick={this.play.bind(this)}>Play</button>
+                <div className="jp-type-footer">   
+                    {this.props.children} 
                     {/*<JPlayerPlaylist ref={jPlayerPlaylist => this.jPlayerPlaylist = jPlayerPlaylist} {...this.state.jPlayerPlaylistOptions} updateOptions={this.updateOptions} />*/}
                 </div>
             </div>
@@ -103,18 +92,17 @@ class Test extends React.Component {
 			}
 		});
     }
-    update = (val, callback) => this.setState((prevState) => prevState = val, callback)
+    update = (val, callback) => this.setState((prevState) => prevState = Object.assign({}, prevState, val), callback)
     render() {
-        debugger
-
         return (
             <div>
-                <JPlayer {...this.state.jPlayerOptions} {...this.props} />
+                <JPlayerPlaylist {...this.state.jPlayerOptions} {...this.props}>
+                </JPlayerPlaylist>
             </div>
         );
     }
 }
 
-let JPlayer = jPlayer(jPlayerPlaylist(FooterContainer));
+let JPlayerPlaylist = jPlayerPlaylist(FooterContainer);
 
 export default connect()(Test);
