@@ -13,7 +13,6 @@ class FooterContainer extends React.Component {
         this.state = {};
     }
     render() {
-        debugger
         return (
             <div>
                 <div className="jp-type-footer">   
@@ -92,11 +91,11 @@ class Test extends React.Component {
 			}
 		});
     }
-    update = (val, callback) => this.setState((prevState) => prevState = Object.assign({}, prevState, val), callback)
+    updateOptions = (update, callback) => this.setState((prevState) => prevState.jPlayerOptions = update(prevState.jPlayerOptions), callback);
     render() {
         return (
             <div>
-                <JPlayerPlaylist {...this.state.jPlayerOptions} {...this.props}>
+                <JPlayerPlaylist {...this.state.jPlayerOptions} {...this.props} updateOptions={this.updateOptions}>
                 </JPlayerPlaylist>
             </div>
         );

@@ -1,7 +1,7 @@
 import React from "react";
 import {Motion, spring} from "react-motion";
 import {jPlayer} from "./jPlayer";
-import sharedHelper from "./JPlayerHelper";
+import * as utilities from "./jPlayerUtilities"
 import merge from "lodash.merge";
 import maxBy from "lodash/maxBy";
 
@@ -35,13 +35,12 @@ export const jPlayerPlaylist = (WrappedComponent) => class extends React.Compone
             itemClass: "jp-playlist-item",
             freeItemClass: "jp-playlist-item-free",
             removeItemClass: "jp-playlist-item-remove",
-            freeGroupClass: "jp-free-media",
-            updateOptions: (update, callback) => {}
+            freeGroupClass: "jp-free-media"
         };
     }
     constructor(props) {
         super(props);
-debugger
+        
         WrappedComponent = jPlayer(WrappedComponent, 
         <PlaylistControls blur={this.blur} shuffle={this.shuffle} next={this.next} previous={this.previous}
                             shuffled={this.shuffled} html={this.props.html} />
@@ -49,6 +48,13 @@ debugger
 
         this.playlistContainerMinHeight = this.playlistItemAnimMinHeight = 0;
         this.playlistContainerMaxHeight = this.playlistItemAnimMaxHeight = 1;
+   
+        this.assignOptions = utilities.assignOptions.bind(this);
+		this.mergeOptions = utilities.mergeOptions.bind(this);
+		this.modifyOptionsArray = utilities.modifyOptionsArray.bind(this);
+		this.addClass = utilities.addClass.bind(this);
+		this.removeClass = utilities.removeClass.bind(this);
+		this.assignStyle = utilities.assignStyle.bind(this);
 
         this.state = {
             current: 0
@@ -60,7 +66,7 @@ debugger
                 this._trigger(this.props.onEnded, jPlayer);
             },
             onPlay: (jPlayer) => { 
-                this._updateFunctions("pauseOthers");
+                jPlayer.pauseOthers();
                 this._trigger(this.props.onPlay, jPlayer);
              },
             onResize: (jPlayer) => {
@@ -74,7 +80,7 @@ debugger
             detailsClass: "detailsClass",
             shuffleOffClass: "shuffleOffClass"
         };
-
+       
         //Add a new stateClass for the extra loop option
         this.stateClass = merge({
             shuffled: "jp-state-shuffled", 
@@ -98,10 +104,8 @@ debugger
 
         this.freeMediaLinkIndex = 0;
     }
-    _updateFunctions = (params, callback) => sharedHelper.modifyOptionsArray.call(this, [params], Array.prototype.concat, sharedHelper.key.functions, callback)
-    _overrideFunctions = (params, callback) => sharedHelper.modifyOptionsArray.call(this, [params], Array.prototype.concat, sharedHelper.key.overrideFunctions, callback)
-    _hideDetails = () => sharedHelper.addClass.call(this, sharedHelper.className.hidden, this.key.detailsClass)
-    _showDetails = () => sharedHelper.removeClass.call(this, sharedHelper.className.hidden, this.key.detailsClass)
+    _hideDetails = () => this.addClass(utilities.className.hidden, this.key.detailsClass)
+    _showDetails = () => this.removeClass(utilities.className.hidden, this.key.detailsClass)
     _trigger = (func, jPlayer) => {
         if (func !== undefined) {
             func.bind(this)(jPlayer);
@@ -134,14 +138,14 @@ debugger
             this._hideDetails();
         }
 
-         const newUpdateButtonCallback = (originalFunction) => {
+        const newUpdateButtonCallback = (originalFunction) => {
             return function() {
                 originalFunction.apply(this, arguments);
                 const stateClassMethod = this.props.loop === "loop-playlist" ? "addStateClass" : "removeStateClass";
-                this._updateFunctions([stateClassMethod, "loopedPlaylist"]);
+                this.props.mergeOptions({stateClass: "loopedPlaylist"});
             }.bind(this);
         };
-        this._overrideFunctions(["_updateButtons", newUpdateButtonCallback]);
+        this.jPlayer._updateButtons = newUpdateButtonCallback(this.jPlayer._updateButtons);
 
         this._init();
     }
@@ -164,7 +168,7 @@ debugger
 
         this._originalPlaylist();
     }
-    _originalPlaylist = (playlistSetCallback) => sharedHelper.assignOptions.call(this, {playlist: [...this.original]}, playlistSetCallback)
+    _originalPlaylist = (playlistSetCallback) => this.assignOptions({playlist: [...this.original]}, playlistSetCallback)
     setPlaylist = (playlist) => {
         this._initPlaylist(playlist);
         this._init();
@@ -174,7 +178,7 @@ debugger
         media.key = maxBy(this.props.playlist, "key").key + 1;
         
         this.original.push(media);
-        sharedHelper.modifyOptionsArray.call(this, media, Array.prototype.concat, this.key.playlist);
+        this.modifyOptionsArray(media, Array.prototype.concat, this.key.playlist);
 
         if (playNow) {
             this.play(this.props.playlist.length - 1);
@@ -187,10 +191,10 @@ debugger
     remove = (index) => {
         if (index === undefined) {
             this._initPlaylist([]);
-            this._updateFunctions("clearMedia");
+            this.assignOptions({media: []});
             return true;
         } else {           
-            sharedHelper.mergeOptions.call(this, {playlist: {[index]: {isRemoving: true}}});
+            this.mergeOptions({playlist: {[index]: {isRemoving: true}}});
         }
         this.setState({useRemoveConfig: true});
     }
@@ -198,7 +202,7 @@ debugger
         index = (index < 0) ? this.original.length + index : index; // Negative index relates to end of array.
         if (0 <= index && index < this.props.playlist.length) {
             this.setState({current: index});
-            this._updateFunctions(["setMedia", this.props.playlist[index]], setMediaCallback);
+            this.assignOptions({media: this.props.playlist[index]}, setMediaCallback);
         } else {
             this.setState({current: 0});
         }
@@ -207,13 +211,13 @@ debugger
         index = (index < 0) ? this.original.length + index : index; // Negative index relates to end of array.
         if (0 <= index && index < this.props.playlist.length) {
             if (this.props.playlist.length) {
-                this.select(index, () => this._updateFunctions("play"));
+                this.select(index, this.mergeOptions({status: {paused: false}}));
             }
         } else if (index === undefined) {
-            this._updateFunctions("play");
+            this.mergeOptions({status: {paused: false}});
         }
     }
-    pause = () => this._updateFunctions("pause");
+    pause = () => this.mergeOptions({status: {paused: true}});
     next = () => {
         var index = (this.state.current + 1 < this.props.playlist.length) ? this.state.current + 1 : 0;
 
@@ -264,7 +268,7 @@ debugger
         } else {
             this.original.splice(index, 1);
         }
-        sharedHelper.modifyOptionsArray.call(this, function(_, i) {return i !== index}, Array.prototype.filter, this.key.playlist);
+        this.modifyOptionsArray(function(_, i) {return i !== index}, Array.prototype.filter, this.key.playlist);
 
         if (this.original.length) {
             if (index === this.state.current) {
@@ -274,7 +278,7 @@ debugger
                 this.setState(previousState => [{current: previousState.current--}]);
             }
         } else {
-            this._updateFunctions("clearMedia");
+            this.assignOptions({media: []});
             this.setState({current: 0});
             this.shuffled = false;
         }
@@ -296,7 +300,7 @@ debugger
         }
 
         if (this.shuffled) {
-            sharedHelper.assignOptions.call(this, {playlist: [...this.props.playlist].sort(() => 0.5 - Math.random())});
+            this.assignOptions({playlist: [...this.props.playlist].sort(() => 0.5 - Math.random())});
             this._updateFunctions(["addStateClass", "shuffled"], playlistSetCallback);
         } else {
             this._originalPlaylist(playlistSetCallback);
@@ -312,15 +316,16 @@ debugger
         }
     }
     componentWillMount() { 
-        this._initPlaylist(this.props.playlist);  
+        this._initPlaylist(this.props.playlist);     
+    }
+    componentDidMount() {
         this._setup();
     }
     render() {
-        debugger
         const MediaAnimationConfig = this.state.useRemoveConfig ? this.props.removeAnimation : this.props.addAnimation
 
-        return (
-            <div>
+        return (   
+            <WrappedComponent ref={(jPlayer) => this.jPlayer = jPlayer} {...this.props} {...this.keyBindings} {...this.event} stateClass={this.stateClass} loopOptions={"loop-playlist"}>            
                 <div id="jp_container_playlist">
                     <div className="jp-playlist">
                         <Playlist isSlidingUp={this.state.isPlaylistContainerSlidingUp} config={this.state.useShuffleConfig ? this.props.shuffleAnimation : this.props.displayAnimation} onRest={this._shuffleAnimationCallback}>
@@ -329,11 +334,9 @@ debugger
                                 remove={this.remove} blur={this.blur} play={this.play} updateOptions={this.props.updateOptions} />
                         </Playlist> 
                     </div>
-                </div>        
-                <WrappedComponent {...this.props} {...this.keyBindings} {...this.event} stateClass={this.stateClass} loopOptions={"loop-playlist"} updateOptions={this.updateOptions}>                                   
-                    {this.props.children}
-                </WrappedComponent>
-            </div>
+                </div>                               
+                {this.props.children}
+            </WrappedComponent>
         );
     }
 } 
@@ -405,11 +408,7 @@ class Media extends React.Component {
     _onMediaLinkClick = (index, event) => {
         event.preventDefault();
 
-        if(this.props.current !== index) {
-            this.props.play(index);
-        } else {
-            this._updateFunctions("play");
-        }
+        this.props.current !== index ? this.props.play(index) : this.props.updateOptions({status: {paused: false}});
         this.props.blur(event.target);
     }
     render() {

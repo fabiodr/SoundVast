@@ -1,9 +1,8 @@
 import React from "react";
 import {Motion, spring} from "react-motion";
+import * as utilities from "./jPlayerUtilities"
 import merge from "lodash.merge";
-import update from "react-addons-update";
 import isEqual from "lodash/isEqual";
-import sharedHelper from "./JPlayerHelper";
 
 export const jPlayer = (WrappedComponent, AdditionalControls) => class extends React.Component {
 	static get propTypes() {
@@ -154,7 +153,20 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 			jPlayerStatus: () => {},
 			overrideFunctions: [],
 			functions: [],
-			status: defaultStatus
+			status: defaultStatus,
+			playClass: [jPlayer.className.play],
+			pauseClass: [jPlayer.className.pause],
+			posterClass: [],
+			videoClass: [],
+			repeatClass: [jPlayer.className.repeat],
+			fullScreenClass: [jPlayer.className.fullScreen],
+			volumeMaxClass: [jPlayer.className.volumeMax],
+			volumeBarClass: [jPlayer.className.volumeBar],
+			volumeBarValueClass: [jPlayer.className.volumeBarValue],
+			playbackRateBarClass: [jPlayer.className.playbackRateBar],
+			playbackRateBarValueClass: [jPlayer.className.playbackRateBarValue],
+			seekBarClass: [jPlayer.className.seekBar],
+			noSolutionClass: [jPlayer.className.noSolution]
 		}
 	}
 	constructor(props) {
@@ -162,12 +174,19 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 
 		this.state = {};	
 
+        this.assignOptions = utilities.assignOptions.bind(this);
+		this.mergeOptions = utilities.mergeOptions.bind(this);
+		this.modifyOptionsArray = utilities.modifyOptionsArray.bind(this);
+		this.addClass = utilities.addClass.bind(this);
+		this.removeClass = utilities.removeClass.bind(this);
+		this.assignStyle = utilities.assignStyle.bind(this);
+
 		this._setupInternalProperties();
 		this._setupOptions();
 		this._setupEvents();
 		this._setupErrors();
 	}
-	_updateStatus = (newOption, callback) => sharedHelper.mergeOptions.call(this, {status: newOption}, callback)
+	_updateStatus = (newOption, callback) => this.mergeOptions({status: newOption}, callback)
 	_setupInternalProperties = () => {
 		this.solution = "html";
 		this.timeFormat = merge(jPlayer.timeFormat, this.props.timeFormat);
@@ -184,42 +203,6 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 			"loop"
 		].concat(this.props.loopOptions);	
 
-		this.key = {
-			volumeBarClass: "volumeBarClass",
-			volumeBarValueClass: "volumeBarValueClass",
-			volumeMaxClass: "volumeMaxClass",
-			playbackRateBarClass: "playbackRateBarClass",
-			playbackRateBarValueClass: "playbackRateBarValueClass",
-			seekBarClass: "seekBarClass",
-			noSolutionClass: "noSolutionClass",
-			posterClass: "posterClass",
-			videoClass: "videoClass",
-			videoPlayClass: "videoPlayClass",
-			playClass: "playClass",
-			pauseClass: "pauseClass",
-			repeatClass: "repeatClass",    
-			fullScreenClass: "fullScreenClass"
-		}
-
-		this.className = {
-			seeking: "jp-seeking-bg",
-			mute: "jp-mute",
-			volumeBar: "jp-volume-bar",
-			volumeBarValue: "jp-volume-bar-value",
-			volumeMax: "jp-volume-max",
-			playbackRateBar: "jp-playback-rate-bar",
-			playbackRateBarValue: "jp-playback-rate-bar-value",
-			seekBar: "jp-seek-bar",
-			noSolution: "jp-no-solution",
-			play: "jp-play",
-			pause: "jp-pause",
-			repeat: "jp-repeat",
-			fullScreen: "jp-full-screen",
-			title: "jp-title",
-			currentTime: "jp-current-time",
-			duration: "jp-duration"
-		};
-		
 		// Classes added to the cssSelectorAncestor to indicate the state.
 		this.stateClass = merge({ 
 			playing: "jp-state-playing",
@@ -268,36 +251,36 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 			// Properties may be added to this object, in key/fn pairs, to enable other key controls. EG, for the playlist add-on.
 			play: {
 				key: 80, // p
-				fn: () => this.props.status.paused ? this.play() : this.pause()
+				fn: () => this.mergeOptions({status: {paused: !this.props.status.paused}})
 			},
 			fullScreen: {
 				key: 70, // f
 				fn: () => {
 					if(this.props.status.video || this.props.audioFullScreen) {
-						sharedHelper.assignOptions.call(this, {fullScreen: !this.props.fullScreen});
+						this.assignOptions({fullScreen: !this.props.fullScreen});
 					}
 				}
 			},
 			muted: {
 				key: 77, // m
-				fn: () => sharedHelper.assignOptions.call(this, {muted: !this.props.muted})
+				fn: () => this.assignOptions({muted: !this.props.muted})
 			},
 			volumeUp: {
 				key: 190, // .
-				fn: () => sharedHelper.assignOptions.call(this, {volume: this.props.volume + 0.1})
+				fn: () => this.assignOptions({volume: this.props.volume + 0.1})
 			},
 			volumeDown: {
 				key: 188, // ,
-				fn: () => sharedHelper.assignOptions.call(this, {volume: this.props.volume - 0.1})
+				fn: () => this.assignOptions({volume: this.props.volume - 0.1})
 			},
 			loop: {
 				key: 76, // l
-				fn: () => sharedHelper.assignOptions.call(this, {loop: this._incrementCurrentLoop()})
+				fn: () => this.assignOptions({loop: this._incrementCurrentLoop()})
 			}
 		}, this.props.keyBindings);
 	}
 	_setupEvents = () => {
-		this.mediaEvent = {
+		this.mediaEvent = { 
 			onProgress: () => {
 				if(this.internal.cmdsIgnored && this.readyState > 0) { // Detect iOS executed the command
 					this.internal.cmdsIgnored = false;
@@ -311,11 +294,11 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 				this.androidFix.setMedia = false; // Disable the fix after the first progress event.
 				if(this.androidFix.play) { // Play Android audio - performing the fix.
 					this.androidFix.play = false;
-					this.play(this.androidFix.time);
+					this.mergeOptions({status: {paused: false, currentTime: this.androidFix.time}});
 				}
 				if(this.androidFix.pause) { // Pause Android audio at time - performing the fix.
 					this.androidFix.pause = false;
-					this.pause(this.androidFix.time);
+					this.mergeOptions({status: {paused: true, currentTime: this.androidFix.time}});
 				}
 				this._trigger(this.props.onLoadedData);
 			},
@@ -373,7 +356,7 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 					this.currentMedia.currentTime = 0; // Safari does not care about this command. ie., It works with or without this line. (Both Safari and Chrome are Webkit.)
 				}
 				// Pause otherwise a click on the progress bar will play from that point, when it shouldn't, since it stopped playback.
-				this.pause();
+				this.mergeOptions({status: {paused: true}});
 				this._updateButtons(false);
 				// With override true. Otherwise Chrome leaves progress at full.
 				this._getHtmlStatus(this.currentMedia, true);
@@ -393,13 +376,13 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 					});
 					
 					if(this.props.status.video && !this.props.status.nativeVideoControls) {
-						sharedHelper.addClass.call(this, sharedHelper.className.hidden, this.key.videoClass);
+						this.addClass(utilities.className.hidden, jPlayer.key.videoClass);
 					}
 
 					if(this._validString(this.props.status.media.poster) && !this.props.status.nativeVideoControls) {
-						sharedHelper.removeClass.call(this, sharedHelper.className.hidden, this.key.posterClass);
+						this.removeClass(utilities.className.hidden, jPlayer.key.posterClass);
 					}
-					sharedHelper.removeClass.call(this, sharedHelper.className.hidden, this.key.videoPlayClass);
+					this.removeClass(utilities.className.hidden, jPlayer.key.videoPlayClass);
 
 					this._error( {
 						type: this.error.URL,
@@ -444,18 +427,18 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 	_initBeforeRender = () => {
 		this._updateStatus(defaultStatus);
 
-		sharedHelper.addClass.call(this, this.className.play, this.key.playClass);
-		sharedHelper.addClass.call(this, this.className.pause, this.key.pauseClass);
-		sharedHelper.addClass.call(this, this.className.video, this.key.videoClass);
-		sharedHelper.addClass.call(this, this.className.repeat, this.key.repeatClass);
-		sharedHelper.addClass.call(this, this.className.fullScreen, this.key.fullScreenClass);
-		sharedHelper.addClass.call(this, this.className.volumeMax, this.key.volumeMaxClass);
-		sharedHelper.addClass.call(this, this.className.volumeBar, this.key.volumeBarClass);
-		sharedHelper.addClass.call(this, this.className.volumeBarValue, this.key.volumeBarValueClass);
-		sharedHelper.addClass.call(this, this.className.playbackRateBar, this.key.playbackRateBarClass);
-		sharedHelper.addClass.call(this, this.className.playbackRateBarValue, this.key.playbackRateBarValueClass);
-		sharedHelper.addClass.call(this, this.className.seekBar, this.key.seekBarClass);
-		sharedHelper.addClass.call(this, this.className.noSolution, this.key.noSolutionClass);
+		// this.addClass(jPlayer.className.play, jPlayer.key.playClass);
+		// this.addClass(jPlayer.className.pause, jPlayer.key.pauseClass);
+		// this.addClass(jPlayer.className.video, jPlayer.key.videoClass);
+		// this.addClass(jPlayer.className.repeat, jPlayer.key.repeatClass);
+		// this.addClass(jPlayer.className.fullScreen, jPlayer.key.fullScreenClass);
+		// this.addClass(jPlayer.className.volumeMax, jPlayer.key.volumeMaxClass);
+		// this.addClass(jPlayer.className.volumeBar, jPlayer.key.volumeBarClass);
+		// this.addClass(jPlayer.className.volumeBarValue, jPlayer.key.volumeBarValueClass);
+		// this.addClass(jPlayer.className.playbackRateBar, jPlayer.key.playbackRateBarClass);
+		// this.addClass(jPlayer.className.playbackRateBarValue, jPlayer.key.playbackRateBarValueClass);
+		// this.addClass(jPlayer.className.seekBar, jPlayer.key.seekBarClass);
+		// this.addClass(jPlayer.className.noSolution, jPlayer.key.noSolutionClass);
 
 		// On iOS, assume commands will be ignored before user initiates them.
 		this.internal.cmdsIgnored = jPlayer.platform.ipad || jPlayer.platform.iphone || jPlayer.platform.ipod;
@@ -484,8 +467,6 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 
 		this.css = {};
 		this.css.cs = {}; // Holds the css selector strings
-
-		//TODO: Warning instead of _limitValue for integers not between expected value
 
 		// Create the formats array, with prority based on the order of the supplied formats string
 		for (var index1 = 0; index1 < this.props.supplied.length; index1++) {
@@ -521,7 +502,7 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 
 		const updateCssClass = () => {
 			const sizeClass = this.props.fullScreen ? this.props.sizeFullCssClass : this.props.sizeCssClass;
-			this.addStateClass(sizeClass);
+			this.addClass(this.stateClass[sizeClass], utilities.key.stateClass);
 			this._updateStatus({cssClass: sizeClass});
 		};
 
@@ -529,7 +510,7 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 		if(this.require.video) {	
 			this.setState({stateClass: ["jp-video"]});
 
-			sharedHelper.assignOptions.call(this, merge({
+			this.assignOptions(merge({
 				sizeCssClass: "jp-video-270p",
 				sizeFullCssClass: "jp-video-full"
 			}, {
@@ -539,7 +520,7 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 		} else {
 			this.setState({stateClass: ["jp-audio"]});
 
-			sharedHelper.assignOptions.call(this, {
+			this.assignOptions({
 				sizeCssClass: this.props.sizeCssClass,
 				sizeFullCssClass: this.props.sizeFullCssClass
 			}, updateCssClass);		
@@ -547,7 +528,7 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 		
 		this._setNextProps();	
 		
-		sharedHelper.addClass.call(this, sharedHelper.className.hidden, this.key.posterClass);
+		this.addClass(utilities.className.hidden, jPlayer.key.posterClass);
 
 		// Determine the status for Blocklisted options.
 		this._updateStatus({ 
@@ -604,13 +585,13 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 		}
 
 		if (jPlayer.platform.android) {
-			sharedHelper.assignOptions.call(this, {preload: this.props.preload !== 'auto' ? 'metadata' : 'auto'});
+			this.assignOptions({preload: this.props.preload !== 'auto' ? 'metadata' : 'auto'});
 		}
 
 		this.html.active = false;
 
 		// Set up the css selectors for the control and feedback entities.
-		this._cssSelectorAncestor(this.props.cssSelectorAncestor);
+		this._cssSelectorAncestor();
 
 		// If html is not being used by this browser, then media playback is not possible. Trigger an error event.
 		if(!(this.html.used)) {
@@ -620,9 +601,9 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 				message: this.errorMsg.NO_SOLUTION,
 				hint: this.errorHint.NO_SOLUTION
 			});
-			sharedHelper.removeClass.call(this, sharedHelper.className.hidden, this.key.noSolutionClass);
+			this.removeClass(utilities.className.hidden, jPlayer.key.noSolutionClass);
 		} else {
-			sharedHelper.addClass.call(this, sharedHelper.className.hidden, this.key.noSolutionClass);
+			this.addClass(utilities.className.hidden, jPlayer.key.noSolutionClass);
 		}
 		this._updateStatus({playbackRateEnabled: this._testPlaybackRate()}, () => {
 			// Using the audio element capabilities for playbackRate. ie., Assuming video element is the same.
@@ -635,17 +616,17 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 		});
 
 		if(this.props.status.nativeVideoControls) {
-			sharedHelper.removeClass.call(this, sharedHelper.className.hidden, this.key.videoClass);
-			sharedHelper.assignStyle.call(this, {width: this.props.status.width, height: this.props.status.height}, "videoStyle");
+			this.removeClass(utilities.className.hidden, jPlayer.key.videoClass);
+			this.assignStyle({width: this.props.status.width, height: this.props.status.height}, "videoStyle");
 		} else {
-			sharedHelper.addClass.call(this, sharedHelper.className.hidden, this.key.videoClass);
+			this.addClass(utilities.className.hidden, jPlayer.key.videoClass);
 		}
 		
 		// Initialize the interface components with the options.
 		this._updateNativeVideoControls();
 
 		// The other controls are now setup in _cssSelectorAncestor()
-		sharedHelper.addClass.call(this, sharedHelper.className.hidden, this.key.videoPlayClass);
+		this.addClass(utilities.className.hidden, jPlayer.key.videoPlayClass);
 	}
 	_testCanPlayType = (codec) => {
 		// IE9 on Win Server 2008 did not implement canPlayType(), but it has the property.
@@ -702,11 +683,11 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 			this.setState({videoControls: this.props.status.nativeVideoControls});
 			// For when option changed. The poster image is not updated, as it is dealt with in setMedia(). Acceptable degradation since seriously doubt these options will change on the fly. Can again review later.
 			if(this.props.status.nativeVideoControls && this.require.video) {
-				sharedHelper.addClass.call(this, sharedHelper.className.hidden, this.key.posterClass);
-				sharedHelper.assignStyle.call(this, {width: this.props.status.width, height: this.props.status.height}, "videoStyle");
+				this.addClass(utilities.className.hidden, jPlayer.key.posterClass);
+				this.assignStyle({width: this.props.status.width, height: this.props.status.height}, "videoStyle");
 			} else if(this.props.status.waitForPlay && this.props.status.video) {
-				sharedHelper.removeClass.call(this, sharedHelper.className.hidden, this.key.posterClass);
-				sharedHelper.removeClass.call(this, sharedHelper.className.hidden, this.key.videoClass);
+				this.removeClass(utilities.className.hidden, jPlayer.key.posterClass);
+				this.removeClass(utilities.className.hidden, jPlayer.key.videoClass);
 			}
 		}
 	}
@@ -773,30 +754,30 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 		if(playing === undefined) {
 			playing = !this.props.status.paused;
 		} else {
-			this._updateStatus({paused: !playing});
+			this.mergeOptions({status: {paused: !playing}});
 		}
 		
 		if(playing) {
-			this.addStateClass('playing');
+			this.addClass(this.stateClass.playing, utilities.key.stateClass);
 		} else {
-			this.removeStateClass('playing');
+			this.removeClass(this.stateClass.playing, utilities.key.stateClass);
 		}
 		if(!this.props.status.noFullWindow && this.nextProps.fullWindow) {
-			this.addStateClass('fullScreen');
+			this.addClass(this.stateClass.fullScreen, utilities.key.stateClass);
 		} else {
-			this.removeStateClass('fullScreen');
+			this.removeClass(this.stateClass.fullScreen, utilities.key.stateClass);
 		}
 		if(this.nextProps.loop === "loop") {
-			this.addStateClass('looped');
+			this.addClass(this.stateClass.looped, utilities.key.stateClass);
 		} else {
-			this.removeStateClass('looped');
+			this.removeClass(this.stateClass.looped, utilities.key.stateClass);
 		}
 	}
 	_updateInterface = () => {
-		sharedHelper.assignStyle.call(this, {width: `${this.props.status.seekPercent}%`}, "seekBarStyle");
+		this.assignStyle({width: `${this.props.status.seekPercent}%`}, "seekBarStyle");
 
-		this.props.smoothPlayBar ? sharedHelper.assignStyle.call(this, {width: `${this.props.status.currentPercentAbsolute}%`}, "playBarStyle")
-								: sharedHelper.assignStyle.call(this, {width: `${this.props.status.currentPercentRelative}%`}, "playBarStyle");
+		this.props.smoothPlayBar ? this.assignStyle({width: `${this.props.status.currentPercentAbsolute}%`}, "playBarStyle")
+								: this.assignStyle({width: `${this.props.status.currentPercentRelative}%`}, "playBarStyle");
 		
 		var currentTimeText = this._convertTime(this.props.status.currentTime);
 
@@ -824,12 +805,12 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 	}
 	_convertTime = ConvertTime.prototype.time
 	_seeking = () => {
-		sharedHelper.addClass.call(this, this.className.seeking, this.key.seekBarClass);
-		this.addStateClass('seeking');
+		this.addClass(jPlayer.className.seeking, jPlayer.key.seekBarClass);
+		this.addClass(this.stateClass.seeking, utilities.key.stateClass);
 	}
 	_seeked = () => {
-		sharedHelper.removeClass.call(this, this.className.seeking, this.key.seekBarClass);
-		this.removeStateClass('seeking');
+		this.removeClass(jPlayer.className.seeking, jPlayer.key.seekBarClass);
+		this.removeClass(this.stateClass.seeking, utilities.key.stateClass);
 	}
 	_escapeHtml = (s) => {
 		return s.split('&').join('&amp;').split('<').join('&lt;').split('>').join('&gt;').split('"').join('&quot;');
@@ -850,8 +831,6 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 
 		return media;
 	}
-	addStateClass = (stateClass) => sharedHelper.addClass.call(this, this.stateClass[stateClass], sharedHelper.key.stateClass)
-	removeStateClass = (stateClass) => sharedHelper.removeClass.call(this, this.stateClass[stateClass], sharedHelper.key.stateClass)
 	setMedia = (media) => {
 		/*	media[format] = String: URL of format. Must contain all of the supplied option's video or audio formats.
 		*	media.poster = String: Video poster URL.
@@ -883,7 +862,7 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 				this._htmlSetVideo(media);
 				this.html.active = true;
 				this._updateStatus({video: true});
-				sharedHelper.removeClass.call(this, sharedHelper.className.hidden, this.key.videoPlayClass);
+				this.removeClass(utilities.className.hidden, jPlayer.key.videoPlayClass);
 			} else {
 				this._htmlSetAudio(media);
 				this.html.active = true;
@@ -893,7 +872,7 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 					this.androidFix.setMedia = true;
 				}
 				this._updateStatus({video: false});
-				sharedHelper.addClass.call(this, sharedHelper.className.hidden, this.key.videoPlayClass);
+				this.addClass(utilities.className.hidden, jPlayer.key.videoPlayClass);
 			}
 			supported = true;
 			break;
@@ -909,7 +888,7 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 					if(posterChanged) { // Since some browsers do not generate img onload event.
 						this.setState({posterSrc: media.poster});
 					} else {
-						sharedHelper.removeClass.call(this, sharedHelper.className.hidden, this.key.posterClass);
+						this.removeClass(utilities.className.hidden, jPlayer.key.posterClass);
 					}
 				}
 			}
@@ -935,7 +914,7 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 		this._updateButtons(false);
 		this._updateInterface();
 		this._seeked();
-		sharedHelper.addClass.call(this, sharedHelper.className.hidden, this.key.posterClass);
+		this.addClass(utilities.className.hidden, jPlayer.key.posterClass);
 
 		// Maintains the status properties that persist through a reset.	
 		this._updateStatus(defaultStatus);
@@ -970,24 +949,17 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 		}
 	}
 	play = (time) => {
-		if(!this.props.status.paused) {
-			this.pause(time);
-		} else {
-			time = (typeof value === "number") ? time : NaN;
-
-			if(this.props.status.srcSet) {
-				this.focus();
-				if(this.html.active) {
-					this._htmlPlay(time);
-				}
-			} else {
-				this._urlNotSetError("play");
+		if(this.props.status.srcSet) {
+			this.focus();
+			if(this.html.active) {
+				this._htmlPlay(time);
 			}
+		} else {
+			this._urlNotSetError("play");
+			this.mergeOptions({status: {paused: true}});
 		}
 	}
 	pause = (time) => {
-		time = (typeof value === "number") ? time : NaN;
-
 		if(this.props.status.srcSet) {
 			if(this.html.active) {
 				this._htmlPause(time);
@@ -1040,10 +1012,10 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 	}
 	mute = (mute) => {					
 		if(this.props.muted) {
-			sharedHelper.assignOptions.call(this, {muted: false});
+			this.assignOptions({muted: false});
 		} else {
 			mute = mute === undefined ? true : !!mute;
-			sharedHelper.assignOptions.call(this, {muted: mute});
+			this.assignOptions({muted: mute});
 		}
 	}
 	_updateMute = (mute) => {
@@ -1051,9 +1023,9 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 			mute = this.props.muted;
 		}
 		if(mute) {
-			this.addStateClass('muted');
+			this.addClass(this.stateClass.muted, utilities.key.stateClass);
 		} else {
-			this.removeStateClass('muted');
+			this.removeClass(this.stateClass.muted, utilities.key.stateClass);
 		}	
 	}
 	_updateVolume = (v) => {
@@ -1064,29 +1036,28 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 		v = this.props.muted ? 0 : v;
 
 		if(this.props.status.noVolume) {
-			this.addStateClass('noVolume');
-
-			sharedHelper.addClass.call(this, sharedHelper.className.hidden, this.key.volumeBarClass);
-			sharedHelper.addClass.call(this, sharedHelper.className.hidden, this.key.volumeBarValueClass);
-			sharedHelper.addClass.call(this, sharedHelper.className.hidden, this.key.volumeMaxClass);
+			this.addClass(this.stateClass.noVolume, utilities.key.stateClass);
+			this.addClass(utilities.className.hidden, jPlayer.key.volumeBarClass);
+			this.addClass(utilities.className.hidden, jPlayer.key.volumeBarValueClass);
+			this.addClass(utilities.className.hidden, jPlayer.key.volumeMaxClass);
 		} else {
-			this.removeStateClass('noVolume');
+			this.removeClass(this.stateClass.noVolume, utilities.key.stateClass);
 
 			const volumeValue = (v * 100) + "%";
 
-			sharedHelper.assignStyle.call(this, {
+			this.assignStyle({
 				width: !this.props.verticalVolume ? volumeValue : null,
 				height: this.props.verticalVolume ? volumeValue : null
 			}, "volumeBarValueStyle");
 			
-			sharedHelper.removeClass.call(this, sharedHelper.className.hidden, this.key.volumeBarClass);
-			sharedHelper.removeClass.call(this, sharedHelper.className.hidden, this.key.volumeBarValueClass);
-			sharedHelper.removeClass.call(this, sharedHelper.className.hidden, this.key.volumeMaxClass);
+			this.removeClass(utilities.className.hidden, jPlayer.key.volumeBarClass);
+			this.removeClass(utilities.className.hidden, jPlayer.key.volumeBarValueClass);
+			this.removeClass(utilities.className.hidden, jPlayer.key.volumeMaxClass);
 		}
 	}
 	_cssSelectorAncestor = (ancestor) => {
-		sharedHelper.removeClass.call(this, this.props.status.cssClass, sharedHelper.key.stateClass);
-		sharedHelper.addClass.call(this, this.props.status.cssClass, sharedHelper.key.stateClass);
+		this.removeClass(this.props.status.cssClass, utilities.key.stateClass);
+		this.addClass(this.props.status.cssClass, utilities.key.stateClass);
 							
 		// Set the GUI to the current state.
 		this._updateInterface();
@@ -1099,7 +1070,7 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 			if(this.props.captureDuration) {
 				e.stopPropagation();
 			}
-			sharedHelper.assignOptions.call(this, {remainingDuration: !this.props.remainingDuration});
+			this.assignOptions({remainingDuration: !this.props.remainingDuration});
 		}
 	}
 	_updatePlaybackRate = () => {
@@ -1107,18 +1078,18 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 			ratio = (pbr - this.props.minPlaybackRate) / (this.props.maxPlaybackRate - this.props.minPlaybackRate);
 		if(this.props.status.playbackRateEnabled) {
 		
-			sharedHelper.removeClass.call(this, sharedHelper.className.hidden, this.key.playbackRateBarClass);
-			sharedHelper.removeClass.call(this, sharedHelper.className.hidden, this.key.playbackRateBarValueClass);
+			this.removeClass(utilities.className.hidden, jPlayer.key.playbackRateBarClass);
+			this.removeClass(utilities.className.hidden, jPlayer.key.playbackRateBarValueClass);
 
 			const playbackRateBarValue = (ratio*100)+"%";
 
-			sharedHelper.assignStyle.call(this, {
+			this.assignStyle({
 				width: !this.props.verticalPlaybackRate ? playbackRateBarValue : null,
 				height: this.props.verticalPlaybackRate ? playbackRateBarValue : null
 			}, "playbackRateBarValueStyle");
 		} else {
-			sharedHelper.addClass.call(this, sharedHelper.className.hidden, this.key.playbackRateBarClass);
-			sharedHelper.addClass.call(this, sharedHelper.className.hidden, this.key.playbackRateBarValueClass);
+			this.addClass(utilities.className.hidden, jPlayer.key.playbackRateBarClass);
+			this.addClass(utilities.className.hidden, jPlayer.key.playbackRateBarValueClass);
 		}
 	}
 	_incrementCurrentLoop = () => {	
@@ -1145,7 +1116,7 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 		};
 	}
 	_setOptions = (options) => {
-		const dynamicOption = {
+		const dynamicOption = {	
 			volume: (value) => {
 				if(this.html.used) {
 					this.currentMedia.volume = value;
@@ -1197,14 +1168,14 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 						this._exitFullscreen();
 					}
 					if(!wkv) {
-						sharedHelper.assignOptions.call(this, {fullWindow: value});
+						this.assignOptions({fullWindow: value});
 					}
 				}
 			},
 			fullWindow: (value) => { 
 				const sizeClass = this.nextProps.fullWindow ? this.props.sizeFullCssClass : this.props.sizeCssClass;
-				this.removeStateClass(this.props.status.cssClass);
-				this.addStateClass(sizeClass);
+				this.removeClass(this.props.status.cssClass, utilities.key.stateClass);
+				this.addClass(this.stateClass[sizeClass], utilities.key.stateClass);
 				this._setNextProps({fullWindow: value});			
 				this._updateStatus({cssClass: sizeClass}, () => this._trigger(this.props.onResize));			
 			},
@@ -1244,19 +1215,6 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 			}
 		}
 	}
-	_overrideFunctions = (functions) => {
-		if (!functions.length) {
-			return;
-		}
-
-		functions.forEach((func) => {
-			const originalFunctionName = func.shift();
-
-			this[originalFunctionName] = func[0](this[originalFunctionName]);
-		});
-
-		sharedHelper.assignOptions.call(this, {[sharedHelper.key.overrideFunctions]: []});
-	}
 	_setFunctions = (functions) => {
 		if (!functions.length) {
 			return;
@@ -1264,13 +1222,13 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 
 		functions.forEach((func) => Array.isArray(func) ? this[func.shift()](...func) : this[func]());
 
-		sharedHelper.assignOptions.call(this, {[sharedHelper.key.functions]: []});
+		this.assignOptions({[utilities.key.functions]: []});
 	}
 	_updateSize = () => {
 		// Video html resized if necessary at this time, or if native video controls being used.
 		if(!this.props.status.waitForPlay && this.html.active && this.props.status.video
 				|| this.html.video.available && this.html.used && this.props.status.nativeVideoControls) {
-			sharedHelper.assignStyle.call(this, {width: this.props.status.width, height: this.props.status.height}, "videoStyle");
+			this.assignStyle({width: this.props.status.width, height: this.props.status.height}, "videoStyle");
 		}
 	}
 	_fullscreenAddEventListeners = () => {
@@ -1293,7 +1251,7 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 	_fullscreenchange = () => {
 		// If nothing is fullscreen, then we cannot be in fullscreen mode.
 		if(this.props.fullScreen && !jPlayer.nativeFeatures.fullscreen.api.fullscreenElement()) {
-			sharedHelper.assignOptions.call(this, {fullScreen: false});
+			this.assignOptions({fullScreen: false});
 		}
 	}
 	_requestFullscreen = () => {
@@ -1311,7 +1269,7 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 	}
 	_posterLoad = () => {
 		if(!this.props.status.video || this.props.status.waitForPlay) {
-			sharedHelper.removeClass.call(this, sharedHelper.className.hidden, this.key.posterClass);
+			this.removeClass(utilities.className.hidden, jPlayer.key.posterClass);
 		}
 	}
 	_exitFullscreen = () => {
@@ -1378,7 +1336,7 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 	_htmlResetMedia = () => {
 		if(this.currentMedia) {
 			if(!this.props.status.nativeVideoControls) {
-				sharedHelper.addClass.call(this, sharedHelper.className.hidden, this.key.videoClass);
+				this.addClass(utilities.className.hidden, jPlayer.key.videoClass);
 			}
 			this.currentMedia.pause();
 		}
@@ -1427,7 +1385,7 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 				}
 			} catch(err) {
 				this.internal.htmlDlyCmdId = setTimeout(() => {
-					this.play(time);
+					this.mergeOptions({status: {paused: false, currentTime: time}});
 				}, 250);
 				return; // Cancel execution and wait for the delayed command.
 			}
@@ -1461,7 +1419,7 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 				}
 			} catch(err) {
 				this.internal.htmlDlyCmdId = setTimeout(() => {
-					this.pause(time);
+					this.mergeOptions({status: {paused: true, currentTime: time}});
 				}, 250);
 				return; // Cancel execution and wait for the delayed command.
 			}
@@ -1489,11 +1447,11 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 	_htmlCheckWaitForPlay = () => {
 		if(this.props.status.waitForPlay) {
 			this._updateStatus({waitForPlay: false});
-			sharedHelper.addClass.call(this, sharedHelper.className.hidden, this.key.videoPlayClass);
+			this.addClass(utilities.className.hidden, jPlayer.key.videoPlayClass);
 
 			if(this.props.status.video) {
-				sharedHelper.addClass.call(this, sharedHelper.className.hidden, this.key.posterClass);
-				sharedHelper.assignStyle.call(this, {width: this.props.status.width, height: this.props.status.height}, "videoStyle");
+				this.addClass(utilities.className.hidden, jPlayer.key.posterClass);
+				this.assignStyle({width: this.props.status.width, height: this.props.status.height}, "videoStyle");
 			}
 		}
 	}
@@ -1510,11 +1468,7 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 	_error = (error) => {
 		this._trigger(this.props.onError, error);
 	}
-	onPlayClick = () => {
-		const funcName = this.props.status.paused ? "play" : "pause";
-
-		this[funcName]();
-	}
+	onPlayClick = () => this.mergeOptions({status: {paused: !this.props.status.paused}})
 	onSeekBarClick = (e) => {	
 		// Using $(e.currentTarget) to enable multiple seek bars
 		var bar = e.currentTarget,
@@ -1543,7 +1497,7 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 		}
 
 		pbr = ratio * (this.props.maxPlaybackRate - this.props.minPlaybackRate) + this.props.minPlaybackRate;
-		sharedHelper.assignOptions.call(this, {playbackRate: pbr});
+		this.assignOptions({playbackRate: pbr});
 	}
 	onVolumeBarClick = (e) => {
 		// Using $(e.currentTarget) to enable multiple volume bars
@@ -1555,30 +1509,41 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 			h = getHeight(bar);
 
 		if(this.props.verticalVolume) {
-			sharedHelper.assignOptions.call(this, {volume: y/h});
+			this.assignOptions({volume: y/h});
 		} else {
-			sharedHelper.assignOptions.call(this, {volume: x/w});
+			this.assignOptions({volume: x/w});
 		}
 
 		if(this.props.muted) {
-			sharedHelper.assignOptions.call(this, {muted: false});
+			this.assignOptions({muted: false});
 		}
 	}
 	onVolumeMaxClick = () => {
-		sharedHelper.assignOptions.call(this, {volume: 1});
+		this.assignOptions({volume: 1});
 
 		if(this.props.muted) {
-			sharedHelper.assignOptions.call(this, {muted: false});
+			this.assignOptions({muted: false});
 		}
 	}
-	onVideoPlayClick = () => this.play()
-	onMuteClick = () => sharedHelper.assignOptions.call(this, {muted: !this.props.muted})
-	onRepeatClick = () => sharedHelper.assignOptions.call(this, {loop: this._incrementCurrentLoop()})
-	onFullScreenClick = () => sharedHelper.assignOptions.call(this, {fullScreen: !this.props.fullScreen});
-	componentWillReceiveProps(nextProps) {						
+	onVideoPlayClick = () => this.mergeOptions({status: {paused: false}});
+	onMuteClick = () => this.assignOptions({muted: !this.props.muted})
+	onRepeatClick = () => this.assignOptions({loop: this._incrementCurrentLoop()})
+	onFullScreenClick = () => this.assignOptions({fullScreen: !this.props.fullScreen});
+	componentWillReceiveProps(nextProps) {			
 		this._setOptions(nextProps);
 		this._setFunctions(nextProps.functions);	
-		this._overrideFunctions(nextProps.overrideFunctions);	
+
+		if (this.props.status.paused !== nextProps.status.paused) {
+			nextProps.status.paused ? this.pause(this.props.status.currentTime) : this.play(this.props.status.currentTime);
+		};
+
+		if (this.props.stateClass !== nextProps.stateClass) {
+			this.setState({stateClass: nextProps.stateClass});
+		}
+
+		if (this.props.status.media !== nextProps.status.media) {
+			this.setMedia(nextProps.media);
+		}
 	}	
 	componentWillUnmount() {
 		this._removeEventListeners();
@@ -1610,7 +1575,7 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 		}
 
 		if (prevProps.status.width !== this.props.status.width || prevProps.status.height !== this.props.status.height) {
-			sharedHelper.assignStyle.call(this, {width: this.props.status.width, height: this.props.status.height}, "jPlayerStyle");
+			this.assignStyle({width: this.props.status.width, height: this.props.status.height}, "jPlayerStyle");
 		}
 	}
 	componentDidMount() {
@@ -1626,60 +1591,60 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 
 		this._initAfterRender();
 	}
-	updateOptions = (update, callback) => this.setState((prevState) => prevState.jPlayerPlaylistOptions = update(prevState.jPlayerPlaylistOptions), callback);
 	render() {
 		return (
 			<WrappedComponent playd={this.play} {...this.props}>
-				<div id={this.props.cssSelectorAncestor.slice(1)} className={this.state.stateClass.join(" ")}>
+				<div id={this.props.cssSelectorAncestor.slice(1)} className={this.props.status.cssClass.join(" ")}>
+					{this.props.children}		
 					<div ref={(jPlayerElement) => this.jPlayerElement = jPlayerElement} id={this.props.jPlayerSelector.slice(1)} className="jp-jplayer" style={this.state.jPlayerStyle}>
-						<Poster posterClass={this.state.posterClass.join(" ")} src={this.state.posterSrc} onLoad={this._posterLoad} onClick={() => this._trigger(this.props.onClick)} /> 
+						<Poster posterClass={this.props.posterClass.join(" ")} src={this.state.posterSrc} onLoad={this._posterLoad} onClick={() => this._trigger(this.props.onClick)} /> 
 						<Audio ref={(audio) => this.audio = audio} require={this.require.audio} events={this.mediaEvent}>
 							{this.state.videoTracks}
 						</Audio>
-						<Video ref={(video) => this.video = video} require={this.require.video} videoClass={this.state.videoClass.join(" ")} style={this.state.videoStyle} onClick={() => this._trigger(this.props.onClick)} events={this.mediaEvent}>
+						<Video ref={(video) => this.video = video} require={this.require.video} videoClass={this.props.videoClass.join(" ")} style={this.state.videoStyle} onClick={() => this._trigger(this.props.onClick)} events={this.mediaEvent}>
 							{this.state.videoTracks}
-						</Video>		 
+						</Video>				 
 					</div>
 					<GUI nativeVideoControls={this.props.status.nativeVideoControls} fullWindow={this.props.fullWindow} autoHide={this.autoHide} fadeInConfig={this.props.guiFadeInAnimation} fadeOutConfig={this.props.guiFadeOutAnimation}>
 						<div className="jp-controls">
-							<a className={this.className.play} onClick={this.onPlayClick}>
+							<a className={jPlayer.className.play} onClick={this.onPlayClick}>
 								{this.props.html.play}
 							</a>
-							<a className={this.className.mute} onClick={this.onMuteClick}>
+							<a className={jPlayer.className.mute} onClick={this.onMuteClick}>
 								{this.props.html.mute}
 							</a>
-							<a className={this.className.volumeMax} onClick={this.onVolumeMaxClick}>
+							<a className={jPlayer.className.volumeMax} onClick={this.onVolumeMaxClick}>
 								{this.props.html.volumeMax}
 							</a>
-							<a className={this.state.repeatClass.join(" ")} onClick={this.onRepeatClick}>							
+							<a className={this.props.repeatClass.join(" ")} onClick={this.onRepeatClick}>							
 								{this.props.html.repeat}			
 							</a>																
-							<a className={this.state.fullScreenClass.join(" ")} onClick={this.onFullScreenClick}>
+							<a className={this.props.fullScreenClass.join(" ")} onClick={this.onFullScreenClick}>
 								{this.props.html.fullScreen}
 							</a>		
-							<div className={this.state.volumeBarClass.join(" ")} style={this.state.volumeBarStyle} onClick={this.onVolumeBarClick}>
-								<div className={this.state.volumeBarValueClass.join(" ")} style={this.state.volumeBarValueStyle} />
+							<div className={this.props.volumeBarClass.join(" ")} style={this.state.volumeBarStyle} onClick={this.onVolumeBarClick}>
+								<div className={this.props.volumeBarValueClass.join(" ")} style={this.state.volumeBarValueStyle} />
 							</div>
-							<div className={this.className.title}>
+							<div className={jPlayer.className.title}>
 								{this.state.titleText}
 							</div>
-							<div className={this.state.playbackRateBarClass.join(" ")} style={this.state.playbackRateBarStyle} onClick={this.onPlaybackRateBarClick}>
-								<div className={this.state.playbackRateBarValueClass.join(" ")} style={this.state.playbackRateBarValueStyle} />
+							<div className={this.props.playbackRateBarClass.join(" ")} style={this.state.playbackRateBarStyle} onClick={this.onPlaybackRateBarClick}>
+								<div className={this.props.playbackRateBarValueClass.join(" ")} style={this.state.playbackRateBarValueStyle} />
 							</div>						
 							{AdditionalControls}
 						</div>
 						<div className="jp-progress">
-							<div className={this.state.seekBarClass.join(" ")} style={this.state.seekBarStyle} onClick={this.onSeekBarClick}>                         
+							<div className={this.props.seekBarClass.join(" ")} style={this.state.seekBarStyle} onClick={this.onSeekBarClick}>                         
 								<PlayBar smoothPlayBar={this.props.smoothPlayBar} currentPercentAbsolute={this.props.status.currentPercentAbsolute} playBarStyle={this.state.playBarStyle} />
-								<div className={this.className.currentTime}>{this.state.currentTimeText}</div>
-								<div className={this.className.duration} onClick={this.state.durationOnClick}>{this.state.durationText}</div>
+								<div className={jPlayer.className.currentTime}>{this.state.currentTimeText}</div>
+								<div className={jPlayer.className.duration} onClick={this.state.durationOnClick}>{this.state.durationText}</div>
 							</div>
 						</div>
 					</GUI>
-					<div className={this.state.noSolutionClass.join(" ")} style={this.state.noSolutionStyle}>
+					<div className={this.props.noSolutionClass.join(" ")} style={this.state.noSolutionStyle}>
 						<span>Update Required</span>
 						To play the media you will need to update your browser to a recent version.
-					</div>
+					</div>		
 				</div>
 			</WrappedComponent>
 		);
@@ -1703,7 +1668,7 @@ class GUI extends React.Component {
 		this.setState({isFadingIn: true});
 	}
 	_updateAutoHide = () => (
-		<div className={this.props.nativeVideoControls ? sharedHelper.className.hidden : null} onMouseMove={this._setFading} style={{width: "100%", height: "100%", position: "fixed", top: "0"}}>
+		<div className={this.props.nativeVideoControls ? utilities.className.hidden : null} onMouseMove={this._setFading} style={{width: "100%", height: "100%", position: "fixed", top: "0"}}>
 			<Motion defaultStyle={{opacityToInterpTo: 1}} style={{opacityToInterpTo: spring(this.state.isFadingIn ? 1 : 0, this.state.isFadingIn ? this.props.fadeInConfig : this.props.fadeOutConfig)}}>
 				{(values) => <div className="jp-gui" onMouseLeave={() => this.setState({isFadingIn: false})} onMouseEnter={() => clearTimeout(this.fadeHoldTimeout)} style={{opacity: values.opacityToInterpTo, display: values.opacityToInterpTo <= 0.05 ? "none" : ""}}>{this.props.children}</div>}
 			</Motion>
@@ -1713,7 +1678,7 @@ class GUI extends React.Component {
 		return (
 			this.props.fullWindow && this.props.autoHide.full || !this.props.fullWindow && this.props.autoHide.restored ?
 				this._updateAutoHide()  
-			:	<div className={this.props.nativeVideoControls ? "jp-gui " + sharedHelper.className.hidden : "jp-gui"}>{this.props.children}</div>
+			:	<div className={this.props.nativeVideoControls ? "jp-gui " + utilities.className.hidden : "jp-gui"}>{this.props.children}</div>
 		);
 	}
 };
@@ -1816,15 +1781,51 @@ const defaultStatus = {
 	readyState: 0,
 	networkState: 0,
 	playbackRate: 1, // Warning - Now both an option and a status property
-	ended: 0
+	ended: 0,
+	cssClass: []
 	/*
 	Persistant status properties created dynamically at _init():
-	cssClass
 	nativeVideoControls
 	noFullWindow
 	noVolume
 	playbackRateEnabled
 	*/
+};
+
+jPlayer.key = {
+	volumeBarClass: "volumeBarClass",
+	volumeBarValueClass: "volumeBarValueClass",
+	volumeMaxClass: "volumeMaxClass",
+	playbackRateBarClass: "playbackRateBarClass",
+	playbackRateBarValueClass: "playbackRateBarValueClass",
+	seekBarClass: "seekBarClass",
+	noSolutionClass: "noSolutionClass",
+	posterClass: "posterClass",
+	videoClass: "videoClass",
+	videoPlayClass: "videoPlayClass",
+	playClass: "playClass",
+	pauseClass: "pauseClass",
+	repeatClass: "repeatClass",    
+	fullScreenClass: "fullScreenClass"
+};
+
+jPlayer.className = {
+	seeking: "jp-seeking-bg",
+	mute: "jp-mute",
+	volumeBar: "jp-volume-bar",
+	volumeBarValue: "jp-volume-bar-value",
+	volumeMax: "jp-volume-max",
+	playbackRateBar: "jp-playback-rate-bar",
+	playbackRateBarValue: "jp-playback-rate-bar-value",
+	seekBar: "jp-seek-bar",
+	noSolution: "jp-no-solution",
+	play: "jp-play",
+	pause: "jp-pause",
+	repeat: "jp-repeat",
+	fullScreen: "jp-full-screen",
+	title: "jp-title",
+	currentTime: "jp-current-time",
+	duration: "jp-duration"				
 };
 
 jPlayer.keys = ((en) => {
