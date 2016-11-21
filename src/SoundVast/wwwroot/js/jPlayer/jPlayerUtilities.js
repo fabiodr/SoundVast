@@ -1,5 +1,7 @@
 import merge from "lodash.merge";
-import filter from "lodash/filter";
+import remove from "lodash/remove";
+import get from "lodash/get";
+import set from "lodash/set";
 
 export const assignOptions = function(newOption, callback) {
     this.props.updateOptions((prevOptions) => Object.assign({}, prevOptions, newOption), callback);
@@ -14,26 +16,21 @@ export const modifyOptionsArray = function(newOptions, arrayMethod, key, callbac
 }
 export const addClass = function(classToAdd, key) {
     //Use function overload of setState to make sure we have up to date values
-    this.props.updateOptions((prevOptions) => {	
-        debugger
-        var prevObject = byString(prevOptions, key);
-        var object = byString(this.props, key);
-        var found = prevObject.some((el) => el === classToAdd);
+    this.props.updateOptions((prevOptions) => {	      
+        const prevObject = get(prevOptions, key, []);
+        const found = prevObject.some((v) => v === classToAdd); 
 
         //Don't add duplicates or empty strings
-        if (!found && classToAdd) {
-            byString(prevOptions, key, [...prevObject, classToAdd]);
-            return prevOptions;
+        if (!found && classToAdd !== undefined) {
+            set(prevOptions, key, [...prevObject, classToAdd]);    
         }
+         return prevOptions;
     });
 }
 export const removeClass = function(classToRemove, key) {
     this.props.updateOptions((prevOptions) => {
-        debugger; 
-        var prevObject = byString(prevOptions, key);
-        var object = byString(this.props, key);
-
-        return object = prevObject.filter((el) => el !== classToRemove);
+        remove(prevOptions, key, classToRemove);
+        return prevOptions;
     });
 }
 export const assignStyle = function(newOption, styleKey, callback) { 
@@ -46,24 +43,4 @@ export const key = {
 }
 export const className = {
     hidden: "jp-hidden"
-}
-
-const byString = (o, s, newValue) => {
-    s = s.replace(/\[(\w+)\]/g, '.$1'); // convert indexes to properties
-    s = s.replace(/^\./, '');           // strip a leading dot
-    var a = s.split('.');
-debugger
-    for (var i = 0, n = a.length; i < n; ++i) {
-        var k = a[i];
-        if (newValue !== undefined) {
-            o[k] = newValue;
-        }
-        else if (k in o) {
-            o = o[k];
-        } else {
-            i + 1 === n ? o[k] = [] : {};
-            o = o[k];
-        }
-    }
-    return o;
 }

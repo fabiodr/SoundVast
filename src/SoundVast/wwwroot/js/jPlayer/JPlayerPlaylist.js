@@ -142,7 +142,7 @@ export const jPlayerPlaylist = (WrappedComponent) => class extends React.Compone
             return function() {
                 originalFunction.apply(this, arguments);
                 const stateClassMethod = this.props.loop === "loop-playlist" ? "addStateClass" : "removeStateClass";
-                this.props.mergeOptions({stateClass: "loopedPlaylist"});
+                this.mergeOptions({stateClass: "loopedPlaylist"});
             }.bind(this);
         };
         this.jPlayer._updateButtons = newUpdateButtonCallback(this.jPlayer._updateButtons);
