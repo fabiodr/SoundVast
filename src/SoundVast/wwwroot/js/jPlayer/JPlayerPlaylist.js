@@ -191,7 +191,7 @@ export const jPlayerPlaylist = (WrappedComponent) => class extends React.Compone
     remove = (index) => {
         if (index === undefined) {
             this._initPlaylist([]);
-            this.assignOptions({media: []});
+            this.mergeOptions({status: {media: []}});
             return true;
         } else {           
             this.mergeOptions({playlist: {[index]: {isRemoving: true}}});
@@ -202,7 +202,7 @@ export const jPlayerPlaylist = (WrappedComponent) => class extends React.Compone
         index = (index < 0) ? this.original.length + index : index; // Negative index relates to end of array.
         if (0 <= index && index < this.props.playlist.length) {
             this.setState({current: index});
-            this.assignOptions({media: this.props.playlist[index]}, setMediaCallback);
+            this.mergeOptions({status: {media: this.props.playlist[index]}}, setMediaCallback);
         } else {
             this.setState({current: 0});
         }
@@ -278,7 +278,7 @@ export const jPlayerPlaylist = (WrappedComponent) => class extends React.Compone
                 this.setState(previousState => [{current: previousState.current--}]);
             }
         } else {
-            this.assignOptions({media: []});
+            this.mergeOptions({status: {media: []}});
             this.setState({current: 0});
             this.shuffled = false;
         }

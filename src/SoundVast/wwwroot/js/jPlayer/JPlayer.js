@@ -872,7 +872,7 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 				if(jPlayer.platform.android) {
 					this.androidFix.setMedia = true;
 				}
-				this.mergeOptions({status: {video: false}});
+				this.mergeOptions({status: {video: false, media: media}});
 				this.addClass(utilities.className.hidden, jPlayer.key.videoPlayClass);
 			}
 			supported = true;
@@ -898,7 +898,7 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 				this.setState({titleText: media.title});
 			}
 			
-			this.mergeOptions({status: {srcSet: true, media: media}});
+			this.mergeOptions({status: {srcSet: true}});
 			this._updateButtons(false);
 			this._trigger(this.props.onSetMedia);
 		} else { // jPlayer cannot support any formats provided in this browser
@@ -952,9 +952,9 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 	play = (time) => {
 		if(this.props.status.srcSet) {
 			this.focus();
-			if(this.html.active) {
-				this._htmlPlay(time);
-			}
+			// if(this.html.active) {
+			// 	this._htmlPlay(time);
+			// }
 		} else {
 			this._urlNotSetError("play");
 			this.mergeOptions({status: {paused: true}});
@@ -1123,15 +1123,14 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 					let option = value[key];
 
 					const status = {
-						paused: (value) => value.status.paused ? this.pause(this.props.status.currentTime) : this.play(this.props.status.currentTime),
+						paused: (value) => value ? this.pause(this.props.status.currentTime) : this.play(this.props.status.currentTime),
 						media: (value) => this.setMedia(value)
 					};
 
-					if (status.hasOwnProperty(key) && !isEqual(this.props[key], option)) {
+					if (status.hasOwnProperty(key) && !isEqual(this.props.status[key], option)) {
 						status[key](option);		
 					}
-				}
-				
+				}		
 			},
 			volume: (value) => {
 				if(this.html.used) {
@@ -1320,10 +1319,10 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 		this.setState({tracks: tracks});
 		this.currentMedia.src = this.props.status.src;
 
-		if(this.props.preload !== 'none') {
-			this._htmlLoad();
-			this._trigger(this.props.onTimeUpdate)
-		}
+		 if(this.props.preload !== 'none') {
+		 	this._htmlLoad();
+		 	this._trigger(this.props.onTimeUpdate)
+		 }
 	}
 	_htmlSetFormat = (media, formatSetCallback) => {
 		// Always finds a format due to checks in setMedia()
@@ -1429,7 +1428,7 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 		} else if(!isNaN(time)) {
 			try {
 				if(!this.currentMedia.seekable || typeof this.currentMedia.seekable === "object" && this.currentMedia.seekable.length > 0) {
-					this.currentMedia.currentTime = time;
+					this.currentMedia.currentTime = 3;
 				} else {
 					throw 1;
 				}
@@ -1559,28 +1558,31 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 	componentDidUpdate(prevProps, prevState) {
 		this.currentMedia.loop = this.props.loop === "loop" ? true : false;
 
-		// if (this.props.status.nativeVideoControls !== prevProps.status.nativeVideoControls) {
-		// 	this._updateNativeVideoControls();
-		// }
+		if (this.props.status.nativeVideoControls !== prevProps.status.nativeVideoControls) {
+			this._updateNativeVideoControls();
+		}
 		
-		// if (this.props.status !== prevProps.status) {
-		// 	this._updateInterface();
-		// 	this._updateButtons();
-		// }
+		if (this.props.status.currentTime !== prevProps.status.currentTime || this.props.status.duration !== prevProps.status.duration) {
+			this._updateInterface();
+		}
 
-		// if (this.props.status.src !== prevProps.status.src) {
-		// 	this._htmlInitMedia(this.props.status.media);
-		// }
+		if (this.props.status.paused !== prevProps.status.paused || this.props.status.noFullWindow !== prevProps.status.noFullWindow || this.props.status.loop !== prevProps.status.loop) {
+			this._updateButtons();
+		}
 
-		// if (this.props.status.waitForLoad !== prevProps.status.waitForLoad) {
-		// 	//if(time > 0) { // Avoids a setMedia() followed by stop() or pause(0) hiding the video play button.
-		// 		this._htmlCheckWaitForPlay();
-		// 	//}
-		// }
+		if (this.props.status.src !== prevProps.status.src) {
+			this._htmlInitMedia(this.props.status.media);
+		}
 
-		// if (prevProps.status.width !== this.props.status.width || prevProps.status.height !== this.props.status.height) {
-		// 	this.assignStyle({width: this.props.status.width, height: this.props.status.height}, "jPlayerStyle");
-		// }
+		if (this.props.status.waitForLoad !== prevProps.status.waitForLoad) {
+			//if(time > 0) { // Avoids a setMedia() followed by stop() or pause(0) hiding the video play button.
+				this._htmlCheckWaitForPlay();
+			//}
+		}
+
+		if (prevProps.status.width !== this.props.status.width || prevProps.status.height !== this.props.status.height) {
+			this.assignStyle({width: this.props.status.width, height: this.props.status.height}, "jPlayerStyle");
+		}
 	}
 	componentDidMount() {
 		if (this.audio.element()){
