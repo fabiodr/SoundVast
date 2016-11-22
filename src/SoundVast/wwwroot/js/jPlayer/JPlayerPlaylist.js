@@ -66,7 +66,7 @@ export const jPlayerPlaylist = (WrappedComponent) => class extends React.Compone
                 this._trigger(this.props.onEnded, jPlayer);
             },
             onPlay: (jPlayer) => { 
-                jPlayer.pauseOthers();
+               // jPlayer.pauseOthers();
                 this._trigger(this.props.onPlay, jPlayer);
              },
             onResize: (jPlayer) => {
@@ -141,8 +141,8 @@ export const jPlayerPlaylist = (WrappedComponent) => class extends React.Compone
         const newUpdateButtonCallback = (originalFunction) => {
             return function() {
                 originalFunction.apply(this, arguments);
-                const stateClassMethod = this.props.loop === "loop-playlist" ? "addStateClass" : "removeStateClass";
-                this.mergeOptions({stateClass: "loopedPlaylist"});
+                const stateClassMethod = this.props.loop === "loop-playlist" ? this.addClass : this.removeClass;
+                stateClassMethod(this.stateClass.loopedPlaylist, utilities.key.stateClass);
             }.bind(this);
         };
         this.jPlayer._updateButtons = newUpdateButtonCallback(this.jPlayer._updateButtons);
@@ -301,10 +301,10 @@ export const jPlayerPlaylist = (WrappedComponent) => class extends React.Compone
 
         if (this.shuffled) {
             this.assignOptions({playlist: [...this.props.playlist].sort(() => 0.5 - Math.random())});
-            this._updateFunctions(["addStateClass", "shuffled"], playlistSetCallback);
+            this.addClass(this.stateClass.shuffled, utilities.key.stateClass, playlistSetCallback);
         } else {
             this._originalPlaylist(playlistSetCallback);
-            this._updateFunctions(["removeStateClass", "shuffled"]);
+            this.removeClass(this.stateClass.shuffled, utilities.key.stateClass);
         }
         
         setTimeout(() => this.setState({isPlaylistContainerSlidingUp: false}), 0);
@@ -330,7 +330,7 @@ export const jPlayerPlaylist = (WrappedComponent) => class extends React.Compone
                         <Playlist isSlidingUp={this.state.isPlaylistContainerSlidingUp} config={this.state.useShuffleConfig ? this.props.shuffleAnimation : this.props.displayAnimation} onRest={this._shuffleAnimationCallback}>
                             <Media medias={this.props.playlist} current={this.state.current} config={MediaAnimationConfig} onRest={this._removeAnimationCallback} 
                                 removeItemClass={this.props.removeItemClass} freeGroupClass={this.props.freeGroupClass} itemClass={this.props.itemClass} enableRemoveControls={this.props.enableRemoveControls} 
-                                remove={this.remove} blur={this.blur} play={this.play} updateOptions={this.props.updateOptions} />
+                                remove={this.remove} blur={this.blur} play={this.play} mergeOptions={this.mergeOptions} />
                         </Playlist> 
                     </div>
                 </div>                               
@@ -407,7 +407,7 @@ class Media extends React.Component {
     _onMediaLinkClick = (index, event) => {
         event.preventDefault();
 
-        this.props.current !== index ? this.props.play(index) : this.props.updateOptions({status: {paused: false}});
+        this.props.current !== index ? this.props.play(index) : this.props.mergeOptions({status: {paused: false}});
         this.props.blur(event.target);
     }
     render() {

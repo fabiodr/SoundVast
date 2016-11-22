@@ -14,23 +14,20 @@ export const modifyOptionsArray = function(newOptions, arrayMethod, key, callbac
 
     this.props.updateOptions((prevOptions) => Object.assign({}, prevOptions, {[key]: handleNewOptions(prevOptions[key])}), callback);
 }
-export const addClass = function(classToAdd, key) {
+export const addClass = function(classToAdd, key, callback) {
     //Use function overload of setState to make sure we have up to date values
-    this.props.updateOptions((prevOptions) => {
-        
+    this.props.updateOptions((prevOptions) => {  
         const prevArray = get(prevOptions, key, []);
         const found = prevArray.some((v) => v === classToAdd); 
-        debugger
-        var e = this.constructor;
-        var p = this.constructor.defaultProps;
+
         //Don't add duplicates or empty strings
         if (!found && classToAdd !== undefined) {
             set(prevOptions, key, [...prevArray, classToAdd]);    
         }
         return prevOptions;
-    });
+    }, callback);
 }
-export const removeClass = function(classToRemove, key) {
+export const removeClass = function(classToRemove, key, callback) {
     this.props.updateOptions((prevOptions) => {
         const prevArray = get(prevOptions, key, []);
 
@@ -39,7 +36,7 @@ export const removeClass = function(classToRemove, key) {
         }
 
         return prevOptions;
-    });
+    }, callback);
 }
 export const assignStyle = function(newOption, styleKey, callback) { 
     this.setState((prevState) => prevState[styleKey] = Object.assign({}, prevState[styleKey], newOption), callback);

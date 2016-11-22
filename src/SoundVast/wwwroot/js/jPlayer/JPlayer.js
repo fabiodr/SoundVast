@@ -4,7 +4,7 @@ import * as utilities from "./jPlayerUtilities"
 import merge from "lodash.merge";
 import isEqual from "lodash/isEqual";
 
-class JPlayer extends React.Component {
+export const jPlayer = (WrappedComponent, AdditionalControls) => class extends React.Component {
 	static get propTypes() {
 		return {
 			updateOptions: React.PropTypes.func.isRequired,
@@ -125,6 +125,48 @@ class JPlayer extends React.Component {
 			onLoadedMetadata: React.PropTypes.func,
 			onCanPlay: React.PropTypes.func,
 			onCanPlayThrough: React.PropTypes.func,
+		}
+	}
+	static get defaultProps() {
+		return {
+			cssSelectorAncestor: "#jp_container_1",
+			jPlayerSelector: "#jplayer_1",
+			preload: "metadata", // HTML5 Spec values: none, metadata, auto.
+			supplied: ["mp3"], // Defines which formats jPlayer will try and support and the priority by the order. 1st is highest,		
+			captureDuration: true, // When true, clicks on the duration are captured and no longer propagate up the DOM.
+			playbackRate: 1.0,
+			defaultPlaybackRate: 1.0,
+			minPlaybackRate: 0.5,
+			maxPlaybackRate: 4,
+			volume: 0.8, // The volume. Number 0 to 1.
+			nativeVideoControls: {
+				// Works well on standard browsers.
+				// Phone and tablet browsers can have problems with the controls disappearing.
+			},
+			guiFadeInAnimation: {
+				stiffness: 40 // Velocity of the animation (higher the faster), other properties automatically set in the Motion component
+			},
+			guiFadeOutAnimation: {
+				stiffness: 40 
+			},
+			html: {},
+			jPlayerStatus: () => {},
+			overrideFunctions: [],
+			functions: [],
+			status: defaultStatus,
+			playClass: [jPlayer.className.play],
+			pauseClass: [jPlayer.className.pause],
+			posterClass: [],
+			videoClass: [],
+			repeatClass: [jPlayer.className.repeat],
+			fullScreenClass: [jPlayer.className.fullScreen],
+			volumeMaxClass: [jPlayer.className.volumeMax],
+			volumeBarClass: [jPlayer.className.volumeBar],
+			volumeBarValueClass: [jPlayer.className.volumeBarValue],
+			playbackRateBarClass: [jPlayer.className.playbackRateBar],
+			playbackRateBarValueClass: [jPlayer.className.playbackRateBarValue],
+			seekBarClass: [jPlayer.className.seekBar],
+			noSolutionClass: [jPlayer.className.noSolution]
 		}
 	}
 	constructor(props) {
@@ -384,20 +426,7 @@ class JPlayer extends React.Component {
 		};
 	}
 	_initBeforeRender = () => {
-		this.mergeOptions({status: defaultStatus});
-
-		// this.addClass(jPlayer.className.play, jPlayer.key.playClass);
-		// this.addClass(jPlayer.className.pause, jPlayer.key.pauseClass);
-		// this.addClass(jPlayer.className.video, jPlayer.key.videoClass);
-		// this.addClass(jPlayer.className.repeat, jPlayer.key.repeatClass);
-		// this.addClass(jPlayer.className.fullScreen, jPlayer.key.fullScreenClass);
-		// this.addClass(jPlayer.className.volumeMax, jPlayer.key.volumeMaxClass);
-		// this.addClass(jPlayer.className.volumeBar, jPlayer.key.volumeBarClass);
-		// this.addClass(jPlayer.className.volumeBarValue, jPlayer.key.volumeBarValueClass);
-		// this.addClass(jPlayer.className.playbackRateBar, jPlayer.key.playbackRateBarClass);
-		// this.addClass(jPlayer.className.playbackRateBarValue, jPlayer.key.playbackRateBarValueClass);
-		// this.addClass(jPlayer.className.seekBar, jPlayer.key.seekBarClass);
-		// this.addClass(jPlayer.className.noSolution, jPlayer.key.noSolutionClass);
+		this.props.updateOptions((prevOptions) => merge({}, this.constructor.defaultProps, prevOptions));
 
 		// On iOS, assume commands will be ignored before user initiates them.
 		this.internal.cmdsIgnored = jPlayer.platform.ipad || jPlayer.platform.iphone || jPlayer.platform.ipod;
@@ -764,7 +793,6 @@ class JPlayer extends React.Component {
 	}
 	_convertTime = ConvertTime.prototype.time
 	_seeking = () => {
-		debugger
 		this.addClass(jPlayer.className.seeking, jPlayer.key.seekBarClass);
 		this.addClass(this.stateClass.seeking, utilities.key.stateClass);
 	}
@@ -797,7 +825,7 @@ class JPlayer extends React.Component {
 		*/
 		var	supported = false,
 			posterChanged = this.props.status.media.poster !== media.poster; // Compare before reset. Important for OSX Safari as this.htmlElement.poster.src is absolute, even if original poster URL was relative.
-		
+
 		this._resetMedia();
 		
 		this.html.active = false;
@@ -1755,50 +1783,6 @@ const defaultStatus = {
 	*/
 };
 
-debugger
-jPlayer.defaultProps = {
-	cssSelectorAncestor: "#jp_container_1",
-	jPlayerSelector: "#jplayer_1",
-	preload: "metadata", // HTML5 Spec values: none, metadata, auto.
-	supplied: ["mp3"], // Defines which formats jPlayer will try and support and the priority by the order. 1st is highest,		
-	captureDuration: true, // When true, clicks on the duration are captured and no longer propagate up the DOM.
-	playbackRate: 1.0,
-	defaultPlaybackRate: 1.0,
-	minPlaybackRate: 0.5,
-	maxPlaybackRate: 4,
-	volume: 0.8, // The volume. Number 0 to 1.
-	nativeVideoControls: {
-		// Works well on standard browsers.
-		// Phone and tablet browsers can have problems with the controls disappearing.
-	},
-	guiFadeInAnimation: {
-		stiffness: 40 // Velocity of the animation (higher the faster), other properties automatically set in the Motion component
-	},
-	guiFadeOutAnimation: {
-		stiffness: 40 
-	},
-	html: {},
-	jPlayerStatus: () => {},
-	overrideFunctions: [],
-	functions: [],
-	status: defaultStatus,
-	playClass: [jPlayer.className.play],
-	pauseClass: [jPlayer.className.pause],
-	posterClass: [],
-	videoClass: [],
-	repeatClass: [jPlayer.className.repeat],
-	fullScreenClass: [jPlayer.className.fullScreen],
-	volumeMaxClass: [jPlayer.className.volumeMax],
-	volumeBarClass: [jPlayer.className.volumeBar],
-	volumeBarValueClass: [jPlayer.className.volumeBarValue],
-	playbackRateBarClass: [jPlayer.className.playbackRateBar],
-	playbackRateBarValueClass: [jPlayer.className.playbackRateBarValue],
-	seekBarClass: [jPlayer.className.seekBar],
-	noSolutionClass: [jPlayer.className.noSolution]
-};
-
-const jPlayer = (WrappedComponent, AdditionalControls) => JPlayer;
-
 jPlayer.key = {
 	volumeBarClass: "volumeBarClass",
 	volumeBarValueClass: "volumeBarValueClass",
@@ -2170,8 +2154,6 @@ jPlayer.format = {
 		media: 'video'
 	}
 }
-
-export {jPlayer}
 
 var getOffset = (el) => ({top: el.getBoundingClientRect().top + document.body.scrollTop, left: el.getBoundingClientRect().left + document.body.scrollLeft});
 var getWidth = (el) => el.getBoundingClientRect().width;
