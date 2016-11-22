@@ -307,7 +307,6 @@ export const jPlayerPlaylist = (WrappedComponent) => class extends React.Compone
             this._updateFunctions(["removeStateClass", "shuffled"]);
         }
         
-
         setTimeout(() => this.setState({isPlaylistContainerSlidingUp: false}), 0);
     }
     blur = (that) => {

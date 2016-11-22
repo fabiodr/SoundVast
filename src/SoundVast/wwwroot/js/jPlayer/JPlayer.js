@@ -4,7 +4,7 @@ import * as utilities from "./jPlayerUtilities"
 import merge from "lodash.merge";
 import isEqual from "lodash/isEqual";
 
-export const jPlayer = (WrappedComponent, AdditionalControls) => class extends React.Component {
+class JPlayer extends React.Component {
 	static get propTypes() {
 		return {
 			updateOptions: React.PropTypes.func.isRequired,
@@ -125,48 +125,6 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 			onLoadedMetadata: React.PropTypes.func,
 			onCanPlay: React.PropTypes.func,
 			onCanPlayThrough: React.PropTypes.func,
-		}
-	}
-	static get defaultProps() {
-		return {
-			cssSelectorAncestor: "#jp_container_1",
-			jPlayerSelector: "#jplayer_1",
-			preload: "metadata", // HTML5 Spec values: none, metadata, auto.
-			supplied: ["mp3"], // Defines which formats jPlayer will try and support and the priority by the order. 1st is highest,		
-			captureDuration: true, // When true, clicks on the duration are captured and no longer propagate up the DOM.
-			playbackRate: 1.0,
-			defaultPlaybackRate: 1.0,
-			minPlaybackRate: 0.5,
-			maxPlaybackRate: 4,
-			volume: 0.8, // The volume. Number 0 to 1.
-			nativeVideoControls: {
-				// Works well on standard browsers.
-				// Phone and tablet browsers can have problems with the controls disappearing.
-			},
-			guiFadeInAnimation: {
-				stiffness: 40 // Velocity of the animation (higher the faster), other properties automatically set in the Motion component
-			},
-			guiFadeOutAnimation: {
-				stiffness: 40 
-			},
-			html: {},
-			jPlayerStatus: () => {},
-			overrideFunctions: [],
-			functions: [],
-			status: defaultStatus,
-			playClass: [jPlayer.className.play],
-			pauseClass: [jPlayer.className.pause],
-			posterClass: [],
-			videoClass: [],
-			repeatClass: [jPlayer.className.repeat],
-			fullScreenClass: [jPlayer.className.fullScreen],
-			volumeMaxClass: [jPlayer.className.volumeMax],
-			volumeBarClass: [jPlayer.className.volumeBar],
-			volumeBarValueClass: [jPlayer.className.volumeBarValue],
-			playbackRateBarClass: [jPlayer.className.playbackRateBar],
-			playbackRateBarValueClass: [jPlayer.className.playbackRateBarValue],
-			seekBarClass: [jPlayer.className.seekBar],
-			noSolutionClass: [jPlayer.className.noSolution]
 		}
 	}
 	constructor(props) {
@@ -806,6 +764,7 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 	}
 	_convertTime = ConvertTime.prototype.time
 	_seeking = () => {
+		debugger
 		this.addClass(jPlayer.className.seeking, jPlayer.key.seekBarClass);
 		this.addClass(this.stateClass.seeking, utilities.key.stateClass);
 	}
@@ -813,9 +772,7 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 		this.removeClass(jPlayer.className.seeking, jPlayer.key.seekBarClass);
 		this.removeClass(this.stateClass.seeking, utilities.key.stateClass);
 	}
-	_escapeHtml = (s) => {
-		return s.split('&').join('&amp;').split('<').join('&lt;').split('>').join('&gt;').split('"').join('&quot;');
-	}
+	_escapeHtml = (s) =>  s.split('&').join('&amp;').split('<').join('&lt;').split('>').join('&gt;').split('"').join('&quot;')
 	_qualifyURL = (url) => {
 		var el = document.createElement('div');
 		el.innerHTML= '<a href="' + this._escapeHtml(url) + '">x</a>';
@@ -952,9 +909,9 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 	play = (time) => {
 		if(this.props.status.srcSet) {
 			this.focus();
-			// if(this.html.active) {
-			// 	this._htmlPlay(time);
-			// }
+			if(this.html.active) {
+				this._htmlPlay(time);
+			}
 		} else {
 			this._urlNotSetError("play");
 			this.mergeOptions({status: {paused: true}});
@@ -1561,7 +1518,7 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 		if (this.props.status.nativeVideoControls !== prevProps.status.nativeVideoControls) {
 			this._updateNativeVideoControls();
 		}
-		
+	
 		if (this.props.status.currentTime !== prevProps.status.currentTime || this.props.status.duration !== prevProps.status.duration) {
 			this._updateInterface();
 		}
@@ -1797,6 +1754,50 @@ const defaultStatus = {
 	playbackRateEnabled
 	*/
 };
+
+debugger
+jPlayer.defaultProps = {
+	cssSelectorAncestor: "#jp_container_1",
+	jPlayerSelector: "#jplayer_1",
+	preload: "metadata", // HTML5 Spec values: none, metadata, auto.
+	supplied: ["mp3"], // Defines which formats jPlayer will try and support and the priority by the order. 1st is highest,		
+	captureDuration: true, // When true, clicks on the duration are captured and no longer propagate up the DOM.
+	playbackRate: 1.0,
+	defaultPlaybackRate: 1.0,
+	minPlaybackRate: 0.5,
+	maxPlaybackRate: 4,
+	volume: 0.8, // The volume. Number 0 to 1.
+	nativeVideoControls: {
+		// Works well on standard browsers.
+		// Phone and tablet browsers can have problems with the controls disappearing.
+	},
+	guiFadeInAnimation: {
+		stiffness: 40 // Velocity of the animation (higher the faster), other properties automatically set in the Motion component
+	},
+	guiFadeOutAnimation: {
+		stiffness: 40 
+	},
+	html: {},
+	jPlayerStatus: () => {},
+	overrideFunctions: [],
+	functions: [],
+	status: defaultStatus,
+	playClass: [jPlayer.className.play],
+	pauseClass: [jPlayer.className.pause],
+	posterClass: [],
+	videoClass: [],
+	repeatClass: [jPlayer.className.repeat],
+	fullScreenClass: [jPlayer.className.fullScreen],
+	volumeMaxClass: [jPlayer.className.volumeMax],
+	volumeBarClass: [jPlayer.className.volumeBar],
+	volumeBarValueClass: [jPlayer.className.volumeBarValue],
+	playbackRateBarClass: [jPlayer.className.playbackRateBar],
+	playbackRateBarValueClass: [jPlayer.className.playbackRateBarValue],
+	seekBarClass: [jPlayer.className.seekBar],
+	noSolutionClass: [jPlayer.className.noSolution]
+};
+
+const jPlayer = (WrappedComponent, AdditionalControls) => JPlayer;
 
 jPlayer.key = {
 	volumeBarClass: "volumeBarClass",
@@ -2169,6 +2170,8 @@ jPlayer.format = {
 		media: 'video'
 	}
 }
+
+export {jPlayer}
 
 var getOffset = (el) => ({top: el.getBoundingClientRect().top + document.body.scrollTop, left: el.getBoundingClientRect().left + document.body.scrollLeft});
 var getWidth = (el) => el.getBoundingClientRect().width;

@@ -16,20 +16,28 @@ export const modifyOptionsArray = function(newOptions, arrayMethod, key, callbac
 }
 export const addClass = function(classToAdd, key) {
     //Use function overload of setState to make sure we have up to date values
-    this.props.updateOptions((prevOptions) => {	      
-        const prevObject = get(prevOptions, key, []);
-        const found = prevObject.some((v) => v === classToAdd); 
-
+    this.props.updateOptions((prevOptions) => {
+        
+        const prevArray = get(prevOptions, key, []);
+        const found = prevArray.some((v) => v === classToAdd); 
+        debugger
+        var e = this.constructor;
+        var p = this.constructor.defaultProps;
         //Don't add duplicates or empty strings
         if (!found && classToAdd !== undefined) {
-            set(prevOptions, key, [...prevObject, classToAdd]);    
+            set(prevOptions, key, [...prevArray, classToAdd]);    
         }
-         return prevOptions;
+        return prevOptions;
     });
 }
 export const removeClass = function(classToRemove, key) {
     this.props.updateOptions((prevOptions) => {
-        remove(prevOptions, key, classToRemove);
+        const prevArray = get(prevOptions, key, []);
+
+        if (classToRemove !== undefined) {
+            remove(prevArray, (v) => classToRemove === v);
+        }
+
         return prevOptions;
     });
 }
