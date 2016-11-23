@@ -496,7 +496,7 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 
 		// Now required types are known, finish the options default settings.
 		if(this.require.video) {	
-			this.setState({stateClass: ["jp-video"]});
+			this.addClass("jp-video", utilities.key.stateClass);
 
 			this.assignOptions(merge({
 				sizeCssClass: "jp-video-270p",
@@ -506,7 +506,7 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 				sizeFullCssClass: this.props.sizeFullCssClass
 			}), updateCssClass);		
 		} else {
-			this.setState({stateClass: ["jp-audio"]});
+			this.addClass("jp-audio", utilities.key.stateClass);
 
 			this.assignOptions({
 				sizeCssClass: this.props.sizeCssClass,
@@ -825,7 +825,7 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 		*/
 		var	supported = false,
 			posterChanged = this.props.status.media.poster !== media.poster; // Compare before reset. Important for OSX Safari as this.htmlElement.poster.src is absolute, even if original poster URL was relative.
-
+			
 		this._resetMedia();
 		
 		this.html.active = false;
@@ -1108,12 +1108,12 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 					let option = value[key];
 
 					const status = {
-						paused: (value) => value ? this.pause(this.props.status.currentTime) : this.play(this.props.status.currentTime),
-						media: (value) => this.setMedia(value)
+						paused: () => option ? this.pause(options.status.currentTime) : this.play(options.status.currentTime),
+						media: () => this.setMedia(option)
 					};
 
 					if (status.hasOwnProperty(key) && !isEqual(this.props.status[key], option)) {
-						status[key](option);		
+						status[key]();		
 					}
 				}		
 			},
@@ -1413,7 +1413,7 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 		} else if(!isNaN(time)) {
 			try {
 				if(!this.currentMedia.seekable || typeof this.currentMedia.seekable === "object" && this.currentMedia.seekable.length > 0) {
-					this.currentMedia.currentTime = 3;
+					this.currentMedia.currentTime = time;
 				} else {
 					throw 1;
 				}
@@ -1525,11 +1525,11 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 			this.assignOptions({muted: false});
 		}
 	}
-	onVideoPlayClick = () => this.mergeOptions({status: {paused: false}});
+	onVideoPlayClick = () => this.mergeOptions({status: {paused: false}})
 	onMuteClick = () => this.assignOptions({muted: !this.props.muted})
 	onRepeatClick = () => this.assignOptions({loop: this._incrementCurrentLoop()})
-	onFullScreenClick = () => this.assignOptions({fullScreen: !this.props.fullScreen});
-	componentWillReceiveProps(nextProps) {			
+	onFullScreenClick = () => this.assignOptions({fullScreen: !this.props.fullScreen})
+	componentWillReceiveProps(nextProps) {
 		this._setOptions(nextProps);
 		this._setFunctions(nextProps.functions);
 	}	
@@ -1550,8 +1550,10 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 		if (this.props.status.currentTime !== prevProps.status.currentTime || this.props.status.duration !== prevProps.status.duration) {
 			this._updateInterface();
 		}
-
-		if (this.props.status.paused !== prevProps.status.paused || this.props.status.noFullWindow !== prevProps.status.noFullWindow || this.props.status.loop !== prevProps.status.loop) {
+debugger
+		if (this.props.status.paused !== prevProps.status.paused || this.props.status.noFullWindow !== prevProps.status.noFullWindow || this.props.status.loop !== prevProps.status.loop ||
+			this.props.status.sizeCssClass !== prevProps.status.sizeCssClass || this.props.status.sizeFullCssClass !== prevProps.status.sizeFullCssClass ||  
+			this.props.fullWindow !== prevProps.fullWindow || this.props.fullScreen !== prevProps.fullScreen) {
 			this._updateButtons();
 		}
 
@@ -1621,8 +1623,8 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 							</div>
 							<div className={this.props.playbackRateBarClass.join(" ")} style={this.state.playbackRateBarStyle} onClick={this.onPlaybackRateBarClick}>
 								<div className={this.props.playbackRateBarValueClass.join(" ")} style={this.state.playbackRateBarValueStyle} />
-							</div>						
-							{AdditionalControls}
+							</div>		
+							<AdditionalControls {...this.props.additionalControlProps} />
 						</div>
 						<div className="jp-progress">
 							<div className={this.props.seekBarClass.join(" ")} style={this.state.seekBarStyle} onClick={this.onSeekBarClick}>                         

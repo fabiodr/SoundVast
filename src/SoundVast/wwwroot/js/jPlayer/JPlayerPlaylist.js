@@ -32,23 +32,21 @@ export const jPlayerPlaylist = (WrappedComponent) => class extends React.Compone
             html: {},
             playlist: [],
             shuffleOnLoop: true,
+            shuffled: false,
             itemClass: "jp-playlist-item",
             freeItemClass: "jp-playlist-item-free",
             removeItemClass: "jp-playlist-item-remove",
-            freeGroupClass: "jp-free-media"
+            freeGroupClass: "jp-free-media",
         };
     }
     constructor(props) {
         super(props);
         
-        WrappedComponent = jPlayer(WrappedComponent, 
-        <PlaylistControls blur={this.blur} shuffle={this.shuffle} next={this.next} previous={this.previous}
-                            shuffled={this.shuffled} html={this.props.html} />
-        );
+        WrappedComponent = jPlayer(WrappedComponent, PlaylistControls);
 
         this.playlistContainerMinHeight = this.playlistItemAnimMinHeight = 0;
         this.playlistContainerMaxHeight = this.playlistItemAnimMaxHeight = 1;
-   
+
         this.assignOptions = utilities.assignOptions.bind(this);
 		this.mergeOptions = utilities.mergeOptions.bind(this);
 		this.modifyOptionsArray = utilities.modifyOptionsArray.bind(this);
@@ -66,7 +64,7 @@ export const jPlayerPlaylist = (WrappedComponent) => class extends React.Compone
                 this._trigger(this.props.onEnded, jPlayer);
             },
             onPlay: (jPlayer) => { 
-               // jPlayer.pauseOthers();
+                this.jPlayer.pauseOthers();
                 this._trigger(this.props.onPlay, jPlayer);
              },
             onResize: (jPlayer) => {
@@ -129,8 +127,6 @@ export const jPlayerPlaylist = (WrappedComponent) => class extends React.Compone
        }
     }
     _setup = () => {
-        this.shuffled = false;
-
         this.cssSelector = Object.assign({}, {cssPlaylistOptionsSelector: this.state.cssSelectorAncestor}, this.state.cssSelector);
 
         // Put the title in its initial display state
@@ -158,7 +154,7 @@ export const jPlayerPlaylist = (WrappedComponent) => class extends React.Compone
     }
     _initPlaylist = (playlist) => {
         this.setState({current: 0});
-        this.shuffled = false;
+        this.assignOptions({shuffled: false});
         this.original = [...playlist] // Copy the Array of Objects
 
         for(var i = 0; i < this.original.length; i++){
@@ -198,11 +194,11 @@ export const jPlayerPlaylist = (WrappedComponent) => class extends React.Compone
         }
         this.setState({useRemoveConfig: true});
     }
-    select = (index, setMediaCallback) => {
+    select = (index, autoPlay) => {
         index = (index < 0) ? this.original.length + index : index; // Negative index relates to end of array.
         if (0 <= index && index < this.props.playlist.length) {
             this.setState({current: index});
-            this.mergeOptions({status: {media: this.props.playlist[index]}}, setMediaCallback);
+            this.mergeOptions({status: {media: this.props.playlist[index]}}, autoPlay ? () => this.mergeOptions({status: {paused: false}}) : null);
         } else {
             this.setState({current: 0});
         }
@@ -211,7 +207,7 @@ export const jPlayerPlaylist = (WrappedComponent) => class extends React.Compone
         index = (index < 0) ? this.original.length + index : index; // Negative index relates to end of array.
         if (0 <= index && index < this.props.playlist.length) {
             if (this.props.playlist.length) {
-                this.select(index, this.mergeOptions({status: {paused: false}}));
+                this.select(index, true);
             }
         } else if (index === undefined) {
             this.mergeOptions({status: {paused: false}});
@@ -226,7 +222,7 @@ export const jPlayerPlaylist = (WrappedComponent) => class extends React.Compone
         }
         if (this.props.loop === "loop-playlist") {
             // See if we need to shuffle before looping to start, and only shuffle if more than 1 item.
-            if (index === 0 && this.shuffled && this.props.shuffleOnLoop && this.props.playlist.length > 1) {
+            if (index === 0 && this.props.shuffled && this.props.shuffleOnLoop && this.props.playlist.length > 1) {
                 this.shuffle(true, true); // playNow
             } else {
                 this.play(index);
@@ -248,16 +244,16 @@ export const jPlayerPlaylist = (WrappedComponent) => class extends React.Compone
     }
     shuffle = (shuffled, playNow) => {
         if(shuffled === undefined) {
-            shuffled = !this.shuffled;
+            shuffled = !this.props.shuffled;
         }
 
-        this.shuffled = shuffled;
         this.playNow = playNow;
+        this.assignOptions({shuffled: shuffled});      
         this.setState({isPlaylistContainerSlidingUp: true});
         this.setState({useShuffleConfig: true});
     }
     _removeAnimationCallback = (index) => {
-        if (this.shuffled) {
+        if (this.props.shuffled) {
             var item = this.props.playlist[index];
             for (var i = 0; i < this.original.length; i++){
                 if (this.original[i].key === item.key) {
@@ -280,7 +276,7 @@ export const jPlayerPlaylist = (WrappedComponent) => class extends React.Compone
         } else {
             this.mergeOptions({status: {media: []}});
             this.setState({current: 0});
-            this.shuffled = false;
+            this.assignOptions({shuffled: false});;
         }
 
         this.setState({useRemoveConfig: false});
@@ -299,7 +295,7 @@ export const jPlayerPlaylist = (WrappedComponent) => class extends React.Compone
             }
         }
 
-        if (this.shuffled) {
+        if (this.props.shuffled) {
             this.assignOptions({playlist: [...this.props.playlist].sort(() => 0.5 - Math.random())});
             this.addClass(this.stateClass.shuffled, utilities.key.stateClass, playlistSetCallback);
         } else {
@@ -322,9 +318,18 @@ export const jPlayerPlaylist = (WrappedComponent) => class extends React.Compone
     }
     render() {
         const MediaAnimationConfig = this.state.useRemoveConfig ? this.props.removeAnimation : this.props.addAnimation
+        const playlistControlProps = {
+            blur: this.blur,
+            shuffle: this.shuffle,
+            next: this.next,
+            previous: this.previous,
+            html: this.props.html,
+            shuffled: this.props.shuffled
+        };
 
         return (   
-            <WrappedComponent ref={(jPlayer) => this.jPlayer = jPlayer} {...this.props} {...this.keyBindings} {...this.event} stateClass={this.stateClass} loopOptions={"loop-playlist"}>            
+            <WrappedComponent ref={(jPlayer) => this.jPlayer = jPlayer} {...this.props} {...this.keyBindings} {...this.event} stateClass={this.stateClass} loopOptions={"loop-playlist"}
+                additionalControlProps={playlistControlProps}>            
                 <div id="jp_container_playlist">
                     <div className="jp-playlist">
                         <Playlist isSlidingUp={this.state.isPlaylistContainerSlidingUp} config={this.state.useShuffleConfig ? this.props.shuffleAnimation : this.props.displayAnimation} onRest={this._shuffleAnimationCallback}>
