@@ -4,7 +4,8 @@ import {bindActionCreators} from "redux";
 
 import {loadUserDetails} from "./appActions";
 import Nav from "./Nav";
-import FooterContainer from "./FooterContainer";
+import FooterPlayer from "./FooterPlayer";
+import TestPlayer from "./TestPlayer";
 import Body from "./Body";
 
 class AppContainer extends React.Component {
@@ -16,7 +17,8 @@ class AppContainer extends React.Component {
             <div style={{height: "100%"}}>{/*Remove Style*/}
                 {/*<Nav isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} userName={this.props.userName} />
                 <Body />*/}
-                <FooterContainer />
+                <FooterPlayer />
+                <TestPlayer />
             </div>
         );
     }

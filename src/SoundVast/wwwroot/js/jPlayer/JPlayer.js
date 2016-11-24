@@ -536,7 +536,7 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 		this.currentMedia.autoplay = this.props.autoPlay;
 		this.currentMedia.loop = this.props.loop === "loop" ? true : false;
 
-		jPlayer.instances[this.internal.instance] = this;
+		jPlayer.instances[this.props.jPlayerSelector.slice(1)] = this;
 
 		// The native controls are only for video and are disabled when audio is also used.
 		this._restrictNativeVideoControls(); 
@@ -954,29 +954,29 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 			this._urlNotSetError("pause");
 		}
 	}
-	tellOthers = (command, conditions, ...others) => {
-		var	hasConditions = typeof conditions === 'function';
+	// tellOthers = (command, conditions, ...others) => {
+	// 	var	hasConditions = typeof conditions === 'function';
 
-		if(typeof command !== 'string') { // Ignore, since no command.
-			return; // Return undefined to maintain chaining.
-		}
+	// 	if(typeof command !== 'string') { // Ignore, since no command.
+	// 		return; // Return undefined to maintain chaining.
+	// 	}
 
-		for (var index in jPlayer.instances) {
-			var instance = jPlayer.instances[index];
+	// 	for (var index in jPlayer.instances) {
+	// 		var instance = jPlayer.instances[index];
 
-			if(this.jPlayerElement !== instance.jPlayerElement) { // Do not tell this instance.
-				if(!hasConditions || conditions.bind(instance)()) {
-					this.setOptions.bind(instance)(command, ...others);
-				}
-			}
-		}
-	}
-	pauseOthers = (time) => {
-		this.tellOthers("pause", function() {
-			// In the conditions function, the "this" context is the other instance's jPlayer object.
-			return this.props.status.srcSet;
-		}, time);
-	}
+	// 		if(this.jPlayerElement !== instance.jPlayerElement) { // Do not tell this instance.
+	// 			if(!hasConditions || conditions.bind(instance)()) {
+	// 				this.setOptions.bind(instance)(command, ...others);
+	// 			}
+	// 		}
+	// 	}
+	// }
+	// pauseOthers = (time) => {
+	// 	this.tellOthers("pause", function() {
+	// 		// In the conditions function, the "this" context is the other instance's jPlayer object.
+	// 		return this.props.status.srcSet;
+	// 	}, time);
+	// }
 	stop = () => {
 		if(this.props.status.srcSet) {
 			if(this.html.active) {
@@ -1121,12 +1121,18 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 				if(this.html.used) {
 					this.currentMedia.volume = value;
 				}
+				debugger
 				if(this.props.globalVolume) {
-					this.tellOthers("volumeWorker", function() {
-						// Check the other instance has global volume enabled.
-						return this.props.globalVolume;
-					}, value);
+					this.mergeOptions({status: {globalVolumeValue: value}});
 				}
+			},
+			globalVolumeValue: (value) => {
+				debugger
+				if(this.html.used) {
+					this.currentMedia.volume = value;
+				}
+				this._updateVolume(value);
+				this._updateButtons();
 			},
 			muted: (value) => {
 				if(this.html.used) {
@@ -1550,7 +1556,7 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 		if (this.props.status.currentTime !== prevProps.status.currentTime || this.props.status.duration !== prevProps.status.duration) {
 			this._updateInterface();
 		}
-debugger
+
 		if (this.props.status.paused !== prevProps.status.paused || this.props.status.noFullWindow !== prevProps.status.noFullWindow || this.props.status.loop !== prevProps.status.loop ||
 			this.props.status.sizeCssClass !== prevProps.status.sizeCssClass || this.props.status.sizeFullCssClass !== prevProps.status.sizeFullCssClass ||  
 			this.props.fullWindow !== prevProps.fullWindow || this.props.fullScreen !== prevProps.fullScreen) {

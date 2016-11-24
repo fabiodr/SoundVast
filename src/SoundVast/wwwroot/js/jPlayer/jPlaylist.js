@@ -1,11 +1,11 @@
 import React from "react";
 import {Motion, spring} from "react-motion";
 import {jPlayer} from "./jPlayer";
-import * as utilities from "./jPlayerUtilities"
+import * as utilities from "./jPlayerUtilities";
 import merge from "lodash.merge";
 import maxBy from "lodash/maxBy";
 
-export const jPlayerPlaylist = (WrappedComponent) => class extends React.Component {
+export const jPlaylist = (WrappedComponent) => class extends React.Component {
     static get propTypes() {
 		return {
             updateOptions: React.PropTypes.func.isRequired,
@@ -41,7 +41,7 @@ export const jPlayerPlaylist = (WrappedComponent) => class extends React.Compone
     }
     constructor(props) {
         super(props);
-        
+
         WrappedComponent = jPlayer(WrappedComponent, PlaylistControls);
 
         this.playlistContainerMinHeight = this.playlistItemAnimMinHeight = 0;
@@ -59,17 +59,24 @@ export const jPlayerPlaylist = (WrappedComponent) => class extends React.Compone
         }
 
         this.event = {
-            onEnded: (jPlayer) => { 
+            onEnded: () => { 
                 this.next()
-                this._trigger(this.props.onEnded, jPlayer);
+                this._trigger(this.props.onEnded);
             },
-            onPlay: (jPlayer) => { 
-                this.jPlayer.pauseOthers();
-                this._trigger(this.props.onPlay, jPlayer);
+            onPlay: () => { 
+                for (var key in jPlayer.instances) {
+                    var instance = jPlayer.instances[key];
+
+                    if (key !== this.props.jPlayerSelector.slice(1)) {
+                        instance.mergeOptions({status: {paused: true}});
+                    }
+                }
+
+                this._trigger(this.props.onPlay);
              },
-            onResize: (jPlayer) => {
+            onResize: () => {
                 this.props.fullScreen ? this._showDetails() : this._hideDetails();
-                this._trigger(this.props.onResize, jPlayer);
+                this._trigger(this.props.onResize);
             }
         }
         
@@ -195,10 +202,12 @@ export const jPlayerPlaylist = (WrappedComponent) => class extends React.Compone
         this.setState({useRemoveConfig: true});
     }
     select = (index, autoPlay) => {
+        const playCallback = autoPlay ? () => this.mergeOptions({status: {paused: false}}) : null;
+
         index = (index < 0) ? this.original.length + index : index; // Negative index relates to end of array.
         if (0 <= index && index < this.props.playlist.length) {
             this.setState({current: index});
-            this.mergeOptions({status: {media: this.props.playlist[index]}}, autoPlay ? () => this.mergeOptions({status: {paused: false}}) : null);
+            this.mergeOptions({status: {media: this.props.playlist[index]}}, playCallback);
         } else {
             this.setState({current: 0});
         }

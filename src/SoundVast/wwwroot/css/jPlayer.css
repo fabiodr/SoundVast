@@ -17,3 +17,11 @@
     width: 480px;
     height: 270px;
 }
+
+#jp_container_footer_player  .jp-gui {
+    z-index: 998;
+}
+
+#jp_container_footer_player2 .jp-gui {
+    bottom: 50px !important;
+}

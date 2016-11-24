@@ -6,8 +6,8 @@ import {jPlayerWrapper} from "../jPlayer/jPlayerWrapper";
 import FooterContainer from "./FooterContainer";
 
 const jPlaylistOptions = {
-    jPlayerSelector: "#jplayer_footer_player",
-    cssSelectorAncestor: "#jp_container_footer_player",
+    jPlayerSelector: "#jplayer_footer_player2",
+    cssSelectorAncestor: "#jp_container_footer_player2",
     html: {
         //Toggle between play and pause in css based on playing or not
         play: <i className="fa fa-play"></i>,
