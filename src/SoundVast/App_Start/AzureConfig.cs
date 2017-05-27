@@ -9,21 +9,23 @@ using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using System.Configuration;
 using Microsoft.AspNetCore.Hosting;
+using SoundVast.CloudStorage;
 
 namespace SoundVast
 {
+    public enum Container
+    {
+        Audio,
+        Image,
+    }
+
     public interface IAzureConfig
     {
-        CloudBlobContainer ContainerAudio { get; set; }
-        CloudBlobContainer ContainerImage { get; set; }
-        CloudBlobContainer ContainerSoftware { get; set; }
+        IDictionary<Container, CloudBlobContainer> Containers { get; set; }
         TempResource AudioConverterResource { get; set; }
         TempResource ImageConverterResource { get; set; }
-        TempResource SoftwareResource { get; set; }
         // LocalResource AudioConverterResource { get; set; }
         // LocalResource ImageConverterResource { get; set; }
-        //  LocalResource SoftwareResource { get; set; }
-        string FFmpegExePath { get; set; }
     }
 
     //Until web roles asp.net core is supported
@@ -32,18 +34,14 @@ namespace SoundVast
         public string RootPath { get; set; }
     }
 
-    public class AzureConfig : IAzureConfig
+    public class AzureConfig : IAzureConfig, ICloudStorage
     {
-        public CloudBlobContainer ContainerAudio { get; set; }
-        public CloudBlobContainer ContainerImage { get; set; }
-        public CloudBlobContainer ContainerSoftware { get; set; }
+        public IDictionary<Container, CloudBlobContainer> Containers { get; set; }
         public TempResource AudioConverterResource { get; set; } = new TempResource();
         public TempResource ImageConverterResource { get; set; } = new TempResource();
-        public TempResource SoftwareResource { get; set; } = new TempResource();
         //    public LocalResource AudioConverterResource { get; set; }
         //   public LocalResource ImageConverterResource { get; set; }
         //   public LocalResource SoftwareResource { get; set; }
-        public string FFmpegExePath { get; set; }
 
         public AzureConfig(string connectionString)
         {
@@ -55,29 +53,58 @@ namespace SoundVast
             var storageAccount = CloudStorageAccount.Parse(connectionString);
             var blobClient = storageAccount.CreateCloudBlobClient();
 
-            ContainerAudio = blobClient.GetContainerReference("audio");
-            ContainerImage = blobClient.GetContainerReference("images");
-            ContainerSoftware = blobClient.GetContainerReference("software");
+            Containers[Container.Audio] = blobClient.GetContainerReference("audio");
+            Containers[Container.Image] = blobClient.GetContainerReference("images");
 
-            ContainerAudio.CreateIfNotExists();
-            ContainerImage.CreateIfNotExists();
-            ContainerSoftware.CreateIfNotExists();
+            foreach (var container in Containers.Values)
+            {
+                container.CreateIfNotExists();
+                container.SetPermissions(new BlobContainerPermissions
+                {
+                    PublicAccess = BlobContainerPublicAccessType.Container
+                });
+            }
 
-            ContainerImage.SetPermissions(new BlobContainerPermissions { PublicAccess = BlobContainerPublicAccessType.Container });
-            ContainerAudio.SetPermissions(new BlobContainerPermissions { PublicAccess = BlobContainerPublicAccessType.Container });
-
-            //SoftwareResource = RoleEnvironment.GetLocalResource("SoftwareResource");
             //AudioConverterResource = RoleEnvironment.GetLocalResource("AudioConverterResource");
             //ImageConverterResource = RoleEnvironment.GetLocalResource("ImageConverterResource");
 
             //FFmpegExePath = SoftwareResource.RootPath + "ffmpeg.exe";
 
-            FFmpegExePath = "ffmpeg.exe";
-            SoftwareResource.RootPath = "App_Data/";
-            AudioConverterResource.RootPath = "App_Data/";
-            ImageConverterResource.RootPath = "App_Data/";
+            AudioConverterResource.RootPath = "Temp/";
+            ImageConverterResource.RootPath = "Temp/";
+        }
 
-            ContainerSoftware.GetBlockBlobReference("ffmpeg.exe").DownloadToFile("ffmpeg.exe", FileMode.Create);
+        public void UploadFromPath(Container containerType, string path)
+        {
+            var blobContainer = Containers[containerType];
+            var contentType = "application/octet-stream";
+
+            if (containerType == Container.Audio)
+                contentType = "audio/mpeg";
+            else if (containerType == Container.Image)
+                contentType = "image/jpeg";
+
+            //Read the bytes from the converted file and upload them to blob storage
+            var bytes = File.ReadAllBytes(path);
+            var blob = blobContainer.GetBlockBlobReference(Path.GetFileName(path));
+
+            blob.Properties.ContentType = contentType;
+            blob.UploadFromByteArray(bytes, 0, bytes.Length);
+
+            //Delete the local temp file
+            File.Delete(path);
+        }
+
+        public CloudFileData GetFileProperties(Container containerType, string fileName)
+        {
+            var blob = Containers[containerType].GetBlockBlobReference(fileName);
+            blob.FetchAttributes();
+
+            return new CloudFileData
+            {
+                Size = blob.Properties.Length,
+                Uri = blob.Uri.AbsoluteUri
+            };
         }
     }
 }

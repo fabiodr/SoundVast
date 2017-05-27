@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -12,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using SoundVast.CustomHelpers;
 using SoundVast.Data;
 using SoundVast.Models;
 using SoundVast.Models.CommentModels;
@@ -22,15 +17,13 @@ using SoundVast.Models.LiveStreamModels;
 using SoundVast.Repository;
 using SoundVast.ServiceLayer;
 using SoundVast.Services;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.AspNetCore.Mvc.Razor;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 
 namespace SoundVast
 {
     public class Startup
     {
+        private IConfigurationRoot _configuration;
+
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -41,21 +34,19 @@ namespace SoundVast
             if (env.IsDevelopment())
             {
                 // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
-                builder.AddUserSecrets();
+                builder.AddUserSecrets<Startup>();
             }
 
             builder.AddEnvironmentVariables();
-            Configuration = builder.Build();
+            _configuration = builder.Build();
             JobScheduler.Start();
         }
-
-        public IConfigurationRoot Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -69,7 +60,7 @@ namespace SoundVast
             services.AddMvc();
             services.AddCloudscribePagination();
 
-            var azureConfig = new AzureConfig(Configuration.GetSection("ConnectionStrings:StorageConnectionString").Value);
+            var azureConfig = new AzureConfig(_configuration.GetSection("ConnectionStrings:StorageConnectionString").Value);
 
             // Add application services.
             services.AddSingleton<IAzureConfig>(azureConfig);
@@ -118,7 +109,7 @@ namespace SoundVast
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            loggerFactory.AddConsole(_configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
             if (env.IsDevelopment())
@@ -138,21 +129,21 @@ namespace SoundVast
 
             app.UseFacebookAuthentication(new FacebookOptions()
             {
-                AppId = Configuration["Authentication:Facebook:AppId"],
-                AppSecret = Configuration["Authentication:Facebook:AppSecret"]
+                AppId = _configuration["Facebook:Id"],
+                AppSecret = _configuration["Facebook:Secret"]
             });
 
-            app.UseTwitterAuthentication(new TwitterOptions()
-            {
-                ConsumerKey = Configuration["Authentication:Twitter:ConsumerKey"],
-                ConsumerSecret = Configuration["Authentication:Twitter:ConsumerSecret"]
-            });
+            //app.UseTwitterAuthentication(new TwitterOptions()
+            //{
+            //    ConsumerKey = Configuration["Authentication:Twitter:ConsumerKey"],
+            //    ConsumerSecret = Configuration["Authentication:Twitter:ConsumerSecret"]
+            //});
 
-            app.UseGoogleAuthentication(new GoogleOptions()
-            {
-                ClientId = Configuration["Authentication:Google:ClientId"],
-                ClientSecret = Configuration["Authentication:Google:ClientSecret"]
-            });
+            //app.UseGoogleAuthentication(new GoogleOptions()
+            //{
+            //    ClientId = Configuration["Authentication:Google:ClientId"],
+            //    ClientSecret = Configuration["Authentication:Google:ClientSecret"]
+            //});
           
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
             app.SeedData();

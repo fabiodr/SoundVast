@@ -31,7 +31,8 @@ namespace SoundVastTests.Controllers
         {
             var azureConfig = new Mock<IAzureConfig>();
             var autoMapper = new AutoMapperConfiguration(azureConfig.Object);
-            var userManager = new Mock<UserManager<ApplicationUser>>();
+            var userStore = new Mock<IUserStore<ApplicationUser>>();
+            var userManager = new UserManager<ApplicationUser>(userStore.Object, null, null, null, null, null, null, null, null);
 
             _service = new Mock<ICommentService>();
             _audioService = new Mock<IAudioService<Audio>>();
@@ -40,13 +41,13 @@ namespace SoundVastTests.Controllers
             _serviceProvider = new Mock<IServiceProvider>();
             _mapper = AutoMapperConfiguration.Config.CreateMapper();
             _commentController = new CommentController(_mapper, _serviceProvider.Object, _service.Object, _audioService.Object, _ratingService.Object,
-                _reportService.Object, userManager.Object);
+                _reportService.Object, userManager);
         }
 
         [Fact]
         public void DeleteEditsInsteadWhenRepliesNotEmpty()
         {
-            _service.Setup(x => x.GetComment(It.IsAny<int>())).Returns(new Comment("BodyText")
+            _service.Setup(x => x.GetCommentForDelete(It.IsAny<int>())).Returns(new Comment("BodyText")
             {
                 Replies = new List<Comment>() { new Comment("Reply1") }
             });
@@ -59,7 +60,7 @@ namespace SoundVastTests.Controllers
         [Fact]
         public void DeleteWithRepliesReturnsReplyPartial()
         {
-            _service.Setup(x => x.GetComment(It.IsAny<int>())).Returns(new Comment("BodyText")
+            _service.Setup(x => x.GetCommentForDelete(It.IsAny<int>())).Returns(new Comment("BodyText")
             {
                 Replies = new List<Comment>() { new Comment("Reply1") }
             });
@@ -79,7 +80,7 @@ namespace SoundVastTests.Controllers
                 Replies = Enumerable.Empty<Comment>().ToList()
             };
 
-            _service.Setup(x => x.GetComment(It.IsAny<int>())).Returns(comment);
+            _service.Setup(x => x.GetCommentForDelete(It.IsAny<int>())).Returns(comment);
 
             var result = _commentController.Delete(It.IsAny<int>()) as EmptyResult;
 
@@ -94,7 +95,7 @@ namespace SoundVastTests.Controllers
                 Replies = Enumerable.Empty<Comment>().ToList()
             };
 
-            _service.Setup(x => x.GetComment(It.IsAny<int>())).Returns(comment);
+            _service.Setup(x => x.GetCommentForDelete(It.IsAny<int>())).Returns(comment);
 
             _commentController.Delete(It.IsAny<int>());
 

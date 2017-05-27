@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IdentityModel.Claims;
 using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +14,9 @@ using SoundVast.ServiceLayer;
 using SoundVast.Repository;
 using SoundVast.Utilities;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Security.Claims;
+using Microsoft.Extensions.Configuration;
+using SoundVast.CloudStorage;
 
 namespace SoundVast.Controllers
 {
@@ -23,14 +25,16 @@ namespace SoundVast.Controllers
     {
         private readonly ICategoryService<LiveStreamCategory> _categoryService;
         private readonly ILiveStreamService _liveStreamService;
-        private readonly IAzureConfig _azureConfig;
+        private readonly ICloudStorage _cloudStorage;
+        private readonly IConfigurationRoot _configuration;
 
-        public UploadLiveStreamController(IAzureConfig azureConfig, ICategoryService<LiveStreamCategory> categoryService, 
-            ILiveStreamService liveStreamService)
+        public UploadLiveStreamController(ICloudStorage cloudStorage, ICategoryService<LiveStreamCategory> categoryService, 
+            ILiveStreamService liveStreamService, IConfigurationRoot configuration)
         {
-            _azureConfig = azureConfig;
+            _cloudStorage = cloudStorage;
             _categoryService = categoryService;
             _liveStreamService = liveStreamService;
+            _configuration = configuration;
         }
 
         public PartialViewResult LiveStreamCreate()
@@ -44,12 +48,10 @@ namespace SoundVast.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult UploadLiveStream([Bind(Prefix = "")] IList<LiveStreamCreateViewModel> liveStreamCreateViewModels)
         {
-            var uploadData = new UploadData(_azureConfig);
-
             foreach (var liveStreamCreateViewModel in liveStreamCreateViewModels)
             {
                 var jpgFileName = Path.ChangeExtension(liveStreamCreateViewModel.Image, "jpg");
-                uploadData.UploadFileFromTemp(_azureConfig.ContainerImage, _azureConfig.ImageConverterResource.RootPath + jpgFileName, jpgFileName, "image/jpeg");
+                _cloudStorage.UploadFromPath(Container.Image, _configuration["Directory:TempResources"] + jpgFileName);
 
                 var liveStream = new LiveStream(User.FindFirst(ClaimTypes.NameIdentifier).Value)
                 {

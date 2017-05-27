@@ -8,17 +8,23 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SoundVast.CustomHelpers;
 using SoundVast.Utilities;
+using Microsoft.Extensions.Configuration;
+using SoundVast.CloudStorage;
 
 namespace SoundVast.Controllers
 {
     [AjaxAuthorize]
     public class UploadMainController : CustomBaseController
     {
-        private readonly IAzureConfig _azureConfig;
+        private readonly IFileStorage _fileStorage;
+        private readonly ICloudStorage _cloudStorage;
+        private readonly IConfigurationRoot _configuration;
 
-        public UploadMainController(IAzureConfig azureConfig)
+        public UploadMainController(IFileStorage fileStorage, ICloudStorage cloudStorage, IConfigurationRoot configuration)
         {
-            _azureConfig = azureConfig;
+            _fileStorage = fileStorage;
+            _cloudStorage = cloudStorage;
+            _configuration = configuration;
         }
 
         public IActionResult Upload()
@@ -29,21 +35,23 @@ namespace SoundVast.Controllers
         [HttpPost]
         public JsonResult ImageData(string fileName)
         {
-            var blob = _azureConfig.ContainerImage.GetBlockBlobReference(fileName);
-            blob.FetchAttributes();
-            var fileData = new { size = blob.Properties.Length, uri = blob.Uri.AbsoluteUri };
+            var fileProperties = _cloudStorage.GetFileProperties(fileName);
+            var imageData = new
+            {
+                size = fileProperties.Size,
+                Uri = fileProperties.Uri
+            };
 
-            return Json(fileData);
+            return Json(imageData);
         }
 
         [HttpPost]
         public void TempStoreImageFile(IFormFile file)
         {
-            var uploadData = new UploadData(_azureConfig);
             var convertedImageName = Path.ChangeExtension(file.FileName, "jpg");
 
-            uploadData.ReadJpgBytes(file, UploadData.CoverImageWidth, UploadData.CoverImageHeight);
-            System.IO.File.WriteAllBytes(_azureConfig.ImageConverterResource.RootPath + convertedImageName, uploadData.ImageBytes);            
+            _fileStorage.ReadJpgBytes(file, FileStorage.CoverImageWidth, FileStorage.CoverImageHeight);
+            System.IO.File.WriteAllBytes(_configuration["Directory:TempResources"] + convertedImageName, _fileStorage.ImageBytes);            
         }
     }
 }

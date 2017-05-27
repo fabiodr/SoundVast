@@ -15,7 +15,6 @@ using SoundVast.Controllers;
 using SoundVast.ServiceLayer;
 using SoundVast.Repository;
 using System.Collections.ObjectModel;
-using System.IdentityModel.Claims;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -27,6 +26,9 @@ using SoundVast.Models.UploadFileViewModels;
 using SoundVast.QueryOptions;
 using SoundVast.Utilities;
 using FileStream = SoundVast.Models.FileStreamModels.FileStream;
+using System.Security.Claims;
+using Microsoft.Extensions.Configuration;
+using SoundVast.CloudStorage;
 
 namespace SoundVast.Controllers
 {
@@ -36,16 +38,21 @@ namespace SoundVast.Controllers
         private readonly IFileStreamService _audioService;
         private readonly IGenreService<FileStreamGenre> _genreService;       
         private readonly ICategoryService<FileStreamCategory> _categoryService;
-        private readonly IAzureConfig _azureConfig;
+        private readonly ICloudStorage _cloudStorage;
+        private readonly IFileStorage _fileStorage;
+        private readonly IConfigurationRoot _configuration;
 
-        public UploadFileController(IMapper mapper, IServiceProvider serviceProvider, IAzureConfig azureConfig, IFileStreamService audioService, 
-            IGenreService<FileStreamGenre> genreService, ICategoryService<FileStreamCategory> categoryService) 
+        public UploadFileController(IMapper mapper, IServiceProvider serviceProvider, IFileStreamService audioService, 
+            IGenreService<FileStreamGenre> genreService, ICategoryService<FileStreamCategory> categoryService,
+            ICloudStorage cloudStorage, IFileStorage fileStorage, IConfigurationRoot configuration) 
             : base(mapper, serviceProvider)
         {
-            _azureConfig = azureConfig;
             _audioService = audioService;
             _genreService = genreService;
             _categoryService = categoryService;
+            _cloudStorage = cloudStorage;
+            _fileStorage = fileStorage;
+            _configuration = configuration;
         }
 
         [HttpPost]
@@ -62,13 +69,12 @@ namespace SoundVast.Controllers
         [HttpPost]
         public void TempStoreAudioFile(IFormFile file, string mp3TempName)
         {
-            var uploadData = new UploadData(_azureConfig);
-            var destPathToStoreAt = _azureConfig.AudioConverterResource.RootPath + file.FileName;
-            var mp3DestPathToStoreAt = _azureConfig.AudioConverterResource.RootPath + mp3TempName;
+            var destPathToStoreAt = _configuration["Directory:TempResources"] + file.FileName;
+            var mp3DestPathToStoreAt = _configuration["Directory:TempResources"] + mp3TempName;
 
-            uploadData.ReadMp3Bytes(file);
-            System.IO.File.WriteAllBytes(destPathToStoreAt, uploadData.AudioBytes);
-            uploadData.ConvertToMp3(file.FileName, destPathToStoreAt, mp3DestPathToStoreAt);
+            _fileStorage.ReadMp3Bytes(file);
+            System.IO.File.WriteAllBytes(destPathToStoreAt, _fileStorage.AudioBytes);
+            _fileStorage.ConvertToMp3(file.FileName, destPathToStoreAt, mp3DestPathToStoreAt);
         }
 
         [HttpPost]
@@ -103,7 +109,6 @@ namespace SoundVast.Controllers
         public IActionResult UploadFile([Bind(Prefix = "")] IEnumerable<RequiredUploadFileViewModel> requiredUploadFileViewModels,
             [Bind(Prefix = "")] IEnumerable<AdditionalUploadFileViewModel> additionalUploadFileViewModels)
         {
-            var uploadData = new UploadData(_azureConfig);
             var zippedUploadViewModels = requiredUploadFileViewModels.Zip(additionalUploadFileViewModels, (r, a) => new { Required = r, Additional = a });
 
             foreach (var zippedUploadViewModel in zippedUploadViewModels)
@@ -111,8 +116,8 @@ namespace SoundVast.Controllers
                 var mp3FileName = Path.ChangeExtension(zippedUploadViewModel.Required.TempAudioName, "mp3");
                 var jpgFileName = Path.ChangeExtension(zippedUploadViewModel.Required.Image, "jpg");
 
-                uploadData.UploadFileFromTemp(_azureConfig.ContainerAudio, _azureConfig.AudioConverterResource.RootPath + mp3FileName, zippedUploadViewModel.Required.Name.Trim() + ".mp3", "audio/mpeg");
-                uploadData.UploadFileFromTemp(_azureConfig.ContainerImage, _azureConfig.ImageConverterResource.RootPath + jpgFileName, jpgFileName, "image/jpeg");
+                _cloudStorage.UploadFromPath(Container.Audio, _configuration["Directory:TempResources"] + mp3FileName);
+                _cloudStorage.UploadFromPath(Container.Image, _configuration["Directory:TempResources"] + jpgFileName);
 
                 var fileStreamMetaData = new FileStream(User.FindFirst(ClaimTypes.NameIdentifier).Value)
                 {

@@ -6,21 +6,31 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Web;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 
 namespace SoundVast.Utilities
 {
-    public class UploadData
+    public interface IFileStorage
     {
+        byte[] ImageBytes { get; set; }
+        byte[] AudioBytes { get; set; }
+
+        void ConvertToMp3(string fileName, string destPathToStoreAt, string mp3DestPathToStoreAt);
+        void ReadMp3Bytes(IFormFile file);
+        void ReadJpgBytes(IFormFile file, int newWidth, int newHeight);
+    }
+
+    public class FileStorage : IFileStorage
+    {
+        private readonly IConfigurationRoot _configuration;
         public static int CoverImageWidth => 217;
         public static int CoverImageHeight => 217;
         public byte[] ImageBytes { get; set; }
         public byte[] AudioBytes { get; set; }
 
-        private readonly IAzureConfig _azureConfig;
-
-        public UploadData(IAzureConfig azureConfig)
+        public FileStorage(IConfigurationRoot configuration)
         {
-            _azureConfig = azureConfig;
+            _configuration = configuration;
         }
 
         public static byte[] ResizeAndConvertToJpg(Image image, int width, int height)
@@ -57,7 +67,7 @@ namespace SoundVast.Utilities
             if (Path.GetExtension(fileName) == ".mp3")
                 return;
 
-            var psi = new ProcessStartInfo(_azureConfig.FFmpegExePath,
+            var psi = new ProcessStartInfo($"{_configuration["Directory:EXE"]}ffempeg.exe",
                 string.Format($@"-i ""{destPathToStoreAt}"" -y ""{mp3DestPathToStoreAt}"""))
             {
                 CreateNoWindow = true,
@@ -95,21 +105,6 @@ namespace SoundVast.Utilities
 
               //  file.InputStream.Position = 0;
             }
-        }
-
-        public void UploadFileFromTemp(CloudBlobContainer container, string path, string blobName, string contentType)
-        {
-            if (!File.Exists(path))
-                return;
-
-            //Read the bytes from the converted file and upload them to blob storage
-            var bytes = File.ReadAllBytes(path);
-            var blob = container.GetBlockBlobReference(blobName);
-            blob.Properties.ContentType = contentType;
-            blob.UploadFromByteArray(bytes, 0, bytes.Length);
-
-            //Delete the local temp file
-            File.Delete(path);
         }
     }
 }

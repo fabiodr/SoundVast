@@ -19,7 +19,6 @@ using SoundVast.Models.CommentViewModels;
 using SoundVast.Models.IdentityModels;
 using SoundVast.QueryOptions;
 using Microsoft.AspNetCore.Mvc;
-using System.IdentityModel.Claims;
 using SoundVast.Models;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;

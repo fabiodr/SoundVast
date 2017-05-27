@@ -48,42 +48,42 @@ namespace SoundVast
                     .ForMember(vm => vm.OriginalCommentId, m => m.MapFrom(z => z.OriginalComment != null ? z.OriginalComment.Id : z.Id));
 
                 x.CreateMap<Category, CategoryViewModel>()
-                    .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => _azureConfig.ContainerImage.GetBlockBlobReference(src.ImageFile.Name).Uri.AbsoluteUri))
+                    .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => _azureConfig.Containers[Container.Image].GetBlockBlobReference(src.ImageFile.Name).Uri.AbsoluteUri))
                     .ReverseMap();
 
                 x.CreateMap<AudioGenre, GenreViewModel>()
-                    .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => _azureConfig.ContainerImage.GetBlockBlobReference(src.Genre.ImageFile.Name).Uri.AbsoluteUri));
+                    .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => _azureConfig.Containers[Container.Image].GetBlockBlobReference(src.Genre.ImageFile.Name).Uri.AbsoluteUri));
 
                 x.CreateMap<Playlist, Models.AudioViewModels.PlaylistViewModel>()
                     .ForMember(vm => vm.UserName, m => m.MapFrom(z => z.User.UserName))
-                    .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => _azureConfig.ContainerImage.GetBlockBlobReference(src.ImageFile.Name).Uri.AbsoluteUri));
+                    .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => _azureConfig.Containers[Container.Image].GetBlockBlobReference(src.ImageFile.Name).Uri.AbsoluteUri));
 
                 x.CreateMap<Playlist, Models.UserViewModels.PlaylistViewModel>()
                     .ForMember(vm => vm.UserName, m => m.MapFrom(z => z.User.UserName))
-                    .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => _azureConfig.ContainerImage.GetBlockBlobReference(src.ImageFile.Name).Uri.AbsoluteUri));
+                    .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => _azureConfig.Containers[Container.Image].GetBlockBlobReference(src.ImageFile.Name).Uri.AbsoluteUri));
 
                 x.CreateMap<LiveStream, LikedLiveStreamViewModel>()
-                    .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => _azureConfig.ContainerImage.GetBlockBlobReference(src.ImageFile.Name).Uri.AbsoluteUri));
+                    .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => _azureConfig.Containers[Container.Image].GetBlockBlobReference(src.ImageFile.Name).Uri.AbsoluteUri));
 
                 x.CreateMap<Playlist, LikedPlaylistViewModel>()
-                    .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => _azureConfig.ContainerImage.GetBlockBlobReference(src.ImageFile.Name).Uri.AbsoluteUri));
+                    .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => _azureConfig.Containers[Container.Image].GetBlockBlobReference(src.ImageFile.Name).Uri.AbsoluteUri));
 
                 x.CreateMap<Audio, SimilarFileStreamViewModel>()
-                    .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => _azureConfig.ContainerImage.GetBlockBlobReference(src.ImageFile.Name).Uri.AbsoluteUri));
+                    .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => _azureConfig.Containers[Container.Image].GetBlockBlobReference(src.ImageFile.Name).Uri.AbsoluteUri));
 
                 x.CreateMap<FileStream, LikedFileStreamViewModel>()
-                    .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => _azureConfig.ContainerImage.GetBlockBlobReference(src.ImageFile.Name).Uri.AbsoluteUri));
+                    .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => _azureConfig.Containers[Container.Image].GetBlockBlobReference(src.ImageFile.Name).Uri.AbsoluteUri));
 
                 x.CreateMap<FileStream, OriginalFileStreamViewModel>()
                     .ForMember(vm => vm.GenreViewModels, m => m.MapFrom(z => z.Genres))
                     .ForMember(vm => vm.BuyLinkViewModels, m => m.MapFrom(z => z.Links))
-                    .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => _azureConfig.ContainerImage.GetBlockBlobReference(src.ImageFile.Name).Uri.AbsoluteUri));
+                    .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => _azureConfig.Containers[Container.Image].GetBlockBlobReference(src.ImageFile.Name).Uri.AbsoluteUri));
 
                 x.CreateMap<FileStream, FileStreamsViewModel>()
-                    .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => _azureConfig.ContainerImage.GetBlockBlobReference(src.ImageFile.Name).Uri.AbsoluteUri));
+                    .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => _azureConfig.Containers[Container.Image].GetBlockBlobReference(src.ImageFile.Name).Uri.AbsoluteUri));
 
                 x.CreateMap<FileStream, AudiosViewModel>()
-                    .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => _azureConfig.ContainerImage.GetBlockBlobReference(src.ImageFile.Name).Uri.AbsoluteUri));
+                    .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => _azureConfig.Containers[Container.Image].GetBlockBlobReference(src.ImageFile.Name).Uri.AbsoluteUri));
 
                 x.CreateMap<FileStream, OtherFileStreamSelectListViewModel>()
                     .ForMember(vm => vm.NameAndArtist, m => m.MapFrom(src => src.Name + src.Artist));
@@ -104,10 +104,10 @@ namespace SoundVast
                 //.ForMember(vm => vm.ReportFileStreamsViewModel, m => m.MapFrom(z => (FileStream)z.Audio));
 
                 x.CreateMap<LiveStream, LiveStreamsViewModel>()
-                    .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => _azureConfig.ContainerImage.GetBlockBlobReference(src.ImageFile.Name).Uri.AbsoluteUri));
+                    .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => _azureConfig.Containers[Container.Image].GetBlockBlobReference(src.ImageFile.Name).Uri.AbsoluteUri));
 
                 x.CreateMap<LiveStream, LiveStreamViewModel>()
-                    .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => _azureConfig.ContainerImage.GetBlockBlobReference(src.ImageFile.Name).Uri.AbsoluteUri));
+                    .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => _azureConfig.Containers[Container.Image].GetBlockBlobReference(src.ImageFile.Name).Uri.AbsoluteUri));
             });
 
             Config.AssertConfigurationIsValid();

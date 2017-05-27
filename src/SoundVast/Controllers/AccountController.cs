@@ -466,15 +466,6 @@ namespace SoundVast.Controllers
             return _userManager.GetUserAsync(HttpContext.User);
         }
 
-        private IActionResult RedirectToLocal(string returnUrl)
-        {
-            if (Url.IsLocalUrl(returnUrl))
-            {
-                return Redirect(returnUrl);
-            }
-            return RedirectToAction(nameof(FileStreamController.FileStreams), "FileStream");
-        }
-
         #endregion
     }
 }
