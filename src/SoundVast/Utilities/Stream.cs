@@ -9,17 +9,18 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using SoundVast.Storage.CloudStorage;
 
 namespace SoundVast.Utilities
 {
 	public class Stream : IActionResult
 	{
 		private readonly string _fileName;
-        private readonly IAzureConfig _azureConfig;
+        private readonly ICloudStorage _cloudStorage;
 
-        public Stream(IAzureConfig azureConfig, string filename)
+        public Stream(ICloudStorage cloudStorage, string filename)
         {
-            _azureConfig = azureConfig;
+            _cloudStorage = cloudStorage;
 			_fileName = filename;
 		}
 
@@ -27,20 +28,15 @@ namespace SoundVast.Utilities
 	    {
             var response = context.HttpContext.Response;
             var request = context.HttpContext.Request;
-
-             var blockBlob = _azureConfig.ContainerAudio.GetBlockBlobReference(_fileName);
-
-            blockBlob.FetchAttributes();
-            var fileLength = blockBlob.Properties.Length;
-            var fileExists = fileLength > 0;
-            var etag = blockBlob.Properties.ETag;
-
-            var responseLength = fileLength;
+	        var blob = _cloudStorage.GetBlob(CloudStorageType.Audio, _fileName);
+	        var fileProperties = blob.FileProperties;
+            var fileExists = fileProperties.Size > 0;
+            var responseLength = fileProperties.Size;
             long startIndex = 0;
 
             //if the "If-Match" exists and is different to etag (or is equal to any "*" with no resource) then return 412 precondition failed
             if ((string)request.Headers["If-Match"] == "*" && !fileExists ||
-                (string)request.Headers["If-Match"] != null && request.Headers["If-Match"] != "*" && request.Headers["If-Match"] != etag)
+                (string)request.Headers["If-Match"] != null && request.Headers["If-Match"] != "*" && request.Headers["If-Match"] != fileProperties.ETag)
             {
                 response.StatusCode = (int)HttpStatusCode.PreconditionFailed;
                 return;
@@ -52,13 +48,13 @@ namespace SoundVast.Utilities
                 return;
             }
 
-            if (request.Headers["If-None-Match"] == etag)
+            if (request.Headers["If-None-Match"] == fileProperties.ETag)
             {
                 response.StatusCode = (int)HttpStatusCode.NotModified;
                 return;
             }
 
-            if ((string)request.Headers["Range"] != null && ((string)request.Headers["If-Range"] == null || request.Headers["IF-Range"] == etag))
+            if ((string)request.Headers["Range"] != null && ((string)request.Headers["If-Range"] == null || request.Headers["IF-Range"] == fileProperties.ETag))
             {
                 string range = request.Headers["Range"];
                 var ranges = range.Split('=', '-');
@@ -71,21 +67,21 @@ namespace SoundVast.Utilities
                 }
                 else
                 {
-                    responseLength = fileLength;
+                    responseLength = fileProperties.Size;
                 }
 
                 responseLength -= startIndex;
                 response.StatusCode = (int)HttpStatusCode.PartialContent;
-                response.Headers.Add("Content-Range", $"bytes {startIndex}-{startIndex + responseLength - 1}/{fileLength}");
+                response.Headers.Add("Content-Range", $"bytes {startIndex}-{startIndex + responseLength - 1}/{fileProperties.Size}");
             }
 
             response.Headers.Add("Accept-Ranges", "bytes");
             response.Headers.Add("Content-Length", responseLength.ToString());
             //response.Cache.SetCacheability(HttpCacheability.Public); //required for etag output
             //  response.Cache.SetETag(etag); //required for IE9 resumable downloads
-            response.ContentType = blockBlob.Properties.ContentType;
+            response.ContentType = fileProperties.ContentType;
 
-            await blockBlob.DownloadRangeToStreamAsync(response.Body, startIndex, responseLength);
+	        await blob.DownloadRangeToStreamAsync(response.Body, startIndex, responseLength);
         }
     }
 }

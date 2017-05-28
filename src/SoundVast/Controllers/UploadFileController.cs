@@ -28,7 +28,8 @@ using SoundVast.Utilities;
 using FileStream = SoundVast.Models.FileStreamModels.FileStream;
 using System.Security.Claims;
 using Microsoft.Extensions.Configuration;
-using SoundVast.CloudStorage;
+using SoundVast.Storage.CloudStorage;
+using SoundVast.Storage.FileStorage;
 
 namespace SoundVast.Controllers
 {
@@ -40,11 +41,11 @@ namespace SoundVast.Controllers
         private readonly ICategoryService<FileStreamCategory> _categoryService;
         private readonly ICloudStorage _cloudStorage;
         private readonly IFileStorage _fileStorage;
-        private readonly IConfigurationRoot _configuration;
+        private readonly IConfiguration _configuration;
 
         public UploadFileController(IMapper mapper, IServiceProvider serviceProvider, IFileStreamService audioService, 
             IGenreService<FileStreamGenre> genreService, ICategoryService<FileStreamCategory> categoryService,
-            ICloudStorage cloudStorage, IFileStorage fileStorage, IConfigurationRoot configuration) 
+            ICloudStorage cloudStorage, IFileStorage fileStorage, IConfiguration configuration) 
             : base(mapper, serviceProvider)
         {
             _audioService = audioService;
@@ -115,9 +116,11 @@ namespace SoundVast.Controllers
             {
                 var mp3FileName = Path.ChangeExtension(zippedUploadViewModel.Required.TempAudioName, "mp3");
                 var jpgFileName = Path.ChangeExtension(zippedUploadViewModel.Required.Image, "jpg");
+                var audioBlob = _cloudStorage.GetBlob(CloudStorageType.Audio, mp3FileName);
+                var imageBlob = _cloudStorage.GetBlob(CloudStorageType.Image, jpgFileName);
 
-                _cloudStorage.UploadFromPath(Container.Audio, _configuration["Directory:TempResources"] + mp3FileName);
-                _cloudStorage.UploadFromPath(Container.Image, _configuration["Directory:TempResources"] + jpgFileName);
+                audioBlob.UploadFromPath(_configuration["Directory:TempResources"] + mp3FileName, "audio/mpeg");
+                imageBlob.UploadFromPath(_configuration["Directory:TempResources"] + jpgFileName, "image/jpg");
 
                 var fileStreamMetaData = new FileStream(User.FindFirst(ClaimTypes.NameIdentifier).Value)
                 {

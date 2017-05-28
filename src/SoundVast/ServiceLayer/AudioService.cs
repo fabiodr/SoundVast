@@ -5,11 +5,14 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using SoundVast.Filters;
 using SoundVast.Models.IdentityModels;
 using SoundVast.Repository;
 using SoundVast.Utilities;
 using SoundVast.QueryOptions;
+using SoundVast.Storage.CloudStorage;
+using SoundVast.Storage.CloudStorage.AzureStorage;
 
 namespace SoundVast.ServiceLayer
 {
@@ -36,13 +39,16 @@ namespace SoundVast.ServiceLayer
     {
         private readonly IValidationDictionary _validationDictionary;
         private readonly IRepository<T> _repository;
-        private readonly IAzureConfig _azureConfig;
+        private readonly ICloudStorage _cloudStorage;
+        private readonly IConfiguration _configuration;
 
-        public AudioService(IValidationDictionary validationDictionary, IRepository<T> repository, IAzureConfig azureConfig)
+        public AudioService(IValidationDictionary validationDictionary, IRepository<T> repository, ICloudStorage cloudStorage,
+            IConfiguration configuration)
         {
             _validationDictionary = validationDictionary;
             _repository = repository;
-            _azureConfig = azureConfig;
+            _cloudStorage = cloudStorage;
+            _configuration = configuration;
         }
 
         protected virtual bool Validate(T audio)
@@ -138,15 +144,14 @@ namespace SoundVast.ServiceLayer
             if (!Validate(audio))
                 return false;
 
-            var uploadData = new UploadData(_azureConfig);
-
             audio.Genres.Clear();
 
             audio.ImageFile.Name = Path.ChangeExtension(newFileStream.ImageFile.Name, "jpg");
             audio.Genres = newFileStream.Genres;
 
-            uploadData.UploadFileFromTemp(_azureConfig.ContainerImage, _azureConfig.ImageConverterResource.RootPath + audio.ImageFile.Name,
-                    audio.ImageFile.Name, "image/jpeg");
+            var blob = _cloudStorage.GetBlob(CloudStorageType.Image, audio.ImageFile.Name);
+
+            blob.UploadFromPath(_configuration["Directory:TempResources"] + audio.ImageFile.Name, "image/jpeg");
 
             _repository.Save();
 

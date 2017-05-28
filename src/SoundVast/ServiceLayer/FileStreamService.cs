@@ -5,8 +5,11 @@ using SoundVast.Repository;
 using Microsoft.WindowsAzure.Storage.Blob;
 using System.Text.RegularExpressions;
 using System.IO;
+using Microsoft.Extensions.Configuration;
 using SoundVast.Filters;
 using SoundVast.QueryOptions;
+using SoundVast.Storage.CloudStorage;
+using SoundVast.Storage.CloudStorage.AzureStorage;
 using SoundVast.Utilities;
 using FileStream = SoundVast.Models.FileStreamModels.FileStream;
 
@@ -21,8 +24,9 @@ namespace SoundVast.ServiceLayer
     {
         private readonly IRepository<FileStream> _repository;
 
-        public FileStreamService(IValidationDictionary validationDictionary, IRepository<FileStream> repository, IAzureConfig azureConfig) 
-            : base(validationDictionary, repository, azureConfig)
+        public FileStreamService(IValidationDictionary validationDictionary, IRepository<FileStream> repository, ICloudStorage cloudStorage,
+            IConfiguration configuration) 
+            : base(validationDictionary, repository, cloudStorage, configuration)
         {
             _repository = repository;
         }

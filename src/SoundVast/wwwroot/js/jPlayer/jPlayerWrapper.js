@@ -8,7 +8,7 @@ export const jPlayerWrapper = (WrappedPlayer, options) => class extends React.Co
             jPlayerOptions: options
         }
     }
-    updateOptions = (update, callback) => {debugger; return this.setState((prevState) => prevState.jPlayerOptions = update(prevState.jPlayerOptions), callback)};
+    updateOptions = (update, callback) => this.setState((prevState) => prevState.jPlayerOptions = update(prevState.jPlayerOptions), callback);
     render() {
         return <WrappedPlayer {...this.state.jPlayerOptions} updateOptions={this.updateOptions} />
     }

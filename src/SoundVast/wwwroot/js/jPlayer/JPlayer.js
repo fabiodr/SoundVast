@@ -1121,13 +1121,11 @@ export const jPlayer = (WrappedComponent, AdditionalControls) => class extends R
 				if(this.html.used) {
 					this.currentMedia.volume = value;
 				}
-				debugger
 				if(this.props.globalVolume) {
 					this.mergeOptions({status: {globalVolumeValue: value}});
 				}
 			},
 			globalVolumeValue: (value) => {
-				debugger
 				if(this.html.used) {
 					this.currentMedia.volume = value;
 				}

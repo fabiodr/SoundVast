@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -16,7 +17,7 @@ using SoundVast.Utilities;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Security.Claims;
 using Microsoft.Extensions.Configuration;
-using SoundVast.CloudStorage;
+using SoundVast.Storage.CloudStorage;
 
 namespace SoundVast.Controllers
 {
@@ -26,10 +27,10 @@ namespace SoundVast.Controllers
         private readonly ICategoryService<LiveStreamCategory> _categoryService;
         private readonly ILiveStreamService _liveStreamService;
         private readonly ICloudStorage _cloudStorage;
-        private readonly IConfigurationRoot _configuration;
+        private readonly IConfiguration _configuration;
 
         public UploadLiveStreamController(ICloudStorage cloudStorage, ICategoryService<LiveStreamCategory> categoryService, 
-            ILiveStreamService liveStreamService, IConfigurationRoot configuration)
+            ILiveStreamService liveStreamService, IConfiguration configuration)
         {
             _cloudStorage = cloudStorage;
             _categoryService = categoryService;
@@ -51,7 +52,9 @@ namespace SoundVast.Controllers
             foreach (var liveStreamCreateViewModel in liveStreamCreateViewModels)
             {
                 var jpgFileName = Path.ChangeExtension(liveStreamCreateViewModel.Image, "jpg");
-                _cloudStorage.UploadFromPath(Container.Image, _configuration["Directory:TempResources"] + jpgFileName);
+                var imageBlob = _cloudStorage.GetBlob(CloudStorageType.Image, jpgFileName);
+
+                imageBlob.UploadFromPath(_configuration["Directory:TempResources"] + jpgFileName, "image/jpg");
 
                 var liveStream = new LiveStream(User.FindFirst(ClaimTypes.NameIdentifier).Value)
                 {

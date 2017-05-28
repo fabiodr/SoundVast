@@ -9,7 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using SoundVast.CustomHelpers;
 using SoundVast.Utilities;
 using Microsoft.Extensions.Configuration;
-using SoundVast.CloudStorage;
+using SoundVast.Storage.CloudStorage;
+using SoundVast.Storage.FileStorage;
 
 namespace SoundVast.Controllers
 {
@@ -18,9 +19,9 @@ namespace SoundVast.Controllers
     {
         private readonly IFileStorage _fileStorage;
         private readonly ICloudStorage _cloudStorage;
-        private readonly IConfigurationRoot _configuration;
+        private readonly IConfiguration _configuration;
 
-        public UploadMainController(IFileStorage fileStorage, ICloudStorage cloudStorage, IConfigurationRoot configuration)
+        public UploadMainController(IFileStorage fileStorage, ICloudStorage cloudStorage, IConfiguration configuration)
         {
             _fileStorage = fileStorage;
             _cloudStorage = cloudStorage;
@@ -35,11 +36,12 @@ namespace SoundVast.Controllers
         [HttpPost]
         public JsonResult ImageData(string fileName)
         {
-            var fileProperties = _cloudStorage.GetFileProperties(fileName);
+            var fileProperties = _cloudStorage.GetBlob(CloudStorageType.Image, fileName).FileProperties;
+
             var imageData = new
             {
-                size = fileProperties.Size,
-                Uri = fileProperties.Uri
+                fileProperties.Size,
+                fileProperties.Uri.AbsoluteUri
             };
 
             return Json(imageData);

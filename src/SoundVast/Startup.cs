@@ -17,12 +17,17 @@ using SoundVast.Models.LiveStreamModels;
 using SoundVast.Repository;
 using SoundVast.ServiceLayer;
 using SoundVast.Services;
+using SoundVast.Storage.CloudStorage;
+using SoundVast.Storage.CloudStorage.AzureStorage;
+using SoundVast.Storage.FileStorage;
+using AutoMapper;
+using Microsoft.AspNetCore.SpaServices.Webpack;
 
 namespace SoundVast
 {
     public class Startup
     {
-        private IConfigurationRoot _configuration;
+        private readonly IConfiguration _configuration;
 
         public Startup(IHostingEnvironment env)
         {
@@ -59,17 +64,22 @@ namespace SoundVast
 
             services.AddMvc();
             services.AddCloudscribePagination();
+            //services.AddAutoMapper();
 
-            var azureConfig = new AzureConfig(_configuration.GetSection("ConnectionStrings:StorageConnectionString").Value);
+            var azureStorage = new AzureStorage(_configuration);
 
             // Add application services.
-            services.AddSingleton<IAzureConfig>(azureConfig);
-            services.AddSingleton(new AutoMapperConfiguration(azureConfig));
-            services.AddSingleton(new ModelStateDictionary());
+            services.AddSingleton(_configuration);
+            services.AddSingleton<ICloudStorage>(azureStorage);
+            services.AddSingleton<IFileStorage, FileStorage>();
+            services.AddSingleton(new AutoMapperConfiguration(azureStorage));
             services.AddSingleton(AutoMapperConfiguration.Config.CreateMapper());
+            services.AddSingleton(new ModelStateDictionary());
 
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+
+            services.AddScoped<ICloudBlob, AzureBlob>();
             services.AddScoped<IValidationDictionary, ModelStateWrapper>();
             services.AddScoped<IRepository<Audio>, Repository<Audio, ApplicationDbContext>>();
             services.AddScoped<IRepository<Playlist>, Repository<Playlist, ApplicationDbContext>>();
@@ -117,6 +127,11 @@ namespace SoundVast
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
                 app.UseBrowserLink();
+                app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
+                {
+                    ConfigFile = "./webpack.config.babel.js",
+                    HotModuleReplacement = true
+                });
             }
             else
             {
@@ -165,9 +180,13 @@ namespace SoundVast
 
             app.UseMvc(routes =>
             {
-                routes.MapRoute(
+                routes.MapSpaFallbackRoute(
                     "default",
-                    "{controller=FileStream}/{action=Index}");
+                    new
+                    {
+                        controller = "FileStream",
+                        action = "Index"
+                    });
             });
         }
     }

@@ -30,18 +30,19 @@ using FileStream = SoundVast.Models.FileStreamModels.FileStream;
 using Stream = SoundVast.Utilities.Stream;
 using Microsoft.AspNetCore.Identity;
 using SoundVast.Models;
+using SoundVast.Storage.CloudStorage;
 
 namespace SoundVast.Controllers
 {
     public class FileStreamController : AudioController<FileStream, FileStreamCategory, FileStreamGenre, FileStreamReport>
     {
         private readonly IFileStreamService _fileStreamService;
-        private readonly IAzureConfig _azureConfig;
+        private readonly ICloudStorage _cloudStorage;
 
         public FileStreamController(
             IMapper mapper,
             IServiceProvider serviceProvider,
-            IAzureConfig azureConfig,
+            ICloudStorage cloudStorage,
             IFileStreamService fileStreamService,
             ICategoryService<FileStreamCategory> categoryService,
             IGenreService<FileStreamGenre> genreService,
@@ -51,7 +52,7 @@ namespace SoundVast.Controllers
             : base(mapper, serviceProvider, fileStreamService, categoryService, genreService, reportService, ratingService, userManager)
         {
             _fileStreamService = fileStreamService;
-            _azureConfig = azureConfig;
+            _cloudStorage = cloudStorage;
         }
 
         [HttpPost]
@@ -62,13 +63,15 @@ namespace SoundVast.Controllers
             foreach (var audio in _fileStreamService.GetPlaylist(id, Audio.PlaylistCount,
                 HttpContext.Session.GetString("Category"), HttpContext.Session.GetString("Genre")))
             {
+                var fileProperties = _cloudStorage.GetBlob(CloudStorageType.Image, audio.ImageFile.Name).FileProperties;
+
                 playlistData.Add(new
                 {
                     id = audio.Id,
                     title = audio.Name,
                     artist = audio.Artist,
                     mp3 = Url.Action("Stream", new { id = audio.Id }),
-                    poster = _azureConfig.ContainerImage.GetBlockBlobReference(audio.ImageFile.Name).Uri.AbsoluteUri,
+                    poster = fileProperties.Uri.AbsoluteUri,
                     comment = @Url.Action("CommentsSideBar", "Comment", new { audioId = audio.Id })
                 });
             }
@@ -155,7 +158,7 @@ namespace SoundVast.Controllers
 
             Response.Headers.Add("Content-Disposition", "attachment; filename=" + fileStream.AudioFile.Name);
 
-            return new Stream(_azureConfig, fileStream.AudioFile.Name);
+            return new Stream(_cloudStorage, fileStream.AudioFile.Name);
         }
 
         public Stream Download(int id)
@@ -163,7 +166,7 @@ namespace SoundVast.Controllers
             var fileStream = _fileStreamService.GetAudio(id, stream => stream.AudioFile);
 
             Response.Headers.Add("Content-Disposition", "attachment; filename=" + fileStream.AudioFile.Name);
-            return new Stream(_azureConfig, fileStream.AudioFile.Name);
+            return new Stream(_cloudStorage, fileStream.AudioFile.Name);
         }
     }
 }

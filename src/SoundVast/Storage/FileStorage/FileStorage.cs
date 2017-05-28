@@ -1,34 +1,22 @@
-﻿using Microsoft.WindowsAzure.Storage.Blob;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Web;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
-namespace SoundVast.Utilities
+namespace SoundVast.Storage.FileStorage
 {
-    public interface IFileStorage
-    {
-        byte[] ImageBytes { get; set; }
-        byte[] AudioBytes { get; set; }
-
-        void ConvertToMp3(string fileName, string destPathToStoreAt, string mp3DestPathToStoreAt);
-        void ReadMp3Bytes(IFormFile file);
-        void ReadJpgBytes(IFormFile file, int newWidth, int newHeight);
-    }
-
     public class FileStorage : IFileStorage
     {
-        private readonly IConfigurationRoot _configuration;
+        private readonly IConfiguration _configuration;
         public static int CoverImageWidth => 217;
         public static int CoverImageHeight => 217;
         public byte[] ImageBytes { get; set; }
         public byte[] AudioBytes { get; set; }
 
-        public FileStorage(IConfigurationRoot configuration)
+        public FileStorage(IConfiguration configuration)
         {
             _configuration = configuration;
         }
@@ -63,7 +51,7 @@ namespace SoundVast.Utilities
 
         public void ConvertToMp3(string fileName, string destPathToStoreAt, string mp3DestPathToStoreAt)
         {
-            //If it is already an .mp3 file then there's no need to convert
+            // If it is already an .mp3 file then there's no need to convert
             if (Path.GetExtension(fileName) == ".mp3")
                 return;
 
@@ -79,7 +67,7 @@ namespace SoundVast.Utilities
             {
                 exeProcess.WaitForExit();
 
-                //Converted the file to mp3, so delete the original
+                // Converted the file to mp3, so delete the original
                 File.Delete(destPathToStoreAt);
             }
         }
@@ -88,8 +76,8 @@ namespace SoundVast.Utilities
         {
             using (var reader = new BinaryReader(file.OpenReadStream()))
             {
-                //  file.InputStream.Position = 0;
-                //Up to 2GB
+                // file.InputStream.Position = 0;
+                // Up to 2GB
                 AudioBytes = reader.ReadBytes((int)file.Length);
             }
         }
@@ -98,12 +86,12 @@ namespace SoundVast.Utilities
         {
             using (var reader = new BinaryReader(file.OpenReadStream()))
             {
-                //Convert and resize the file
+                // Convert and resize the file
                 var ms = new MemoryStream(reader.ReadBytes((int)file.Length));
                 var img = Image.FromStream(ms);
                 ImageBytes = ResizeAndConvertToJpg(img, newWidth, newHeight);
 
-              //  file.InputStream.Position = 0;
+                // file.InputStream.Position = 0;
             }
         }
     }
