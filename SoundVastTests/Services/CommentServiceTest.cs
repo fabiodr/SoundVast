@@ -5,34 +5,37 @@ using System.Threading.Tasks;
 using Xunit;
 using Moq;
 using SoundVast.Repository;
-using SoundVast.Models.IdentityModels;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using SoundVast.ServiceLayer;
+using SoundVast.Components;
+using SoundVast.Components.Audio.Models;
+using SoundVast.Components.Comment;
+using SoundVast.Components.Comment.Models;
+using SoundVast.Components.Rating;
+using SoundVast.Components.User;
 
-namespace SoundVastTests
+namespace SoundVastTests.Services
 {
     public class CommentServiceTest
     {
-        private Mock<IRepository<Comment>> _mockRepository;
-        private ICommentService _service;
-        private ModelStateDictionary _modelState;
+        private readonly Mock<IRepository<CommentModel>> _mockRepository;
+        private readonly ICommentService _service;
 
         public CommentServiceTest()
         {
-            _modelState = new ModelStateDictionary();
-            _mockRepository = new Mock<IRepository<Comment>>();
-            _service = new CommentService(new ModelStateWrapper(_modelState), _mockRepository.Object);
+            var modelState = new ModelStateDictionary();
+            _mockRepository = new Mock<IRepository<CommentModel>>();
+            _service = new CommentService(new ModelStateWrapper(modelState), _mockRepository.Object);
         }
 
         [Fact]
         public void Add()
         {
-            var comment = new Comment("BodyText")
+            var comment = new CommentModel("BodyText")
             {
-                Audio = new Audio()
+                Audio = new AudioModel()
             };
 
-            _mockRepository.Setup(x => x.Add(It.IsAny<Comment>()));
+            _mockRepository.Setup(x => x.Add(It.IsAny<CommentModel>()));
 
             var result = _service.Add(comment);
 
@@ -42,13 +45,13 @@ namespace SoundVastTests
         [Fact]
         public void CommentCountIncrementedOnAdd()
         {
-            var comment = new Comment("BodyText")
+            var comment = new CommentModel("BodyText")
             {
-                Audio = new Audio()
+                Audio = new AudioModel()
             };
 
             var originalCommentCount = comment.Audio.CommentCount;
-            var result = _service.Add(comment);
+            _service.Add(comment);
             var newCommentCount = comment.Audio.CommentCount;
 
             Assert.Equal(originalCommentCount + (int)RatingValue.Increment, newCommentCount);
@@ -57,8 +60,8 @@ namespace SoundVastTests
         [Fact]
         public void Edit()
         {
-            var comment = new Comment("BodyText");
-            var user = new SoundVast.Models.ApplicationUser()
+            var comment = new CommentModel("BodyText");
+            var user = new ApplicationUser()
             {
                 Email = "test123@gmail.com",
                 PhoneNumber = "07456313767",
@@ -73,12 +76,12 @@ namespace SoundVastTests
         [Fact]
         public void Delete()
         {
-            var comment = new Comment("BodyText")
+            var comment = new CommentModel("BodyText")
             {
-                Audio = new Audio()
+                Audio = new AudioModel()
             };
 
-            _mockRepository.Setup(x => x.Remove(It.IsAny<Comment>()));
+            _mockRepository.Setup(x => x.Remove(It.IsAny<CommentModel>()));
 
             _service.Delete(comment);
 
@@ -88,9 +91,9 @@ namespace SoundVastTests
         [Fact]
         public void CommentCountDecrementedOnDelete()
         {
-            var comment = new Comment("BodyText")
+            var comment = new CommentModel("BodyText")
             {
-                Audio = new Audio()
+                Audio = new AudioModel()
             };
 
             var originalCommentCount = comment.Audio.CommentCount;

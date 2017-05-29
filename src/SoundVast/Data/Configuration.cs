@@ -7,10 +7,13 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.DependencyInjection;
+using SoundVast.Components.Category.Models;
+using SoundVast.Components.FileStream.Models;
+using SoundVast.Components.Genre.Models;
+using SoundVast.Components.Image.Models;
+using SoundVast.Components.LiveStream.Models;
+using SoundVast.Components.Quote.Models;
 using SoundVast.CustomHelpers;
-using SoundVast.Models.FileStreamModels;
-using SoundVast.Models.IdentityModels;
-using SoundVast.Models.LiveStreamModels;
 using SoundVast.Properties;
 
 namespace SoundVast.Data
@@ -34,11 +37,11 @@ namespace SoundVast.Data
 
                 var fileStreamCategoryResources = FileStreamCategories.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
                 var radioStationCategoryResources = LiveStreamCategories.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
-                var placeHolderImage = new ImageFile("Placeholder.jpg");
+                var placeHolderImage = new ImageFileModel("Placeholder.jpg");
 
                 InitializeQuotes(context);
-                InitializeCategories<FileStreamCategory>(context, fileStreamCategoryResources, placeHolderImage);
-                InitializeCategories<LiveStreamCategory>(context, radioStationCategoryResources, placeHolderImage);
+                InitializeCategories<FileStreamCategoryModel>(context, fileStreamCategoryResources, placeHolderImage);
+                InitializeCategories<LiveStreamCategoryModel>(context, radioStationCategoryResources, placeHolderImage);
                 //InitializeIdentityForEf(context);
 
                 context.SaveChanges();
@@ -48,21 +51,21 @@ namespace SoundVast.Data
         private static void InitializeQuotes(ApplicationDbContext context)
         {
             var quoteResources = Quotes.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
-            var quotes = quoteResources.Select(x => new Quote { Quotation = (string)x.Value });
+            var quotes = quoteResources.Select(x => new QuoteModel { Quotation = (string)x.Value });
 
             context.Quotes.AddRange(quotes.Where(quote => !context.Quotes.Any(x => x.Quotation == quote.Quotation)));
         }
 
-        public static void InitializeCategories<T>(ApplicationDbContext context, DictionaryEntry[] categoryResources, ImageFile imageFile)
-                where T : Category
+        public static void InitializeCategories<T>(ApplicationDbContext context, DictionaryEntry[] categoryResources, ImageFileModel imageFile)
+                where T : CategoryModel
         {
             var categories = categoryResources.Select(x => (T)Activator.CreateInstance(typeof(T), new object[] { x.Value, imageFile }));
 
             context.Set<T>().AddRange(categories.Where(category => !context.Set<T>().Any(x => x.Name == category.Name)));
         }
 
-        public static void InitializeGenres<T>(ApplicationDbContext context, DictionaryEntry[] genreResources, ImageFile imageFile)
-            where T : Genre
+        public static void InitializeGenres<T>(ApplicationDbContext context, DictionaryEntry[] genreResources, ImageFileModel imageFile)
+            where T : GenreModel
         {
             var genres = genreResources.Select(x => (T)Activator.CreateInstance(typeof(T), new object[] { x.Value, imageFile }));
 

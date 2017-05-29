@@ -1,10 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using SoundVast.Models.FileStreamModels;
-using SoundVast.Models.IdentityModels;
-using SoundVast.Models.LiveStreamModels;
-using SoundVast.Models.UserViewModels;
-using SoundVast.ServiceLayer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +7,14 @@ using System.Threading.Tasks;
 using System.Security;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
-using SoundVast.Models;
+using SoundVast.Components.FileStream;
+using SoundVast.Components.FileStream.Models;
+using SoundVast.Components.LiveStream;
+using SoundVast.Components.LiveStream.Models;
+using SoundVast.Components.Playlist;
+using SoundVast.Components.Playlist.Models;
+using SoundVast.Components.User;
+using SoundVast.Components.User.ViewModels;
 
 namespace SoundVast.ViewComponents
 {
@@ -42,9 +44,9 @@ namespace SoundVast.ViewComponents
 
             var likedAudioListViewModel = new LikedAudioListViewModel
             {
-                LikedFileStreamViewModels = Mapper.Map<ICollection<FileStream>, ICollection<LikedFileStreamViewModel>>(_fileStreamService.GetLikedAudiosForUser(userId)),
-                LikedLiveStreamViewModels = Mapper.Map<ICollection<LiveStream>, ICollection<LikedLiveStreamViewModel>>(_liveStreamService.GetLikedAudiosForUser(userId)),
-                LikedPlaylistViewModels = Mapper.Map<ICollection<Playlist>, ICollection<LikedPlaylistViewModel>>(_playlistService.GetLikedAudiosForUser(userId))
+                LikedFileStreamViewModels = Mapper.Map<ICollection<FileStreamModel>, ICollection<LikedFileStreamViewModel>>(_fileStreamService.GetLikedAudiosForUser(userId)),
+                LikedLiveStreamViewModels = Mapper.Map<ICollection<LiveStreamModel>, ICollection<LikedLiveStreamViewModel>>(_liveStreamService.GetLikedAudiosForUser(userId)),
+                LikedPlaylistViewModels = Mapper.Map<ICollection<PlaylistModel>, ICollection<LikedPlaylistViewModel>>(_playlistService.GetLikedAudiosForUser(userId))
             };
 
             return View(likedAudioListViewModel);

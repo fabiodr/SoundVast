@@ -4,18 +4,21 @@ using System.Linq;
 using System.Web;
 using AutoMapper;
 using System.Linq.Expressions;
+using SoundVast.Components;
+using SoundVast.Components.Audio;
+using SoundVast.Components.Audio.Models;
+using SoundVast.Components.Category.Models;
+using SoundVast.Components.Comment.Models;
+using SoundVast.Components.Comment.ViewModels;
+using SoundVast.Components.FileStream.Models;
+using SoundVast.Components.FileStream.ViewModels;
+using SoundVast.Components.LiveStream.Models;
+using SoundVast.Components.LiveStream.ViewModels;
+using SoundVast.Components.Playlist.Models;
+using SoundVast.Components.Quote;
+using SoundVast.Components.Quote.Models;
+using SoundVast.Components.User.ViewModels;
 using SoundVast.CustomHelpers;
-using SoundVast.Models.AudioViewModels;
-using SoundVast.Models.CommentViewModels;
-using SoundVast.Models.FileStreamModels;
-using SoundVast.Models.FileStreamViewModels;
-using SoundVast.Models.IdentityModels;
-using SoundVast.Models.LiveStreamModels;
-using SoundVast.Models.LiveStreamViewModels;
-using SoundVast.Models.QuoteViewModels;
-using SoundVast.Models.UserViewModels;
-using SoundVast.ServiceLayer;
-using SoundVast.Models.CommentModels;
 using SoundVast.Storage.CloudStorage;
 
 namespace SoundVast
@@ -40,58 +43,58 @@ namespace SoundVast
             {
                 x.IgnoreUnmapped();
 
-                x.CreateMap<Quote, QuoteViewModel>();
-                x.CreateMap<Comment, CommentBodyViewModel>();
-                x.CreateMap<Comment, CommentListViewModel>();
+                x.CreateMap<QuoteModel, QuoteViewModel>();
+                x.CreateMap<CommentModel, CommentBodyViewModel>();
+                x.CreateMap<CommentModel, CommentListViewModel>();
 
-                x.CreateMap<Comment, CommentViewModel>()
+                x.CreateMap<CommentModel, CommentViewModel>()
                     .ForMember(vm => vm.UserName, m => m.MapFrom(z => z.User.UserName))
                     .ForMember(vm => vm.ReplyViewModels, m => m.MapFrom(z => z.Replies))
                     .ForMember(vm => vm.OriginalCommentUserName, m => m.MapFrom(z => z.OriginalComment.User.UserName))
                     .ForMember(vm => vm.OriginalCommentId, m => m.MapFrom(z => z.OriginalComment != null ? z.OriginalComment.Id : z.Id));
 
-                x.CreateMap<Category, CategoryViewModel>()
+                x.CreateMap<CategoryModel, CategoryViewModel>()
                     .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => imageFileProperties(src.ImageFile.Name).Uri.AbsoluteUri))
                     .ReverseMap();
 
-                x.CreateMap<AudioGenre, GenreViewModel>()
+                x.CreateMap<AudioGenreModel, GenreViewModel>()
                     .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => imageFileProperties(src.Genre.ImageFile.Name).Uri.AbsoluteUri));
 
-                x.CreateMap<Playlist, Models.AudioViewModels.PlaylistViewModel>()
+                x.CreateMap<PlaylistModel, PlaylistViewModel>()
                     .ForMember(vm => vm.UserName, m => m.MapFrom(z => z.User.UserName))
                     .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => imageFileProperties(src.ImageFile.Name).Uri.AbsoluteUri));
 
-                x.CreateMap<Playlist, Models.UserViewModels.PlaylistViewModel>()
+                x.CreateMap<PlaylistModel, PlaylistViewModel>()
                     .ForMember(vm => vm.UserName, m => m.MapFrom(z => z.User.UserName))
                     .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => imageFileProperties(src.ImageFile.Name).Uri.AbsoluteUri));
 
-                x.CreateMap<LiveStream, LikedLiveStreamViewModel>()
+                x.CreateMap<LiveStreamModel, LikedLiveStreamViewModel>()
                     .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => imageFileProperties(src.ImageFile.Name).Uri.AbsoluteUri));
 
-                x.CreateMap<Playlist, LikedPlaylistViewModel>()
+                x.CreateMap<PlaylistModel, LikedPlaylistViewModel>()
                     .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => imageFileProperties(src.ImageFile.Name).Uri.AbsoluteUri));
 
-                x.CreateMap<Audio, SimilarFileStreamViewModel>()
+                x.CreateMap<AudioModel, SimilarFileStreamViewModel>()
                     .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => imageFileProperties(src.ImageFile.Name).Uri.AbsoluteUri));
 
-                x.CreateMap<FileStream, LikedFileStreamViewModel>()
+                x.CreateMap<FileStreamModel, LikedFileStreamViewModel>()
                     .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => imageFileProperties(src.ImageFile.Name).Uri.AbsoluteUri));
 
-                x.CreateMap<FileStream, OriginalFileStreamViewModel>()
+                x.CreateMap<FileStreamModel, OriginalFileStreamViewModel>()
                     .ForMember(vm => vm.GenreViewModels, m => m.MapFrom(z => z.Genres))
                     .ForMember(vm => vm.BuyLinkViewModels, m => m.MapFrom(z => z.Links))
                     .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => imageFileProperties(src.ImageFile.Name).Uri.AbsoluteUri));
 
-                x.CreateMap<FileStream, FileStreamsViewModel>()
+                x.CreateMap<FileStreamModel, FileStreamsViewModel>()
                     .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => imageFileProperties(src.ImageFile.Name).Uri.AbsoluteUri));
 
-                x.CreateMap<FileStream, AudiosViewModel>()
+                x.CreateMap<FileStreamModel, AudiosViewModel>()
                     .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => imageFileProperties(src.ImageFile.Name).Uri.AbsoluteUri));
 
-                x.CreateMap<FileStream, OtherFileStreamSelectListViewModel>()
+                x.CreateMap<FileStreamModel, OtherFileStreamSelectListViewModel>()
                     .ForMember(vm => vm.NameAndArtist, m => m.MapFrom(src => src.Name + src.Artist));
 
-                x.CreateMap<Link, BuyLinkViewModel>()
+                x.CreateMap<LinkModel, BuyLinkViewModel>()
                     .ReverseMap();
 
                 //x.CreateMap<Report, ReportsViewModel>()
@@ -103,13 +106,13 @@ namespace SoundVast
                 //    .ForMember(vm => vm.Likes, m => m.MapFrom(src => src.Audio.Likes))
                 //    .ForMember(vm => vm.Dislikes, m => m.MapFrom(src => src.Audio.Dislikes));
 
-                x.CreateMap<FileStreamReport, ReportFileStreamDisplayViewModel>();
+                x.CreateMap<FileStreamReportModel, ReportFileStreamDisplayViewModel>();
                 //.ForMember(vm => vm.ReportFileStreamsViewModel, m => m.MapFrom(z => (FileStream)z.Audio));
 
-                x.CreateMap<LiveStream, LiveStreamsViewModel>()
+                x.CreateMap<LiveStreamModel, LiveStreamsViewModel>()
                     .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => imageFileProperties(src.ImageFile.Name).Uri.AbsoluteUri));
 
-                x.CreateMap<LiveStream, LiveStreamViewModel>()
+                x.CreateMap<LiveStreamModel, LiveStreamViewModel>()
                     .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => imageFileProperties(src.ImageFile.Name).Uri.AbsoluteUri));
             });
 

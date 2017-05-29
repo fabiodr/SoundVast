@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using SoundVast.Models.IdentityModels;
 using SoundVast.QueryOptions;
-using SoundVast.ServiceLayer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using SoundVast.Models.CommentViewModels;
+using SoundVast.Components.Comment;
+using SoundVast.Components.Comment.Models;
+using SoundVast.Components.Comment.ViewModels;
 
 namespace SoundVast.ViewComponents
 {
@@ -24,7 +24,7 @@ namespace SoundVast.ViewComponents
 
         public IViewComponentResult Invoke(int audioId, bool sortDescending, int pageNumber = 1)
         {
-            var comments = _commentService.GetSortedCommentsForAudio(audioId, pageNumber, new OrderingOption<Comment, int>(x => x.RatingCount.Likes, sortDescending));
+            var comments = _commentService.GetSortedCommentsForAudio(audioId, pageNumber, new OrderingOption<CommentModel, int>(x => x.RatingCount.Likes, sortDescending));
             var commentViewModels = _mapper.Map<IEnumerable<CommentViewModel>>(comments);
 
             return View(commentViewModels);

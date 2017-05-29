@@ -1,10 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using SoundVast.Models.FileStreamModels;
-using SoundVast.Models.IdentityModels;
-using SoundVast.Models.LiveStreamModels;
-using SoundVast.Models.UserViewModels;
-using SoundVast.ServiceLayer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +7,10 @@ using System.Threading.Tasks;
 using System.Security;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
-using SoundVast.Models;
+using SoundVast.Components.Audio;
+using SoundVast.Components.Playlist;
+using SoundVast.Components.Playlist.Models;
+using SoundVast.Components.User;
 
 namespace SoundVast.ViewComponents
 {
@@ -34,7 +32,7 @@ namespace SoundVast.ViewComponents
             var user = await GetCurrentUserAsync();
             var userId = user.Id;
 
-            var playlistViewModels = Mapper.Map<ICollection<Playlist>, ICollection<PlaylistViewModel>>(_playlistService.GetAudiosForUser(userId));
+            var playlistViewModels = Mapper.Map<ICollection<PlaylistModel>, ICollection<PlaylistViewModel>>(_playlistService.GetAudiosForUser(userId));
 
             return View(playlistViewModels);
         }

@@ -7,7 +7,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
-using SoundVast.Models;
 using SoundVast.Utilities;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
