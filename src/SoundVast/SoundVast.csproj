@@ -10,6 +10,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="Components\App.htm" />
+    <Content Include="wwwroot\js\components\navBar.jsx" />
+    <Content Include="wwwroot\js\routing.js" />
+    <Content Include="wwwroot\js\routing.jsx" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include=".exe\ffmpeg.exe" />
     <None Include="App.config" />
     <None Update="wwwroot\**\*;Views\**\*;Areas\**\Views">

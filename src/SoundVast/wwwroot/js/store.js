@@ -1,17 +1,5 @@
-import React from "react";
-import {render} from "react-dom";
-import {applyMiddleware, createStore} from "redux";
-import {Provider} from "react-redux";
-import thunk from "redux-thunk";
+import { createStore } from 'redux';
 
-import reducers from "./reducers";
-import Routing from "./Routing";
+import reducers from './reducers';
 
-const middleWare = applyMiddleware(thunk);
-const store = createStore(reducers, middleWare);
-
-render(
-<Provider store={store}>
-    <Routing />
-</Provider>
-, document.getElementById("app"));
+export default createStore(reducers);

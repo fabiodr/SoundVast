@@ -21,12 +21,11 @@ module.exports = {
     context: __dirname,
     devtool: dev ? "inline-sourcemap" : null,
     entry: {
-        app: "./wwwroot/js/store.js",
+        app: "./wwwroot/js/app.jsx",
         vendor: [
             "react",
             "react-dom",
-            "react-router",
-            "./wwwroot/js/polyfill.js"
+            "react-router"
        ]
     },
     output: {
@@ -38,7 +37,7 @@ module.exports = {
         loaders: [
             {
                 test: /\.jsx?$/,
-                exclude: /(node_modules|bower_components)/,
+                exclude: /node_modules/,
                 loader: "babel-loader"
             }
         ]

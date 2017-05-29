@@ -197,7 +197,7 @@ namespace SoundVast
                     "default",
                     new
                     {
-                        controller = "FileStream",
+                        controller = "App",
                         action = "Index"
                     });
             });
