@@ -70,7 +70,8 @@ namespace SoundVast
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddSession(options => {
+            services.AddSession(options =>
+            {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
                 options.CookieName = ".SoundVast";
             });
@@ -142,8 +143,7 @@ namespace SoundVast
                 app.UseBrowserLink();
                 app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
                 {
-                    ConfigFile = "./webpack.config.babel.js",
-                    HotModuleReplacement = true
+                    ConfigFile = "./webpack.config.babel.js"
                 });
             }
             else
@@ -172,7 +172,7 @@ namespace SoundVast
             //    ClientId = Configuration["Authentication:Google:ClientId"],
             //    ClientSecret = Configuration["Authentication:Google:ClientSecret"]
             //});
-          
+
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
             app.SeedData();
             app.UseSession();
@@ -193,13 +193,22 @@ namespace SoundVast
 
             app.UseMvc(routes =>
             {
+                routes.MapRoute(
+                    "app",
+                    "{controller}/{action}"
+                );
+            });
+
+            app.UseMvc(routes =>
+            {
                 routes.MapSpaFallbackRoute(
                     "default",
                     new
                     {
                         controller = "App",
                         action = "Index"
-                    });
+                    }
+                );
             });
         }
     }

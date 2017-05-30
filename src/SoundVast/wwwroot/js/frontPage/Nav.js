@@ -27,13 +27,13 @@ export default class Nav extends React.Component {
                                 <li>
                                     <Link to="uploadmain/upload" className="nav-link upload">Upload</Link>
                                 </li>
-                                <li>                                
+                                <li>
                                     <Search></Search>
                                 </li>
                             </ul>
                             <ul className="outer pull-right">
                                 {
-                                    this.props.isAuthenticated ? <AuthorizedDropdown userName={this.props.userName} /> 
+                                    this.props.isAuthenticated ? <AuthorizedDropdown userName={this.props.userName} />
                                                                 : unAuthorizedDropdown()
                                 }
                                 <li>
@@ -52,7 +52,7 @@ export default class Nav extends React.Component {
                                             <li>
                                                 <Link to="content/termsofuse" className="nav-link terms-of-use">Terms of Use</Link>
                                             </li>
-                                            {this.props.isAdmin ? adminDropdown() : null}                                      
+                                            {this.props.isAdmin ? adminDropdown() : null}
                                         </ul>
                                     </div>
                                     <div id="cover"></div>
@@ -73,14 +73,14 @@ const adminDropdown = () => (
         role: <li><Link to="rolesadmin/index" className="nav-link admin-roles">Admin Roles</Link></li>,
         user: <li><Link to="usersadmin/index" className="nav-link admin-user">Admin User</Link></li>,
         reportedStreams: <li><Link to="filestream/reportfilestreams" className="nav-link report-file-stream">Report FileStreams</Link></li>
-    })          
+    })
 );
 
 const unAuthorizedDropdown = () => (
     createFragment({
         login: <li><Link to="account/login" className="nav-link popup-link" id="login-link">Login</Link></li>,
         register: <li><Link to="account/register" className="nav-link popup-link" id="register-link">Register</Link></li>
-    })                  
+    })
 );
 
 const AuthorizedDropdown = (props) => (

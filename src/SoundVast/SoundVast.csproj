@@ -10,10 +10,25 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="Components\App.htm" />
-    <Content Include="wwwroot\js\components\navBar.jsx" />
-    <Content Include="wwwroot\js\routing.js" />
-    <Content Include="wwwroot\js\routing.jsx" />
+    <Content Include="wwwroot\components\app\App.htm" />
+    <Content Include="wwwroot\components\app\app.jsx" />
+    <Content Include="wwwroot\components\app\layout.jsx" />
+    <Content Include="wwwroot\components\app\routing.jsx" />
+    <Content Include="wwwroot\components\app\store.js" />
+    <Content Include="wwwroot\components\frontPage\frontPage.jsx" />
+    <Content Include="wwwroot\components\header\header.jsx" />
+    <Content Include="wwwroot\components\header\header.less" />
+    <Content Include="wwwroot\components\user\actions\getUserDetails.jsx" />
+    <Content Include="wwwroot\components\user\userReducer.jsx" />
+    <Content Include="wwwroot\js\frontPage\appActions.js" />
+    <Content Include="wwwroot\js\frontPage\appReducer.js" />
+    <Content Include="wwwroot\js\frontPage\Body.js" />
+    <Content Include="wwwroot\js\frontPage\FooterContainer.js" />
+    <Content Include="wwwroot\js\frontPage\FooterPlayer.js" />
+    <Content Include="wwwroot\js\frontPage\frontPage.jsx" />
+    <Content Include="wwwroot\js\frontPage\Nav.js" />
+    <Content Include="wwwroot\js\frontPage\Search.js" />
+    <Content Include="wwwroot\js\frontPage\TestPlayer.js" />
   </ItemGroup>
 
   <ItemGroup>

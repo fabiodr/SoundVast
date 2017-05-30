@@ -1,7 +1,12 @@
 ﻿import React from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 
-const NavBar = () => (
+import './header.less';
+import AuthorizedList from './authorizedList/authorizedListContainer';
+import UnAuthorizedList from './unAuthorizedList/unAuthorizedListContainer';
+import AdminList from './adminList/adminListContainer';
+
+const Header = () => (
   <div className="row">
     <div className="col-xs-12">
       <header>
@@ -24,11 +29,11 @@ const NavBar = () => (
               </li>
             </ul>
             <ul className="outer pull-right">
+              <AuthorizedList />
+              <UnAuthorizedList />
               <li>
                 <div className="nav-dropdown">
-                  <span>
-                    <i className="fa fa-bars" />
-                  </span>
+                  <span><i className="fa fa-bars" /></span>
                   <ul className="menu">
                     <li>
                       <Link to="content/aboutus" className="nav-link about-us">About us</Link>
@@ -42,6 +47,7 @@ const NavBar = () => (
                     <li>
                       <Link to="content/termsofuse" className="nav-link terms-of-use">Terms of Use</Link>
                     </li>
+                    <AdminList />
                   </ul>
                 </div>
               </li>
@@ -53,4 +59,4 @@ const NavBar = () => (
   </div>
 );
 
-export default NavBar;
+export default Header;

@@ -48,7 +48,8 @@ namespace SoundVast.Components.Account
 
             return Json(new
             {
-                user,
+                UserName = user != null ? user.UserName : null,
+                IsLoggedIn = user != null,
                 IsAdmin = User.IsInRole("Admin")
             });
         }
