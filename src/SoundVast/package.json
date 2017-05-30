@@ -19,9 +19,9 @@
   "homepage": "https://github.com/MartinDawson/SoundVast",
   "license": "ISC",
   "scripts": {
-    "lint": "eslint --fix --ext .jsx,.js ./Components",
-    "test": "cross-env BABEL_ENV=test mocha Components/**/*.spec.{js,jsx} --opts ./mocha.opts",
-    "coverage": "cross-env BABEL_ENV=test nyc mocha Components/**/*.spec.{js,jsx} --opts ./mocha.opts",
+    "lint": "eslint --fix --ext .jsx,.js wwwroot/components",
+    "test": "cross-env BABEL_ENV=test mocha wwwroot/components/**/*.spec.{js,jsx} --opts ./mocha.opts",
+    "coverage": "cross-env BABEL_ENV=test nyc mocha wwwroot/components/**/*.spec.{js,jsx} --opts ./mocha.opts",
     "test:watch": "npm test -- -w",
     "packages": "david",
     "packages:update": "david update"
@@ -104,6 +104,7 @@
     "pre-commit": "^1.2.2",
     "react-addons-test-utils": "^15.3.2",
     "react-test-renderer": "^15.3.2",
+    "redux-mock-store": "^1.2.3",
     "style-loader": "^0.13.2",
     "webpack": "^2.2.1",
     "webpack-dev-server": "^2.4.1"

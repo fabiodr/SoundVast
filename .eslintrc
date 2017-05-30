@@ -19,7 +19,10 @@
   "extends": "airbnb",
   "rules": {
     "react/wrap-multilines": "off",
-    "react/require-extension":  "off" 
+    "react/require-extension":  "off",
+	"import/no-extraneous-dependencies": ["error", { "devDependencies": [
+	  "**/*.spec.*{js,jsx}",
+	] }],
   },
   "plugins": [
     "react"

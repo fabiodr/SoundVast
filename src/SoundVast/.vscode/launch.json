@@ -1,0 +1,22 @@
+﻿{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "request": "launch",
+      "type": "node",
+      "name": "Debug Unit Tests",
+      "protocol": "inspector",
+      "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+      "args": [
+        "wwwroot/components/**/*.spec.{js,jsx}",
+        "--opts",
+        "./mocha.opts"
+      ],
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": null,
+      "env": {
+        "BABEL_ENV": "test"
+      }
+    }
+  ]
+}

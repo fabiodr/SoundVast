@@ -1,4 +1,4 @@
-﻿const defaultState = {
+const defaultState = {
   isAdmin: false,
   isLoggedIn: false,
   userName: '',

@@ -1,6 +1,6 @@
-﻿import reqwest from 'reqwest';
+import reqwest from 'reqwest';
 
-export default () => dispatch =>
+export const getUserDetails = () => dispatch =>
 reqwest({
   url: 'account/userdetails',
   method: 'post',
