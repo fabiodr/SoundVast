@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include=".vscode\launch.json" />
     <Content Include="wwwroot\components\app\App.htm" />
     <Content Include="wwwroot\components\app\app.jsx" />
     <Content Include="wwwroot\components\app\layout.jsx" />

@@ -1,13 +1,12 @@
-import reqwest from 'reqwest';
-
 export const getUserDetails = () => dispatch =>
-reqwest({
-  url: 'account/userdetails',
+fetch('account/userdetails', {
   method: 'post',
-  success: (data) => {
+  mode: 'cors',
+}).then(response =>
+  response.json().then((json) => {
     dispatch({
       type: 'USER_DETAILS',
-      ...data,
+      ...json,
     });
-  },
-});
+  }),
+);
