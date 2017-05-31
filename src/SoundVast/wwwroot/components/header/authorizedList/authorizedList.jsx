@@ -6,7 +6,7 @@ const AuthorizedList = ({ isLoggedIn, userName }) => (
   isLoggedIn ?
     <li>
       <div className="nav-dropdown">
-        <span>{userName}</span>
+        <span className="user-name">{userName}</span>
         <ul className="menu">
           <li>
             <Link to="profile" className="nav-link profile">Profile</Link>
@@ -22,9 +22,13 @@ const AuthorizedList = ({ isLoggedIn, userName }) => (
   : null
 );
 
+AuthorizedList.defaultProps = {
+  userName: null,
+};
+
 AuthorizedList.propTypes = {
   isLoggedIn: PropTypes.bool.isRequired,
-  userName: PropTypes.string.isRequired,
+  userName: PropTypes.string,
 };
 
 export default AuthorizedList;

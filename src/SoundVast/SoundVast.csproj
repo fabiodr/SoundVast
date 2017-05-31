@@ -10,6 +10,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\components\user\actions\**" />
+    <Content Remove="wwwroot\components\user\actions\**" />
+    <EmbeddedResource Remove="wwwroot\components\user\actions\**" />
+    <None Remove="wwwroot\components\user\actions\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include=".vscode\launch.json" />
     <Content Include="wwwroot\components\app\App.htm" />
     <Content Include="wwwroot\components\app\app.jsx" />
@@ -19,17 +26,67 @@
     <Content Include="wwwroot\components\frontPage\frontPage.jsx" />
     <Content Include="wwwroot\components\header\header.jsx" />
     <Content Include="wwwroot\components\header\header.less" />
-    <Content Include="wwwroot\components\user\actions\getUserDetails.jsx" />
-    <Content Include="wwwroot\components\user\userReducer.jsx" />
+    <Content Include="wwwroot\components\user\userReducer.js" />
+    <Content Include="wwwroot\components\user\userReducer.spec.js" />
+    <Content Include="wwwroot\js\frontPage\frontPage.jsx" />
+    <Content Include="wwwroot\js\active-user.js" />
+    <Content Include="wwwroot\js\audio\Audio.js" />
+    <Content Include="wwwroot\js\audio\audioActions.js" />
+    <Content Include="wwwroot\js\audio\AudioContainer.js" />
+    <Content Include="wwwroot\js\audio\audioReducer.js" />
+    <Content Include="wwwroot\js\audio\Rating.js" />
+    <Content Include="wwwroot\js\audio\Sorting.js" />
+    <Content Include="wwwroot\js\extendedOld\autocomplete-category.js" />
+    <Content Include="wwwroot\js\extendedOld\extended.min.js" />
+    <Content Include="wwwroot\js\extendedOld\jquery.history.js" />
+    <Content Include="wwwroot\js\extendedOld\prettypre.js" />
+    <Content Include="wwwroot\js\extended\jplayer.playlist.js" />
+    <Content Include="wwwroot\js\footer-old.js" />
     <Content Include="wwwroot\js\frontPage\appActions.js" />
     <Content Include="wwwroot\js\frontPage\appReducer.js" />
     <Content Include="wwwroot\js\frontPage\Body.js" />
     <Content Include="wwwroot\js\frontPage\FooterContainer.js" />
     <Content Include="wwwroot\js\frontPage\FooterPlayer.js" />
-    <Content Include="wwwroot\js\frontPage\frontPage.jsx" />
     <Content Include="wwwroot\js\frontPage\Nav.js" />
     <Content Include="wwwroot\js\frontPage\Search.js" />
     <Content Include="wwwroot\js\frontPage\TestPlayer.js" />
+    <Content Include="wwwroot\js\index.js" />
+    <Content Include="wwwroot\js\jPlayer\JPlayer.js" />
+    <Content Include="wwwroot\js\jPlayer\jPlayerUtilities.js" />
+    <Content Include="wwwroot\js\jPlayer\jPlayerWrapper.js" />
+    <Content Include="wwwroot\js\jPlayer\jPlaylist.js" />
+    <Content Include="wwwroot\js\old\audios.js" />
+    <Content Include="wwwroot\js\old\category.js" />
+    <Content Include="wwwroot\js\old\comment.js" />
+    <Content Include="wwwroot\js\old\css-loader.js" />
+    <Content Include="wwwroot\js\old\genre.js" />
+    <Content Include="wwwroot\js\old\helpers.js" />
+    <Content Include="wwwroot\js\old\history.js" />
+    <Content Include="wwwroot\js\old\infinite-scroll.js" />
+    <Content Include="wwwroot\js\old\layout.js" />
+    <Content Include="wwwroot\js\old\playlist.js" />
+    <Content Include="wwwroot\js\old\popup.js" />
+    <Content Include="wwwroot\js\old\profile.js" />
+    <Content Include="wwwroot\js\old\radiostation-create.js" />
+    <Content Include="wwwroot\js\old\radiostation.js" />
+    <Content Include="wwwroot\js\old\redirect.js" />
+    <Content Include="wwwroot\js\old\search.js" />
+    <Content Include="wwwroot\js\old\side-bar.js" />
+    <Content Include="wwwroot\js\old\site.min.js" />
+    <Content Include="wwwroot\js\old\song.js" />
+    <Content Include="wwwroot\js\old\songs-related-songs-edit.js" />
+    <Content Include="wwwroot\js\old\songs-request-deletion.js" />
+    <Content Include="wwwroot\js\old\songs-request-edit.js" />
+    <Content Include="wwwroot\js\old\upload-song-details.js" />
+    <Content Include="wwwroot\js\old\upload.js" />
+    <Content Include="wwwroot\js\old\user-user-profile.js" />
+    <Content Include="wwwroot\js\old\_create-playlist.js" />
+    <Content Include="wwwroot\js\playlistold\JPlayerPlaylist.js" />
+    <Content Include="wwwroot\js\playlistold\JPlayerPlaylistStore.js" />
+    <Content Include="wwwroot\js\polyfill.js" />
+    <Content Include="wwwroot\js\reducers.js" />
+    <Content Include="wwwroot\js\test\jPlayer\jPlayerPlaylist.test.js" />
+    <Content Include="wwwroot\js\upload\upload.js" />
   </ItemGroup>
 
   <ItemGroup>

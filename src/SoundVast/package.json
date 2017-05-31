@@ -40,9 +40,9 @@
     "extension": [
       ".jsx"
     ],
-    "include": "Components",
+    "include": "wwwroot/components/**/*.{js,jsx}",
     "exclude": [
-      "**/*.spec.{js,jsx}"
+      "wwwroot/components/**/*.spec.{js,jsx}"
     ],
     "require": [
       "babel-register"
@@ -58,6 +58,8 @@
   },
   "dependencies": {
     "aspnet-webpack": "^1.0.29",
+    "es6-promise": "^4.1.0",
+    "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.15.0",
     "prop-types": "^15.5.8",
     "react": "^15.3.0",
@@ -70,13 +72,13 @@
     "recompose": "^0.23.4",
     "redux": "^3.5.2",
     "redux-thunk": "^2.2.0",
-    "whatwg-fetch": "^2.0.3",
     "xhr2": "^0.1.4"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.1",
     "babel-eslint": "^7.1.1",
     "babel-loader": "^7.0.0",
+    "babel-plugin-istanbul": "^4.1.4",
     "babel-preset-es2015": "^6.18.0",
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-2": "^6.22.0",
@@ -95,6 +97,8 @@
     "eslint-plugin-react": "^7.0.1",
     "expect": "^1.20.2",
     "extract-text-webpack-plugin": "^2.1.0",
+    "fetch-mock": "^5.11.0",
+    "ignore-styles": "^5.0.1",
     "jsdom": "^11.0.0",
     "less": "^2.7.2",
     "less-loader": "^3.0.0",

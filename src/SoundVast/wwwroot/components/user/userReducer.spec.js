@@ -16,4 +16,15 @@ describe('userReducer', () => {
 
     expect(userDetails).toEqual(actionProps);
   });
+
+  it('should return defaultState if undefined', () => {
+    const userDetails = userReducer(undefined, {
+      type: 'NONE',
+    });
+
+    expect(userDetails).toEqual({
+      isAdmin: false,
+      isLoggedIn: false,
+    });
+  });
 });

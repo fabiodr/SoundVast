@@ -1,4 +1,5 @@
 ﻿import jsdom from 'jsdom';
+import 'isomorphic-fetch';
 
 const window = new jsdom.JSDOM().window;
 

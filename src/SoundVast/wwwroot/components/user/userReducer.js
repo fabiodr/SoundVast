@@ -1,7 +1,6 @@
 const defaultState = {
   isAdmin: false,
   isLoggedIn: false,
-  userName: '',
 };
 
 export default (state = defaultState, action) => {

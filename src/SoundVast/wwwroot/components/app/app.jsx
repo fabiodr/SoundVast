@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import 'whatwg-fetch';
+import 'isomorphic-fetch';
 
 import Routing from './routing';
 import store from './store';
