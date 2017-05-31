@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import styles from './modal.less';
+
 const Modal = ({ children, title }) => (
-  <div className="modal-layout">
-    <span role="img" aria-label="close" className="modal-close">❌</span>
-    <div className="modal-title">
+  <div className={styles.layout}>
+    <span role="img" aria-label="close" className={styles.close}>❌</span>
+    <div className={styles.title}>
       {title}
     </div>
     {children}

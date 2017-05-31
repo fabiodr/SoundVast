@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import './header.less';
+import styles from './header.less';
 import AuthorizedList from './authorizedList/authorizedListContainer';
 import UnAuthorizedList from './unAuthorizedList/unAuthorizedListContainer';
 import AdminList from './adminList/adminListContainer';
@@ -9,43 +9,43 @@ import AdminList from './adminList/adminListContainer';
 const Header = () => (
   <div className="row">
     <div className="col-xs-12">
-      <header>
+      <header className={styles.header}>
         <div className="wrapper container">
           <nav>
-            <ul className="outer pull-left">
+            <ul className={`${styles.outerList} pull-left`}>
               <li>
-                <Link to="/" className="nav-link logo">
+                <Link to="/">
                   <img src="images/soundvast-nav-logo.png" alt="SoundVast" />
                 </Link>
               </li>
               <li>
-                <Link to="filestream/filestreams" className="nav-link audio">Audios</Link>
+                <Link to="filestream/filestreams">Audios</Link>
               </li>
               <li>
-                <Link to="livestreams/livestream" className="nav-link live-stream">Live Streams</Link>
+                <Link to="livestreams/livestream">Live Streams</Link>
               </li>
               <li>
-                <Link to="uploadmain/upload" className="nav-link upload">Upload</Link>
+                <Link to="uploadmain/upload">Upload</Link>
               </li>
             </ul>
-            <ul className="outer pull-right">
+            <ul className={`${styles.outerList} pull-right`}>
               <AuthorizedList />
               <UnAuthorizedList />
               <li>
-                <div className="nav-dropdown">
+                <div className={styles.navDropdown}>
                   <span><i className="fa fa-bars" /></span>
-                  <ul className="menu">
+                  <ul className={styles.navDropdownList}>
                     <li>
-                      <Link to="content/aboutus" className="nav-link about-us">About us</Link>
+                      <Link to="content/aboutus">About us</Link>
                     </li>
                     <li>
-                      <Link to="content/privacy" className="nav-link privacy">Privacy</Link>
+                      <Link to="content/privacy">Privacy</Link>
                     </li>
                     <li>
-                      <Link to="content/copyright" className="nav-link copyright">Copyright</Link>
+                      <Link to="content/copyright">Copyright</Link>
                     </li>
                     <li>
-                      <Link to="content/termsofuse" className="nav-link terms-of-use">Terms of Use</Link>
+                      <Link to="content/termsofuse">Terms of Use</Link>
                     </li>
                     <AdminList />
                   </ul>

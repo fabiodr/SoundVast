@@ -2,14 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
+import styles from '../header.less';
+
 const AuthorizedList = ({ isLoggedIn, userName }) => (
   isLoggedIn ?
     <li>
-      <div className="nav-dropdown">
+      <div className={styles.navDropdown}>
         <span className="user-name">{userName}</span>
-        <ul className="menu">
+        <ul className={styles.navDropdownList}>
           <li>
-            <Link to="profile" className="nav-link profile">Profile</Link>
+            <Link to="profile">Profile</Link>
           </li>
           <li>
             <form action="account/logout" name="logout-form" id="logout-form">

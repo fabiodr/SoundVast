@@ -2,11 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
+import styles from '../header.less';
+
 const UnAuthorizedList = ({ isLoggedIn }) => (
   !isLoggedIn ?
-    <ul>
-      <li><Link to="account/login" className="nav-link popup-link" id="login-link">Login</Link></li>
-      <li><Link to="account/register" className="nav-link popup-link" id="register-link">Register</Link></li>
+    <ul className={styles.outerList}>
+      <li><Link to="account/login" id="login-link">Login</Link></li>
+      <li><Link to="account/register" id="register-link">Register</Link></li>
     </ul>
   : null
 );
