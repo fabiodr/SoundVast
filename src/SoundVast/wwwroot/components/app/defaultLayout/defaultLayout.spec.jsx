@@ -2,7 +2,7 @@ import React from 'react';
 import expect from 'expect';
 import { shallow } from 'enzyme';
 
-import Layout from './layout';
+import DefaultLayout from './defaultLayout';
 import User from '../../user/userContainer';
 import Header from '../../header/header';
 
@@ -11,7 +11,7 @@ const setup = (newProps) => {
     ...newProps,
   };
 
-  const wrapper = shallow(<Layout {...props} />);
+  const wrapper = shallow(<DefaultLayout {...props} />);
 
   return {
     wrapper,

@@ -1,10 +1,10 @@
-export const getUserDetails = () => dispatch =>
-fetch('account/userDetails', {
+export const getSocialLogins = () => dispatch =>
+fetch('account/socialLogins', {
   method: 'post',
 }).then(response =>
   response.json().then((json) => {
     dispatch({
-      type: 'GET_USER_DETAILS',
+      type: 'GET_SOCIAL_LOGINS',
       ...json,
     });
   }),

@@ -3,12 +3,12 @@ import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import fetchMock from 'fetch-mock';
 
-import * as actions from './userActions';
+import * as actions from './socialLoginsActions';
 
 const mockStore = configureStore([thunk]);
 const store = mockStore({});
 
-describe('userActions', () => {
+describe('socialLoginActions', () => {
   let calledActions;
 
   beforeEach(() => {
@@ -20,18 +20,21 @@ describe('userActions', () => {
     fetchMock.reset().restore();
   });
 
-  it('should fetch user details', () => {
+  it('should fetch social logins', () => {
     const json = {
-      isAdmin: true,
-      isLoggedIn: true,
-      userName: 'Yoshimiii',
+      loginProviders: [{
+        authenticationScheme: 'facebook',
+        displayName: 'Facebook',
+      }],
     };
 
-    fetchMock.post('account/userDetails', json);
+    fetchMock.post('account/socialLogins', json);
 
-    store.dispatch(actions.getUserDetails()).then(() => {
+    store.dispatch(actions.getSocialLogins()).then(() => {
+      calledActions = store.getActions();
+
       expect(calledActions[0]).toEqual({
-        type: 'GET_USER_DETAILS',
+        type: 'GET_SOCIAL_LOGINS',
         ...json,
       });
     });

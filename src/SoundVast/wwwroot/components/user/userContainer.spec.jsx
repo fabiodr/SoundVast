@@ -3,7 +3,7 @@ import configureMockStore from 'redux-mock-store';
 import { mount } from 'enzyme';
 import expect from 'expect';
 
-import User from './userContainer';
+import UserContainer from './userContainer';
 import { getUserDetails } from './userActions';
 
 const store = configureMockStore()({});
@@ -15,7 +15,7 @@ const setup = (newProps) => {
   expect.spyOn(store, 'dispatch');
 
   const wrapper = mount(
-    <User {...props} />,
+    <UserContainer {...props} />,
     { context: { store } },
   );
 
@@ -26,7 +26,7 @@ const setup = (newProps) => {
 };
 
 describe('UserContainer', () => {
-  it('should dispatch user details on load', () => {
+  it('should get user details on load', () => {
     setup();
 
     expect(store.dispatch).toHaveBeenCalledWith(getUserDetails());

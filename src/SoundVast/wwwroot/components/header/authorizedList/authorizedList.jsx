@@ -8,13 +8,13 @@ const AuthorizedList = ({ isLoggedIn, userName }) => (
   isLoggedIn ?
     <li>
       <div className={styles.navDropdown}>
-        <span className="user-name">{userName}</span>
+        <span className="userName">{userName}</span>
         <ul className={styles.navDropdownList}>
           <li>
             <Link to="profile">Profile</Link>
           </li>
           <li>
-            <form action="account/logout" name="logout-form" id="logout-form">
+            <form action="account/logout" name="logout">
               <input type="submit" value="Logout" />
             </form>
           </li>

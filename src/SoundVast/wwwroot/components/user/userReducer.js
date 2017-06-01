@@ -5,7 +5,7 @@ const defaultState = {
 
 export default (state = defaultState, action) => {
   switch (action.type) {
-    case 'USER_DETAILS':
+    case 'GET_USER_DETAILS':
       return {
         isAdmin: action.isAdmin,
         isLoggedIn: action.isLoggedIn,

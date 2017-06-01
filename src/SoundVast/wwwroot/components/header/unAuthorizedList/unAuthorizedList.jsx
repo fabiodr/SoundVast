@@ -7,8 +7,8 @@ import styles from '../header.less';
 const UnAuthorizedList = ({ isLoggedIn }) => (
   !isLoggedIn ?
     <ul className={styles.outerList}>
-      <li><Link to="account/login" id="login-link">Login</Link></li>
-      <li><Link to="account/register" id="register-link">Register</Link></li>
+      <li><Link to="account/login">Login</Link></li>
+      <li><Link to="account/register">Register</Link></li>
     </ul>
   : null
 );

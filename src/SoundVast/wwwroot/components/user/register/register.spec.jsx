@@ -1,30 +1,36 @@
-// import expect from 'expect';
-// import configureStore from 'redux-mock-store';
-// import thunk from 'redux-thunk';
-// import fetchMock from 'fetch-mock';
+import React from 'react';
+import expect from 'expect';
+import { shallow } from 'enzyme';
 
-// import Modal from
+import Register from './register';
+import Modal from '../../_partials/modal';
+import SocialLoginsContainer from '../login/socialLogins/socialLoginsContainer';
 
-// const mockStore = configureStore([thunk]);
+const setup = (newProps) => {
+  const props = {
+    ...newProps,
+  };
 
-// describe('Register', () => {
-//   it('should render Modal', () => {
-//     const store = mockStore({});
-//     const json = {
-//       isAdmin: true,
-//       isLoggedIn: true,
-//       userName: 'Yoshimiii',
-//     };
+  const wrapper = shallow(<Register {...props} />);
 
-//     fetchMock.post('account/userdetails', json);
+  return {
+    wrapper,
+    props,
+  };
+};
 
-//     store.dispatch(actions.getUserDetails()).then(() => {
-//       const calledActions = store.getActions();
+describe('Register', () => {
+  let wrapper;
 
-//       expect(calledActions[0]).toEqual({
-//         type: 'USER_DETAILS',
-//         ...json,
-//       });
-//     });
-//   });
-// });
+  it('should wrap component in a modal', () => {
+    ({ wrapper } = setup());
+
+    expect(wrapper.type()).toBe(Modal);
+  });
+
+  it('should render social logins', () => {
+    ({ wrapper } = setup());
+
+    expect(wrapper.find(SocialLoginsContainer).length).toBe(1);
+  });
+});

@@ -48,9 +48,21 @@ namespace SoundVast.Components.Account
 
             return Json(new
             {
-                UserName = user != null ? user.UserName : null,
+                user?.UserName,
                 IsLoggedIn = user != null,
                 IsAdmin = User.IsInRole("Admin")
+            });
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public JsonResult SocialLogins()
+        {
+            var loginProviders = _signInManager.GetExternalAuthenticationSchemes().ToList();
+
+            return Json(new
+            {
+                loginProviders
             });
         }
 

@@ -38,6 +38,6 @@ describe('AuthorizedList', () => {
 
     ({ wrapper } = setup({ isLoggedIn: true, userName }));
 
-    expect(wrapper.find('.user-name').text()).toBe(userName);
+    expect(wrapper.find('.userName').text()).toBe(userName);
   });
 });
