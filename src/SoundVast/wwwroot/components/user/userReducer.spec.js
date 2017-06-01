@@ -4,11 +4,11 @@ import userReducer from './userReducer';
 
 describe('userReducer', () => {
   it('should return defaultState if undefined', () => {
-    const userDetails = userReducer(undefined, {
+    const state = userReducer(undefined, {
       type: 'NONE',
     });
 
-    expect(userDetails).toEqual({
+    expect(state).toEqual({
       isAdmin: false,
       isLoggedIn: false,
     });
@@ -20,11 +20,11 @@ describe('userReducer', () => {
       isLoggedIn: true,
       userName: 'Yoshimiii',
     };
-    const userDetails = userReducer(null, {
+    const state = userReducer(null, {
       type: 'GET_USER_DETAILS',
       ...actionProps,
     });
 
-    expect(userDetails).toEqual(actionProps);
+    expect(state).toEqual(actionProps);
   });
 });

@@ -19,7 +19,7 @@ const DefaultLayout = ({ component: Component, ...rest }) => (
 );
 
 DefaultLayout.propTypes = {
-  component: PropTypes.node.isRequired,
+  component: PropTypes.func.isRequired,
 };
 
 export default DefaultLayout;

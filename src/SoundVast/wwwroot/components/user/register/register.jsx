@@ -1,10 +1,10 @@
 import React from 'react';
 
-import Modal from '../../_partials/modal';
+import Modal from '../../_partials/modal/modalContainer';
 import SocialLogins from '../login/socialLogins/socialLoginsContainer';
 
 const Register = () => (
-  <Modal title="Register.">
+  <Modal title="Register." id="register">
     <SocialLogins />
   </Modal>
 );

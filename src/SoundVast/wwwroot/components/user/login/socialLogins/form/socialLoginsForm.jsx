@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import styles from './socialLoginsForm.less';
-import { hr } from '../../../../_partials/modal.less';
+import { hr } from '../../../../_partials/modal/modal.less';
 import SocialLogin from './socialLogin/socialLogin';
 
 const SocialLoginsForm = ({ loginProviders }) => (

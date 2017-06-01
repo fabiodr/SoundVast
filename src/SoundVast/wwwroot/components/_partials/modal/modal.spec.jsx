@@ -6,6 +6,7 @@ import Modal from './modal';
 
 const setup = (newProps) => {
   const props = {
+    showModal: true,
     children: <div className="@@test" />,
     title: 'test-title',
     ...newProps,
@@ -39,5 +40,11 @@ describe('Modal', () => {
     ({ wrapper } = setup());
 
     expect(wrapper.find('.close').text()).toBe('❌');
+  });
+
+  it('should render null when showModal is false', () => {
+    ({ wrapper } = setup({ showModal: false }));
+
+    expect(wrapper.type()).toBe(null);
   });
 });

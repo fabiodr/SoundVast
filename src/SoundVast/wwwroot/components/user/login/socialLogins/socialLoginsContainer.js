@@ -5,7 +5,7 @@ import { getSocialLogins } from './socialLoginsActions';
 import SocialLogins from './socialLogins';
 
 const mapStateToProps = ({ socialLogins }) => ({
-  isLoggedIn: socialLogins.loginProviders,
+  loginProviders: socialLogins.loginProviders,
 });
 
 export default compose(

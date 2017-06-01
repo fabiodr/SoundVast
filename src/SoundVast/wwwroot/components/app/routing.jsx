@@ -1,14 +1,14 @@
 import React from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
 
 import DefaultLayout from './defaultLayout/defaultLayout';
-import Register from '../user/register/register';
+import FrontPage from '../frontPage/frontPage';
 
 export default () => (
   <DocumentTitle title="SoundVast">
     <BrowserRouter>
-      <DefaultLayout path="/" component={DefaultLayout} />
+      <DefaultLayout path="/" component={FrontPage} />
     </BrowserRouter>
   </DocumentTitle>
 );
