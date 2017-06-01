@@ -1,5 +1,4 @@
 ﻿--require babel-register
---require ignore-styles
 --require jsdom.spec.js
 --require expect
 --compilers jsx:babel-register

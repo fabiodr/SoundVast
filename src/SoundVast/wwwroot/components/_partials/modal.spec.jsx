@@ -32,12 +32,12 @@ describe('Modal', () => {
   it('should render modal title', () => {
     ({ wrapper, props } = setup());
 
-    expect(wrapper.find('.modal-title').text()).toBe(props.title);
+    expect(wrapper.find('.title').text()).toBe(props.title);
   });
 
   it('should render modal close', () => {
     ({ wrapper } = setup());
 
-    expect(wrapper.find('.modal-close').text()).toBe('❌');
+    expect(wrapper.find('.close').text()).toBe('❌');
   });
 });
