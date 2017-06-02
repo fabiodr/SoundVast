@@ -3,12 +3,14 @@ import { shallow } from 'enzyme';
 import expect from 'expect';
 
 import Modal from './modal';
+import ModalOverlay from './overlay/modalOverlay';
 
 const setup = (newProps) => {
   const props = {
-    showModal: true,
+    showCurrentModal: true,
     children: <div className="@@test" />,
     title: 'test-title',
+    showModal: expect.createSpy(),
     ...newProps,
   };
 
@@ -42,9 +44,25 @@ describe('Modal', () => {
     expect(wrapper.find('.close').text()).toBe('❌');
   });
 
-  it('should render null when showModal is false', () => {
-    ({ wrapper } = setup({ showModal: false }));
+  it('should render ModalOverlay', () => {
+    ({ wrapper, props } = setup());
+
+    expect(wrapper.find(ModalOverlay).length).toBe(1);
+  });
+
+  it('should render null when showCurrentModal is false', () => {
+    ({ wrapper } = setup({ showCurrentModal: false }));
 
     expect(wrapper.type()).toBe(null);
+  });
+
+  it('should close modal on close click', () => {
+    ({ wrapper, props } = setup());
+
+    const close = wrapper.find('.close');
+    close.simulate('click');
+
+    expect(props.showModal).toHaveBeenCalled();
+    expect(props.showModal.calls[0].arguments.length).toBe(0);
   });
 });

@@ -30,10 +30,10 @@ describe('userActions', () => {
     fetchMock.post('account/userDetails', json);
 
     store.dispatch(actions.getUserDetails()).then(() => {
-      expect(calledActions[0]).toEqual({
+      expect(calledActions).toEqual([{
         type: 'GET_USER_DETAILS',
         ...json,
-      });
+      }]);
     });
   });
 });

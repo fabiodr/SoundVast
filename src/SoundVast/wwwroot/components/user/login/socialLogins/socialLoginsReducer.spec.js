@@ -4,11 +4,11 @@ import socialLoginsReducer from './socialLoginsReducer';
 
 describe('socialLoginsReducer', () => {
   it('should return defaultState if undefined', () => {
-    const socialLoginDetails = socialLoginsReducer(undefined, {
+    const state = socialLoginsReducer(undefined, {
       type: 'NONE',
     });
 
-    expect(socialLoginDetails).toEqual({});
+    expect(state).toEqual({});
   });
 
   it('should get social logins', () => {
@@ -18,11 +18,11 @@ describe('socialLoginsReducer', () => {
         displayName: 'Facebook',
       }],
     };
-    const socialLoginDetails = socialLoginsReducer(null, {
+    const state = socialLoginsReducer(null, {
       type: 'GET_SOCIAL_LOGINS',
       ...actionProps,
     });
 
-    expect(socialLoginDetails).toEqual(actionProps);
+    expect(state).toEqual(actionProps);
   });
 });

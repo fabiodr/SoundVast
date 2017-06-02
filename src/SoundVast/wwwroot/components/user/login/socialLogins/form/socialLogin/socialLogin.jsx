@@ -12,7 +12,7 @@ const SocialLogin = ({ authenticationScheme, displayName }) => (
       name="provider"
       title={`Log in using your ${displayName} account`}
     >
-      <img src={`~/images/loginProviders/${authenticationScheme}_40.png`} alt={displayName} />
+      <img src={`images/loginProviders/${authenticationScheme}_40.png`} alt={displayName} />
     </button>
   </div>
 );

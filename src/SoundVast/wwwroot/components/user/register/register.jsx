@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Modal from '../../_partials/modal/modalContainer';
+import Modal from '../../shared/modal/modalContainer';
 import SocialLogins from '../login/socialLogins/socialLoginsContainer';
 
 const Register = () => (

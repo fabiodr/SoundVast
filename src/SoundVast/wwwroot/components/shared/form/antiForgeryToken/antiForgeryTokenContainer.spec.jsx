@@ -3,11 +3,13 @@ import configureMockStore from 'redux-mock-store';
 import { mount } from 'enzyme';
 import expect from 'expect';
 
-import UserContainer from './userContainer';
-import { getUserDetails } from './userActions';
+import AntiForgeryTokenContainer from './antiForgeryTokenContainer';
+import { generateAntiForgeryToken } from '../formActions';
 
 const store = configureMockStore()({
-  modal: {},
+  form: {
+    antiForgeryToken: '0#DERG£%%FDD£',
+  },
 });
 
 const setup = (newProps) => {
@@ -17,7 +19,7 @@ const setup = (newProps) => {
   expect.spyOn(store, 'dispatch');
 
   const wrapper = mount(
-    <UserContainer {...props} />,
+    <AntiForgeryTokenContainer {...props} />,
     { context: { store } },
   );
 
@@ -27,10 +29,10 @@ const setup = (newProps) => {
   };
 };
 
-describe('UserContainer', () => {
-  it('should get user details on load', () => {
+describe('AntiForgeryTokenContainer', () => {
+  it('should get anti forgery token on load', () => {
     setup();
 
-    expect(store.dispatch).toHaveBeenCalledWith(getUserDetails());
+    expect(store.dispatch).toHaveBeenCalledWith(generateAntiForgeryToken());
   });
 });

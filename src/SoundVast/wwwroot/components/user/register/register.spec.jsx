@@ -3,7 +3,7 @@ import expect from 'expect';
 import { shallow } from 'enzyme';
 
 import Register from './register';
-import Modal from '../../_partials/modal/modalContainer';
+import Modal from '../../shared/modal/modalContainer';
 import SocialLoginsContainer from '../login/socialLogins/socialLoginsContainer';
 
 const setup = (newProps) => {

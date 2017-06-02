@@ -6,6 +6,8 @@ import AuthorizedList from './authorizedList/authorizedListContainer';
 import UnAuthorizedList from './unAuthorizedList/unAuthorizedListContainer';
 import AdminList from './adminList/adminListContainer';
 
+// import soundVastLogo from '../../images/soundvast-nav-logo.png';
+
 const Header = () => (
   <div className="row">
     <div className="col-xs-12">
@@ -15,7 +17,7 @@ const Header = () => (
             <ul className={`${styles.outerList} pull-left`}>
               <li>
                 <Link to="/">
-                  <img src="images/soundvast-nav-logo.png" alt="SoundVast" />
+                  {/* <img src={soundVastLogo} alt="SoundVast" /> */ }
                 </Link>
               </li>
               <li>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Policy;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -25,19 +26,22 @@ namespace SoundVast.Components.Account
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
+        private readonly IAntiforgery _antiforgery;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
             ISmsSender smsSender,
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory,
+            IAntiforgery antiforgery)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
+            _antiforgery = antiforgery;
         }
 
         [HttpPost]
@@ -166,6 +170,19 @@ namespace SoundVast.Components.Account
             await _signInManager.SignOutAsync();
             _logger.LogInformation(4, "User logged out.");
             return RedirectToAction(nameof(FileStreamController.FileStreams), "Home");
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public JsonResult GenerateAntiForgeryToken()
+        {
+            var tokenSet = _antiforgery.GetAndStoreTokens(HttpContext);
+
+            return Json(new
+            {
+                antiForgeryToken = tokenSet.RequestToken,
+                cookieToken = tokenSet.CookieToken
+            });
         }
 
         //

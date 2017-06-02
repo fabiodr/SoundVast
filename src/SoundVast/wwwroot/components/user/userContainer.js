@@ -1,13 +1,8 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
 
 import { getUserDetails } from './userActions';
-import Register from './register/register';
-
-const UserContainer = () => (
-  <Register />
-);
+import User from './user';
 
 export default compose(
   connect(),
@@ -16,4 +11,4 @@ export default compose(
       this.props.dispatch(getUserDetails());
     },
   }),
-)(UserContainer);
+)(User);

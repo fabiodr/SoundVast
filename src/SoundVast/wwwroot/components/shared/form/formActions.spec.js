@@ -3,12 +3,12 @@ import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import fetchMock from 'fetch-mock';
 
-import * as actions from './socialLoginsActions';
+import * as actions from './formActions';
 
 const mockStore = configureStore([thunk]);
 const store = mockStore({});
 
-describe('socialLoginsActions', () => {
+describe('formActions', () => {
   let calledActions;
 
   beforeEach(() => {
@@ -20,21 +20,16 @@ describe('socialLoginsActions', () => {
     fetchMock.reset().restore();
   });
 
-  it('should fetch social logins', () => {
+  it('should fetch an anti forgery token', () => {
     const json = {
-      loginProviders: [{
-        authenticationScheme: 'facebook',
-        displayName: 'Facebook',
-      }],
+      antiForgeryToken: '0#DERG£%%FDD£',
     };
 
-    fetchMock.post('account/socialLogins', json);
+    fetchMock.post('account/generateAntiForgeryToken', json);
 
-    store.dispatch(actions.getSocialLogins()).then(() => {
-      calledActions = store.getActions();
-
+    store.dispatch(actions.generateAntiForgeryToken()).then(() => {
       expect(calledActions).toEqual([{
-        type: 'GET_SOCIAL_LOGINS',
+        type: 'GENERATE_ANTI_FORGERY_TOKEN',
         ...json,
       }]);
     });

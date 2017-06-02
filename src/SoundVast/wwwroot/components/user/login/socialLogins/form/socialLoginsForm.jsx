@@ -2,11 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import styles from './socialLoginsForm.less';
-import { hr } from '../../../../_partials/modal/modal.less';
+import { hr } from '../../../../shared/modal/modal.less';
 import SocialLogin from './socialLogin/socialLogin';
+import AntiForgeryToken from '../../../../shared/form/antiForgeryToken/antiForgeryTokenContainer';
 
 const SocialLoginsForm = ({ loginProviders }) => (
   <form action="account/externalLogin" method="post" className="form-horizontal">
+    <AntiForgeryToken />
     <div className={styles.socialLogins}>
       <div className="row-eq-height">
         {

@@ -1,0 +1,39 @@
+.layout {
+    position: fixed;
+    top: 15%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30%;
+    min-width: 400px;
+    background-color: white;
+    z-index: 100;
+    
+    @media (max-width: 500px) {
+        height: 100vh;
+        top: 0%;
+        left: 0%;
+        transform: translateX(0%);
+        width: 100%;
+        min-width: 100px;
+    }
+}
+
+.close,
+.close:hover {
+    cursor: pointer;
+    font-size: 15px;
+    position: absolute;
+    right: 6px;
+    text-decoration: none;
+    top: 4px;
+}
+
+.title {
+    margin-top: 24px;
+    margin-bottom: 8px;
+    font-size: 18px;
+}
+
+.hr {
+    margin-top: 2px;
+}
