@@ -110,6 +110,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="1.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="1.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="1.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Cors" Version="1.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="1.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="1.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="1.1.2" />

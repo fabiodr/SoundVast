@@ -7,7 +7,13 @@ import UserContainer from './userContainer';
 import { getUserDetails } from './userActions';
 
 const store = configureMockStore()({
-  modal: {},
+  form: {},
+  modal: {
+    currentModal: 'test',
+  },
+  socialLogins: {
+    loginProviders: [],
+  },
 });
 
 const setup = (newProps) => {

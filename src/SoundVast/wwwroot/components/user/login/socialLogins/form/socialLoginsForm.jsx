@@ -26,7 +26,7 @@ const SocialLoginsForm = ({ loginProviders }) => (
 );
 
 SocialLoginsForm.defaultProps = {
-  loginProviders: null,
+  loginProviders: [],
 };
 
 SocialLoginsForm.propTypes = {

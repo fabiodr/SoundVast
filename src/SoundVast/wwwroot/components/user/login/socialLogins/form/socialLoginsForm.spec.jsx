@@ -5,6 +5,7 @@ import expect from 'expect';
 import SocialLoginsForm from './socialLoginsForm';
 import SocialLogin from './socialLogin/socialLogin';
 import loginProviders from '../socialLoginsMockData.spec';
+import AntiForgeryToken from '../../../../shared/form/antiForgeryToken/antiForgeryTokenContainer';
 
 const setup = (newProps) => {
   const props = {
@@ -27,5 +28,11 @@ describe('SocialLoginsForm', () => {
     ({ wrapper, props } = setup({ loginProviders }));
 
     expect(wrapper.find(SocialLogin).length).toBe(props.loginProviders.length);
+  });
+
+  it('should render an anti-forgery token', () => {
+    ({ wrapper, props } = setup());
+
+    expect(wrapper.find(AntiForgeryToken).length).toBe(1);
   });
 });

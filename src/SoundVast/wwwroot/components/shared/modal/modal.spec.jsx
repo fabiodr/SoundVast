@@ -7,7 +7,7 @@ import ModalOverlay from './overlay/modalOverlay';
 
 const setup = (newProps) => {
   const props = {
-    showCurrentModal: true,
+    layoutClasses: ['test'],
     children: <div className="@@test" />,
     title: 'test-title',
     showModal: expect.createSpy(),
@@ -48,12 +48,6 @@ describe('Modal', () => {
     ({ wrapper, props } = setup());
 
     expect(wrapper.find(ModalOverlay).length).toBe(1);
-  });
-
-  it('should render null when showCurrentModal is false', () => {
-    ({ wrapper } = setup({ showCurrentModal: false }));
-
-    expect(wrapper.type()).toBe(null);
   });
 
   it('should close modal on close click', () => {

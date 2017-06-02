@@ -176,12 +176,11 @@ namespace SoundVast.Components.Account
         [AllowAnonymous]
         public JsonResult GenerateAntiForgeryToken()
         {
-            var tokenSet = _antiforgery.GetAndStoreTokens(HttpContext);
+            var tokenSet = _antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
 
             return Json(new
             {
-                antiForgeryToken = tokenSet.RequestToken,
-                cookieToken = tokenSet.CookieToken
+                antiForgeryToken = tokenSet,
             });
         }
 
