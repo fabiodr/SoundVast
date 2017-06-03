@@ -1,12 +1,11 @@
-export const generateAntiForgeryToken = () => dispatch =>
+import { change } from 'redux-form';
+
+export const generateAntiForgeryToken = form => dispatch =>
 fetch('account/generateAntiForgeryToken', {
   method: 'post',
   credentials: 'same-origin',
 }).then(response =>
   response.json().then((json) => {
-    dispatch({
-      type: 'GENERATE_ANTI_FORGERY_TOKEN',
-      ...json,
-    });
+    dispatch(change(form, '__RequestVerificationToken', json.antiForgeryToken));
   }),
 );

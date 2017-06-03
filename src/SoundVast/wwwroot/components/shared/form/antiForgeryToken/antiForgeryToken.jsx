@@ -1,15 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { Field } from 'redux-form';
 
-const AntiForgeryToken = ({ antiForgeryToken }) =>
-  <input type="hidden" name="__RequestVerificationToken" value={antiForgeryToken} />;
-
-AntiForgeryToken.defaultProps = {
-  antiForgeryToken: '',
-};
-
-AntiForgeryToken.propTypes = {
-  antiForgeryToken: PropTypes.string,
-};
+const AntiForgeryToken = () =>
+  <Field component="input" type="hidden" name="__RequestVerificationToken" />;
 
 export default AntiForgeryToken;

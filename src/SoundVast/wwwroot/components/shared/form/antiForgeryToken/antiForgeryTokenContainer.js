@@ -4,15 +4,11 @@ import { connect } from 'react-redux';
 import { generateAntiForgeryToken } from '../formActions';
 import AntiForgeryToken from './antiForgeryToken';
 
-const mapStateToProps = ({ form }) => ({
-  antiForgeryToken: form.antiForgeryToken,
-});
-
 export default compose(
-  connect(mapStateToProps),
+  connect(),
   lifecycle({
     componentDidMount() {
-      this.props.dispatch(generateAntiForgeryToken());
+      this.props.dispatch(generateAntiForgeryToken(this.props.form));
     },
   }),
 )(AntiForgeryToken);

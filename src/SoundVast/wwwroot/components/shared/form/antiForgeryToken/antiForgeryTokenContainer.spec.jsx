@@ -2,6 +2,8 @@ import React from 'react';
 import configureMockStore from 'redux-mock-store';
 import { mount } from 'enzyme';
 import expect from 'expect';
+import { reduxForm } from 'redux-form';
+import { Provider } from 'react-redux';
 
 import AntiForgeryTokenContainer from './antiForgeryTokenContainer';
 import { generateAntiForgeryToken } from '../formActions';
@@ -18,9 +20,15 @@ const setup = (newProps) => {
   };
   expect.spyOn(store, 'dispatch');
 
+
+  const ReduxFormMock = reduxForm({
+    form: 'test',
+  })(AntiForgeryTokenContainer);
+
   const wrapper = mount(
-    <AntiForgeryTokenContainer {...props} />,
-    { context: { store } },
+    <Provider store={store}>
+      <ReduxFormMock {...props} />
+    </Provider>,
   );
 
   return {
@@ -30,7 +38,7 @@ const setup = (newProps) => {
 };
 
 describe('AntiForgeryTokenContainer', () => {
-  it('should get anti forgery token on load', () => {
+  it('should generate an anti forgery token on load', () => {
     setup();
 
     expect(store.dispatch).toHaveBeenCalledWith(generateAntiForgeryToken());

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Field } from 'redux-form';
 
 import Modal from '../../shared/modal/modalContainer';
 import SocialLogins from '../login/socialLogins/socialLoginsContainer';
@@ -12,7 +13,7 @@ const Register = () => (
     <SocialLogins />
 
     <form action="account/register" method="post" className="form-horizontal">
-      <AntiForgeryToken />
+      <AntiForgeryToken form="register" />
 
       <div className="form-group">
         <div className="col-md-12">
@@ -20,7 +21,8 @@ const Register = () => (
         </div>
 
         <div className="col-md-12">
-          <input type="email" className={formStyles.input} placeholder="Email" />
+          <Field className={formStyles.input} name="email" component="input" type="email" placeholder="Email" required />
+          {/* <input type="email" className={formStyles.input} placeholder="Email" /> */ }
         </div>
 
         <div className="col-md-12">

@@ -27,10 +27,16 @@ describe('formActions', () => {
 
     fetchMock.post('account/generateAntiForgeryToken', json);
 
-    store.dispatch(actions.generateAntiForgeryToken()).then(() => {
+    store.dispatch(actions.generateAntiForgeryToken('test')).then(() => {
       expect(calledActions).toEqual([{
-        type: 'GENERATE_ANTI_FORGERY_TOKEN',
-        ...json,
+        meta: {
+          field: '__RequestVerificationToken',
+          form: 'test',
+          persistentSubmitErrors: undefined,
+          touch: undefined,
+        },
+        payload: '0#DERG£%%FDD£',
+        type: '@@redux-form/CHANGE',
       }]);
     });
   });

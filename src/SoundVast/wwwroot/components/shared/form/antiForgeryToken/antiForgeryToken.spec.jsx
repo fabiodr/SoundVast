@@ -20,11 +20,11 @@ const setup = (newProps) => {
 describe('AntiForgeryToken', () => {
   let wrapper;
 
-  it('should render anti forgery token input', () => {
+  it('should render an anti forgery token input', () => {
     ({ wrapper } = setup());
 
     expect(wrapper.prop('name')).toBe('__RequestVerificationToken');
     expect(wrapper.prop('type')).toBe('hidden');
-    expect(wrapper.type()).toBe('input');
+    expect(wrapper.prop('component')).toBe('input');
   });
 });
