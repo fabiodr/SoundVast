@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import styles from './socialLoginsForm.less';
+import styles from './form.less';
 import { hr } from '../../../../shared/modal/modal.less';
 import SocialLogin from './socialLogin/socialLogin';
 import AntiForgeryToken from '../../../../shared/form/antiForgeryToken/antiForgeryTokenContainer';
 
-const SocialLoginsForm = ({ loginProviders }) => (
+const Form = ({ loginProviders }) => (
   <form action="account/externalLogin" method="post" className="form-horizontal">
     <AntiForgeryToken />
     <div className={styles.socialLogins}>
@@ -25,11 +25,11 @@ const SocialLoginsForm = ({ loginProviders }) => (
   </form>
 );
 
-SocialLoginsForm.defaultProps = {
+Form.defaultProps = {
   loginProviders: [],
 };
 
-SocialLoginsForm.propTypes = {
+Form.propTypes = {
   loginProviders: PropTypes.arrayOf(
     PropTypes.shape({
       authenticationScheme: PropTypes.string.isRequired,
@@ -38,4 +38,4 @@ SocialLoginsForm.propTypes = {
   ),
 };
 
-export default SocialLoginsForm;
+export default Form;

@@ -5,7 +5,7 @@ import { shallow } from 'enzyme';
 import Register from './register';
 import Modal from '../../shared/modal/modalContainer';
 import SocialLoginsContainer from '../login/socialLogins/socialLoginsContainer';
-import AntiForgeryToken from '../../shared/form/antiForgeryToken/antiForgeryTokenContainer';
+import RegisterForm from './form/formContainer';
 
 const setup = (newProps) => {
   const props = {
@@ -35,9 +35,9 @@ describe('Register', () => {
     expect(wrapper.find(SocialLoginsContainer).length).toBe(1);
   });
 
-  it('should render an anti-forgery token', () => {
+  it('should render a register form', () => {
     ({ wrapper } = setup());
 
-    expect(wrapper.find(AntiForgeryToken).length).toBe(1);
+    expect(wrapper.find(RegisterForm).length).toBe(1);
   });
 });

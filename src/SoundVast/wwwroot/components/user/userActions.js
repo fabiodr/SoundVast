@@ -1,7 +1,5 @@
 export const getUserDetails = () => dispatch =>
-fetch('account/userDetails', {
-  method: 'post',
-}).then(response =>
+fetch('account/userDetails').then(response =>
   response.json().then((json) => {
     dispatch({
       type: 'GET_USER_DETAILS',

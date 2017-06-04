@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import styles from '../header.less';
-import ModalLink from '../../shared/modal/link/modalLinkContainer';
+import ModalLink from '../../shared/modal/link/linkContainer';
 
 const UnAuthorizedList = ({ isLoggedIn }) => (
   !isLoggedIn ?

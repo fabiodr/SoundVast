@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import styles from './modal.less';
-import ModalOverlay from './overlay/modalOverlay';
+import ModalOverlay from './overlay/overlay';
 
 const Modal = ({ children, title, containerClass, showModal }) => (
   <div className={containerClass}>

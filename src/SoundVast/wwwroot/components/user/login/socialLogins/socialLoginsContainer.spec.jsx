@@ -5,10 +5,12 @@ import expect from 'expect';
 
 import SocialLoginsContainer from './socialLoginsContainer';
 import { getSocialLogins } from './socialLoginsActions';
-import loginProviders from './socialLoginsMockData.spec';
 
 const store = configureMockStore()({
-  socialLogins: loginProviders,
+  socialLogins: {
+    authenticationScheme: 'facebook',
+    displayName: 'Facebook',
+  },
 });
 
 const setup = (newProps) => {

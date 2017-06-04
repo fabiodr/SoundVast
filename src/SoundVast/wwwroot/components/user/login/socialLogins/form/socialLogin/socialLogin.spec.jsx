@@ -3,11 +3,11 @@ import { shallow } from 'enzyme';
 import expect from 'expect';
 
 import SocialLogin from './socialLogin';
-import loginProviders from '../../socialLoginsMockData.spec';
 
 const setup = (newProps) => {
   const props = {
-    ...loginProviders[0],
+    authenticationScheme: 'facebook',
+    displayName: 'Facebook',
     ...newProps,
   };
 

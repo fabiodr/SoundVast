@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const ModalLink = ({ children, modalId, showModal }) => (
+const Link = ({ children, modalId, showModal }) => (
   <button onClick={() => showModal(modalId)}>
     {children}
   </button>
 );
 
-ModalLink.propTypes = {
+Link.propTypes = {
   modalId: PropTypes.string.isRequired,
   showModal: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
 };
 
-export default ModalLink;
+export default Link;

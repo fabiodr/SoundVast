@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import SocialLoginsErrorMessage from './errorMessage/socialLoginsErrorMessage';
-import SocialLoginsForm from './form/socialLoginsForm';
+import SocialLoginsErrorMessage from './errorMessage/errorMessage';
+import SocialLoginsForm from './form/formContainer';
 
 const SocialLogins = ({ loginProviders }) => (
   <div>

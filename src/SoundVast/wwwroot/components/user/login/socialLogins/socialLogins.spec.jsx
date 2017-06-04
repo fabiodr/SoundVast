@@ -3,9 +3,8 @@ import { shallow } from 'enzyme';
 import expect from 'expect';
 
 import SocialLogins from './socialLogins';
-import SocialLoginsErrorMessage from './errorMessage/socialLoginsErrorMessage';
-import SocialLoginsForm from './form/socialLoginsForm';
-import loginProviders from './socialLoginsMockData.spec';
+import SocialLoginsErrorMessage from './errorMessage/errorMessage';
+import SocialLoginsForm from './form/formContainer';
 
 const setup = (newProps) => {
   const props = {
@@ -19,6 +18,12 @@ const setup = (newProps) => {
     props,
   };
 };
+const loginProviders = [
+  {
+    authenticationScheme: 'facebook',
+    displayName: 'Facebook',
+  },
+];
 
 describe('SocialLogins', () => {
   let wrapper;

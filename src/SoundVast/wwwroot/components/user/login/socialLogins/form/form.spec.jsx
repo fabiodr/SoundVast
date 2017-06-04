@@ -2,9 +2,8 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import expect from 'expect';
 
-import SocialLoginsForm from './socialLoginsForm';
+import SocialLoginsForm from './form';
 import SocialLogin from './socialLogin/socialLogin';
-import loginProviders from '../socialLoginsMockData.spec';
 import AntiForgeryToken from '../../../../shared/form/antiForgeryToken/antiForgeryTokenContainer';
 
 const setup = (newProps) => {
@@ -25,6 +24,12 @@ describe('SocialLoginsForm', () => {
   let props;
 
   it('should render all social logins if there are login providers', () => {
+    const loginProviders = [
+      {
+        authenticationScheme: 'facebook',
+        displayName: 'Facebook',
+      },
+    ];
     ({ wrapper, props } = setup({ loginProviders }));
 
     expect(wrapper.find(SocialLogin).length).toBe(props.loginProviders.length);

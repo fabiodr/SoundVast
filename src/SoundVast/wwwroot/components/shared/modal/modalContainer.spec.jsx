@@ -13,6 +13,8 @@ const store = configureMockStore()({
 });
 const setup = (newProps) => {
   const props = {
+    children: <div className="@@test" />,
+    title: 'test-title',
     ...newProps,
   };
 

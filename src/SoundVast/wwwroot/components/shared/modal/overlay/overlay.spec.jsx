@@ -2,7 +2,7 @@ import React from 'react';
 import expect from 'expect';
 import { shallow } from 'enzyme';
 
-import ModalOverlay from './modalOverlay';
+import ModalOverlay from './overlay';
 
 const setup = (newProps) => {
   const props = {

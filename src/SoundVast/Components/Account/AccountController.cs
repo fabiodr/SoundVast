@@ -44,13 +44,12 @@ namespace SoundVast.Components.Account
             _antiforgery = antiforgery;
         }
 
-        [HttpPost]
         [AllowAnonymous]
-        public async Task<JsonResult> UserDetails()
+        public async Task<IActionResult> UserDetails()
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
 
-            return Json(new
+            return Ok(new
             {
                 user?.UserName,
                 IsLoggedIn = user != null,
@@ -58,13 +57,12 @@ namespace SoundVast.Components.Account
             });
         }
 
-        [HttpPost]
         [AllowAnonymous]
-        public JsonResult SocialLogins()
+        public IActionResult SocialLogins()
         {
             var loginProviders = _signInManager.GetExternalAuthenticationSchemes().ToList();
 
-            return Json(new
+            return Ok(new
             {
                 loginProviders
             });
@@ -174,11 +172,11 @@ namespace SoundVast.Components.Account
 
         [HttpPost]
         [AllowAnonymous]
-        public JsonResult GenerateAntiForgeryToken()
+        public IActionResult GenerateAntiForgeryToken()
         {
             var tokenSet = _antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
 
-            return Json(new
+            return Ok(new
             {
                 antiForgeryToken = tokenSet,
             });
@@ -229,14 +227,18 @@ namespace SoundVast.Components.Account
             {
                 return View("Lockout");
             }
-            else
-            {
-                // If the user does not have an account, then ask the user to create an account.
-                ViewData["ReturnUrl"] = returnUrl;
-                ViewData["LoginProvider"] = info.LoginProvider;
-                var email = info.Principal.FindFirstValue(ClaimTypes.Email);
-                return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = email });
-            }
+
+            // If the user does not have an account, then ask the user to create an account.
+            ViewData["ReturnUrl"] = returnUrl;
+            ViewData["LoginProvider"] = info.LoginProvider;
+            var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+            var redirectUrl = Url.Action("t", "Account", new { ReturnUrl = returnUrl });
+
+            return RedirectToLocal(redirectUrl);
+            //return Ok(new
+            //{
+            //    email
+            //});
         }
 
         //

@@ -3,11 +3,11 @@ import { shallow } from 'enzyme';
 import expect from 'expect';
 
 import Modal from './modal';
-import ModalOverlay from './overlay/modalOverlay';
+import ModalOverlay from './overlay/overlay';
 
 const setup = (newProps) => {
   const props = {
-    containerClasses: ['test'],
+    containerClass: 'test',
     children: <div className="@@test" />,
     title: 'test-title',
     showModal: expect.createSpy(),

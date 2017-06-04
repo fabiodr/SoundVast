@@ -1,8 +1,8 @@
 import { reduxForm } from 'redux-form';
 
-import Register from './register';
+import SocialLoginForm from './form';
 
 export default reduxForm({
-  form: 'register',
+  form: 'socialLogin',
   fields: ['__RequestVerificationToken'],
-})(Register);
+})(SocialLoginForm);

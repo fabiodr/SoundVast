@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import expect from 'expect';
 
-import ModalLink from './modalLink';
+import ModalLink from './link';
 
 const setup = (newProps) => {
   const props = {

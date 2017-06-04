@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import ModalLink from './modalLink';
+import ModalLink from './link';
 import { showModal } from '../modalActions';
 
 export default connect(null, {
