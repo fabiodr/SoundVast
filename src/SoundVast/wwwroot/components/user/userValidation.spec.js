@@ -1,7 +1,6 @@
 import expect from 'expect';
 
 import validate from './userValidation';
-import ERROR_MESSAGES from '../shared/form/validation/errorMessages';
 
 describe('userValidation', () => {
   it('should return no errors if every field is valid', () => {
@@ -18,19 +17,19 @@ describe('userValidation', () => {
   it('should have Required error if username is blank', () => {
     const errors = validate({});
 
-    expect(errors.username).toBe(ERROR_MESSAGES.required);
+    expect(errors.username).toExist();
   });
 
   it('should have Required error if email is blank', () => {
     const errors = validate({});
 
-    expect(errors.email).toBe(ERROR_MESSAGES.required);
+    expect(errors.email).toExist();
   });
 
   it('should have Required error if password is blank', () => {
     const errors = validate({});
 
-    expect(errors.password).toBe(ERROR_MESSAGES.required);
+    expect(errors.password).toExist();
   });
 
   it('should have non space error if username contains only spaces', () => {
@@ -38,7 +37,7 @@ describe('userValidation', () => {
       username: ' ',
     });
 
-    expect(errors.username).toBe(ERROR_MESSAGES.nonSpace);
+    expect(errors.username).toExist();
   });
 
   it('should have length15 error if username length is more than 15', () => {
@@ -46,7 +45,7 @@ describe('userValidation', () => {
       username: '1234567890123456',
     });
 
-    expect(errors.username).toBe(ERROR_MESSAGES.length15);
+    expect(errors.username).toExist();
   });
 
   it('should have invalid email error if email is invalid', () => {
@@ -54,7 +53,7 @@ describe('userValidation', () => {
       email: 'testsdsgd@',
     });
 
-    expect(errors.email).toBe(ERROR_MESSAGES.invalidEmail);
+    expect(errors.email).toExist();
   });
 
   it('should have length300 error if password length is more than 300', () => {
@@ -68,7 +67,7 @@ describe('userValidation', () => {
       password,
     });
 
-    expect(errors.password).toBe(ERROR_MESSAGES.length300);
+    expect(errors.password).toExist();
   });
 
   it('should have invalidConfirmPassword error if passwords don\'t match', () => {
@@ -76,6 +75,6 @@ describe('userValidation', () => {
       confirmPassword: 'passwordtest',
     });
 
-    expect(errors.confirmPassword).toBe(ERROR_MESSAGES.invalidConfirmPassword);
+    expect(errors.confirmPassword).toExist();
   });
 });

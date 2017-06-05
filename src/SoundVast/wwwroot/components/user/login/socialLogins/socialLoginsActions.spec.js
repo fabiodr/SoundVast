@@ -28,7 +28,7 @@ describe('socialLoginsActions', () => {
       }],
     };
 
-    fetchMock.get('account/socialLogins', json);
+    fetchMock.getOnce('account/socialLogins', json);
 
     store.dispatch(actions.getSocialLogins()).then(() => {
       calledActions = store.getActions();

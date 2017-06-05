@@ -9,6 +9,7 @@ import RegisterForm from './form/formContainer';
 
 const setup = (newProps) => {
   const props = {
+    submit: expect.createSpy(),
     ...newProps,
   };
 

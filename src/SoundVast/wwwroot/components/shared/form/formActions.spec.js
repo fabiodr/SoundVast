@@ -25,13 +25,13 @@ describe('formActions', () => {
       antiForgeryToken: '0#DERG£%%FDD£',
     };
 
-    fetchMock.post('account/generateAntiForgeryToken', json);
+    fetchMock.postOnce('account/generateAntiForgeryToken', json);
 
-    store.dispatch(actions.generateAntiForgeryToken('test')).then(() => {
+    store.dispatch(actions.generateAntiForgeryToken('registerForm')).then(() => {
       expect(calledActions).toEqual([{
         meta: {
           field: '__RequestVerificationToken',
-          form: 'test',
+          form: 'registerForm',
           persistentSubmitErrors: undefined,
           touch: undefined,
         },

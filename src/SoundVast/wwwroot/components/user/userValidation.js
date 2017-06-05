@@ -1,30 +1,28 @@
-import ERROR_MESSAGES from '../shared/form/validation/errorMessages';
-
 const validate = (values) => {
   const errors = {};
 
   if (values.username === undefined) {
-    errors.username = ERROR_MESSAGES.required;
+    errors.username = 'Username is required';
   } else if (!/^\S+$/.test(values.username)) {
-    errors.username = ERROR_MESSAGES.nonSpace;
+    errors.username = 'Must not contain only spaces';
   } else if (values.username.length > 15) {
-    errors.username = ERROR_MESSAGES.length15;
+    errors.username = 'Must not be more than 15 characters';
   }
 
   if (values.email === undefined) {
-    errors.email = ERROR_MESSAGES.required;
+    errors.email = 'Email is required';
   } else if (!/^.+@.+$/i.test(values.email)) {
-    errors.email = ERROR_MESSAGES.invalidEmail;
+    errors.email = 'Must be a valid email address';
   }
 
   if (values.password === undefined) {
-    errors.password = ERROR_MESSAGES.required;
+    errors.password = 'Password is required';
   } else if (values.password.length > 300) {
-    errors.password = ERROR_MESSAGES.length300;
+    errors.password = 'Must not be more than 300 characters';
   }
 
   if (values.confirmPassword !== values.password) {
-    errors.confirmPassword = ERROR_MESSAGES.invalidConfirmPassword;
+    errors.confirmPassword = 'Passwords must match';
   }
 
   return errors;
