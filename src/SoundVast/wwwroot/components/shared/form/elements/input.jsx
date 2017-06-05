@@ -15,7 +15,10 @@ Input.propTypes = {
   input: PropTypes.object.isRequired,
   meta: PropTypes.shape({
     touched: PropTypes.bool.isRequired,
-    error: PropTypes.string,
+    error: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.array,
+    ]),
   }).isRequired,
 };
 

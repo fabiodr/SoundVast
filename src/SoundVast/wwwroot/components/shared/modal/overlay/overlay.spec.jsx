@@ -6,7 +6,7 @@ import ModalOverlay from './overlay';
 
 const setup = (newProps) => {
   const props = {
-    showModal: expect.createSpy(),
+    hideModal: expect.createSpy(),
     ...newProps,
   };
 
@@ -27,7 +27,7 @@ describe('ModalOverlay', () => {
 
     wrapper.simulate('click');
 
-    expect(props.showModal).toHaveBeenCalled();
-    expect(props.showModal.calls[0].arguments.length).toBe(0);
+    expect(props.hideModal).toHaveBeenCalled();
+    expect(props.hideModal.calls[0].arguments.length).toBe(0);
   });
 });

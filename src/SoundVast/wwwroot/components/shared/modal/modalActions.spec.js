@@ -26,4 +26,14 @@ describe('modalActions', () => {
       },
     ]);
   });
+
+  it('should hide modal', () => {
+    store.dispatch(actions.hideModal());
+
+    expect(calledActions).toEqual([
+      {
+        type: 'HIDE_MODAL',
+      },
+    ]);
+  });
 });

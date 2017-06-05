@@ -3,7 +3,7 @@ import classNames from 'classnames';
 
 import styles from './modal.less';
 import Modal from './modal';
-import { showModal } from './modalActions';
+import { hideModal } from './modalActions';
 
 const mapStateToProps = ({ modal }, { id }) => ({
   containerClass: classNames({
@@ -12,5 +12,5 @@ const mapStateToProps = ({ modal }, { id }) => ({
 });
 
 export default connect(mapStateToProps, {
-  showModal,
+  hideModal,
 })(Modal);

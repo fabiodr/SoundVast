@@ -14,25 +14,25 @@ describe('userValidation', () => {
     expect(errors).toEqual({});
   });
 
-  it('should have Required error if username is blank', () => {
+  it('should have an error if username is blank', () => {
     const errors = validate({});
 
     expect(errors.username).toExist();
   });
 
-  it('should have Required error if email is blank', () => {
+  it('should have an error if email is blank', () => {
     const errors = validate({});
 
     expect(errors.email).toExist();
   });
 
-  it('should have Required error if password is blank', () => {
+  it('should have an error if password is blank', () => {
     const errors = validate({});
 
     expect(errors.password).toExist();
   });
 
-  it('should have non space error if username contains only spaces', () => {
+  it('should have an error if username contains only spaces', () => {
     const errors = validate({
       username: ' ',
     });
@@ -40,7 +40,7 @@ describe('userValidation', () => {
     expect(errors.username).toExist();
   });
 
-  it('should have length15 error if username length is more than 15', () => {
+  it('should have an error if username length is more than 15', () => {
     const errors = validate({
       username: '1234567890123456',
     });
@@ -48,7 +48,7 @@ describe('userValidation', () => {
     expect(errors.username).toExist();
   });
 
-  it('should have invalid email error if email is invalid', () => {
+  it('should have an error if email is invalid', () => {
     const errors = validate({
       email: 'testsdsgd@',
     });
@@ -56,7 +56,7 @@ describe('userValidation', () => {
     expect(errors.email).toExist();
   });
 
-  it('should have length300 error if password length is more than 300', () => {
+  it('should have an error if password length is more than 300', () => {
     let password = '';
 
     for (let index = 0; index < 301; index += 1) {
@@ -70,7 +70,7 @@ describe('userValidation', () => {
     expect(errors.password).toExist();
   });
 
-  it('should have invalidConfirmPassword error if passwords don\'t match', () => {
+  it('should have an error if passwords don\'t match', () => {
     const errors = validate({
       confirmPassword: 'passwordtest',
     });

@@ -13,7 +13,10 @@ Validate.defaultProps = {
 
 Validate.propTypes = {
   touched: PropTypes.bool.isRequired,
-  error: PropTypes.string,
+  error: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array,
+  ]),
 };
 
 export default Validate;

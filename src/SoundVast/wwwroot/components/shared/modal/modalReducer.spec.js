@@ -11,7 +11,7 @@ describe('modalReducer', () => {
     expect(state).toEqual({});
   });
 
-  it('should get current modal to show', () => {
+  it('should handle showing the modal', () => {
     const id = 'test';
     const state = modalReducer(null, {
       type: 'SHOW_MODAL',
@@ -20,6 +20,16 @@ describe('modalReducer', () => {
 
     expect(state).toEqual({
       currentModal: id,
+    });
+  });
+
+  it('should handle hiding the modal', () => {
+    const state = modalReducer(null, {
+      type: 'HIDE_MODAL',
+    });
+
+    expect(state).toEqual({
+      currentModal: null,
     });
   });
 });

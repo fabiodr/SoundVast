@@ -4,6 +4,10 @@ export default (state = {}, action) => {
       return {
         currentModal: action.id,
       };
+    case 'HIDE_MODAL':
+      return {
+        currentModal: null,
+      };
     default: return state;
   }
 };

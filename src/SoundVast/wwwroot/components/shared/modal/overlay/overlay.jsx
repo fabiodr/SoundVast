@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 
 import styles from './overlay.less';
 
-const Overlay = ({ showModal }) =>
-  <div tabIndex={-1} role="button" className={styles.overlay} onClick={showModal} />;
+const Overlay = ({ hideModal }) =>
+  <div tabIndex={-1} role="button" className={styles.overlay} onClick={hideModal} />;
 
 Overlay.propTypes = {
-  showModal: PropTypes.func.isRequired,
+  hideModal: PropTypes.func.isRequired,
 };
 
 export default Overlay;
