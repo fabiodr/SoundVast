@@ -5,10 +5,12 @@ import FrontPage from '../frontPage/frontPage';
 import Header from '../header/header';
 import User from '../user/userContainer';
 
-const T = (props) =>{
-  debugger;
-  return null;
-}
+const T = (props) => {
+  const params = new URLSearchParams(props.location.search);
+
+  const foo = params.get('email');
+  const e = params.get('returnUrl');
+};
 
 export default () => (
   <BrowserRouter>

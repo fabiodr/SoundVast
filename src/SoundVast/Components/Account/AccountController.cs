@@ -231,7 +231,11 @@ namespace SoundVast.Components.Account
             ViewData["ReturnUrl"] = returnUrl;
             ViewData["LoginProvider"] = info.LoginProvider;
             var email = info.Principal.FindFirstValue(ClaimTypes.Email);
-            var redirectUrl = Url.Action("t", "Account", new { ReturnUrl = returnUrl });
+            var redirectUrl = Url.Action("t", "Account", new
+            {
+                ReturnUrl = returnUrl,
+                email
+            });
 
             return RedirectToLocal(redirectUrl);
             //return Ok(new

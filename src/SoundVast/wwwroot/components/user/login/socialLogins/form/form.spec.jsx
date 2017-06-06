@@ -36,7 +36,7 @@ describe('SocialLoginsForm', () => {
   });
 
   it('should render an anti-forgery token', () => {
-    ({ wrapper, props } = setup());
+    ({ wrapper } = setup());
 
     expect(wrapper.find(AntiForgeryToken).length).toBe(1);
   });
