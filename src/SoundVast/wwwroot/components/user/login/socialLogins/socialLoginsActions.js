@@ -1,3 +1,5 @@
+/* eslint-disable import/prefer-default-export */
+
 export const getSocialLogins = () => dispatch =>
 fetch('account/socialLogins').then(response =>
   response.json().then((json) => {

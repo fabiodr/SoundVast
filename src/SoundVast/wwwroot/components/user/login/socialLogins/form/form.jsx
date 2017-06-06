@@ -7,10 +7,10 @@ import SocialLogin from './socialLogin/socialLogin';
 import AntiForgeryToken from '../../../../shared/form/antiForgeryToken/antiForgeryTokenContainer';
 
 const Form = ({ loginProviders }) => (
-  <form action="account/externalLogin" method="post" className="form-horizontal">
-    <AntiForgeryToken />
+  <form action="account/externalLogin" method="post">
+    <AntiForgeryToken form="socialLogin" />
     <div className={styles.socialLogins}>
-      <div className="row-eq-height">
+      <div>
         {
           loginProviders.map(loginProvider => (
             <SocialLogin

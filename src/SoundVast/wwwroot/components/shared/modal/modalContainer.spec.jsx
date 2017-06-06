@@ -32,15 +32,15 @@ const setup = (newProps) => {
 describe('ModalContainer', () => {
   let wrapper;
 
-  it('containerClass should have hidden style when the modal ids don\'t match', () => {
+  it('modalContainerClass should have hidden style when the modal ids don\'t match', () => {
     ({ wrapper } = setup());
 
-    expect(wrapper.prop('containerClass')).toContain(styles.hide);
+    expect(wrapper.prop('modalContainerClass')).toContain(styles.hide);
   });
 
-  it('containerClass should not have hidden style when the modal ids match', () => {
+  it('modalContainerClass should not have hidden style when the modal ids match', () => {
     ({ wrapper } = setup({ id: 'test' }));
 
-    expect(wrapper.prop('containerClass')).toNotContain(styles.hide);
+    expect(wrapper.prop('modalContainerClass')).toNotContain(styles.hide);
   });
 });

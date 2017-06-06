@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import styles from './modal.less';
 import ModalOverlay from './overlay/overlay';
 
-const Modal = ({ children, title, containerClass, hideModal }) => (
-  <div className={containerClass}>
-    <div className={styles.layout}>
+const Modal = ({ children, title, modalContainerClass, hideModal }) => (
+  <div className={modalContainerClass}>
+    <div className={styles.modal}>
       <button onClick={hideModal} className={styles.close}>
         <span role="img" aria-label="close">
           ❌
@@ -24,7 +24,7 @@ const Modal = ({ children, title, containerClass, hideModal }) => (
 Modal.propTypes = {
   children: PropTypes.node.isRequired,
   title: PropTypes.string.isRequired,
-  containerClass: PropTypes.string.isRequired,
+  modalContainerClass: PropTypes.string.isRequired,
   hideModal: PropTypes.func.isRequired,
 };
 

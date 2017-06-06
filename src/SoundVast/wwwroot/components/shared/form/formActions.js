@@ -1,3 +1,5 @@
+/* eslint-disable import/prefer-default-export */
+
 import { change } from 'redux-form';
 
 export const generateAntiForgeryToken = form => dispatch =>

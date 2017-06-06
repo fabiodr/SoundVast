@@ -24,21 +24,19 @@ const setup = (newProps) => {
 describe('Register', () => {
   let wrapper;
 
-  it('should wrap component in a modal', () => {
+  it('should render social logins in a Modal', () => {
     ({ wrapper } = setup());
 
-    expect(wrapper.type()).toBe(Modal);
+    const modal = wrapper.find(Modal);
+
+    expect(modal.find(SocialLoginsContainer).length).toBe(1);
   });
 
-  it('should render social logins', () => {
+  it('should render a register form in a Modal', () => {
     ({ wrapper } = setup());
 
-    expect(wrapper.find(SocialLoginsContainer).length).toBe(1);
-  });
+    const modal = wrapper.find(Modal);
 
-  it('should render a register form', () => {
-    ({ wrapper } = setup());
-
-    expect(wrapper.find(RegisterForm).length).toBe(1);
+    expect(modal.find(RegisterForm).length).toBe(1);
   });
 });

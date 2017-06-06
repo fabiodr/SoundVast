@@ -6,7 +6,7 @@ import Modal from './modal';
 import { hideModal } from './modalActions';
 
 const mapStateToProps = ({ modal }, { id }) => ({
-  containerClass: classNames({
+  modalContainerClass: classNames({
     [styles.hide]: modal.currentModal !== id,
   }),
 });

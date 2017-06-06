@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import 'isomorphic-fetch';
 
+import './app.less';
 import Routing from './routing';
 import store from './store';
 

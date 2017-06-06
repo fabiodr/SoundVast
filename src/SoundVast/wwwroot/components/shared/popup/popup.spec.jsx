@@ -2,15 +2,16 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import expect from 'expect';
 
-import Message from './message';
+import Popup from './popup';
 
 const setup = (newProps) => {
   const props = {
+    popupClass: 'test',
     children: <div className="@@test" />,
     ...newProps,
   };
 
-  const wrapper = shallow(<Message {...props} />);
+  const wrapper = shallow(<Popup {...props} />);
 
   return {
     wrapper,
@@ -18,7 +19,7 @@ const setup = (newProps) => {
   };
 };
 
-describe('Message', () => {
+describe('Popup', () => {
   let wrapper;
   let props;
 

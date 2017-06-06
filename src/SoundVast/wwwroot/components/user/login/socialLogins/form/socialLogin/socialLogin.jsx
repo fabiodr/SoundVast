@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import styles from './socialLogin.less';
 
 const SocialLogin = ({ authenticationScheme, displayName }) => (
-  <div className="col-centered">
+  <div>
     <button
       type="submit"
       className={styles.submit}

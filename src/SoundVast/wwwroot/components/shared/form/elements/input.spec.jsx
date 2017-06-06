@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import expect from 'expect';
 
 import FormInput from './input';
-import Validate from '../validation/validate';
+import ValidationError from '../validation/error/error';
 
 const setup = (newProps) => {
   const props = {
@@ -31,7 +31,7 @@ describe('FormInput', () => {
     expect(wrapper.find('input').length).toBe(1);
   });
 
-  it('should render Validate', () => {
+  it('should render ValidationError', () => {
     const error = 'Required';
     ({ wrapper } = setup({
       meta: {
@@ -40,7 +40,7 @@ describe('FormInput', () => {
       },
     }));
 
-    expect(wrapper.find(Validate).length).toBe(1);
-    expect(wrapper.find(Validate).prop('error')).toBe(error);
+    expect(wrapper.find(ValidationError).length).toBe(1);
+    expect(wrapper.find(ValidationError).prop('error')).toBe(error);
   });
 });

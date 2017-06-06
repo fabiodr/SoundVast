@@ -1,4 +1,4 @@
-import React from 'react';
+/* import React from 'react';
 import configureMockStore from 'redux-mock-store';
 import { mount } from 'enzyme';
 import expect from 'expect';
@@ -39,9 +39,9 @@ const setup = (newProps) => {
 };
 
 describe('UserContainer', () => {
-  // it('should get user details on load', () => {
-  //   setup();
+  it('should get user details on load', () => {
+    setup();
 
-  //   expect(store.dispatch).toHaveBeenCalledWith(getUserDetails());
-  // });
-});
+    expect(store.dispatch).toHaveBeenCalledWith(getUserDetails());
+  });
+});*/

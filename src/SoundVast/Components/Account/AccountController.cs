@@ -131,7 +131,7 @@ namespace SoundVast.Components.Account
             {
                 var user = new ApplicationUser
                 {
-                    UserName = model.Email,
+                    UserName = model.Username,
                     Email = model.Email
                 };
                 var result = await _userManager.CreateAsync(user, model.Password);
@@ -490,7 +490,7 @@ namespace SoundVast.Components.Account
         {
             foreach (var error in result.Errors)
             {
-                ModelState.AddModelError(string.Empty, error.Description);
+                ModelState.AddModelError("_error", error.Description);
             }
         }
 

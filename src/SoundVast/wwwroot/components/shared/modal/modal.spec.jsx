@@ -7,7 +7,7 @@ import ModalOverlay from './overlay/overlay';
 
 const setup = (newProps) => {
   const props = {
-    containerClass: 'test',
+    modalContainerClass: 'test',
     children: <div className="@@test" />,
     title: 'test-title',
     hideModal: expect.createSpy(),

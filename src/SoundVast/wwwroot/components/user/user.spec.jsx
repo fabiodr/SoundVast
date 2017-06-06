@@ -4,6 +4,7 @@ import expect from 'expect';
 
 import User from './user';
 import Register from './register/register';
+import Login from './login/login';
 
 const setup = (newProps) => {
   const props = {
@@ -25,5 +26,11 @@ describe('User', () => {
     ({ wrapper } = setup());
 
     expect(wrapper.find(Register).length).toBe(1);
+  });
+
+  it('should render Login', () => {
+    ({ wrapper } = setup());
+
+    expect(wrapper.find(Login).length).toBe(1);
   });
 });

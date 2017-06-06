@@ -1,4 +1,4 @@
-.layout {
+.modal {
     position: fixed;
     top: 15%;
     left: 50%;
@@ -7,6 +7,8 @@
     min-width: 400px;
     background-color: white;
     z-index: 100;
+    padding: 25px;
+    border-radius: 2px;
     
     @media (max-width: 500px) {
         height: 100vh;
@@ -15,6 +17,7 @@
         transform: translateX(0%);
         width: 100%;
         min-width: 100px;
+        border-radius: 0;
     }
 }
 
@@ -24,20 +27,21 @@
 
 .close,
 .close:hover {
-    cursor: pointer;
-    font-size: 15px;
     position: absolute;
     right: 6px;
-    text-decoration: none;
-    top: 4px;
-}
-
-.title {
-    margin-top: 24px;
-    margin-bottom: 8px;
+    top: 6px;
+    border:none;
+    background-color: initial;
     font-size: 18px;
 }
 
+.title {
+    margin-top: 14px;
+    margin-bottom: 10px;
+    font-size: 23px;
+}
+
 .hr {
-    margin-top: 2px;
+    margin-top: 15px;
+    margin-bottom: 15px;
 }

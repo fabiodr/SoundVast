@@ -1,15 +1,21 @@
-/* eslint-disable react/forbid-prop-types*/
+/* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
-import Validate from '../validation/validate';
+import styles from './input.less';
+import ValidationError from '../validation/error/error';
 
-const Input = ({ input, meta: { touched, error }, ...props }) => (
-  <div>
-    <input {...input} {...props} />
-    <Validate touched={touched} error={error} />
+const Input = ({ input, meta: { touched, error }, className, ...props }) => (
+  <div className={styles.inputContainer}>
+    <input className={classNames(className, styles.input)} {...input} {...props} />
+    <ValidationError touched={touched} error={error} />
   </div>
 );
+
+Input.defaultProps = {
+  className: null,
+};
 
 Input.propTypes = {
   input: PropTypes.object.isRequired,
@@ -20,6 +26,7 @@ Input.propTypes = {
       PropTypes.array,
     ]),
   }).isRequired,
+  className: PropTypes.string,
 };
 
 export default Input;
