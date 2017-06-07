@@ -29,7 +29,9 @@ const Form = ({ error, handleSubmit }) => (
     </div>
     <br />
 
-    <button className={classNames(genericStyles.button, styles.register)} type="submit">Register</button>
+    <button className={classNames(genericStyles.button, styles.register)} type="submit">
+      Register
+    </button>
   </form>
 );
 

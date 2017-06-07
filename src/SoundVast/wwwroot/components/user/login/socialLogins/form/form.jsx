@@ -8,7 +8,7 @@ import AntiForgeryToken from '../../../../shared/form/antiForgeryToken/antiForge
 
 const Form = ({ loginProviders }) => (
   <form action="account/externalLogin" method="post">
-    <AntiForgeryToken form="socialLogin" />
+    <AntiForgeryToken form="socialLogins" />
     <div className={styles.socialLogins}>
       <div>
         {

@@ -212,7 +212,7 @@ namespace SoundVast.Components.Account
             }
 
             // Sign in the user with this external login provider if the user already has a login.
-            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false);
+            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, true);
             if (result.Succeeded)
             {
                 _logger.LogInformation(5, "User logged in with {Name} provider.", info.LoginProvider);
@@ -228,16 +228,15 @@ namespace SoundVast.Components.Account
             }
 
             // If the user does not have an account, then ask the user to create an account.
-            ViewData["ReturnUrl"] = returnUrl;
-            ViewData["LoginProvider"] = info.LoginProvider;
             var email = info.Principal.FindFirstValue(ClaimTypes.Email);
-            var redirectUrl = Url.Action("t", "Account", new
+            var redirectUrl = Url.Action("ExternalLoginConfirmation", "Account", new
             {
-                ReturnUrl = returnUrl,
+                loginProvider = info.LoginProvider,
+                returnUrl,
                 email
             });
 
-            return RedirectToLocal(redirectUrl);
+            return LocalRedirect(redirectUrl);
             //return Ok(new
             //{
             //    email

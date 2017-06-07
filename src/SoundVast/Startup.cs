@@ -16,6 +16,7 @@ using SoundVast.Storage.CloudStorage;
 using SoundVast.Storage.CloudStorage.AzureStorage;
 using SoundVast.Storage.FileStorage;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using SoundVast.Components;
 using SoundVast.Components.Audio;
@@ -162,7 +163,7 @@ namespace SoundVast
 
             app.UseIdentity();
 
-            app.UseFacebookAuthentication(new FacebookOptions()
+            app.UseFacebookAuthentication(new FacebookOptions
             {
                 AppId = _configuration["Facebook:Id"],
                 AppSecret = _configuration["Facebook:Secret"]

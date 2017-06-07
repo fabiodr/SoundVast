@@ -1,5 +1,6 @@
 ﻿import jsdom from 'jsdom';
 import 'isomorphic-fetch';
+import 'url-search-params-polyfill';
 import hook from 'css-modules-require-hook';
 
 hook({
