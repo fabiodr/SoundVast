@@ -27,7 +27,7 @@ describe('userActions', () => {
       userName: 'Yoshimiii',
     };
 
-    fetchMock.getOnce('account/userDetails', json);
+    fetchMock.getOnce('/account/userDetails', json);
 
     store.dispatch(actions.getUserDetails()).then(() => {
       expect(calledActions).toEqual([{

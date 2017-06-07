@@ -22,7 +22,7 @@ describe('registerFormActions', () => {
   });
 
   it('should post form', () => {
-    fetchMock.postOnce('account/register', 200);
+    fetchMock.postOnce('/account/register', 200);
 
     store.dispatch(actions.submit()).then(() => {
       expect(fetchMock.called()).toBe(true);
@@ -35,7 +35,7 @@ describe('registerFormActions', () => {
       password: 'Required',
     };
 
-    fetchMock.postOnce('account/register', {
+    fetchMock.postOnce('/account/register', {
       status: 400,
       body: modelErrors,
     });
@@ -47,7 +47,7 @@ describe('registerFormActions', () => {
   });
 
   it('should show popup message on success', () => {
-    fetchMock.postOnce('account/register', 200);
+    fetchMock.postOnce('/account/register', 200);
 
     store.dispatch(actions.submit()).then(() => {
       expect(calledActions).toContain({
@@ -58,7 +58,7 @@ describe('registerFormActions', () => {
   });
 
   it('should close modal on success', () => {
-    fetchMock.postOnce('account/register', 200);
+    fetchMock.postOnce('/account/register', 200);
 
     store.dispatch(actions.submit()).then(() => {
       expect(calledActions).toContain({
@@ -68,7 +68,7 @@ describe('registerFormActions', () => {
   });
 
   it('should do nothing on failure', () => {
-    fetchMock.postOnce('account/register', 500);
+    fetchMock.postOnce('/account/register', 500);
 
     store.dispatch(actions.submit()).then(() => {
       expect(calledActions).toEqual([]);

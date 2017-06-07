@@ -4,13 +4,13 @@ import { compose } from 'recompose';
 
 import { submit } from '../../../../../shared/form/formActions';
 import SocialLoginConfirmationForm from './form';
+import userValidation from '../../../../userValidation';
 
-const mapStateToProps = (state) => {
-  debugger; return({
+const mapStateToProps = (state, { email }) => ({
   initialValues: {
-    email: state.email,
+    email,
   },
-});}
+});
 
 const mapDispatchToProps = dispatch => ({
   onSubmit: (values) => {
@@ -30,5 +30,6 @@ export default compose(
   reduxForm({
     form: 'socialLoginConfirmation',
     fields: ['__RequestVerificationToken'],
+    validate: userValidation,
   }),
 )(SocialLoginConfirmationForm);

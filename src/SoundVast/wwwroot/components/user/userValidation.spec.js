@@ -1,10 +1,10 @@
 import expect from 'expect';
 
-import validate from './userValidation';
+import userValidation from './userValidation';
 
 describe('userValidation', () => {
   it('should return no errors if every field is valid', () => {
-    const errors = validate({
+    const errors = userValidation({
       username: 'Yoshimiii',
       email: '123test@gmail.com',
       password: 'passwordtest',
@@ -15,25 +15,25 @@ describe('userValidation', () => {
   });
 
   it('should have an error if username is blank', () => {
-    const errors = validate({});
+    const errors = userValidation({});
 
     expect(errors.username).toExist();
   });
 
   it('should have an error if email is blank', () => {
-    const errors = validate({});
+    const errors = userValidation({});
 
     expect(errors.email).toExist();
   });
 
   it('should have an error if password is blank', () => {
-    const errors = validate({});
+    const errors = userValidation({});
 
     expect(errors.password).toExist();
   });
 
   it('should have an error if username contains only spaces', () => {
-    const errors = validate({
+    const errors = userValidation({
       username: ' ',
     });
 
@@ -41,7 +41,7 @@ describe('userValidation', () => {
   });
 
   it('should have an error if username length is more than 15', () => {
-    const errors = validate({
+    const errors = userValidation({
       username: '1234567890123456',
     });
 
@@ -49,7 +49,7 @@ describe('userValidation', () => {
   });
 
   it('should have an error if email is invalid', () => {
-    const errors = validate({
+    const errors = userValidation({
       email: 'testsdsgd@',
     });
 
@@ -63,7 +63,7 @@ describe('userValidation', () => {
       password += '1';
     }
 
-    const errors = validate({
+    const errors = userValidation({
       password,
     });
 
@@ -71,7 +71,7 @@ describe('userValidation', () => {
   });
 
   it('should have an error if passwords don\'t match', () => {
-    const errors = validate({
+    const errors = userValidation({
       confirmPassword: 'passwordtest',
     });
 

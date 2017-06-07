@@ -3,7 +3,7 @@ import { compose } from 'recompose';
 import { connect } from 'react-redux';
 
 import RegisterForm from './form';
-import validate from '../../userValidation';
+import userValidation from '../../userValidation';
 import { submit } from '../form/formActions';
 
 const mapDispatchToProps = dispatch => ({
@@ -23,6 +23,6 @@ export default compose(
   reduxForm({
     form: 'register',
     fields: ['__RequestVerificationToken'],
-    validate,
+    validate: userValidation,
   }),
 )(RegisterForm);

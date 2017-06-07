@@ -5,7 +5,7 @@ import { showPopup } from '../../../shared/popup/popupActions';
 import { hideModal } from '../../../shared/modal/modalActions';
 
 export const submit = formData => dispatch =>
-fetch('account/register', {
+fetch('/account/register', {
   method: 'post',
   body: formData,
   credentials: 'same-origin',
