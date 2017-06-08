@@ -1,6 +1,5 @@
 import React from 'react';
 import { Field } from 'redux-form';
-import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
 import AntiForgeryToken from '../../../../../shared/form/antiForgeryToken/antiForgeryTokenContainer';
@@ -24,7 +23,7 @@ const Form = ({ error, handleSubmit, loginProvider }) => (
     <div className="form-group">
       <Field name="email" component={FormInput} type="email" placeholder="Email" />
     </div>
-    <button className={classNames(genericStyles.button)} type="submit">
+    <button className={genericStyles.button} type="submit">
       Register
     </button>
   </form>

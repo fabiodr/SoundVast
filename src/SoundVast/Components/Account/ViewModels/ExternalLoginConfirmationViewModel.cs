@@ -9,7 +9,7 @@ namespace SoundVast.Components.Account.ViewModels
     public class ExternalLoginConfirmationViewModel
     {
         [Required]
-        [EmailAddress]
+        [RegularExpression(@"^.+@.+$", ErrorMessage = "Must be a valid email address")]
         public string Email { get; set; }
     }
 }

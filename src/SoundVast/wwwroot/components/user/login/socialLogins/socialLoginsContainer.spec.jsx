@@ -2,9 +2,15 @@ import React from 'react';
 import configureMockStore from 'redux-mock-store';
 import { mount } from 'enzyme';
 import expect from 'expect';
+import proxyquire from 'proxyquire';
 
-import SocialLoginsContainer from './socialLoginsContainer';
 import { getSocialLogins } from './socialLoginsActions';
+
+proxyquire.noCallThru();
+
+const SocialLoginsContainer = proxyquire('./socialLoginsContainer', {
+  './socialLogins': () => null,
+}).default;
 
 const store = configureMockStore()({
   socialLogins: {

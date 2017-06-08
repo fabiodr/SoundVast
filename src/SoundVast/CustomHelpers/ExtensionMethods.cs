@@ -9,7 +9,10 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using SoundVast.Utilities;
 using System.Linq.Expressions;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace SoundVast.CustomHelpers
 {
@@ -125,6 +128,18 @@ namespace SoundVast.CustomHelpers
         public static void IgnoreUnmapped<TSrc, TDest>(this IProfileExpression profile)
         {
             profile.IgnoreUnmapped(typeof(TSrc), typeof(TDest));
+        }
+
+        public static string ToJsonString(this ModelStateDictionary modelState)
+        {
+            var modelStateErrors = modelState.ToDictionary(x => x.Key, x => x.Value.Errors.Select(e => e.ErrorMessage));
+            var serializerSettings = new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
+            var jsonString = JsonConvert.SerializeObject(modelStateErrors, serializerSettings);
+
+            return jsonString;
         }
     }
 }

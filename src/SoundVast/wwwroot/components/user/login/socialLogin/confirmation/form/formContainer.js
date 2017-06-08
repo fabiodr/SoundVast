@@ -2,7 +2,7 @@ import { reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 
-import { submit } from '../../../../../shared/form/formActions';
+import { submit } from './formActions';
 import SocialLoginConfirmationForm from './form';
 import userValidation from '../../../../userValidation';
 

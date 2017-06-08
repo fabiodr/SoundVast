@@ -2,33 +2,28 @@ import React from 'react';
 import configureMockStore from 'redux-mock-store';
 import { mount } from 'enzyme';
 import expect from 'expect';
-import { reduxForm } from 'redux-form';
-import { Provider } from 'react-redux';
+import proxyquire from 'proxyquire';
 
-import AntiForgeryTokenContainer from './antiForgeryTokenContainer';
 import { generateAntiForgeryToken } from '../formActions';
 
-const store = configureMockStore()({
-  form: {
-    antiForgeryToken: '0#DERG£%%FDD£',
-  },
-});
+proxyquire.noCallThru();
+
+const AntiForgeryTokenContainer = proxyquire('./antiForgeryTokenContainer', {
+  './antiForgeryToken': () => null,
+}).default;
+
+const store = configureMockStore()({});
 
 const setup = (newProps) => {
   const props = {
+    form: 'testForm',
     ...newProps,
   };
   expect.spyOn(store, 'dispatch');
 
-
-  const ReduxFormMock = reduxForm({
-    form: 'test',
-  })(AntiForgeryTokenContainer);
-
   const wrapper = mount(
-    <Provider store={store}>
-      <ReduxFormMock {...props} />
-    </Provider>,
+    <AntiForgeryTokenContainer {...props} />,
+    { context: { store } },
   );
 
   return {
