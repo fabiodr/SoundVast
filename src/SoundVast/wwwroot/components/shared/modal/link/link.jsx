@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const Link = ({ children, modalId, showModal }) => (
-  <button onClick={() => showModal(modalId)}>
+  <button type="button" onClick={() => showModal(modalId)}>
     {children}
   </button>
 );

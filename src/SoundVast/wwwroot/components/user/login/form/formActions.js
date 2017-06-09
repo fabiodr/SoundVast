@@ -1,0 +1,22 @@
+/* eslint-disable import/prefer-default-export */
+
+import { SubmissionError } from 'redux-form';
+import { showPopup } from '../../../shared/popup/popupActions';
+import { hideModal } from '../../../shared/modal/modalActions';
+
+export const submit = formData => dispatch =>
+fetch('/account/login', {
+  method: 'post',
+  body: formData,
+  credentials: 'same-origin',
+}).then((response) => {
+  if (response.ok) {
+    dispatch(hideModal());
+    return dispatch(showPopup('login'));
+  } else if (response.status === 400) {
+    return response.json().then((modelErrors) => {
+      throw new SubmissionError(modelErrors);
+    });
+  }
+  return null;
+});

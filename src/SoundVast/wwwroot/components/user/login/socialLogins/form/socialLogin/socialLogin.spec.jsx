@@ -25,6 +25,6 @@ describe('SocialLogin', () => {
   it('should render social login button', () => {
     ({ wrapper } = setup());
 
-    expect(wrapper.find('button').filter('[type="submit"]').length).toBe(1);
+    expect(wrapper.find('button').length).toBe(1);
   });
 });

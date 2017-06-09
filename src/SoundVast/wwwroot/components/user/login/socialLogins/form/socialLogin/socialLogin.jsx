@@ -6,7 +6,6 @@ import styles from './socialLogin.less';
 const SocialLogin = ({ authenticationScheme, displayName }) => (
   <div>
     <button
-      type="submit"
       className={styles.submit}
       value={authenticationScheme}
       name="provider"

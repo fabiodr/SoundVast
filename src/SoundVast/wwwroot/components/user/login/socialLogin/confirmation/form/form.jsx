@@ -23,7 +23,7 @@ const Form = ({ error, handleSubmit, loginProvider }) => (
     <div className="form-group">
       <Field name="email" component={FormInput} type="email" placeholder="Email" />
     </div>
-    <button className={genericStyles.button} type="submit">
+    <button className={genericStyles.button}>
       Register
     </button>
   </form>

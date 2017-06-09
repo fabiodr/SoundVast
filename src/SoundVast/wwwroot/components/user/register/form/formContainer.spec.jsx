@@ -1,21 +1,16 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
-import configureMockStore from 'redux-mock-store';
 import { mount } from 'enzyme';
 import expect from 'expect';
-import proxyquire from 'proxyquire';
+import { reducer as formReducer } from 'redux-form';
+import { createStore, combineReducers } from 'redux';
+import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
 
 import { submit } from '../form/formActions';
+import RegisterFormContainer from './formContainer';
 
-proxyquire.noCallThru();
-
-const FormContainer = proxyquire('./formContainer', {
-  './form': ({ handleSubmit }) => (
-    <form className="@@testForm" onSubmit={handleSubmit} />
-  ),
-}).default;
-
-const store = configureMockStore()({});
+const store = createStore(combineReducers({ form: formReducer }));
 
 const setup = (newProps) => {
   const props = {
@@ -24,8 +19,11 @@ const setup = (newProps) => {
   expect.spyOn(store, 'dispatch');
 
   const wrapper = mount(
-    <FormContainer {...props} />,
-    { context: { store } },
+    <Provider store={store}>
+      <BrowserRouter>
+        <RegisterFormContainer {...props} />
+      </BrowserRouter>
+    </Provider>,
   );
 
   return {
@@ -34,13 +32,13 @@ const setup = (newProps) => {
   };
 };
 
-describe('FormContainer', () => {
+describe('RegisterFormContainer.integration', () => {
   let wrapper;
 
   it('should submit formData in onSubmit handler', () => {
     ({ wrapper } = setup());
 
-    wrapper.find('.@@testForm').simulate('submit');
+    wrapper.find('form').simulate('submit', { test: 3 });
 
     expect(store.dispatch).toHaveBeenCalledWith(submit());
   });

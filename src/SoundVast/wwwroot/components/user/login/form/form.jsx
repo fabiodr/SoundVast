@@ -2,6 +2,7 @@ import React from 'react';
 import { Field } from 'redux-form';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import ModalLink from '../../../shared/modal/link/linkContainer';
 
 import styles from './form.less';
 import genericStyles from '../../../shared/generic.less';
@@ -10,26 +11,26 @@ import FormInput from '../../../shared/form/elements/input';
 
 const Form = ({ error, handleSubmit }) => (
   <form onSubmit={handleSubmit} action="">
-    <AntiForgeryToken form="register" />
+    <AntiForgeryToken form="login" />
 
     {error}
 
     <div className={styles.formGroup}>
       <Field className={styles.input} name="username" component={FormInput} placeholder="Username" />
-      <Field className={styles.input} name="email" component={FormInput} type="email" placeholder="Email" />
       <Field className={styles.input} name="password" component={FormInput} type="password" placeholder="Password" />
-      <Field className={styles.input} name="confirmPassword" component={FormInput} type="password" placeholder="Confirm password" />
+    </div>
+
+    <Field name="rememberMe" component="checkbox" checked />
+    <div>
+      Or <ModalLink modalId="register">register</ModalLink> if you don&apos;t have an account.
     </div>
     <div>
-      Or <Link to="account/login">login</Link> if you already have an account.
-    </div>
-    <div className={styles.tos}>
-        By registering you are agreeing to our <a href="content/termsOfUse">terms of use.</a>
+      <Link to="account/forgotPassword">Forgotten your password?</Link>
     </div>
     <br />
 
     <button className={genericStyles.button}>
-      Register
+      Login
     </button>
   </form>
 );
