@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 
 import styles from './error.less';
 
-const Error = ({ touched, error }) => (
-  touched && error !== null ?
+const Error = ({ error }) => (
+  error !== null ?
     <span className={styles.error}>
       {error}
     </span>
@@ -16,11 +16,7 @@ Error.defaultProps = {
 };
 
 Error.propTypes = {
-  touched: PropTypes.bool.isRequired,
-  error: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.array,
-  ]),
+  error: PropTypes.string,
 };
 
 export default Error;

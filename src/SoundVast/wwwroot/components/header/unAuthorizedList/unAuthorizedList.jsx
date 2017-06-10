@@ -5,12 +5,12 @@ import styles from '../header.less';
 import ModalLink from '../../shared/modal/link/linkContainer';
 
 const UnAuthorizedList = ({ isLoggedIn }) => (
-  !isLoggedIn ?
+  //!isLoggedIn ?
     <ul className={styles.outerList}>
       <li><ModalLink modalId="login">Login</ModalLink></li>
       <li><ModalLink modalId="register">Register</ModalLink></li>
     </ul>
-  : null
+ // : null
 );
 
 UnAuthorizedList.propTypes = {

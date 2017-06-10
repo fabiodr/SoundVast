@@ -10,7 +10,6 @@ namespace SoundVast.Components.Account.ViewModels
     {
         [Required]
         [StringLength(15)]
-        [RegularExpression(@"^\S+$", ErrorMessage = "Must not contain only spaces")]
         public string Username { get; set; }
 
         [Required]

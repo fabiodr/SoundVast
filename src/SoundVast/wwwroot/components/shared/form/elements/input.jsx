@@ -4,14 +4,22 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import styles from './input.less';
-import ValidationError from '../validation/error/error';
+import ValidationErrors from '../validation/errors/errors';
 
-const Input = ({ input, meta: { touched, error }, className, ...props }) => (
-  <div className={styles.inputContainer}>
-    <input className={classNames(className, styles.input)} {...input} {...props} />
-    <ValidationError touched={touched} error={error} />
-  </div>
-);
+const Input = ({ input, meta: { touched, error = [] }, className, ...props }) => {
+  let errors = error;
+
+  if (!Array.isArray(error)) {
+    errors = [error];
+  }
+
+  return (
+    <div className={styles.inputContainer}>
+      <input className={classNames(className, styles.input)} {...input} {...props} />
+      { touched ? <ValidationErrors errors={errors} /> : null }
+    </div>
+  );
+};
 
 Input.defaultProps = {
   className: null,

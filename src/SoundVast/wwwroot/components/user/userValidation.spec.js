@@ -32,14 +32,6 @@ describe('userValidation', () => {
     expect(errors.password).toExist();
   });
 
-  it('should have an error if username contains only spaces', () => {
-    const errors = userValidation({
-      username: ' ',
-    });
-
-    expect(errors.username).toExist();
-  });
-
   it('should have an error if username length is more than 15', () => {
     const errors = userValidation({
       username: '1234567890123456',

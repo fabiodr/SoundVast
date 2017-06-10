@@ -4,6 +4,7 @@ import { shallow } from 'enzyme';
 
 import RegisterForm from './form';
 import AntiForgeryToken from '../../../shared/form/antiForgeryToken/antiForgeryTokenContainer';
+import ValidationErrors from '../../../shared/form/validation/errors/errors';
 
 const setup = (newProps) => {
   const props = {
@@ -27,6 +28,12 @@ describe('RegisterForm', () => {
     ({ wrapper } = setup());
 
     expect(wrapper.find(AntiForgeryToken).length).toBe(1);
+  });
+
+  it('should render validation errors', () => {
+    ({ wrapper } = setup());
+
+    expect(wrapper.find(ValidationErrors).length).toBe(1);
   });
 
   it('should call submit handler when form is submitted', () => {

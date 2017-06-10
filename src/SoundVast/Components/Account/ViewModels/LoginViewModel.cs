@@ -9,16 +9,13 @@ namespace SoundVast.Components.Account.ViewModels
     public class LoginViewModel
     {
         [Required]
-        [StringLength(15, MinimumLength = 3, ErrorMessage = "Your username will be between 3-15 characters")]
-        [RegularExpression(@"^[a-zA-Z0-9]+$", ErrorMessage = "Your username will only contain letters and/or numbers")]
+        [StringLength(15)]
         public string UserName { get; set; }
 
         [Required]
-        [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [StringLength(300)]
         public string Password { get; set; }
 
-        [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
     }
 }

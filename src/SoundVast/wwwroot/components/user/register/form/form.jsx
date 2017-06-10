@@ -7,16 +7,16 @@ import styles from './form.less';
 import genericStyles from '../../../shared/generic.less';
 import AntiForgeryToken from '../../../shared/form/antiForgeryToken/antiForgeryTokenContainer';
 import FormInput from '../../../shared/form/elements/input';
+import ValidationErrors from '../../../shared/form/validation/errors/errors';
 
-const Form = ({ error, handleSubmit }) => (
+const Form = ({ error: errors, handleSubmit }) => (
   <form onSubmit={handleSubmit} action="">
     <AntiForgeryToken form="register" />
-
-    {error}
+    <ValidationErrors errors={errors} />
 
     <div className={styles.formGroup}>
       <Field className={styles.input} name="username" component={FormInput} placeholder="Username" />
-      <Field className={styles.input} name="email" component={FormInput} type="email" placeholder="Email" />
+      <Field className={styles.input} name="email" component={FormInput} placeholder="Email" />
       <Field className={styles.input} name="password" component={FormInput} type="password" placeholder="Password" />
       <Field className={styles.input} name="confirmPassword" component={FormInput} type="password" placeholder="Confirm password" />
     </div>
@@ -35,7 +35,7 @@ const Form = ({ error, handleSubmit }) => (
 );
 
 Form.defaultProps = {
-  error: null,
+  error: [],
 };
 
 Form.propTypes = {

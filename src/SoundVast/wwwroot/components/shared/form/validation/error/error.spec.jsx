@@ -6,8 +6,6 @@ import ValidationError from './error';
 
 const setup = (newProps) => {
   const props = {
-    touched: false,
-    error: 'Required',
     ...newProps,
   };
 
@@ -22,15 +20,17 @@ const setup = (newProps) => {
 describe('ValidationError', () => {
   let wrapper;
 
-  it('should not render an error when field has not been touched', () => {
+  it('should not render an error when an error doesn\'t exist', () => {
     ({ wrapper } = setup());
 
-    expect(wrapper.text()).toNotBe('Required');
+    expect(wrapper.text()).toNotExist();
   });
 
-  it('should render an error when field has been touched', () => {
-    ({ wrapper } = setup({ touched: true }));
+  it('should render an error when an error exists', () => {
+    const error = 'Required';
 
-    expect(wrapper.text()).toBe('Required');
+    ({ wrapper } = setup({ error }));
+
+    expect(wrapper.text()).toBe(error);
   });
 });

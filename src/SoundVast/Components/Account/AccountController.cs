@@ -48,8 +48,9 @@ namespace SoundVast.Components.Account
             _antiforgery = antiforgery;
         }
 
+        [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> UserDetails()
+        public async Task<IActionResult> GetUserDetails()
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
 
@@ -61,8 +62,9 @@ namespace SoundVast.Components.Account
             });
         }
 
+        [HttpGet]
         [AllowAnonymous]
-        public IActionResult SocialLogins()
+        public IActionResult GetSocialLogins()
         {
             var loginProviders = _signInManager.GetExternalAuthenticationSchemes().ToList();
 
@@ -72,26 +74,11 @@ namespace SoundVast.Components.Account
             });
         }
 
-        //
-        // GET: /Account/Login
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult Login(string returnUrl = null)
-        {
-            ViewData["ReturnUrl"] = returnUrl;
-
-            return ViewOrPartial();
-        }
-
-        //
-        // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
-            ViewData["ReturnUrl"] = returnUrl;
-
             if (ModelState.IsValid)
             {
                 // This doesn't count login failures towards account lockout
@@ -100,16 +87,14 @@ namespace SoundVast.Components.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation(1, "User logged in.");
-                    return RedirectToLocal(returnUrl);
+
+                    return Ok();
                 }
                 ModelState.AddModelError("_error", "Invalid login attempt.");
-                return View(model);
             }
 
-            // If we got this far, something failed, redisplay form
-            return View(model);
+            return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ToJsonString());
         }
-
 
         [HttpPost]
         [AllowAnonymous]

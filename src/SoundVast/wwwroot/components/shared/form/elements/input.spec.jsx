@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import expect from 'expect';
 
 import FormInput from './input';
-import ValidationError from '../validation/error/error';
+import ValidationErrors from '../validation/errors/errors';
 
 const setup = (newProps) => {
   const props = {
@@ -31,8 +31,8 @@ describe('FormInput', () => {
     expect(wrapper.find('input').length).toBe(1);
   });
 
-  it('should render ValidationError', () => {
-    const error = 'Required';
+  it('should render ValidationErrors when touched', () => {
+    const error = ['Required'];
     ({ wrapper } = setup({
       meta: {
         touched: true,
@@ -40,7 +40,19 @@ describe('FormInput', () => {
       },
     }));
 
-    expect(wrapper.find(ValidationError).length).toBe(1);
-    expect(wrapper.find(ValidationError).prop('error')).toBe(error);
+    expect(wrapper.find(ValidationErrors).length).toBe(1);
+    expect(wrapper.find(ValidationErrors).prop('errors')).toBe(error);
+  });
+
+  it('should not render ValidationErrors when not touched', () => {
+    const error = 'Required';
+    ({ wrapper } = setup({
+      meta: {
+        touched: false,
+        error,
+      },
+    }));
+
+    expect(wrapper.find(ValidationErrors).length).toBe(0);
   });
 });

@@ -1,10 +1,17 @@
+/* eslint-disable no-param-reassign */
+
+const replacePureWhiteSpace = values => Object.keys(values).forEach((key) => {
+  values[key] = values[key].replace(/^\s+$/, '');
+});
+
 const validation = (values) => {
   const errors = {};
+  values = { ...values };
+
+  replacePureWhiteSpace(values);
 
   if (!values.username) {
     errors.username = 'Username is required';
-  } else if (!/^\S+$/.test(values.username)) {
-    errors.username = 'Must not contain only spaces';
   } else if (values.username.length > 15) {
     errors.username = 'Must not be more than 15 characters';
   }
