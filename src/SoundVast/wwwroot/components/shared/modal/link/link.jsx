@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Link = ({ children, modalId, showModal }) => (
-  <button type="button" onClick={() => showModal(modalId)}>
+const Link = ({ children, modalId, showModal, ...props }) => (
+  <a tabIndex={0} role="link" onClick={() => showModal(modalId)} {...props}>
     {children}
-  </button>
+  </a>
 );
 
 Link.propTypes = {

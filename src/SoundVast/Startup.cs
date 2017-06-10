@@ -169,17 +169,17 @@ namespace SoundVast
                 AppSecret = _configuration["Facebook:Secret"]
             });
 
-            //app.UseTwitterAuthentication(new TwitterOptions()
-            //{
-            //    ConsumerKey = Configuration["Authentication:Twitter:ConsumerKey"],
-            //    ConsumerSecret = Configuration["Authentication:Twitter:ConsumerSecret"]
-            //});
+            app.UseTwitterAuthentication(new TwitterOptions
+            {
+                ConsumerKey = _configuration["Twitter:Id"],
+                ConsumerSecret = _configuration["Twitter:Secret"]
+            });
 
-            //app.UseGoogleAuthentication(new GoogleOptions()
-            //{
-            //    ClientId = Configuration["Authentication:Google:ClientId"],
-            //    ClientSecret = Configuration["Authentication:Google:ClientSecret"]
-            //});
+            app.UseGoogleAuthentication(new GoogleOptions()
+            {
+                ClientId = _configuration["Google:Id"],
+                ClientSecret = _configuration["Google:Secret"]
+            });
 
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
             app.SeedData();

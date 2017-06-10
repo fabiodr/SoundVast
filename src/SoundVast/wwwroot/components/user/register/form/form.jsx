@@ -1,6 +1,5 @@
 import React from 'react';
 import { Field } from 'redux-form';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import styles from './form.less';
@@ -8,6 +7,7 @@ import genericStyles from '../../../shared/generic.less';
 import AntiForgeryToken from '../../../shared/form/antiForgeryToken/antiForgeryTokenContainer';
 import FormInput from '../../../shared/form/elements/input';
 import ValidationErrors from '../../../shared/form/validation/errors/errors';
+import ModalLink from '../../../shared/modal/link/linkContainer';
 
 const Form = ({ error: errors, handleSubmit }) => (
   <form onSubmit={handleSubmit} action="">
@@ -21,7 +21,7 @@ const Form = ({ error: errors, handleSubmit }) => (
       <Field className={styles.input} name="confirmPassword" component={FormInput} type="password" placeholder="Confirm password" />
     </div>
     <div>
-      Or <Link to="account/login">login</Link> if you already have an account.
+      Or <ModalLink modalId="login">login</ModalLink> if you already have an account.
     </div>
     <div className={styles.tos}>
         By registering you are agreeing to our <a href="content/termsOfUse">terms of use.</a>
