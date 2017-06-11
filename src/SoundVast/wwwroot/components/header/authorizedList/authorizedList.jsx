@@ -7,7 +7,7 @@ import styles from '../header.less';
 const AuthorizedList = ({ isLoggedIn, userName }) => (
   isLoggedIn ?
     <li>
-      <div className={styles.dropdown}>
+      <button className={styles.dropdown}>
         <span className="userName">{userName}</span>
         <ul>
           <li>
@@ -19,7 +19,7 @@ const AuthorizedList = ({ isLoggedIn, userName }) => (
             </form>
           </li>
         </ul>
-      </div>
+      </button>
     </li>
   : null
 );

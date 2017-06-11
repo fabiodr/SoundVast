@@ -31,7 +31,7 @@ const Header = () => (
         <AuthorizedList />
         <UnAuthorizedList />
         <li>
-          <div className={styles.dropdown}>
+          <button className={styles.dropdown}>
             <span><i className="fa fa-bars" /></span>
             <ul>
               <li>
@@ -48,7 +48,7 @@ const Header = () => (
               </li>
               <AdminList />
             </ul>
-          </div>
+          </button>
         </li>
       </ul>
     </nav>
