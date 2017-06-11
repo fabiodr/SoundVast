@@ -150,8 +150,19 @@ namespace SoundVast.Components.Account
             });
         }
 
-        //
-        // POST: /Account/ExternalLogin
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult AccessDenied(string returnUrl = null)
+        {
+            if (Request.Cookies["Identity.External"] != null)
+            {
+                return RedirectToAction(nameof(ExternalLoginCallback), new { returnUrl });
+            }
+
+            // Return error page
+            return null;
+        }
+
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -160,6 +171,7 @@ namespace SoundVast.Components.Account
             // Request a redirect to the external login provider.
             var redirectUrl = Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl });
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+      
             return Challenge(properties, provider);
         }
 

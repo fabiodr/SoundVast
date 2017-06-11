@@ -1,67 +1,47 @@
-﻿:global {
-  header {
-    nav [class*='outerList'] {
-      > li {
-        display: inline-block;
-      }
+﻿.header {
+  background-color: white;
+  top: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 
-      a {
-        color: #157bf8;
-        cursor: pointer;
-        font-family: 'Source Sans Pro', Arial;
-        font-size: 16px;
-        margin: 5px;
-        padding-bottom: 20px;
-        padding-left: 5px;
-        padding-right: 5px;
-        padding-top: 16px;
-        position: relative;
-        font-weight: bold;
-      }
+  nav {
+    width: 60%;
+    display: flex;
 
-      a:hover {
-        background-color: #cccccc;
-        text-decoration: none;
-      }
+    > ul {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+    }
 
-      [class*='navDropdownList'] li {
-        background-color: #114ca7;
-        width: 120px;
-        a,
-        input[type=submit] {
-          background-color: #114ca7;
-          color: white;
-          display: block;
-          padding: 10px;
-          text-decoration: none;
-          border: 0;
-          width: 100%;
-          text-align: left;
-        }
+    > ul:nth-child(2) {
+      margin-left: auto;
+    }
+      
+    a:not(.logoLink) {
+      font-weight: bold;
+      padding: 20px 10px;
+    }
 
-        a:hover,
-        input[type=submit]:hover {
-          background-color: #157bf8;
-          color: white;
-          padding: 10px;
-        }
-      }
+    a:hover {
+      background-color: #cccccc;
+      text-decoration: none;
+    }
+  
+    > li {
+      display: inline-block;
     }
   }
 }
 
-.header {
-  background-color: white;
-  top: 0;
-  width: 100%;
+.logoLink {
+  display: inline-block;
+  margin-right: 20px;
 }
 
-.outerList {
-  margin: 0;
-  padding: 0;
-}
-
-.navDropdown {
+.dropdown {
   border: none;
   color: #157bf8;
   cursor: pointer;
@@ -71,14 +51,36 @@
   padding-right: 5px;
   padding-top: 14px;
   position: relative;
-}
 
-.navDropdownList {
-  cursor: pointer;
-  display: none;
-  list-style-type: none;
-  position: absolute;
-  right: 0;
-  top: 100%;
-  z-index: 1;
+  ul {
+    cursor: pointer;
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    z-index: 1;
+
+    li {
+      background-color: #114ca7;
+      width: 120px;
+      a,
+      input[type=submit] {
+        background-color: #114ca7;
+        color: white;
+        display: block;
+        padding: 10px;
+        text-decoration: none;
+        border: 0;
+        width: 100%;
+        text-align: left;
+      }
+
+      a:hover,
+      input[type=submit]:hover {
+        background-color: #157bf8;
+        color: white;
+        padding: 10px;
+      }
+    }
+  }
 }

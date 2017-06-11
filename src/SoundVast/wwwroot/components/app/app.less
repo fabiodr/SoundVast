@@ -1,13 +1,23 @@
+@primaryColour: #157bf8;
+@secondaryColour: #55acee;
+
 :global {
     body {
         font-family: Garuda, Verdana, Tahoma, sans-serif;
+        margin-top: 0;
     }
 
     a {
+        color: @primaryColour;
         cursor: pointer;
+        text-decoration: none;
     }
 
-    a:hover {
-        text-decoration: none;
+    a:focus {
+        color: @secondaryColour;
+    }
+
+    ul {
+        list-style-type: none;
     }
 }

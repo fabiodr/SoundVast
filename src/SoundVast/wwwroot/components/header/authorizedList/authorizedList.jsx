@@ -7,9 +7,9 @@ import styles from '../header.less';
 const AuthorizedList = ({ isLoggedIn, userName }) => (
   isLoggedIn ?
     <li>
-      <div className={styles.navDropdown}>
+      <div className={styles.dropdown}>
         <span className="userName">{userName}</span>
-        <ul className={styles.navDropdownList}>
+        <ul>
           <li>
             <Link to="profile">Profile</Link>
           </li>

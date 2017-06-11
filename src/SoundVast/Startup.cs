@@ -18,6 +18,7 @@ using SoundVast.Storage.FileStorage;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SpaServices.Webpack;
+using Microsoft.Extensions.Options;
 using SoundVast.Components;
 using SoundVast.Components.Audio;
 using SoundVast.Components.Audio.Models;
@@ -175,7 +176,7 @@ namespace SoundVast
                 ConsumerSecret = _configuration["Twitter:Secret"]
             });
 
-            app.UseGoogleAuthentication(new GoogleOptions()
+            app.UseGoogleAuthentication(new GoogleOptions
             {
                 ClientId = _configuration["Google:Id"],
                 ClientSecret = _configuration["Google:Secret"]
