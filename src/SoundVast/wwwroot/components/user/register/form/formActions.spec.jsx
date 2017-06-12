@@ -15,6 +15,7 @@ describe('registerFormActions', () => {
   beforeEach(() => {
     store.clearActions();
     calledActions = store.getActions();
+    fetchMock.getOnce('/account/getUserDetails', {});
   });
 
   afterEach(() => {
@@ -25,7 +26,7 @@ describe('registerFormActions', () => {
     fetchMock.postOnce('/account/register', 200);
 
     store.dispatch(actions.submit()).then(() => {
-      expect(fetchMock.called()).toBe(true);
+      expect(fetchMock.called('/account/register')).toBe(true);
     });
   });
 
@@ -64,6 +65,14 @@ describe('registerFormActions', () => {
       expect(calledActions).toContain({
         type: 'HIDE_MODAL',
       });
+    });
+  });
+
+  it('should fetch user details on success', () => {
+    fetchMock.postOnce('/account/register', 200);
+
+    store.dispatch(actions.submit()).then(() => {
+      expect(fetchMock.called('/account/getUserDetails')).toBe(true);
     });
   });
 

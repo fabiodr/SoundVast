@@ -14,6 +14,7 @@ describe('logoutFormActions', () => {
   beforeEach(() => {
     store.clearActions();
     calledActions = store.getActions();
+    fetchMock.getOnce('/account/getUserDetails', {});
   });
 
   afterEach(() => {
@@ -24,7 +25,7 @@ describe('logoutFormActions', () => {
     fetchMock.postOnce('/account/logout', 200);
 
     store.dispatch(actions.submit()).then(() => {
-      expect(fetchMock.called()).toBe(true);
+      expect(fetchMock.called('/account/logout')).toBe(true);
     });
   });
 
@@ -36,6 +37,14 @@ describe('logoutFormActions', () => {
         type: 'SHOW_POPUP',
         id: 'logout',
       });
+    });
+  });
+
+  it('should fetch user details on success', () => {
+    fetchMock.postOnce('/account/logout', 200);
+
+    store.dispatch(actions.submit()).then(() => {
+      expect(fetchMock.called('/account/getUserDetails')).toBe(true);
     });
   });
 
