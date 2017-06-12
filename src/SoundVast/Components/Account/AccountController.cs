@@ -134,8 +134,10 @@ namespace SoundVast.Components.Account
         public async Task<IActionResult> LogOut()
         {
             await _signInManager.SignOutAsync();
+
             _logger.LogInformation(4, "User logged out.");
-            return RedirectToAction(nameof(FileStreamController.FileStreams), "Home");
+
+            return Ok();
         }
 
         [HttpPost]
@@ -251,7 +253,6 @@ namespace SoundVast.Components.Account
             return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ToJsonString());
         }
 
-        // GET: /Account/ConfirmEmail
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> ConfirmEmail(string userId, string code)
@@ -269,8 +270,6 @@ namespace SoundVast.Components.Account
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
 
-        //
-        // GET: /Account/ForgotPassword
         [HttpGet]
         [AllowAnonymous]
         public IActionResult ForgotPassword()
@@ -278,8 +277,6 @@ namespace SoundVast.Components.Account
             return View();
         }
 
-        //
-        // POST: /Account/ForgotPassword
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -307,8 +304,6 @@ namespace SoundVast.Components.Account
             return View(model);
         }
 
-        //
-        // GET: /Account/ForgotPasswordConfirmation
         [HttpGet]
         [AllowAnonymous]
         public IActionResult ForgotPasswordConfirmation()
@@ -316,8 +311,6 @@ namespace SoundVast.Components.Account
             return View();
         }
 
-        //
-        // GET: /Account/ResetPassword
         [HttpGet]
         [AllowAnonymous]
         public IActionResult ResetPassword(string code = null)
@@ -325,8 +318,6 @@ namespace SoundVast.Components.Account
             return code == null ? View("Error") : View();
         }
 
-        //
-        // POST: /Account/ResetPassword
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -351,8 +342,6 @@ namespace SoundVast.Components.Account
             return View();
         }
 
-        //
-        // GET: /Account/ResetPasswordConfirmation
         [HttpGet]
         [AllowAnonymous]
         public IActionResult ResetPasswordConfirmation()

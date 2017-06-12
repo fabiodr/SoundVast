@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import expect from 'expect';
 
-import LoginSuccessMessage from './successMessage';
+import LogoutSuccessMessage from './successMessage';
 import SuccessPopup from '../../../shared/popup/popupContainer';
 
 const setup = (newProps) => {
@@ -11,7 +11,7 @@ const setup = (newProps) => {
   };
 
   const wrapper = shallow(
-    <LoginSuccessMessage {...props} />,
+    <LogoutSuccessMessage {...props} />,
   );
 
   return {
@@ -20,7 +20,7 @@ const setup = (newProps) => {
   };
 };
 
-describe('LoginSuccessMessage', () => {
+describe('LogoutSuccessMessage', () => {
   let wrapper;
 
   it('should render a success popup', () => {

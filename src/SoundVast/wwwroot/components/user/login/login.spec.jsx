@@ -4,7 +4,6 @@ import { shallow } from 'enzyme';
 
 import Login from './login';
 import SocialLoginsContainer from '../login/socialLogins/socialLoginsContainer';
-import LoginSuccessMessage from './successMessage/successMessage';
 import Modal from '../../shared/modal/modalContainer';
 import LoginForm from './form/formContainer';
 
@@ -24,26 +23,21 @@ const setup = (newProps) => {
 describe('Login', () => {
   let wrapper;
 
-  it('should render social logins in a Modal', () => {
+  it('should render a Modal', () => {
     ({ wrapper } = setup());
 
-    const modal = wrapper.find(Modal);
-
-    expect(modal.find(SocialLoginsContainer).length).toBe(1);
+    expect(wrapper.type()).toBe(Modal);
   });
 
-
-  it('should render success message', () => {
+  it('should render social logins', () => {
     ({ wrapper } = setup());
 
-    expect(wrapper.find(LoginSuccessMessage).length).toBe(1);
+    expect(wrapper.find(SocialLoginsContainer).length).toBe(1);
   });
 
-  it('should render a login form in a Modal', () => {
+  it('should render a login form', () => {
     ({ wrapper } = setup());
 
-    const modal = wrapper.find(Modal);
-
-    expect(modal.find(LoginForm).length).toBe(1);
+    expect(wrapper.find(LoginForm).length).toBe(1);
   });
 });

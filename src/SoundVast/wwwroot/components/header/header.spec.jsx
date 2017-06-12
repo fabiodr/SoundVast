@@ -6,6 +6,7 @@ import Header from './header';
 import AuthorizedList from './authorizedList/authorizedListContainer';
 import UnAuthorizedList from './unAuthorizedList/unAuthorizedListContainer';
 import AdminList from './adminList/adminListContainer';
+import LinkDropdown from '../shared/dropDown/linkDropdownContainer';
 
 const setup = (newProps) => {
   const props = {
@@ -39,5 +40,14 @@ describe('Header', () => {
     ({ wrapper } = setup());
 
     expect(wrapper.find(AdminList).length).toBe(1);
+  });
+
+  it('should render LinkDropdown', () => {
+    ({ wrapper } = setup());
+
+    const LinkDropdownTitle = shallow(wrapper.find(LinkDropdown).prop('title'));
+
+    expect(LinkDropdownTitle.length).toBe(1);
+    expect(LinkDropdownTitle.hasClass('fa-bars')).toBe(true);
   });
 });

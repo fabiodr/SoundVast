@@ -2,24 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-import styles from '../header.less';
+import LinkDropdown from '../../shared/dropDown/linkDropdownContainer';
+import LogoutForm from '../../user/logout/form/formContainer';
 
 const AuthorizedList = ({ isLoggedIn, userName }) => (
   isLoggedIn ?
     <li>
-      <button className={styles.dropdown}>
-        <span className="userName">{userName}</span>
-        <ul>
-          <li>
-            <Link to="profile">Profile</Link>
-          </li>
-          <li>
-            <form action="account/logout" name="logout">
-              <input type="submit" value="Logout" />
-            </form>
-          </li>
-        </ul>
-      </button>
+      <LinkDropdown title={userName}>
+        <li>
+          <Link to="profile">Profile</Link>
+        </li>
+        <li>
+          <LogoutForm />
+        </li>
+      </LinkDropdown>
     </li>
   : null
 );

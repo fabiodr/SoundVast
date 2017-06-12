@@ -6,6 +6,7 @@ import AntiForgeryToken from './antiForgeryToken';
 
 const setup = (newProps) => {
   const props = {
+    form: 'test-form',
     ...newProps,
   };
 

@@ -14,25 +14,24 @@
       padding: 0;
       display: flex;
       align-items: center;
+
+      > li > a:not(.logoLink), button {
+        padding: 20px 10px;
+      }
     }
 
     > ul:nth-child(2) {
       margin-left: auto;
     }
       
-    a:not(.logoLink), button {
+    a, button {
       background-color: initial;
       font-weight: bold;
-      padding: 20px 10px;
     }
 
     a:hover, button:hover {
       background-color: #cccccc;
       text-decoration: none;
-    }
-  
-    > li {
-      display: inline-block;
     }
   }
 }
@@ -40,48 +39,4 @@
 .logoLink {
   display: inline-block;
   margin-right: 20px;
-}
-
-.dropdown {
-  border: none;
-  color: #157bf8;
-  cursor: pointer;
-  font-size: 16px;
-  padding-bottom: 16px;
-  padding-left: 5px;
-  padding-right: 5px;
-  padding-top: 14px;
-  position: relative;
-
-  ul {
-    cursor: pointer;
-    display: none;
-    position: absolute;
-    right: 0;
-    top: 100%;
-    z-index: 1;
-
-    li {
-      background-color: #114ca7;
-      width: 120px;
-      a,
-      input[type=submit] {
-        background-color: #114ca7;
-        color: white;
-        display: block;
-        padding: 10px;
-        text-decoration: none;
-        border: 0;
-        width: 100%;
-        text-align: left;
-      }
-
-      a:hover,
-      input[type=submit]:hover {
-        background-color: #157bf8;
-        color: white;
-        padding: 10px;
-      }
-    }
-  }
 }
