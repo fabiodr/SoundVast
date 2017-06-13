@@ -1,10 +1,9 @@
 import React from 'react';
 import { Field } from 'redux-form';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import ModalLink from '../../../shared/modal/link/linkContainer';
 
-import styles from './form.less';
+import formStyles from '../../../shared/form/form.less';
 import genericStyles from '../../../shared/generic.less';
 import AntiForgeryToken from '../../../shared/form/antiForgeryToken/antiForgeryTokenContainer';
 import FormInput from '../../../shared/form/elements/input';
@@ -15,9 +14,9 @@ const Form = ({ error: errors, handleSubmit }) => (
     <AntiForgeryToken form="login" />
     <ValidationErrors errors={errors} />
 
-    <div className={styles.formGroup}>
-      <Field className={styles.input} name="username" component={FormInput} placeholder="Username" />
-      <Field className={styles.input} name="password" component={FormInput} type="password" placeholder="Password" />
+    <div className={formStyles.formGroup}>
+      <Field name="username" component={FormInput} placeholder="Username" />
+      <Field name="password" component={FormInput} type="password" placeholder="Password" />
     </div>
 
     <Field name="rememberMe" component="checkbox" checked />
@@ -25,7 +24,7 @@ const Form = ({ error: errors, handleSubmit }) => (
       Or <ModalLink modalId="register">register</ModalLink> if you don&apos;t have an account.
     </div>
     <div>
-      <Link to="account/forgotPassword">Forgotten your password?</Link>
+      <ModalLink modalId="forgotPassword">Forgotten your password?</ModalLink>
     </div>
     <br />
 

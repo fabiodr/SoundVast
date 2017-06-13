@@ -9,7 +9,7 @@ namespace SoundVast.Components.Account.ViewModels
     public class ForgotPasswordViewModel
     {
         [Required]
-        [EmailAddress]
+        [RegularExpression(@"^.+@.+$", ErrorMessage = "Must be a valid email address")]
         public string Email { get; set; }
     }
 }

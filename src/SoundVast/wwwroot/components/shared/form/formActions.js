@@ -3,7 +3,7 @@
 import { change } from 'redux-form';
 
 export const generateAntiForgeryToken = form => dispatch =>
-fetch('/account/generateAntiForgeryToken', {
+fetch('/form/generateAntiForgeryToken', {
   method: 'post',
   credentials: 'same-origin',
 }).then(response =>

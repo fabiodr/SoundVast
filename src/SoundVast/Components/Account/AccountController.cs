@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
@@ -7,6 +8,7 @@ using System.Security.Policy;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -23,14 +25,14 @@ using SoundVast.Services;
 namespace SoundVast.Components.Account
 {
     [Authorize]
-    public class AccountController : CustomBaseController
+    public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
-        private readonly IAntiforgery _antiforgery;
+        private readonly IHostingEnvironment _appEnvironment;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
@@ -38,14 +40,14 @@ namespace SoundVast.Components.Account
             IEmailSender emailSender,
             ISmsSender smsSender,
             ILoggerFactory loggerFactory,
-            IAntiforgery antiforgery)
+            IHostingEnvironment appEnvironment)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
-            _antiforgery = antiforgery;
+            _appEnvironment = appEnvironment;
         }
 
         [HttpGet]
@@ -140,18 +142,6 @@ namespace SoundVast.Components.Account
             return Ok();
         }
 
-        [HttpPost]
-        [AllowAnonymous]
-        public IActionResult GenerateAntiForgeryToken()
-        {
-            var tokenSet = _antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
-
-            return Ok(new
-            {
-                antiForgeryToken = tokenSet,
-            });
-        }
-
         [HttpGet]
         [AllowAnonymous]
         public IActionResult AccessDenied(string returnUrl = null)
@@ -171,7 +161,7 @@ namespace SoundVast.Components.Account
         public IActionResult ExternalLogin(string provider, string returnUrl = null)
         {
             // Request a redirect to the external login provider.
-            var redirectUrl = Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl });
+            var redirectUrl = Url.Action("ExternalLoginCallback", new { ReturnUrl = returnUrl });
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
       
             return Challenge(properties, provider);
@@ -184,7 +174,8 @@ namespace SoundVast.Components.Account
             if (remoteError != null)
             {
                 ModelState.AddModelError("_error", $"Error from external provider: {remoteError}");
-                return View(nameof(Login));
+
+                return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ToJsonString());
             }
             var info = await _signInManager.GetExternalLoginInfoAsync();
             if (info == null)
@@ -197,16 +188,18 @@ namespace SoundVast.Components.Account
             if (result.Succeeded)
             {
                 _logger.LogInformation(5, "User logged in with {Name} provider.", info.LoginProvider);
-                return RedirectToLocal(returnUrl);
+
+                return LocalRedirect(returnUrl);
             }
+
             if (result.IsLockedOut)
             {
-                return View("Lockout");
+                return LocalRedirect(Url.Action("Lockout"));
             }
 
             // If the user does not have an account, then ask the user to create an account.
             var email = info.Principal.FindFirstValue(ClaimTypes.Email);
-            var redirectUrl = Url.Action("ExternalLoginConfirmation", "Account", new
+            var redirectUrl = Url.Action("ExternalLoginConfirmation", new
             {
                 loginProvider = info.LoginProvider,
                 returnUrl,
@@ -244,7 +237,7 @@ namespace SoundVast.Components.Account
                     {
                         await _signInManager.SignInAsync(user, true);
                         _logger.LogInformation(6, "User created an account using {Name} provider.", info.LoginProvider);
-                        return RedirectToLocal(returnUrl);
+                        return LocalRedirect(returnUrl);
                     }
                 }
                 AddErrors(result);
@@ -270,38 +263,45 @@ namespace SoundVast.Components.Account
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
 
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult ForgotPassword()
-        {
-            return View();
-        }
-
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        public async Task<IActionResult> GeneratePasswordResetLink(ForgotPasswordViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var user = await _userManager.FindByNameAsync(model.Email);
-                if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+                var user = await _userManager.FindByEmailAsync(model.Email);
+
+                if (user == null)
                 {
-                    // Don't reveal that the user does not exist or is not confirmed
-                    return View("ForgotPasswordConfirmation");
+                    ModelState.AddModelError("_error", "We couldn’t find that email address");
+
+                    return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ToJsonString());
                 }
 
                 // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
                 // Send an email with this link
-                //var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-                //var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-                //await _emailSender.SendEmailAsync(model.Email, "Reset Password",
-                //   $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
-                //return View("ForgotPasswordConfirmation");
+                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var resetPasswordLink = Url.Action("ResetPassword", "Account", new { userId = user.Id, code }, HttpContext.Request.Scheme);
+
+                return Ok(new
+                {
+                    email = model.Email,
+                    resetPasswordLink
+                });
             }
 
             // If we got this far, something failed, redisplay form
-            return View(model);
+            return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ToJsonString());
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> SendResetPasswordEmail(string email, string emailMessage, string subject = "Reset Password")
+        {
+            await _emailSender.SendEmailAsync(email, subject, emailMessage);
+
+            return Ok();
         }
 
         [HttpGet]

@@ -1,0 +1,37 @@
+import React from 'react';
+import { reduxForm } from 'redux-form';
+import { compose } from 'recompose';
+import { connect } from 'react-redux';
+import ReactDOMServer from 'react-dom/server';
+
+import ForgotPasswordForm from './form';
+import ForgotPasswordEmailMessage from '../../../email/forgotPassword/message';
+import { submit, sendEmail } from '../form/formActions';
+import userValidation from '../../userValidation';
+
+const mapDispatchToProps = dispatch => ({
+  onSubmit: (values) => {
+    const formData = new FormData();
+
+    Object.keys(values).forEach((key) => {
+      formData.append(key, values[key]);
+    });
+
+    return dispatch(submit(formData)).then((json) => {debugger
+      const emailMessage = ReactDOMServer.renderToString(
+        <ForgotPasswordEmailMessage resetPasswordLink={json.resetPasswordLink} />,
+      );
+
+      dispatch(sendEmail(json.email, emailMessage));
+    });
+  },
+});
+
+export default compose(
+  connect(null, mapDispatchToProps),
+  reduxForm({
+    form: 'forgotPassword',
+    fields: ['__RequestVerificationToken'],
+    validate: userValidation,
+  }),
+)(ForgotPasswordForm);

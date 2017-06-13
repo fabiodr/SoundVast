@@ -25,7 +25,7 @@ describe('formActions', () => {
       antiForgeryToken: '0#DERG£%%FDD£',
     };
 
-    fetchMock.postOnce('/account/generateAntiForgeryToken', json);
+    fetchMock.postOnce('/form/generateAntiForgeryToken', json);
 
     store.dispatch(actions.generateAntiForgeryToken('registerForm')).then(() => {
       expect(calledActions).toEqual([{
