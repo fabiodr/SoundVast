@@ -17,8 +17,8 @@ const mapDispatchToProps = dispatch => ({
       formData.append(key, values[key]);
     });
 
-    return dispatch(submit(formData)).then((json) => {debugger
-      const emailMessage = ReactDOMServer.renderToString(
+    return dispatch(submit(formData)).then((json) => {
+      const emailMessage = ReactDOMServer.renderToStaticMarkup(
         <ForgotPasswordEmailMessage resetPasswordLink={json.resetPasswordLink} />,
       );
 

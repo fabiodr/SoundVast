@@ -297,25 +297,11 @@ namespace SoundVast.Components.Account
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> SendResetPasswordEmail(string email, string emailMessage, string subject = "Reset Password")
+        public async Task<IActionResult> SendResetPasswordEmail([FromBody]ForgotPasswordEmailViewModel model)
         {
-            await _emailSender.SendEmailAsync(email, subject, emailMessage);
+            await _emailSender.SendEmailAsync(model.Email, model.Subject, model.EmailMessage);
 
             return Ok();
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult ForgotPasswordConfirmation()
-        {
-            return View();
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult ResetPassword(string code = null)
-        {
-            return code == null ? View("Error") : View();
         }
 
         [HttpPost]
@@ -331,21 +317,14 @@ namespace SoundVast.Components.Account
             if (user == null)
             {
                 // Don't reveal that the user does not exist
-                return RedirectToAction(nameof(AccountController.ResetPasswordConfirmation), "Account");
+                return RedirectToAction("ResetPasswordConfirmation");
             }
             var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
             if (result.Succeeded)
             {
-                return RedirectToAction(nameof(AccountController.ResetPasswordConfirmation), "Account");
+                return RedirectToAction("ResetPasswordConfirmation");
             }
             AddErrors(result);
-            return View();
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult ResetPasswordConfirmation()
-        {
             return View();
         }
 

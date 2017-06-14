@@ -105,6 +105,7 @@
     <PackageReference Include="elmah.corelibrary" Version="1.2.2" />
     <PackageReference Include="Elmah.Mvc" Version="2.1.2" />
     <PackageReference Include="ExpressiveAnnotations" Version="2.9.2" />
+    <PackageReference Include="MailKit" Version="1.16.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="1.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="1.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="1.1.2" />

@@ -1,4 +1,5 @@
 /* eslint-disable import/prefer-default-export */
+import { SubmissionError } from 'redux-form';
 
 export const submit = formData => () =>
 fetch('/account/generatePasswordResetLink', {
@@ -8,6 +9,10 @@ fetch('/account/generatePasswordResetLink', {
 }).then((response) => {
   if (response.ok) {
     return response.json();
+  } else if (response.status === 400) {
+    return response.json().then((modelErrors) => {
+      throw new SubmissionError(modelErrors);
+    });
   }
   return null;
 });
@@ -15,9 +20,12 @@ fetch('/account/generatePasswordResetLink', {
 export const sendEmail = (email, emailMessage) => () =>
 fetch('/account/sendResetPasswordEmail', {
   method: 'post',
-  body: {
+  body: JSON.stringify({
     email,
     emailMessage,
+  }),
+  headers: {
+    'Content-Type': 'application/json',
   },
 }).then((response) => {
   if (response.ok) {
