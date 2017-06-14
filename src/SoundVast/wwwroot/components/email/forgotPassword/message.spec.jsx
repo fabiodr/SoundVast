@@ -1,6 +1,7 @@
 import React from 'react';
 import expect from 'expect';
 import { shallow } from 'enzyme';
+import { A } from 'react-html-email';
 
 import ForgotPasswordEmailMessage from './message';
 
@@ -24,6 +25,6 @@ describe('ForgotPasswordEmailMessage', () => {
   it('should render a link to reset password', () => {
     ({ wrapper } = setup());
 
-    expect(wrapper.find('a').length).toBe(1);
+    expect(wrapper.find(A).length).toBe(1);
   });
 });

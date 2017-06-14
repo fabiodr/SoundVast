@@ -2,7 +2,7 @@ import React from 'react';
 import { reduxForm } from 'redux-form';
 import { compose } from 'recompose';
 import { connect } from 'react-redux';
-import ReactDOMServer from 'react-dom/server';
+import { renderEmail } from 'react-html-email';
 
 import ForgotPasswordForm from './form';
 import ForgotPasswordEmailMessage from '../../../email/forgotPassword/message';
@@ -18,7 +18,7 @@ const mapDispatchToProps = dispatch => ({
     });
 
     return dispatch(submit(formData)).then((json) => {
-      const emailMessage = ReactDOMServer.renderToStaticMarkup(
+      const emailMessage = renderEmail(
         <ForgotPasswordEmailMessage resetPasswordLink={json.resetPasswordLink} />,
       );
 

@@ -26,7 +26,7 @@ namespace SoundVast.Services
         {
             var emailMessage = new MimeMessage();
 
-            emailMessage.From.Add(new MailboxAddress("SoundVast", "noreply@soundvast.com"));
+            emailMessage.From.Add(new MailboxAddress("SoundVast", "no-reply@soundvast.com"));
             emailMessage.To.Add(new MailboxAddress("", email));
             emailMessage.Subject = subject;
             emailMessage.Body = new TextPart(TextFormat.Html)
