@@ -2,6 +2,6 @@ import React from 'react';
 import { Field } from 'redux-form';
 
 const AntiForgeryToken = () =>
-  <Field component="input" type="hidden" name="__RequestVerificationToken" />;
+  <Field name="__RequestVerificationToken" component="input" type="hidden" />;
 
 export default AntiForgeryToken;

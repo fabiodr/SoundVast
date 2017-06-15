@@ -29,7 +29,6 @@ export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   reduxForm({
     form: 'socialLoginConfirmation',
-    fields: ['__RequestVerificationToken'],
     validate: userValidation,
   }),
 )(SocialLoginConfirmationForm);

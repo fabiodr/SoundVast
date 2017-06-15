@@ -12,11 +12,11 @@ const Message = ({ resetPasswordLink }) => (
       <p>
         We received a request to change your password on SoundVast.
       </p>
-      <A textDecoration="none" href={resetPasswordLink}>
+      <A href={resetPasswordLink}>
         Click here to change your password
       </A>
       <p>
-        If you didn’t request a password change, you can ignore this
+        If you didn&apos;t request a password change, you can ignore this
         message and continue to use your current password.
         Someone probably typed in your email address by accident.
       </p>

@@ -21,6 +21,5 @@ export default compose(
   connect(null, mapDispatchToProps),
   reduxForm({
     form: 'logout',
-    fields: ['__RequestVerificationToken'],
   }),
 )(LogoutForm);

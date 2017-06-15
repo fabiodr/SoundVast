@@ -22,7 +22,6 @@ export default compose(
   connect(null, mapDispatchToProps),
   reduxForm({
     form: 'register',
-    fields: ['__RequestVerificationToken'],
     validate: userValidation,
   }),
 )(RegisterForm);

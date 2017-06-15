@@ -10,15 +10,18 @@ import ValidationErrors from '../../../shared/form/validation/errors/errors';
 
 const Form = ({ error: errors, handleSubmit }) => (
   <form onSubmit={handleSubmit} action="">
-    <AntiForgeryToken form="forgotPassword" />
+    <AntiForgeryToken form="resetPassword" />
+    <Field name="userId" component="input" type="hidden" />
+    <Field name="code" component="input" type="hidden" />
     <ValidationErrors errors={errors} />
 
     <div className={formStyles.formGroup}>
-      <Field name="email" component={FormInput} type="email" placeholder="Email" />
+      <Field name="password" component={FormInput} type="password" placeholder="Password" />
+      <Field name="confirmPassword" component={FormInput} type="password" placeholder="Confirm password" />
     </div>
 
     <button className={genericStyles.button}>
-      Submit
+      Reset Password
     </button>
   </form>
 );

@@ -1,10 +1,10 @@
 import { reduxForm } from 'redux-form';
-import { compose } from 'recompose';
+import { compose, lifecycle } from 'recompose';
 import { connect } from 'react-redux';
 
-import LoginForm from './form';
-import userValidation from '../../userValidation';
+import ResetPasswordForm from './form';
 import { submit } from '../form/formActions';
+import userValidation from '../../userValidation';
 
 const mapDispatchToProps = dispatch => ({
   onSubmit: (values) => {
@@ -21,7 +21,17 @@ const mapDispatchToProps = dispatch => ({
 export default compose(
   connect(null, mapDispatchToProps),
   reduxForm({
-    form: 'login',
+    form: 'resetPassword',
     validate: userValidation,
   }),
-)(LoginForm);
+  lifecycle({
+    componentDidMount() {
+      const params = new URLSearchParams(this.props.location.search);
+      const userId = params.get('userId');
+      const code = params.get('code');
+
+      this.props.change('userId', userId);
+      this.props.change('code', code);
+    },
+  }),
+)(ResetPasswordForm);

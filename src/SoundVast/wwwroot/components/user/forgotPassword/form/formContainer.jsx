@@ -31,7 +31,6 @@ export default compose(
   connect(null, mapDispatchToProps),
   reduxForm({
     form: 'forgotPassword',
-    fields: ['__RequestVerificationToken'],
     validate: userValidation,
   }),
 )(ForgotPasswordForm);

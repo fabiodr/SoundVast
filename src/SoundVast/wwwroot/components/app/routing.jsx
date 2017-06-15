@@ -6,6 +6,7 @@ import Header from '../header/header';
 import User from '../user/userContainer';
 import SocialLoginConfirmation from '../user/login/socialLogin/confirmation/confirmation';
 import SocialLoginFailure from '../user/login/socialLogin/failure/failure';
+import ResetPassword from '../user/resetPassword/form/formContainer';
 
 export default () => (
   <BrowserRouter>
@@ -16,6 +17,7 @@ export default () => (
         <Route exact path="/" component={FrontPage} />
         <Route exact path="/Account/ExternalLoginConfirmation" component={SocialLoginConfirmation} />
         <Route exact path="/Account/ExternalLoginFailure" component={SocialLoginFailure} />
+        <Route exact path="/Account/ResetPassword" component={ResetPassword} />
       </Switch>
     </div>
   </BrowserRouter>

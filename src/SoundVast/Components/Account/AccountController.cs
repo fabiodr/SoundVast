@@ -291,7 +291,6 @@ namespace SoundVast.Components.Account
                 });
             }
 
-            // If we got this far, something failed, redisplay form
             return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ToJsonString());
         }
 
@@ -311,21 +310,19 @@ namespace SoundVast.Components.Account
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ToJsonString());
             }
-            var user = await _userManager.FindByNameAsync(model.Email);
-            if (user == null)
-            {
-                // Don't reveal that the user does not exist
-                return RedirectToAction("ResetPasswordConfirmation");
-            }
+            var user = await _userManager.FindByIdAsync(model.UserId);
             var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
+
             if (result.Succeeded)
             {
-                return RedirectToAction("ResetPasswordConfirmation");
+                return Ok();
             }
+
             AddErrors(result);
-            return View();
+
+            return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ToJsonString());
         }
 
         private void AddErrors(IdentityResult result)
