@@ -30,24 +30,18 @@ namespace SoundVast.Components.Account
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
-        private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
-        private readonly IHostingEnvironment _appEnvironment;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
-            ISmsSender smsSender,
-            ILoggerFactory loggerFactory,
-            IHostingEnvironment appEnvironment)
+            ILoggerFactory loggerFactory)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
-            _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
-            _appEnvironment = appEnvironment;
         }
 
         [HttpGet]
@@ -282,7 +276,11 @@ namespace SoundVast.Components.Account
                 // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
                 // Send an email with this link
                 var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-                var resetPasswordLink = Url.Action("ResetPassword", "Account", new { userId = user.Id, code }, HttpContext.Request.Scheme);
+                var resetPasswordLink = Url.Action("ResetPassword", "Account", new
+                {
+                    userId = user.Id,
+                    code
+                }, HttpContext.Request.Scheme);
 
                 return Ok(new
                 {

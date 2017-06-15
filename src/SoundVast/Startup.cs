@@ -17,6 +17,7 @@ using SoundVast.Storage.CloudStorage.AzureStorage;
 using SoundVast.Storage.FileStorage;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Options;
 using SoundVast.Components;
@@ -83,6 +84,11 @@ namespace SoundVast
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
                 options.CookieName = ".SoundVast";
+            });
+           
+            services.Configure<DataProtectionTokenProviderOptions>(options =>
+            {
+                options.TokenLifespan = TimeSpan.FromMinutes(30);
             });
 
             services.AddMvc();
