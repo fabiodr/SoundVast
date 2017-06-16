@@ -38,7 +38,7 @@ describe('RegisterFormContainer.integration', () => {
   it('should submit formData in onSubmit handler', () => {
     ({ wrapper } = setup());
 
-    wrapper.find('form').simulate('submit', { test: 3 });
+    wrapper.find('form').simulate('submit');
 
     expect(store.dispatch).toHaveBeenCalledWith(submit());
   });

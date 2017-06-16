@@ -8,6 +8,10 @@ import * as actions from './formActions';
 
 const mockStore = configureStore([thunk]);
 const store = mockStore({});
+const body = {
+  email: 'test@gmail.com',
+  confirmEmailLink: '/account/confirmLink',
+};
 
 describe('registerFormActions', () => {
   let calledActions;
@@ -15,7 +19,8 @@ describe('registerFormActions', () => {
   beforeEach(() => {
     store.clearActions();
     calledActions = store.getActions();
-    fetchMock.getOnce('/account/getUserDetails', {});
+    fetchMock.getOnce('/account/getUserDetails', body);
+    fetchMock.postOnce('/email/sendEmail', 200);
   });
 
   afterEach(() => {
@@ -23,7 +28,7 @@ describe('registerFormActions', () => {
   });
 
   it('should post form', () => {
-    fetchMock.postOnce('/account/register', 200);
+    fetchMock.postOnce('/account/register', body);
 
     store.dispatch(actions.submit()).then(() => {
       expect(fetchMock.called('/account/register')).toBe(true);
@@ -48,7 +53,7 @@ describe('registerFormActions', () => {
   });
 
   it('should show popup message on success', () => {
-    fetchMock.postOnce('/account/register', 200);
+    fetchMock.postOnce('/account/register', body);
 
     store.dispatch(actions.submit()).then(() => {
       expect(calledActions).toContain({
@@ -59,7 +64,7 @@ describe('registerFormActions', () => {
   });
 
   it('should close modal on success', () => {
-    fetchMock.postOnce('/account/register', 200);
+    fetchMock.postOnce('/account/register', body);
 
     store.dispatch(actions.submit()).then(() => {
       expect(calledActions).toContain({
@@ -69,10 +74,25 @@ describe('registerFormActions', () => {
   });
 
   it('should fetch user details on success', () => {
-    fetchMock.postOnce('/account/register', 200);
+    fetchMock.postOnce('/account/register', body);
 
     store.dispatch(actions.submit()).then(() => {
       expect(fetchMock.called('/account/getUserDetails')).toBe(true);
+    });
+  });
+
+  it('should send confirmation email on success', () => {
+    fetchMock.postOnce('/account/register', body);
+
+    store.dispatch(actions.submit()).then(() => {
+      const sentEmailBody = JSON.parse(fetchMock.lastOptions('/email/sendEmail').body);
+
+      expect(fetchMock.called('/email/sendEmail')).toBe(true);
+      expect(sentEmailBody).toContain({
+        email: body.email,
+        subject: 'Confirm Email',
+      });
+      expect(sentEmailBody.message).toBeTruthy();
     });
   });
 

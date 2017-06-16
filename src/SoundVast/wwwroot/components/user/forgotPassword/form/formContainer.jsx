@@ -5,8 +5,9 @@ import { connect } from 'react-redux';
 import { renderEmail } from 'react-html-email';
 
 import ForgotPasswordForm from './form';
-import ForgotPasswordEmailMessage from '../../../email/forgotPassword/message';
-import { submit, sendEmail } from '../form/formActions';
+import ForgotPasswordEmail from '../../../email/forgotPassword/forgotPassword';
+import { submit } from './formActions';
+import { sendEmail } from '../../../email/emailActions';
 import userValidation from '../../userValidation';
 
 const mapDispatchToProps = dispatch => ({
@@ -19,10 +20,10 @@ const mapDispatchToProps = dispatch => ({
 
     return dispatch(submit(formData)).then((json) => {
       const emailMessage = renderEmail(
-        <ForgotPasswordEmailMessage resetPasswordLink={json.resetPasswordLink} />,
+        <ForgotPasswordEmail resetPasswordLink={json.resetPasswordLink} />,
       );
 
-      dispatch(sendEmail(json.email, emailMessage));
+      dispatch(sendEmail(json.email, emailMessage, 'Reset Password'));
     });
   },
 });

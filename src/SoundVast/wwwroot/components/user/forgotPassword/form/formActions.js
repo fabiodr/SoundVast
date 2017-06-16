@@ -16,20 +16,3 @@ fetch('/account/generatePasswordResetLink', {
   }
   return null;
 });
-
-export const sendEmail = (email, emailMessage) => () =>
-fetch('/account/sendResetPasswordEmail', {
-  method: 'post',
-  body: JSON.stringify({
-    email,
-    emailMessage,
-  }),
-  headers: {
-    'Content-Type': 'application/json',
-  },
-}).then((response) => {
-  if (response.ok) {
-
-  }
-  return null;
-});

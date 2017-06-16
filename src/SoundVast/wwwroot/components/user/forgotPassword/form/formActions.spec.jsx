@@ -15,7 +15,6 @@ describe('forgotPasswordFormActions', () => {
   beforeEach(() => {
     store.clearActions();
     calledActions = store.getActions();
-    fetchMock.postOnce('/account/sendResetPasswordEmail', 200);
   });
 
   afterEach(() => {

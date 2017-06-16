@@ -29,18 +29,17 @@ namespace SoundVast.Components.Account
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
+        private const string ModelError = "_error";
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            IEmailSender emailSender,
+
             ILoggerFactory loggerFactory)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _emailSender = emailSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
         }
 
@@ -86,7 +85,7 @@ namespace SoundVast.Components.Account
 
                     return Ok();
                 }
-                ModelState.AddModelError("_error", "Invalid login attempt.");
+                ModelState.AddModelError(ModelError, "Invalid login attempt.");
             }
 
             return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ToJsonString());
@@ -108,16 +107,22 @@ namespace SoundVast.Components.Account
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
-                    // Send an email with this link
-                    //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var confirmEmailLink = Url.Action(nameof(ConfirmEmail), "Account", new
+                    {
+                        userId = user.Id,
+                        code
+                    }, HttpContext.Request.Scheme);
                     //await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
                     //    $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
                     await _signInManager.SignInAsync(user, true);
                     _logger.LogInformation(3, "User created a new account with password.");
 
-                    return Ok();
+                    return Ok(new
+                    {
+                        email = user.Email,
+                        confirmEmailLink
+                    });
                 }
                 AddErrors(result);
             }
@@ -155,7 +160,7 @@ namespace SoundVast.Components.Account
         public IActionResult ExternalLogin(string provider, string returnUrl = null)
         {
             // Request a redirect to the external login provider.
-            var redirectUrl = Url.Action("ExternalLoginCallback", new { ReturnUrl = returnUrl });
+            var redirectUrl = Url.Action(nameof(ExternalLoginCallback), new { ReturnUrl = returnUrl });
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
       
             return Challenge(properties, provider);
@@ -167,7 +172,7 @@ namespace SoundVast.Components.Account
         {
             if (remoteError != null)
             {
-                ModelState.AddModelError("_error", $"Error from external provider: {remoteError}");
+                ModelState.AddModelError(ModelError, $"Error from external provider: {remoteError}");
 
                 return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ToJsonString());
             }
@@ -193,7 +198,7 @@ namespace SoundVast.Components.Account
 
             // If the user does not have an account, then ask the user to create an account.
             var email = info.Principal.FindFirstValue(ClaimTypes.Email);
-            var redirectUrl = Url.Action("ExternalLoginConfirmation", new
+            var redirectUrl = Url.Action(nameof(ExternalLoginConfirmation), new
             {
                 loginProvider = info.LoginProvider,
                 returnUrl,
@@ -242,19 +247,16 @@ namespace SoundVast.Components.Account
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> ConfirmEmail(string userId, string code)
+        public async Task<IActionResult> ConfirmEmail(ConfirmEmailViewModel model)
         {
-            if (userId == null || code == null)
+            var user = await _userManager.FindByIdAsync(model.UserId);
+            var result = await _userManager.ConfirmEmailAsync(user, model.Code);
+
+            if (result.Succeeded)
             {
-                return View("Error");
+                return LocalRedirect("/");
             }
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
-            {
-                return View("Error");
-            }
-            var result = await _userManager.ConfirmEmailAsync(user, code);
-            return View(result.Succeeded ? "ConfirmEmail" : "Error");
+            return LocalRedirect("/Error");
         }
 
         [HttpPost]
@@ -268,7 +270,7 @@ namespace SoundVast.Components.Account
 
                 if (user == null)
                 {
-                    ModelState.AddModelError("_error", "We couldn’t find that email address");
+                    ModelState.AddModelError("", "We couldn't find that email address");
 
                     return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ToJsonString());
                 }
@@ -276,7 +278,7 @@ namespace SoundVast.Components.Account
                 // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
                 // Send an email with this link
                 var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-                var resetPasswordLink = Url.Action("ResetPassword", "Account", new
+                var resetPasswordLink = Url.Action(nameof(ResetPassword), "Account", new
                 {
                     userId = user.Id,
                     code
@@ -290,15 +292,6 @@ namespace SoundVast.Components.Account
             }
 
             return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ToJsonString());
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> SendResetPasswordEmail([FromBody]ForgotPasswordEmailViewModel model)
-        {
-            await _emailSender.SendEmailAsync(model.Email, model.Subject, model.EmailMessage);
-
-            return Ok();
         }
 
         [HttpPost]
@@ -327,7 +320,7 @@ namespace SoundVast.Components.Account
         {
             foreach (var error in result.Errors)
             {
-                ModelState.AddModelError("_error", error.Description);
+                ModelState.AddModelError(ModelError, error.Description);
             }
         }
     }
