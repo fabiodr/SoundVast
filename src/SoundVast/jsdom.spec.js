@@ -3,6 +3,9 @@ import 'isomorphic-fetch';
 import 'url-search-params-polyfill';
 import hook from 'css-modules-require-hook';
 import formData from 'formdata-polyfill';
+import { injectReactEmailAttributes } from 'react-html-email';
+
+injectReactEmailAttributes();
 
 hook({
   extensions: ['.less'],

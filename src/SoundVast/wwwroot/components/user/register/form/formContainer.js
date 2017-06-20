@@ -6,7 +6,7 @@ import RegisterForm from './form';
 import userValidation from '../../userValidation';
 import { submit } from '../form/formActions';
 
-const mapDispatchToProps = dispatch => ({
+export const mapDispatchToProps = dispatch => ({
   onSubmit: (values) => {
     const formData = new FormData();
 

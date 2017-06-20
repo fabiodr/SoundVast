@@ -8,6 +8,10 @@ import * as actions from './formActions';
 
 const mockStore = configureStore([thunk]);
 const store = mockStore({});
+const body = {
+  email: 'test@gmail.com',
+  resetPasswordLink: '/account/resetPassword',
+};
 
 describe('forgotPasswordFormActions', () => {
   let calledActions;
@@ -15,6 +19,7 @@ describe('forgotPasswordFormActions', () => {
   beforeEach(() => {
     store.clearActions();
     calledActions = store.getActions();
+    fetchMock.postOnce('/email/sendEmail', 200);
   });
 
   afterEach(() => {
@@ -22,7 +27,7 @@ describe('forgotPasswordFormActions', () => {
   });
 
   it('submit should post form', () => {
-    fetchMock.postOnce('/account/generatePasswordResetLink', {});
+    fetchMock.postOnce('/account/generatePasswordResetLink', body);
 
     store.dispatch(actions.submit()).then(() => {
       expect(fetchMock.called('/account/generatePasswordResetLink')).toBe(true);
@@ -42,6 +47,21 @@ describe('forgotPasswordFormActions', () => {
     store.dispatch(actions.submit()).catch((error) => {
       expect(error.errors).toEqual(modelErrors);
       expect(error instanceof SubmissionError).toBe(true);
+    });
+  });
+
+  it('should send forgot password email on success', () => {
+    fetchMock.postOnce('/account/generatePasswordResetLink', body);
+
+    store.dispatch(actions.submit()).then(() => {
+      const sentEmailBody = JSON.parse(fetchMock.lastOptions('/email/sendEmail').body);
+
+      expect(fetchMock.called('/email/sendEmail')).toBe(true);
+      expect(sentEmailBody).toContain({
+        email: body.email,
+        subject: 'Reset Password',
+      });
+      expect(sentEmailBody.message).toBeTruthy();
     });
   });
 

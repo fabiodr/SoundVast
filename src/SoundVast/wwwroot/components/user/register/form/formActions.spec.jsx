@@ -10,7 +10,7 @@ const mockStore = configureStore([thunk]);
 const store = mockStore({});
 const body = {
   email: 'test@gmail.com',
-  confirmEmailLink: '/account/confirmLink',
+  confirmEmailLink: '/account/confirm',
 };
 
 describe('registerFormActions', () => {

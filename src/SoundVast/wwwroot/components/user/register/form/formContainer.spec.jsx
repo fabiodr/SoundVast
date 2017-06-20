@@ -1,45 +1,34 @@
-/* eslint-disable react/prop-types */
-import React from 'react';
-import { mount } from 'enzyme';
 import expect from 'expect';
-import { reducer as formReducer } from 'redux-form';
-import { createStore, combineReducers } from 'redux';
-import { BrowserRouter } from 'react-router-dom';
-import { Provider } from 'react-redux';
 
+import { mapDispatchToProps } from './formContainer';
 import { submit } from '../form/formActions';
-import RegisterFormContainer from './formContainer';
 
-const store = createStore(combineReducers({ form: formReducer }));
+describe('RegisterFormContainer', () => {
+  let dispatchSpy;
+  let dispatchProps;
 
-const setup = (newProps) => {
-  const props = {
-    ...newProps,
-  };
-  expect.spyOn(store, 'dispatch');
+  beforeEach(() => {
+    dispatchSpy = expect.createSpy();
+    dispatchProps = mapDispatchToProps(dispatchSpy);
+  });
 
-  const wrapper = mount(
-    <Provider store={store}>
-      <BrowserRouter>
-        <RegisterFormContainer {...props} />
-      </BrowserRouter>
-    </Provider>,
-  );
-
-  return {
-    wrapper,
-    props,
-  };
-};
-
-describe('RegisterFormContainer.integration', () => {
-  let wrapper;
+  afterEach(() => {
+    expect.restoreSpies();
+  });
 
   it('should submit formData in onSubmit handler', () => {
-    ({ wrapper } = setup());
+    const values = {
+      userName: 'Yoshiii',
+      password: 'test',
+    };
 
-    wrapper.find('form').simulate('submit');
+    expect.spyOn(FormData.prototype, 'append');
 
-    expect(store.dispatch).toHaveBeenCalledWith(submit());
+    dispatchProps.onSubmit(values);
+
+    expect(dispatchSpy).toHaveBeenCalledWith(submit());
+    Object.keys(values).forEach((key) => {
+      expect(FormData.prototype.append).toHaveBeenCalledWith(key, values[key]);
+    });
   });
 });

@@ -6,8 +6,6 @@ import proxyquire from 'proxyquire';
 
 import { getSocialLogins } from './socialLoginsActions';
 
-proxyquire.noCallThru();
-
 const SocialLoginsContainer = proxyquire('./socialLoginsContainer', {
   './socialLogins': () => null,
 }).default;
