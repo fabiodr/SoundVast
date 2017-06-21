@@ -1,11 +1,11 @@
 import React from 'react';
 
-import SuccessPopup from '../../../shared/popup/popupContainer';
+import LogoutSuccessPopup from '../../../shared/popup/popupContainer';
 
 const SuccessMessage = () => (
-  <SuccessPopup id="logout">
+  <LogoutSuccessPopup id="logoutSuccess">
     You have successfully logged out.
-  </SuccessPopup>
+  </LogoutSuccessPopup>
 );
 
 export default SuccessMessage;

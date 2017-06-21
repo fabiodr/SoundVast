@@ -254,7 +254,7 @@ namespace SoundVast.Components.Account
 
             if (result.Succeeded)
             {
-                return LocalRedirect("/");
+                return LocalRedirect("/Account/SuccessfullyConfirmedEmail");
             }
             return LocalRedirect("/Error");
         }

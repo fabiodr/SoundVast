@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import expect from 'expect';
 
 import LogoutSuccessMessage from './successMessage';
-import SuccessPopup from '../../../shared/popup/popupContainer';
+import LogoutSuccessPopup from '../../../shared/popup/popupContainer';
 
 const setup = (newProps) => {
   const props = {
@@ -23,10 +23,10 @@ const setup = (newProps) => {
 describe('LogoutSuccessMessage', () => {
   let wrapper;
 
-  it('should render a success popup', () => {
+  it('should render a logout success popup', () => {
     ({ wrapper } = setup());
 
-    expect(wrapper.find(SuccessPopup).length).toBe(1);
+    expect(wrapper.find(LogoutSuccessPopup).length).toBe(1);
   });
 });
 

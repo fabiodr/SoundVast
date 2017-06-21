@@ -9,6 +9,7 @@ import Routing from './routing';
 import store from './store';
 import LoginSuccessMessage from '../user/login/successMessage/successMessage';
 import LogoutSuccessMessage from '../user/logout/successMessage/successMessage';
+import ConfirmedEmailSuccessMessage from '../user/confirmedEmailSuccess/successMessage/successMessage';
 
 injectReactEmailAttributes();
 
@@ -18,6 +19,7 @@ ReactDOM.render((
       <Routing />
       <LoginSuccessMessage />
       <LogoutSuccessMessage />
+      <ConfirmedEmailSuccessMessage />
     </div>
   </Provider>
 ), document.getElementById('app'));

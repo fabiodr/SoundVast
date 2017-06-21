@@ -1,11 +1,11 @@
 import React from 'react';
 
-import SuccessPopup from '../../../shared/popup/popupContainer';
+import LoginSuccessPopup from '../../../shared/popup/popupContainer';
 
 const SuccessMessage = () => (
-  <SuccessPopup id="login">
+  <LoginSuccessPopup id="loginSuccess">
     You have successfully logged in.
-  </SuccessPopup>
+  </LoginSuccessPopup>
 );
 
 export default SuccessMessage;
