@@ -14,7 +14,7 @@ fetch('/account/login', {
   if (response.ok) {
     dispatch(getUserDetails());
     dispatch(hideModal());
-    return dispatch(showPopup('login'));
+    return dispatch(showPopup('loginSuccess'));
   } else if (response.status === 400) {
     return response.json().then((modelErrors) => {
       throw new SubmissionError(modelErrors);

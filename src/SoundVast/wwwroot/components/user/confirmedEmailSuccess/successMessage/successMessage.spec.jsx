@@ -27,6 +27,7 @@ describe('ConfirmedEmailSuccessMessage', () => {
     ({ wrapper } = setup());
 
     expect(wrapper.find(ConfirmedEmailSuccessPopup).length).toBe(1);
+    expect(wrapper.prop('id')).toBe('confirmedEmailSuccess');
   });
 });
 
