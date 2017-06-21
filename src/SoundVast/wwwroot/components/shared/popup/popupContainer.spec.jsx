@@ -5,7 +5,6 @@ import expect from 'expect';
 
 import PopupContainer from './popupContainer';
 import styles from './popup.less';
-import { hidePopup } from './popupActions';
 
 const store = configureMockStore()({
   popup: {
@@ -26,11 +25,13 @@ const setup = (newProps) => {
   return {
     wrapper,
     props,
+    lifeCycle: wrapper.dive(),
   };
 };
 
 describe('PopupContainer', () => {
   let wrapper;
+  let lifeCycle;
 
   afterEach(() => {
     expect.restoreSpies();
@@ -49,24 +50,29 @@ describe('PopupContainer', () => {
   });
 
   it('should hide popup after 2 seconds when it is current popup', () => {
-    ({ wrapper } = setup({ id: 'test' }));
-
     expect.spyOn(global, 'setTimeout');
 
-    wrapper.dive();
+    ({ wrapper, lifeCycle } = setup());
+
+    const hidePopup = expect.createSpy();
+    lifeCycle.setProps({ isCurrentPopup: true, hidePopup });
+
     const spyArguments = global.setTimeout.calls[0].arguments;
 
-    expect(spyArguments[0]).toBeA('function');
+    spyArguments[0]();
+
     expect(spyArguments[1]).toBe(2000);
+    expect(hidePopup).toHaveBeenCalled();
   });
 
   it('should not hide popup when it is not current popup', () => {
-    ({ wrapper } = setup());
-
     expect.spyOn(global, 'setTimeout');
 
-    wrapper.dive();
+    ({ wrapper, lifeCycle } = setup());
 
-    expect(global.setTimeout).toNotHaveBeenCalled();
+    const hidePopup = expect.createSpy();
+    lifeCycle.setProps({ hidePopup });
+
+    expect(hidePopup).toNotHaveBeenCalled();
   });
 });

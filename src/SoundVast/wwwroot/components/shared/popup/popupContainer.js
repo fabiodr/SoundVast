@@ -22,9 +22,9 @@ export default compose(
     hidePopup,
   }),
   lifecycle({
-    componentWillMount() {
-      if (this.props.isCurrentPopup) {
-        setTimeout(this.props.hidePopup, 2000);
+    componentWillReceiveProps(nextProps) {
+      if (nextProps.isCurrentPopup) {
+        setTimeout(nextProps.hidePopup, 2000);
       }
     },
   }),
