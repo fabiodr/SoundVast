@@ -18,7 +18,7 @@ fetch('/account/register', {
   if (response.ok) {
     dispatch(getUserDetails());
     dispatch(hideModal());
-    dispatch(showPopup('login'));
+    dispatch(showPopup('loginSuccess'));
 
     return response.json().then((json) => {
       const emailMessage = renderEmail(

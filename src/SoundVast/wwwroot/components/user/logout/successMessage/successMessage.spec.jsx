@@ -27,6 +27,7 @@ describe('LogoutSuccessMessage', () => {
     ({ wrapper } = setup());
 
     expect(wrapper.find(LogoutSuccessPopup).length).toBe(1);
+    expect(wrapper.prop('id')).toBe('logoutSuccess');
   });
 });
 

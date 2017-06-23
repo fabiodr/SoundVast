@@ -1,16 +1,31 @@
 import { connect } from 'react-redux';
+import { compose, lifecycle } from 'recompose';
 import classNames from 'classnames';
 
 import styles from './popup.less';
 import Popup from './popup';
 import { hidePopup } from './popupActions';
 
-const mapStateToProps = ({ popup }, { id }) => ({
-  popupClass: classNames(styles.popup, {
-    [styles.hide]: popup.currentPopup !== id,
-  }),
-});
+const mapStateToProps = ({ popup }, { id }) => {
+  const isCurrentPopup = popup.currentPopup === id;
 
-export default connect(mapStateToProps, {
-  hidePopup,
-})(Popup);
+  return {
+    popupClass: classNames(styles.popup, {
+      [styles.hide]: !isCurrentPopup,
+    }),
+    isCurrentPopup,
+  };
+};
+
+export default compose(
+  connect(mapStateToProps, {
+    hidePopup,
+  }),
+  lifecycle({
+    componentWillReceiveProps(nextProps) {
+      if (nextProps.isCurrentPopup) {
+        setTimeout(nextProps.hidePopup, 2000);
+      }
+    },
+  }),
+)(Popup);

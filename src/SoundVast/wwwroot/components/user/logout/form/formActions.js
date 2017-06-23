@@ -11,7 +11,7 @@ fetch('/account/logout', {
 }).then((response) => {
   if (response.ok) {
     dispatch(getUserDetails());
-    return dispatch(showPopup('logout'));
+    return dispatch(showPopup('logoutSuccess'));
   }
   return null;
 });

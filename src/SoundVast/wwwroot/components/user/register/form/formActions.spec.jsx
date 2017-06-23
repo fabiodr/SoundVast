@@ -58,7 +58,7 @@ describe('registerFormActions', () => {
     store.dispatch(actions.submit()).then(() => {
       expect(calledActions).toContain({
         type: 'SHOW_POPUP',
-        id: 'login',
+        id: 'loginSuccess',
       });
     });
   });

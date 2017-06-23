@@ -35,7 +35,7 @@ describe('logoutFormActions', () => {
     store.dispatch(actions.submit()).then(() => {
       expect(calledActions).toContain({
         type: 'SHOW_POPUP',
-        id: 'logout',
+        id: 'logoutSuccess',
       });
     });
   });

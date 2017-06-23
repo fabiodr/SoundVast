@@ -27,6 +27,7 @@ describe('LoginSuccessMessage', () => {
     ({ wrapper } = setup());
 
     expect(wrapper.find(LoginSuccessPopup).length).toBe(1);
+    expect(wrapper.prop('id')).toBe('loginSuccess');
   });
 });
 
