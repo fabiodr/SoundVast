@@ -250,13 +250,14 @@ namespace SoundVast.Components.Account
         public async Task<IActionResult> ConfirmEmail(ConfirmEmailViewModel model)
         {
             var user = await _userManager.FindByIdAsync(model.UserId);
+
+            if (user == null)
+            {
+                return LocalRedirect("/Error");
+            }
             var result = await _userManager.ConfirmEmailAsync(user, model.Code);
 
-            if (result.Succeeded)
-            {
-                return LocalRedirect("/Account/SuccessfullyConfirmedEmail");
-            }
-            return LocalRedirect("/Error");
+            return LocalRedirect(result.Succeeded ? "/Account/SuccessfullyConfirmedEmail" : "/Error");
         }
 
         [HttpPost]

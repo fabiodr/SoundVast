@@ -8,6 +8,7 @@ import SocialLoginConfirmation from '../user/login/socialLogin/confirmation/conf
 import SocialLoginFailure from '../user/login/socialLogin/failure/failure';
 import ResetPassword from '../user/resetPassword/form/formContainer';
 import ConfirmedEmailSuccess from '../user/confirmedEmailSuccess/confirmedEmailSuccessContainer';
+import Error from '../error/error';
 
 export default () => (
   <BrowserRouter>
@@ -20,6 +21,7 @@ export default () => (
         <Route exact path="/Account/ExternalLoginFailure" component={SocialLoginFailure} />
         <Route exact path="/Account/ResetPassword" component={ResetPassword} />
         <Route exact path="/Account/SuccessfullyConfirmedEmail" component={ConfirmedEmailSuccess} />
+        <Route exact path="/Error" component={Error} />
       </Switch>
     </div>
   </BrowserRouter>
