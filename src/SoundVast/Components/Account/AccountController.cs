@@ -35,7 +35,6 @@ namespace SoundVast.Components.Account
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-
             ILoggerFactory loggerFactory)
         {
             _userManager = userManager;
@@ -113,8 +112,7 @@ namespace SoundVast.Components.Account
                         userId = user.Id,
                         code
                     }, HttpContext.Request.Scheme);
-                    //await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
-                    //    $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
+
                     await _signInManager.SignInAsync(user, true);
                     _logger.LogInformation(3, "User created a new account with password.");
 
@@ -143,15 +141,14 @@ namespace SoundVast.Components.Account
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult AccessDenied(string returnUrl = null)
+        public IActionResult AccessDenied()
         {
             if (Request.Cookies["Identity.External"] != null)
             {
-                return RedirectToAction(nameof(ExternalLoginCallback), new { returnUrl });
+                return RedirectToAction(nameof(ExternalLoginCallback));
             }
 
-            // Return error page
-            return null;
+            return LocalRedirect("/Error");
         }
 
         [HttpPost]
@@ -160,7 +157,7 @@ namespace SoundVast.Components.Account
         public IActionResult ExternalLogin(string provider, string returnUrl = null)
         {
             // Request a redirect to the external login provider.
-            var redirectUrl = Url.Action(nameof(ExternalLoginCallback), new { ReturnUrl = returnUrl });
+            var redirectUrl = Url.Action(nameof(ExternalLoginCallback), new { returnUrl });
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
       
             return Challenge(properties, provider);

@@ -44,8 +44,9 @@ namespace SoundVast
     public class Startup
     {
         private readonly IConfiguration _configuration;
+        private readonly ILogger _logger;
 
-        public Startup(IHostingEnvironment env)
+        public Startup(IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
@@ -60,6 +61,8 @@ namespace SoundVast
 
             builder.AddEnvironmentVariables();
             _configuration = builder.Build();
+            _logger = loggerFactory.CreateLogger<Startup>();
+
             JobScheduler.Start();
         }
 
@@ -170,23 +173,48 @@ namespace SoundVast
 
             app.UseIdentity();
 
-            app.UseFacebookAuthentication(new FacebookOptions
+            var faceBookSecret = _configuration["OAuth:Facebook:Secret"];
+            var twitterSecret = _configuration["OAuth:Twitter:Secret"];
+            var googleSecret = _configuration["OAuth:Google:Secret"];
+
+            if (faceBookSecret != null)
             {
-                AppId = _configuration["Facebook:Id"],
-                AppSecret = _configuration["Facebook:Secret"]
-            });
+                app.UseFacebookAuthentication(new FacebookOptions
+                {
+                    AppId = _configuration["OAuth:Facebook:Id"],
+                    AppSecret = faceBookSecret
+                });
+            }
+            else
+            {
+                _logger.LogWarning("FaceBook OAuth not setup beacause the Facebook secret is null");
+            }
 
-            //app.UseTwitterAuthentication(new TwitterOptions
-            //{
-            //    ConsumerKey = _configuration["Twitter:Id"],
-            //    ConsumerSecret = _configuration["Twitter:Secret"]
-            //});
+            if (twitterSecret != null)
+            {
+                app.UseTwitterAuthentication(new TwitterOptions
+                {
+                    ConsumerKey = _configuration["OAuth:Twitter:Id"],
+                    ConsumerSecret = twitterSecret
+                });
+            }
+            else
+            {
+                _logger.LogWarning("Twitter OAuth not setup beacause the Twitter secret is null");
+            }
 
-            //app.UseGoogleAuthentication(new GoogleOptions
-            //{
-            //    ClientId = _configuration["Google:Id"],
-            //    ClientSecret = _configuration["Google:Secret"]
-            //});
+            if (googleSecret != null)
+            {
+                app.UseGoogleAuthentication(new GoogleOptions
+                {
+                    ClientId = _configuration["OAuth:Google:Id"],
+                    ClientSecret = googleSecret
+                });
+            }
+            else
+            {
+                _logger.LogWarning("Google OAuth not setup beacause the Google secret is null");
+            }
 
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
             app.SeedData();
