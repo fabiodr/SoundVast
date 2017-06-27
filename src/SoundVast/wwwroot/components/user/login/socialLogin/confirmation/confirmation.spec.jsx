@@ -8,7 +8,7 @@ import SocialLoginConfirmationForm from './form/formContainer';
 const setup = (newProps) => {
   const props = {
     location: {
-      search: '?loginProvider=Facebook&email=test@outlook.com',
+      search: '?loginProvider=Facebook&email=test@outlook.com&returnUrl=/',
     },
     ...newProps,
   };
@@ -35,5 +35,6 @@ describe('SocialLoginConfirmation', () => {
 
     expect(wrapper.find(SocialLoginConfirmationForm).prop('loginProvider')).toBe('Facebook');
     expect(wrapper.find(SocialLoginConfirmationForm).prop('email')).toBe('test@outlook.com');
+    expect(wrapper.find(SocialLoginConfirmationForm).prop('returnUrl')).toBe('/');
   });
 });

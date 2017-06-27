@@ -11,5 +11,7 @@ namespace SoundVast.Components.Account.ViewModels
         [Required]
         [RegularExpression(@"^.+@.+$", ErrorMessage = "Must be a valid email address")]
         public string Email { get; set; }
+
+        public string ReturnUrl { get; set; }
     }
 }

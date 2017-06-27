@@ -9,17 +9,17 @@ import AntiForgeryToken from '../../../../shared/form/antiForgeryToken/antiForge
 const Form = ({ loginProviders }) => (
   <form action="account/externalLogin" method="post">
     <AntiForgeryToken form="socialLogins" />
+    <input type="hidden" name="returnUrl" value={window.location.pathname} />
+
     <div className={styles.socialLogins}>
-      <div>
-        {
-          loginProviders.map(loginProvider => (
-            <SocialLogin
-              key={loginProvider.authenticationScheme}
-              {...loginProvider}
-            />
-          ))
-        }
-      </div>
+      {
+        loginProviders.map(loginProvider => (
+          <SocialLogin
+            key={loginProvider.authenticationScheme}
+            {...loginProvider}
+          />
+        ))
+      }
     </div>
     <hr className={hr} />
   </form>

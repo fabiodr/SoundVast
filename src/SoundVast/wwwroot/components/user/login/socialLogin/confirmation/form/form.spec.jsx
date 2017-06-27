@@ -4,11 +4,13 @@ import expect from 'expect';
 
 import SocialLoginConfirmationForm from './form';
 import AntiForgeryToken from '../../../../../shared/form/antiForgeryToken/antiForgeryTokenContainer';
+import ValidationErrors from '../../../../../shared/form/validation/errors/errors';
 
 const setup = (newProps) => {
   const props = {
     handleSubmit: expect.createSpy(),
     loginProvider: 'Facebook',
+    returnUrl: '/',
     ...newProps,
   };
 
@@ -36,5 +38,11 @@ describe('SocialLoginConfirmationForm', () => {
     wrapper.simulate('submit');
 
     expect(props.handleSubmit).toHaveBeenCalled();
+  });
+
+  it('should render validation errors', () => {
+    ({ wrapper } = setup());
+
+    expect(wrapper.find(ValidationErrors).length).toBe(1);
   });
 });

@@ -6,9 +6,10 @@ import { submit } from './formActions';
 import SocialLoginConfirmationForm from './form';
 import userValidation from '../../../../userValidation';
 
-const mapStateToProps = (state, { email }) => ({
+const mapStateToProps = (state, { email, returnUrl }) => ({
   initialValues: {
     email,
+    returnUrl,
   },
 });
 

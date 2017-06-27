@@ -139,22 +139,10 @@ namespace SoundVast.Components.Account
             return Ok();
         }
 
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult AccessDenied()
-        {
-            if (Request.Cookies["Identity.External"] != null)
-            {
-                return RedirectToAction(nameof(ExternalLoginCallback));
-            }
-
-            return LocalRedirect("/Error");
-        }
-
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public IActionResult ExternalLogin(string provider, string returnUrl = null)
+        public IActionResult ExternalLogin(string provider, string returnUrl)
         {
             // Request a redirect to the external login provider.
             var redirectUrl = Url.Action(nameof(ExternalLoginCallback), new { returnUrl });
@@ -165,7 +153,7 @@ namespace SoundVast.Components.Account
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null)
+        public async Task<IActionResult> ExternalLoginCallback(string returnUrl, string remoteError = null)
         {
             if (remoteError != null)
             {
@@ -176,7 +164,7 @@ namespace SoundVast.Components.Account
             var info = await _signInManager.GetExternalLoginInfoAsync();
             if (info == null)
             {
-                return RedirectToAction(nameof(Login));
+                return StatusCode((int)HttpStatusCode.BadRequest);
             }
 
             // Sign in the user with this external login provider if the user already has a login.
@@ -208,7 +196,7 @@ namespace SoundVast.Components.Account
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model, string returnUrl = null)
+        public async Task<IActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -233,7 +221,7 @@ namespace SoundVast.Components.Account
                     {
                         await _signInManager.SignInAsync(user, true);
                         _logger.LogInformation(6, "User created an account using {Name} provider.", info.LoginProvider);
-                        return LocalRedirect(returnUrl);
+                        return LocalRedirect(model.ReturnUrl);
                     }
                 }
                 AddErrors(result);

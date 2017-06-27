@@ -5,15 +5,16 @@ import PropTypes from 'prop-types';
 import AntiForgeryToken from '../../../../../shared/form/antiForgeryToken/antiForgeryTokenContainer';
 import FormInput from '../../../../../shared/form/elements/input';
 import genericStyles from '../../../../../shared/generic.less';
+import ValidationErrors from '../../../../../shared/form/validation/errors/errors';
 
-const Form = ({ error, handleSubmit, loginProvider }) => (
+const Form = ({ error: errors, handleSubmit, loginProvider }) => (
   <form onSubmit={handleSubmit} action="" method="post">
     <AntiForgeryToken form="socialLoginConfirmation" />
+    <ValidationErrors errors={errors} />
 
     <h4>Association Form</h4>
 
     <hr />
-    {error}
 
     <p className="text-info">
         You&apos;ve successfully authenticated with {loginProvider}.
@@ -30,7 +31,7 @@ const Form = ({ error, handleSubmit, loginProvider }) => (
 );
 
 Form.defaultProps = {
-  error: null,
+  error: [],
 };
 
 Form.propTypes = {

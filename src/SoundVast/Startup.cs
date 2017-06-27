@@ -38,6 +38,7 @@ using SoundVast.Components.Quote.Models;
 using SoundVast.Components.Rating;
 using SoundVast.Components.Report;
 using SoundVast.Components.User;
+using System.Text.RegularExpressions;
 
 namespace SoundVast
 {
@@ -79,6 +80,8 @@ namespace SoundVast
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequireUppercase = false;
                     options.Password.RequiredLength = 0;
+                    // Allow all characters
+                    options.User.AllowedUserNameCharacters = string.Empty;
                 })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
@@ -187,7 +190,7 @@ namespace SoundVast
             }
             else
             {
-                _logger.LogWarning("FaceBook OAuth not setup beacause the Facebook secret is null");
+                _logger.LogWarning("FaceBook OAuth not setup because the Facebook secret is null");
             }
 
             if (twitterSecret != null)
@@ -200,7 +203,7 @@ namespace SoundVast
             }
             else
             {
-                _logger.LogWarning("Twitter OAuth not setup beacause the Twitter secret is null");
+                _logger.LogWarning("Twitter OAuth not setup because the Twitter secret is null");
             }
 
             if (googleSecret != null)
@@ -213,7 +216,7 @@ namespace SoundVast
             }
             else
             {
-                _logger.LogWarning("Google OAuth not setup beacause the Google secret is null");
+                _logger.LogWarning("Google OAuth not setup because the Google secret is null");
             }
 
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
