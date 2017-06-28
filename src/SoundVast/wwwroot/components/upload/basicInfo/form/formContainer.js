@@ -2,9 +2,14 @@ import { reduxForm } from 'redux-form';
 import { compose } from 'recompose';
 import { connect } from 'react-redux';
 
-import LoginForm from './form';
-import userValidation from '../../userValidation';
+import UploadForm from './form';
 import { submit } from './formActions';
+
+const mapStateToProps = (state, { title }) => ({
+  initialValues: {
+    title,
+  },
+});
 
 const mapDispatchToProps = dispatch => ({
   onSubmit: (values) => {
@@ -19,9 +24,9 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default compose(
-  connect(null, mapDispatchToProps),
+  connect(mapStateToProps, mapDispatchToProps),
   reduxForm({
-    form: 'login',
-    validate: userValidation,
+    form: 'upload',
+    // validate: userValidation,
   }),
-)(LoginForm);
+)(UploadForm);
