@@ -12,7 +12,7 @@ const Header = () => (
   <header className={styles.header}>
     <nav>
       <ul>
-        {/* <li>
+        {/*<li>
           <Link to="/" className={styles.logoLink}>
             <img src={soundVastLogo} alt="SoundVast" />
           </Link>
@@ -22,10 +22,10 @@ const Header = () => (
         </li>
         <li>
           <Link to="livestreams/livestream">Live Streams</Link>
-        </li>
+        </li>*/}
         <li>
-          <Link to="uploadmain/upload">Upload</Link>
-        </li> */}
+          <Link to="upload">Upload</Link>
+        </li>
       </ul>
       <ul>
         <AuthorizedList />
