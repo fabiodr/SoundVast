@@ -7,7 +7,7 @@ import Popup from './popup';
 const setup = (newProps) => {
   const props = {
     popupClass: 'test',
-    children: <div className="@@test" />,
+    text: 'Successfully logged in!',
     ...newProps,
   };
 
@@ -23,9 +23,9 @@ describe('Popup', () => {
   let wrapper;
   let props;
 
-  it('should render children', () => {
+  it('should render text', () => {
     ({ wrapper, props } = setup());
 
-    expect(wrapper.contains(props.children)).toBe(true);
+    expect(wrapper.text()).toBe(props.text);
   });
 });

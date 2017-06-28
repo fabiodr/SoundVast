@@ -27,6 +27,7 @@
     <Content Include="wwwroot\components\header\header.less" />
     <Content Include="wwwroot\components\user\userReducer.js" />
     <Content Include="wwwroot\components\user\userReducer.spec.js" />
+    <Content Include="wwwroot\images\loginProviders\twitter_40.png" />
     <Content Include="wwwroot\js\frontPage\frontPage.jsx" />
     <Content Include="wwwroot\js\active-user.js" />
     <Content Include="wwwroot\js\audio\Audio.js" />

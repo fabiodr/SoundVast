@@ -7,9 +7,7 @@ import { injectReactEmailAttributes } from 'react-html-email';
 import './app.less';
 import Routing from './routing';
 import store from './store';
-import LoginSuccessMessage from '../user/login/successMessage/successMessage';
-import LogoutSuccessMessage from '../user/logout/successMessage/successMessage';
-import ConfirmedEmailSuccessMessage from '../user/confirmedEmailSuccess/successMessage/successMessage';
+import TextPopup from '../shared/popup/popupContainer';
 
 injectReactEmailAttributes();
 
@@ -17,9 +15,7 @@ ReactDOM.render((
   <Provider store={store}>
     <div>
       <Routing />
-      <LoginSuccessMessage />
-      <LogoutSuccessMessage />
-      <ConfirmedEmailSuccessMessage />
+      <TextPopup id="textPopup" />
     </div>
   </Provider>
 ), document.getElementById('app'));

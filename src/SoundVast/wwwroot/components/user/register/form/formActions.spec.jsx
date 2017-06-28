@@ -57,8 +57,9 @@ describe('registerFormActions', () => {
 
     store.dispatch(actions.submit()).then(() => {
       expect(calledActions).toContain({
-        type: 'SHOW_POPUP',
-        id: 'loginSuccess',
+        type: 'SHOW_TEXT_POPUP',
+        text: 'You have successfully logged in.',
+        id: 'textPopup',
       });
     });
   });

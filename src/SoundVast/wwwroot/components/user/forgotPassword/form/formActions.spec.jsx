@@ -65,6 +65,28 @@ describe('forgotPasswordFormActions', () => {
     });
   });
 
+  it('should show popup message on success', () => {
+    fetchMock.postOnce('/account/generatePasswordResetLink', body);
+
+    store.dispatch(actions.submit()).then(() => {
+      expect(calledActions).toContain({
+        type: 'SHOW_TEXT_POPUP',
+        id: 'textPopup',
+        text: 'A password reset link has been sent to your email.',
+      });
+    });
+  });
+
+  it('should close modal on success', () => {
+    fetchMock.postOnce('/account/generatePasswordResetLink', body);
+
+    store.dispatch(actions.submit()).then(() => {
+      expect(calledActions).toContain({
+        type: 'HIDE_MODAL',
+      });
+    });
+  });
+
   it('submit should do nothing on failure', () => {
     fetchMock.postOnce('/account/generatePasswordResetLink', 500);
 

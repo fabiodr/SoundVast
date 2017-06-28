@@ -1,6 +1,7 @@
-export const showPopup = id => ({
-  type: 'SHOW_POPUP',
-  id,
+export const showTextPopup = text => ({
+  type: 'SHOW_TEXT_POPUP',
+  id: 'textPopup',
+  text,
 });
 
 export const hidePopup = () => ({

@@ -14,6 +14,7 @@ const mapStateToProps = ({ popup }, { id }) => {
       [styles.hide]: !isCurrentPopup,
     }),
     isCurrentPopup,
+    text: popup.text,
   };
 };
 

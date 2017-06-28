@@ -3,6 +3,8 @@ import React from 'react';
 import { SubmissionError } from 'redux-form';
 import { renderEmail } from 'react-html-email';
 
+import { showTextPopup } from '../../../shared/popup/popupActions';
+import { hideModal } from '../../../shared/modal/modalActions';
 import { sendEmail } from '../../../email/emailActions';
 import ForgotPasswordEmail from '../../../email/forgotPassword/forgotPassword';
 
@@ -19,6 +21,8 @@ fetch('/account/generatePasswordResetLink', {
       );
 
       dispatch(sendEmail(json.email, emailMessage, 'Reset Password'));
+      dispatch(hideModal());
+      dispatch(showTextPopup('A password reset link has been sent to your email.'));
     });
   } else if (response.status === 400) {
     return response.json().then((modelErrors) => {

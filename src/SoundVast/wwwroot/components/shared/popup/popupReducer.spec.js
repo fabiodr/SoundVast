@@ -13,13 +13,16 @@ describe('popupReducer', () => {
 
   it('should handle showing the popup', () => {
     const id = 'test';
+    const text = 'Successfully logged in!';
     const state = popupReducer(null, {
-      type: 'SHOW_POPUP',
+      type: 'SHOW_TEXT_POPUP',
       id,
+      text,
     });
 
     expect(state).toEqual({
       currentPopup: id,
+      text,
     });
   });
 

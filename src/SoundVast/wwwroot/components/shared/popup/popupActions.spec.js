@@ -14,20 +14,21 @@ describe('popupActions', () => {
     calledActions = store.getActions();
   });
 
-  it('should show popup', () => {
-    const id = 'test';
+  it('should show text popup', () => {
+    const text = 'Successfully logged in!';
 
-    store.dispatch(actions.showPopup(id));
+    store.dispatch(actions.showTextPopup(text));
 
     expect(calledActions).toEqual([
       {
-        type: 'SHOW_POPUP',
-        id,
+        type: 'SHOW_TEXT_POPUP',
+        id: 'textPopup',
+        text,
       },
     ]);
   });
 
-  it('should hide modpopupal', () => {
+  it('should hide popup', () => {
     store.dispatch(actions.hidePopup());
 
     expect(calledActions).toEqual([

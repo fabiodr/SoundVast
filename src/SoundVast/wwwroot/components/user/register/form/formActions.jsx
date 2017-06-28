@@ -3,7 +3,7 @@ import React from 'react';
 import { SubmissionError } from 'redux-form';
 import { renderEmail } from 'react-html-email';
 
-import { showPopup } from '../../../shared/popup/popupActions';
+import { showTextPopup } from '../../../shared/popup/popupActions';
 import { hideModal } from '../../../shared/modal/modalActions';
 import { getUserDetails } from '../../userActions';
 import { sendEmail } from '../../../email/emailActions';
@@ -18,7 +18,7 @@ fetch('/account/register', {
   if (response.ok) {
     dispatch(getUserDetails());
     dispatch(hideModal());
-    dispatch(showPopup('loginSuccess'));
+    dispatch(showTextPopup('You have successfully logged in.'));
 
     return response.json().then((json) => {
       const emailMessage = renderEmail(

@@ -1,14 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Popup = ({ children, popupClass }) => (
+const Popup = ({ text, popupClass }) => (
   <div className={popupClass}>
-    {children}
+    {text}
   </div>
 );
 
+Popup.defaultProps = {
+  text: null,
+};
+
 Popup.propTypes = {
-  children: PropTypes.node.isRequired,
+  text: PropTypes.node,
   popupClass: PropTypes.string.isRequired,
 };
 

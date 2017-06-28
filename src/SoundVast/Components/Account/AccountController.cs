@@ -256,7 +256,7 @@ namespace SoundVast.Components.Account
 
                 if (user == null)
                 {
-                    ModelState.AddModelError("", "We couldn't find that email address");
+                    ModelState.AddModelError(ModelError, "We couldn't find that email address");
 
                     return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ToJsonString());
                 }
