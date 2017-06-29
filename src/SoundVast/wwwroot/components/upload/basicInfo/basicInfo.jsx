@@ -1,9 +1,15 @@
 import React from 'react';
+import { Field } from 'redux-form';
 
-import Form from './form/formContainer';
+import formStyles from '../../shared/form/form.less';
+import FormInput from '../../shared/form/elements/input';
 
 const BasicInfo = () => (
-  <Form />
+  <div className={formStyles.formGroup}>
+    <Field name="name" component={FormInput} />
+    <Field name="artist" component={FormInput} />
+    {/* TODO: Genre's dropdown */}
+  </div>
 );
 
 export default BasicInfo;

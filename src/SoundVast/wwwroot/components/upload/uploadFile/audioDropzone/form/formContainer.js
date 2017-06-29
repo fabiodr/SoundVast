@@ -27,6 +27,5 @@ export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   reduxForm({
     form: 'upload',
-    // validate: userValidation,
   }),
 )(UploadForm);

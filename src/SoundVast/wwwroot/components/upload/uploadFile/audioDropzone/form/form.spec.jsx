@@ -3,11 +3,13 @@ import expect from 'expect';
 import { shallow } from 'enzyme';
 
 import UploadForm from './form';
-import ValidationErrors from '../../../shared/form/validation/errors/errors';
+import ValidationErrors from '../../../../shared/form/validation/errors/errors';
 
 const setup = (newProps) => {
   const props = {
     handleSubmit: expect.createSpy(),
+    cancel: expect.createSpy(),
+    index: 2,
     ...newProps,
   };
 
@@ -29,6 +31,14 @@ describe('UploadForm', () => {
     wrapper.simulate('submit');
 
     expect(props.handleSubmit).toHaveBeenCalled();
+  });
+
+  it('should call cancel on cancel click', () => {
+    ({ wrapper, props } = setup());
+
+    wrapper.find('.cancel').simulate('click');
+
+    expect(props.cancel).toHaveBeenCalledWith(props.index);
   });
 
   it('should render validation errors', () => {
