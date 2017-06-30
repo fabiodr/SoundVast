@@ -42,7 +42,7 @@ namespace SoundVast.Components.FileStream
             ICloudStorage cloudStorage,
             IFileStreamService fileStreamService,
             ICategoryService<FileStreamCategoryModel> categoryService,
-            IGenreService<FileStreamGenreModel> genreService,
+            IGenreService genreService,
             IReportService<FileStreamReportModel> reportService,
             IRatingService<AudioRatingModel> ratingService,
             UserManager<ApplicationUser> userManager)

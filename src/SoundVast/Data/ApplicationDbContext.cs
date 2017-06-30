@@ -26,8 +26,8 @@ namespace SoundVast.Data
         public DbSet<LinkModel> Links { get; set; }
         public DbSet<GenreModel> Genres { get; set; }
         public DbSet<CategoryModel> Categories { get; set; }
-        public DbSet<FileStreamGenreModel> FileStreamGenres { get; set; }
-        public DbSet<LiveStreamGenreModel> LiveStreamGenres { get; set; }
+        //public DbSet<FileStreamGenreModel> FileStreamGenres { get; set; }
+        //public DbSet<LiveStreamGenreModel> LiveStreamGenres { get; set; }
         public DbSet<FileStreamCategoryModel> FileStreamCategories { get; set; }
         public DbSet<LiveStreamCategoryModel> LiveStreamCategories { get; set; }
         public DbSet<ReportModel> Reports { get; set; }

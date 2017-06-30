@@ -33,7 +33,7 @@ namespace SoundVast.Components.Audio
     {
         private readonly IAudioService<TAudio> _audioService;
         private readonly ICategoryService<TCategory> _categoryService;
-        private readonly IGenreService<TGenre> _genreService;
+        private readonly IGenreService _genreService;
         private readonly IReportService<TReport> _reportService;
         private readonly IRatingService<AudioRatingModel> _ratingService;
         private readonly UserManager<ApplicationUser> _userManager;
@@ -43,7 +43,7 @@ namespace SoundVast.Components.Audio
         }
 
         protected AudioController(IMapper mapper, IServiceProvider serviceProvider, IAudioService<TAudio> audioService, 
-            ICategoryService<TCategory> categoryService, IGenreService<TGenre> genreService, IReportService<TReport> reportservice,
+            ICategoryService<TCategory> categoryService, IGenreService genreService, IReportService<TReport> reportservice,
             IRatingService<AudioRatingModel> ratingService, UserManager<ApplicationUser> userManager)
             : base(mapper, serviceProvider)
         {

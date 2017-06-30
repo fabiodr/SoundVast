@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Dropzone from 'react-dropzone';
 
+import styles from './audioDropzone.less';
 import dropzoneStyles from '../../../shared/dropzone/dropzone.less';
 import FileInformation from './fileInformation/fileInformation';
 import Form from './form/formContainer';
@@ -9,7 +10,7 @@ import Form from './form/formContainer';
 const AudioDropzone = ({ onDrop, files, removeFile }) => (
   <div>
     <Dropzone
-      className="dropzone"
+      className={styles.audioDropzone}
       accept="audio/*"
       onDrop={onDrop}
     >

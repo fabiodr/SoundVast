@@ -38,14 +38,14 @@ namespace SoundVast.Components.Upload.File
     public class UploadFileController : CustomBaseController
     {
         private readonly IFileStreamService _audioService;
-        private readonly IGenreService<FileStreamGenreModel> _genreService;       
+        private readonly IGenreService _genreService;       
         private readonly ICategoryService<FileStreamCategoryModel> _categoryService;
         private readonly ICloudStorage _cloudStorage;
         private readonly IFileStorage _fileStorage;
         private readonly IConfiguration _configuration;
 
         public UploadFileController(IMapper mapper, IServiceProvider serviceProvider, IFileStreamService audioService, 
-            IGenreService<FileStreamGenreModel> genreService, ICategoryService<FileStreamCategoryModel> categoryService,
+            IGenreService genreService, ICategoryService<FileStreamCategoryModel> categoryService,
             ICloudStorage cloudStorage, IFileStorage fileStorage, IConfiguration configuration) 
             : base(mapper, serviceProvider)
         {

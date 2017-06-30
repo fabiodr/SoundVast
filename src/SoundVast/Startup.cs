@@ -39,6 +39,7 @@ using SoundVast.Components.Rating;
 using SoundVast.Components.Report;
 using SoundVast.Components.User;
 using System.Text.RegularExpressions;
+using SoundVast.Components.Genre.Models;
 
 namespace SoundVast
 {
@@ -119,12 +120,11 @@ namespace SoundVast
             services.AddScoped<IRepository<AudioModel>, Repository<AudioModel, ApplicationDbContext>>();
             services.AddScoped<IRepository<PlaylistModel>, Repository<PlaylistModel, ApplicationDbContext>>();
             services.AddScoped<IRepository<FileStream>, Repository<FileStream, ApplicationDbContext>>();
-            services.AddScoped<IRepository<FileStreamGenreModel>, Repository<FileStreamGenreModel, ApplicationDbContext>>();
+            services.AddScoped<IRepository<GenreModel>, Repository<GenreModel, ApplicationDbContext>>();
             services.AddScoped<IRepository<FileStreamCategoryModel>, Repository<FileStreamCategoryModel, ApplicationDbContext>>();
             services.AddScoped<IRepository<FileStreamReportModel>, Repository<FileStreamReportModel, ApplicationDbContext>>();
             services.AddScoped<IRepository<AudioRatingModel>, Repository<AudioRatingModel, ApplicationDbContext>>();
             services.AddScoped<IRepository<LiveStreamModel>, Repository<LiveStreamModel, ApplicationDbContext>>();
-            services.AddScoped<IRepository<LiveStreamGenreModel>, Repository<LiveStreamGenreModel, ApplicationDbContext>>();
             services.AddScoped<IRepository<LiveStreamCategoryModel>, Repository<LiveStreamCategoryModel, ApplicationDbContext>>();
             services.AddScoped<IRepository<LiveStreamReportModel>, Repository<LiveStreamReportModel, ApplicationDbContext>>();
             services.AddScoped<IRepository<LiveStreamRatingModel>, Repository<LiveStreamRatingModel, ApplicationDbContext>>();
@@ -136,12 +136,11 @@ namespace SoundVast
             services.AddScoped<IAudioService<AudioModel>, AudioService<AudioModel>>();
             services.AddScoped<IPlaylistService, PlaylistService>();
             services.AddScoped<IFileStreamService, FileStreamService>();
-            services.AddScoped<IGenreService<FileStreamGenreModel>, GenreService<FileStreamGenreModel>>();
+            services.AddScoped<IGenreService, GenreService>();
             services.AddScoped<ICategoryService<FileStreamCategoryModel>, CategoryService<FileStreamCategoryModel>>();
             services.AddScoped<IReportService<FileStreamReportModel>, ReportService<FileStreamReportModel>>();
             services.AddScoped<IRatingService<AudioRatingModel>, RatingService<AudioRatingModel>>();
             services.AddScoped<ILiveStreamService, LiveStreamService>();
-            services.AddScoped<IGenreService<LiveStreamGenreModel>, GenreService<LiveStreamGenreModel>>();
             services.AddScoped<ICategoryService<LiveStreamCategoryModel>, CategoryService<LiveStreamCategoryModel>>();
             services.AddScoped<IReportService<LiveStreamReportModel>, ReportService<LiveStreamReportModel>>();
             services.AddScoped<IRatingService<LiveStreamRatingModel>, RatingService<LiveStreamRatingModel>>();

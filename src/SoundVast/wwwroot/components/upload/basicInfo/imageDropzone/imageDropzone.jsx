@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import Dropzone from 'react-dropzone';
 
 import dropzoneStyles from '../../../shared/dropzone/dropzone.less';
+import styles from './imageDropzone.less';
 
 const ImageDropzone = ({ onDrop }) => (
   <Dropzone
-    className="dropzone"
+    className={styles.imageDropzone}
     accept="image/*"
     onDrop={onDrop}
   >

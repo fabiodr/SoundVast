@@ -1,7 +1,9 @@
-﻿var Webpack = require('webpack');
+﻿/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable no-var */
+
+var Webpack = require('webpack');
 var path = require('path');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var autoprefixer = require('autoprefixer');
 
 var dev = process.env.NODE_ENV !== 'production';
 var plugins = [
@@ -58,10 +60,6 @@ module.exports = {
             },
           }, {
             loader: 'postcss-loader',
-            options: {
-              indent: 'postcss',
-              plugins: () => [autoprefixer],
-            },
           }, {
             loader: 'less-loader',
           }],

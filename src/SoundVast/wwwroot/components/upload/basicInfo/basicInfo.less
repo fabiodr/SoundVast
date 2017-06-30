@@ -1,8 +1,16 @@
+.basicInfo {
+    display: flex;
+}
+
 .imageDropzoneContainer {
-    width: 30%;
+    width: 40%;
 }
 
 .formGroup {
-    // composes: formGroup from '../../shared/form/form.less';
+    composes: formGroup from '../../shared/form/form.less';
     width: 70%;
+
+    input {
+        width: 100%;
+    }
 }
