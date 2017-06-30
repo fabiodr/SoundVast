@@ -1,27 +1,13 @@
-import { compose, withState, withHandlers } from 'recompose';
+import { connect } from 'react-redux';
 
 import AudioDropzone from './audioDropzone';
+import { addFiles, removeFile } from '../../uploadActions';
 
-let fileKey = 0;
+export const mapStateToProps = ({ upload }) => ({
+  files: upload.files,
+});
 
-export const onDrop = ({ addFiles }) => (files) => {
-  addFiles((stateFiles) => {
-    const allFiles = stateFiles.concat(files);
-
-    allFiles.forEach((file) => {
-      const newFile = file;
-
-      newFile.key = fileKey;
-      fileKey += 1;
-    });
-
-    return allFiles;
-  });
-};
-
-export default compose(
-  withState('files', 'addFiles', []),
-  withHandlers({
-    onDrop,
-  }),
-)(AudioDropzone);
+export default connect(mapStateToProps, {
+  onDrop: addFiles,
+  removeFile,
+})(AudioDropzone);

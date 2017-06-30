@@ -6,6 +6,7 @@ import user from '../user/userReducer';
 import socialLogins from '../user/login/socialLogins/socialLoginsReducer';
 import modal from '../shared/modal/modalReducer';
 import popup from '../shared/popup/popupReducer';
+import upload from '../upload/uploadReducer';
 
 const middleWare = applyMiddleware(thunk);
 const reducers = combineReducers({
@@ -14,6 +15,7 @@ const reducers = combineReducers({
   modal,
   form,
   popup,
+  upload,
 });
 
 export default createStore(reducers, middleWare);

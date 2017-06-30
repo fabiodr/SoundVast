@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 
 import ValidationErrors from '../../../../shared/form/validation/errors/errors';
 
-const Form = ({ error: errors, children, handleSubmit, cancel, index }) => (
+const Form = ({ error: errors, children, handleSubmit, removeFile, index }) => (
   <form onSubmit={handleSubmit} action="">
     <ValidationErrors errors={errors} />
 
     {children}
 
     <button>Save</button>
-    <button className="cancel" onClick={() => cancel(index)}>
+    <button type="button" className="cancel" onClick={() => removeFile(index)}>
       Cancel
     </button>
   </form>
@@ -23,7 +23,7 @@ Form.defaultProps = {
 Form.propTypes = {
   children: PropTypes.node.isRequired,
   index: PropTypes.number.isRequired,
-  cancel: PropTypes.func.isRequired,
+  removeFile: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   error: PropTypes.arrayOf(PropTypes.string.isRequired),
 };

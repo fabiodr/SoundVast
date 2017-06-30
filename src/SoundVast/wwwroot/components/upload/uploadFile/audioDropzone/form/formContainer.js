@@ -2,12 +2,12 @@ import { reduxForm } from 'redux-form';
 import { compose } from 'recompose';
 import { connect } from 'react-redux';
 
-import UploadForm from './form';
+import UploadFileForm from './form';
 import { submit } from './formActions';
 
-const mapStateToProps = (state, { title }) => ({
+export const mapStateToProps = (_, { name }) => ({
   initialValues: {
-    title,
+    name: name.replace(/\.[^/.]+$/, ''),
   },
 });
 
@@ -25,7 +25,6 @@ const mapDispatchToProps = dispatch => ({
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
-  reduxForm({
-    form: 'upload',
-  }),
-)(UploadForm);
+  // TODO: https://github.com/erikras/redux-form/issues/3048
+  reduxForm({}),
+)(UploadFileForm);

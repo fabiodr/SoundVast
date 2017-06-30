@@ -2,18 +2,18 @@ import React from 'react';
 import expect from 'expect';
 import { shallow } from 'enzyme';
 
-import UploadForm from './form';
+import UploadFileForm from './form';
 import ValidationErrors from '../../../../shared/form/validation/errors/errors';
 
 const setup = (newProps) => {
   const props = {
     handleSubmit: expect.createSpy(),
-    cancel: expect.createSpy(),
+    removeFile: expect.createSpy(),
     index: 2,
     ...newProps,
   };
 
-  const wrapper = shallow(<UploadForm {...props} />);
+  const wrapper = shallow(<UploadFileForm {...props} />);
 
   return {
     wrapper,
@@ -21,7 +21,7 @@ const setup = (newProps) => {
   };
 };
 
-describe('UploadForm', () => {
+describe('UploadFileForm', () => {
   let wrapper;
   let props;
 
@@ -33,12 +33,12 @@ describe('UploadForm', () => {
     expect(props.handleSubmit).toHaveBeenCalled();
   });
 
-  it('should call cancel on cancel click', () => {
+  it('should call removeFile on cancel click', () => {
     ({ wrapper, props } = setup());
 
     wrapper.find('.cancel').simulate('click');
 
-    expect(props.cancel).toHaveBeenCalledWith(props.index);
+    expect(props.removeFile).toHaveBeenCalledWith(props.index);
   });
 
   it('should render validation errors', () => {

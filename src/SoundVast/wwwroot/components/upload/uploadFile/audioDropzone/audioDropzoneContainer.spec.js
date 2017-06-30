@@ -1,25 +1,21 @@
 import expect from 'expect';
 
-import { onDrop } from './audioDropzoneContainer';
+import { mapStateToProps } from './audioDropzoneContainer';
 
 describe('AudioDropzoneContainer', () => {
-  it('should add files to existing files', () => {
-    let stateFiles;
-    const files = [{
-      title: 'bubble.mp3',
-    }];
-
-    const addFiles = (func) => {
-      stateFiles = func([{
-        title: 'test.mp3',
-      }]);
+  it('should map state to props correctly', () => {
+    const state = {
+      upload: {
+        files: [
+          { title: 'test.mp3' },
+        ],
+      },
     };
 
-    onDrop({ addFiles })(files);
+    const stateProps = mapStateToProps(state);
 
-    expect(stateFiles).toEqual([
-      { key: 0, title: 'test.mp3' },
-      { key: 1, title: 'bubble.mp3' },
-    ]);
+    expect(stateProps).toEqual({
+      files: state.upload.files,
+    });
   });
 });

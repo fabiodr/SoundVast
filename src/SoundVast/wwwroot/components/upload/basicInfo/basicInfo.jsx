@@ -1,14 +1,20 @@
 import React from 'react';
 import { Field } from 'redux-form';
 
-import formStyles from '../../shared/form/form.less';
+import styles from './basicInfo.less';
+import ImageDropzone from './imageDropzone/imageDropzone';
 import FormInput from '../../shared/form/elements/input';
 
 const BasicInfo = () => (
-  <div className={formStyles.formGroup}>
-    <Field name="name" component={FormInput} />
-    <Field name="artist" component={FormInput} />
-    {/* TODO: Genre's dropdown */}
+  <div>
+    <div className={styles.imageDropzoneContainer}>
+      <ImageDropzone />
+    </div>
+    <div className={styles.formGroup}>
+      <Field name="name" component={FormInput} />
+      <Field name="artist" component={FormInput} />
+      {/* TODO: Genre's dropdown */}
+    </div>
   </div>
 );
 
