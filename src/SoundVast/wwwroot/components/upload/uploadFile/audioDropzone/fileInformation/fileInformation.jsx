@@ -1,9 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 import BasicInfo from '../../../basicInfo/basicInfoContainer';
 
-const FileInformation = () => (
+const FileInformation = ({ index }) => (
   <Tabs>
     <TabList>
       <Tab>Basic info</Tab>
@@ -11,7 +12,7 @@ const FileInformation = () => (
       <Tab>Permissions</Tab>
     </TabList>
     <TabPanel>
-      <BasicInfo />
+      <BasicInfo index={index} />
     </TabPanel>
     <TabPanel>
       MetaData
@@ -21,5 +22,9 @@ const FileInformation = () => (
     </TabPanel>
   </Tabs>
 );
+
+FileInformation.propTypes = {
+  index: PropTypes.number.isRequired,
+};
 
 export default FileInformation;

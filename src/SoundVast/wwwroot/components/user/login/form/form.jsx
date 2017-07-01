@@ -6,7 +6,7 @@ import ModalLink from '../../../shared/modal/link/linkContainer';
 import formStyles from '../../../shared/form/form.less';
 import genericStyles from '../../../shared/generic.less';
 import AntiForgeryToken from '../../../shared/form/antiForgeryToken/antiForgeryTokenContainer';
-import FormInput from '../../../shared/form/elements/input';
+import FormInput from '../../../shared/form/elements/editableField/input/input';
 import ValidationErrors from '../../../shared/form/validation/errors/errors';
 
 const Form = ({ error: errors, handleSubmit }) => (

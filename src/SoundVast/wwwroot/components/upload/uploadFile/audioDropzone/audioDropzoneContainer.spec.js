@@ -6,8 +6,13 @@ describe('AudioDropzoneContainer', () => {
   it('should map state to props correctly', () => {
     const state = {
       upload: {
-        files: [
-          { title: 'test.mp3' },
+        audioFiles: [
+          {
+            key: 0,
+            name: 'test.mp3',
+            preview: 'blob:localhost:8080/test.jpg',
+            size: 1003990,
+          },
         ],
       },
     };
@@ -15,7 +20,13 @@ describe('AudioDropzoneContainer', () => {
     const stateProps = mapStateToProps(state);
 
     expect(stateProps).toEqual({
-      files: state.upload.files,
+      files: [
+        {
+          preview: state.upload.audioFiles[0].preview,
+          key: state.upload.audioFiles[0].key,
+          name: state.upload.audioFiles[0].name,
+        },
+      ],
     });
   });
 });

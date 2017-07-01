@@ -8,6 +8,7 @@ import Form from './form/formContainer';
 const setup = (newProps) => {
   const props = {
     files: [],
+    removeFile: expect.createSpy(),
     onDrop: expect.createSpy(),
     ...newProps,
   };
@@ -31,8 +32,16 @@ describe('AudioDropzone', () => {
 
   it('should map form for each file', () => {
     const files = [
-      { title: 'test.mp3' },
-      { title: 'testTwo.mp3' },
+      {
+        key: 0,
+        name: 'test.mp3',
+        preview: 'blob:localhost:8080/test.jpg',
+      },
+      {
+        key: 1,
+        name: 'testTwo.mp3',
+        preview: 'blob:localhost:8080/test.jpg',
+      },
     ];
 
     ({ wrapper } = setup({ files }));

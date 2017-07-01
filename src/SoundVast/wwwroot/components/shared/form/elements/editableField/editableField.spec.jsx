@@ -2,19 +2,17 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import expect from 'expect';
 
-import FormInput from './input';
-import ValidationErrors from '../validation/errors/errors';
+import EditableField from './editableField';
+import ValidationErrors from '../../validation/errors/errors';
 
 const setup = (newProps) => {
   const props = {
-    input: {},
-    meta: {
-      touched: false,
-    },
+    children: <div />,
+    touched: false,
     ...newProps,
   };
 
-  const wrapper = shallow(<FormInput {...props} />);
+  const wrapper = shallow(<EditableField {...props} />);
 
   return {
     wrapper,
@@ -22,23 +20,18 @@ const setup = (newProps) => {
   };
 };
 
-describe('FormInput', () => {
+describe('EditableField', () => {
   let wrapper;
 
-  it('should render input', () => {
+  it('should render children', () => {
     ({ wrapper } = setup());
 
-    expect(wrapper.find('input').length).toBe(1);
+    expect(wrapper.find('.editableField').length).toBe(1);
   });
 
   it('should render ValidationErrors when touched', () => {
     const error = ['Required'];
-    ({ wrapper } = setup({
-      meta: {
-        touched: true,
-        error,
-      },
-    }));
+    ({ wrapper } = setup({ touched: true, error }));
 
     expect(wrapper.find(ValidationErrors).length).toBe(1);
     expect(wrapper.find(ValidationErrors).prop('errors')).toBe(error);
@@ -46,12 +39,7 @@ describe('FormInput', () => {
 
   it('should not render ValidationErrors when not touched', () => {
     const error = 'Required';
-    ({ wrapper } = setup({
-      meta: {
-        touched: false,
-        error,
-      },
-    }));
+    ({ wrapper } = setup({ error }));
 
     expect(wrapper.find(ValidationErrors).length).toBe(0);
   });

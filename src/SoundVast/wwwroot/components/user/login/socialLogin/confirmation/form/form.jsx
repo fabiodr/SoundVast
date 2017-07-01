@@ -3,7 +3,7 @@ import { Field } from 'redux-form';
 import PropTypes from 'prop-types';
 
 import AntiForgeryToken from '../../../../../shared/form/antiForgeryToken/antiForgeryTokenContainer';
-import FormInput from '../../../../../shared/form/elements/input';
+import FormInput from '../../../../../shared/form/elements/editableField/input/input';
 import genericStyles from '../../../../../shared/generic.less';
 import ValidationErrors from '../../../../../shared/form/validation/errors/errors';
 

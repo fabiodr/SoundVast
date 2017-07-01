@@ -7,6 +7,7 @@ import ValidationErrors from '../../../../shared/form/validation/errors/errors';
 
 const setup = (newProps) => {
   const props = {
+    children: <div className="@@test" />,
     handleSubmit: expect.createSpy(),
     removeFile: expect.createSpy(),
     index: 2,
@@ -24,6 +25,12 @@ const setup = (newProps) => {
 describe('UploadFileForm', () => {
   let wrapper;
   let props;
+
+  it('should render children', () => {
+    ({ wrapper, props } = setup());
+
+    expect(wrapper.find('.@@test').length).toBe(1);
+  });
 
   it('should call submit handler when form is submitted', () => {
     ({ wrapper, props } = setup());

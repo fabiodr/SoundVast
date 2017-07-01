@@ -9,48 +9,90 @@ describe('uploadReducer', () => {
     });
 
     expect(state).toEqual({
-      files: [],
+      audioFiles: [],
     });
   });
 
-  it('should add files to existing files', () => {
+  it('should add audio files to existing files', () => {
     const actionProps = {
       files: [{
-        title: 'bubble.mp3',
+        name: 'bubble.mp3',
       }],
     };
     const prevState = {
-      files: [{
-        title: 'test.mp3',
+      audioFiles: [{
+        name: 'test.mp3',
       }],
     };
 
     const state = uploadReducer(prevState, {
-      type: 'ADD_FILES',
+      type: 'ADD_AUDIO_FILES',
       ...actionProps,
     });
 
     expect(state).toEqual({
-      files: [
-        { title: 'test.mp3' },
-        { title: 'bubble.mp3', key: 0 },
+      audioFiles: [
+        { name: 'test.mp3' },
+        { name: 'bubble.mp3', key: 0 },
       ],
     });
   });
 
-  it('should remove file', () => {
+  it('should remove audio file', () => {
     const prevState = {
-      files: [
-        { title: 'test.mp3' },
-        { title: 'testTwo.mp3' },
+      audioFiles: [
+        { name: 'test.mp3' },
+        { name: 'testTwo.mp3' },
       ],
     };
 
     const state = uploadReducer(prevState, {
-      type: 'REMOVE_FILE',
+      type: 'REMOVE_AUDIO_FILE',
       index: 0,
     });
 
-    expect(state.files.length).toBe(1);
+    expect(state.audioFiles.length).toBe(1);
+  });
+
+  it('should update cover image file', () => {
+    const index = 0;
+    const actionProps = {
+      file: {
+        preview: 'bubble.jpg',
+      },
+      index,
+    };
+
+    const prevState = {
+      audioFiles: [
+        { name: 'test.mp3' },
+      ],
+    };
+
+    const state = uploadReducer(prevState, {
+      type: 'UPDATE_COVER_IMAGE_FILE',
+      ...actionProps,
+    });
+
+    expect(state.audioFiles[index].previewCoverImage).toEqual(
+      actionProps.file.preview,
+    );
+  });
+
+  it('should remove cover image file', () => {
+    const index = 1;
+    const prevState = {
+      audioFiles: [
+        { name: 'test.mp3', previewCoverImage: 'test.jpg' },
+        { name: 'bubble.mp3', previewCoverImage: 'bubble.jpg' },
+      ],
+    };
+
+    const state = uploadReducer(prevState, {
+      type: 'REMOVE_COVER_IMAGE_FILE',
+      index: 1,
+    });
+
+    expect(state.audioFiles[index].previewCoverImage).toBe(null);
   });
 });

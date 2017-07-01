@@ -1,13 +1,17 @@
 import { connect } from 'react-redux';
 
 import AudioDropzone from './audioDropzone';
-import { addFiles, removeFile } from '../../uploadActions';
+import { addAudioFiles, removeAudioFile } from '../../uploadActions';
 
 export const mapStateToProps = ({ upload }) => ({
-  files: upload.files,
+  files: upload.audioFiles.map(x => ({
+    key: x.key,
+    preview: x.preview,
+    name: x.name,
+  })),
 });
 
 export default connect(mapStateToProps, {
-  onDrop: addFiles,
-  removeFile,
+  onDrop: addAudioFiles,
+  removeFile: removeAudioFile,
 })(AudioDropzone);

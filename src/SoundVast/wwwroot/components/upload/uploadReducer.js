@@ -1,30 +1,58 @@
 let fileKey = 0;
 
 const defaultState = {
-  files: [],
+  audioFiles: [],
+};
+
+const addFiles = (files, newFiles) => {
+  newFiles.forEach((file) => {
+    const newFile = file;
+
+    newFile.key = fileKey;
+    fileKey += 1;
+  });
+
+  return files.concat(newFiles);
+};
+
+const removeFile = (files, index) => {
+  const newFiles = [...files];
+
+  newFiles.splice(index, 1);
+
+  return newFiles;
 };
 
 export default (state = defaultState, action) => {
   switch (action.type) {
-    case 'ADD_FILES': {
-      action.files.forEach((file) => {
-        const newFile = file;
+    case 'ADD_AUDIO_FILES':
+      return {
+        ...state,
+        audioFiles: addFiles(state.audioFiles, action.files),
+      };
+    case 'REMOVE_AUDIO_FILE':
+      return {
+        ...state,
+        audioFiles: removeFile(state.audioFiles, action.index),
+      };
+    case 'UPDATE_COVER_IMAGE_FILE': {
+      const audioFiles = [...state.audioFiles];
 
-        newFile.key = fileKey;
-        fileKey += 1;
-      });
+      audioFiles[action.index].previewCoverImage = action.file.preview;
 
       return {
-        files: state.files.concat(action.files),
+        ...state,
+        audioFiles,
       };
     }
-    case 'REMOVE_FILE': {
-      const files = [...state.files];
+    case 'REMOVE_COVER_IMAGE_FILE': {
+      const audioFiles = [...state.audioFiles];
 
-      files.splice(action.index, 1);
+      audioFiles[action.index].previewCoverImage = null;
 
       return {
-        files,
+        ...state,
+        audioFiles,
       };
     }
     default: return state;

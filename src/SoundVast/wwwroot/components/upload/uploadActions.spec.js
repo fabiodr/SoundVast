@@ -14,27 +14,58 @@ describe('uploadActions', () => {
     calledActions = store.getActions();
   });
 
-  it('should add files', () => {
+  it('should add audio files', () => {
     const files = [
-      { title: 'test.mp3' },
+      { name: 'test.mp3' },
     ];
-    store.dispatch(actions.addFiles(files));
+
+    store.dispatch(actions.addAudioFiles(files));
 
     expect(calledActions).toEqual([
       {
-        type: 'ADD_FILES',
+        type: 'ADD_AUDIO_FILES',
         files,
       },
     ]);
   });
 
-  it('should remove file', () => {
+  it('should remove audio file', () => {
     const index = 0;
-    store.dispatch(actions.removeFile(index));
+
+    store.dispatch(actions.removeAudioFile(index));
 
     expect(calledActions).toEqual([
       {
-        type: 'REMOVE_FILE',
+        type: 'REMOVE_AUDIO_FILE',
+        index,
+      },
+    ]);
+  });
+
+  it('should add cover image files', () => {
+    const file = {
+      name: 'test.jpg',
+    };
+    const index = 0;
+
+    store.dispatch(actions.updateCoverImageFile(file, index));
+
+    expect(calledActions).toEqual([
+      {
+        type: 'UPDATE_COVER_IMAGE_FILE',
+        file,
+        index,
+      },
+    ]);
+  });
+
+  it('should remove cover image file', () => {
+    const index = 0;
+    store.dispatch(actions.removeCoverImageFile(index));
+
+    expect(calledActions).toEqual([
+      {
+        type: 'REMOVE_COVER_IMAGE_FILE',
         index,
       },
     ]);
