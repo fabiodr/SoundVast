@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -49,14 +50,16 @@ namespace SoundVast.Storage.FileStorage
             return ms.ToArray();
         }
 
-        public void ConvertToMp3(string fileName, string destPathToStoreAt, string mp3DestPathToStoreAt)
+        private void ConvertToMp3(string fileName, string currentFilePath)
         {
             // If it is already an .mp3 file then there's no need to convert
             if (Path.GetExtension(fileName) == ".mp3")
                 return;
 
+            var mp3DestinationPath = Path.ChangeExtension(currentFilePath, ".mp3");
+
             var psi = new ProcessStartInfo($"{_configuration["Directory:EXE"]}ffempeg.exe",
-                string.Format($@"-i ""{destPathToStoreAt}"" -y ""{mp3DestPathToStoreAt}"""))
+                string.Format($@"-i ""{currentFilePath}"" -y ""{mp3DestinationPath}"""))
             {
                 CreateNoWindow = true,
                 UseShellExecute = false,
@@ -68,11 +71,11 @@ namespace SoundVast.Storage.FileStorage
                 exeProcess.WaitForExit();
 
                 // Converted the file to mp3, so delete the original
-                File.Delete(destPathToStoreAt);
+                File.Delete(currentFilePath);
             }
         }
 
-        public void ReadMp3Bytes(IFormFile file)
+        private void ReadMp3Bytes(IFormFile file)
         {
             using (var reader = new BinaryReader(file.OpenReadStream()))
             {
@@ -82,7 +85,7 @@ namespace SoundVast.Storage.FileStorage
             }
         }
 
-        public void ReadJpgBytes(IFormFile file, int newWidth, int newHeight)
+        private void ReadJpgBytes(IFormFile file, int newWidth, int newHeight)
         {
             using (var reader = new BinaryReader(file.OpenReadStream()))
             {
@@ -93,6 +96,13 @@ namespace SoundVast.Storage.FileStorage
 
                 // file.InputStream.Position = 0;
             }
+        }
+
+        public void TempStoreMp3File(IFormFile file, string destinationPath)
+        {
+            ReadMp3Bytes(file);
+            File.WriteAllBytes(destinationPath, AudioBytes);
+            ConvertToMp3(file.FileName, destinationPath);
         }
     }
 }

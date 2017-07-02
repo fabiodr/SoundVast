@@ -15,10 +15,10 @@ describe('uploadFormActions', () => {
   });
 
   it('should post form', () => {
-    fetchMock.postOnce('/upload', 200);
+    fetchMock.postOnce('/upload/save', 200);
 
     store.dispatch(actions.submit()).then(() => {
-      expect(fetchMock.called('/upload')).toBe(true);
+      expect(fetchMock.called('/upload/save')).toBe(true);
     });
   });
 
@@ -27,7 +27,7 @@ describe('uploadFormActions', () => {
       title: 'Required',
     };
 
-    fetchMock.postOnce('/upload', {
+    fetchMock.postOnce('/upload/save', {
       status: 400,
       body: modelErrors,
     });

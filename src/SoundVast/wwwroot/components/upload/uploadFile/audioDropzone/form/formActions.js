@@ -3,7 +3,7 @@
 import { SubmissionError } from 'redux-form';
 
 export const submit = formData => () =>
-fetch('/upload', {
+fetch('/upload/save', {
   method: 'post',
   body: formData,
 }).then((response) => {

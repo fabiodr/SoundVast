@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import UploadFileForm from './form';
 import { submit } from './formActions';
 import { getGenres } from '../../../../genre/genreActions';
+import uploadValidation from '../../../uploadValidation';
 
 export const mapStateToProps = ({ genre }, { name }) => ({
   initialValues: {
@@ -34,5 +35,7 @@ export default compose(
     },
   }),
   // TODO: https://github.com/erikras/redux-form/issues/3048
-  reduxForm({}),
+  reduxForm({
+    validate: uploadValidation,
+  }),
 )(UploadFileForm);

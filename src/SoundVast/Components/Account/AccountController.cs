@@ -21,6 +21,7 @@ using SoundVast.Components.FileStream;
 using SoundVast.Components.User;
 using SoundVast.CustomHelpers;
 using SoundVast.Services;
+using SoundVast.Utilities.ModelState;
 
 namespace SoundVast.Components.Account
 {
@@ -30,16 +31,19 @@ namespace SoundVast.Components.Account
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger _logger;
+        private readonly IModelState _modelState;
         private const string ModelError = "_error";
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory,
+            IModelState modelState)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = loggerFactory.CreateLogger<AccountController>();
+            _modelState = modelState;
         }
 
         [HttpGet]
@@ -87,7 +91,7 @@ namespace SoundVast.Components.Account
                 ModelState.AddModelError(ModelError, "Invalid login attempt.");
             }
 
-            return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ToJsonString());
+            return StatusCode((int)HttpStatusCode.BadRequest, _modelState.ConvertToJson(ModelState));
         }
 
         [HttpPost]
@@ -125,7 +129,7 @@ namespace SoundVast.Components.Account
                 AddErrors(result);
             }
 
-            return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ToJsonString());
+            return StatusCode((int)HttpStatusCode.BadRequest, _modelState.ConvertToJson(ModelState));
         }
 
         [HttpPost]
@@ -159,7 +163,7 @@ namespace SoundVast.Components.Account
             {
                 ModelState.AddModelError(ModelError, $"Error from external provider: {remoteError}");
 
-                return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ToJsonString());
+                return StatusCode((int)HttpStatusCode.BadRequest, _modelState.ConvertToJson(ModelState));
             }
             var info = await _signInManager.GetExternalLoginInfoAsync();
             if (info == null)
@@ -227,7 +231,7 @@ namespace SoundVast.Components.Account
                 AddErrors(result);
             }
 
-            return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ToJsonString());
+            return StatusCode((int)HttpStatusCode.BadRequest, _modelState.ConvertToJson(ModelState));
         }
 
         [HttpGet]
@@ -258,7 +262,7 @@ namespace SoundVast.Components.Account
                 {
                     ModelState.AddModelError(ModelError, "We couldn't find that email address");
 
-                    return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ToJsonString());
+                    return StatusCode((int)HttpStatusCode.BadRequest, _modelState.ConvertToJson(ModelState));
                 }
 
                 // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
@@ -277,7 +281,7 @@ namespace SoundVast.Components.Account
                 });
             }
 
-            return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ToJsonString());
+            return StatusCode((int)HttpStatusCode.BadRequest, _modelState.ConvertToJson(ModelState));
         }
 
         [HttpPost]
@@ -287,7 +291,7 @@ namespace SoundVast.Components.Account
         {
             if (!ModelState.IsValid)
             {
-                return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ToJsonString());
+                return StatusCode((int)HttpStatusCode.BadRequest, _modelState.ConvertToJson(ModelState));
             }
             var user = await _userManager.FindByIdAsync(model.UserId);
             var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
@@ -299,7 +303,7 @@ namespace SoundVast.Components.Account
 
             AddErrors(result);
 
-            return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ToJsonString());
+            return StatusCode((int)HttpStatusCode.BadRequest, _modelState.ConvertToJson(ModelState));
         }
 
         private void AddErrors(IdentityResult result)

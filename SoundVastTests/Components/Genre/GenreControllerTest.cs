@@ -26,7 +26,7 @@ namespace SoundVastTests.Components.Genre
         }
 
         [Test]
-        public void GetGenres()
+        public void ShouldGetGenres()
         {
             var genres = new List<GenreModel>();
 

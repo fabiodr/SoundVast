@@ -1,9 +1,11 @@
 import expect from 'expect';
 import configureStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+import fetchMock from 'fetch-mock';
 
 import * as actions from './uploadActions';
 
-const mockStore = configureStore();
+const mockStore = configureStore([thunk]);
 const store = mockStore({});
 
 describe('uploadActions', () => {
@@ -14,19 +16,26 @@ describe('uploadActions', () => {
     calledActions = store.getActions();
   });
 
-  it('should add audio files', () => {
+  afterEach(() => {
+    expect.restoreSpies();
+  });
+
+  it('should upload audio files', () => {
+    fetchMock.postOnce('/upload/upload', 200);
+
     const files = [
       { name: 'test.mp3' },
     ];
 
-    store.dispatch(actions.addAudioFiles(files));
+    expect.spyOn(FormData.prototype, 'append');
 
-    expect(calledActions).toEqual([
-      {
+    store.dispatch(actions.uploadAudioFiles(files)).then(() => {
+      expect(FormData.prototype.append).toHaveBeenCalledWith('files', files[0]);
+      expect(calledActions).toEqual([{
         type: 'ADD_AUDIO_FILES',
         files,
-      },
-    ]);
+      }]);
+    });
   });
 
   it('should remove audio file', () => {

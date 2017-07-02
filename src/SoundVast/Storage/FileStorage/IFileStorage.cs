@@ -11,8 +11,6 @@ namespace SoundVast.Storage.FileStorage
         byte[] ImageBytes { get; set; }
         byte[] AudioBytes { get; set; }
 
-        void ConvertToMp3(string fileName, string destPathToStoreAt, string mp3DestPathToStoreAt);
-        void ReadMp3Bytes(IFormFile file);
-        void ReadJpgBytes(IFormFile file, int newWidth, int newHeight);
+        void TempStoreMp3File(IFormFile file, string destinationPath);
     }
 }

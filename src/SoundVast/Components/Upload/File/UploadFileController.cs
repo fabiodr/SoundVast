@@ -68,16 +68,16 @@ namespace SoundVast.Components.Upload.File
             return Json(tags);
         }
 
-        [HttpPost]
-        public void TempStoreAudioFile(IFormFile file, string mp3TempName)
-        {
-            var destPathToStoreAt = _configuration["Directory:TempResources"] + file.FileName;
-            var mp3DestPathToStoreAt = _configuration["Directory:TempResources"] + mp3TempName;
+        //[HttpPost]
+        //public void TempStoreAudioFile(IFormFile file, string mp3TempName)
+        //{
+        //    var destPathToStoreAt = _configuration["Directory:TempResources"] + file.FileName;
+        //    var mp3DestPathToStoreAt = _configuration["Directory:TempResources"] + mp3TempName;
 
-            _fileStorage.ReadMp3Bytes(file);
-            System.IO.File.WriteAllBytes(destPathToStoreAt, _fileStorage.AudioBytes);
-            _fileStorage.ConvertToMp3(file.FileName, destPathToStoreAt, mp3DestPathToStoreAt);
-        }
+        //    _fileStorage.ReadMp3Bytes(file);
+        //    System.IO.File.WriteAllBytes(destPathToStoreAt, _fileStorage.AudioBytes);
+        //    _fileStorage.ConvertToMp3(file.FileName, destPathToStoreAt, mp3DestPathToStoreAt);
+        //}
 
         [HttpPost]
         public JsonResult HandleFiles(IFormCollection files)
@@ -96,7 +96,7 @@ namespace SoundVast.Components.Upload.File
 
                 additionalUploadFileViewModels.Add(new AdditionalUploadFileViewModel());
 
-                TempStoreAudioFile(file, file.FileName);
+               // TempStoreAudioFile(file, file.FileName);
             }
 
             //Return two partials so we don't need two HTTP Requests
