@@ -1,7 +1,25 @@
+import jsmediatags from 'jsmediatags';
+import fs from 'fs';
+
 export const uploadAudioFiles = (files) => {
   const formData = new FormData();
 
-  files.forEach(file => formData.append('files', file));
+//   fs.read("./Miaow-07-Bubble.m4a", () => {
+// debugger
+//   });
+
+  files.forEach((file) => {
+    formData.append('files', file);
+
+    jsmediatags.read("./Miaow-07-Bubble.m4a", {
+      onSuccess: (tag) => {
+        console.log(tag);
+      },
+      onError: (error) => {
+        console.log(':(', error.type, error.info);
+      },
+    });
+  });
 
   return dispatch =>
     fetch('/upload/upload', {

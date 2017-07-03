@@ -2,7 +2,6 @@
 import 'isomorphic-fetch';
 import 'url-search-params-polyfill';
 import hook from 'css-modules-require-hook';
-import formData from 'formdata-polyfill';
 import { injectReactEmailAttributes } from 'react-html-email';
 
 injectReactEmailAttributes();
@@ -14,8 +13,7 @@ hook({
 
 const window = new jsdom.JSDOM().window;
 
-window.FormData = formData;
-global.FormData = formData;
+global.FormData = window.FormData;
 
 Object.keys(window).forEach((property) => {
   if (typeof global[property] === 'undefined') {
