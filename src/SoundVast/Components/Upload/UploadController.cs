@@ -59,6 +59,26 @@ namespace SoundVast.Components.Upload
             return Ok();
         }
 
+        [HttpPost]
+        public async Task<IActionResult> FetchFilesMetadata(IEnumerable<IFormFile> files)
+        {
+            var fileMetadata = new FileMetadata();
+
+            foreach (var file in files)
+            {
+                fileMetadata = await _fileStorage.GetFileMetadata(file);
+                var coverImageFileName = Path.GetFileName(fileMetadata.CoverImagePath);
+                var coverImageBlob = _cloudStorage.GetBlob(CloudStorageType.Image, coverImageFileName);
+
+                //await coverImageBlob.UploadFromPathAsync(fileMetadata.CoverImagePath, FileMetadata.CoverImageContentType);
+            }
+
+            return Ok(new
+            {
+                CoverImagePreviewBytes = fileMetadata.CoverImageBytes
+            });
+        }
+
         //public void TempStoreAudioFile(IFormFile file, string mp3TempName)
         //{
         //    var destPathToStoreAt = _configuration["Directory:TempResources"] + file.FileName;

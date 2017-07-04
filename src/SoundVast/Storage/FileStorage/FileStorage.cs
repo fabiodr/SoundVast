@@ -6,10 +6,13 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace SoundVast.Storage.FileStorage
 {
@@ -17,6 +20,7 @@ namespace SoundVast.Storage.FileStorage
     {
         private readonly IConfiguration _configuration;
         private readonly ILogger _logger;
+        private string FfmpegPath => Path.Combine(_configuration["Directory:EXE"], "ffmpeg.exe");
         public static int CoverImageWidth => 217;
         public static int CoverImageHeight => 217;
         public byte[] ImageBytes { get; set; }
@@ -56,6 +60,52 @@ namespace SoundVast.Storage.FileStorage
             return ms.ToArray();
         }
 
+        private async Task<FileMetadata> ProcessMetadata(string path)
+        {
+            var coverImagePath = Path.ChangeExtension(path, ".jpg");
+            var metadataPath = Path.ChangeExtension(path, ".txt");
+            // https://ffmpeg.org/ffmpeg.html
+            // -i - specifies the input files
+            // -vsync vfr - frames with same input are dropped
+            // -f ffmetadata - output a metadata file
+            var arguments = $"-i {path} -vsync vfr -acodec copy {coverImagePath} -f ffmetadata {metadataPath}";
+
+            var processStartInfo = new ProcessStartInfo(FfmpegPath, arguments)
+            {
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true
+            };
+
+            using (var process = new Process
+            {
+                StartInfo = processStartInfo,
+                EnableRaisingEvents = true
+            })
+            {
+                await RunProcessAsync(process).ConfigureAwait(false);
+            }
+
+            if (metadataPath != null)
+            {
+                // Metadata keys or values containing special characters (‘=’, ‘;’, ‘#’, ‘\’ and a newline)
+                // must be escaped with a backslash ‘\’. 
+
+                int SplitIndex(string metadataLine) => metadataLine.IndexOf("=", 0, StringComparison.Ordinal);
+
+                var regex = new Regex("");
+                var metadatda = File.ReadLines(metadataPath)
+                    .Where(x => SplitIndex(x) >= 0).ToDictionary(x => x.Substring(0, SplitIndex(x)), x => x.Substring(SplitIndex(x), x.Length));
+            }
+            
+
+            return new FileMetadata
+            {
+                CoverImageBytes = File.ReadAllBytes(coverImagePath)
+            };
+        }
+
         private async Task<ProcessAudioModel> ProcessAudioFile(string path, string fileName)
         {
             // https://ffmpeg.org/ffmpeg.html
@@ -71,11 +121,11 @@ namespace SoundVast.Storage.FileStorage
 
                 arguments += $"{mp3Path} ";
             }
-            
+
             var coverImagePath = Path.ChangeExtension(path, ".jpg");
             var metadataPath = Path.ChangeExtension(path, ".txt");
             var ffmpegPath = Path.Combine(_configuration["Directory:EXE"], "ffmpeg.exe");
-            
+
             // -vsync vfr - frames with same input are dropped
             // -f ffmetadata - output a metadata file
             arguments += $"-vsync vfr -acodec copy {coverImagePath} -f ffmetadata {metadataPath}";
@@ -127,11 +177,9 @@ namespace SoundVast.Storage.FileStorage
             var started = process.Start();
             if (!started)
             {
-                //you may allow for the process to be re-used (started = false) 
-                //but I'm not sure about the guarantees of the Exited event in such a case
                 throw new InvalidOperationException($"Could not start process: {process}");
             }
-
+            
             process.BeginOutputReadLine();
             process.BeginErrorReadLine();
 
@@ -169,6 +217,16 @@ namespace SoundVast.Storage.FileStorage
             File.WriteAllBytes(path, AudioBytes);
 
             return await ProcessAudioFile(path, file.FileName);
+        }
+
+        public async Task<FileMetadata> GetFileMetadata(IFormFile file)
+        {
+            var path = Path.GetTempFileName();
+
+            ReadMp3Bytes(file);
+            File.WriteAllBytes(path, AudioBytes);
+
+            return await ProcessMetadata(path);
         }
     }
 }

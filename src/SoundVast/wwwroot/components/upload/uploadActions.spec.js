@@ -20,8 +20,24 @@ describe('uploadActions', () => {
     expect.restoreSpies();
   });
 
+  it('should fetch files metadata while uploading', () => {
+    fetchMock.postOnce('/upload/upload', 200);
+    fetchMock.postOnce('/upload/fetchFilesMetadata', 200);
+
+    const files = [
+      { name: 'test.mp3' },
+    ];
+
+    expect.spyOn(FormData.prototype, 'append');
+
+    store.dispatch(actions.uploadAudioFiles(files)).then(() => {
+      expect(fetchMock.called('/upload/fetchFilesMetadata')).toBe(true);
+    });
+  });
+
   it('should upload audio files', () => {
     fetchMock.postOnce('/upload/upload', 200);
+    fetchMock.postOnce('/upload/fetchFilesMetadata', 200);
 
     const files = [
       { name: 'test.mp3' },

@@ -46,7 +46,7 @@ namespace SoundVast.Storage.CloudStorage.AzureStorage
             var bytes = File.ReadAllBytes(path);
 
             File.Delete(path);
-
+            
             _cloudBlockBlob.Properties.ContentType = contentType;
 
             await _cloudBlockBlob.UploadFromByteArrayAsync(bytes, 0, bytes.Length);

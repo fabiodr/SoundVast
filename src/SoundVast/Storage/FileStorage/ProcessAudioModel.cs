@@ -9,7 +9,6 @@ namespace SoundVast.Storage.FileStorage
     {
         public static string AudioContentType => "audio/mpeg";
         public static string CoverImageContentType => "image/jpg";
-
         public string AudioPath { get; set; }
         public string CoverImagePath { get; set; }
         public string MetadataPath { get; set; }
