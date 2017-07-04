@@ -120,8 +120,8 @@ namespace SoundVast.Components.Upload.File
                 var audioBlob = _cloudStorage.GetBlob(CloudStorageType.Audio, mp3FileName);
                 var imageBlob = _cloudStorage.GetBlob(CloudStorageType.Image, jpgFileName);
 
-                audioBlob.UploadFromPath(_configuration["Directory:TempResources"] + mp3FileName, "audio/mpeg");
-                imageBlob.UploadFromPath(_configuration["Directory:TempResources"] + jpgFileName, "image/jpg");
+                audioBlob.UploadFromPathAsync(_configuration["Directory:TempResources"] + mp3FileName, "audio/mpeg");
+                imageBlob.UploadFromPathAsync(_configuration["Directory:TempResources"] + jpgFileName, "image/jpg");
 
                 var fileStreamMetaData = new FileStreamModel(User.FindFirst(ClaimTypes.NameIdentifier).Value)
                 {

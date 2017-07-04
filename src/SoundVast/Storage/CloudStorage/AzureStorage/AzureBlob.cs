@@ -40,16 +40,16 @@ namespace SoundVast.Storage.CloudStorage.AzureStorage
             });
         }
 
-        public void UploadFromPath(string path, string contentType = "application/octet-stream")
+        public async Task UploadFromPathAsync(string path, string contentType = "application/octet-stream")
         {
             //Read the bytes from the converted file and upload them to blob storage
             var bytes = File.ReadAllBytes(path);
 
-            _cloudBlockBlob.Properties.ContentType = contentType;
-            _cloudBlockBlob.UploadFromByteArray(bytes, 0, bytes.Length);
-
-            //Delete the local temp file
             File.Delete(path);
+
+            _cloudBlockBlob.Properties.ContentType = contentType;
+
+            await _cloudBlockBlob.UploadFromByteArrayAsync(bytes, 0, bytes.Length);
         }
 
         public async Task DownloadRangeToStreamAsync(Stream target, long? offset, long? length)

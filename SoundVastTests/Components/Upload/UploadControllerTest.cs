@@ -30,7 +30,6 @@ namespace SoundVastTests.Components.Upload
         private UploadController _uploadController;
         private Mock<IModelState> _mockModelState;
         private Mock<IFileStorage> _mockFileStorage;
-        private Mock<IConfiguration> _mockConfiguration;
         private Mock<ICloudStorage> _mockCloudStorage;
 
         [SetUp]
@@ -38,11 +37,10 @@ namespace SoundVastTests.Components.Upload
         {
             _mockModelState = new Mock<IModelState>();
             _mockFileStorage = new Mock<IFileStorage>();
-            _mockConfiguration = new Mock<IConfiguration>();
             _mockCloudStorage = new Mock<ICloudStorage>();
             _mockModelState.Setup(x => x.ConvertToJson(It.IsAny<ModelStateDictionary>())).Returns("error");
 
-            _uploadController = new UploadController(_mockModelState.Object, _mockFileStorage.Object, _mockConfiguration.Object,
+            _uploadController = new UploadController(_mockModelState.Object, _mockFileStorage.Object,
                 _mockCloudStorage.Object);
         }
 
@@ -67,30 +65,34 @@ namespace SoundVastTests.Components.Upload
         }
 
         [Test]
-        public void UploadShouldUploadFiles()
+        public async Task UploadShouldUploadFiles()
         {
+            const string audioFileName = "testFile.mp3";
+            const string coverImageFileName = "testFile.jpg";
             var files = new List<IFormFile>();
+            var processAudioModel = new ProcessAudioModel
+            {
+                AudioPath = Path.Combine("testPath", audioFileName),
+                CoverImagePath = Path.Combine("testPath", coverImageFileName)
+            };
 
-            var path = "testPath://";
-            var fileName = "testFile.mp3";
-            Mock<SoundVast.Storage.CloudStorage.ICloudBlob> mockAudioBlob = new Mock<SoundVast.Storage.CloudStorage.ICloudBlob>();
+            var mockAudioBlob = new Mock<SoundVast.Storage.CloudStorage.ICloudBlob>();
+            var mockCoverImageBlob = new Mock<SoundVast.Storage.CloudStorage.ICloudBlob>();
             var mockFile = new Mock<IFormFile>();
 
-            mockFile.Setup(x => x.FileName).Returns("testFile.wav");
-
-            var destinationPath = Path.Combine(path, mockFile.Object.FileName);
-
-            mockAudioBlob.Setup(x => x.UploadFromPath(It.IsAny<string>(), "audio/mpeg"));
-            _mockConfiguration.Setup(x => x[It.IsAny<string>()]).Returns(path);
-            _mockCloudStorage.Setup(x => x.GetBlob(CloudStorageType.Audio, fileName)).Returns(mockAudioBlob.Object);
-            _mockFileStorage.Setup(x => x.TempStoreMp3File(mockFile.Object, destinationPath));
+            _mockFileStorage.Setup(x => x.TempStoreMp3Data(mockFile.Object)).ReturnsAsync(processAudioModel);
+            _mockCloudStorage.Setup(x => x.GetBlob(CloudStorageType.Audio, audioFileName)).Returns(mockAudioBlob.Object);
+            _mockCloudStorage.Setup(x => x.GetBlob(CloudStorageType.Image, coverImageFileName)).Returns(mockCoverImageBlob.Object);
+            mockAudioBlob.Setup(x => x.UploadFromPathAsync(processAudioModel.AudioPath, ProcessAudioModel.AudioContentType)).Returns(Task.CompletedTask);
+            mockCoverImageBlob.Setup(x => x.UploadFromPathAsync(processAudioModel.CoverImagePath, ProcessAudioModel.CoverImageContentType)).Returns(Task.CompletedTask);
 
             files.Add(mockFile.Object);
 
-            var result = _uploadController.Upload(files);
+            var result = await _uploadController.Upload(files);
 
             _mockFileStorage.VerifyAll();
             mockAudioBlob.VerifyAll();
+            mockCoverImageBlob.VerifyAll();
 
             result.Should().BeOfType<OkResult>();
         }

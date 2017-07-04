@@ -1,0 +1,11 @@
+;FFMETADATA1
+publisher=Ninja Tune
+track=1
+album=Ninja Tuna
+artist=Mr. Scruff
+album_artist=Mr. Scruff
+title=Kalimba
+genre=Electronic
+composer=A. Carthy and A. Kingslow
+date=2008
+encoder=Lavf57.44.100

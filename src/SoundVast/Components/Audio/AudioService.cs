@@ -167,7 +167,7 @@ namespace SoundVast.Components.Audio
 
             var blob = _cloudStorage.GetBlob(CloudStorageType.Image, audio.ImageFile.Name);
 
-            blob.UploadFromPath(_configuration["Directory:TempResources"] + audio.ImageFile.Name, "image/jpeg");
+            blob.UploadFromPathAsync(_configuration["Directory:TempResources"] + audio.ImageFile.Name, "image/jpeg");
 
             _repository.Save();
 

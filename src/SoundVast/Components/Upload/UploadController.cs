@@ -13,6 +13,7 @@ using SoundVast.Storage.CloudStorage;
 using SoundVast.Storage.FileStorage;
 using SoundVast.Components.Upload.ViewModels;
 using System.Net;
+using System.Threading.Tasks;
 using SoundVast.Utilities.ModelState;
 
 namespace SoundVast.Components.Upload
@@ -21,14 +22,12 @@ namespace SoundVast.Components.Upload
     {
         private readonly IModelState _modelState;
         private readonly IFileStorage _fileStorage;
-        private readonly IConfiguration _configuration;
         private readonly ICloudStorage _cloudStorage;
 
-        public UploadController(IModelState modelState, IFileStorage fileStorage, IConfiguration configuration, ICloudStorage cloudStorage)
+        public UploadController(IModelState modelState, IFileStorage fileStorage, ICloudStorage cloudStorage)
         {
             _modelState = modelState;
             _fileStorage = fileStorage;
-            _configuration = configuration;
             _cloudStorage = cloudStorage;
         }
 
@@ -43,18 +42,18 @@ namespace SoundVast.Components.Upload
         }
 
         [HttpPost]
-        public IActionResult Upload(IEnumerable<IFormFile> files)
+        public async Task<IActionResult> Upload(IEnumerable<IFormFile> files)
         {
             foreach (var file in files)
             {
-                var mp3FileName = Path.ChangeExtension(file.FileName, ".mp3");
-                var tempStorageDestinationPath = Path.Combine(_configuration["Directory:Temp"], file.FileName);
-                var uploadSourcePath = Path.Combine(_configuration["Directory:Temp"], mp3FileName);
+                var processAudioModel = await _fileStorage.TempStoreMp3Data(file);
+                var mp3FileName = Path.GetFileName(processAudioModel.AudioPath);
+                var coverImageFileName = Path.GetFileName(processAudioModel.CoverImagePath);
                 var audioBlob = _cloudStorage.GetBlob(CloudStorageType.Audio, mp3FileName);
+                var coverImageBlob = _cloudStorage.GetBlob(CloudStorageType.Image, coverImageFileName);
 
-                _fileStorage.TempStoreMp3File(file, tempStorageDestinationPath);
-
-                audioBlob.UploadFromPath(uploadSourcePath, "audio/mpeg");
+                await audioBlob.UploadFromPathAsync(processAudioModel.AudioPath, ProcessAudioModel.AudioContentType);
+                await coverImageBlob.UploadFromPathAsync(processAudioModel.CoverImagePath, ProcessAudioModel.CoverImageContentType);
             }
 
             return Ok();

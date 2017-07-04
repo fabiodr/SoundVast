@@ -55,7 +55,7 @@ namespace SoundVast.Components.Upload.LiveStream
                 var jpgFileName = Path.ChangeExtension(liveStreamCreateViewModel.Image, "jpg");
                 var imageBlob = _cloudStorage.GetBlob(CloudStorageType.Image, jpgFileName);
 
-                imageBlob.UploadFromPath(_configuration["Directory:TempResources"] + jpgFileName, "image/jpg");
+                imageBlob.UploadFromPathAsync(_configuration["Directory:TempResources"] + jpgFileName, "image/jpg");
 
                 var liveStream = new LiveStreamModel(User.FindFirst(ClaimTypes.NameIdentifier).Value)
                 {
