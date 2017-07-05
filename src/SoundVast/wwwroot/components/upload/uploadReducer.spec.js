@@ -72,25 +72,39 @@ describe('uploadReducer', () => {
       ...actionProps,
     });
 
-    expect(state.audioFiles[index].previewCoverImage).toEqual(
+    expect(state.audioFiles[index].previewCoverImage).toBe(
       actionProps.preview,
     );
   });
 
   it('should remove cover image file', () => {
-    const index = 1;
+    const index = 0;
     const prevState = {
       audioFiles: [
-        { name: 'test.mp3', previewCoverImage: 'test.jpg' },
-        { name: 'bubble.mp3', previewCoverImage: 'bubble.jpg' },
+        { previewCoverImage: 'test.jpg' },
       ],
     };
 
     const state = uploadReducer(prevState, {
       type: 'REMOVE_COVER_IMAGE_FILE',
-      index: 1,
+      index,
     });
 
     expect(state.audioFiles[index].previewCoverImage).toBe(null);
+  });
+
+  it('should update upload progress', () => {
+    const index = 0;
+    const progressPercent = 30;
+    const prevState = {
+      audioFiles: [{ }],
+    };
+    const state = uploadReducer(prevState, {
+      type: 'UPLOAD_PROGRESS',
+      progressPercent,
+      index,
+    });
+
+    expect(state.audioFiles[index].progressPercent).toBe(progressPercent);
   });
 });

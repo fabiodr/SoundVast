@@ -1,3 +1,5 @@
+import fetchProgress from '../shared/polyfills/fetchProgress';
+
 const fetchFilesMetadata = formData => dispatch =>
   fetch('/upload/fetchFilesMetadata', {
     method: 'post',
@@ -19,9 +21,16 @@ export const uploadAudioFiles = files => (dispatch) => {
 
   files.forEach(file => formData.append('files', file));
 
-  fetch('/upload/upload', {
+  fetchProgress('/upload/upload', {
     method: 'post',
     body: formData,
+  }, (e) => {
+    const progressPercent = (e.loaded / e.total) * 100;
+
+    dispatch({
+      type: 'UPLOAD_PROGRESS',
+      progressPercent: parseInt(progressPercent, 10),
+    });
   });
 
   return fetchFilesMetadata(formData)(dispatch);

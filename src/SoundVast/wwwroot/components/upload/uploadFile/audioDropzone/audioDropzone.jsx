@@ -6,6 +6,7 @@ import styles from './audioDropzone.less';
 import dropzoneStyles from '../../../shared/dropzone/dropzone.less';
 import FileInformation from './fileInformation/fileInformation';
 import Form from './form/formContainer';
+import Progress from './progress/progressContainer';
 
 const AudioDropzone = ({ onDrop, files, removeFile }) => (
   <div>
@@ -25,14 +26,17 @@ const AudioDropzone = ({ onDrop, files, removeFile }) => (
     </Dropzone>
     <aside>
       {files.map((file, i) => (
-        <Form
-          key={file.key}
-          form={`upload_${file.key}`}
-          index={i}
-          removeFile={removeFile}
-        >
-          <FileInformation index={i} />
-        </Form>
+        <div>
+          <Progress key={file.key} index={i} />
+          <Form
+            key={file.key}
+            form={`upload_${file.key}`}
+            index={i}
+            removeFile={removeFile}
+          >
+            <FileInformation index={i} />
+          </Form>
+        </div>
       ))}
     </aside>
   </div>

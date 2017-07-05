@@ -4,6 +4,7 @@ import { shallow } from 'enzyme';
 
 import AudioDropzone from './audioDropzone';
 import Form from './form/formContainer';
+import Progress from './progress/progressContainer';
 
 const setup = (newProps) => {
   const props = {
@@ -68,5 +69,11 @@ describe('AudioDropzone', () => {
     ({ props, wrapper } = setup());
 
     expect(wrapper.find(Form).length).toBe(props.files.length);
+  });
+
+  it('should render Progress', () => {
+    ({ wrapper } = setup());
+
+    expect(wrapper.find(Progress).length).toBe(1);
   });
 });

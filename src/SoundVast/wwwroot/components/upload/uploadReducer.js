@@ -2,6 +2,7 @@ let fileKey = 0;
 
 const defaultState = {
   audioFiles: [],
+  progressPercents: [],
 };
 
 const addFiles = (files, newFiles) => {
@@ -53,6 +54,19 @@ export default (state = defaultState, action) => {
       return {
         ...state,
         audioFiles,
+      };
+    }
+    case 'UPLOAD_PROGRESS': {
+      const progressPercents = [...state.progressPercents];
+
+      audioFiles[action.index].progressPercent = action.progressPercent;
+
+      return {
+        ...state,
+        uploadProgress: [
+          ...state.uploadProgress,
+
+        ],
       };
     }
     default: return state;
