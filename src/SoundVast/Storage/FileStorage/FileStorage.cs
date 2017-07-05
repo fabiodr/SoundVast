@@ -23,8 +23,6 @@ namespace SoundVast.Storage.FileStorage
         private string FfmpegPath => Path.Combine(_configuration["Directory:EXE"], "ffmpeg.exe");
         public static int CoverImageWidth => 217;
         public static int CoverImageHeight => 217;
-        public byte[] ImageBytes { get; set; }
-        public byte[] AudioBytes { get; set; }
 
         public FileStorage(IConfiguration configuration, ILoggerFactory loggerFactory)
         {
@@ -60,8 +58,23 @@ namespace SoundVast.Storage.FileStorage
             return ms.ToArray();
         }
 
+        //private void ReadJpgBytes(IFormFile file, int newWidth, int newHeight)
+        //{
+        //    using (var reader = new BinaryReader(file.OpenReadStream()))
+        //    {
+        //        // Convert and resize the file
+        //        var ms = new MemoryStream(reader.ReadBytes((int)file.Length));
+        //        var img = Image.FromStream(ms);
+        //        ImageBytes = ResizeAndConvertToJpg(img, newWidth, newHeight);
+
+        //        // file.InputStream.Position = 0;
+        //    }
+        //}
+
         private async Task<AudioFileMetadata> GetAudioMetadata(string path)
         {
+            if (path == null) throw new ArgumentNullException(nameof(path));
+
             var coverImagePath = Path.ChangeExtension(path, ".jpg");
             var metadataPath = Path.ChangeExtension(path, ".txt");
             // https://ffmpeg.org/ffmpeg.html
@@ -87,21 +100,16 @@ namespace SoundVast.Storage.FileStorage
                 await RunProcessAsync(process).ConfigureAwait(false);
             }
 
-            var metadata = new Dictionary<string, string>();
-
-            if (metadataPath != null)
+            // Metadata keys or values containing special characters (‘=’, ‘;’, ‘#’, ‘\’ and a newline)
+            // must be escaped with a backslash ‘\’.
+            int SplitIndex(string metadataLine)
             {
-                // Metadata keys or values containing special characters (‘=’, ‘;’, ‘#’, ‘\’ and a newline)
-                // must be escaped with a backslash ‘\’.
-                int SplitIndex(string metadataLine)
-                {
-                    return metadataLine.IndexOf("=", 0, StringComparison.Ordinal);
-                }
-
-                metadata = File.ReadLines(metadataPath)
-                    .Where(x => SplitIndex(x) >= 0)
-                    .ToDictionary(x => x.Substring(0, SplitIndex(x)), x => x.Substring(SplitIndex(x) + 1));
+                return metadataLine.IndexOf("=", 0, StringComparison.Ordinal);
             }
+
+            var metadata = File.ReadLines(metadataPath)
+                .Where(x => SplitIndex(x) >= 0)
+                .ToDictionary(x => x.Substring(0, SplitIndex(x)), x => x.Substring(SplitIndex(x) + 1));
             
             return new AudioFileMetadata
             {
@@ -113,22 +121,22 @@ namespace SoundVast.Storage.FileStorage
 
         private async Task<ProcessAudio> GetAudioFile(string path, string fileName)
         {
+            if (path == null) throw new ArgumentNullException(nameof(path));
+
             // https://ffmpeg.org/ffmpeg.html
             // -i - specifies the input files
             var arguments = $"-i {path} ";
             var isMp3Already = Path.GetExtension(fileName) == ".mp3";
-            var mp3Path = path;
+            var mp3Path = Path.ChangeExtension(path, ".mp3");
 
             // If it is already an .mp3 file then there's no need to convert
             if (!isMp3Already)
             {
-                mp3Path = Path.ChangeExtension(path, ".mp3");
-
                 arguments += $"{mp3Path} ";
             }
 
-            var coverImagePath = Path.ChangeExtension(path, ".jpg");
-            var metadataPath = Path.ChangeExtension(path, ".txt");
+            var coverImagePath = Path.ChangeExtension(mp3Path, ".jpg");
+            var metadataPath = Path.ChangeExtension(mp3Path, ".txt");
             var ffmpegPath = Path.Combine(_configuration["Directory:EXE"], "ffmpeg.exe");
 
             // -vsync vfr - frames with same input are dropped
@@ -150,16 +158,16 @@ namespace SoundVast.Storage.FileStorage
             })
             {
                 await RunProcessAsync(process).ConfigureAwait(false);
+            }
 
-                if (!isMp3Already)
-                {
-                    File.Delete(path);
-                }
+            if (!isMp3Already)
+            {
+                File.Delete(path);
             }
 
             return new ProcessAudio
             {
-                AudioPath = mp3Path,
+                AudioPath = isMp3Already ? path : mp3Path,
                 AudioName = Path.GetFileName(mp3Path),
         };
         }
@@ -190,35 +198,22 @@ namespace SoundVast.Storage.FileStorage
             return tcs.Task;
         }
 
-        private void ReadMp3Bytes(IFormFile file)
+        private static async Task<byte[]> ReadFileBytes(IFormFile file)
         {
-            using (var reader = new BinaryReader(file.OpenReadStream()))
+            using (var memoryStream = new MemoryStream())
             {
-                // file.InputStream.Position = 0;
-                // Up to 2GB
-                AudioBytes = reader.ReadBytes((int)file.Length);
-            }
-        }
+                await file.CopyToAsync(memoryStream);
 
-        private void ReadJpgBytes(IFormFile file, int newWidth, int newHeight)
-        {
-            using (var reader = new BinaryReader(file.OpenReadStream()))
-            {
-                // Convert and resize the file
-                var ms = new MemoryStream(reader.ReadBytes((int)file.Length));
-                var img = Image.FromStream(ms);
-                ImageBytes = ResizeAndConvertToJpg(img, newWidth, newHeight);
-
-                // file.InputStream.Position = 0;
+                return memoryStream.ToArray();
             }
         }
 
         public async Task<ProcessAudio> TempStoreMp3Data(IFormFile file)
         {
             var path = Path.GetTempFileName();
+            var audioBytes = await ReadFileBytes(file);
 
-            ReadMp3Bytes(file);
-            File.WriteAllBytes(path, AudioBytes);
+            File.WriteAllBytes(path, audioBytes);
 
             return await GetAudioFile(path, file.FileName);
         }
@@ -226,9 +221,9 @@ namespace SoundVast.Storage.FileStorage
         public async Task<AudioFileMetadata> GetAudioFileMetadata(IFormFile file)
         {
             var path = Path.GetTempFileName();
+            var audioBytes = await ReadFileBytes(file);
 
-            ReadMp3Bytes(file);
-            File.WriteAllBytes(path, AudioBytes);
+            File.WriteAllBytes(path, audioBytes);
 
             return await GetAudioMetadata(path);
         }
