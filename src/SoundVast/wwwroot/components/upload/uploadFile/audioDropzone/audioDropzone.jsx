@@ -14,9 +14,14 @@ const AudioDropzone = ({ onDrop, files, removeFile }) => (
       accept="audio/*"
       onDrop={onDrop}
     >
-      <div className={dropzoneStyles.placeholder}>
-        Drag and Drop or Click to upload files
+      <div className={styles.placeholderContainer}>
+        <div className={dropzoneStyles.placeholder}>
+          Upload audio
+        </div>
       </div>
+      {files.map(file => (
+        file.preview && <img key={file.key} alt="" src={file.preview} />
+      ))}
     </Dropzone>
     <aside>
       {files.map((file, i) => (
@@ -40,6 +45,7 @@ AudioDropzone.propTypes = {
     PropTypes.shape({
       key: PropTypes.number.isRequired,
       title: PropTypes.string.isRequired,
+      preview: PropTypes.string,
     }),
   ).isRequired,
 };

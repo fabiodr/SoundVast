@@ -7,6 +7,7 @@ export const mapStateToProps = ({ upload }) => ({
   files: upload.audioFiles.map(x => ({
     key: x.key,
     title: x.title,
+    preview: x.previewCoverImageUrl,
   })),
 });
 

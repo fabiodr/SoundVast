@@ -10,6 +10,7 @@ describe('AudioDropzoneContainer', () => {
           {
             key: 0,
             title: 'test.mp3',
+            previewCoverImageUrl: 'localhost://test.jpg',
             size: 1003990,
           },
         ],
@@ -23,6 +24,7 @@ describe('AudioDropzoneContainer', () => {
         {
           key: state.upload.audioFiles[0].key,
           title: state.upload.audioFiles[0].title,
+          preview: state.upload.audioFiles[0].previewCoverImageUrl,
         },
       ],
     });
