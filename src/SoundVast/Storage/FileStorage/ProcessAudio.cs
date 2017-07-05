@@ -5,12 +5,10 @@ using System.Threading.Tasks;
 
 namespace SoundVast.Storage.FileStorage
 {
-    public class ProcessAudioModel
+    public class ProcessAudio
     {
         public static string AudioContentType => "audio/mpeg";
-        public static string CoverImageContentType => "image/jpg";
         public string AudioPath { get; set; }
-        public string CoverImagePath { get; set; }
-        public string MetadataPath { get; set; }
+        public string AudioName { get; set; }
     }
 }

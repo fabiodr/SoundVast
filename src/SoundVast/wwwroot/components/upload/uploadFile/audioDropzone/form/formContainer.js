@@ -7,9 +7,10 @@ import { submit } from './formActions';
 import { getGenres } from '../../../../genre/genreActions';
 import uploadValidation from '../../../uploadValidation';
 
-export const mapStateToProps = ({ genre }, { name }) => ({
+export const mapStateToProps = ({ genre, upload }, { index }) => ({
   initialValues: {
-    name: name.replace(/\.[^/.]+$/, ''),
+    name: upload.audioFiles[index].title,
+    artist: upload.audioFiles[index].artist,
     genres: genre.genres,
   },
 });

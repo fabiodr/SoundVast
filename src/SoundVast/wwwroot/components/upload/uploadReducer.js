@@ -28,7 +28,7 @@ export default (state = defaultState, action) => {
     case 'ADD_AUDIO_FILES':
       return {
         ...state,
-        audioFiles: addFiles(state.audioFiles, action.files),
+        audioFiles: addFiles(state.audioFiles, action.audioFiles),
       };
     case 'REMOVE_AUDIO_FILE':
       return {
@@ -38,7 +38,7 @@ export default (state = defaultState, action) => {
     case 'UPDATE_COVER_IMAGE_FILE': {
       const audioFiles = [...state.audioFiles];
 
-      audioFiles[action.index].previewCoverImage = action.file.preview;
+      audioFiles[action.index].previewCoverImage = action.preview;
 
       return {
         ...state,

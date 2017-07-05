@@ -11,7 +11,7 @@ namespace SoundVast.Storage.FileStorage
         byte[] ImageBytes { get; set; }
         byte[] AudioBytes { get; set; }
 
-        Task<ProcessAudioModel> TempStoreMp3Data(IFormFile file);
-        Task<FileMetadata> GetFileMetadata(IFormFile file);
+        Task<ProcessAudio> TempStoreMp3Data(IFormFile file);
+        Task<AudioFileMetadata> GetAudioFileMetadata(IFormFile file);
     }
 }

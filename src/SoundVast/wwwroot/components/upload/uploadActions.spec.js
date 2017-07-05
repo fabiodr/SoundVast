@@ -7,6 +7,12 @@ import * as actions from './uploadActions';
 
 const mockStore = configureStore([thunk]);
 const store = mockStore({});
+const audioMetadataBody = {
+  audioFileMetadatas: {
+    name: 'test',
+    album: 'testAlbum',
+  },
+};
 
 describe('uploadActions', () => {
   let calledActions;
@@ -22,7 +28,7 @@ describe('uploadActions', () => {
 
   it('should fetch files metadata while uploading', () => {
     fetchMock.postOnce('/upload/upload', 200);
-    fetchMock.postOnce('/upload/fetchFilesMetadata', 200);
+    fetchMock.postOnce('/upload/fetchFilesMetadata', audioMetadataBody);
 
     const files = [
       { name: 'test.mp3' },
@@ -32,12 +38,16 @@ describe('uploadActions', () => {
 
     store.dispatch(actions.uploadAudioFiles(files)).then(() => {
       expect(fetchMock.called('/upload/fetchFilesMetadata')).toBe(true);
+      expect(calledActions).toEqual([{
+        type: 'ADD_AUDIO_FILES',
+        audioFiles: audioMetadataBody.audioFileMetadatas,
+      }]);
     });
   });
 
   it('should upload audio files', () => {
     fetchMock.postOnce('/upload/upload', 200);
-    fetchMock.postOnce('/upload/fetchFilesMetadata', 200);
+    fetchMock.postOnce('/upload/fetchFilesMetadata', audioMetadataBody);
 
     const files = [
       { name: 'test.mp3' },
@@ -45,13 +55,8 @@ describe('uploadActions', () => {
 
     expect.spyOn(FormData.prototype, 'append');
 
-    store.dispatch(actions.uploadAudioFiles(files)).then(() => {
-      expect(FormData.prototype.append).toHaveBeenCalledWith('files', files[0]);
-      expect(calledActions).toEqual([{
-        type: 'ADD_AUDIO_FILES',
-        files,
-      }]);
-    });
+    store.dispatch(actions.uploadAudioFiles(files));
+    expect(FormData.prototype.append).toHaveBeenCalledWith('files', files[0]);
   });
 
   it('should remove audio file', () => {
@@ -69,7 +74,7 @@ describe('uploadActions', () => {
 
   it('should add cover image files', () => {
     const file = {
-      name: 'test.jpg',
+      preview: 'localhost//test.jpg',
     };
     const index = 0;
 
@@ -78,7 +83,7 @@ describe('uploadActions', () => {
     expect(calledActions).toEqual([
       {
         type: 'UPDATE_COVER_IMAGE_FILE',
-        file,
+        preview: file.preview,
         index,
       },
     ]);

@@ -14,6 +14,7 @@ using SoundVast.Storage.FileStorage;
 using SoundVast.Components.Upload.ViewModels;
 using System.Net;
 using System.Threading.Tasks;
+using SoundVast.Storage.CloudStorage.AzureStorage;
 using SoundVast.Utilities.ModelState;
 
 namespace SoundVast.Components.Upload
@@ -46,14 +47,10 @@ namespace SoundVast.Components.Upload
         {
             foreach (var file in files)
             {
-                var processAudioModel = await _fileStorage.TempStoreMp3Data(file);
-                var mp3FileName = Path.GetFileName(processAudioModel.AudioPath);
-                var coverImageFileName = Path.GetFileName(processAudioModel.CoverImagePath);
-                var audioBlob = _cloudStorage.GetBlob(CloudStorageType.Audio, mp3FileName);
-                var coverImageBlob = _cloudStorage.GetBlob(CloudStorageType.Image, coverImageFileName);
+                var processAudio = await _fileStorage.TempStoreMp3Data(file);
+                var audioBlob = _cloudStorage.GetBlob(CloudStorageType.Audio, processAudio.AudioName);
 
-                await audioBlob.UploadFromPathAsync(processAudioModel.AudioPath, ProcessAudioModel.AudioContentType);
-                await coverImageBlob.UploadFromPathAsync(processAudioModel.CoverImagePath, ProcessAudioModel.CoverImageContentType);
+                await audioBlob.UploadFromPathAsync(processAudio.AudioPath, ProcessAudio.AudioContentType);
             }
 
             return Ok();
@@ -61,21 +58,23 @@ namespace SoundVast.Components.Upload
 
         [HttpPost]
         public async Task<IActionResult> FetchFilesMetadata(IEnumerable<IFormFile> files)
-        {
-            var fileMetadata = new FileMetadata();
+        {           
+            var audioFileMetadatas = new List<AudioFileMetadata>();
 
             foreach (var file in files)
             {
-                fileMetadata = await _fileStorage.GetFileMetadata(file);
-                var coverImageFileName = Path.GetFileName(fileMetadata.CoverImagePath);
-                var coverImageBlob = _cloudStorage.GetBlob(CloudStorageType.Image, coverImageFileName);
+                var audioFileMetadata = await _fileStorage.GetAudioFileMetadata(file);
+                var coverImageBlob = _cloudStorage.GetBlob(CloudStorageType.Image, audioFileMetadata.CoverImageName);
 
-                //await coverImageBlob.UploadFromPathAsync(fileMetadata.CoverImagePath, FileMetadata.CoverImageContentType);
+                await coverImageBlob.UploadFromPathAsync(audioFileMetadata.CoverImagePath, AudioFileMetadata.CoverImageContentType);
+
+                audioFileMetadata.Metadata.Add("previewCoverImageUrl", coverImageBlob.FileProperties.Uri.AbsoluteUri);
+                audioFileMetadatas.Add(audioFileMetadata);
             }
 
             return Ok(new
             {
-                CoverImagePreviewBytes = fileMetadata.CoverImageBytes
+                audioFileMetadatas = audioFileMetadatas.Select(x => x.Metadata)
             });
         }
 

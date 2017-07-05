@@ -34,12 +34,12 @@ describe('AudioDropzone', () => {
     const files = [
       {
         key: 0,
-        name: 'test.mp3',
+        title: 'test',
         preview: 'blob:localhost:8080/test.jpg',
       },
       {
         key: 1,
-        name: 'testTwo.mp3',
+        title: 'testTwo',
         preview: 'blob:localhost:8080/test.jpg',
       },
     ];

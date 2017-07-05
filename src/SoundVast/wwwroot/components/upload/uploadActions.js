@@ -1,28 +1,30 @@
-const fetchFilesMetadata = formData =>
+const fetchFilesMetadata = formData => dispatch =>
   fetch('/upload/fetchFilesMetadata', {
     method: 'post',
     body: formData,
+  }).then((response) => {
+    if (response.ok) {
+      return response.json().then((data) => {
+        dispatch({
+          type: 'ADD_AUDIO_FILES',
+          audioFiles: data.audioFileMetadatas,
+        });
+      });
+    }
+    return null;
   });
 
-export const uploadAudioFiles = (files) => {
+export const uploadAudioFiles = files => (dispatch) => {
   const formData = new FormData();
 
   files.forEach(file => formData.append('files', file));
 
-  fetchFilesMetadata(formData);
+  fetch('/upload/upload', {
+    method: 'post',
+    body: formData,
+  });
 
-  // return dispatch =>
-  //   fetch('/upload/upload', {
-  //     method: 'post',
-  //     body: formData,
-  //   }).then((response) => {
-  //     if (response.ok) {
-  //       dispatch({
-  //         type: 'ADD_AUDIO_FILES',
-  //         files,
-  //       });
-  //     }
-  //   });
+  return fetchFilesMetadata(formData)(dispatch);
 };
 
 export const removeAudioFile = index => ({
@@ -32,7 +34,7 @@ export const removeAudioFile = index => ({
 
 export const updateCoverImageFile = (file, index) => ({
   type: 'UPDATE_COVER_IMAGE_FILE',
-  file,
+  preview: file.preview,
   index,
 });
 

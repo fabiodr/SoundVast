@@ -9,18 +9,24 @@ const state = {
       { name: 'rock' },
     ],
   },
+  upload: {
+    audioFiles: [
+      { title: 'test', artist: 'testAlbum' },
+    ],
+  },
 };
 
 describe('UploadFileFormContainer', () => {
   it('should map state to props correctly', () => {
     const props = {
-      name: 'bubble.mp3',
+      index: 0,
     };
     const stateProps = mapStateToProps(state, props);
 
     expect(stateProps).toEqual({
       initialValues: {
-        name: 'bubble',
+        name: 'test',
+        artist: 'testAlbum',
         genres: state.genre.genres,
       },
     });

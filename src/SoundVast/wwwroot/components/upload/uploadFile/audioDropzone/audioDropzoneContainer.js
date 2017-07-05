@@ -6,8 +6,7 @@ import { uploadAudioFiles, removeAudioFile } from '../../uploadActions';
 export const mapStateToProps = ({ upload }) => ({
   files: upload.audioFiles.map(x => ({
     key: x.key,
-    preview: x.preview,
-    name: x.name,
+    title: x.title,
   })),
 });
 

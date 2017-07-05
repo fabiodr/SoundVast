@@ -12,7 +12,6 @@ const BasicInfo = ({ genres, index }) => (
     <div className={styles.imageDropzoneContainer}>
       <span>Cover Image</span>
       <ImageDropzone index={index} />
-      <input type="hidden" name="coverImageFile" />
     </div>
     <div className={styles.formGroup}>
       <label htmlFor={`name_${index}`}>Name *

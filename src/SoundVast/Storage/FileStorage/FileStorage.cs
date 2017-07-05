@@ -60,7 +60,7 @@ namespace SoundVast.Storage.FileStorage
             return ms.ToArray();
         }
 
-        private async Task<FileMetadata> ProcessMetadata(string path)
+        private async Task<AudioFileMetadata> GetAudioMetadata(string path)
         {
             var coverImagePath = Path.ChangeExtension(path, ".jpg");
             var metadataPath = Path.ChangeExtension(path, ".txt");
@@ -87,26 +87,31 @@ namespace SoundVast.Storage.FileStorage
                 await RunProcessAsync(process).ConfigureAwait(false);
             }
 
+            var metadata = new Dictionary<string, string>();
+
             if (metadataPath != null)
             {
                 // Metadata keys or values containing special characters (‘=’, ‘;’, ‘#’, ‘\’ and a newline)
-                // must be escaped with a backslash ‘\’. 
+                // must be escaped with a backslash ‘\’.
+                int SplitIndex(string metadataLine)
+                {
+                    return metadataLine.IndexOf("=", 0, StringComparison.Ordinal);
+                }
 
-                int SplitIndex(string metadataLine) => metadataLine.IndexOf("=", 0, StringComparison.Ordinal);
-
-                var regex = new Regex("");
-                var metadatda = File.ReadLines(metadataPath)
-                    .Where(x => SplitIndex(x) >= 0).ToDictionary(x => x.Substring(0, SplitIndex(x)), x => x.Substring(SplitIndex(x), x.Length));
+                metadata = File.ReadLines(metadataPath)
+                    .Where(x => SplitIndex(x) >= 0)
+                    .ToDictionary(x => x.Substring(0, SplitIndex(x)), x => x.Substring(SplitIndex(x) + 1));
             }
             
-
-            return new FileMetadata
+            return new AudioFileMetadata
             {
-                CoverImageBytes = File.ReadAllBytes(coverImagePath)
+                CoverImagePath = coverImagePath,
+                CoverImageName = Path.GetFileName(coverImagePath),
+                Metadata = metadata
             };
         }
 
-        private async Task<ProcessAudioModel> ProcessAudioFile(string path, string fileName)
+        private async Task<ProcessAudio> GetAudioFile(string path, string fileName)
         {
             // https://ffmpeg.org/ffmpeg.html
             // -i - specifies the input files
@@ -152,12 +157,11 @@ namespace SoundVast.Storage.FileStorage
                 }
             }
 
-            return new ProcessAudioModel
+            return new ProcessAudio
             {
                 AudioPath = mp3Path,
-                CoverImagePath = coverImagePath,
-                MetadataPath = metadataPath
-            };
+                AudioName = Path.GetFileName(mp3Path),
+        };
         }
         
         private Task<int> RunProcessAsync(Process process)
@@ -209,24 +213,24 @@ namespace SoundVast.Storage.FileStorage
             }
         }
 
-        public async Task<ProcessAudioModel> TempStoreMp3Data(IFormFile file)
+        public async Task<ProcessAudio> TempStoreMp3Data(IFormFile file)
         {
             var path = Path.GetTempFileName();
 
             ReadMp3Bytes(file);
             File.WriteAllBytes(path, AudioBytes);
 
-            return await ProcessAudioFile(path, file.FileName);
+            return await GetAudioFile(path, file.FileName);
         }
 
-        public async Task<FileMetadata> GetFileMetadata(IFormFile file)
+        public async Task<AudioFileMetadata> GetAudioFileMetadata(IFormFile file)
         {
             var path = Path.GetTempFileName();
 
             ReadMp3Bytes(file);
             File.WriteAllBytes(path, AudioBytes);
 
-            return await ProcessMetadata(path);
+            return await GetAudioMetadata(path);
         }
     }
 }

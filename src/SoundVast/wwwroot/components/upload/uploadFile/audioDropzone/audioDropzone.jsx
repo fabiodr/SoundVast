@@ -25,7 +25,6 @@ const AudioDropzone = ({ onDrop, files, removeFile }) => (
           form={`upload_${file.key}`}
           index={i}
           removeFile={removeFile}
-          name={file.name}
         >
           <FileInformation index={i} />
         </Form>
@@ -40,8 +39,7 @@ AudioDropzone.propTypes = {
   files: PropTypes.arrayOf(
     PropTypes.shape({
       key: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      preview: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
     }),
   ).isRequired,
 };

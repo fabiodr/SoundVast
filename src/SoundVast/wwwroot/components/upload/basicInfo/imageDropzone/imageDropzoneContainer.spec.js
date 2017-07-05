@@ -7,7 +7,7 @@ describe('ImageDropzoneContainer', () => {
     const state = {
       upload: {
         audioFiles: [
-          { previewCoverImage: 'blob:localhost:8080/test.jpg' },
+          { previewCoverImageUrl: 'blob:localhost:8080/test.jpg' },
         ],
       },
     };
@@ -15,7 +15,7 @@ describe('ImageDropzoneContainer', () => {
     const stateProps = mapStateToProps(state, { index });
 
     expect(stateProps).toEqual({
-      preview: state.upload.audioFiles[index].previewCoverImage,
+      preview: state.upload.audioFiles[index].previewCoverImageUrl,
     });
   });
 });

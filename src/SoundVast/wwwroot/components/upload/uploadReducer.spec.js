@@ -15,7 +15,7 @@ describe('uploadReducer', () => {
 
   it('should add audio files to existing files', () => {
     const actionProps = {
-      files: [{
+      audioFiles: [{
         name: 'bubble.mp3',
       }],
     };
@@ -57,9 +57,7 @@ describe('uploadReducer', () => {
   it('should update cover image file', () => {
     const index = 0;
     const actionProps = {
-      file: {
-        preview: 'bubble.jpg',
-      },
+      preview: 'bubble.jpg',
       index,
     };
 
@@ -75,7 +73,7 @@ describe('uploadReducer', () => {
     });
 
     expect(state.audioFiles[index].previewCoverImage).toEqual(
-      actionProps.file.preview,
+      actionProps.preview,
     );
   });
 

@@ -2,11 +2,8 @@ import { connect } from 'react-redux';
 
 import BasicInfo from './basicInfo';
 
-export const mapStateToProps = ({ genre, upload }) => ({
+export const mapStateToProps = ({ genre }) => ({
   genres: genre.genres,
-  initialValues: {
-    coverImageFile: upload.coverImageFile,
-  },
 });
 
 export default connect(mapStateToProps)(BasicInfo);
