@@ -6,9 +6,9 @@ import styles from './audioDropzone.less';
 import dropzoneStyles from '../../../shared/dropzone/dropzone.less';
 import FileInformation from './fileInformation/fileInformation';
 import Form from './form/formContainer';
-import Progress from './progress/progressContainer';
+import Progress from './progress/progress';
 
-const AudioDropzone = ({ onDrop, files, removeFile }) => (
+const AudioDropzone = ({ onDrop, files, progressPercents, removeFile }) => (
   <div>
     <Dropzone
       className={styles.audioDropzone}
@@ -21,16 +21,17 @@ const AudioDropzone = ({ onDrop, files, removeFile }) => (
         </div>
       </div>
       {files.map(file => (
-        file.preview && <img key={file.key} alt="" src={file.preview} />
+        file.preview && <img key={file.id} alt="" src={file.preview} />
       ))}
     </Dropzone>
     <aside>
+      {progressPercents.map(progressPercent =>
+        <Progress key={progressPercent.id} progressPercent={progressPercent.value} />,
+      )}
       {files.map((file, i) => (
-        <div>
-          <Progress key={file.key} index={i} />
+        <div key={file.id}>
           <Form
-            key={file.key}
-            form={`upload_${file.key}`}
+            form={`upload_${file.id}`}
             index={i}
             removeFile={removeFile}
           >
@@ -47,9 +48,15 @@ AudioDropzone.propTypes = {
   removeFile: PropTypes.func.isRequired,
   files: PropTypes.arrayOf(
     PropTypes.shape({
-      key: PropTypes.number.isRequired,
+      id: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
       preview: PropTypes.string,
+    }),
+  ).isRequired,
+  progressPercents: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      value: PropTypes.number.isRequired,
     }),
   ).isRequired,
 };

@@ -8,10 +8,16 @@ describe('AudioDropzoneContainer', () => {
       upload: {
         audioFiles: [
           {
-            key: 0,
+            id: 0,
             title: 'test.mp3',
             previewCoverImageUrl: 'localhost://test.jpg',
             size: 1003990,
+          },
+        ],
+        progressPercents: [
+          {
+            id: 0,
+            value: 22,
           },
         ],
       },
@@ -22,11 +28,12 @@ describe('AudioDropzoneContainer', () => {
     expect(stateProps).toEqual({
       files: [
         {
-          key: state.upload.audioFiles[0].key,
+          id: state.upload.audioFiles[0].id,
           title: state.upload.audioFiles[0].title,
           preview: state.upload.audioFiles[0].previewCoverImageUrl,
         },
       ],
+      progressPercents: state.upload.progressPercents,
     });
   });
 });

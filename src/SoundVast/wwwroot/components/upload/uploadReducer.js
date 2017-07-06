@@ -1,19 +1,6 @@
-let fileKey = 0;
-
 const defaultState = {
   audioFiles: [],
   progressPercents: [],
-};
-
-const addFiles = (files, newFiles) => {
-  newFiles.forEach((file) => {
-    const newFile = file;
-
-    newFile.key = fileKey;
-    fileKey += 1;
-  });
-
-  return files.concat(newFiles);
 };
 
 const removeFile = (files, index) => {
@@ -29,7 +16,7 @@ export default (state = defaultState, action) => {
     case 'ADD_AUDIO_FILES':
       return {
         ...state,
-        audioFiles: addFiles(state.audioFiles, action.audioFiles),
+        audioFiles: state.audioFiles.concat(action.audioFiles),
       };
     case 'REMOVE_AUDIO_FILE':
       return {
@@ -56,17 +43,10 @@ export default (state = defaultState, action) => {
         audioFiles,
       };
     }
-    case 'UPLOAD_PROGRESS': {
-      const progressPercents = [...state.progressPercents];
-
-      audioFiles[action.index].progressPercent = action.progressPercent;
-
+    case 'ADD_UPLOAD_PROGRESS': {
       return {
         ...state,
-        uploadProgress: [
-          ...state.uploadProgress,
-
-        ],
+        progressPercents: Object.assign([], state.progressPercents, action.progressPercents),
       };
     }
     default: return state;

@@ -1,8 +1,8 @@
-export default (url, opts = {}, onProgress) =>
+export default (url, opts = {}, uploadEvents) =>
   new Promise((res, rej) => {
     const xhr = new XMLHttpRequest();
 
-    xhr.open(opts.method || 'get', url);
+    xhr.open(opts.method || 'get', url, true);
 
     Object.keys(opts.headers || {}).forEach((key) => {
       xhr.setRequestHeader(key, opts.headers[key]);
@@ -11,11 +11,10 @@ export default (url, opts = {}, onProgress) =>
     xhr.onload = e => res(e.target.responseText);
     xhr.onerror = rej;
 
-    if (xhr.upload && onProgress) {
-      // event.loaded
-      // event.total * 100
-      // event.lengthComputable
-      xhr.upload.onprogress = onProgress;
+    if (xhr.upload) {
+      Object.keys(uploadEvents).forEach((key) => {
+        xhr.upload.addEventListener(key, uploadEvents[key]);
+      });
     }
 
     xhr.send(opts.body);

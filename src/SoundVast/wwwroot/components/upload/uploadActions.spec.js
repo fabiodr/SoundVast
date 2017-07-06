@@ -2,16 +2,24 @@ import expect from 'expect';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import fetchMock from 'fetch-mock';
+import proxyquire from 'proxyquire';
 
-import * as actions from './uploadActions';
+proxyquire.noCallThru();
 
+const actions = proxyquire('./uploadActions', {
+  shortid: {
+    generate: expect.createSpy().andReturn('testId'),
+  },
+  '../shared/polyfills/fetchProgress': expect.createSpy(),
+});
 const mockStore = configureStore([thunk]);
 const store = mockStore({});
 const audioMetadataBody = {
-  audioFileMetadatas: {
+  audioFileMetadatas: [{
     name: 'test',
     album: 'testAlbum',
-  },
+    id: 'testId',
+  }],
 };
 
 describe('uploadActions', () => {
@@ -26,22 +34,25 @@ describe('uploadActions', () => {
     expect.restoreSpies();
   });
 
-  it('should fetch files metadata while uploading', () => {
-    fetchMock.postOnce('/upload/upload', 200);
+  it('should fetch files metadata', () => {
     fetchMock.postOnce('/upload/fetchFilesMetadata', audioMetadataBody);
 
     const files = [
       { name: 'test.mp3' },
+      { name: 'testTwo.mp3' },
     ];
 
     expect.spyOn(FormData.prototype, 'append');
 
-    store.dispatch(actions.uploadAudioFiles(files)).then(() => {
+    store.dispatch(actions.fetchFilesMetadata(files)).then(() => {
       expect(fetchMock.called('/upload/fetchFilesMetadata')).toBe(true);
       expect(calledActions).toEqual([{
         type: 'ADD_AUDIO_FILES',
         audioFiles: audioMetadataBody.audioFileMetadatas,
       }]);
+    });
+    files.forEach((file) => {
+      expect(FormData.prototype.append).toHaveBeenCalledWith('files', file);
     });
   });
 
@@ -51,12 +62,17 @@ describe('uploadActions', () => {
 
     const files = [
       { name: 'test.mp3' },
+      { name: 'testTwo.mp3' },
     ];
 
-    expect.spyOn(FormData.prototype, 'append');
+    expect.spyOn(FormData.prototype, 'set');
 
     store.dispatch(actions.uploadAudioFiles(files));
-    expect(FormData.prototype.append).toHaveBeenCalledWith('files', files[0]);
+
+    files.forEach((file) => {
+      expect(FormData.prototype.set).toHaveBeenCalledWith('file', file);
+      expect(fetchMock.called('/upload/fetchFilesMetadata')).toBe(true);
+    });
   });
 
   it('should remove audio file', () => {

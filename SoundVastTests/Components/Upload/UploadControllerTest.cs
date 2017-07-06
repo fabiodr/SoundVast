@@ -68,7 +68,6 @@ namespace SoundVastTests.Components.Upload
         public async Task ShouldUploadFiles()
         {
             const string audioName = "testFile.mp3";
-            var files = new List<IFormFile>();
             var processAudio = new ProcessAudio
             {
                 AudioPath = Path.Combine("testPath", audioName),
@@ -82,9 +81,7 @@ namespace SoundVastTests.Components.Upload
             _mockCloudStorage.Setup(x => x.GetBlob(CloudStorageType.Audio, audioName)).Returns(mockAudioBlob.Object);
             mockAudioBlob.Setup(x => x.UploadFromPathAsync(processAudio.AudioPath, ProcessAudio.AudioContentType)).Returns(Task.CompletedTask);
 
-            files.Add(mockFile.Object);
-
-            var result = await _uploadController.Upload(files);
+            var result = await _uploadController.Upload(mockFile.Object);
 
             mockAudioBlob.VerifyAll();
 

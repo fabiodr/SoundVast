@@ -13,6 +13,7 @@ using SoundVast.Storage.CloudStorage;
 using SoundVast.Storage.FileStorage;
 using SoundVast.Components.Upload.ViewModels;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using SoundVast.Storage.CloudStorage.AzureStorage;
 using SoundVast.Utilities.ModelState;
@@ -43,15 +44,12 @@ namespace SoundVast.Components.Upload
         }
 
         [HttpPost]
-        public async Task<IActionResult> Upload(IEnumerable<IFormFile> files)
+        public async Task<IActionResult> Upload(IFormFile file)
         {
-            foreach (var file in files)
-            {
-                var processAudio = await _fileStorage.TempStoreMp3Data(file);
-                var audioBlob = _cloudStorage.GetBlob(CloudStorageType.Audio, processAudio.AudioName);
+            var processAudio = await _fileStorage.TempStoreMp3Data(file);
+            var audioBlob = _cloudStorage.GetBlob(CloudStorageType.Audio, processAudio.AudioName);
 
-                await audioBlob.UploadFromPathAsync(processAudio.AudioPath, ProcessAudio.AudioContentType);
-            }
+            await audioBlob.UploadFromPathAsync(processAudio.AudioPath, ProcessAudio.AudioContentType);
 
             return Ok();
         }

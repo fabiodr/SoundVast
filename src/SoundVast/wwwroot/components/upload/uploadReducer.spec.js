@@ -1,6 +1,14 @@
 import expect from 'expect';
+import proxyquire from 'proxyquire';
 
-import uploadReducer from './uploadReducer';
+proxyquire.noCallThru();
+
+const uploadReducer = proxyquire('./uploadReducer', {
+  shortid: {
+    generate: expect.createSpy().andReturn(0),
+  },
+}).default;
+
 
 describe('uploadReducer', () => {
   it('should return defaultState if undefined', () => {
@@ -10,6 +18,7 @@ describe('uploadReducer', () => {
 
     expect(state).toEqual({
       audioFiles: [],
+      progressPercents: [],
     });
   });
 
@@ -33,7 +42,7 @@ describe('uploadReducer', () => {
     expect(state).toEqual({
       audioFiles: [
         { name: 'test.mp3' },
-        { name: 'bubble.mp3', key: 0 },
+        { name: 'bubble.mp3' },
       ],
     });
   });
@@ -93,18 +102,21 @@ describe('uploadReducer', () => {
     expect(state.audioFiles[index].previewCoverImage).toBe(null);
   });
 
-  it('should update upload progress', () => {
-    const index = 0;
-    const progressPercent = 30;
-    const prevState = {
-      audioFiles: [{ }],
+  it('should add progress percents to existing progress percents', () => {
+    const actionProps = {
+      progressPercents: [30],
     };
+    const prevState = {
+      progressPercents: [20, 50],
+    };
+
     const state = uploadReducer(prevState, {
-      type: 'UPLOAD_PROGRESS',
-      progressPercent,
-      index,
+      type: 'ADD_UPLOAD_PROGRESS',
+      ...actionProps,
     });
 
-    expect(state.audioFiles[index].progressPercent).toBe(progressPercent);
+    expect(state).toEqual({
+      progressPercents: [30, 50],
+    });
   });
 });

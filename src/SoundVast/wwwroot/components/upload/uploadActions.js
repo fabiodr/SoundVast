@@ -1,39 +1,64 @@
+import shortid from 'shortid';
+
 import fetchProgress from '../shared/polyfills/fetchProgress';
 
-const fetchFilesMetadata = formData => dispatch =>
-  fetch('/upload/fetchFilesMetadata', {
+export const fetchFilesMetadata = files => (dispatch) => {
+  const formData = new FormData();
+
+  files.forEach(file => formData.append('files', file));
+
+  return fetch('/upload/fetchFilesMetadata', {
     method: 'post',
     body: formData,
   }).then((response) => {
     if (response.ok) {
       return response.json().then((data) => {
+        const audioFiles = data.audioFileMetadatas.map(audioFileMetadata => ({
+          ...audioFileMetadata,
+          id: shortid.generate(),
+        }));
+
         dispatch({
           type: 'ADD_AUDIO_FILES',
-          audioFiles: data.audioFileMetadatas,
+          audioFiles,
         });
       });
     }
     return null;
   });
+};
 
 export const uploadAudioFiles = files => (dispatch) => {
   const formData = new FormData();
+  const progressPercents = [];
 
-  files.forEach(file => formData.append('files', file));
+  files.forEach((file, i) => {
+    formData.set('file', file);
+    const id = shortid.generate();
 
-  fetchProgress('/upload/upload', {
-    method: 'post',
-    body: formData,
-  }, (e) => {
-    const progressPercent = (e.loaded / e.total) * 100;
+    fetchProgress('/upload/upload', {
+      method: 'post',
+      body: formData,
+    }, {
+      progress: (e) => {
+        if (e.lengthComputable) {
+          const progressPercent = parseInt((e.loaded / e.total) * 100, 10);
 
-    dispatch({
-      type: 'UPLOAD_PROGRESS',
-      progressPercent: parseInt(progressPercent, 10),
+          progressPercents[i] = {
+            value: progressPercent,
+            id,
+          };
+
+          dispatch({
+            type: 'ADD_UPLOAD_PROGRESS',
+            progressPercents,
+          });
+        }
+      },
     });
   });
 
-  return fetchFilesMetadata(formData)(dispatch);
+  return fetchFilesMetadata(files)(dispatch);
 };
 
 export const removeAudioFile = index => ({

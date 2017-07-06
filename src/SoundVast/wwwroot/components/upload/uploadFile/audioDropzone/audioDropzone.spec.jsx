@@ -4,20 +4,26 @@ import { shallow } from 'enzyme';
 
 import AudioDropzone from './audioDropzone';
 import Form from './form/formContainer';
-import Progress from './progress/progressContainer';
+import Progress from './progress/progress';
 
 const setup = (newProps) => {
   const props = {
     files: [
       {
-        key: 0,
+        id: 'testId',
         title: 'test',
         preview: 'blob:localhost:8080/test.jpg',
       },
       {
-        key: 1,
+        id: 'testId',
         title: 'testTwo',
         preview: 'blob:localhost:8080/test.jpg',
+      },
+    ],
+    progressPercents: [
+      {
+        id: 'testId',
+        value: 22,
       },
     ],
     removeFile: expect.createSpy(),
@@ -51,8 +57,8 @@ describe('AudioDropzone', () => {
 
   it('should not map preview image when preview is empty', () => {
     const files = [
-      { key: 0, title: 'test', preview: '' },
-      { key: 1, title: 'testTwo', preview: 'blob:localhost:8080/test.jpg' },
+      { id: 'testId', title: 'test', preview: '' },
+      { id: 'testId', title: 'testTwo', preview: 'blob:localhost:8080/test.jpg' },
     ];
     ({ wrapper } = setup({ files }));
 
@@ -71,9 +77,9 @@ describe('AudioDropzone', () => {
     expect(wrapper.find(Form).length).toBe(props.files.length);
   });
 
-  it('should render Progress', () => {
-    ({ wrapper } = setup());
+  it('should render a progress bar for each file', () => {
+    ({ props, wrapper } = setup());
 
-    expect(wrapper.find(Progress).length).toBe(1);
+    expect(wrapper.find(Progress).length).toBe(props.progressPercents.length);
   });
 });

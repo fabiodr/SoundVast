@@ -5,10 +5,11 @@ import { uploadAudioFiles, removeAudioFile } from '../../uploadActions';
 
 export const mapStateToProps = ({ upload }) => ({
   files: upload.audioFiles.map(x => ({
-    key: x.key,
+    id: x.id,
     title: x.title,
     preview: x.previewCoverImageUrl,
   })),
+  progressPercents: upload.progressPercents,
 });
 
 export default connect(mapStateToProps, {
