@@ -102,21 +102,26 @@ describe('uploadReducer', () => {
     expect(state.audioFiles[index].previewCoverImage).toBe(null);
   });
 
-  it('should add progress percents to existing progress percents', () => {
+  it('should update progress percent', () => {
+    const index = 0;
     const actionProps = {
-      progressPercents: [30],
+      progressPercent: 33,
+      index,
     };
+
     const prevState = {
-      progressPercents: [20, 50],
+      audioFiles: [
+        { name: 'test.mp3' },
+      ],
     };
 
     const state = uploadReducer(prevState, {
-      type: 'ADD_UPLOAD_PROGRESS',
+      type: 'UPDATE_UPLOAD_PROGRESS',
       ...actionProps,
     });
 
-    expect(state).toEqual({
-      progressPercents: [30, 50],
-    });
+    expect(state.audioFiles[index].progressPercent).toBe(
+      actionProps.progressPercent,
+    );
   });
 });

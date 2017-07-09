@@ -44,42 +44,36 @@ namespace SoundVast.Components.Upload
         }
 
         [HttpPost]
-        public async Task<IActionResult> Upload(IFormFile file)
+        public IActionResult FetchUploadProgress(string progressId)
         {
-            var processAudio = await _fileStorage.TempStoreMp3Data(file);
-            var audioBlob = _cloudStorage.GetBlob(CloudStorageType.Audio, processAudio.AudioName);
-
-            await audioBlob.UploadFromPathAsync(processAudio.AudioPath, ProcessAudio.AudioContentType);
-
-            return Ok();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> FetchFilesMetadata(IEnumerable<IFormFile> files)
-        {           
-            var audioFileMetadatas = new List<AudioFileMetadata>();
-
-            foreach (var file in files)
-            {
-                var audioFileMetadata = await _fileStorage.GetAudioFileMetadata(file);
-                var coverImageBlob = _cloudStorage.GetBlob(CloudStorageType.Image, audioFileMetadata.CoverImageName);
-
-                await coverImageBlob.UploadFromPathAsync(audioFileMetadata.CoverImagePath, AudioFileMetadata.CoverImageContentType);
-
-                audioFileMetadata.Metadata.Add("previewCoverImageUrl", coverImageBlob.FileProperties.Uri.AbsoluteUri);
-                audioFileMetadatas.Add(audioFileMetadata);
-            }
+            var progressPercent = HttpContext.Session.GetInt32(progressId);
 
             return Ok(new
             {
-                audioFileMetadatas = audioFileMetadatas.Select(x => x.Metadata)
+                progressPercent
             });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Upload(IFormFile file, string progressId)
+        {
+            var processAudio = await _fileStorage.TempStoreMp3Data(file);
+            var audioBlob = _cloudStorage.GetBlob(CloudStorageType.Audio, processAudio.AudioName);
+            HttpContext.Session.SetInt32(progressId, 50);
+
+            await audioBlob.UploadFromPathAsync(processAudio.AudioPath, ProcessAudio.AudioContentType);
+            HttpContext.Session.SetInt32(progressId, 100);
+
+            return Ok();
         }
 
         //public void TempStoreAudioFile(IFormFile file, string mp3TempName)
         //{
         //    var destPathToStoreAt = _configuration["Directory:TempResources"] + file.FileName;
         //    var mp3DestPathToStoreAt = _configuration["Directory:TempResources"] + mp3TempName;
+
+
+
 
         //    _fileStorage.ReadMp3Bytes(file);
         //    System.IO.File.WriteAllBytes(destPathToStoreAt, _fileStorage.AudioBytes);

@@ -1,64 +1,98 @@
+import jsmediatags from 'jsmediatags/dist/jsmediatags';
 import shortid from 'shortid';
 
 import fetchProgress from '../shared/polyfills/fetchProgress';
 
-export const fetchFilesMetadata = files => (dispatch) => {
+export const getServerUploadProgress = (progressId, progressIndex) => (dispatch) => {
   const formData = new FormData();
 
-  files.forEach(file => formData.append('files', file));
+  formData.set('progressId', progressId);
 
-  return fetch('/upload/fetchFilesMetadata', {
+  setInterval(() => fetch('/upload/fetchUploadProgress', {
     method: 'post',
     body: formData,
-  }).then((response) => {
-    if (response.ok) {
-      return response.json().then((data) => {
-        const audioFiles = data.audioFileMetadatas.map(audioFileMetadata => ({
-          ...audioFileMetadata,
-          id: shortid.generate(),
-        }));
-
-        dispatch({
-          type: 'ADD_AUDIO_FILES',
-          audioFiles,
-        });
+    credentials: 'same-origin',
+  }).then(response => response.json()).then((data) => {
+    if (data.progressPercent !== null) {
+      dispatch({
+        type: 'UPDATE_UPLOAD_PROGRESS',
+        progressPercent: data.progressPercent,
+        index: progressIndex,
       });
     }
-    return null;
+  }), 100);
+};
+
+export const uploadFile = (file, progressIndex) => (dispatch) => {
+  const formData = new FormData();
+  const progressId = shortid.generate();
+
+  formData.set('file', file);
+  formData.set('progressId', progressId);
+
+  fetchProgress('/upload/upload', {
+    method: 'post',
+    body: formData,
+  }, {
+    progress: (e) => {
+      if (e.lengthComputable) {
+        const progressPercent = parseInt((e.loaded / e.total) * 20, 10);
+
+        dispatch({
+          type: 'UPDATE_UPLOAD_PROGRESS',
+          progressPercent,
+          index: progressIndex,
+        });
+      }
+
+      if (e.loaded === e.total) {
+        getServerUploadProgress(progressId, progressIndex)(dispatch);
+      }
+    },
   });
 };
 
-export const uploadAudioFiles = files => (dispatch) => {
-  const formData = new FormData();
-  const progressPercents = [];
+export const uploadAudioFiles = files => (dispatch, getState) => {
+  const stateFiles = getState().upload.audioFiles;
 
   files.forEach((file, i) => {
-    formData.set('file', file);
-    const id = shortid.generate();
+    const progressIndex = stateFiles.length + i;
 
-    fetchProgress('/upload/upload', {
-      method: 'post',
-      body: formData,
-    }, {
-      progress: (e) => {
-        if (e.lengthComputable) {
-          const progressPercent = parseInt((e.loaded / e.total) * 100, 10);
-
-          progressPercents[i] = {
-            value: progressPercent,
-            id,
+    fetch(file.preview).then(response => response.blob()).then((blob) => {
+      jsmediatags.read(blob, {
+        onSuccess: (tag) => {
+          const coverImageBytes = new Uint8Array(tag.tags.picture.data);
+          const coverImageBlob = new Blob([coverImageBytes], { type: tag.tags.picture.format });
+          const previewCoverImageUrl = URL.createObjectURL(coverImageBlob);
+          const audioFiles = {
+            id: shortid.generate(),
+            artist: tag.tags.artist,
+            album: tag.tags.album,
+            previewCoverImageUrl,
+            title: tag.tags.title,
           };
 
           dispatch({
-            type: 'ADD_UPLOAD_PROGRESS',
-            progressPercents,
+            type: 'ADD_AUDIO_FILES',
+            audioFiles,
           });
-        }
-      },
+
+          uploadFile(file, progressIndex)(dispatch);
+        },
+        onError: () => {
+          dispatch({
+            type: 'ADD_AUDIO_FILES',
+            audioFiles: {
+              ...file,
+              title: file.name,
+            },
+          });
+
+          uploadFile(files, progressIndex)(dispatch);
+        },
+      });
     });
   });
-
-  return fetchFilesMetadata(files)(dispatch);
 };
 
 export const removeAudioFile = index => ({

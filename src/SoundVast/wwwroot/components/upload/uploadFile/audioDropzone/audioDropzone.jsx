@@ -8,7 +8,7 @@ import FileInformation from './fileInformation/fileInformation';
 import Form from './form/formContainer';
 import Progress from './progress/progress';
 
-const AudioDropzone = ({ onDrop, files, progressPercents, removeFile }) => (
+const AudioDropzone = ({ onDrop, files, removeFile }) => (
   <div>
     <Dropzone
       className={styles.audioDropzone}
@@ -25,11 +25,9 @@ const AudioDropzone = ({ onDrop, files, progressPercents, removeFile }) => (
       ))}
     </Dropzone>
     <aside>
-      {progressPercents.map(progressPercent =>
-        <Progress key={progressPercent.id} progressPercent={progressPercent.value} />,
-      )}
       {files.map((file, i) => (
         <div key={file.id}>
+          <Progress progressPercent={file.progressPercent} />
           <Form
             form={`upload_${file.id}`}
             index={i}
@@ -51,13 +49,8 @@ AudioDropzone.propTypes = {
       id: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
       preview: PropTypes.string,
-    }),
-  ).isRequired,
-  progressPercents: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      value: PropTypes.number.isRequired,
-    }),
+      progressPercent: PropTypes.number,
+    }).isRequired,
   ).isRequired,
 };
 

@@ -13,17 +13,13 @@ const setup = (newProps) => {
         id: 'testId',
         title: 'test',
         preview: 'blob:localhost:8080/test.jpg',
+        progressPercent: 33,
       },
       {
         id: 'testId',
         title: 'testTwo',
         preview: 'blob:localhost:8080/test.jpg',
-      },
-    ],
-    progressPercents: [
-      {
-        id: 'testId',
-        value: 22,
+        progressPercent: 25,
       },
     ],
     removeFile: expect.createSpy(),
@@ -80,6 +76,6 @@ describe('AudioDropzone', () => {
   it('should render a progress bar for each file', () => {
     ({ props, wrapper } = setup());
 
-    expect(wrapper.find(Progress).length).toBe(props.progressPercents.length);
+    expect(wrapper.find(Progress).length).toBe(props.files.length);
   });
 });

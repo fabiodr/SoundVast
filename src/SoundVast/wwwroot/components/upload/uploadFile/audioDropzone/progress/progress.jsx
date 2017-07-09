@@ -5,8 +5,12 @@ const Progress = ({ progressPercent }) => (
   <progress value={progressPercent} max={100} />
 );
 
+Progress.defaultProps = {
+  progressPercent: 0,
+};
+
 Progress.propTypes = {
-  progressPercent: PropTypes.number.isRequired,
+  progressPercent: PropTypes.number,
 };
 
 export default Progress;

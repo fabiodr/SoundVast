@@ -9,6 +9,5 @@ namespace SoundVast.Storage.FileStorage
     public interface IFileStorage
     {
         Task<ProcessAudio> TempStoreMp3Data(IFormFile file);
-        Task<AudioFileMetadata> GetAudioFileMetadata(IFormFile file);
     }
 }

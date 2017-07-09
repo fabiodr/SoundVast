@@ -12,12 +12,7 @@ describe('AudioDropzoneContainer', () => {
             title: 'test.mp3',
             previewCoverImageUrl: 'localhost://test.jpg',
             size: 1003990,
-          },
-        ],
-        progressPercents: [
-          {
-            id: 0,
-            value: 22,
+            progressPercent: 33,
           },
         ],
       },
@@ -31,9 +26,9 @@ describe('AudioDropzoneContainer', () => {
           id: state.upload.audioFiles[0].id,
           title: state.upload.audioFiles[0].title,
           preview: state.upload.audioFiles[0].previewCoverImageUrl,
+          progressPercent: state.upload.audioFiles[0].progressPercent,
         },
       ],
-      progressPercents: state.upload.progressPercents,
     });
   });
 });

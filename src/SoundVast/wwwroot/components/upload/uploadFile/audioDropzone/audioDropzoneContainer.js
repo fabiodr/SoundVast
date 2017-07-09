@@ -8,8 +8,8 @@ export const mapStateToProps = ({ upload }) => ({
     id: x.id,
     title: x.title,
     preview: x.previewCoverImageUrl,
+    progressPercent: x.progressPercent,
   })),
-  progressPercents: upload.progressPercents,
 });
 
 export default connect(mapStateToProps, {
