@@ -30,10 +30,29 @@ export const uploadFile = (file, progressIndex) => (dispatch) => {
   formData.set('file', file);
   formData.set('progressId', progressId);
 
-  fetchProgress('/upload/upload', {
+  fetchProgress('/upload/tempStoreMp3File', {
     method: 'post',
     body: formData,
   }, {
+    readystatechange() {
+      if (this.readyState === 4) {debugger
+        var p = JSON.parse(this.responseText);
+        const body = JSON.stringify(p);
+
+        fetch('/upload/upload', {
+          method: 'post',
+          headers: {
+
+            'Content-Type': 'application/json',
+          },
+          body,
+        });
+      }
+    },
+  }, {
+    load: () => {
+      getServerUploadProgress(progressId, progressIndex)(dispatch);
+    },
     progress: (e) => {
       if (e.lengthComputable) {
         const progressPercent = parseInt((e.loaded / e.total) * 20, 10);
@@ -43,10 +62,6 @@ export const uploadFile = (file, progressIndex) => (dispatch) => {
           progressPercent,
           index: progressIndex,
         });
-      }
-
-      if (e.loaded === e.total) {
-        getServerUploadProgress(progressId, progressIndex)(dispatch);
       }
     },
   });

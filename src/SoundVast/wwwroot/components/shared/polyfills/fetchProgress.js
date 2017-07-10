@@ -1,4 +1,4 @@
-export default (url, opts = {}, uploadEvents) =>
+export default (url, opts = {}, events, uploadEvents) =>
   new Promise((res, rej) => {
     const xhr = new XMLHttpRequest();
 
@@ -10,6 +10,10 @@ export default (url, opts = {}, uploadEvents) =>
 
     xhr.onload = e => res(e.target.responseText);
     xhr.onerror = rej;
+
+    Object.keys(events).forEach((key) => {
+      xhr.addEventListener(key, events[key]);
+    });
 
     if (xhr.upload) {
       Object.keys(uploadEvents).forEach((key) => {
