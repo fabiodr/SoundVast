@@ -46,7 +46,10 @@ export default (state = defaultState, action) => {
     case 'UPDATE_UPLOAD_PROGRESS': {
       const audioFiles = [...state.audioFiles];
 
-      audioFiles[action.index].progressPercent = action.progressPercent;
+      audioFiles[action.index].progress = {
+        value: action.progressPercent,
+        message: action.message,
+      };
 
       return {
         ...state,

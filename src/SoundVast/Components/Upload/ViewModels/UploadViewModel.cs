@@ -16,4 +16,10 @@ namespace SoundVast.Components.Upload.ViewModels
 
         public IEnumerable<SelectListItem> Genres { get; set; }
     }
+
+    public class UploadViewModel
+    {
+        public string AudioName { get; set; }
+        public string AudioPath { get; set; }
+    }
 }

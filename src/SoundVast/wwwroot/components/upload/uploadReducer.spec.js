@@ -102,10 +102,11 @@ describe('uploadReducer', () => {
     expect(state.audioFiles[index].previewCoverImage).toBe(null);
   });
 
-  it('should update progress percent', () => {
+  it('should update upload progress', () => {
     const index = 0;
     const actionProps = {
       progressPercent: 33,
+      message: 'uploading files...',
       index,
     };
 
@@ -120,8 +121,12 @@ describe('uploadReducer', () => {
       ...actionProps,
     });
 
-    expect(state.audioFiles[index].progressPercent).toBe(
-      actionProps.progressPercent,
-    );
+    expect(state.audioFiles[index]).toEqual({
+      progress: {
+        value: actionProps.progressPercent,
+        message: actionProps.message,
+      },
+      ...prevState.audioFiles[index],
+    });
   });
 });

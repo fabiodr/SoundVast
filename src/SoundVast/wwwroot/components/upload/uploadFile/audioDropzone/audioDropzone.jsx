@@ -27,7 +27,7 @@ const AudioDropzone = ({ onDrop, files, removeFile }) => (
     <aside>
       {files.map((file, i) => (
         <div key={file.id}>
-          <Progress progressPercent={file.progressPercent} />
+          <Progress {...file.progress} />
           <Form
             form={`upload_${file.id}`}
             index={i}

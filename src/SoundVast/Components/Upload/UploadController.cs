@@ -44,39 +44,23 @@ namespace SoundVast.Components.Upload
         }
 
         [HttpPost]
-        public IActionResult FetchUploadProgress(string progressId)
-        {
-            var progressPercent = HttpContext.Session.GetInt32(progressId);
-
-            return Ok(new
-            {
-                progressPercent
-            });
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> TempStoreMp3File(IFormFile file, string progressId)
+        public async Task<IActionResult> TempStoreMp3File(IFormFile file)
         {
             var processAudio = await _fileStorage.TempStoreMp3Data(file);
-            var audioBlob = _cloudStorage.GetBlob(CloudStorageType.Audio, processAudio.AudioName);
-            
-            HttpContext.Session.SetInt32(progressId, 50);
 
             return Ok(new
             {
                 audioName = processAudio.AudioName,
                 audioPath = processAudio.AudioPath,
-                progressId
             });
         }
 
         [HttpPost]
-        public async Task<IActionResult> Upload([FromBody]string audioName, [FromBody]string audioPath, [FromBody]string progressId)
+        public async Task<IActionResult> Upload([FromBody] UploadViewModel model)
         {
-            var audioBlob = _cloudStorage.GetBlob(CloudStorageType.Audio, audioName);
+            var audioBlob = _cloudStorage.GetBlob(CloudStorageType.Audio, model.AudioName);
 
-            await audioBlob.UploadFromPathAsync(audioPath, ProcessAudio.AudioContentType);
-            HttpContext.Session.SetInt32(progressId, 100);
+            await audioBlob.UploadFromPathAsync(model.AudioPath, ProcessAudio.AudioContentType);
 
             return Ok();
         }

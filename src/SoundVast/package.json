@@ -57,6 +57,7 @@
     "instrument": false
   },
   "dependencies": {
+    "airbnb-prop-types": "^2.7.0",
     "aspnet-webpack": "^1.0.29",
     "classnames": "^2.2.5",
     "es6-promise": "^4.1.0",

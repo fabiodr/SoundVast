@@ -3,64 +3,62 @@ import shortid from 'shortid';
 
 import fetchProgress from '../shared/polyfills/fetchProgress';
 
-export const getServerUploadProgress = (progressId, progressIndex) => (dispatch) => {
-  const formData = new FormData();
-
-  formData.set('progressId', progressId);
-
-  setInterval(() => fetch('/upload/fetchUploadProgress', {
+export const uploadFile = (body, progressIndex) => dispatch =>
+  fetch('/upload/upload', {
     method: 'post',
-    body: formData,
-    credentials: 'same-origin',
-  }).then(response => response.json()).then((data) => {
-    if (data.progressPercent !== null) {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body,
+  }).then((response) => {
+    if (response.ok) {
       dispatch({
         type: 'UPDATE_UPLOAD_PROGRESS',
-        progressPercent: data.progressPercent,
+        progressPercent: 100,
         index: progressIndex,
+        message: 'Successfully uploaded file.',
       });
     }
-  }), 100);
-};
+  });
 
-export const uploadFile = (file, progressIndex) => (dispatch) => {
+export const tempStoreMp3File = (file, progressIndex) => (dispatch) => {
   const formData = new FormData();
-  const progressId = shortid.generate();
 
   formData.set('file', file);
-  formData.set('progressId', progressId);
 
   fetchProgress('/upload/tempStoreMp3File', {
     method: 'post',
     body: formData,
   }, {
     readystatechange() {
-      if (this.readyState === 4) {debugger
-        var p = JSON.parse(this.responseText);
-        const body = JSON.stringify(p);
-
-        fetch('/upload/upload', {
-          method: 'post',
-          headers: {
-
-            'Content-Type': 'application/json',
-          },
-          body,
+      if (this.readyState === 4) {
+        dispatch({
+          type: 'UPDATE_UPLOAD_PROGRESS',
+          progressPercent: 75,
+          index: progressIndex,
+          message: 'Uploading to SoundVast...',
         });
+        uploadFile(this.responseText, progressIndex)(dispatch);
       }
     },
   }, {
     load: () => {
-      getServerUploadProgress(progressId, progressIndex)(dispatch);
+      dispatch({
+        type: 'UPDATE_UPLOAD_PROGRESS',
+        progressPercent: 50,
+        index: progressIndex,
+        message: 'Converting to mp3...',
+      });
     },
     progress: (e) => {
       if (e.lengthComputable) {
-        const progressPercent = parseInt((e.loaded / e.total) * 20, 10);
+        const progressPercent = parseInt((e.loaded / e.total) * 25, 10);
 
         dispatch({
           type: 'UPDATE_UPLOAD_PROGRESS',
           progressPercent,
           index: progressIndex,
+          message: 'Sending file to server...',
         });
       }
     },
@@ -92,7 +90,7 @@ export const uploadAudioFiles = files => (dispatch, getState) => {
             audioFiles,
           });
 
-          uploadFile(file, progressIndex)(dispatch);
+          tempStoreMp3File(file, progressIndex)(dispatch);
         },
         onError: () => {
           dispatch({
@@ -103,7 +101,7 @@ export const uploadAudioFiles = files => (dispatch, getState) => {
             },
           });
 
-          uploadFile(files, progressIndex)(dispatch);
+          tempStoreMp3File(files, progressIndex)(dispatch);
         },
       });
     });

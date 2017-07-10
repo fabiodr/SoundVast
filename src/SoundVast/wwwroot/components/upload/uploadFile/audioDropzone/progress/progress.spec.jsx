@@ -6,7 +6,6 @@ import Progress from './progress';
 
 const setup = (newProps) => {
   const props = {
-    progressPercent: 30,
     ...newProps,
   };
 
@@ -20,11 +19,23 @@ const setup = (newProps) => {
 
 describe('Progress', () => {
   let wrapper;
-  let props;
 
-  it('should use progressPercent for the value', () => {
-    ({ props, wrapper } = setup());
+  it('should have a value for progress', () => {
+    ({ wrapper } = setup());
 
-    expect(wrapper.find('progress').prop('value')).toBe(props.progressPercent);
+    expect(wrapper.find('progress').prop('value')).toBe(0);
+  });
+
+  it('should not render message if not specified', () => {
+    ({ wrapper } = setup());
+
+    expect(wrapper.find('.message').length).toBe(0);
+  });
+
+  it('should render message if not empty', () => {
+    const message = 'Uploading...';
+    ({ wrapper } = setup({ message }));
+
+    expect(wrapper.find('.message').text()).toBe(message);
   });
 });

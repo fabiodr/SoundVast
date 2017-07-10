@@ -1,16 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import AirbnbPropTypes from 'airbnb-prop-types';
 
-const Progress = ({ progressPercent }) => (
-  <progress value={progressPercent} max={100} />
+const Progress = ({ value, message }) => (
+  <div>
+    {message && <div className="message">{message}</div>}
+    <progress value={value} max={100} />
+  </div>
 );
 
 Progress.defaultProps = {
-  progressPercent: 0,
+  value: 0,
+  message: null,
 };
 
 Progress.propTypes = {
-  progressPercent: PropTypes.number,
+  value: AirbnbPropTypes.between({
+    gte: 0,
+    lte: 100,
+  }),
+  message: PropTypes.string,
 };
 
 export default Progress;
