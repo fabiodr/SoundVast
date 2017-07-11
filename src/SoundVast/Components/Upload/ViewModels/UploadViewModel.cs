@@ -21,5 +21,7 @@ namespace SoundVast.Components.Upload.ViewModels
     {
         public string AudioName { get; set; }
         public string AudioPath { get; set; }
+        public long FileLength { get; set; }
+        public string ProgressId { get; set; }
     }
 }

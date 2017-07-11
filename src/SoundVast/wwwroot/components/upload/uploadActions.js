@@ -3,23 +3,46 @@ import shortid from 'shortid';
 
 import fetchProgress from '../shared/polyfills/fetchProgress';
 
-export const uploadFile = (body, progressIndex) => dispatch =>
+export const uploadFile = (jsonText, progressIndex) => (dispatch) => {
+  const body = JSON.parse(jsonText);
+  const progressId = shortid.generate();
+  const eventSource = new EventSource(`upload/uploadProgress?progressId=${progressId}`);
+
+  body.progressId = progressId;
+
+  eventSource.onmessage = (e) => {
+    const progressPercent = parseInt(e.data, 10);
+
+    if (progressPercent === 100) {
+      eventSource.close();
+      dispatch({
+        type: 'UPDATE_UPLOAD_PROGRESS',
+        progressPercent,
+        index: progressIndex,
+        message: 'Successfully uploaded.',
+      });
+    } else {
+      dispatch({
+        type: 'UPDATE_UPLOAD_PROGRESS',
+        progressPercent,
+        index: progressIndex,
+        message: 'Uploading to SoundVast...',
+      });
+    }
+  };
+
   fetch('/upload/upload', {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
     },
-    body,
+    body: JSON.stringify(body),
   }).then((response) => {
-    if (response.ok) {
-      dispatch({
-        type: 'UPDATE_UPLOAD_PROGRESS',
-        progressPercent: 100,
-        index: progressIndex,
-        message: 'Successfully uploaded file.',
-      });
+    if (!response.ok) {
+      eventSource.close();
     }
-  });
+  }).catch(() => eventSource.close());
+};
 
 export const tempStoreMp3File = (file, progressIndex) => (dispatch) => {
   const formData = new FormData();
@@ -32,12 +55,6 @@ export const tempStoreMp3File = (file, progressIndex) => (dispatch) => {
   }, {
     readystatechange() {
       if (this.readyState === 4) {
-        dispatch({
-          type: 'UPDATE_UPLOAD_PROGRESS',
-          progressPercent: 75,
-          index: progressIndex,
-          message: 'Uploading to SoundVast...',
-        });
         uploadFile(this.responseText, progressIndex)(dispatch);
       }
     },

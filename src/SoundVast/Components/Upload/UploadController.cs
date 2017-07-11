@@ -52,15 +52,31 @@ namespace SoundVast.Components.Upload
             {
                 audioName = processAudio.AudioName,
                 audioPath = processAudio.AudioPath,
+                fileLength = file.Length
             });
+        }
+
+        [HttpGet]
+        public IActionResult UploadProgress(string progressId)
+        {
+            Response.ContentType = "text/event-stream";
+
+            AzureBlob.UploadProgresses.TryGetValue(progressId, out int progressPercent);
+
+            if (progressPercent == 100)
+            {
+                AzureBlob.UploadProgresses.Remove(progressId);
+            }
+            
+            return Ok($"retry: 200\ndata: {progressPercent}\n\n"
+            );
         }
 
         [HttpPost]
         public async Task<IActionResult> Upload([FromBody] UploadViewModel model)
         {
             var audioBlob = _cloudStorage.GetBlob(CloudStorageType.Audio, model.AudioName);
-
-            await audioBlob.UploadFromPathAsync(model.AudioPath, ProcessAudio.AudioContentType);
+            await audioBlob.UploadChunksFromPathAsync(model.AudioPath, model.FileLength, model.ProgressId);
 
             return Ok();
         }

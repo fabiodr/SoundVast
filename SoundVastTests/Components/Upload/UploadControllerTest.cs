@@ -65,7 +65,7 @@ namespace SoundVastTests.Components.Upload
         }
 
         [Test]
-        public async Task ShouldUploadFiles()
+        public async Task ShouldTempStoreMp3File()
         {
             const string audioName = "testFile.mp3";
             var processAudio = new ProcessAudio
@@ -74,70 +74,42 @@ namespace SoundVastTests.Components.Upload
                 AudioName = audioName
             };
 
-            var mockAudioBlob = new Mock<SoundVast.Storage.CloudStorage.ICloudBlob>();
             var mockFile = new Mock<IFormFile>();
 
             _mockFileStorage.Setup(x => x.TempStoreMp3Data(mockFile.Object)).ReturnsAsync(processAudio);
-            _mockCloudStorage.Setup(x => x.GetBlob(CloudStorageType.Audio, audioName)).Returns(mockAudioBlob.Object);
-            mockAudioBlob.Setup(x => x.UploadFromPathAsync(processAudio.AudioPath, ProcessAudio.AudioContentType)).Returns(Task.CompletedTask);
+            
+            var result = (OkObjectResult)await _uploadController.TempStoreMp3File(mockFile.Object);
 
-            var result = await _uploadController.Upload(mockFile.Object);
+            _mockFileStorage.VerifyAll();
+
+            result.Value.ShouldBeEquivalentTo(new
+            {
+                audioName = processAudio.AudioName,
+                audioPath = processAudio.AudioPath
+            });
+        }
+
+        [Test]
+        public async Task ShouldUploadFiles()
+        {
+            const string audioName = "testFile.mp3";
+            var model = new UploadViewModel
+            {
+                AudioPath = Path.Combine("testPath", audioName),
+                AudioName = audioName
+            };
+
+            var mockAudioBlob = new Mock<SoundVast.Storage.CloudStorage.ICloudBlob>();
+            var mockFile = new Mock<IFormFile>();
+
+            _mockCloudStorage.Setup(x => x.GetBlob(CloudStorageType.Audio, audioName)).Returns(mockAudioBlob.Object);
+            mockAudioBlob.Setup(x => x.UploadFromPathAsync(model.AudioPath, ProcessAudio.AudioContentType)).Returns(Task.CompletedTask);
+
+            var result = await _uploadController.Upload(model);
 
             mockAudioBlob.VerifyAll();
 
             result.Should().BeOfType<OkResult>();
-        }
-
-        [Test]
-        public async Task ShouldFetchMetadata()
-        {
-            const string coverImageName = "testFile.jpg";
-            var files = new List<IFormFile>();
-            var audioFileMetadata = new AudioFileMetadata
-            {
-                CoverImageName = coverImageName,
-                CoverImagePath = Path.Combine("testPath", coverImageName),
-                Metadata = new Dictionary<string, string>
-                {
-                    { "title", "kalimba" },
-                    { "album", "kalimba Album" }
-                }
-            };
-
-            var mockCoverImageBlob = new Mock<SoundVast.Storage.CloudStorage.ICloudBlob>();
-            var mockFile = new Mock<IFormFile>();
-
-            mockCoverImageBlob.Setup(x => x.FileProperties).Returns(new CloudStorageProperties
-            {
-                Uri = new Uri("localhost://test.com")
-            });
-
-            _mockFileStorage.Setup(x => x.GetAudioFileMetadata(mockFile.Object)).ReturnsAsync(audioFileMetadata);
-            _mockCloudStorage.Setup(x => x.GetBlob(CloudStorageType.Image, audioFileMetadata.CoverImageName)).Returns(mockCoverImageBlob.Object);
-            mockCoverImageBlob.Setup(x => x.UploadFromPathAsync(audioFileMetadata.CoverImagePath, AudioFileMetadata.CoverImageContentType)).Returns(Task.CompletedTask);
-
-            files.Add(mockFile.Object);
-
-            var result = (OkObjectResult)await _uploadController.FetchFilesMetadata(files);
-
-            mockCoverImageBlob.VerifyAll();
-
-            result.Should().BeOfType<OkObjectResult>();
-
-            var expected = new
-            {
-                audioFileMetadatas = new List<IDictionary<string, string>>()
-                {
-                    new Dictionary<string, string>
-                    {
-                        {"title", "kalimba"},
-                        {"album", "kalimba Album"},
-                        {"previewCoverImageUrl", "localhost://test.com/"}
-                    }
-                }
-            };
-
-            result.Value.ShouldBeEquivalentTo(expected);
         }
     }
 }

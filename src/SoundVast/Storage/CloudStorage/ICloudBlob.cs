@@ -12,6 +12,7 @@ namespace SoundVast.Storage.CloudStorage
         CloudStorageProperties FileProperties { get; }
 
         Task UploadFromPathAsync(string path, string contentType);
+        Task UploadChunksFromPathAsync(string path, long fileLength, string progressId);
         Task DownloadRangeToStreamAsync(Stream target, long? offset, long? length);
     }
 }

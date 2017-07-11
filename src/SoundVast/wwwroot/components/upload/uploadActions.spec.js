@@ -2,6 +2,7 @@ import expect from 'expect';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import proxyquire from 'proxyquire';
+import fetchMock from 'fetch-mock';
 
 import * as actions from './uploadActions';
 
@@ -20,6 +21,20 @@ describe('uploadActions', () => {
 
   afterEach(() => {
     expect.restoreSpies();
+  });
+
+  it('should upload file', () => {
+    const progressIndex = 0;
+    fetchMock.postOnce('/upload/upload', 200);
+
+    store.dispatch(actions.uploadFile({}, progressIndex)).then(() => {
+      expect(calledActions).toContain({
+        type: 'UPDATE_UPLOAD_PROGRESS',
+        progressPercent: 100,
+        index: progressIndex,
+        message: 'Successfully uploaded file.',
+      });
+    });
   });
 
   it('should remove audio file', () => {
