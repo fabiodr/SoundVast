@@ -70,7 +70,7 @@ namespace SoundVast.Storage.FileStorage
         //    }
         //}
 
-        private async Task<ProcessAudio> GetAudioFile(string path, string fileName)
+        private async Task<ProcessAudio> ConvertToMp3(string path, string fileName)
         {
             if (path == null) throw new ArgumentNullException(nameof(path));
 
@@ -132,9 +132,10 @@ namespace SoundVast.Storage.FileStorage
             {
                 _logger.LogInformation(1, ea.Data);
             };
+
             process.ErrorDataReceived += (s, ea) =>
             {
-                _logger.LogError(2, ea.Data);
+                _logger.LogInformation(1, ea.Data);
             };
 
             var started = process.Start();
@@ -166,7 +167,7 @@ namespace SoundVast.Storage.FileStorage
 
             File.WriteAllBytes(path, audioBytes);
 
-            return await GetAudioFile(path, file.FileName);
+            return await ConvertToMp3(path, file.FileName);
         }
     }
 }

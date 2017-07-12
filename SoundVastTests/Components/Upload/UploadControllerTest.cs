@@ -85,25 +85,40 @@ namespace SoundVastTests.Components.Upload
             result.Value.ShouldBeEquivalentTo(new
             {
                 audioName = processAudio.AudioName,
-                audioPath = processAudio.AudioPath
+                audioPath = processAudio.AudioPath,
+                fileLength = mockFile.Object.Length
             });
+        }
+
+        [Test]
+        public void ShouldGetUploadProgress()
+        {
+            const string progressId = "testId";
+
+            _uploadController.ControllerContext.HttpContext = new DefaultHttpContext();
+
+            var result = (OkObjectResult)_uploadController.UploadProgress(progressId);
+
+            result.Value.Should().Be($"retry: 200\ndata: {0}\n\n");
         }
 
         [Test]
         public async Task ShouldUploadFiles()
         {
+            const string progressId = "testId";
             const string audioName = "testFile.mp3";
+
             var model = new UploadViewModel
             {
                 AudioPath = Path.Combine("testPath", audioName),
-                AudioName = audioName
+                AudioName = audioName,
+                ProgressId = progressId
             };
 
             var mockAudioBlob = new Mock<SoundVast.Storage.CloudStorage.ICloudBlob>();
-            var mockFile = new Mock<IFormFile>();
 
             _mockCloudStorage.Setup(x => x.GetBlob(CloudStorageType.Audio, audioName)).Returns(mockAudioBlob.Object);
-            mockAudioBlob.Setup(x => x.UploadFromPathAsync(model.AudioPath, ProcessAudio.AudioContentType)).Returns(Task.CompletedTask);
+            mockAudioBlob.Setup(x => x.UploadChunksFromPathAsync(model.AudioPath, model.FileLength, model.ProgressId)).Returns(Task.CompletedTask);
 
             var result = await _uploadController.Upload(model);
 

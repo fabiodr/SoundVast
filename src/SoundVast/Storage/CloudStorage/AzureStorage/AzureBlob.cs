@@ -31,7 +31,7 @@ namespace SoundVast.Storage.CloudStorage.AzureStorage
         };
         public CloudBlobContainer CloudBlobContainer { get; set; }
         private CloudBlockBlob _cloudBlockBlob;
-        public static IDictionary<string, int> UploadProgresses = new Dictionary<string, int>();
+        private static readonly IDictionary<string, int> UploadProgresses = new Dictionary<string, int>();
 
         public AzureBlob(string containerName, CloudBlobClient cloudBlobClient)
         {
@@ -41,6 +41,18 @@ namespace SoundVast.Storage.CloudStorage.AzureStorage
             {
                 PublicAccess = BlobContainerPublicAccessType.Container
             });
+        }
+
+        public static int GetProgressPercent(string progressId)
+        {
+            UploadProgresses.TryGetValue(progressId, out int progressPercent);
+
+            if (progressPercent == 100)
+            {
+                UploadProgresses.Remove(progressId);
+            }
+
+            return progressPercent;
         }
 
         public async Task UploadChunksFromPathAsync(string path, long fileLength, string progressId)

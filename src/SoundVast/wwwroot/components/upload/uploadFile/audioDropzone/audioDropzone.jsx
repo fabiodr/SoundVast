@@ -8,6 +8,8 @@ import FileInformation from './fileInformation/fileInformation';
 import Form from './form/formContainer';
 import Progress from './progress/progress';
 
+import filePlaceholder from '../../../../images/logo/icon/SoundVast_Icon_70x70.png';
+
 const AudioDropzone = ({ onDrop, files, removeFile }) => (
   <div>
     <Dropzone
@@ -21,7 +23,10 @@ const AudioDropzone = ({ onDrop, files, removeFile }) => (
         </div>
       </div>
       {files.map(file => (
-        file.preview && <img key={file.id} alt="" src={file.preview} />
+        <figure key={file.id}>
+          <img alt="" src={file.preview ? file.preview : filePlaceholder} />
+          <figcaption>{file.title}</figcaption>
+        </figure>
       ))}
     </Dropzone>
     <aside>

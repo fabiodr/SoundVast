@@ -2,6 +2,7 @@ import jsmediatags from 'jsmediatags/dist/jsmediatags';
 import shortid from 'shortid';
 
 import fetchProgress from '../shared/polyfills/fetchProgress';
+import trimFileExtension from '../shared/utilities/trimFileExtension';
 
 export const uploadFile = (jsonText, progressIndex) => (dispatch) => {
   const body = JSON.parse(jsonText);
@@ -24,7 +25,7 @@ export const uploadFile = (jsonText, progressIndex) => (dispatch) => {
     } else {
       dispatch({
         type: 'UPDATE_UPLOAD_PROGRESS',
-        progressPercent,
+        progressPercent: 50 + (progressPercent / 2),
         index: progressIndex,
         message: 'Uploading to SoundVast...',
       });
@@ -62,7 +63,7 @@ export const tempStoreMp3File = (file, progressIndex) => (dispatch) => {
     load: () => {
       dispatch({
         type: 'UPDATE_UPLOAD_PROGRESS',
-        progressPercent: 50,
+        progressPercent: 25,
         index: progressIndex,
         message: 'Converting to mp3...',
       });
@@ -89,18 +90,23 @@ export const uploadAudioFiles = files => (dispatch, getState) => {
     const progressIndex = stateFiles.length + i;
 
     fetch(file.preview).then(response => response.blob()).then((blob) => {
+      const audioFiles = {
+        id: shortid.generate(),
+      };
+
       jsmediatags.read(blob, {
         onSuccess: (tag) => {
-          const coverImageBytes = new Uint8Array(tag.tags.picture.data);
-          const coverImageBlob = new Blob([coverImageBytes], { type: tag.tags.picture.format });
-          const previewCoverImageUrl = URL.createObjectURL(coverImageBlob);
-          const audioFiles = {
-            id: shortid.generate(),
-            artist: tag.tags.artist,
-            album: tag.tags.album,
-            previewCoverImageUrl,
-            title: tag.tags.title,
-          };
+          audioFiles.artist = tag.tags.artist;
+          audioFiles.album = tag.tags.album;
+          audioFiles.title = tag.tags.title;
+
+          if (tag.tags.picture !== undefined) {
+            const coverImageBytes = new Uint8Array(tag.tags.picture.data);
+            const coverImageBlob = new Blob([coverImageBytes], { type: tag.tags.picture.format });
+            const previewCoverImageUrl = URL.createObjectURL(coverImageBlob);
+
+            audioFiles.previewCoverImageUrl = previewCoverImageUrl;
+          }
 
           dispatch({
             type: 'ADD_AUDIO_FILES',
@@ -110,15 +116,14 @@ export const uploadAudioFiles = files => (dispatch, getState) => {
           tempStoreMp3File(file, progressIndex)(dispatch);
         },
         onError: () => {
+          audioFiles.title = trimFileExtension(file.name);
+
           dispatch({
             type: 'ADD_AUDIO_FILES',
-            audioFiles: {
-              ...file,
-              title: file.name,
-            },
+            audioFiles,
           });
 
-          tempStoreMp3File(files, progressIndex)(dispatch);
+          tempStoreMp3File(file, progressIndex)(dispatch);
         },
       });
     });

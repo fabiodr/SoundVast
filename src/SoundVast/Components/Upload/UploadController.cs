@@ -61,21 +61,16 @@ namespace SoundVast.Components.Upload
         {
             Response.ContentType = "text/event-stream";
 
-            AzureBlob.UploadProgresses.TryGetValue(progressId, out int progressPercent);
-
-            if (progressPercent == 100)
-            {
-                AzureBlob.UploadProgresses.Remove(progressId);
-            }
+            var progressPercent = AzureBlob.GetProgressPercent(progressId);
             
-            return Ok($"retry: 200\ndata: {progressPercent}\n\n"
-            );
+            return Ok($"retry: 200\ndata: {progressPercent}\n\n");
         }
 
         [HttpPost]
         public async Task<IActionResult> Upload([FromBody] UploadViewModel model)
         {
             var audioBlob = _cloudStorage.GetBlob(CloudStorageType.Audio, model.AudioName);
+
             await audioBlob.UploadChunksFromPathAsync(model.AudioPath, model.FileLength, model.ProgressId);
 
             return Ok();

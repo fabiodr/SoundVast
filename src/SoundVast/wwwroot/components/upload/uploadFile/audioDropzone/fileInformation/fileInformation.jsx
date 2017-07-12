@@ -8,17 +8,9 @@ const FileInformation = ({ index }) => (
   <Tabs>
     <TabList>
       <Tab>Basic info</Tab>
-      <Tab>Metadata</Tab>
-      <Tab>Permissions</Tab>
     </TabList>
     <TabPanel>
       <BasicInfo index={index} />
-    </TabPanel>
-    <TabPanel>
-      MetaData
-    </TabPanel>
-    <TabPanel>
-      Permissions
     </TabPanel>
   </Tabs>
 );

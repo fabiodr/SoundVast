@@ -51,14 +51,31 @@ describe('AudioDropzone', () => {
     expect(wrapper.find('img').length).toBe(0);
   });
 
-  it('should not map preview image when preview is empty', () => {
+  it('should map same number of preview images as files', () => {
+    ({ wrapper } = setup());
+
+    expect(wrapper.find('img').length).toBe(2);
+  });
+
+  it('should map same number of captions as files', () => {
+    ({ wrapper } = setup());
+
+    expect(wrapper.find('figcaption').length).toBe(2);
+  });
+
+  it('preview image should fallback to placeholder when preview is empty', () => {
     const files = [
-      { id: 'testId', title: 'test', preview: '' },
-      { id: 'testId', title: 'testTwo', preview: 'blob:localhost:8080/test.jpg' },
+      { id: 'testId', title: 'testTwo', preview: '' },
     ];
     ({ wrapper } = setup({ files }));
 
-    expect(wrapper.find('img').length).toBe(1);
+    expect(wrapper.find('img').first().prop('src')).toBeTruthy();
+  });
+
+  it('preview image should use preview when not empty', () => {
+    ({ props, wrapper } = setup());
+
+    expect(wrapper.find('img').at(0).prop('src')).toBe(props.files[0].preview);
   });
 
   it('should map preview image for each file', () => {
