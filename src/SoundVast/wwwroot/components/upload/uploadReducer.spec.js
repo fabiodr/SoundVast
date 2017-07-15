@@ -18,7 +18,6 @@ describe('uploadReducer', () => {
 
     expect(state).toEqual({
       audioFiles: [],
-      progressPercents: [],
     });
   });
 
@@ -26,11 +25,13 @@ describe('uploadReducer', () => {
     const actionProps = {
       audioFile: {
         name: 'bubble.mp3',
+        previewCoverImageUrl: 'blob:localhost://bubble.jpg',
       },
     };
     const prevState = {
       audioFiles: [{
         name: 'test.mp3',
+        previewCoverImageUrl: 'blob:localhost://test.jpg',
       }],
     };
 
@@ -41,10 +42,28 @@ describe('uploadReducer', () => {
 
     expect(state).toEqual({
       audioFiles: [
-        { name: 'test.mp3' },
-        { name: 'bubble.mp3' },
+        { ...prevState.audioFiles[0] },
+        { ...actionProps.audioFile },
       ],
     });
+  });
+
+  it('should use default cover image when not specified', () => {
+    const actionProps = {
+      audioFile: {
+        name: 'bubble.mp3',
+      },
+    };
+    const prevState = {
+      audioFiles: [],
+    };
+
+    const state = uploadReducer(prevState, {
+      type: 'ADD_AUDIO_FILE',
+      ...actionProps,
+    });
+
+    expect(state.audioFiles[0].previewCoverImageUrl).toBeTruthy();
   });
 
   it('should remove audio file', () => {
@@ -81,7 +100,7 @@ describe('uploadReducer', () => {
       ...actionProps,
     });
 
-    expect(state.audioFiles[index].previewCoverImage).toBe(
+    expect(state.audioFiles[index].previewCoverImageUrl).toBe(
       actionProps.preview,
     );
   });
@@ -90,7 +109,7 @@ describe('uploadReducer', () => {
     const index = 0;
     const prevState = {
       audioFiles: [
-        { previewCoverImage: 'test.jpg' },
+        { previewCoverImageUrl: 'test.jpg' },
       ],
     };
 
@@ -99,7 +118,7 @@ describe('uploadReducer', () => {
       index,
     });
 
-    expect(state.audioFiles[index].previewCoverImage).toBe(null);
+    expect(state.audioFiles[index].previewCoverImageUrl).toBe(null);
   });
 
   it('should update upload progress', () => {

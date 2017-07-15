@@ -63,16 +63,7 @@ describe('AudioDropzone', () => {
     expect(wrapper.find('figcaption').length).toBe(2);
   });
 
-  it('preview image should fallback to placeholder when preview is empty', () => {
-    const files = [
-      { id: 'testId', title: 'testTwo', preview: '' },
-    ];
-    ({ wrapper } = setup({ files }));
-
-    expect(wrapper.find('img').first().prop('src')).toBeTruthy();
-  });
-
-  it('preview image should use preview when not empty', () => {
+  it('preview image should use preview', () => {
     ({ props, wrapper } = setup());
 
     expect(wrapper.find('img').at(0).prop('src')).toBe(props.files[0].preview);

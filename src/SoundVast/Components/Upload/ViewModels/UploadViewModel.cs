@@ -14,7 +14,9 @@ namespace SoundVast.Components.Upload.ViewModels
 
         public string Artist { get; set; }
 
-        public IEnumerable<SelectListItem> Genres { get; set; }
+        public string CoverImageUrl { get; set; }
+
+        public SelectListItem Genre { get; set; }
     }
 
     public class UploadViewModel

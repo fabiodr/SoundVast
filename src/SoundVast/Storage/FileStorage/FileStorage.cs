@@ -156,7 +156,7 @@ namespace SoundVast.Storage.FileStorage
             }
         }
 
-        public async Task<string> TempStoreMp3Data(IFormFile file)
+        public async Task<string> ConvertToMp3(IFormFile file)
         {
             var path = Path.GetTempFileName();
             var audioBytes = await ReadFileBytes(file);

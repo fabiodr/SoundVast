@@ -2,15 +2,20 @@
 
 import { SubmissionError } from 'redux-form';
 
-export const submit = formData => () =>
-fetch('/upload/save', {
-  method: 'post',
-  body: formData,
-}).then((response) => {
-  if (response.status === 400) {
-    return response.json().then((modelErrors) => {
-      throw new SubmissionError(modelErrors);
-    });
-  }
-  return null;
-});
+export const submit = ({ __RequestVerificationToken, ...values }) => () =>
+  fetch('/upload/save', {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+      RequestVerificationToken: __RequestVerificationToken,
+    },
+    body: JSON.stringify(values),
+    credentials: 'same-origin',
+  }).then((response) => {
+    if (response.status === 400) {
+      return response.json().then((modelErrors) => {
+        throw new SubmissionError(modelErrors);
+      });
+    }
+    return null;
+  });

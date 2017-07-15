@@ -4,7 +4,7 @@ import shortid from 'shortid';
 import fetchProgress from '../shared/polyfills/fetchProgress';
 import trimFileExtension from '../shared/utilities/trimFileExtension';
 
-export const uploadFile = (jsonText, id) => (dispatch) => {
+export const uploadMp3 = (jsonText, id) => (dispatch) => {
   const body = JSON.parse(jsonText);
   const eventSource = new EventSource(`upload/uploadProgress?progressId=${id}`);
 
@@ -31,7 +31,7 @@ export const uploadFile = (jsonText, id) => (dispatch) => {
     }
   };
 
-  fetch('/upload/upload', {
+  fetch('/upload/uploadMp3', {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
@@ -44,18 +44,18 @@ export const uploadFile = (jsonText, id) => (dispatch) => {
   }).catch(() => eventSource.close());
 };
 
-export const tempStoreMp3File = (file, id) => (dispatch) => {
+export const convertToMp3 = (file, id) => (dispatch) => {
   const formData = new FormData();
 
   formData.set('file', file);
 
-  fetchProgress('/upload/tempStoreMp3File', {
+  fetchProgress('/upload/convertToMp3', {
     method: 'post',
     body: formData,
   }, {
     readystatechange() {
       if (this.readyState === 4) {
-        uploadFile(this.responseText, id)(dispatch);
+        uploadMp3(this.responseText, id)(dispatch);
       }
     },
   }, {
@@ -108,7 +108,7 @@ export const uploadAudioFiles = files => (dispatch) => {
             audioFile,
           });
 
-          tempStoreMp3File(file, audioFile.id)(dispatch);
+          convertToMp3(file, audioFile.id)(dispatch);
         },
         onError: () => {
           audioFile.title = trimFileExtension(file.name);
@@ -118,7 +118,7 @@ export const uploadAudioFiles = files => (dispatch) => {
             audioFile,
           });
 
-          tempStoreMp3File(file, audioFile.id)(dispatch);
+          convertToMp3(file, audioFile.id)(dispatch);
         },
       });
     });

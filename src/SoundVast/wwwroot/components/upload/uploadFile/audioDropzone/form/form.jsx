@@ -2,9 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import ValidationErrors from '../../../../shared/form/validation/errors/errors';
+import AntiForgeryToken from '../../../../shared/form/antiForgeryToken/antiForgeryTokenContainer';
 
-const Form = ({ error: errors, children, handleSubmit, removeFile, index }) => (
+const Form = ({ error: errors, children, handleSubmit, removeFile, index, form }) => (
   <form onSubmit={handleSubmit} action="">
+    <AntiForgeryToken form={form} />
     <ValidationErrors errors={errors} />
 
     {children}
@@ -21,6 +23,7 @@ Form.defaultProps = {
 };
 
 Form.propTypes = {
+  form: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
   index: PropTypes.number.isRequired,
   removeFile: PropTypes.func.isRequired,

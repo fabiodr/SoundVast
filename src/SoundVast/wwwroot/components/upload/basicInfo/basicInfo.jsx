@@ -12,6 +12,7 @@ const BasicInfo = ({ genres, index }) => (
     <div className={styles.imageDropzoneContainer}>
       <span>Cover Image</span>
       <ImageDropzone index={index} />
+      <Field type="hidden" name="coverImageUrl" component="input" />
     </div>
     <div className={styles.formGroup}>
       <label htmlFor={`name_${index}`}>Name *
@@ -24,7 +25,7 @@ const BasicInfo = ({ genres, index }) => (
 
       <label htmlFor={`genre_${index}`}>Genre
         <Field name="genre" id={`genre_${index}`} component={FormSelect}>
-          <option key="none" value="none">None</option>
+          <option value="None">None</option>
           {genres.map(genre => <option key={genre.id} value={genre.name}>{genre.name}</option>)}
         </Field>
       </label>

@@ -32,9 +32,10 @@ namespace SoundVast.Components.Upload
             _fileStorage = fileStorage;
             _cloudStorage = cloudStorage;
         }
-
+        
         [HttpPost]
-        public IActionResult Save(SaveUploadViewModel model)
+        [ValidateAntiForgeryToken]
+        public IActionResult Save([FromBody] SaveUploadViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -44,9 +45,9 @@ namespace SoundVast.Components.Upload
         }
 
         [HttpPost]
-        public async Task<IActionResult> TempStoreMp3File(IFormFile file)
+        public async Task<IActionResult> ConvertToMp3(IFormFile file)
         {
-            var audioPath = await _fileStorage.TempStoreMp3Data(file);
+            var audioPath = await _fileStorage.ConvertToMp3(file);
 
             return Ok(new
             {
@@ -62,13 +63,13 @@ namespace SoundVast.Components.Upload
             Response.ContentType = "text/event-stream";
 
             var progressPercent = AzureBlob.GetProgressPercent(progressId);
-            const int progressRetryMilliseconds = 200;
+            const int progressRetryMilliseconds = 50;
             
             return Ok($"retry: {progressRetryMilliseconds}\ndata: {progressPercent}\n\n");
         }
 
         [HttpPost]
-        public async Task<IActionResult> Upload([FromBody] UploadViewModel model)
+        public async Task<IActionResult> UploadMp3([FromBody] UploadViewModel model)
         {
             var audioBlob = _cloudStorage.GetBlob(CloudStorageType.Audio, model.AudioName);
 

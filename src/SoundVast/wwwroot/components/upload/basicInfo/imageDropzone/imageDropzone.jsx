@@ -12,7 +12,7 @@ const ImageDropzone = ({ onDrop, index, preview }) => (
     multiple={false}
     onDrop={files => onDrop(files[0], index)}
   >
-    {preview && <img alt="" src={preview} />}
+    <img alt="" src={preview} />
     <div className={dropzoneStyles.placeholder}>
       Update image
     </div>
@@ -26,7 +26,7 @@ ImageDropzone.defaultProps = {
 ImageDropzone.propTypes = {
   index: PropTypes.number.isRequired,
   onDrop: PropTypes.func.isRequired,
-  preview: PropTypes.string,
+  preview: PropTypes.string.isRequired,
 };
 
 export default ImageDropzone;

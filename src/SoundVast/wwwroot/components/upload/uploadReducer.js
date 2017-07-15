@@ -1,6 +1,7 @@
+import filePlaceholder from '../../images/logo/icon/SoundVast_Icon_310x310.png';
+
 const defaultState = {
   audioFiles: [],
-  progressPercents: [],
 };
 
 const removeFile = (files, index) => {
@@ -16,7 +17,10 @@ export default (state = defaultState, action) => {
     case 'ADD_AUDIO_FILE':
       return {
         ...state,
-        audioFiles: state.audioFiles.concat([action.audioFile]),
+        audioFiles: state.audioFiles.concat([{
+          previewCoverImageUrl: filePlaceholder,
+          ...action.audioFile,
+        }]),
       };
     case 'REMOVE_AUDIO_FILE':
       return {
@@ -26,7 +30,7 @@ export default (state = defaultState, action) => {
     case 'UPDATE_COVER_IMAGE_FILE': {
       const audioFiles = [...state.audioFiles];
 
-      audioFiles[action.index].previewCoverImage = action.preview;
+      audioFiles[action.index].previewCoverImageUrl = action.preview;
 
       return {
         ...state,
@@ -36,7 +40,7 @@ export default (state = defaultState, action) => {
     case 'REMOVE_COVER_IMAGE_FILE': {
       const audioFiles = [...state.audioFiles];
 
-      audioFiles[action.index].previewCoverImage = null;
+      audioFiles[action.index].previewCoverImageUrl = null;
 
       return {
         ...state,

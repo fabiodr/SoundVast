@@ -63,16 +63,16 @@ namespace SoundVastTests.Components.Upload
         }
 
         [Test]
-        public async Task ShouldTempStoreMp3File()
+        public async Task ShouldConvertToMp3()
         {
             const string audioName = "testFile.mp3";
             var audioPath = Path.Combine("testPath", audioName);
             var mockFile = new Mock<IFormFile>();
 
             mockFile.Setup(x => x.FileName).Returns(audioName);
-            _mockFileStorage.Setup(x => x.TempStoreMp3Data(mockFile.Object)).ReturnsAsync(audioPath);
+            _mockFileStorage.Setup(x => x.ConvertToMp3(mockFile.Object)).ReturnsAsync(audioPath);
             
-            var result = (OkObjectResult)await _uploadController.TempStoreMp3File(mockFile.Object);
+            var result = (OkObjectResult)await _uploadController.ConvertToMp3(mockFile.Object);
 
             _mockFileStorage.VerifyAll();
 
@@ -93,7 +93,7 @@ namespace SoundVastTests.Components.Upload
 
             var result = (OkObjectResult)_uploadController.UploadProgress(progressId);
 
-            result.Value.Should().Be($"retry: 200\ndata: {0}\n\n");
+            result.Value.Should().Be("retry: 50\ndata: 0\n\n");
         }
 
         [Test]
@@ -114,7 +114,7 @@ namespace SoundVastTests.Components.Upload
             _mockCloudStorage.Setup(x => x.GetBlob(CloudStorageType.Audio, audioName)).Returns(mockAudioBlob.Object);
             mockAudioBlob.Setup(x => x.UploadChunksFromPathAsync(model.AudioPath, "audio/mpeg", model.FileLength, model.ProgressId)).Returns(Task.CompletedTask);
 
-            var result = await _uploadController.Upload(model);
+            var result = await _uploadController.UploadMp3(model);
 
             mockAudioBlob.VerifyAll();
 

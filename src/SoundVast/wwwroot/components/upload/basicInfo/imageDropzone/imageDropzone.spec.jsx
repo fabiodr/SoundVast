@@ -8,6 +8,7 @@ const setup = (newProps) => {
   const props = {
     onDrop: expect.createSpy(),
     index: 0,
+    preview: 'blob:localhost:8080/test.jpg',
     ...newProps,
   };
 
@@ -21,17 +22,11 @@ const setup = (newProps) => {
 
 describe('ImageDropzone', () => {
   let wrapper;
+  let props;
 
-  it('should not render image when no preview', () => {
-    ({ wrapper } = setup({}));
+  it('preview image should use preview', () => {
+    ({ wrapper, props } = setup());
 
-    expect(wrapper.find('img').length).toBe(0);
-  });
-
-  it('should render image when there is a preview', () => {
-    const preview = 'blob:localhost:8080/test.jpg';
-    ({ wrapper } = setup({ preview }));
-
-    expect(wrapper.find('img').length).toBe(1);
+    expect(wrapper.find('img').prop('src')).toBe(props.preview);
   });
 });

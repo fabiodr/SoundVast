@@ -1,4 +1,4 @@
-import { reduxForm } from 'redux-form';
+import { reduxForm, change } from 'redux-form';
 import { compose, lifecycle } from 'recompose';
 import { connect } from 'react-redux';
 
@@ -11,21 +11,14 @@ export const mapStateToProps = ({ genre, upload }, { index }) => ({
   initialValues: {
     name: upload.audioFiles[index].title,
     artist: upload.audioFiles[index].artist,
-    genres: genre.genres,
+    coverImageUrl: upload.audioFiles[index].previewCoverImageUrl,
   },
 });
 
 const mapDispatchToProps = dispatch => ({
-  getGenres: () => getGenres()(dispatch),
-  onSubmit: (values) => {
-    const formData = new FormData();
-
-    Object.keys(values).forEach((key) => {
-      formData.append(key, values[key]);
-    });
-
-    return dispatch(submit(formData));
-  },
+  onSubmit: values => dispatch(submit(values)),
+  getGenres: () => dispatch(getGenres()),
+  change: (...values) => dispatch(change(values)),
 });
 
 export default compose(
@@ -34,8 +27,12 @@ export default compose(
     componentDidMount() {
       this.props.getGenres();
     },
+    componentWillReceiveProps(nextProps) {
+      if (this.props.initialValues.coverImageUrl !== nextProps.initialValues.coverImageUrl) {
+        this.props.change(this.props.form, 'coverImageUrl', nextProps.initialValues.coverImageUrl);
+      }
+    },
   }),
-  // TODO: https://github.com/erikras/redux-form/issues/3048
   reduxForm({
     validate: uploadValidation,
   }),

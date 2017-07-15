@@ -8,6 +8,6 @@ namespace SoundVast.Storage.FileStorage
 {
     public interface IFileStorage
     {
-        Task<string> TempStoreMp3Data(IFormFile file);
+        Task<string> ConvertToMp3(IFormFile file);
     }
 }

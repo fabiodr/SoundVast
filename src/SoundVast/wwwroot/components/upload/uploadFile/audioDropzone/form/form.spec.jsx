@@ -10,6 +10,7 @@ const setup = (newProps) => {
     children: <div className="@@test" />,
     handleSubmit: expect.createSpy(),
     removeFile: expect.createSpy(),
+    form: 'upload_0',
     index: 2,
     ...newProps,
   };

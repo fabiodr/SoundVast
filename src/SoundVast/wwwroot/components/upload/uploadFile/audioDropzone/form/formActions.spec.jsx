@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+
 import expect from 'expect';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
@@ -8,6 +10,7 @@ import * as actions from './formActions';
 
 const mockStore = configureStore([thunk]);
 const store = mockStore({});
+const __RequestVerificationToken = '@fdsewr';
 
 describe('uploadFormActions', () => {
   afterEach(() => {
@@ -17,7 +20,7 @@ describe('uploadFormActions', () => {
   it('should post form', () => {
     fetchMock.postOnce('/upload/save', 200);
 
-    store.dispatch(actions.submit()).then(() => {
+    store.dispatch(actions.submit({ __RequestVerificationToken })).then(() => {
       expect(fetchMock.called('/upload/save')).toBe(true);
     });
   });
@@ -32,7 +35,7 @@ describe('uploadFormActions', () => {
       body: modelErrors,
     });
 
-    store.dispatch(actions.submit()).catch((error) => {
+    store.dispatch(actions.submit({ __RequestVerificationToken })).catch((error) => {
       expect(error.errors).toEqual(modelErrors);
       expect(error instanceof SubmissionError).toBe(true);
     });
