@@ -13,10 +13,10 @@ const removeFile = (files, index) => {
 
 export default (state = defaultState, action) => {
   switch (action.type) {
-    case 'ADD_AUDIO_FILES':
+    case 'ADD_AUDIO_FILE':
       return {
         ...state,
-        audioFiles: state.audioFiles.concat(action.audioFiles),
+        audioFiles: state.audioFiles.concat([action.audioFile]),
       };
     case 'REMOVE_AUDIO_FILE':
       return {
@@ -45,8 +45,9 @@ export default (state = defaultState, action) => {
     }
     case 'UPDATE_UPLOAD_PROGRESS': {
       const audioFiles = [...state.audioFiles];
+      const audioFile = audioFiles.find(x => x.id === action.id);
 
-      audioFiles[action.index].progress = {
+      audioFile.progress = {
         value: action.progressPercent,
         message: action.message,
       };

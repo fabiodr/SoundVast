@@ -70,7 +70,7 @@ namespace SoundVast.Storage.FileStorage
         //    }
         //}
 
-        private async Task<ProcessAudio> ConvertToMp3(string path, string fileName)
+        private async Task<string> ConvertToMp3(string path, string fileName)
         {
             if (path == null) throw new ArgumentNullException(nameof(path));
 
@@ -116,13 +116,9 @@ namespace SoundVast.Storage.FileStorage
                 File.Delete(path);
             }
 
-            return new ProcessAudio
-            {
-                AudioPath = isMp3Already ? path : mp3Path,
-                AudioName = Path.GetFileName(mp3Path),
-        };
+            return isMp3Already ? path : mp3Path;
         }
-        
+
         private Task<int> RunProcessAsync(Process process)
         {
             var tcs = new TaskCompletionSource<int>();
@@ -143,7 +139,7 @@ namespace SoundVast.Storage.FileStorage
             {
                 throw new InvalidOperationException($"Could not start process: {process}");
             }
-            
+
             process.BeginOutputReadLine();
             process.BeginErrorReadLine();
 
@@ -160,7 +156,7 @@ namespace SoundVast.Storage.FileStorage
             }
         }
 
-        public async Task<ProcessAudio> TempStoreMp3Data(IFormFile file)
+        public async Task<string> TempStoreMp3Data(IFormFile file)
         {
             var path = Path.GetTempFileName();
             var audioBytes = await ReadFileBytes(file);

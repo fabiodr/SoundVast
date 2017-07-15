@@ -8,7 +8,6 @@ namespace SoundVast.Storage.CloudStorage
 {
     public interface ICloudStorage
     {
-        IDictionary<CloudStorageType, ICloudBlob> CloudBlobs { get; set; }
         ICloudBlob GetBlob(CloudStorageType cloudStorageType, string fileName);
     }
 }

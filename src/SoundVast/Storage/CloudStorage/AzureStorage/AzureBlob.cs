@@ -12,36 +12,15 @@ namespace SoundVast.Storage.CloudStorage.AzureStorage
 {
     public class AzureBlob : ICloudBlob
     {
-        private string _fileName;
-        public string FileName
-        {
-            get => _fileName;
-            set
-            {
-                _fileName = value;
-                _cloudBlockBlob = CloudBlobContainer.GetBlockBlobReference(value);
-            }
-        }
         public CloudStorageProperties FileProperties => new CloudStorageProperties
         {
-            Size = _cloudBlockBlob.Properties.Length,
-            Uri = _cloudBlockBlob.Uri,
-            ETag = _cloudBlockBlob.Properties.ETag,
-            ContentType = _cloudBlockBlob.Properties.ContentType,
+            Size = CloudBlockBlob.Properties.Length,
+            Uri = CloudBlockBlob.Uri,
+            ETag = CloudBlockBlob.Properties.ETag,
+            ContentType = CloudBlockBlob.Properties.ContentType,
         };
-        public CloudBlobContainer CloudBlobContainer { get; set; }
-        private CloudBlockBlob _cloudBlockBlob;
+        public CloudBlockBlob CloudBlockBlob { get; set; }
         private static readonly IDictionary<string, int> UploadProgresses = new Dictionary<string, int>();
-
-        public AzureBlob(string containerName, CloudBlobClient cloudBlobClient)
-        {
-            CloudBlobContainer = cloudBlobClient.GetContainerReference(containerName);
-            CloudBlobContainer.CreateIfNotExists();
-            CloudBlobContainer.SetPermissions(new BlobContainerPermissions
-            {
-                PublicAccess = BlobContainerPublicAccessType.Container
-            });
-        }
 
         public static int GetProgressPercent(string progressId)
         {
@@ -55,7 +34,7 @@ namespace SoundVast.Storage.CloudStorage.AzureStorage
             return progressPercent;
         }
 
-        public async Task UploadChunksFromPathAsync(string path, long fileLength, string progressId)
+        public async Task UploadChunksFromPathAsync(string path, string contentType, long fileLength, string progressId)
         {
             const int blockSize = 256 * 1024;
             var bytesToUpload = fileLength;
@@ -79,7 +58,7 @@ namespace SoundVast.Storage.CloudStorage.AzureStorage
                 var blockId = Convert.ToBase64String(Encoding.UTF8.GetBytes(index.ToString("d6")));
 
                 blockIds.Add(blockId);
-                await _cloudBlockBlob.PutBlockAsync(blockId, new MemoryStream(blobContents), null);
+                await CloudBlockBlob.PutBlockAsync(blockId, new MemoryStream(blobContents), null);
 
                 bytesUploaded += bytesToRead;
                 bytesToUpload -= bytesToRead;
@@ -90,23 +69,25 @@ namespace SoundVast.Storage.CloudStorage.AzureStorage
                 UploadProgresses[progressId] = percent;
             } while (bytesToUpload > 0);
 
-            await _cloudBlockBlob.PutBlockListAsync(blockIds);
+            CloudBlockBlob.Properties.ContentType = contentType;
+
+            await CloudBlockBlob.PutBlockListAsync(blockIds);
         }
 
-        public async Task UploadFromPathAsync(string path, string contentType = "application/octet-stream")
+        public async Task UploadFromPathAsync(string path, string contentType)
         {
             var bytes = File.ReadAllBytes(path);
 
             File.Delete(path);
-            
-            _cloudBlockBlob.Properties.ContentType = contentType;
 
-            await _cloudBlockBlob.UploadFromByteArrayAsync(bytes, 0, bytes.Length);
+            CloudBlockBlob.Properties.ContentType = contentType;
+
+            await CloudBlockBlob.UploadFromByteArrayAsync(bytes, 0, bytes.Length);
         }
 
         public async Task DownloadRangeToStreamAsync(Stream target, long? offset, long? length)
         {
-            await _cloudBlockBlob.DownloadRangeToStreamAsync(target, offset, length);
+            await CloudBlockBlob.DownloadRangeToStreamAsync(target, offset, length);
         }
     }
 }

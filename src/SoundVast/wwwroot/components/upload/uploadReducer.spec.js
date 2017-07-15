@@ -24,9 +24,9 @@ describe('uploadReducer', () => {
 
   it('should add audio files to existing files', () => {
     const actionProps = {
-      audioFiles: [{
+      audioFile: {
         name: 'bubble.mp3',
-      }],
+      },
     };
     const prevState = {
       audioFiles: [{
@@ -35,7 +35,7 @@ describe('uploadReducer', () => {
     };
 
     const state = uploadReducer(prevState, {
-      type: 'ADD_AUDIO_FILES',
+      type: 'ADD_AUDIO_FILE',
       ...actionProps,
     });
 

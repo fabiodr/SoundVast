@@ -9,8 +9,6 @@ using Newtonsoft.Json;
 using NUnit.Framework;
 using SoundVast.Components.Upload;
 using SoundVast.Components.Upload.ViewModels;
-using SoundVast.Storage.CloudStorage;
-using SoundVast.Storage.CloudStorage.AzureStorage;
 using SoundVast.Storage.FileStorage;
 using SoundVast.Utilities.ModelState;
 using System;
@@ -21,6 +19,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
+using SoundVast.Storage.CloudStorage;
 
 namespace SoundVastTests.Components.Upload
 {
@@ -40,8 +39,7 @@ namespace SoundVastTests.Components.Upload
             _mockCloudStorage = new Mock<ICloudStorage>();
             _mockModelState.Setup(x => x.ConvertToJson(It.IsAny<ModelStateDictionary>())).Returns("error");
 
-            _uploadController = new UploadController(_mockModelState.Object, _mockFileStorage.Object,
-                _mockCloudStorage.Object);
+            _uploadController = new UploadController(_mockModelState.Object, _mockFileStorage.Object, _mockCloudStorage.Object);
         }
 
         [Test]
@@ -68,15 +66,11 @@ namespace SoundVastTests.Components.Upload
         public async Task ShouldTempStoreMp3File()
         {
             const string audioName = "testFile.mp3";
-            var processAudio = new ProcessAudio
-            {
-                AudioPath = Path.Combine("testPath", audioName),
-                AudioName = audioName
-            };
-
+            var audioPath = Path.Combine("testPath", audioName);
             var mockFile = new Mock<IFormFile>();
 
-            _mockFileStorage.Setup(x => x.TempStoreMp3Data(mockFile.Object)).ReturnsAsync(processAudio);
+            mockFile.Setup(x => x.FileName).Returns(audioName);
+            _mockFileStorage.Setup(x => x.TempStoreMp3Data(mockFile.Object)).ReturnsAsync(audioPath);
             
             var result = (OkObjectResult)await _uploadController.TempStoreMp3File(mockFile.Object);
 
@@ -84,9 +78,9 @@ namespace SoundVastTests.Components.Upload
 
             result.Value.ShouldBeEquivalentTo(new
             {
-                audioName = processAudio.AudioName,
-                audioPath = processAudio.AudioPath,
-                fileLength = mockFile.Object.Length
+                fileLength = mockFile.Object.Length,
+                audioName,
+                audioPath
             });
         }
 
@@ -118,7 +112,7 @@ namespace SoundVastTests.Components.Upload
             var mockAudioBlob = new Mock<SoundVast.Storage.CloudStorage.ICloudBlob>();
 
             _mockCloudStorage.Setup(x => x.GetBlob(CloudStorageType.Audio, audioName)).Returns(mockAudioBlob.Object);
-            mockAudioBlob.Setup(x => x.UploadChunksFromPathAsync(model.AudioPath, model.FileLength, model.ProgressId)).Returns(Task.CompletedTask);
+            mockAudioBlob.Setup(x => x.UploadChunksFromPathAsync(model.AudioPath, "audio/mpeg", model.FileLength, model.ProgressId)).Returns(Task.CompletedTask);
 
             var result = await _uploadController.Upload(model);
 

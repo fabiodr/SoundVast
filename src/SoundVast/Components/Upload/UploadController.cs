@@ -9,8 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using SoundVast.CustomHelpers;
 using SoundVast.Utilities;
 using Microsoft.Extensions.Configuration;
-using SoundVast.Storage.CloudStorage;
 using SoundVast.Storage.FileStorage;
+using SoundVast.Storage.CloudStorage;
 using SoundVast.Components.Upload.ViewModels;
 using System.Net;
 using System.Threading;
@@ -46,13 +46,13 @@ namespace SoundVast.Components.Upload
         [HttpPost]
         public async Task<IActionResult> TempStoreMp3File(IFormFile file)
         {
-            var processAudio = await _fileStorage.TempStoreMp3Data(file);
+            var audioPath = await _fileStorage.TempStoreMp3Data(file);
 
             return Ok(new
             {
-                audioName = processAudio.AudioName,
-                audioPath = processAudio.AudioPath,
-                fileLength = file.Length
+                audioName = file.FileName,
+                fileLength = file.Length,
+                audioPath
             });
         }
 
@@ -62,8 +62,9 @@ namespace SoundVast.Components.Upload
             Response.ContentType = "text/event-stream";
 
             var progressPercent = AzureBlob.GetProgressPercent(progressId);
+            const int progressRetryMilliseconds = 200;
             
-            return Ok($"retry: 200\ndata: {progressPercent}\n\n");
+            return Ok($"retry: {progressRetryMilliseconds}\ndata: {progressPercent}\n\n");
         }
 
         [HttpPost]
@@ -71,7 +72,7 @@ namespace SoundVast.Components.Upload
         {
             var audioBlob = _cloudStorage.GetBlob(CloudStorageType.Audio, model.AudioName);
 
-            await audioBlob.UploadChunksFromPathAsync(model.AudioPath, model.FileLength, model.ProgressId);
+            await audioBlob.UploadChunksFromPathAsync(model.AudioPath, "audio/mpeg", model.FileLength, model.ProgressId);
 
             return Ok();
         }
@@ -92,7 +93,7 @@ namespace SoundVast.Components.Upload
         //[HttpPost]
         //public JsonResult ImageData(string fileName)
         //{
-        //    var fileProperties = _cloudStorage.GetBlob(CloudStorageType.Image, fileName).FileProperties;
+        //    var fileProperties = _cloudStorage.GetBlob(AzureCloudStorageType.Image, fileName).FileProperties;
 
         //    var imageData = new
         //    {

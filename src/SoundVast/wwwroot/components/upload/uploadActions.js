@@ -4,12 +4,11 @@ import shortid from 'shortid';
 import fetchProgress from '../shared/polyfills/fetchProgress';
 import trimFileExtension from '../shared/utilities/trimFileExtension';
 
-export const uploadFile = (jsonText, progressIndex) => (dispatch) => {
+export const uploadFile = (jsonText, id) => (dispatch) => {
   const body = JSON.parse(jsonText);
-  const progressId = shortid.generate();
-  const eventSource = new EventSource(`upload/uploadProgress?progressId=${progressId}`);
+  const eventSource = new EventSource(`upload/uploadProgress?progressId=${id}`);
 
-  body.progressId = progressId;
+  body.progressId = id;
 
   eventSource.onmessage = (e) => {
     const progressPercent = parseInt(e.data, 10);
@@ -19,15 +18,15 @@ export const uploadFile = (jsonText, progressIndex) => (dispatch) => {
       dispatch({
         type: 'UPDATE_UPLOAD_PROGRESS',
         progressPercent,
-        index: progressIndex,
         message: 'Successfully uploaded.',
+        id,
       });
     } else {
       dispatch({
         type: 'UPDATE_UPLOAD_PROGRESS',
         progressPercent: 50 + (progressPercent / 2),
-        index: progressIndex,
         message: 'Uploading to SoundVast...',
+        id,
       });
     }
   };
@@ -45,7 +44,7 @@ export const uploadFile = (jsonText, progressIndex) => (dispatch) => {
   }).catch(() => eventSource.close());
 };
 
-export const tempStoreMp3File = (file, progressIndex) => (dispatch) => {
+export const tempStoreMp3File = (file, id) => (dispatch) => {
   const formData = new FormData();
 
   formData.set('file', file);
@@ -56,7 +55,7 @@ export const tempStoreMp3File = (file, progressIndex) => (dispatch) => {
   }, {
     readystatechange() {
       if (this.readyState === 4) {
-        uploadFile(this.responseText, progressIndex)(dispatch);
+        uploadFile(this.responseText, id)(dispatch);
       }
     },
   }, {
@@ -64,7 +63,7 @@ export const tempStoreMp3File = (file, progressIndex) => (dispatch) => {
       dispatch({
         type: 'UPDATE_UPLOAD_PROGRESS',
         progressPercent: 25,
-        index: progressIndex,
+        id,
         message: 'Converting to mp3...',
       });
     },
@@ -75,7 +74,7 @@ export const tempStoreMp3File = (file, progressIndex) => (dispatch) => {
         dispatch({
           type: 'UPDATE_UPLOAD_PROGRESS',
           progressPercent,
-          index: progressIndex,
+          id,
           message: 'Sending file to server...',
         });
       }
@@ -83,47 +82,43 @@ export const tempStoreMp3File = (file, progressIndex) => (dispatch) => {
   });
 };
 
-export const uploadAudioFiles = files => (dispatch, getState) => {
-  const stateFiles = getState().upload.audioFiles;
-
-  files.forEach((file, i) => {
-    const progressIndex = stateFiles.length + i;
-
+export const uploadAudioFiles = files => (dispatch) => {
+  files.forEach((file) => {
     fetch(file.preview).then(response => response.blob()).then((blob) => {
-      const audioFiles = {
+      const audioFile = {
         id: shortid.generate(),
       };
 
       jsmediatags.read(blob, {
         onSuccess: (tag) => {
-          audioFiles.artist = tag.tags.artist;
-          audioFiles.album = tag.tags.album;
-          audioFiles.title = tag.tags.title;
+          audioFile.artist = tag.tags.artist;
+          audioFile.album = tag.tags.album;
+          audioFile.title = tag.tags.title;
 
           if (tag.tags.picture !== undefined) {
             const coverImageBytes = new Uint8Array(tag.tags.picture.data);
             const coverImageBlob = new Blob([coverImageBytes], { type: tag.tags.picture.format });
             const previewCoverImageUrl = URL.createObjectURL(coverImageBlob);
 
-            audioFiles.previewCoverImageUrl = previewCoverImageUrl;
+            audioFile.previewCoverImageUrl = previewCoverImageUrl;
           }
 
           dispatch({
-            type: 'ADD_AUDIO_FILES',
-            audioFiles,
+            type: 'ADD_AUDIO_FILE',
+            audioFile,
           });
 
-          tempStoreMp3File(file, progressIndex)(dispatch);
+          tempStoreMp3File(file, audioFile.id)(dispatch);
         },
         onError: () => {
-          audioFiles.title = trimFileExtension(file.name);
+          audioFile.title = trimFileExtension(file.name);
 
           dispatch({
-            type: 'ADD_AUDIO_FILES',
-            audioFiles,
+            type: 'ADD_AUDIO_FILE',
+            audioFile,
           });
 
-          tempStoreMp3File(file, progressIndex)(dispatch);
+          tempStoreMp3File(file, audioFile.id)(dispatch);
         },
       });
     });

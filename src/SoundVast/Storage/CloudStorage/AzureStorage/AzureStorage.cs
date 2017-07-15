@@ -9,31 +9,40 @@ using Microsoft.WindowsAzure.ServiceRuntime;
 using System.Configuration;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace SoundVast.Storage.CloudStorage.AzureStorage
 {
     public class AzureStorage : ICloudStorage
     {
-        public IDictionary<CloudStorageType, ICloudBlob> CloudBlobs { get; set; }
+        public IDictionary<CloudStorageType, CloudBlobContainer> CloudBlobContainers { get; set; } = new Dictionary<CloudStorageType, CloudBlobContainer>();
 
         public AzureStorage(IConfiguration configuration)
         {
             var storageAccount = CloudStorageAccount.Parse(configuration["ConnectionStrings:StorageConnectionString"]);
             var blobClient = storageAccount.CreateCloudBlobClient();
 
-            CloudBlobs = new Dictionary<CloudStorageType, ICloudBlob>();
-
             foreach (CloudStorageType cloudStorageType in Enum.GetValues(typeof(CloudStorageType)))
             {
-                CloudBlobs[cloudStorageType] = new AzureBlob(cloudStorageType.ToString().ToLower(), blobClient);
+                var cloudBlobContainer = blobClient.GetContainerReference(cloudStorageType.ToString().ToLower());
+                cloudBlobContainer.CreateIfNotExists();
+                cloudBlobContainer.SetPermissions(new BlobContainerPermissions
+                {
+                    PublicAccess = BlobContainerPublicAccessType.Container
+                });
+
+                CloudBlobContainers.Add(cloudStorageType, cloudBlobContainer);
             }
         }
 
         public ICloudBlob GetBlob(CloudStorageType cloudStorageType, string fileName)
         {
-            CloudBlobs[cloudStorageType].FileName = fileName;
+            var azureBlob = new AzureBlob
+            {
+                CloudBlockBlob = CloudBlobContainers[cloudStorageType].GetBlockBlobReference(fileName)
+            };
 
-            return CloudBlobs[cloudStorageType];
+            return azureBlob;
         }
     }
 }
