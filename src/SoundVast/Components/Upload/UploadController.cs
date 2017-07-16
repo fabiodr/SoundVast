@@ -15,33 +15,47 @@ using SoundVast.Components.Upload.ViewModels;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using SoundVast.Components.Audio.Models;
+using SoundVast.Components.FileStream;
+using SoundVast.Components.FileStream.Models;
 using SoundVast.Storage.CloudStorage.AzureStorage;
-using SoundVast.Utilities.ModelState;
 
 namespace SoundVast.Components.Upload
 {
     public class UploadController : Controller
     {
-        private readonly IModelState _modelState;
+        private readonly IValidationDictionary _validationDictionary;
         private readonly IFileStorage _fileStorage;
         private readonly ICloudStorage _cloudStorage;
+        private readonly IUploadService _uploadService;
 
-        public UploadController(IModelState modelState, IFileStorage fileStorage, ICloudStorage cloudStorage)
+        public UploadController(IValidationDictionary validationDictionary, IFileStorage fileStorage, ICloudStorage cloudStorage, 
+            IUploadService uploadService)
         {
-            _modelState = modelState;
+            _validationDictionary = validationDictionary;
             _fileStorage = fileStorage;
             _cloudStorage = cloudStorage;
+            _uploadService = uploadService;
         }
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Save([FromBody] SaveUploadViewModel model)
+        public IActionResult Save([FromBody] SaveUploadViewModel viewModel)
         {
-            if (ModelState.IsValid)
+            var model = new AudioModel
             {
+                Name = viewModel.Name,
+                Artist = viewModel.Artist,
+                CoverImageUrl = viewModel.CoverImageUrl,
+                GenreId = viewModel.GenreId
+            };
 
+            if (_uploadService.Add(model))
+            {
+                return Ok();
             }
-            return StatusCode((int)HttpStatusCode.BadRequest, _modelState.ConvertToJson(ModelState));
+
+            return StatusCode((int)HttpStatusCode.BadRequest, _validationDictionary.ConvertToJson());
         }
 
         [HttpPost]
@@ -69,11 +83,11 @@ namespace SoundVast.Components.Upload
         }
 
         [HttpPost]
-        public async Task<IActionResult> UploadMp3([FromBody] UploadViewModel model)
+        public async Task<IActionResult> UploadMp3([FromBody] UploadViewModel viewModel)
         {
-            var audioBlob = _cloudStorage.GetBlob(CloudStorageType.Audio, model.AudioName);
+            var audioBlob = _cloudStorage.GetBlob(CloudStorageType.Audio, viewModel.AudioName);
 
-            await audioBlob.UploadChunksFromPathAsync(model.AudioPath, "audio/mpeg", model.FileLength, model.ProgressId);
+            await audioBlob.UploadChunksFromPathAsync(viewModel.AudioPath, "audio/mpeg", viewModel.FileLength, viewModel.ProgressId);
 
             return Ok();
         }

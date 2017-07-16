@@ -32,32 +32,32 @@ namespace SoundVast.Components.Search
             _liveStreamService = liveStreamService;
         }
 
-        [HttpPost]
-        //[OutputCache(CacheProfile = "SearchTags")]
-        public JsonResult GetSearchTags()
-        {
-            var audios = _audioService.GetAudiosForSearchTags();
-            var tags = audios.Select(x => new { label = x.Name, category = x.Category.Name });
+        //[HttpPost]
+        ////[OutputCache(CacheProfile = "SearchTags")]
+        //public JsonResult GetSearchTags()
+        //{
+        //    var audios = _audioService.GetAudiosForSearchTags();
+        //    var tags = audios.Select(x => new { label = x.Name, category = x.Category.Name });
 
-            return Json(tags);
-        }
+        //    return Json(tags);
+        //}
 
-        public IActionResult Search(string search, int pageNumber = 1)
-        {
-            var audios = _audioService.GetAudiosForSearch();
-            var audioViewModels = new List<AudiosViewModel>();
+        //public IActionResult Search(string search, int pageNumber = 1)
+        //{
+        //    var audios = _audioService.GetAudiosForSearch();
+        //    var audioViewModels = new List<AudiosViewModel>();
 
-            audioViewModels.AddRange(Mapper.Map<IEnumerable<FileStreamsViewModel>>(audios.OfType<FileStreamModel>()));
-            audioViewModels.AddRange(Mapper.Map<IEnumerable<LiveStreamsViewModel>>(audios.OfType<LiveStreamModel>()));
+        //    audioViewModels.AddRange(Mapper.Map<IEnumerable<FileStreamsViewModel>>(audios.OfType<FileStreamModel>()));
+        //    audioViewModels.AddRange(Mapper.Map<IEnumerable<LiveStreamsViewModel>>(audios.OfType<LiveStreamModel>()));
 
-            foreach (var audioViewModel in audioViewModels)
-            {
-                audioViewModel.LevenshteinScore = Levenshtein.iLD(audioViewModel.Name, search);
-            }
+        //    foreach (var audioViewModel in audioViewModels)
+        //    {
+        //        audioViewModel.LevenshteinScore = Levenshtein.iLD(audioViewModel.Name, search);
+        //    }
 
-            audioViewModels.AsQueryable().WithOrdering(new OrderingOption<AudiosViewModel, int>(x => x.LevenshteinScore));
+        //    audioViewModels.AsQueryable().WithOrdering(new OrderingOption<AudiosViewModel, int>(x => x.LevenshteinScore));
 
-            return ViewOrPartial("Audio/Audios", audioViewModels);
-        }
+        //    return ViewOrPartial("Audio/Audios", audioViewModels);
+        //}
     }
 }

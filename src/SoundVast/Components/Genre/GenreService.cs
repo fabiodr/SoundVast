@@ -16,10 +16,10 @@ namespace SoundVast.Components.Genre
             _repository = repository;
         }
 
-        public ICollection<GenreModel> GetGenresInCategory(string category)
-        {
-            return _repository.GetAll().Where(x => x.Category.Name == category).ToList();
-        }
+        //public ICollection<GenreModel> GetGenresInCategory(string category)
+        //{
+        //    return _repository.GetAll().Where(x => x.Category.Name == category).ToList();
+        //}
 
         public ICollection<GenreModel> GetGenres()
         {

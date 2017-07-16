@@ -4,6 +4,8 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import styles from './upload.less';
 import AudioDropzone from './uploadFile/audioDropzone/audioDropzoneContainer';
 
+import authorizedComponent from '../shared/authorizedComponent/authorizedComponentContainer';
+
 const Upload = () => (
   <div className={styles.upload}>
     <h3>Upload</h3>
@@ -11,18 +13,14 @@ const Upload = () => (
     <Tabs>
       <TabList>
         <Tab>From File</Tab>
-        <Tab>From Live Stream</Tab>
       </TabList>
       <br />
 
       <TabPanel>
         <AudioDropzone />
       </TabPanel>
-      <TabPanel>
-        Html.RenderPartial("Upload/_UploadLiveStream");
-      </TabPanel>
     </Tabs>
   </div>
 );
 
-export default Upload;
+export default authorizedComponent(Upload);

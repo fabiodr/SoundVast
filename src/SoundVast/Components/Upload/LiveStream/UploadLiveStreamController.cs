@@ -46,33 +46,33 @@ namespace SoundVast.Components.Upload.LiveStream
             return PartialView("_LiveStreamCreate", new LiveStreamCreateViewModel { GenresSelectList = genresSelectList });
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult UploadLiveStream([Bind(Prefix = "")] IList<LiveStreamCreateViewModel> liveStreamCreateViewModels)
-        {
-            foreach (var liveStreamCreateViewModel in liveStreamCreateViewModels)
-            {
-                var jpgFileName = Path.ChangeExtension(liveStreamCreateViewModel.Image, "jpg");
-                var imageBlob = _cloudStorage.GetBlob(CloudStorageType.Image, jpgFileName);
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult UploadLiveStream([Bind(Prefix = "")] IList<LiveStreamCreateViewModel> liveStreamCreateViewModels)
+        //{
+        //    foreach (var liveStreamCreateViewModel in liveStreamCreateViewModels)
+        //    {
+        //        var jpgFileName = Path.ChangeExtension(liveStreamCreateViewModel.Image, "jpg");
+        //        var imageBlob = _cloudStorage.GetBlob(CloudStorageType.Image, jpgFileName);
 
-                imageBlob.UploadFromPathAsync(_configuration["Directory:TempResources"] + jpgFileName, "image/jpg");
+        //        imageBlob.UploadFromPathAsync(_configuration["Directory:TempResources"] + jpgFileName, "image/jpg");
 
-                var liveStream = new LiveStreamModel(User.FindFirst(ClaimTypes.NameIdentifier).Value)
-                {
-                    Name = liveStreamCreateViewModel.Name,
-                    AudioUrl = liveStreamCreateViewModel.AudioUrl,
-                    WebsiteUrl = liveStreamCreateViewModel.WebsiteUrl,
-                    //Genres = _categoryService.GetSelectedCategories(liveStreamCreateViewModel.SelectedGenreIds).Cast<Genre>().ToList(),
-                    ImageFile = new ImageFileModel(jpgFileName)
-                };
+        //        var liveStream = new LiveStreamModel(User.FindFirst(ClaimTypes.NameIdentifier).Value)
+        //        {
+        //            Name = liveStreamCreateViewModel.Name,
+        //            AudioUrl = liveStreamCreateViewModel.AudioUrl,
+        //            WebsiteUrl = liveStreamCreateViewModel.WebsiteUrl,
+        //            //Genres = _categoryService.GetSelectedCategories(liveStreamCreateViewModel.SelectedGenreIds).Cast<Genre>().ToList(),
+        //            ImageFile = new ImageFileModel(jpgFileName)
+        //        };
 
-                if (!_liveStreamService.Add(liveStream))
-                {
-                    return RedirectToAction("Upload", "UploadMain");
-                }
-            }
+        //        if (!_liveStreamService.Add(liveStream))
+        //        {
+        //            return RedirectToAction("Upload", "UploadMain");
+        //        }
+        //    }
 
-            return RedirectToAction("AllLiveStreams", "LiveStream", new { area = "LiveStreams" });
-        }
+        //    return RedirectToAction("AllLiveStreams", "LiveStream", new { area = "LiveStreams" });
+        //}
     }
 }

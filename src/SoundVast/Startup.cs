@@ -40,7 +40,7 @@ using SoundVast.Components.Report;
 using SoundVast.Components.User;
 using System.Text.RegularExpressions;
 using SoundVast.Components.Genre.Models;
-using SoundVast.Utilities.ModelState;
+using SoundVast.Components.Upload;
 
 namespace SoundVast
 {
@@ -135,6 +135,7 @@ namespace SoundVast
             services.AddScoped<IRepository<LinkModel>, Repository<LinkModel, ApplicationDbContext>>();
             services.AddScoped<IRepository<QuoteModel>, Repository<QuoteModel, ApplicationDbContext>>();
             services.AddScoped<IAudioService<AudioModel>, AudioService<AudioModel>>();
+            services.AddScoped<IUploadService, UploadService>();
             services.AddScoped<IPlaylistService, PlaylistService>();
             services.AddScoped<IFileStreamService, FileStreamService>();
             services.AddScoped<IGenreService, GenreService>();
@@ -149,7 +150,6 @@ namespace SoundVast
             services.AddScoped<IRatingService<CommentRatingModel>, RatingService<CommentRatingModel>>();
             services.AddScoped<IReportService<CommentReportModel>, ReportService<CommentReportModel>>();
             services.AddScoped<IQuoteService, QuoteService>();
-            services.AddScoped<IModelState, ModelState>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -116,36 +116,36 @@ namespace SoundVast.Components.Audio
         //    return PartialView("_Playlist", playlistViewModel);
         //}
 
-        [HttpPost]
-        public JsonResult IncrementView(int id)
-        {
-            var audio = _audioService.GetAudio(id);
+        //[HttpPost]
+        //public JsonResult IncrementView(int id)
+        //{
+        //    var audio = _audioService.GetAudio(id);
 
-            _audioService.IncrementView(audio);
+        //    _audioService.IncrementView(audio);
 
-            return Json(new { audio.UniqueViews });
-        }
+        //    return Json(new { audio.UniqueViews });
+        //}
 
-        [HttpPost]
-        public async Task<JsonResult> Rate(int id, bool liked)
-        {
-            var currentUser = await _userManager.GetUserAsync(User);
-            var audio = _audioService.GetAudioForRating(id);
-            var existingRating = audio.AudioRatingJoins.SingleOrDefault(x => x.AudioRating.User.Id == currentUser.Id && x.Audio.Id == id);
+        //[HttpPost]
+        //public async Task<JsonResult> Rate(int id, bool liked)
+        //{
+        //    var currentUser = await _userManager.GetUserAsync(User);
+        //    var audio = _audioService.GetAudioForRating(id);
+        //    var existingRating = audio.AudioRatingJoins.SingleOrDefault(x => x.AudioRating.User.Id == currentUser.Id && x.Audio.Id == id);
 
-            var newRating = new AudioRatingModel
-            {
-                AudioRatingJoins = new List<AudioRatingJoinModel>(),
-                User = currentUser,
-                Liked = liked
-            };
+        //    var newRating = new AudioRatingModel
+        //    {
+        //        AudioRatingJoins = new List<AudioRatingJoinModel>(),
+        //        User = currentUser,
+        //        Liked = liked
+        //    };
 
-            newRating.AudioRatingJoins.Add(new AudioRatingJoinModel { Audio = audio, AudioRating = newRating });
+        //    newRating.AudioRatingJoins.Add(new AudioRatingJoinModel { Audio = audio, AudioRating = newRating });
 
-            _ratingService.Add(audio.RatingCount, newRating, existingRating?.AudioRating, liked);
+        //    _ratingService.Add(audio.RatingCount, newRating, existingRating?.AudioRating, liked);
 
-            return Json(audio.RatingCount);
-        }
+        //    return Json(audio.RatingCount);
+        //}
 
         //public IActionResult Search(SearchViewModel searchViewModel)
         //{
@@ -186,11 +186,11 @@ namespace SoundVast.Components.Audio
         //    return new EmptyResult();
         //}
 
-        protected virtual IEnumerable<TGenreViewModel> Genres<TGenreViewModel>()
-            where TGenreViewModel : GenreViewModel
-        {
-            return Mapper.Map<IEnumerable<TGenreViewModel>>(_genreService.GetGenresInCategory(HttpContext.Session.GetString("Category")));
-        }
+        //protected virtual IEnumerable<TGenreViewModel> Genres<TGenreViewModel>()
+        //    where TGenreViewModel : GenreViewModel
+        //{
+        //    return Mapper.Map<IEnumerable<TGenreViewModel>>(_genreService.GetGenresInCategory(HttpContext.Session.GetString("Category")));
+        //}
 
         protected virtual IEnumerable<TCategoryViewModel> Categories<TCategoryViewModel>()
             where TCategoryViewModel : CategoryViewModel
@@ -198,37 +198,37 @@ namespace SoundVast.Components.Audio
             return Mapper.Map<IEnumerable<TCategoryViewModel>>(_categoryService.GetCategories());
         }
 
-        protected virtual IEnumerable<TAudiosViewModel> Sort<TAudiosViewModel, TKey>(DateFrom dateFrom, string genre, string category, string concatText,
-            Expression<Func<TAudio, TKey>> keySelector)
-            where TAudiosViewModel : AudiosViewModel
-        {
-            var date = DateTime.Now.AddDays((int)dateFrom * -1);
-            var audios = _audioService.OrderAudiosInGenreAndCategoryFromDate(new OrderingOption<TAudio, TKey>(keySelector, true), date,
-                category, genre);
+        //protected virtual IEnumerable<TAudiosViewModel> Sort<TAudiosViewModel, TKey>(DateFrom dateFrom, string genre, string category, string concatText,
+        //    Expression<Func<TAudio, TKey>> keySelector)
+        //    where TAudiosViewModel : AudiosViewModel
+        //{
+        //    var date = DateTime.Now.AddDays((int)dateFrom * -1);
+        //    var audios = _audioService.OrderAudiosInGenreAndCategoryFromDate(new OrderingOption<TAudio, TKey>(keySelector, true), date,
+        //        category, genre);
 
-            var filterEnumDisplayValue = EnumHelper<DateFrom>.GetDisplayValue(dateFrom);
-            var allAudiosViewModels = Mapper.Map<IEnumerable<TAudio>, IEnumerable<TAudiosViewModel>>(audios);
+        //    var filterEnumDisplayValue = EnumHelper<DateFrom>.GetDisplayValue(dateFrom);
+        //    var allAudiosViewModels = Mapper.Map<IEnumerable<TAudio>, IEnumerable<TAudiosViewModel>>(audios);
 
-            ViewBag.SortingText = filterEnumDisplayValue + concatText + genre + " " + category;
+        //    ViewBag.SortingText = filterEnumDisplayValue + concatText + genre + " " + category;
 
-            return allAudiosViewModels;
-        }
+        //    return allAudiosViewModels;
+        //}
 
-        protected virtual IEnumerable<TAudiosViewModel> Audios<TAudiosViewModel>(string genre, string category, int pageNumber = 1)
-            where TAudiosViewModel : AudiosViewModel
-        {
-            var audios = _audioService.GetAudiosInGenreAndCategory(category, genre);
-            var audioViewModels = Mapper.Map<IEnumerable<TAudiosViewModel>>(audios);
+        //protected virtual IEnumerable<TAudiosViewModel> Audios<TAudiosViewModel>(string genre, string category, int pageNumber = 1)
+        //    where TAudiosViewModel : AudiosViewModel
+        //{
+        //    var audios = _audioService.GetAudiosInGenreAndCategory(category, genre);
+        //    var audioViewModels = Mapper.Map<IEnumerable<TAudiosViewModel>>(audios);
 
-            HttpContext.Session.SetString("Category", category);
+        //    HttpContext.Session.SetString("Category", category);
 
-            if (genre != null)
-            {
-                HttpContext.Session.SetString("Genre", genre);
-            }
+        //    if (genre != null)
+        //    {
+        //        HttpContext.Session.SetString("Genre", genre);
+        //    }
 
-            return audioViewModels;
-        }
+        //    return audioViewModels;
+        //}
 
         //protected virtual TAudioViewModel Audio<TAudioViewModel>(int id)
         //    where TAudioViewModel : AudioViewModel

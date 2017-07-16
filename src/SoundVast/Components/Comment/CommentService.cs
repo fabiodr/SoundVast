@@ -102,7 +102,7 @@ namespace SoundVast.Components.Comment
 
         private static void ModifyComment(CommentModel comment, RatingValue value)
         {
-            comment.Audio.ModifyComment(value);
+            //comment.Audio.ModifyComment(value);
         }
 
         public bool Add(CommentModel comment)

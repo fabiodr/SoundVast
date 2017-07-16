@@ -106,41 +106,41 @@ namespace SoundVast.Components.Upload.File
             return Json(new { requiredFileDetailsPartialView, additionalFileDetailsPartialView });
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult UploadFile([Bind(Prefix = "")] IEnumerable<RequiredUploadFileViewModel> requiredUploadFileViewModels,
-            [Bind(Prefix = "")] IEnumerable<AdditionalUploadFileViewModel> additionalUploadFileViewModels)
-        {
-            var zippedUploadViewModels = requiredUploadFileViewModels.Zip(additionalUploadFileViewModels, (r, a) => new { Required = r, Additional = a });
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult UploadFile([Bind(Prefix = "")] IEnumerable<RequiredUploadFileViewModel> requiredUploadFileViewModels,
+        //    [Bind(Prefix = "")] IEnumerable<AdditionalUploadFileViewModel> additionalUploadFileViewModels)
+        //{
+        //    var zippedUploadViewModels = requiredUploadFileViewModels.Zip(additionalUploadFileViewModels, (r, a) => new { Required = r, Additional = a });
 
-            foreach (var zippedUploadViewModel in zippedUploadViewModels)
-            {
-                var mp3FileName = Path.ChangeExtension(zippedUploadViewModel.Required.TempAudioName, "mp3");
-                var jpgFileName = Path.ChangeExtension(zippedUploadViewModel.Required.Image, "jpg");
-                var audioBlob = _cloudStorage.GetBlob(CloudStorageType.Audio, mp3FileName);
-                var imageBlob = _cloudStorage.GetBlob(CloudStorageType.Image, jpgFileName);
+        //    foreach (var zippedUploadViewModel in zippedUploadViewModels)
+        //    {
+        //        var mp3FileName = Path.ChangeExtension(zippedUploadViewModel.Required.TempAudioName, "mp3");
+        //        var jpgFileName = Path.ChangeExtension(zippedUploadViewModel.Required.Image, "jpg");
+        //        var audioBlob = _cloudStorage.GetBlob(CloudStorageType.Audio, mp3FileName);
+        //        var imageBlob = _cloudStorage.GetBlob(CloudStorageType.Image, jpgFileName);
 
-                audioBlob.UploadFromPathAsync(_configuration["Directory:TempResources"] + mp3FileName, "audio/mpeg");
-                imageBlob.UploadFromPathAsync(_configuration["Directory:TempResources"] + jpgFileName, "image/jpg");
+        //        audioBlob.UploadFromPathAsync(_configuration["Directory:TempResources"] + mp3FileName, "audio/mpeg");
+        //        imageBlob.UploadFromPathAsync(_configuration["Directory:TempResources"] + jpgFileName, "image/jpg");
 
-                var fileStreamMetaData = new FileStreamModel(User.FindFirst(ClaimTypes.NameIdentifier).Value)
-                {
-                    Name = zippedUploadViewModel.Required.Name,
-                    Artist = zippedUploadViewModel.Required.Artist,
-                    Album = zippedUploadViewModel.Additional.Album,
-                    AudioFile = new AudioFileModel(mp3FileName),
-                    ImageFile = new ImageFileModel(jpgFileName),
-                    Category = _categoryService.GetCategory(zippedUploadViewModel.Required.SelectCategoryViewModel.SelectedCategory),
-                    //SimilarAudios = _audioService.GetRelatedAudios(zippedUploadViewModel.Required.Name, Levenshtein.Match.AverageMatch).Cast<Audio>().ToList()
-                };
+        //        var fileStreamMetaData = new FileStreamModel(User.FindFirst(ClaimTypes.NameIdentifier).Value)
+        //        {
+        //            Name = zippedUploadViewModel.Required.Name,
+        //            Artist = zippedUploadViewModel.Required.Artist,
+        //            Album = zippedUploadViewModel.Additional.Album,
+        //            AudioFile = new AudioFileModel(mp3FileName),
+        //            ImageFile = new ImageFileModel(jpgFileName),
+        //            Category = _categoryService.GetCategory(zippedUploadViewModel.Required.SelectCategoryViewModel.SelectedCategory),
+        //            //SimilarAudios = _audioService.GetRelatedAudios(zippedUploadViewModel.Required.Name, Levenshtein.Match.AverageMatch).Cast<Audio>().ToList()
+        //        };
 
-                if (!_audioService.Add(fileStreamMetaData))
-                {
-                    return RedirectToAction("Upload", "UploadMain");
-                }
-            }
+        //        if (!_audioService.Add(fileStreamMetaData))
+        //        {
+        //            return RedirectToAction("Upload", "UploadMain");
+        //        }
+        //    }
 
-            return RedirectToAction("FileStreams", "FileStream", new { area = "Audio" });
-        }
+        //    return RedirectToAction("FileStreams", "FileStream", new { area = "Audio" });
+        //}
     }
 }

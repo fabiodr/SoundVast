@@ -16,10 +16,10 @@ namespace SoundVast.Components.LiveStream.Models
 
         }
 
-        public LiveStreamModel(string userId)
-            : base(userId)
-        {
+        //public LiveStreamModel(string userId)
+        //    : base(userId)
+        //{
 
-        }
+        //}
     }
 }

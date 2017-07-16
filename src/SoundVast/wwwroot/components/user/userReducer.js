@@ -1,9 +1,4 @@
-const defaultState = {
-  isAdmin: false,
-  isLoggedIn: false,
-};
-
-export default (state = defaultState, action) => {
+export default (state = {}, action) => {
   switch (action.type) {
     case 'GET_USER_DETAILS':
       return {

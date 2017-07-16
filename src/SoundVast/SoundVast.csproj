@@ -168,4 +168,19 @@
     <Folder Include="Components\Form\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Properties\MusicGenres.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>MusicGenres.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\MusicGenres.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>MusicGenres.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>

@@ -13,8 +13,8 @@ namespace SoundVast.Components.FileStream.Models
         {
         }
 
-        public FileStreamGenreModel(string name, ImageFileModel imageFile) : base(name, imageFile)
-        {
-        }
+        //public FileStreamGenreModel(string name, ImageFileModel imageFile) : base(name, imageFile)
+        //{
+        //}
     }
 }

@@ -21,7 +21,7 @@ namespace SoundVast.Components.Genre
             var genres = _genreService.GetGenres();
 
             return Ok(new {
-                genres,
+                genres
             });
         }
     }

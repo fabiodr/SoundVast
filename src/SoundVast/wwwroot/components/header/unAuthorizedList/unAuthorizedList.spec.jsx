@@ -6,7 +6,6 @@ import UnAuthorizedList from './unAuthorizedList';
 
 const setup = (newProps) => {
   const props = {
-    isLoggedIn: false,
     ...newProps,
   };
 

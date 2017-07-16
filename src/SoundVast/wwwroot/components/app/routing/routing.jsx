@@ -1,16 +1,16 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
-import Content from './content/content';
-import FrontPage from '../frontPage/frontPage';
-import Header from '../header/header';
-import User from '../user/userContainer';
-import SocialLoginConfirmation from '../user/login/socialLogin/confirmation/confirmation';
-import SocialLoginFailure from '../user/login/socialLogin/failure/failure';
-import ResetPassword from '../user/resetPassword/form/formContainer';
-import ConfirmedEmailSuccess from '../user/confirmedEmailSuccess/confirmedEmailSuccessContainer';
-import Upload from '../upload/upload';
-import Error from '../error/error';
+import Content from '../content/content';
+import FrontPage from '../../frontPage/frontPage';
+import Header from '../../header/header';
+import User from '../../user/userContainer';
+import SocialLoginConfirmation from '../../user/login/socialLogin/confirmation/confirmation';
+import SocialLoginFailure from '../../user/login/socialLogin/failure/failure';
+import ResetPassword from '../../user/resetPassword/form/formContainer';
+import ConfirmedEmailSuccess from '../../user/confirmedEmailSuccess/confirmedEmailSuccessContainer';
+import Upload from '../../upload/upload';
+import Error from '../../error/error';
 
 export default () => (
   <BrowserRouter>

@@ -22,10 +22,11 @@ const AuthorizedList = ({ isLoggedIn, userName }) => (
 
 AuthorizedList.defaultProps = {
   userName: null,
+  isLoggedIn: false,
 };
 
 AuthorizedList.propTypes = {
-  isLoggedIn: PropTypes.bool.isRequired,
+  isLoggedIn: PropTypes.bool,
   userName: PropTypes.string,
 };
 

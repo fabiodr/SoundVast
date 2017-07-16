@@ -20,8 +20,7 @@ namespace SoundVast.Data
 {
     public static class DataSeeder
     {
-        // TODO: Move this code when seed data is implemented in EF 7
-
+        // Todo: Move this code when seed data is implemented in EF 7
         /// <summary>
         /// This is a workaround for missing seed data functionality in EF 7.0-rc1
         /// More info: https://github.com/aspnet/EntityFramework/issues/629
@@ -35,13 +34,15 @@ namespace SoundVast.Data
             {
                 context.Database.Migrate();
 
-                var fileStreamCategoryResources = FileStreamCategories.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
+                var musicGenres = MusicGenres.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
                 var radioStationCategoryResources = LiveStreamCategories.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
                 var placeHolderImage = new ImageFileModel("Placeholder.jpg");
 
-                InitializeQuotes(context);
-                InitializeCategories<FileStreamCategoryModel>(context, fileStreamCategoryResources, placeHolderImage);
-                InitializeCategories<LiveStreamCategoryModel>(context, radioStationCategoryResources, placeHolderImage);
+                InitializeGenres(context, musicGenres);
+
+             //   InitializeQuotes(context);
+             //   InitializeCategories<FileStreamCategoryModel>(context, fileStreamCategoryResources, placeHolderImage);
+             //   InitializeCategories<LiveStreamCategoryModel>(context, radioStationCategoryResources, placeHolderImage);
                 //InitializeIdentityForEf(context);
 
                 context.SaveChanges();
@@ -53,7 +54,7 @@ namespace SoundVast.Data
             var quoteResources = Quotes.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
             var quotes = quoteResources.Select(x => new QuoteModel { Quotation = (string)x.Value });
 
-            context.Quotes.AddRange(quotes.Where(quote => !context.Quotes.Any(x => x.Quotation == quote.Quotation)));
+            //context.Quotes.AddRange(quotes.Where(quote => !context.Quotes.Any(x => x.Quotation == quote.Quotation)));
         }
 
         public static void InitializeCategories<T>(ApplicationDbContext context, DictionaryEntry[] categoryResources, ImageFileModel imageFile)
@@ -64,12 +65,15 @@ namespace SoundVast.Data
             context.Set<T>().AddRange(categories.Where(category => !context.Set<T>().Any(x => x.Name == category.Name)));
         }
 
-        public static void InitializeGenres<T>(ApplicationDbContext context, DictionaryEntry[] genreResources, ImageFileModel imageFile)
-            where T : GenreModel
+        public static void InitializeGenres(ApplicationDbContext context, DictionaryEntry[] genreResources)
         {
-            var genres = genreResources.Select(x => (T)Activator.CreateInstance(typeof(T), new object[] { x.Value, imageFile }));
+            var musicGenres = genreResources.Select(x => new GenreModel
+            {
+                Name = (string)x.Value,
+                GenreType = "Music"
+            });
 
-            context.Set<T>().AddRange(genres.Where(genre => !context.Set<T>().Any(x => x.Name == genre.Name)));
+            context.Set<GenreModel>().AddRange(musicGenres.Where(genre => !context.Set<GenreModel>().Any(x => x.Name == genre.Name)));
         }
 
         //public static void InitializeIdentityForEf(ApplicationDbContext context)

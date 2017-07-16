@@ -8,9 +8,10 @@ using SoundVast.Data;
 namespace SoundVast.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170716195755_update-1")]
+    partial class update1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
@@ -130,13 +131,11 @@ namespace SoundVast.Migrations
 
                     b.Property<string>("Artist");
 
-                    b.Property<string>("CoverImageUrl")
-                        .IsRequired();
+                    b.Property<string>("CoverImageUrl");
 
                     b.Property<int?>("GenreId");
 
-                    b.Property<string>("Name")
-                        .IsRequired();
+                    b.Property<string>("Name");
 
                     b.HasKey("Id");
 
@@ -148,11 +147,9 @@ namespace SoundVast.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("GenreType")
-                        .IsRequired();
+                    b.Property<string>("GenreType");
 
-                    b.Property<string>("Name")
-                        .IsRequired();
+                    b.Property<string>("Name");
 
                     b.HasKey("Id");
 

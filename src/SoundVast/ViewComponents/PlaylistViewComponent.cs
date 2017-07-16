@@ -27,14 +27,15 @@ namespace SoundVast.ViewComponents
             _playlistService = playlistService;
             _userManager = userManager;
         }
+
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var user = await GetCurrentUserAsync();
             var userId = user.Id;
 
-            var playlistViewModels = Mapper.Map<ICollection<PlaylistModel>, ICollection<PlaylistViewModel>>(_playlistService.GetAudiosForUser(userId));
+            //var playlistViewModels = Mapper.Map<ICollection<PlaylistModel>, ICollection<PlaylistViewModel>>(_playlistService.GetAudiosForUser(userId));
 
-            return View(playlistViewModels);
+            return View(/*playlistViewModels*/);
         }
     }
 }

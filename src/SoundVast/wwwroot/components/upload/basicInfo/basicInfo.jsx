@@ -24,9 +24,9 @@ const BasicInfo = ({ genres, index }) => (
       </label>
 
       <label htmlFor={`genre_${index}`}>Genre
-        <Field name="genre" id={`genre_${index}`} component={FormSelect}>
-          <option value="None">None</option>
-          {genres.map(genre => <option key={genre.id} value={genre.name}>{genre.name}</option>)}
+        <Field name="genreId" id={`genre_${index}`} component={FormSelect}>
+          <option value="">None</option>
+          {genres.map(genre => <option key={genre.id} value={genre.id}>{genre.name}</option>)}
         </Field>
       </label>
     </div>

@@ -13,9 +13,9 @@ namespace SoundVast.Components.Playlist.Models
 
         }
 
-        public PlaylistModel(string userId) : base(userId)
-        {
+        //public PlaylistModel(string userId) : base(userId)
+        //{
 
-        }
+        //}
     }
 }

@@ -103,16 +103,16 @@ namespace SoundVast.Components.Comment
             return PartialView("_Comments", Mapper.Map<IEnumerable<CommentViewModel>>(_commentService.GetReplies(id)));
         }
 
-        [AllowAnonymous]
-        public PartialViewResult CommentsSideBar(int audioId)
-        {
-            var commentListViewModel = new CommentListViewModel(audioId, _audioService.GetAudio(audioId).CommentCount)
-            {
-                CreateCommentViewModel = new CreateCommentViewModel { AudioId = audioId },
-            };
+        //[AllowAnonymous]
+        //public PartialViewResult CommentsSideBar(int audioId)
+        //{
+        //    var commentListViewModel = new CommentListViewModel(audioId, _audioService.GetAudio(audioId).CommentCount)
+        //    {
+        //        CreateCommentViewModel = new CreateCommentViewModel { AudioId = audioId },
+        //    };
 
-            return PartialView("_CommentsSideBar", commentListViewModel);
-        }
+        //    return PartialView("_CommentsSideBar", commentListViewModel);
+        //}
 
         [HttpPost]
         [AllowAnonymous]

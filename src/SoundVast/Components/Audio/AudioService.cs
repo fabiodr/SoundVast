@@ -19,19 +19,19 @@ namespace SoundVast.Components.Audio
     {
         T GetAudio(int id);
         T GetAudio(int id, params Expression<Func<T, object>>[] includeExpressions);
-        T GetAudioForRating(int id);
+      //  T GetAudioForRating(int id);
         ICollection<T> GetAudios();
-        ICollection<T> GetAudiosForSearch();
-        ICollection<T> GetAudiosForSearchTags();
-        ICollection<T> GetAudiosInGenreAndCategory(string category, string genre);
-        ICollection<T> GetLikedAudiosForUser(string userId);
-        ICollection<T> GetAudiosForUser(string userId);
-        ICollection<T> OrderAudiosInGenreAndCategoryFromDate<TKey>(OrderingOption<T, TKey> orderingOption, DateTime date, string category, string genre);
-        ICollection<T> GetPlaylist(int idToStart, int numberToTake, string category, string genre);
-        ICollection<T> GetRelatedAudios(string name, Levenshtein.Match matchEnum);
+        //ICollection<T> GetAudiosForSearch();
+        //ICollection<T> GetAudiosForSearchTags();
+        //ICollection<T> GetAudiosInGenreAndCategory(string category, string genre);
+        //ICollection<T> GetLikedAudiosForUser(string userId);
+        //ICollection<T> GetAudiosForUser(string userId);
+        //ICollection<T> OrderAudiosInGenreAndCategoryFromDate<TKey>(OrderingOption<T, TKey> orderingOption, DateTime date, string category, string genre);
+        //ICollection<T> GetPlaylist(int idToStart, int numberToTake, string category, string genre);
+        //ICollection<T> GetRelatedAudios(string name, Levenshtein.Match matchEnum);
         bool Add(T audio);
-        bool Edit(T audio, T newFileStream);
-        void IncrementView(T audio);
+      //  bool Edit(T audio, T newFileStream);
+      //  void IncrementView(T audio);
     }
 
     public class AudioService<T> : IAudioService<T> where T : AudioModel
@@ -60,15 +60,15 @@ namespace SoundVast.Components.Audio
             return _repository.Get(id);
         }
 
-        public T GetAudioForRating(int id)
-        {
-            return _repository.GetAll()
-                .Include(x => x.AudioRatingJoins)
-                .ThenInclude(x => x.AudioRating)
-                .Include(x => x.User)
-                .Include(x => x.RatingCount)
-                .SingleOrDefault(x => x.Id == id);
-        }
+        //public T GetAudioForRating(int id)
+        //{
+        //    return _repository.GetAll()
+        //        .Include(x => x.AudioRatingJoins)
+        //        .ThenInclude(x => x.AudioRating)
+        //        .Include(x => x.User)
+        //        .Include(x => x.RatingCount)
+        //        .SingleOrDefault(x => x.Id == id);
+        //}
 
         public T GetAudio(int id, params Expression<Func<T, object>>[] includeExpressions)
         {
@@ -80,61 +80,61 @@ namespace SoundVast.Components.Audio
             return _repository.GetAll().ToList();
         }
 
-        public ICollection<T> GetAudiosForSearch()
-        {
-            return _repository.GetAll().Include(x => x.ImageFile).ToList();
-        }
+        //public ICollection<T> GetAudiosForSearch()
+        //{
+        //    return _repository.GetAll().Include(x => x.ImageFile).ToList();
+        //}
 
-        public ICollection<T> GetAudiosForSearchTags()
-        {
-            return _repository.GetAll().Include(x => x.Category).ToList();
-        }
+        //public ICollection<T> GetAudiosForSearchTags()
+        //{
+        //    return _repository.GetAll().Include(x => x.Category).ToList();
+        //}
 
-        public ICollection<T> GetAudiosInGenreAndCategory(string category, string genre)
-        {
-            if (genre != null)
-            {
-                return _repository.GetAll().Where(x => x.Category.Name == category).Where(x => x.Genres
-                    .Any(z => z.Genre.Name == genre)).Include(x => x.ImageFile).ToList();
-            }
-            return _repository.GetAll().Where(x => x.Category.Name == category).Include(x => x.ImageFile).ToList();
-        }
+        //public ICollection<T> GetAudiosInGenreAndCategory(string category, string genre)
+        //{
+        //    if (genre != null)
+        //    {
+        //        return _repository.GetAll().Where(x => x.Category.Name == category).Where(x => x.Genres
+        //            .Any(z => z.Genre.Name == genre)).Include(x => x.ImageFile).ToList();
+        //    }
+        //    return _repository.GetAll().Where(x => x.Category.Name == category).Include(x => x.ImageFile).ToList();
+        //}
 
-        public ICollection<T> GetLikedAudiosForUser(string userId)
-        {
-            return _repository.GetAll()/*.WhereLiked()*/.Where(x => x.User.Id == userId).ToList();
-        }
+        //public ICollection<T> GetLikedAudiosForUser(string userId)
+        //{
+        //    return _repository.GetAll()/*.WhereLiked()*/.Where(x => x.User.Id == userId).ToList();
+        //}
 
-        public ICollection<T> GetAudiosForUser(string userId)
-        {
-            return _repository.GetAll().Where(x => x.User.Id == userId).ToList();
-        }
+        //public ICollection<T> GetAudiosForUser(string userId)
+        //{
+        //    return _repository.GetAll().Where(x => x.User.Id == userId).ToList();
+        //}
 
-        public ICollection<T> OrderAudiosInGenreAndCategoryFromDate<TKey>(OrderingOption<T, TKey> orderingOption, DateTime date, string category,
-            string genre)
-        {
-            if (genre != null)
-            {
-                return _repository.GetAll().Include(x => x.ImageFile)
-                    .Where(x => x.Category.Name == category)
-                    .Where(x => x.Genres.Any(z => z.Genre.Name == genre)).Where(x => x.UploadDate >= date)
-                        .WithOrdering(orderingOption).ToList();
-            }
-            return _repository.GetAll().Include(x => x.ImageFile).Where(x => x.Category.Name == category)
-                .Where(x => x.UploadDate >= date).WithOrdering(orderingOption).ToList();
-        }
+        //public ICollection<T> OrderAudiosInGenreAndCategoryFromDate<TKey>(OrderingOption<T, TKey> orderingOption, DateTime date, string category,
+        //    string genre)
+        //{
+        //    if (genre != null)
+        //    {
+        //        return _repository.GetAll().Include(x => x.ImageFile)
+        //            .Where(x => x.Category.Name == category)
+        //            .Where(x => x.Genres.Any(z => z.Genre.Name == genre)).Where(x => x.UploadDate >= date)
+        //                .WithOrdering(orderingOption).ToList();
+        //    }
+        //    return _repository.GetAll().Include(x => x.ImageFile).Where(x => x.Category.Name == category)
+        //        .Where(x => x.UploadDate >= date).WithOrdering(orderingOption).ToList();
+        //}
 
-        public ICollection<T> GetPlaylist(int idToStart, int numberToTake, string category, string genre)
-        {
-            if (genre != null)
-            {
-                return _repository.GetAll().Include(x => x.ImageFile).Cast<T>().Where(x => x.Id >= idToStart)
-                    .Where(x => x.Category.Name == category)
-                    .Where(x => x.Genres.Any(z => z.Genre.Name == genre)).Take(numberToTake).ToList();
-            }
-            return _repository.GetAll().Include(x => x.ImageFile).Cast<T>().Where(x => x.Id >= idToStart)
-                .Where(x => x.Category.Name == category).Take(numberToTake).ToList();
-        }
+        //public ICollection<T> GetPlaylist(int idToStart, int numberToTake, string category, string genre)
+        //{
+        //    if (genre != null)
+        //    {
+        //        return _repository.GetAll().Include(x => x.ImageFile).Cast<T>().Where(x => x.Id >= idToStart)
+        //            .Where(x => x.Category.Name == category)
+        //            .Where(x => x.Genres.Any(z => z.Genre.Name == genre)).Take(numberToTake).ToList();
+        //    }
+        //    return _repository.GetAll().Include(x => x.ImageFile).Cast<T>().Where(x => x.Id >= idToStart)
+        //        .Where(x => x.Category.Name == category).Take(numberToTake).ToList();
+        //}
 
         public ICollection<T> GetRelatedAudios(string name, Levenshtein.Match matchEnum)
         {
@@ -155,29 +155,29 @@ namespace SoundVast.Components.Audio
             return true;
         }
 
-        public virtual bool Edit(T audio, T newFileStream)
-        {
-            if (!Validate(audio))
-                return false;
+        //public virtual bool Edit(T audio, T newFileStream)
+        //{
+        //    if (!Validate(audio))
+        //        return false;
 
-            audio.Genres.Clear();
+        //    audio.Genres.Clear();
 
-            audio.ImageFile.Name = Path.ChangeExtension(newFileStream.ImageFile.Name, "jpg");
-            audio.Genres = newFileStream.Genres;
+        //    audio.ImageFile.Name = Path.ChangeExtension(newFileStream.ImageFile.Name, "jpg");
+        //    audio.Genres = newFileStream.Genres;
 
-            var blob = _cloudStorage.GetBlob(CloudStorageType.Image, audio.ImageFile.Name);
+        //    var blob = _cloudStorage.GetBlob(CloudStorageType.Image, audio.ImageFile.Name);
 
-            blob.UploadFromPathAsync(_configuration["Directory:TempResources"] + audio.ImageFile.Name, "image/jpeg");
+        //    blob.UploadFromPathAsync(_configuration["Directory:TempResources"] + audio.ImageFile.Name, "image/jpeg");
 
-            _repository.Save();
+        //    _repository.Save();
 
-            return true;
-        }
+        //    return true;
+        //}
 
-        public virtual void IncrementView(T audio)
-        {
-            audio.IncrementView();
-            _repository.Save();
-        }
+        //public virtual void IncrementView(T audio)
+        //{
+        //    audio.IncrementView();
+        //    _repository.Save();
+        //}
     }
 }

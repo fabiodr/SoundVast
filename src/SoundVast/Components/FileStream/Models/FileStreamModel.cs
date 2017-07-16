@@ -21,9 +21,9 @@ namespace SoundVast.Components.FileStream.Models
 
         }
 
-        public FileStreamModel(string userId) : base(userId)
-        {
+        //public FileStreamModel(string userId) : base(userId)
+        //{
 
-        }
+        //}
     }
 }

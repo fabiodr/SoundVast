@@ -13,8 +13,12 @@ const UnAuthorizedList = ({ isLoggedIn }) => (
   : null
 );
 
+UnAuthorizedList.defaultProps = {
+  isLoggedIn: false,
+};
+
 UnAuthorizedList.propTypes = {
-  isLoggedIn: PropTypes.bool.isRequired,
+  isLoggedIn: PropTypes.bool,
 };
 
 export default UnAuthorizedList;
