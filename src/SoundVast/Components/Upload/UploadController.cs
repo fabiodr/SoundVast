@@ -15,9 +15,11 @@ using SoundVast.Components.Upload.ViewModels;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using SoundVast.Components.Audio.Models;
 using SoundVast.Components.FileStream;
 using SoundVast.Components.FileStream.Models;
+using SoundVast.Components.User;
 using SoundVast.Storage.CloudStorage.AzureStorage;
 
 namespace SoundVast.Components.Upload
@@ -28,14 +30,16 @@ namespace SoundVast.Components.Upload
         private readonly IFileStorage _fileStorage;
         private readonly ICloudStorage _cloudStorage;
         private readonly IUploadService _uploadService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public UploadController(IValidationDictionary validationDictionary, IFileStorage fileStorage, ICloudStorage cloudStorage, 
-            IUploadService uploadService)
+        public UploadController(IValidationDictionary validationDictionary, IFileStorage fileStorage, ICloudStorage cloudStorage,
+            IUploadService uploadService, UserManager<ApplicationUser> userManager)
         {
             _validationDictionary = validationDictionary;
             _fileStorage = fileStorage;
             _cloudStorage = cloudStorage;
             _uploadService = uploadService;
+            _userManager = userManager;
         }
         
         [HttpPost]
@@ -47,7 +51,8 @@ namespace SoundVast.Components.Upload
                 Name = viewModel.Name,
                 Artist = viewModel.Artist,
                 CoverImageUrl = viewModel.CoverImageUrl,
-                GenreId = viewModel.GenreId
+                GenreId = viewModel.GenreId,
+                UserId = _userManager.GetUserId(User)
             };
 
             if (_uploadService.Add(model))

@@ -2,9 +2,9 @@ import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 import styles from './upload.less';
-import AudioDropzone from './uploadFile/audioDropzone/audioDropzoneContainer';
+import AudioDropzone from './uploadFile/audioDropzone/container';
 
-import authorizedComponent from '../shared/authorizedComponent/authorizedComponentContainer';
+import authorizedComponent from '../shared/authorizedComponent/container';
 
 const Upload = () => (
   <div className={styles.upload}>

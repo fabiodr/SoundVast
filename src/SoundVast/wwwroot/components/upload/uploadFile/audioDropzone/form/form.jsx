@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import ValidationErrors from '../../../../shared/form/validation/errors/errors';
-import AntiForgeryToken from '../../../../shared/form/antiForgeryToken/antiForgeryTokenContainer';
+import AntiForgeryToken from '../../../../shared/form/antiForgeryToken/container';
 
 const Form = ({ error: errors, children, handleSubmit, removeFile, index, form }) => (
   <form onSubmit={handleSubmit} action="">

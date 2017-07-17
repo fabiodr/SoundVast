@@ -119,7 +119,7 @@ import { compose } from 'recompose';
 &nbsp;
 import { submit } from './formActions';
 import SocialLoginConfirmationForm from './form';
-import userValidation from '../../../../userValidation';
+import accountValidation from '../../../../accountValidation';
 &nbsp;
 const mapStateToProps = <span class="fstat-no" title="function not covered" >(s</span>tate, { email }) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
   initialValues: {
@@ -145,7 +145,7 @@ export default compose(
   reduxForm({
     form: 'socialLoginConfirmation',
     fields: ['__RequestVerificationToken'],
-    validate: userValidation,
+    validate: accountValidation,
   }),
 )(SocialLoginConfirmationForm);
 &nbsp;</pre></td></tr>

@@ -3,8 +3,8 @@ import expect from 'expect';
 import { shallow } from 'enzyme';
 
 import AuthorizedList from './authorizedList';
-import LinkDropdown from '../../shared/dropDown/linkDropdownContainer';
-import LogoutForm from '../../user/logout/form/formContainer';
+import LinkDropdown from '../../shared/dropDown/container';
+import LogoutForm from '../../account/logout/form/container';
 
 const setup = (newProps) => {
   const props = {

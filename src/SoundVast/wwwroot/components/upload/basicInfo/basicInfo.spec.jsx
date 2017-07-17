@@ -28,14 +28,14 @@ describe('BasicInfo', () => {
 
   it('should map no selectable genres when no genres', () => {
     ({ wrapper } = setup({ genres: [] }));
-    const genreSelect = wrapper.find(Field).filter('[name="genre"]');
+    const genreSelect = wrapper.find(Field).filter('[name="genreId"]');
 
     expect(genreSelect.find('option').length).toBe(1);
   });
 
   it('should map selectable genres when genres', () => {
     ({ wrapper } = setup());
-    const genreSelect = wrapper.find(Field).filter('[name="genre"]');
+    const genreSelect = wrapper.find(Field).filter('[name="genreId"]');
 
     expect(genreSelect.find('option').length).toBe(3);
   });

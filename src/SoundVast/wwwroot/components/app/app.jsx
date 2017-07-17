@@ -7,7 +7,7 @@ import { injectReactEmailAttributes } from 'react-html-email';
 import './app.less';
 import Routing from './routing/routing';
 import store from './store/store';
-import TextPopup from '../shared/popup/popupContainer';
+import TextPopup from '../shared/popup/container';
 
 injectReactEmailAttributes();
 

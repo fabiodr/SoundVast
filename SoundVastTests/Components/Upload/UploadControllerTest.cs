@@ -15,14 +15,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SoundVast.Components;
 using SoundVast.Components.Audio.Models;
 using SoundVast.Components.FileStream;
 using SoundVast.Components.FileStream.Models;
+using SoundVast.Components.User;
 using SoundVast.Storage.CloudStorage;
 
 namespace SoundVastTests.Components.Upload
@@ -35,23 +38,28 @@ namespace SoundVastTests.Components.Upload
         private Mock<IFileStorage> _mockFileStorage;
         private Mock<ICloudStorage> _mockCloudStorage;
         private Mock<IUploadService> _mockUploadService;
+        private Mock<UserManager<ApplicationUser>> _mockUserManager;
 
         [SetUp]
         public void Init()
         {
+            var userStore = new Mock<IUserStore<ApplicationUser>>();
+
             _mockValidationDictionary = new Mock<IValidationDictionary>();
             _mockFileStorage = new Mock<IFileStorage>();
             _mockCloudStorage = new Mock<ICloudStorage>();
             _mockUploadService = new Mock<IUploadService>();
+            _mockUserManager = new Mock<UserManager<ApplicationUser>>(userStore.Object, null, null, null, null, null, null, null, null);
             _mockValidationDictionary.Setup(x => x.ConvertToJson()).Returns("error");
 
             _uploadController = new UploadController(_mockValidationDictionary.Object, _mockFileStorage.Object, _mockCloudStorage.Object,
-                _mockUploadService.Object);
+                _mockUploadService.Object, _mockUserManager.Object);
         }
 
         [Test]
         public void SaveShouldAddUploadToDatabase()
         {
+            const string userId = "DORPE-12354-DSADD";
             var viewModel = new SaveUploadViewModel
             {
                 Name = "bubble",
@@ -61,6 +69,7 @@ namespace SoundVastTests.Components.Upload
             };
             var model = new AudioModel();
 
+            _mockUserManager.Setup(x => x.GetUserId(It.IsAny<ClaimsPrincipal>())).Returns(userId);
             _mockUploadService.Setup(x => x.Add(It.IsAny<AudioModel>())).Callback<AudioModel>(x => model = x);
 
             _uploadController.Save(viewModel);
@@ -71,7 +80,8 @@ namespace SoundVastTests.Components.Upload
                 Name = viewModel.Name,
                 Artist = viewModel.Artist,
                 CoverImageUrl = viewModel.CoverImageUrl,
-                GenreId = viewModel.GenreId
+                GenreId = viewModel.GenreId,
+                UserId = userId
             });
         }
 

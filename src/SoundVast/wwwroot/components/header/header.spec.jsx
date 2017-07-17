@@ -3,10 +3,10 @@ import expect from 'expect';
 import { shallow } from 'enzyme';
 
 import Header from './header';
-import AuthorizedList from './authorizedList/authorizedListContainer';
-import UnAuthorizedList from './unAuthorizedList/unAuthorizedListContainer';
-import AdminList from './adminList/adminListContainer';
-import LinkDropdown from '../shared/dropDown/linkDropdownContainer';
+import AuthorizedList from './authorizedList/container';
+import UnAuthorizedList from './unAuthorizedList/container';
+import AdminList from './adminList/container';
+import LinkDropdown from '../shared/dropDown/container';
 
 const setup = (newProps) => {
   const props = {

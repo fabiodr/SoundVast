@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
-import BasicInfo from '../../../basicInfo/basicInfoContainer';
+import BasicInfo from '../../../basicInfo/container';
 
 const FileInformation = ({ index }) => (
   <Tabs>

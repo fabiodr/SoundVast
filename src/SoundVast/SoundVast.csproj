@@ -166,6 +166,7 @@
 
   <ItemGroup>
     <Folder Include="Components\Form\" />
+    <Folder Include="Components\User\Profile\" />
   </ItemGroup>
 
   <ItemGroup>

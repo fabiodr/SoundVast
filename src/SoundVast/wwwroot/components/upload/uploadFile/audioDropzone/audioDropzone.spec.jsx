@@ -3,7 +3,7 @@ import expect from 'expect';
 import { shallow } from 'enzyme';
 
 import AudioDropzone from './audioDropzone';
-import Form from './form/formContainer';
+import Form from './form/container';
 import Progress from './progress/progress';
 
 const setup = (newProps) => {

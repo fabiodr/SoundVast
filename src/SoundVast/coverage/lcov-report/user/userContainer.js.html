@@ -74,14 +74,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
 &nbsp;
-import { getUserDetails } from './userActions';
+import { getAccountDetails } from './userActions';
 import User from './user';
 &nbsp;
 export default compose(
   connect(),
   lifecycle({
     componentDidMount() {
-      this.props.dispatch(getUserDetails());
+      this.props.dispatch(getAccountDetails());
     },
   }),
 )(User);

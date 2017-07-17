@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-import LinkDropdown from '../../shared/dropDown/linkDropdownContainer';
-import LogoutForm from '../../user/logout/form/formContainer';
+import LinkDropdown from '../../shared/dropDown/container';
+import LogoutForm from '../../account/logout/form/container';
 
 const AuthorizedList = ({ isLoggedIn, userName }) => (
   isLoggedIn ?

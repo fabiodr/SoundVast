@@ -45,7 +45,7 @@ namespace SoundVast.Components.Account
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> GetUserDetails()
+        public async Task<IActionResult> GetAccountDetails()
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
 

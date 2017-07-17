@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 
 import soundVastLogo from '../../images/soundvast-nav-logo.png';
 import styles from './header.less';
-import AuthorizedList from './authorizedList/authorizedListContainer';
-import UnAuthorizedList from './unAuthorizedList/unAuthorizedListContainer';
-import AdminList from './adminList/adminListContainer';
-import LinkDropdown from '../shared/dropDown/linkDropdownContainer';
+import AuthorizedList from './authorizedList/container';
+import UnAuthorizedList from './unAuthorizedList/container';
+import AdminList from './adminList/container';
+import LinkDropdown from '../shared/dropDown/container';
 
 const Header = () => (
   <header className={styles.header}>

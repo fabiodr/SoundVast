@@ -138,6 +138,9 @@ namespace SoundVast.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
+                    b.Property<string>("UserId")
+                        .IsRequired();
+
                     b.HasKey("Id");
 
                     b.ToTable("Audios");

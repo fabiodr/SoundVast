@@ -28,7 +28,8 @@ namespace SoundVast.Components.Audio.Models
       //  public int UniqueViews { get; private set; }
      //   public DateTimeOffset UploadDate { get; private set; }
         public int? GenreId { get; set; }
-    //    public string UserId { get; set; }
+        [Required]
+        public string UserId { get; set; }
      //   public virtual ApplicationUser User { get; set; }
      //   public virtual ImageFileModel ImageFile { get; set; }
      //   public virtual CategoryModel Category { get; set; }

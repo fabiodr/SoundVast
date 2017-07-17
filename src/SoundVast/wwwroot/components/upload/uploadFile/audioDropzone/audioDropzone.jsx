@@ -5,7 +5,7 @@ import Dropzone from 'react-dropzone';
 import styles from './audioDropzone.less';
 import dropzoneStyles from '../../../shared/dropzone/dropzone.less';
 import FileInformation from './fileInformation/fileInformation';
-import Form from './form/formContainer';
+import Form from './form/container';
 import Progress from './progress/progress';
 
 const AudioDropzone = ({ onDrop, files, removeFile }) => (

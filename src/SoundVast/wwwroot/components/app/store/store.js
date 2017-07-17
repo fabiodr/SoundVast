@@ -2,16 +2,16 @@ import { applyMiddleware, combineReducers, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import { reducer as form } from 'redux-form';
 
-import user from '../../user/userReducer';
-import socialLogins from '../../user/login/socialLogins/socialLoginsReducer';
-import modal from '../../shared/modal/modalReducer';
-import popup from '../../shared/popup/popupReducer';
-import upload from '../../upload/uploadReducer';
-import genre from '../../genre/genreReducer';
+import account from '../../account/reducer';
+import socialLogins from '../../account/login/socialLogins/reducer';
+import modal from '../../shared/modal/reducer';
+import popup from '../../shared/popup/reducer';
+import upload from '../../upload/reducer';
+import genre from '../../genre/reducer';
 
 const middleWare = applyMiddleware(thunk);
 const reducers = combineReducers({
-  user,
+  account,
   socialLogins,
   modal,
   form,

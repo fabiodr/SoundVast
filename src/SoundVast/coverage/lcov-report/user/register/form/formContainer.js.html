@@ -104,7 +104,7 @@ import { compose } from 'recompose';
 import { connect } from 'react-redux';
 &nbsp;
 import RegisterForm from './form';
-import userValidation from '../../userValidation';
+import accountValidation from '../../accountValidation';
 import { submit } from '../form/formActions';
 &nbsp;
 const mapDispatchToProps = <span class="fstat-no" title="function not covered" >di</span>spatch =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
@@ -124,7 +124,7 @@ export default compose(
   reduxForm({
     form: 'register',
     fields: ['__RequestVerificationToken'],
-    validate: userValidation,
+    validate: accountValidation,
   }),
 )(RegisterForm);
 &nbsp;</pre></td></tr>

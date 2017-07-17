@@ -8,15 +8,9 @@ using SoundVast.Data;
 
 namespace SoundVast.Components.User
 {
-    [AjaxAuthorize]
-    public class UserController : CustomBaseController
+    public class UserController : Controller
     {
-        [ActionName("Profile")]
-        public IActionResult UserProfile()
-        {
-            var profileViewModel = new ProfileViewModel(User.Identity.Name);
 
-            return ViewOrPartial(profileViewModel);
-        }
+
     }
 }

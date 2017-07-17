@@ -135,6 +135,7 @@ namespace SoundVast
             services.AddScoped<IRepository<LinkModel>, Repository<LinkModel, ApplicationDbContext>>();
             services.AddScoped<IRepository<QuoteModel>, Repository<QuoteModel, ApplicationDbContext>>();
             services.AddScoped<IAudioService<AudioModel>, AudioService<AudioModel>>();
+            services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUploadService, UploadService>();
             services.AddScoped<IPlaylistService, PlaylistService>();
             services.AddScoped<IFileStreamService, FileStreamService>();
