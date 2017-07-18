@@ -11,12 +11,11 @@ export const mapStateToProps = ({ genre, upload }, { index }) => ({
   initialValues: {
     name: upload.audioFiles[index].title,
     artist: upload.audioFiles[index].artist,
-    coverImageUrl: upload.audioFiles[index].previewCoverImageUrl,
   },
 });
 
-const mapDispatchToProps = dispatch => ({
-  onSubmit: values => dispatch(submit(values)),
+const mapDispatchToProps = (dispatch, { index }) => ({
+  onSubmit: values => dispatch(submit(values, index)),
   getGenres: () => dispatch(getGenres()),
   change: (...values) => dispatch(change(values)),
 });
@@ -26,11 +25,6 @@ export default compose(
   lifecycle({
     componentDidMount() {
       this.props.getGenres();
-    },
-    componentWillReceiveProps(nextProps) {
-      if (this.props.initialValues.coverImageUrl !== nextProps.initialValues.coverImageUrl) {
-        this.props.change(this.props.form, 'coverImageUrl', nextProps.initialValues.coverImageUrl);
-      }
     },
   }),
   reduxForm({

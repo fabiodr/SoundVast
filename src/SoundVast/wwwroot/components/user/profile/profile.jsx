@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
-import UserUploads from './uploads/uploads';
+import UserUploads from './uploads/container';
 
 const Profile = ({ userName }) => (
   <div>

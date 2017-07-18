@@ -18,7 +18,7 @@ export default (state = defaultState, action) => {
       return {
         ...state,
         audioFiles: state.audioFiles.concat([{
-          previewCoverImageUrl: filePlaceholder,
+          coverImagePreview: filePlaceholder,
           ...action.audioFile,
         }]),
       };
@@ -30,7 +30,8 @@ export default (state = defaultState, action) => {
     case 'UPDATE_COVER_IMAGE_FILE': {
       const audioFiles = [...state.audioFiles];
 
-      audioFiles[action.index].previewCoverImageUrl = action.preview;
+      audioFiles[action.index].coverImagePreview = action.file.preview;
+      audioFiles[action.index].coverImageFile = action.file;
 
       return {
         ...state,
@@ -40,7 +41,7 @@ export default (state = defaultState, action) => {
     case 'REMOVE_COVER_IMAGE_FILE': {
       const audioFiles = [...state.audioFiles];
 
-      audioFiles[action.index].previewCoverImageUrl = null;
+      audioFiles[action.index].coverImagePreview = null;
 
       return {
         ...state,

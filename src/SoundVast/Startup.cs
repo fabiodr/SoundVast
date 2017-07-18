@@ -39,8 +39,12 @@ using SoundVast.Components.Rating;
 using SoundVast.Components.Report;
 using SoundVast.Components.User;
 using System.Text.RegularExpressions;
+using Autofac;
+using Autofac.Core;
+using Autofac.Extensions.DependencyInjection;
 using SoundVast.Components.Genre.Models;
 using SoundVast.Components.Upload;
+using SoundVast.Validation;
 
 namespace SoundVast
 {
@@ -70,7 +74,7 @@ namespace SoundVast
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
@@ -98,59 +102,73 @@ namespace SoundVast
             {
                 options.TokenLifespan = TimeSpan.FromMinutes(30);
             });
-
+          
             services.AddMvc();
             services.AddCloudscribePagination();
             //services.AddAutoMapper();
 
+            IValidator ValidatorFactory(Type type)
+            {
+                var valType = typeof(Validator<>).MakeGenericType(type);
+
+                return (IValidator)container.Resolve(valType);
+            }
+
             var azureStorage = new AzureStorage(_configuration);
+            var containerBuilder = new ContainerBuilder();
 
-            // Add application services.
-            services.AddSingleton(_configuration);
-            services.AddSingleton<ICloudStorage>(azureStorage);
-            services.AddSingleton<IFileStorage, FileStorage>();
-            services.AddSingleton(new AutoMapperConfiguration(azureStorage));
-            services.AddSingleton(AutoMapperConfiguration.Config.CreateMapper());
-            services.AddSingleton(new ModelStateDictionary());
+            containerBuilder.Register(x => _configuration).As<IConfiguration>().SingleInstance();
+            containerBuilder.Register(x => azureStorage).As<ICloudStorage>().SingleInstance();
+            containerBuilder.RegisterType<FileStorage>().As<IFileStorage>().SingleInstance();
+            containerBuilder.Register(x => new ValidationProvider(ValidatorFactory)).As<IValidationProvider>().SingleInstance();
 
-            services.AddTransient<IEmailSender, AuthMessageSender>();
-            services.AddTransient<ISmsSender, AuthMessageSender>();
+            containerBuilder.RegisterType<AuthMessageSender>().As<IEmailSender>();
+            containerBuilder.RegisterType<AuthMessageSender>().As<ISmsSender>();
+            containerBuilder.RegisterType<UploadValidator>().As<Validator<AudioModel>>();
+            containerBuilder.RegisterType<AzureBlob>().As<ICloudBlob>();
+            containerBuilder.RegisterType<Repository<AudioModel, ApplicationDbContext>>().As<IRepository<AudioModel>>();
+            containerBuilder.RegisterType<Repository<GenreModel, ApplicationDbContext>>().As<IRepository<GenreModel>>();
+            containerBuilder.RegisterType<UploadService>().As<IUploadService>();
+            containerBuilder.RegisterType<UserService>().As<IUserService>();
+            containerBuilder.RegisterType<GenreService>().As<IGenreService>();
 
-            services.AddScoped<ICloudBlob, AzureBlob>();
-            services.AddScoped<IValidationDictionary, ModelStateWrapper>();
-            services.AddScoped<IRepository<AudioModel>, Repository<AudioModel, ApplicationDbContext>>();
-            services.AddScoped<IRepository<PlaylistModel>, Repository<PlaylistModel, ApplicationDbContext>>();
-            services.AddScoped<IRepository<FileStream>, Repository<FileStream, ApplicationDbContext>>();
-            services.AddScoped<IRepository<GenreModel>, Repository<GenreModel, ApplicationDbContext>>();
-            services.AddScoped<IRepository<FileStreamCategoryModel>, Repository<FileStreamCategoryModel, ApplicationDbContext>>();
-            services.AddScoped<IRepository<FileStreamReportModel>, Repository<FileStreamReportModel, ApplicationDbContext>>();
-            services.AddScoped<IRepository<AudioRatingModel>, Repository<AudioRatingModel, ApplicationDbContext>>();
-            services.AddScoped<IRepository<LiveStreamModel>, Repository<LiveStreamModel, ApplicationDbContext>>();
-            services.AddScoped<IRepository<LiveStreamCategoryModel>, Repository<LiveStreamCategoryModel, ApplicationDbContext>>();
-            services.AddScoped<IRepository<LiveStreamReportModel>, Repository<LiveStreamReportModel, ApplicationDbContext>>();
-            services.AddScoped<IRepository<LiveStreamRatingModel>, Repository<LiveStreamRatingModel, ApplicationDbContext>>();
-            services.AddScoped<IRepository<CommentModel>, Repository<CommentModel, ApplicationDbContext>>();
-            services.AddScoped<IRepository<CommentRatingModel>, Repository<CommentRatingModel, ApplicationDbContext>>();
-            services.AddScoped<IRepository<CommentReportModel>, Repository<CommentReportModel, ApplicationDbContext>>();
-            services.AddScoped<IRepository<LinkModel>, Repository<LinkModel, ApplicationDbContext>>();
-            services.AddScoped<IRepository<QuoteModel>, Repository<QuoteModel, ApplicationDbContext>>();
-            services.AddScoped<IAudioService<AudioModel>, AudioService<AudioModel>>();
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IUploadService, UploadService>();
-            services.AddScoped<IPlaylistService, PlaylistService>();
-            services.AddScoped<IFileStreamService, FileStreamService>();
-            services.AddScoped<IGenreService, GenreService>();
-            services.AddScoped<ICategoryService<FileStreamCategoryModel>, CategoryService<FileStreamCategoryModel>>();
-            services.AddScoped<IReportService<FileStreamReportModel>, ReportService<FileStreamReportModel>>();
-            services.AddScoped<IRatingService<AudioRatingModel>, RatingService<AudioRatingModel>>();
-            services.AddScoped<ILiveStreamService, LiveStreamService>();
-            services.AddScoped<ICategoryService<LiveStreamCategoryModel>, CategoryService<LiveStreamCategoryModel>>();
-            services.AddScoped<IReportService<LiveStreamReportModel>, ReportService<LiveStreamReportModel>>();
-            services.AddScoped<IRatingService<LiveStreamRatingModel>, RatingService<LiveStreamRatingModel>>();
-            services.AddScoped<ICommentService, CommentService>();
-            services.AddScoped<IRatingService<CommentRatingModel>, RatingService<CommentRatingModel>>();
-            services.AddScoped<IReportService<CommentReportModel>, ReportService<CommentReportModel>>();
-            services.AddScoped<IQuoteService, QuoteService>();
+            containerBuilder.Populate(services);
+
+            var container = containerBuilder.Build();
+
+            return container.Resolve<IServiceProvider>();
+            //services.AddSingleton(new AutoMapperConfiguration(azureStorage));
+            //services.AddSingleton(AutoMapperConfiguration.Config.CreateMapper());
+            //services.AddScoped<IUploadValidator, UploadValidator>();
+            //services.AddScoped<IRepository<PlaylistModel>, Repository<PlaylistModel, ApplicationDbContext>>();
+            //services.AddScoped<IRepository<FileStream>, Repository<FileStream, ApplicationDbContext>>();
+            //services.AddScoped<IRepository<FileStreamCategoryModel>, Repository<FileStreamCategoryModel, ApplicationDbContext>>();
+            //services.AddScoped<IRepository<FileStreamReportModel>, Repository<FileStreamReportModel, ApplicationDbContext>>();
+            //services.AddScoped<IRepository<AudioRatingModel>, Repository<AudioRatingModel, ApplicationDbContext>>();
+            //services.AddScoped<IRepository<LiveStreamModel>, Repository<LiveStreamModel, ApplicationDbContext>>();
+            //services.AddScoped<IRepository<LiveStreamCategoryModel>, Repository<LiveStreamCategoryModel, ApplicationDbContext>>();
+            //services.AddScoped<IRepository<LiveStreamReportModel>, Repository<LiveStreamReportModel, ApplicationDbContext>>();
+            //services.AddScoped<IRepository<LiveStreamRatingModel>, Repository<LiveStreamRatingModel, ApplicationDbContext>>();
+            //services.AddScoped<IRepository<CommentModel>, Repository<CommentModel, ApplicationDbContext>>();
+            //services.AddScoped<IRepository<CommentRatingModel>, Repository<CommentRatingModel, ApplicationDbContext>>();
+            //services.AddScoped<IRepository<CommentReportModel>, Repository<CommentReportModel, ApplicationDbContext>>();
+            //services.AddScoped<IRepository<LinkModel>, Repository<LinkModel, ApplicationDbContext>>();
+            //services.AddScoped<IRepository<QuoteModel>, Repository<QuoteModel, ApplicationDbContext>>();
+            //services.AddScoped<IAudioService<AudioModel>, AudioService<AudioModel>>();
+            //services.AddScoped<IPlaylistService, PlaylistService>();
+            //services.AddScoped<IFileStreamService, FileStreamService>();
+            //services.AddScoped<IGenreService, GenreService>();
+            //services.AddScoped<ICategoryService<FileStreamCategoryModel>, CategoryService<FileStreamCategoryModel>>();
+            //services.AddScoped<IReportService<FileStreamReportModel>, ReportService<FileStreamReportModel>>();
+            //services.AddScoped<IRatingService<AudioRatingModel>, RatingService<AudioRatingModel>>();
+            //services.AddScoped<ILiveStreamService, LiveStreamService>();
+            //services.AddScoped<ICategoryService<LiveStreamCategoryModel>, CategoryService<LiveStreamCategoryModel>>();
+            //services.AddScoped<IReportService<LiveStreamReportModel>, ReportService<LiveStreamReportModel>>();
+            //services.AddScoped<IRatingService<LiveStreamRatingModel>, RatingService<LiveStreamRatingModel>>();
+            //services.AddScoped<ICommentService, CommentService>();
+            //services.AddScoped<IRatingService<CommentRatingModel>, RatingService<CommentRatingModel>>();
+            //services.AddScoped<IReportService<CommentReportModel>, ReportService<CommentReportModel>>();
+            //services.AddScoped<IQuoteService, QuoteService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

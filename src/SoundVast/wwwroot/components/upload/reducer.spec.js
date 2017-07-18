@@ -1,14 +1,6 @@
 import expect from 'expect';
-import proxyquire from 'proxyquire';
 
-proxyquire.noCallThru();
-
-const uploadReducer = proxyquire('./reducer', {
-  shortid: {
-    generate: expect.createSpy().andReturn(0),
-  },
-}).default;
-
+import uploadReducer from './reducer';
 
 describe('uploadReducer', () => {
   it('should return defaultState if undefined', () => {
@@ -25,13 +17,13 @@ describe('uploadReducer', () => {
     const actionProps = {
       audioFile: {
         name: 'bubble.mp3',
-        previewCoverImageUrl: 'blob:localhost://bubble.jpg',
+        coverImagePreview: 'blob:localhost://bubble.jpg',
       },
     };
     const prevState = {
       audioFiles: [{
         name: 'test.mp3',
-        previewCoverImageUrl: 'blob:localhost://test.jpg',
+        coverImagePreview: 'blob:localhost://test.jpg',
       }],
     };
 
@@ -63,7 +55,7 @@ describe('uploadReducer', () => {
       ...actionProps,
     });
 
-    expect(state.audioFiles[0].previewCoverImageUrl).toBeTruthy();
+    expect(state.audioFiles[0].coverImagePreview).toBeTruthy();
   });
 
   it('should remove audio file', () => {
@@ -100,7 +92,7 @@ describe('uploadReducer', () => {
       ...actionProps,
     });
 
-    expect(state.audioFiles[index].previewCoverImageUrl).toBe(
+    expect(state.audioFiles[index].coverImagePreview).toBe(
       actionProps.preview,
     );
   });
@@ -109,7 +101,7 @@ describe('uploadReducer', () => {
     const index = 0;
     const prevState = {
       audioFiles: [
-        { previewCoverImageUrl: 'test.jpg' },
+        { coverImagePreview: 'test.jpg' },
       ],
     };
 
@@ -118,7 +110,7 @@ describe('uploadReducer', () => {
       index,
     });
 
-    expect(state.audioFiles[index].previewCoverImageUrl).toBe(null);
+    expect(state.audioFiles[index].coverImagePreview).toBe(null);
   });
 
   it('should update upload progress', () => {

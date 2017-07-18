@@ -14,7 +14,7 @@ const state = {
       {
         title: 'test',
         artist: 'testAlbum',
-        previewCoverImageUrl: 'blob:localhost:8080/test.jpg',
+        coverImagePreview: 'blob:localhost:8080/test.jpg',
       },
     ],
   },
@@ -29,7 +29,7 @@ describe('UploadFileFormContainer', () => {
       initialValues: {
         name: state.upload.audioFiles[index].title,
         artist: state.upload.audioFiles[index].artist,
-        coverImageUrl: state.upload.audioFiles[index].previewCoverImageUrl,
+        coverImageUrl: state.upload.audioFiles[index].coverImagePreview,
       },
     });
   });

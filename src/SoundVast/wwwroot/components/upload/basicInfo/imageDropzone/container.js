@@ -4,7 +4,7 @@ import ImageDropzone from './imageDropzone';
 import { updateCoverImageFile, removeCoverImageFile } from '../../actions';
 
 export const mapStateToProps = ({ upload }, { index }) => ({
-  preview: upload.audioFiles[index].previewCoverImageUrl,
+  preview: upload.audioFiles[index].coverImagePreview,
 });
 
 export default connect(mapStateToProps, {

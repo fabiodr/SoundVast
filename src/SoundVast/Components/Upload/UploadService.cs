@@ -1,43 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using ByteSizeLib;
 using SoundVast.Components.Audio.Models;
 using SoundVast.Repository;
+using SoundVast.Storage.CloudStorage;
+using SoundVast.Validation;
 
 namespace SoundVast.Components.Upload
 {
     public class UploadService : IUploadService
     {
-        private readonly IValidationDictionary _validationDictionary;
+        private readonly IValidationProvider _validationProvider;
+      //  private readonly IUploadValidator _uploadValidator;
         private readonly IRepository<AudioModel> _repository;
 
-        public UploadService(IValidationDictionary validationDictionary, IRepository<AudioModel> repository)
+        public UploadService(IValidationProvider validationProvider, /*IUploadValidator uploadValidator,*/
+            IRepository<AudioModel> repository)
         {
-            _validationDictionary = validationDictionary;
+            _validationProvider = validationProvider;
+            //_uploadValidator = uploadValidator;
             _repository = repository;
         }
 
-        protected bool Validate(AudioModel model)
+        public async Task UploadCoverImage(ICloudBlob blob, Stream stream, string contentType)
         {
-            if (string.IsNullOrWhiteSpace(model.Name))
-            {
-                _validationDictionary.SetError("Name", "Name is required");
-            }
+            var fileSize = ByteSize.FromBytes(stream.Length);
 
-            return _validationDictionary.IsValid;
+           // _uploadValidator.ValidateUploadCoverImage(fileSize.MegaBytes);
+
+            await blob.UploadFromStreamAsync(stream, contentType);
         }
 
-        public bool Add(AudioModel model)
+        public void Add(AudioModel model)
         {
-            if (!Validate(model))
-                return false;
+            _validationProvider.Validate(model);
 
             _repository.Add(model);
-
-            return true;
         }
     }
 }

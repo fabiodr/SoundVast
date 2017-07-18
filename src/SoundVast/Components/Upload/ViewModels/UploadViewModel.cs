@@ -10,11 +10,8 @@ namespace SoundVast.Components.Upload.ViewModels
     public class SaveUploadViewModel
     {
         public string Name { get; set; }
-
         public string Artist { get; set; }
-
         public string CoverImageUrl { get; set; }
-
         public int? GenreId { get; set; }
     }
 

@@ -35,8 +35,7 @@ namespace SoundVast.Components.Account
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            ILoggerFactory loggerFactory,
-            IValidationDictionary validationDictionary)
+            ILoggerFactory loggerFactory)
         {
             _userManager = userManager;
             _signInManager = signInManager;

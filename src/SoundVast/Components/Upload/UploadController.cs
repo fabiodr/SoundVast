@@ -15,27 +15,28 @@ using SoundVast.Components.Upload.ViewModels;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using ByteSizeLib;
 using Microsoft.AspNetCore.Identity;
 using SoundVast.Components.Audio.Models;
 using SoundVast.Components.FileStream;
 using SoundVast.Components.FileStream.Models;
 using SoundVast.Components.User;
+using SoundVast.Repository;
 using SoundVast.Storage.CloudStorage.AzureStorage;
+using SoundVast.Validation;
 
 namespace SoundVast.Components.Upload
 {
     public class UploadController : Controller
     {
-        private readonly IValidationDictionary _validationDictionary;
         private readonly IFileStorage _fileStorage;
         private readonly ICloudStorage _cloudStorage;
         private readonly IUploadService _uploadService;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public UploadController(IValidationDictionary validationDictionary, IFileStorage fileStorage, ICloudStorage cloudStorage,
+        public UploadController(IFileStorage fileStorage, ICloudStorage cloudStorage,
             IUploadService uploadService, UserManager<ApplicationUser> userManager)
         {
-            _validationDictionary = validationDictionary;
             _fileStorage = fileStorage;
             _cloudStorage = cloudStorage;
             _uploadService = uploadService;
@@ -55,12 +56,18 @@ namespace SoundVast.Components.Upload
                 UserId = _userManager.GetUserId(User)
             };
 
-            if (_uploadService.Add(model))
+            try
             {
-                return Ok();
+                _uploadService.Add(model);
+            }
+            catch (ValidationException e)
+            {
+                ModelState.AddModelErrors(e);
+
+                return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ConvertToJson());
             }
 
-            return StatusCode((int)HttpStatusCode.BadRequest, _validationDictionary.ConvertToJson());
+            return Ok();
         }
 
         [HttpPost]
@@ -76,15 +83,26 @@ namespace SoundVast.Components.Upload
             });
         }
 
-        [HttpGet]
-        public IActionResult UploadProgress(string progressId)
+        [HttpPost]
+        public async Task<IActionResult> UploadCoverImage(IFormFile file)
         {
-            Response.ContentType = "text/event-stream";
+            var imageBlob = _cloudStorage.GetBlob(CloudStorageType.Image, file.FileName);
 
-            var progressPercent = AzureBlob.GetProgressPercent(progressId);
-            const int progressRetryMilliseconds = 50;
-            
-            return Ok($"retry: {progressRetryMilliseconds}\ndata: {progressPercent}\n\n");
+            try
+            {
+                await _uploadService.UploadCoverImage(imageBlob, file.OpenReadStream(), file.ContentType);
+            }
+            catch (ValidationException e)
+            {
+                ModelState.AddModelErrors(e);
+
+                return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ConvertToJson());
+            }
+
+            return Ok(new
+            {
+                imagePath = imageBlob.CloudBlockBlob.Uri.AbsoluteUri
+            });
         }
 
         [HttpPost]
@@ -95,6 +113,17 @@ namespace SoundVast.Components.Upload
             await audioBlob.UploadChunksFromPathAsync(viewModel.AudioPath, "audio/mpeg", viewModel.FileLength, viewModel.ProgressId);
 
             return Ok();
+        }
+
+        [HttpGet]
+        public IActionResult UploadProgress(string progressId)
+        {
+            Response.ContentType = "text/event-stream";
+
+            var progressPercent = AzureBlob.GetProgressPercent(progressId);
+            const int progressRetryMilliseconds = 50;
+
+            return Ok($"retry: {progressRetryMilliseconds}\ndata: {progressPercent}\n\n");
         }
 
         //public void TempStoreAudioFile(IFormFile file, string mp3TempName)

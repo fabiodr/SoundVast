@@ -97,10 +97,11 @@ export const uploadAudioFiles = files => (dispatch) => {
 
           if (tag.tags.picture !== undefined) {
             const coverImageBytes = new Uint8Array(tag.tags.picture.data);
-            const coverImageBlob = new Blob([coverImageBytes], { type: tag.tags.picture.format });
-            const previewCoverImageUrl = URL.createObjectURL(coverImageBlob);
 
-            audioFile.previewCoverImageUrl = previewCoverImageUrl;
+            audioFile.coverImageFile = new File([coverImageBytes], audioFile.title, {
+              type: tag.tags.picture.format,
+            });
+            audioFile.coverImagePreview = URL.createObjectURL(audioFile.coverImageFile);
           }
 
           dispatch({
@@ -132,7 +133,7 @@ export const removeAudioFile = index => ({
 
 export const updateCoverImageFile = (file, index) => ({
   type: 'UPDATE_COVER_IMAGE_FILE',
-  preview: file.preview,
+  file,
   index,
 });
 

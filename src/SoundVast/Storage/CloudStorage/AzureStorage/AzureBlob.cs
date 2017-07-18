@@ -7,18 +7,12 @@ using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using System.Threading;
 using System.Text;
+using Microsoft.AspNetCore.Http;
 
 namespace SoundVast.Storage.CloudStorage.AzureStorage
 {
     public class AzureBlob : ICloudBlob
     {
-        public CloudStorageProperties FileProperties => new CloudStorageProperties
-        {
-            Size = CloudBlockBlob.Properties.Length,
-            Uri = CloudBlockBlob.Uri,
-            ETag = CloudBlockBlob.Properties.ETag,
-            ContentType = CloudBlockBlob.Properties.ContentType,
-        };
         public CloudBlockBlob CloudBlockBlob { get; set; }
         private static readonly IDictionary<string, int> UploadProgresses = new Dictionary<string, int>();
 
@@ -74,15 +68,13 @@ namespace SoundVast.Storage.CloudStorage.AzureStorage
             await CloudBlockBlob.PutBlockListAsync(blockIds);
         }
 
-        public async Task UploadFromPathAsync(string path, string contentType)
+        public async Task UploadFromStreamAsync(Stream stream, string contentType)
         {
-            var bytes = File.ReadAllBytes(path);
-
-            File.Delete(path);
-
             CloudBlockBlob.Properties.ContentType = contentType;
 
-            await CloudBlockBlob.UploadFromByteArrayAsync(bytes, 0, bytes.Length);
+            await CloudBlockBlob.UploadFromStreamAsync(stream);
+
+            stream.Close();
         }
 
         public async Task DownloadRangeToStreamAsync(Stream target, long? offset, long? length)

@@ -11,7 +11,7 @@ namespace SoundVast.Components
 {
     public interface IValidationDictionary
     {
-        void SetError(string key, string errorMessage);
+        void AddError(string key, string errorMessage);
         bool IsValid { get; }
         string ConvertToJson();
     }
@@ -24,14 +24,6 @@ namespace SoundVast.Components
         public ModelStateWrapper(ModelStateDictionary modelState)
         {
             _modelState = modelState;
-        }
-
-        public void SetError(string key, string errorMessage)
-        {
-            if (!_modelState.ContainsKey(key))
-            {
-                _modelState.AddModelError(key, errorMessage);
-            }
         }
 
         public void AddError(string key, string errorMessage)

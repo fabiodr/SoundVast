@@ -3,6 +3,7 @@ import thunk from 'redux-thunk';
 import { reducer as form } from 'redux-form';
 
 import account from '../../account/reducer';
+import profile from '../../user/profile/reducer';
 import socialLogins from '../../account/login/socialLogins/reducer';
 import modal from '../../shared/modal/reducer';
 import popup from '../../shared/popup/reducer';
@@ -12,6 +13,7 @@ import genre from '../../genre/reducer';
 const middleWare = applyMiddleware(thunk);
 const reducers = combineReducers({
   account,
+  profile,
   socialLogins,
   modal,
   form,

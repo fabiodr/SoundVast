@@ -29,9 +29,9 @@ namespace SoundVast.Utilities
             var response = context.HttpContext.Response;
             var request = context.HttpContext.Request;
 	        var blob = _cloudStorage.GetBlob(CloudStorageType.Audio, _fileName);
-	        var fileProperties = blob.FileProperties;
-            var fileExists = fileProperties.Size > 0;
-            var responseLength = fileProperties.Size;
+	        var fileProperties = blob.CloudBlockBlob.Properties;
+            var fileExists = fileProperties.Length > 0;
+            var responseLength = fileProperties.Length;
             long startIndex = 0;
 
             //if the "If-Match" exists and is different to etag (or is equal to any "*" with no resource) then return 412 precondition failed
@@ -67,12 +67,12 @@ namespace SoundVast.Utilities
                 }
                 else
                 {
-                    responseLength = fileProperties.Size;
+                    responseLength = fileProperties.Length;
                 }
 
                 responseLength -= startIndex;
                 response.StatusCode = (int)HttpStatusCode.PartialContent;
-                response.Headers.Add("Content-Range", $"bytes {startIndex}-{startIndex + responseLength - 1}/{fileProperties.Size}");
+                response.Headers.Add("Content-Range", $"bytes {startIndex}-{startIndex + responseLength - 1}/{fileProperties.Length}");
             }
 
             response.Headers.Add("Accept-Ranges", "bytes");

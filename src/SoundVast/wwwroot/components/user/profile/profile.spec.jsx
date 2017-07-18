@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import expect from 'expect';
 
 import Profile from './profile';
-import UserUploads from './uploads/uploads';
+import UserUploads from './uploads/container';
 
 const setup = (newProps) => {
   const props = {
