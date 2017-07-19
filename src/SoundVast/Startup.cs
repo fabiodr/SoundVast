@@ -128,15 +128,15 @@ namespace SoundVast
             builder.Register(x => azureStorage).As<ICloudStorage>().SingleInstance();
             builder.RegisterType<FileStorage>().As<IFileStorage>().SingleInstance();
             builder.RegisterType<ValidationProvider>().As<IValidationProvider>().SingleInstance();
-            builder.RegisterAssemblyTypes(assembly).AssignableTo(typeof(Validator<>)).AsImplementedInterfaces();
+            builder.RegisterAssemblyTypes(assembly).AsClosedTypesOf(typeof(Validator<>));
+            builder.RegisterGeneric(typeof(Repository<object, ApplicationDbContext>)).As(typeof(IRepository<>));
 
             builder.RegisterType<AuthMessageSender>().As<IEmailSender>();
             builder.RegisterType<AuthMessageSender>().As<ISmsSender>();
             builder.RegisterType<UploadValidator>().As<IUploadValidator>();
-            //builder.RegisterType<UploadValidator>().As<Validator<AudioModel>>();
             builder.RegisterType<AzureBlob>().As<ICloudBlob>();
-            builder.RegisterType<Repository<AudioModel, ApplicationDbContext>>().As<IRepository<AudioModel>>();
-            builder.RegisterType<Repository<GenreModel, ApplicationDbContext>>().As<IRepository<GenreModel>>();
+         //   builder.RegisterType<Repository<AudioModel, ApplicationDbContext>>().As<IRepository<AudioModel>>();
+          //  builder.RegisterType<Repository<GenreModel, ApplicationDbContext>>().As<IRepository<GenreModel>>();
             builder.RegisterType<UploadService>().As<IUploadService>();
             builder.RegisterType<UserService>().As<IUserService>();
             builder.RegisterType<GenreService>().As<IGenreService>();
