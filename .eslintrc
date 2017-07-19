@@ -21,8 +21,8 @@
     "react/wrap-multilines": "off",
     "react/require-extension":  "off",
 	"import/no-extraneous-dependencies": ["error", { "devDependencies": [
-	  "**/*.spec.*{js,jsx}",
-	] }],
+	  "**/*.spec.*{js,jsx}"
+	] }]
   },
   "plugins": [
     "react"
