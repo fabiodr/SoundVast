@@ -23,10 +23,10 @@
 *.sbr
 *.sdf
 ipch/
-**/*/obj/
-**/*/[Bb]in
-**/*/[Dd]ebug*/
-**/*/[Rr]elease*/
+obj/
+[Bb]in
+[Dd]ebug*/
+[Rr]elease*/
 Ankh.NoLoad
 .vs/
 
@@ -43,9 +43,9 @@ _ReSharper*/
 
 # Office Temp Files
 ~$*
-
-**/*/*.ncrunchsolution
-**/*/*.ncrunchproject
-**/*/node_modules/
-**/*/.nyc_output/
-**/*/coverage/
+*.ncrunchsolution
+*.ncrunchsolution
+*.ncrunchproject
+node_modules/
+.nyc_output/
+coverage/
