@@ -5,6 +5,6 @@ namespace SoundVast.Components.Upload
 {
     public interface IUploadValidator
     {
-        IEnumerable<ValidationResult> ValidateUploadCoverImage(double fileSizeInMegabytes);
+        void ValidateUploadCoverImage(double fileSize);
     }
 }

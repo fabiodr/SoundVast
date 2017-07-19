@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.IO;
+using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -107,34 +108,42 @@ namespace SoundVast
             services.AddCloudscribePagination();
             //services.AddAutoMapper();
 
-            IValidator ValidatorFactory(Type type)
-            {
-                var valType = typeof(Validator<>).MakeGenericType(type);
-
-                return (IValidator)container.Resolve(valType);
-            }
-
             var azureStorage = new AzureStorage(_configuration);
-            var containerBuilder = new ContainerBuilder();
+            var builder = new ContainerBuilder();
+            var assembly = Assembly.GetExecutingAssembly();
 
-            containerBuilder.Register(x => _configuration).As<IConfiguration>().SingleInstance();
-            containerBuilder.Register(x => azureStorage).As<ICloudStorage>().SingleInstance();
-            containerBuilder.RegisterType<FileStorage>().As<IFileStorage>().SingleInstance();
-            containerBuilder.Register(x => new ValidationProvider(ValidatorFactory)).As<IValidationProvider>().SingleInstance();
+            builder.Register<Func<Type, IValidator>>(x =>
+            {
+                var context = x.Resolve<IComponentContext>();
 
-            containerBuilder.RegisterType<AuthMessageSender>().As<IEmailSender>();
-            containerBuilder.RegisterType<AuthMessageSender>().As<ISmsSender>();
-            containerBuilder.RegisterType<UploadValidator>().As<Validator<AudioModel>>();
-            containerBuilder.RegisterType<AzureBlob>().As<ICloudBlob>();
-            containerBuilder.RegisterType<Repository<AudioModel, ApplicationDbContext>>().As<IRepository<AudioModel>>();
-            containerBuilder.RegisterType<Repository<GenreModel, ApplicationDbContext>>().As<IRepository<GenreModel>>();
-            containerBuilder.RegisterType<UploadService>().As<IUploadService>();
-            containerBuilder.RegisterType<UserService>().As<IUserService>();
-            containerBuilder.RegisterType<GenreService>().As<IGenreService>();
+                return type =>
+                {
+                    var valType = typeof(Validator<>).MakeGenericType(type);
 
-            containerBuilder.Populate(services);
+                    return (IValidator)context.Resolve(valType);
+                };
+            });
 
-            var container = containerBuilder.Build();
+            builder.Register(x => _configuration).As<IConfiguration>().SingleInstance();
+            builder.Register(x => azureStorage).As<ICloudStorage>().SingleInstance();
+            builder.RegisterType<FileStorage>().As<IFileStorage>().SingleInstance();
+            builder.RegisterType<ValidationProvider>().As<IValidationProvider>().SingleInstance();
+            builder.RegisterAssemblyTypes(assembly).AssignableTo(typeof(Validator<>)).AsImplementedInterfaces();
+
+            builder.RegisterType<AuthMessageSender>().As<IEmailSender>();
+            builder.RegisterType<AuthMessageSender>().As<ISmsSender>();
+            builder.RegisterType<UploadValidator>().As<IUploadValidator>();
+            //builder.RegisterType<UploadValidator>().As<Validator<AudioModel>>();
+            builder.RegisterType<AzureBlob>().As<ICloudBlob>();
+            builder.RegisterType<Repository<AudioModel, ApplicationDbContext>>().As<IRepository<AudioModel>>();
+            builder.RegisterType<Repository<GenreModel, ApplicationDbContext>>().As<IRepository<GenreModel>>();
+            builder.RegisterType<UploadService>().As<IUploadService>();
+            builder.RegisterType<UserService>().As<IUserService>();
+            builder.RegisterType<GenreService>().As<IGenreService>();
+
+            builder.Populate(services);
+
+            var container = builder.Build();
 
             return container.Resolve<IServiceProvider>();
             //services.AddSingleton(new AutoMapperConfiguration(azureStorage));

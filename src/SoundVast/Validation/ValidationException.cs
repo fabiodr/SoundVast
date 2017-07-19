@@ -9,10 +9,16 @@ namespace SoundVast.Validation
 {
     public class ValidationException : Exception
     {
-        public ValidationException(ICollection<ValidationResult> r)
-            : base(GetFirstErrorMessage(r))
+        public ValidationException(ValidationResult validationResult)
+            : base(validationResult.Message)
         {
-            Errors = new ReadOnlyCollection<ValidationResult>(r.ToList());
+            Errors = new ReadOnlyCollection<ValidationResult>(new List<ValidationResult> { validationResult });
+        }
+
+        public ValidationException(ICollection<ValidationResult> validationResults)
+            : base(GetFirstErrorMessage(validationResults))
+        {
+            Errors = new ReadOnlyCollection<ValidationResult>(validationResults.ToList());
         }
 
         public ReadOnlyCollection<ValidationResult> Errors { get; }

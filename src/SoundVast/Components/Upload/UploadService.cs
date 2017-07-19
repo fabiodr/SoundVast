@@ -16,14 +16,14 @@ namespace SoundVast.Components.Upload
     public class UploadService : IUploadService
     {
         private readonly IValidationProvider _validationProvider;
-      //  private readonly IUploadValidator _uploadValidator;
+        private readonly IUploadValidator _uploadValidator;
         private readonly IRepository<AudioModel> _repository;
 
-        public UploadService(IValidationProvider validationProvider, /*IUploadValidator uploadValidator,*/
+        public UploadService(IValidationProvider validationProvider, IUploadValidator uploadValidator,
             IRepository<AudioModel> repository)
         {
             _validationProvider = validationProvider;
-            //_uploadValidator = uploadValidator;
+            _uploadValidator = uploadValidator;
             _repository = repository;
         }
 
@@ -31,7 +31,7 @@ namespace SoundVast.Components.Upload
         {
             var fileSize = ByteSize.FromBytes(stream.Length);
 
-           // _uploadValidator.ValidateUploadCoverImage(fileSize.MegaBytes);
+            _uploadValidator.ValidateUploadCoverImage(fileSize.MegaBytes);
 
             await blob.UploadFromStreamAsync(stream, contentType);
         }

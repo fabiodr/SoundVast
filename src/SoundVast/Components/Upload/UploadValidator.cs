@@ -7,7 +7,7 @@ using SoundVast.Validation;
 
 namespace SoundVast.Components.Upload
 {
-    public class UploadValidator : Validator<AudioModel>/*, IUploadValidator*/
+    public class UploadValidator : Validator<AudioModel>, IUploadValidator
     {
         private const int MaxImageUploadSize = 2;
 
@@ -19,12 +19,12 @@ namespace SoundVast.Components.Upload
             }
         }
 
-        //public IEnumerable<ValidationResult> ValidateUploadCoverImage(double fileSize)
-        //{
-        //    if (fileSize > MaxImageUploadSize)
-        //    {
-        //        yield return new ValidationResult("_error", "Maximum image size is {MaxImageUploadSize}MB");
-        //    }
-        //}
+        public void ValidateUploadCoverImage(double fileSize)
+        {
+            if (fileSize > MaxImageUploadSize)
+            {
+                throw new ValidationException(new ValidationResult("_error", $"Maximum image size is {MaxImageUploadSize}MB"));
+            }
+        }
     }
 }
