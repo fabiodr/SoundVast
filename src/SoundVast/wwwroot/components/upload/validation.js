@@ -4,7 +4,7 @@ const validation = (values) => {
   const errors = {};
 
   if (!values.name || !noWhiteSpace(values.name)) {
-   // errors.name = 'Name is required';
+    errors.name = 'Name is required';
   }
 
   return errors;

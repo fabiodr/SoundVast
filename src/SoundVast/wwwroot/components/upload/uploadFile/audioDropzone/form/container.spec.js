@@ -29,7 +29,6 @@ describe('UploadFileFormContainer', () => {
       initialValues: {
         name: state.upload.audioFiles[index].title,
         artist: state.upload.audioFiles[index].artist,
-        coverImageUrl: state.upload.audioFiles[index].coverImagePreview,
       },
     });
   });

@@ -8,8 +8,8 @@ import UserAudio from './userAudio/userAudio';
 const setup = (newProps) => {
   const props = {
     userAudios: [
-      { name: 'bubble', coverImageUrl: 'blob:test.jpg' },
-      { name: 'kalimba', coverImageUrl: 'blob:test.jpg' },
+      { id: 0, name: 'bubble', coverImageUrl: 'blob:test.jpg' },
+      { id: 1, name: 'kalimba', coverImageUrl: 'blob:test.jpg' },
     ],
     ...newProps,
   };
