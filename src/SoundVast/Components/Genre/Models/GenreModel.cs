@@ -10,6 +10,12 @@ using SoundVast.Components.Image.Models;
 
 namespace SoundVast.Components.Genre.Models
 {
+    public enum GenreType
+    {
+        Music,
+        Audio
+    }
+
     public class GenreModel
     {
         [Required]

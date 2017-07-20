@@ -24,6 +24,9 @@ const Header = () => (
           <Link to="livestreams/livestream">Live Streams</Link>
         </li>*/}
         <li>
+          <Link to="music">Music</Link>
+        </li>
+        <li>
           <Link to="upload">Upload</Link>
         </li>
       </ul>
@@ -34,7 +37,7 @@ const Header = () => (
           <LinkDropdown title={<i className="fa fa-bars" />}>
             <ul>
               <li>
-                <Link to="content/aboutus">About us</Link>
+                <Link to="content/aboutuUs">About us</Link>
               </li>
               <li>
                 <Link to="content/privacy">Privacy</Link>
@@ -43,7 +46,7 @@ const Header = () => (
                 <Link to="content/copyright">Copyright</Link>
               </li>
               <li>
-                <Link to="content/termsofuse">Terms of Use</Link>
+                <Link to="content/termsOfUse">Terms of Use</Link>
               </li>
               <AdminList />
             </ul>

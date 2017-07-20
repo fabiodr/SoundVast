@@ -1,6 +1,7 @@
 import React from 'react';
 import expect from 'expect';
 import { shallow } from 'enzyme';
+import { Link } from 'react-router-dom';
 
 import Header from './header';
 import AuthorizedList from './authorizedList/container';
@@ -23,6 +24,18 @@ const setup = (newProps) => {
 
 describe('Header', () => {
   let wrapper;
+
+  it('should render Music Link', () => {
+    ({ wrapper } = setup());
+
+    expect(wrapper.findWhere(x => x.prop('to') === 'music').length).toBe(1);
+  });
+
+  it('should render Upload Link', () => {
+    ({ wrapper } = setup());
+
+    expect(wrapper.findWhere(x => x.prop('to') === 'upload').length).toBe(1);
+  });
 
   it('should render AuthorizedList', () => {
     ({ wrapper } = setup());

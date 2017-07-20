@@ -9,6 +9,7 @@ import modal from '../../shared/modal/reducer';
 import popup from '../../shared/popup/reducer';
 import upload from '../../upload/reducer';
 import genre from '../../genre/reducer';
+import music from '../../music/reducer';
 
 const middleWare = applyMiddleware(thunk);
 const reducers = combineReducers({
@@ -20,6 +21,7 @@ const reducers = combineReducers({
   popup,
   upload,
   genre,
+  music,
 });
 
 export default createStore(reducers, middleWare);

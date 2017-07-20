@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SoundVast.Components.Category.Models;
 using SoundVast.Components.Comment.Models;
+using SoundVast.Components.Genre.Models;
 using SoundVast.Components.Image.Models;
 using SoundVast.Components.Rating;
 using SoundVast.Components.Rating.Models;
@@ -27,9 +28,10 @@ namespace SoundVast.Components.Audio.Models
       //  public int CommentCount { get; private set; }
       //  public int UniqueViews { get; private set; }
      //   public DateTimeOffset UploadDate { get; private set; }
-        public int? GenreId { get; set; }
         [Required]
         public string UserId { get; set; }
+        public int? GenreId { get; set; }
+        public virtual GenreModel Genre { get; set; }
      //   public virtual ApplicationUser User { get; set; }
      //   public virtual ImageFileModel ImageFile { get; set; }
      //   public virtual CategoryModel Category { get; set; }
