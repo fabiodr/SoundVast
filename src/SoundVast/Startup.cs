@@ -108,76 +108,13 @@ namespace SoundVast
             services.AddCloudscribePagination();
             //services.AddAutoMapper();
 
-            var azureStorage = new AzureStorage(_configuration);
-            var builder = new ContainerBuilder();
-            var assembly = Assembly.GetExecutingAssembly();
-
-            builder.Register<Func<Type, IValidator>>(x =>
-            {
-                var context = x.Resolve<IComponentContext>();
-
-                return type =>
-                {
-                    var valType = typeof(Validator<>).MakeGenericType(type);
-
-                    return (IValidator)context.Resolve(valType);
-                };
-            });
-
-            builder.Register(x => _configuration).As<IConfiguration>().SingleInstance();
-            builder.Register(x => azureStorage).As<ICloudStorage>().SingleInstance();
-            builder.RegisterType<FileStorage>().As<IFileStorage>().SingleInstance();
-            builder.RegisterType<ValidationProvider>().As<IValidationProvider>().SingleInstance();
-            builder.RegisterAssemblyTypes(assembly).AsClosedTypesOf(typeof(Validator<>));
-            builder.RegisterGeneric(typeof(Repository<object, ApplicationDbContext>)).As(typeof(IRepository<>));
-
-            builder.RegisterType<AuthMessageSender>().As<IEmailSender>();
-            builder.RegisterType<AuthMessageSender>().As<ISmsSender>();
-            builder.RegisterType<UploadValidator>().As<IUploadValidator>();
-            builder.RegisterType<AzureBlob>().As<ICloudBlob>();
-         //   builder.RegisterType<Repository<AudioModel, ApplicationDbContext>>().As<IRepository<AudioModel>>();
-          //  builder.RegisterType<Repository<GenreModel, ApplicationDbContext>>().As<IRepository<GenreModel>>();
-            builder.RegisterType<UploadService>().As<IUploadService>();
-            builder.RegisterType<UserService>().As<IUserService>();
-            builder.RegisterType<GenreService>().As<IGenreService>();
+            var builder = RegisterServices();
 
             builder.Populate(services);
 
             var container = builder.Build();
 
             return container.Resolve<IServiceProvider>();
-            //services.AddSingleton(new AutoMapperConfiguration(azureStorage));
-            //services.AddSingleton(AutoMapperConfiguration.Config.CreateMapper());
-            //services.AddScoped<IUploadValidator, UploadValidator>();
-            //services.AddScoped<IRepository<PlaylistModel>, Repository<PlaylistModel, ApplicationDbContext>>();
-            //services.AddScoped<IRepository<FileStream>, Repository<FileStream, ApplicationDbContext>>();
-            //services.AddScoped<IRepository<FileStreamCategoryModel>, Repository<FileStreamCategoryModel, ApplicationDbContext>>();
-            //services.AddScoped<IRepository<FileStreamReportModel>, Repository<FileStreamReportModel, ApplicationDbContext>>();
-            //services.AddScoped<IRepository<AudioRatingModel>, Repository<AudioRatingModel, ApplicationDbContext>>();
-            //services.AddScoped<IRepository<LiveStreamModel>, Repository<LiveStreamModel, ApplicationDbContext>>();
-            //services.AddScoped<IRepository<LiveStreamCategoryModel>, Repository<LiveStreamCategoryModel, ApplicationDbContext>>();
-            //services.AddScoped<IRepository<LiveStreamReportModel>, Repository<LiveStreamReportModel, ApplicationDbContext>>();
-            //services.AddScoped<IRepository<LiveStreamRatingModel>, Repository<LiveStreamRatingModel, ApplicationDbContext>>();
-            //services.AddScoped<IRepository<CommentModel>, Repository<CommentModel, ApplicationDbContext>>();
-            //services.AddScoped<IRepository<CommentRatingModel>, Repository<CommentRatingModel, ApplicationDbContext>>();
-            //services.AddScoped<IRepository<CommentReportModel>, Repository<CommentReportModel, ApplicationDbContext>>();
-            //services.AddScoped<IRepository<LinkModel>, Repository<LinkModel, ApplicationDbContext>>();
-            //services.AddScoped<IRepository<QuoteModel>, Repository<QuoteModel, ApplicationDbContext>>();
-            //services.AddScoped<IAudioService<AudioModel>, AudioService<AudioModel>>();
-            //services.AddScoped<IPlaylistService, PlaylistService>();
-            //services.AddScoped<IFileStreamService, FileStreamService>();
-            //services.AddScoped<IGenreService, GenreService>();
-            //services.AddScoped<ICategoryService<FileStreamCategoryModel>, CategoryService<FileStreamCategoryModel>>();
-            //services.AddScoped<IReportService<FileStreamReportModel>, ReportService<FileStreamReportModel>>();
-            //services.AddScoped<IRatingService<AudioRatingModel>, RatingService<AudioRatingModel>>();
-            //services.AddScoped<ILiveStreamService, LiveStreamService>();
-            //services.AddScoped<ICategoryService<LiveStreamCategoryModel>, CategoryService<LiveStreamCategoryModel>>();
-            //services.AddScoped<IReportService<LiveStreamReportModel>, ReportService<LiveStreamReportModel>>();
-            //services.AddScoped<IRatingService<LiveStreamRatingModel>, RatingService<LiveStreamRatingModel>>();
-            //services.AddScoped<ICommentService, CommentService>();
-            //services.AddScoped<IRatingService<CommentRatingModel>, RatingService<CommentRatingModel>>();
-            //services.AddScoped<IReportService<CommentReportModel>, ReportService<CommentReportModel>>();
-            //services.AddScoped<IQuoteService, QuoteService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -201,10 +138,72 @@ namespace SoundVast
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            RegisterSocialLogins(app);
+
             app.UseStaticFiles();
-
             app.UseIdentity();
+            app.SeedData();
+            app.UseSession();
 
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    "app",
+                    "{controller}/{action}"
+                );
+            });
+
+            app.UseMvc(routes =>
+            {
+                routes.MapSpaFallbackRoute(
+                    "default",
+                    new
+                    {
+                        controller = "App",
+                        action = "Index"
+                    }
+                );
+            });
+        }
+
+        private ContainerBuilder RegisterServices()
+        {
+            var azureStorage = new AzureStorage(_configuration);
+            var builder = new ContainerBuilder();
+            var assembly = Assembly.GetExecutingAssembly();
+
+            builder.Register<Func<Type, IValidator>>(x =>
+            {
+                var context = x.Resolve<IComponentContext>();
+
+                return type =>
+                {
+                    var valType = typeof(Validator<>).MakeGenericType(type);
+
+                    return (IValidator)context.Resolve(valType);
+                };
+            });
+
+            builder.Register(x => _configuration).As<IConfiguration>().SingleInstance();
+            builder.Register(x => azureStorage).As<ICloudStorage>().SingleInstance();
+
+            builder.RegisterAssemblyTypes(assembly).AsClosedTypesOf(typeof(Validator<>));
+            builder.RegisterAssemblyTypes(assembly).Where(x => x.Name.EndsWith("Service")).AsImplementedInterfaces();
+            builder.RegisterAssemblyTypes(assembly).Where(x => x.Name.EndsWith("Validator")).AsImplementedInterfaces();
+
+            builder.RegisterType<FileStorage>().As<IFileStorage>().SingleInstance();
+            builder.RegisterType<ValidationProvider>().As<IValidationProvider>().SingleInstance();
+            builder.RegisterType<AuthMessageSender>().As<IEmailSender>();
+            builder.RegisterType<AuthMessageSender>().As<ISmsSender>();
+            builder.RegisterType<AzureBlob>().As<ICloudBlob>();
+            builder.RegisterType<Repository<AudioModel, ApplicationDbContext>>().As<IRepository<AudioModel>>();
+            builder.RegisterType<Repository<GenreModel, ApplicationDbContext>>().As<IRepository<GenreModel>>();
+
+            return builder;
+        }
+
+        private void RegisterSocialLogins(IApplicationBuilder app)
+        {
             var faceBookSecret = _configuration["OAuth:Facebook:Secret"];
             var twitterSecret = _configuration["OAuth:Twitter:Secret"];
             var googleSecret = _configuration["OAuth:Google:Secret"];
@@ -247,44 +246,6 @@ namespace SoundVast
             {
                 _logger.LogWarning("Google OAuth not setup because the Google secret is null");
             }
-
-            // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
-            app.SeedData();
-            app.UseSession();
-
-            //app.UseMvc(routes =>
-            //{
-            //    routes.MapRoute(
-            //        "default_2",
-            //        "{controller=FileStream}/{action=FileStreams}/{id?}");
-            //});
-
-            //app.UseMvc(routes =>
-            //{
-            //    routes.MapRoute(
-            //        "default",
-            //        "{controller=FileStream}/{action=FileStreams}/{genre?}/{category=Song}/{pageNumber=1}");
-            //});
-
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    "app",
-                    "{controller}/{action}"
-                );
-            });
-
-            app.UseMvc(routes =>
-            {
-                routes.MapSpaFallbackRoute(
-                    "default",
-                    new
-                    {
-                        controller = "App",
-                        action = "Index"
-                    }
-                );
-            });
         }
     }
 }

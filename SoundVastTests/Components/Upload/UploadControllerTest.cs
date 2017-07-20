@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Configuration;
-using Microsoft.WindowsAzure.Storage.Blob;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
@@ -21,12 +20,17 @@ using System.Threading.Tasks;
 using System.Threading;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.WindowsAzure.Storage.Blob;
 using SoundVast.Components;
 using SoundVast.Components.Audio.Models;
 using SoundVast.Components.FileStream;
 using SoundVast.Components.FileStream.Models;
 using SoundVast.Components.User;
+using SoundVast.CustomHelpers;
 using SoundVast.Storage.CloudStorage;
+using SoundVast.Storage.CloudStorage.AzureStorage;
+using SoundVast.Validation;
+using ICloudBlob = SoundVast.Storage.CloudStorage.ICloudBlob;
 
 namespace SoundVastTests.Components.Upload
 {
@@ -69,7 +73,7 @@ namespace SoundVastTests.Components.Upload
             _mockUserManager.Setup(x => x.GetUserId(It.IsAny<ClaimsPrincipal>())).Returns(userId);
             _mockUploadService.Setup(x => x.Add(It.IsAny<AudioModel>())).Callback<AudioModel>(x => model = x);
 
-            _uploadController.Save(viewModel);
+            var result = (OkResult)_uploadController.Save(viewModel);
 
             _mockUploadService.Verify(x => x.Add(It.IsAny<AudioModel>()), Times.Once);
             model.ShouldBeEquivalentTo(new AudioModel
@@ -80,30 +84,21 @@ namespace SoundVastTests.Components.Upload
                 GenreId = viewModel.GenreId,
                 UserId = userId
             });
+
+            result.Should().BeOfType<OkResult>();
         }
 
-        //[Test]
-        //public void SaveShouldReturnOkIfAddedUploadToDatabaseSuccessfully()
-        //{
-        //    var viewModel = new SaveUploadViewModel();
+        [Test]
+        public void SaveShouldReturnModelErrorsIfUploadThrowsValidationException()
+        {
+            var validationResult = new ValidationResult("_error", "testError");
+            _mockUploadService.Setup(x => x.Add(It.IsAny<AudioModel>())).Throws(new ValidationException(validationResult));
 
-        //    _mockUploadService.Setup(x => x.Add(It.IsAny<AudioModel>())).Returns(true);
+            var result = (ObjectResult)_uploadController.Save(new SaveUploadViewModel());
 
-        //    var result = (OkResult)_uploadController.Save(viewModel);
-
-        //    result.Should().BeOfType<OkResult>();
-        //}
-
-        //[Test]
-        //public void SaveShouldReturn400IfUnSuccessfullyAddedUploadToDatabase()
-        //{
-        //    _mockUploadService.Setup(x => x.Add(It.IsAny<AudioModel>())).Returns(false);
-
-        //    var result = (ObjectResult)_uploadController.Save(new SaveUploadViewModel());
-
-        //    result.StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
-        //    result.Value.Should().Be("error");
-        //}
+            result.StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
+            result.Value.Should().Be(_uploadController.ModelState.ConvertToJson());
+        }
 
         [Test]
         public async Task ShouldConvertToMp3()
@@ -128,19 +123,52 @@ namespace SoundVastTests.Components.Upload
         }
 
         [Test]
-        public void ShouldGetUploadProgress()
+        public async Task ShouldUploadCoverImage()
         {
-            const string progressId = "testId";
+            const string coverImageName = "testFile.jpg";
+            const string contentType = "image/jpeg";
+            var stream = new MemoryStream();
+            
+            var imagePath = Path.Combine("http://www.test.com/", coverImageName);
+            var mockFile = new Mock<IFormFile>();
+            var imageBlob = new AzureBlob
+            {
+                CloudBlockBlob = new CloudBlockBlob(new Uri(imagePath))
+            };
+            
+            mockFile.Setup(x => x.OpenReadStream()).Returns(stream);
+            mockFile.Setup(x => x.FileName).Returns(coverImageName);
+            mockFile.Setup(x => x.ContentType).Returns(contentType);
+            _mockCloudStorage.Setup(x => x.GetBlob(CloudStorageType.Image, coverImageName)).Returns(imageBlob);
+            _mockUploadService.Setup(x => x.UploadCoverImage(imageBlob, stream, contentType)).Returns(Task.CompletedTask);
+            
+            var result = (OkObjectResult)await _uploadController.UploadCoverImage(mockFile.Object);
 
-            _uploadController.ControllerContext.HttpContext = new DefaultHttpContext();
-
-            var result = (OkObjectResult)_uploadController.UploadProgress(progressId);
-
-            result.Value.Should().Be("retry: 50\ndata: 0\n\n");
+            _mockUploadService.VerifyAll();
+            result.Value.ShouldBeEquivalentTo(new
+            {
+                imagePath = imageBlob.CloudBlockBlob.Uri.AbsoluteUri
+            });
         }
 
         [Test]
-        public async Task ShouldUploadFiles()
+        public async Task UploadCoverImageShouldReturnModelErrorsIfUploadThrowsValidationException()
+        {
+            var validationResult = new ValidationResult("_error", "testError");
+            var mockFile = new Mock<IFormFile>();
+
+            _mockCloudStorage.Setup(x => x.GetBlob(CloudStorageType.Image, It.IsAny<string>()));
+            _mockUploadService.Setup(x => x.UploadCoverImage(It.IsAny<ICloudBlob>(), It.IsAny<Stream>(), It.IsAny<string>()))
+                .Throws(new ValidationException(validationResult));
+
+            var result = (ObjectResult)await _uploadController.UploadCoverImage(mockFile.Object);
+
+            result.StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
+            result.Value.Should().Be(_uploadController.ModelState.ConvertToJson());
+        }
+
+        [Test]
+        public async Task ShouldUploadMp3()
         {
             const string progressId = "testId";
             const string audioName = "testFile.mp3";
@@ -162,6 +190,18 @@ namespace SoundVastTests.Components.Upload
             mockAudioBlob.VerifyAll();
 
             result.Should().BeOfType<OkResult>();
+        }
+
+        [Test]
+        public void ShouldGetUploadProgress()
+        {
+            const string progressId = "testId";
+
+            _uploadController.ControllerContext.HttpContext = new DefaultHttpContext();
+
+            var result = (OkObjectResult)_uploadController.UploadProgress(progressId);
+
+            result.Value.Should().Be("retry: 50\ndata: 0\n\n");
         }
     }
 }

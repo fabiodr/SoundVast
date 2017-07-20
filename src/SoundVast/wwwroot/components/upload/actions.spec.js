@@ -35,7 +35,7 @@ describe('uploadActions', () => {
     ]);
   });
 
-  it('should add cover image files', () => {
+  it('should update cover image files', () => {
     const file = {
       preview: 'localhost//test.jpg',
     };
@@ -46,7 +46,7 @@ describe('uploadActions', () => {
     expect(calledActions).toEqual([
       {
         type: 'UPDATE_COVER_IMAGE_FILE',
-        preview: file.preview,
+        file,
         index,
       },
     ]);

@@ -77,7 +77,9 @@ describe('uploadReducer', () => {
   it('should update cover image file', () => {
     const index = 0;
     const actionProps = {
-      preview: 'bubble.jpg',
+      file: {
+        preview: 'bubble.jpg',
+      },
       index,
     };
 
@@ -93,7 +95,10 @@ describe('uploadReducer', () => {
     });
 
     expect(state.audioFiles[index].coverImagePreview).toBe(
-      actionProps.preview,
+      actionProps.file.preview,
+    );
+    expect(state.audioFiles[index].coverImageFile).toEqual(
+      actionProps.file,
     );
   });
 

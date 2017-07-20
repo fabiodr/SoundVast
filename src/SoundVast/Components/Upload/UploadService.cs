@@ -17,14 +17,14 @@ namespace SoundVast.Components.Upload
     {
         private readonly IValidationProvider _validationProvider;
         private readonly IUploadValidator _uploadValidator;
-        private readonly IRepository<AudioModel> _repository;
+        private readonly IRepository<AudioModel> _audioRepository;
 
         public UploadService(IValidationProvider validationProvider, IUploadValidator uploadValidator,
-            IRepository<AudioModel> repository)
+            IRepository<AudioModel> audioRepository)
         {
             _validationProvider = validationProvider;
             _uploadValidator = uploadValidator;
-            _repository = repository;
+            _audioRepository = audioRepository;
         }
 
         public async Task UploadCoverImage(ICloudBlob blob, Stream stream, string contentType)
@@ -40,7 +40,7 @@ namespace SoundVast.Components.Upload
         {
             _validationProvider.Validate(model);
 
-            _repository.Add(model);
+            _audioRepository.Add(model);
         }
     }
 }
