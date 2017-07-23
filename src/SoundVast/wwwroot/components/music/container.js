@@ -1,18 +1,20 @@
 import { connect } from 'react-redux';
-import { compose, lifecycle } from 'recompose';
 
 import Music from './music';
-import { getMusic } from './actions';
+import { fetchMusic } from './actions';
 
 const mapStateToProps = ({ music }) => ({
-  musicAudios: music.musicAudios,
+  musicAudios: music.musicAudios.map(musicAudio => ({
+    id: musicAudio.id,
+    name: musicAudio.name,
+    artist: musicAudio.artist,
+    coverImageUrl: musicAudio.coverImageUrl,
+  })),
+  hasMore: music.hasMore,
 });
 
-export default compose(
-  connect(mapStateToProps),
-  lifecycle({
-    componentDidMount() {
-      this.props.dispatch(getMusic());
-    },
-  }),
-)(Music);
+const mapDispatchToProps = dispatch => ({
+  fetchMusic: () => dispatch(fetchMusic()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Music);

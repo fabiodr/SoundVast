@@ -10,6 +10,7 @@ describe('musicReducer', () => {
 
     expect(state).toEqual({
       musicAudios: [],
+      hasMore: true,
     });
   });
 
@@ -19,12 +20,13 @@ describe('musicReducer', () => {
         { name: 'bubble.mp3' },
         { name: 'kalimba.mp3' },
       ],
+      hasMore: true,
     };
     const prevState = {
       test: 'test',
     };
     const state = musicReducer(prevState, {
-      type: 'GET_MUSIC',
+      type: 'FETCH_MUSIC',
       ...actionProps,
     });
 

@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import expect from 'expect';
 
 import EditableField from './editableField';
-import ValidationErrors from '../../validation/errors/errors';
+import ValidationErrors from '../validation/errors/errors';
 
 const setup = (newProps) => {
   const props = {

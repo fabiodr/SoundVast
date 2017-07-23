@@ -1,4 +1,6 @@
-import { SubmissionError } from 'redux-form';
+import notOkError from '../../../../shared/fetch/errorHandling/notOkError/notOkError';
+import notOkErrorPopup from '../../../../shared/fetch/errorHandling/notOkError/notOkErrorPopup';
+import validationError from '../../../../shared/fetch/errorHandling/validationError/validationError';
 
 export const uploadCoverImage = index => (dispatch, getState) => {
   const coverImageFile = getState().upload.audioFiles[index].coverImageFile;
@@ -13,19 +15,20 @@ export const uploadCoverImage = index => (dispatch, getState) => {
   return fetch('/upload/uploadCoverImage', {
     method: 'post',
     body: formData,
-  }).then((response) => {
-    if (response.status === 400) {
-      return response.json().then((modelErrors) => {
-        throw new SubmissionError(modelErrors);
-      });
-    } else if (response.ok) {
-      return response.json().then(json => json.imagePath);
-    }
-    return null;
-  });
+  }).then(validationError)
+    .then(notOkError)
+    .then(response => response.json())
+    .then(json => json.imagePath)
+    .catch(notOkErrorPopup(dispatch));
 };
 
-export const submit = ({ __RequestVerificationToken, ...values }, index) => dispatch =>
+export const submit = ({ __RequestVerificationToken, ...values }, index) => (dispatch) => {
+  dispatch({
+    type: 'SUBMIT_PENDING',
+    index,
+    isSubmitting: true,
+  });
+
   dispatch(uploadCoverImage(index)).then(coverImageUrl =>
     fetch('/upload/save', {
       method: 'post',
@@ -38,12 +41,13 @@ export const submit = ({ __RequestVerificationToken, ...values }, index) => disp
         coverImageUrl,
       }),
       credentials: 'same-origin',
-    }).then((response) => {
-      if (response.status === 400) {
-        return response.json().then((modelErrors) => {
-          throw new SubmissionError(modelErrors);
-        });
-      }
-      return null;
-    }),
-  );
+    }).then(validationError)
+      .then(notOkError)
+      .catch(notOkErrorPopup(dispatch)));
+};
+
+export const submitPending = (index, isSubmitting) => ({
+  type: 'SUBMIT_PENDING',
+  index,
+  isSubmitting,
+});

@@ -2,13 +2,12 @@ import expect from 'expect';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import fetchMock from 'fetch-mock';
-import { SubmissionError } from 'redux-form';
 
 import * as actions from './actions';
 
 const mockStore = configureStore([thunk]);
 const store = mockStore({});
-const body = {
+const response = {
   email: 'test@gmail.com',
   confirmEmailLink: '/account/confirm',
 };
@@ -19,7 +18,7 @@ describe('registerFormActions', () => {
   beforeEach(() => {
     store.clearActions();
     calledActions = store.getActions();
-    fetchMock.getOnce('/account/getAccountDetails', body);
+    fetchMock.getOnce('/account/getAccountDetails', response);
     fetchMock.postOnce('/email/sendEmail', 200);
   });
 
@@ -27,33 +26,8 @@ describe('registerFormActions', () => {
     fetchMock.reset().restore();
   });
 
-  it('should post form', () => {
-    fetchMock.postOnce('/account/register', body);
-
-    store.dispatch(actions.submit()).then(() => {
-      expect(fetchMock.called('/account/register')).toBe(true);
-    });
-  });
-
-  it('should handle validation errors', () => {
-    const modelErrors = {
-      userName: 'Required',
-      password: 'Required',
-    };
-
-    fetchMock.postOnce('/account/register', {
-      status: 400,
-      body: modelErrors,
-    });
-
-    store.dispatch(actions.submit()).catch((error) => {
-      expect(error.errors).toEqual(modelErrors);
-      expect(error instanceof SubmissionError).toBe(true);
-    });
-  });
-
   it('should show popup message on success', () => {
-    fetchMock.postOnce('/account/register', body);
+    fetchMock.postOnce('/account/register', response);
 
     store.dispatch(actions.submit()).then(() => {
       expect(calledActions).toContain({
@@ -65,7 +39,7 @@ describe('registerFormActions', () => {
   });
 
   it('should close modal on success', () => {
-    fetchMock.postOnce('/account/register', body);
+    fetchMock.postOnce('/account/register', response);
 
     store.dispatch(actions.submit()).then(() => {
       expect(calledActions).toContain({
@@ -75,7 +49,7 @@ describe('registerFormActions', () => {
   });
 
   it('should fetch user details on success', () => {
-    fetchMock.postOnce('/account/register', body);
+    fetchMock.postOnce('/account/register', response);
 
     store.dispatch(actions.submit()).then(() => {
       expect(fetchMock.called('/account/getAccountDetails')).toBe(true);
@@ -83,25 +57,17 @@ describe('registerFormActions', () => {
   });
 
   it('should send confirmation email on success', () => {
-    fetchMock.postOnce('/account/register', body);
+    fetchMock.postOnce('/account/register', response);
 
     store.dispatch(actions.submit()).then(() => {
       const sentEmailBody = JSON.parse(fetchMock.lastOptions('/email/sendEmail').body);
 
       expect(fetchMock.called('/email/sendEmail')).toBe(true);
       expect(sentEmailBody).toContain({
-        email: body.email,
+        email: response.email,
         subject: 'Confirm Email',
       });
       expect(sentEmailBody.message).toBeTruthy();
-    });
-  });
-
-  it('should do nothing on failure', () => {
-    fetchMock.postOnce('/account/register', 500);
-
-    store.dispatch(actions.submit()).then(() => {
-      expect(calledActions).toEqual([]);
     });
   });
 });

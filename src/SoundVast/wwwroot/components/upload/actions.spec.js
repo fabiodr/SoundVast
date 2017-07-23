@@ -1,11 +1,8 @@
 import expect from 'expect';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import proxyquire from 'proxyquire';
 
 import * as actions from './actions';
-
-proxyquire.noCallThru();
 
 const mockStore = configureStore([thunk]);
 const store = mockStore({});

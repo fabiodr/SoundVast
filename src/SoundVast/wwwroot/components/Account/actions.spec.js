@@ -20,20 +20,21 @@ describe('accountActions', () => {
     fetchMock.reset().restore();
   });
 
-  it('should fetch user details', () => {
-    const json = {
+  it('should fetch user details', (done) => {
+    const response = {
       isAdmin: true,
       isLoggedIn: true,
       userName: 'Yoshimiii',
     };
 
-    fetchMock.getOnce('/account/getAccountDetails', json);
+    fetchMock.getOnce('/account/getAccountDetails', response);
 
     store.dispatch(actions.getAccountDetails()).then(() => {
       expect(calledActions).toEqual([{
         type: 'GET_ACCOUNT_DETAILS',
-        ...json,
+        ...response,
       }]);
+      done();
     });
   });
 });

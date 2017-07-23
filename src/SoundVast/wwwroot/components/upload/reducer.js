@@ -62,6 +62,16 @@ export default (state = defaultState, action) => {
         audioFiles,
       };
     }
+    case 'SUBMIT_PENDING': {
+      const audioFiles = [...state.audioFiles];
+
+      audioFiles[action.index].isSubmitting = action.isSubmitting;
+
+      return {
+        ...state,
+        audioFiles,
+      };
+    }
     default: return state;
   }
 };

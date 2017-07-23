@@ -4,6 +4,7 @@ import { shallow } from 'enzyme';
 
 import Music from './music';
 import Audio from './audio/audio';
+import InfiniteScrollGrid from '../content/infiniteScrollGrid/infiniteScrollGrid';
 
 const setup = (newProps) => {
   const props = {
@@ -32,9 +33,9 @@ describe('Music', () => {
     expect((wrapper).prop('title')).toBe('Music');
   });
 
-  it('should change document title to music', () => {
+  it('should render Audio for each musicAudio in InfiniteScrollGrid', () => {
     ({ wrapper, props } = setup());
 
-    expect((wrapper).find(Audio).length).toBe(props.musicAudios.length);
+    expect((wrapper).find(InfiniteScrollGrid).find(Audio).length).toBe(props.musicAudios.length);
   });
 });

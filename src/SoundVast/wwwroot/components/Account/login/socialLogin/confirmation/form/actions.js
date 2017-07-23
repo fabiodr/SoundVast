@@ -1,19 +1,19 @@
 /* eslint-disable import/prefer-default-export */
 
-import { SubmissionError } from 'redux-form';
+import notOkError from '../../../../../shared/fetch/errorHandling/notOkError/notOkError';
+import notOkErrorPopup from '../../../../../shared/fetch/errorHandling/notOkError/notOkErrorPopup';
+import validationError from '../../../../../shared/fetch/errorHandling/validationError/validationError';
 
-export const submit = formData => () =>
+export const submit = formData => dispatch =>
 fetch('/account/externalLoginConfirmation', {
   method: 'post',
   body: formData,
   credentials: 'same-origin',
-}).then((response) => {
-  if (response.redirected) {
-    location.href = response.url;
-  } else if (response.status === 400) {
-    return response.json().then((modelErrors) => {
-      throw new SubmissionError(modelErrors);
-    });
-  }
-  return null;
-});
+}).then(validationError)
+  .then(notOkError)
+  .then((response) => {
+    if (response.redirected) {
+      location.href = response.url;
+    }
+  })
+  .catch(notOkErrorPopup(dispatch));

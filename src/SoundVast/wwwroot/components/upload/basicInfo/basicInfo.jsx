@@ -4,8 +4,8 @@ import { Field } from 'redux-form';
 
 import styles from './basicInfo.less';
 import ImageDropzone from './imageDropzone/container';
-import FormInput from '../../shared/form/elements/editableField/input/input';
-import FormSelect from '../../shared/form/elements/editableField/select/select';
+import FormInput from '../../shared/form/editableField/input/input';
+import FormSelect from '../../shared/form/editableField/select/select';
 
 const BasicInfo = ({ genres, index }) => (
   <div className={styles.basicInfo}>

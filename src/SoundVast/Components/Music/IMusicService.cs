@@ -8,6 +8,6 @@ namespace SoundVast.Components.Music
 {
     public interface IMusicService
     {
-        ICollection<AudioModel> GetMusic();
+        ICollection<AudioModel> GetMusic(int current, int amount);
     }
 }

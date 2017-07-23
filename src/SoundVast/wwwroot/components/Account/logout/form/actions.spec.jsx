@@ -21,15 +21,7 @@ describe('logoutFormActions', () => {
     fetchMock.reset().restore();
   });
 
-  it('should post form', () => {
-    fetchMock.postOnce('/account/logout', 200);
-
-    store.dispatch(actions.submit()).then(() => {
-      expect(fetchMock.called('/account/logout')).toBe(true);
-    });
-  });
-
-  it('should show popup message on success', () => {
+  it('should show popup message on success', (done) => {
     fetchMock.postOnce('/account/logout', 200);
 
     store.dispatch(actions.submit()).then(() => {
@@ -38,22 +30,16 @@ describe('logoutFormActions', () => {
         text: 'You have successfully logged out.',
         id: 'textPopup',
       });
+      done();
     });
   });
 
-  it('should fetch user details on success', () => {
+  it('should fetch user details on success', (done) => {
     fetchMock.postOnce('/account/logout', 200);
 
     store.dispatch(actions.submit()).then(() => {
       expect(fetchMock.called('/account/getAccountDetails')).toBe(true);
-    });
-  });
-
-  it('should do nothing on failure', () => {
-    fetchMock.postOnce('/account/logout', 500);
-
-    store.dispatch(actions.submit()).then(() => {
-      expect(calledActions).toEqual([]);
+      done();
     });
   });
 });

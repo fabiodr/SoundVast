@@ -20,23 +20,24 @@ describe('socialLoginsActions', () => {
     fetchMock.reset().restore();
   });
 
-  it('should fetch social logins', () => {
-    const json = {
+  it('should fetch social logins', (done) => {
+    const response = {
       loginProviders: [{
         authenticationScheme: 'facebook',
         displayName: 'Facebook',
       }],
     };
 
-    fetchMock.getOnce('/account/getSocialLogins', json);
+    fetchMock.getOnce('/account/getSocialLogins', response);
 
     store.dispatch(actions.getSocialLogins()).then(() => {
       calledActions = store.getActions();
 
       expect(calledActions).toEqual([{
         type: 'GET_SOCIAL_LOGINS',
-        ...json,
+        ...response,
       }]);
+      done();
     });
   });
 });

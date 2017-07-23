@@ -21,19 +21,19 @@ describe('genreActions', () => {
   });
 
   it('should fetch genres', () => {
-    const json = {
+    const response = {
       genres: [
         { name: 'metal' },
         { name: 'rock' },
       ],
     };
 
-    fetchMock.getOnce('/genre/getGenres', json);
+    fetchMock.getOnce('/genre/getGenres', response);
 
     store.dispatch(actions.getGenres()).then(() => {
       expect(calledActions).toEqual([{
         type: 'GET_GENRES',
-        ...json,
+        ...response,
       }]);
     });
   });

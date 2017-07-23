@@ -3,6 +3,8 @@ import shortid from 'shortid';
 
 import fetchProgress from '../shared/polyfills/fetchProgress';
 import trimFileExtension from '../shared/utilities/trimFileExtension';
+import notOkError from '../shared/fetch/errorHandling/notOkError/notOkError';
+import notOkErrorPopup from '../shared/fetch/errorHandling/notOkError/notOkErrorPopup';
 
 export const uploadMp3 = (jsonText, id) => (dispatch) => {
   const body = JSON.parse(jsonText);
@@ -37,11 +39,16 @@ export const uploadMp3 = (jsonText, id) => (dispatch) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(body),
-  }).then((response) => {
-    if (!response.ok) {
+  }).then(notOkError)
+    .then((response) => {
+      if (!response.ok) {
+        eventSource.close();
+      }
+    })
+    .catch(() => {
+      notOkErrorPopup(dispatch);
       eventSource.close();
-    }
-  }).catch(() => eventSource.close());
+    });
 };
 
 export const convertToMp3 = (file, id) => (dispatch) => {
@@ -84,45 +91,49 @@ export const convertToMp3 = (file, id) => (dispatch) => {
 
 export const uploadAudioFiles = files => (dispatch) => {
   files.forEach((file) => {
-    fetch(file.preview).then(response => response.blob()).then((blob) => {
-      const audioFile = {
-        id: shortid.generate(),
-      };
+    fetch(file.preview)
+      .then(notOkError)
+      .then(response => response.blob())
+      .then((blob) => {
+        const audioFile = {
+          id: shortid.generate(),
+        };
 
-      jsmediatags.read(blob, {
-        onSuccess: (tag) => {
-          audioFile.artist = tag.tags.artist;
-          audioFile.album = tag.tags.album;
-          audioFile.title = tag.tags.title;
+        jsmediatags.read(blob, {
+          onSuccess: (tag) => {
+            audioFile.artist = tag.tags.artist;
+            audioFile.album = tag.tags.album;
+            audioFile.title = tag.tags.title;
 
-          if (tag.tags.picture !== undefined) {
-            const coverImageBytes = new Uint8Array(tag.tags.picture.data);
+            if (tag.tags.picture !== undefined) {
+              const coverImageBytes = new Uint8Array(tag.tags.picture.data);
 
-            audioFile.coverImageFile = new File([coverImageBytes], audioFile.title, {
-              type: tag.tags.picture.format,
+              audioFile.coverImageFile = new File([coverImageBytes], audioFile.title, {
+                type: tag.tags.picture.format,
+              });
+              audioFile.coverImagePreview = URL.createObjectURL(audioFile.coverImageFile);
+            }
+
+            dispatch({
+              type: 'ADD_AUDIO_FILE',
+              audioFile,
             });
-            audioFile.coverImagePreview = URL.createObjectURL(audioFile.coverImageFile);
-          }
 
-          dispatch({
-            type: 'ADD_AUDIO_FILE',
-            audioFile,
-          });
+            convertToMp3(file, audioFile.id)(dispatch);
+          },
+          onError: () => {
+            audioFile.title = trimFileExtension(file.name);
 
-          convertToMp3(file, audioFile.id)(dispatch);
-        },
-        onError: () => {
-          audioFile.title = trimFileExtension(file.name);
+            dispatch({
+              type: 'ADD_AUDIO_FILE',
+              audioFile,
+            });
 
-          dispatch({
-            type: 'ADD_AUDIO_FILE',
-            audioFile,
-          });
-
-          convertToMp3(file, audioFile.id)(dispatch);
-        },
-      });
-    });
+            convertToMp3(file, audioFile.id)(dispatch);
+          },
+        });
+      })
+      .catch(notOkErrorPopup(dispatch));
   });
 };
 

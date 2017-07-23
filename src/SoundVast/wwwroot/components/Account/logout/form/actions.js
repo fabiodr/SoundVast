@@ -2,16 +2,17 @@
 
 import { showTextPopup } from '../../../shared/popup/actions';
 import { getAccountDetails } from '../../actions';
+import notOkError from '../../../shared/fetch/errorHandling/notOkError/notOkError';
+import notOkErrorPopup from '../../../shared/fetch/errorHandling/notOkError/notOkErrorPopup';
 
 export const submit = formData => dispatch =>
 fetch('/account/logout', {
   method: 'post',
   body: formData,
   credentials: 'same-origin',
-}).then((response) => {
-  if (response.ok) {
+}).then(notOkError)
+  .then(() => {
     dispatch(getAccountDetails());
-    return dispatch(showTextPopup('You have successfully logged out.'));
-  }
-  return null;
-});
+    dispatch(showTextPopup('You have successfully logged out.'));
+  })
+  .catch(notOkErrorPopup(dispatch));

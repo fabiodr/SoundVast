@@ -21,6 +21,7 @@ export default () => (
       <Content>
         <Switch>
           <Route exact path="/" component={Music} />
+          <Route exact path="/music" component={Music} />
           <Route exact path="/account/externalLoginConfirmation" component={SocialLoginConfirmation} />
           <Route exact path="/account/externalLoginFailure" component={SocialLoginFailure} />
           <Route exact path="/account/resetPassword" component={ResetPassword} />

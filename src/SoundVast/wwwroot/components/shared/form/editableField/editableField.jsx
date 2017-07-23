@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import styles from './editableField.less';
-import ValidationErrors from '../../validation/errors/errors';
+import ValidationErrors from '../validation/errors/errors';
 
 const EditableField = ({ children, error, touched }) => {
   let errors = error;

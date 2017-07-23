@@ -1,19 +1,18 @@
 /* eslint-disable import/prefer-default-export */
 
-export const sendEmail = (email, message, subject) => () =>
-fetch('/email/sendEmail', {
-  method: 'post',
-  body: JSON.stringify({
-    email,
-    message,
-    subject,
-  }),
-  headers: {
-    'Content-Type': 'application/json',
-  },
-}).then((response) => {
-  if (response.ok) {
+import notOkError from '../shared/fetch/errorHandling/notOkError/notOkError';
+import notOkErrorPopup from '../shared/fetch/errorHandling/notOkError/notOkErrorPopup';
 
-  }
-  return null;
-});
+export const sendEmail = (email, message, subject) => dispatch =>
+  fetch('/email/sendEmail', {
+    method: 'post',
+    body: JSON.stringify({
+      email,
+      message,
+      subject,
+    }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  }).then(notOkError)
+    .catch(notOkErrorPopup(dispatch));

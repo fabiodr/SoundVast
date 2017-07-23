@@ -4,6 +4,7 @@ import { shallow } from 'enzyme';
 
 import UploadFileForm from './form';
 import ValidationErrors from '../../../../shared/form/validation/errors/errors';
+import SpinnerButton from '../../../../shared/spinners/button/button';
 
 const setup = (newProps) => {
   const props = {
@@ -53,5 +54,12 @@ describe('UploadFileForm', () => {
     ({ wrapper } = setup());
 
     expect(wrapper.find(ValidationErrors).length).toBe(1);
+  });
+
+  it('should render SpinnerButton', () => {
+    const isLoading = true;
+    ({ wrapper } = setup({ isLoading }));
+
+    expect(wrapper.find(SpinnerButton).length).toBe(1);
   });
 });

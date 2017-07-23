@@ -19,9 +19,9 @@ namespace SoundVast.Components.Music
             _repository = repository;
         }
 
-        public ICollection<AudioModel> GetMusic()
+        public ICollection<AudioModel> GetMusic(int current, int amount)
         {
-            return _repository.GetAll().Where(x => x.Genre.GenreType == nameof(GenreType.Music)).ToList();
+            return _repository.GetAll().Where(x => x.Genre.GenreType == nameof(GenreType.Music)).Skip(current).Take(amount).ToList();
         }
     }
 }

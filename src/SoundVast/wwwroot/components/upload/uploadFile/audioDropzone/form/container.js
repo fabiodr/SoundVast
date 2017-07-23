@@ -12,6 +12,7 @@ export const mapStateToProps = ({ genre, upload }, { index }) => ({
     name: upload.audioFiles[index].title,
     artist: upload.audioFiles[index].artist,
   },
+  isSubmitting: upload.audioFiles[index].isSubmitting,
 });
 
 const mapDispatchToProps = (dispatch, { index }) => ({

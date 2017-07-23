@@ -20,21 +20,24 @@ describe('musicActions', () => {
     fetchMock.reset().restore();
   });
 
-  it('should fetch music', () => {
-    const json = {
+  it('should fetch music', (done) => {
+    const response = {
       musicAudios: [
         { name: 'bubble.mp3' },
         { name: 'kalimba.mp3' },
       ],
+      hasMore: true,
     };
 
-    fetchMock.getOnce('/music/getMusic', json);
+    fetchMock.postOnce('/music/fetchMusic', response);
 
-    store.dispatch(actions.getMusic()).then(() => {
+    store.dispatch(actions.fetchMusic()).then(() => {
       expect(calledActions).toEqual([{
-        type: 'GET_MUSIC',
-        musicAudios: json.musicAudios,
+        type: 'FETCH_MUSIC',
+        musicAudios: response.musicAudios,
+        hasMore: response.hasMore,
       }]);
+      done();
     });
   });
 });

@@ -31,18 +31,24 @@ namespace SoundVastTests.Components.Music
         [Test]
         public void GetMusic()
         {
+            const int current = 1;
+            const int amount = 2;
             var musicAudios = new List<AudioModel>
             {
-                new AudioModel { Name="bubble.mp3", Genre = new GenreModel { GenreType = nameof(GenreType.Music) }},
                 new AudioModel { Name="podcast.mp3", Genre = new GenreModel { GenreType = nameof(GenreType.Audio) }},
+                new AudioModel { Name="bubble01.mp3", Genre = new GenreModel { GenreType = nameof(GenreType.Music) }},
+                new AudioModel { Name="bubble02.mp3", Genre = new GenreModel { GenreType = nameof(GenreType.Music) }},
+                new AudioModel { Name="bubble03.mp3", Genre = new GenreModel { GenreType = nameof(GenreType.Music) }},
+                new AudioModel { Name="bubble04.mp3", Genre = new GenreModel { GenreType = nameof(GenreType.Music) }}
             }.AsQueryable();
 
             _mockAudioRepository.Setup(x => x.GetAll()).Returns(musicAudios);
 
-            var result = _musicService.GetMusic();
+            var result = _musicService.GetMusic(current, amount);
 
-            result.Count.Should().Be(1);
-            result.ElementAt(0).Name.Should().Be("bubble.mp3");
+            result.Count.Should().Be(2);
+            result.All(x => x.Genre.GenreType == nameof(GenreType.Music)).Should().Be(true);
+            result.ElementAt(0).Name.Should().Be("bubble02.mp3");
         }
     }
 }

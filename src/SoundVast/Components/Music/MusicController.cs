@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using SoundVast.Components.Music.ViewModels;
 
 namespace SoundVast.Components.Music
 {
@@ -15,13 +16,16 @@ namespace SoundVast.Components.Music
             _musicService = musicService;
         }
 
-        public IActionResult GetMusic()
+        [HttpPost]
+        public IActionResult FetchMusic([FromBody] GetMusicViewModel model)
         {
-            var musicAudios = _musicService.GetMusic();
+            var musicAudios = _musicService.GetMusic(model.Current, model.Amount);
+            var hasMore = _musicService.GetMusic(model.Current + model.Amount, model.Amount).Any();
 
             return Ok(new
             {
-                musicAudios
+                musicAudios,
+                hasMore
             });
         }
     }

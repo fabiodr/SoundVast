@@ -1,18 +1,14 @@
 /* eslint-disable import/prefer-default-export */
-import { SubmissionError } from 'redux-form';
 
-export const submit = formData => () =>
+import notOkError from '../../../shared/fetch/errorHandling/notOkError/notOkError';
+import notOkErrorPopup from '../../../shared/fetch/errorHandling/notOkError/notOkErrorPopup';
+import validationError from '../../../shared/fetch/errorHandling/validationError/validationError';
+
+export const submit = formData => dispatch =>
 fetch('/account/resetPassword', {
   method: 'post',
   body: formData,
   credentials: 'same-origin',
-}).then((response) => {
-  if (response.ok) {
-    return response.json();
-  } else if (response.status === 400) {
-    return response.json().then((modelErrors) => {
-      throw new SubmissionError(modelErrors);
-    });
-  }
-  return null;
-});
+}).then(validationError)
+  .then(notOkError)
+  .catch(notOkErrorPopup(dispatch));

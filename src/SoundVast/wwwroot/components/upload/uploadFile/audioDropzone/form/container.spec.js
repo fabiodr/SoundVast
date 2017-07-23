@@ -15,6 +15,7 @@ const state = {
         title: 'test',
         artist: 'testAlbum',
         coverImagePreview: 'blob:localhost:8080/test.jpg',
+        isSubmitting: true,
       },
     ],
   },
@@ -30,6 +31,7 @@ describe('UploadFileFormContainer', () => {
         name: state.upload.audioFiles[index].title,
         artist: state.upload.audioFiles[index].artist,
       },
+      isSubmitting: state.upload.audioFiles[index].isSubmitting,
     });
   });
 });

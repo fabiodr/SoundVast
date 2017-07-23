@@ -138,11 +138,29 @@ describe('uploadReducer', () => {
     });
 
     expect(state.audioFiles[index]).toEqual({
+      ...prevState.audioFiles[index],
       progress: {
         value: actionProps.progressPercent,
         message: actionProps.message,
       },
-      ...prevState.audioFiles[index],
     });
+  });
+
+  it('should handle submit pending ', () => {
+    const index = 0;
+    const isSubmitting = true;
+    const prevState = {
+      audioFiles: [
+        { coverImagePreview: 'test.jpg' },
+      ],
+    };
+
+    const state = uploadReducer(prevState, {
+      type: 'SUBMIT_PENDING',
+      index,
+      isSubmitting,
+    });
+
+    expect(state.audioFiles[index].isSubmitting).toBe(isSubmitting);
   });
 });
