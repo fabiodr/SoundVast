@@ -3,28 +3,20 @@ import PropTypes from 'prop-types';
 
 import SoundVastTitle from '../shared/title/soundVastTitle';
 import InfiniteScrollGrid from '../content/infiniteScrollGrid/infiniteScrollGrid';
-import Audio from './audio/audio';
+import Audios from './audios/container';
 import styles from './music.less';
 
-const Music = ({ musicAudios, fetchMusic, hasMore }) => (
+const Music = ({ fetchMusic, hasMore }) => (
   <SoundVastTitle title="Music">
-    <div className={styles.music}>
+    <div className={styles.music} style={{'overflow-anchor': 'none'}}>
       <InfiniteScrollGrid loadMore={fetchMusic} hasMore={hasMore}>
-        {musicAudios.map(audio => <Audio key={audio.id} {...audio} />)}
+        <Audios />
       </InfiniteScrollGrid>
     </div>
   </SoundVastTitle>
 );
 
 Music.propTypes = {
-  musicAudios: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      artist: PropTypes.string,
-      coverImageUrl: PropTypes.string.isRequired,
-    }),
-  ).isRequired,
   fetchMusic: PropTypes.func.isRequired,
   hasMore: PropTypes.bool.isRequired,
 };

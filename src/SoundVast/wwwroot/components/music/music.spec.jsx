@@ -3,15 +3,11 @@ import expect from 'expect';
 import { shallow } from 'enzyme';
 
 import Music from './music';
-import Audio from './audio/audio';
+import Audios from './audios/container';
 import InfiniteScrollGrid from '../content/infiniteScrollGrid/infiniteScrollGrid';
 
 const setup = (newProps) => {
   const props = {
-    musicAudios: [
-      { id: 0, name: 'bubble', artist: 'bubbleArtist', coverImageUrl: 'bubble.jpg' },
-      { id: 1, name: 'kalimba', artist: 'kalimbaArtist', coverImageUrl: 'kalimba.jpg' },
-    ],
     ...newProps,
   };
 
@@ -25,7 +21,6 @@ const setup = (newProps) => {
 
 describe('Music', () => {
   let wrapper;
-  let props;
 
   it('should change document title to music', () => {
     ({ wrapper } = setup());
@@ -33,9 +28,9 @@ describe('Music', () => {
     expect((wrapper).prop('title')).toBe('Music');
   });
 
-  it('should render Audio for each musicAudio in InfiniteScrollGrid', () => {
-    ({ wrapper, props } = setup());
+  it('should render Audios', () => {
+    ({ wrapper } = setup());
 
-    expect((wrapper).find(InfiniteScrollGrid).find(Audio).length).toBe(props.musicAudios.length);
+    expect((wrapper).find(InfiniteScrollGrid).find(Audios).length).toBe(1);
   });
 });

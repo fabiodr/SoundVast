@@ -6,8 +6,8 @@ import notOkErrorPopup from '../shared/fetch/errorHandling/notOkError/notOkError
 const amount = 30;
 let current = 0;
 
-export const fetchMusic = () => dispatch =>
-  fetch('/music/fetchMusic', {
+export const fetchMusic = () => (dispatch) => {
+  const result = fetch('/music/fetchMusic', {
     method: 'post',
     body: JSON.stringify({
       current,
@@ -16,16 +16,16 @@ export const fetchMusic = () => dispatch =>
     headers: {
       'Content-Type': 'application/json',
     },
-  })
-    .then(notOkError)
+  }).then(notOkError)
     .then(response => response.json())
-    .then((json) => {
-      current += amount;
-
-      dispatch({
-        type: 'FETCH_MUSIC',
-        musicAudios: json.musicAudios,
-        hasMore: json.hasMore,
-      });
-    })
+    .then(json => dispatch({
+      type: 'FETCH_MUSIC',
+      musicAudios: json.musicAudios,
+      hasMore: json.hasMore,
+    }))
     .catch(notOkErrorPopup(dispatch));
+
+  current += 30;
+
+  return result;
+};

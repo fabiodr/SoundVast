@@ -106,6 +106,7 @@ namespace SoundVast
           
             services.AddMvc();
             services.AddCloudscribePagination();
+            services.AddMemoryCache();
             //services.AddAutoMapper();
 
             var builder = RegisterServices();

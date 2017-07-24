@@ -23,6 +23,9 @@ describe('musicReducer', () => {
       hasMore: true,
     };
     const prevState = {
+      musicAudios: [
+        { name: 'test.mp3' },
+      ],
       test: 'test',
     };
     const state = musicReducer(prevState, {
@@ -33,6 +36,7 @@ describe('musicReducer', () => {
     expect(state).toEqual({
       ...prevState,
       ...actionProps,
+      musicAudios: prevState.musicAudios.concat(actionProps.musicAudios),
     });
   });
 });

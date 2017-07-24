@@ -8,7 +8,7 @@ export default (state = defaultState, action) => {
     case 'FETCH_MUSIC':
       return {
         ...state,
-        musicAudios: action.musicAudios,
+        musicAudios: state.musicAudios,
         hasMore: action.hasMore,
       };
     default: return state;

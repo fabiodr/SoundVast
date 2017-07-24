@@ -7,7 +7,7 @@ namespace SoundVast.Components.Music.ViewModels
 {
     public class GetMusicViewModel
     {
-        public int Current { get; set; }
         public int Amount { get; set; }
+        public int Current { get; set; }
     }
 }
