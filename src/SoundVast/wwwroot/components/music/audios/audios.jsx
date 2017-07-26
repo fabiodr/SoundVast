@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import InfiniteScrollGrid from '../../content/infiniteScrollGrid/infiniteScrollGrid';
 
 import Audio from '../audio/audio';
+import styles from './audios.less';
 
-const Audios = ({ musicAudios }) => (
-  <div>
+const Audios = ({ musicAudios, fetchMusic, hasMore }) => (
+  <InfiniteScrollGrid loadMore={fetchMusic} hasMore={hasMore} className={styles.audios}>
     {musicAudios.map(audio => <Audio key={audio.id} {...audio} />)}
-  </div>
+  </InfiniteScrollGrid>
 );
 
 Audios.propTypes = {
@@ -18,6 +20,8 @@ Audios.propTypes = {
       coverImageUrl: PropTypes.string.isRequired,
     }),
   ).isRequired,
+  fetchMusic: PropTypes.func.isRequired,
+  hasMore: PropTypes.bool.isRequired,
 };
 
 export default Audios;

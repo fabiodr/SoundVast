@@ -10,7 +10,7 @@ import ResetPassword from '../../account/resetPassword/form/container';
 import ConfirmedEmailSuccess from '../../account/confirmedEmailSuccess/container';
 import Profile from '../../user/profile/container';
 import Upload from '../../upload/upload';
-import Music from '../../music/container';
+import Music from '../../music/music';
 import Error from '../../error/error';
 
 export default () => (

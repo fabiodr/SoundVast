@@ -4,6 +4,7 @@ import { shallow } from 'enzyme';
 
 import Audios from './audios';
 import Audio from '../audio/audio';
+import InfiniteScrollGrid from '../../content/infiniteScrollGrid/infiniteScrollGrid';
 
 const setup = (newProps) => {
   const props = {
@@ -11,6 +12,8 @@ const setup = (newProps) => {
       { id: 0, name: 'bubble', artist: 'bubbleArtist', coverImageUrl: 'bubble.jpg' },
       { id: 1, name: 'kalimba', artist: 'kalimbaArtist', coverImageUrl: 'kalimba.jpg' },
     ],
+    fetchMusic: expect.createSpy(),
+    hasMore: true,
     ...newProps,
   };
 
@@ -29,6 +32,6 @@ describe('MusicAudios', () => {
   it('should render Audio for each musicAudio', () => {
     ({ wrapper, props } = setup());
 
-    expect((wrapper).find(Audio).length).toBe(props.musicAudios.length);
+    expect((wrapper).find(InfiniteScrollGrid).find(Audio).length).toBe(props.musicAudios.length);
   });
 });

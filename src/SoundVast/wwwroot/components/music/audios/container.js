@@ -1,14 +1,15 @@
 import { connect } from 'react-redux';
 
+import { fetchMusic } from '../actions';
 import Audios from './audios';
 
 const mapStateToProps = ({ music }) => ({
-  musicAudios: music.musicAudios.map(musicAudio => ({
-    id: musicAudio.id,
-    name: musicAudio.name,
-    artist: musicAudio.artist,
-    coverImageUrl: musicAudio.coverImageUrl,
-  })),
+  musicAudios: music.musicAudios,
+  hasMore: music.hasMore,
 });
 
-export default connect(mapStateToProps)(Audios);
+const mapDispatchToProps = dispatch => ({
+  fetchMusic: () => dispatch(fetchMusic()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Audios);

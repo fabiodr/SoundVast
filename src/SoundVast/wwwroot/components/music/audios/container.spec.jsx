@@ -6,12 +6,13 @@ import expect from 'expect';
 import AudiosContainer from './container';
 
 const musicAudios = [
-  { id: 0, genre: 15, name: 'bubble.mp3', artist: 'bubbleArtist', coverImageUrl: 'bubble.jpg' },
-  { id: 1, genre: 10, name: 'kalimba.mp3', artist: 'kalimbaArtist', coverImageUrl: 'kalimba.jpg' },
+  { id: 0, name: 'bubble.mp3', artist: 'bubbleArtist', coverImageUrl: 'bubble.jpg' },
+  { id: 1, name: 'kalimba.mp3', artist: 'kalimbaArtist', coverImageUrl: 'kalimba.jpg' },
 ];
 const store = configureMockStore()({
   music: {
     musicAudios,
+    hasMore: true,
   },
 });
 
@@ -37,14 +38,12 @@ describe('MusicAudiosContainer', () => {
   it('should map state', () => {
     ({ wrapper } = setup());
 
-    const expectedMusicAudios = musicAudios.map((audio) => {
-      const newAudio = { ...audio };
+    expect(wrapper.prop('musicAudios')).toEqual(musicAudios);
+  });
 
-      delete newAudio.genre;
+  it('should map state', () => {
+    ({ wrapper } = setup());
 
-      return newAudio;
-    });
-
-    expect(wrapper.prop('musicAudios')).toEqual(expectedMusicAudios);
+    expect(wrapper.prop('hasMore')).toEqual(true);
   });
 });
