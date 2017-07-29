@@ -27,13 +27,13 @@ describe('Audio', () => {
   it('should render name', () => {
     ({ wrapper, props } = setup());
 
-    expect((wrapper).find('figcaption').text()).toContain(props.name);
+    expect((wrapper).find('.name').text()).toContain(props.name);
   });
 
   it('should render artist', () => {
     ({ wrapper, props } = setup());
 
-    expect((wrapper).find('figcaption').text()).toContain(props.artist);
+    expect((wrapper).find('.artist').text()).toContain(props.artist);
   });
 
   it('should render coverImageUrl', () => {

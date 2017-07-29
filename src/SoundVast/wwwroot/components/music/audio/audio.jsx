@@ -2,12 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import styles from './audio.less';
+import Play from '../../../images/audioControls/play.svg';
 
 const Audio = ({ name, artist, coverImageUrl }) => (
   <div className={styles.audio}>
     <figure>
-      <img alt="" src={coverImageUrl} />
-      <figcaption>{name} by {artist}</figcaption>
+      <div className={styles.imageContainer}>
+        <button>
+          <img alt="" src={coverImageUrl} />
+          <Play width={50} height={50} className={styles.play} />
+        </button>
+      </div>
+      <figcaption className={styles.name}>{name}</figcaption>
+      <figcaption className={styles.artist}>{artist}</figcaption>
     </figure>
   </div>
 );
