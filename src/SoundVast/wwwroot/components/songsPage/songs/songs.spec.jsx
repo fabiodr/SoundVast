@@ -2,22 +2,22 @@ import React from 'react';
 import expect from 'expect';
 import { shallow } from 'enzyme';
 
-import Audios from './audios';
-import Audio from '../audio/audio';
+import Songs from './songs';
+import Song from '../song/container';
 import InfiniteScrollGrid from '../../content/infiniteScrollGrid/infiniteScrollGrid';
 
 const setup = (newProps) => {
   const props = {
-    musicAudios: [
+    songs: [
       { id: 0, name: 'bubble', artist: 'bubbleArtist', coverImageUrl: 'bubble.jpg' },
       { id: 1, name: 'kalimba', artist: 'kalimbaArtist', coverImageUrl: 'kalimba.jpg' },
     ],
-    fetchMusic: expect.createSpy(),
+    fetchSongs: expect.createSpy(),
     hasMore: true,
     ...newProps,
   };
 
-  const wrapper = shallow(<Audios {...props} />);
+  const wrapper = shallow(<Songs {...props} />);
 
   return {
     wrapper,
@@ -25,13 +25,13 @@ const setup = (newProps) => {
   };
 };
 
-describe('MusicAudios', () => {
+describe('Songs', () => {
   let wrapper;
   let props;
 
-  it('should render Audio for each musicAudio', () => {
+  it('should render Song for each song', () => {
     ({ wrapper, props } = setup());
 
-    expect((wrapper).find(InfiniteScrollGrid).find(Audio).length).toBe(props.musicAudios.length);
+    expect((wrapper).find(InfiniteScrollGrid).find(Song).length).toBe(props.songs.length);
   });
 });

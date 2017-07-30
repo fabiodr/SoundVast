@@ -17,6 +17,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Components\Audio\AudioViewModels.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include=".vscode\launch.json" />
     <Content Include="wwwroot\components\app\App.htm" />
     <Content Include="wwwroot\components\app\app.jsx" />
@@ -25,6 +29,24 @@
     <Content Include="wwwroot\components\frontPage\frontPage.jsx" />
     <Content Include="wwwroot\components\header\header.jsx" />
     <Content Include="wwwroot\components\header\header.less" />
+    <Content Include="wwwroot\components\songsPage\actions.js" />
+    <Content Include="wwwroot\components\songsPage\actions.spec.js" />
+    <Content Include="wwwroot\components\songsPage\audios\audios.jsx" />
+    <Content Include="wwwroot\components\songsPage\audios\audios.less" />
+    <Content Include="wwwroot\components\songsPage\audios\audios.spec.jsx" />
+    <Content Include="wwwroot\components\songsPage\audios\container.js" />
+    <Content Include="wwwroot\components\songsPage\audios\container.spec.jsx" />
+    <Content Include="wwwroot\components\songsPage\audio\audio.jsx" />
+    <Content Include="wwwroot\components\songsPage\audio\audio.less" />
+    <Content Include="wwwroot\components\songsPage\audio\audio.spec.jsx" />
+    <Content Include="wwwroot\components\songsPage\reducer.js" />
+    <Content Include="wwwroot\components\songsPage\reducer.spec.js" />
+    <Content Include="wwwroot\components\songsPage\songs.jsx" />
+    <Content Include="wwwroot\components\songsPage\songs.less" />
+    <Content Include="wwwroot\components\songsPage\songs.spec.jsx" />
+    <Content Include="wwwroot\components\songsPage\music.jsx" />
+    <Content Include="wwwroot\components\songsPage\music.less" />
+    <Content Include="wwwroot\components\songsPage\music.spec.jsx" />
     <Content Include="wwwroot\components\user\userReducer.js" />
     <Content Include="wwwroot\components\user\userReducer.spec.js" />
     <Content Include="wwwroot\images\loginProviders\twitter_40.png" />

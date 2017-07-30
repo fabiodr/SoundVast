@@ -10,7 +10,7 @@ import ResetPassword from '../../account/resetPassword/form/container';
 import ConfirmedEmailSuccess from '../../account/confirmedEmailSuccess/container';
 import Profile from '../../user/profile/container';
 import Upload from '../../upload/upload';
-import Music from '../../music/music';
+import SongsPage from '../../songsPage/songsPage';
 import Error from '../../error/error';
 
 export default () => (
@@ -20,8 +20,8 @@ export default () => (
       <Route path="/" component={Header} />
       <Content>
         <Switch>
-          <Route exact path="/" component={Music} />
-          <Route exact path="/music" component={Music} />
+          <Route exact path="/" component={SongsPage} />
+          <Route exact path="/songs" component={SongsPage} />
           <Route exact path="/account/externalLoginConfirmation" component={SocialLoginConfirmation} />
           <Route exact path="/account/externalLoginFailure" component={SocialLoginFailure} />
           <Route exact path="/account/resetPassword" component={ResetPassword} />

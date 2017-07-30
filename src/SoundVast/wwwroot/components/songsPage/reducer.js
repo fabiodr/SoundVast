@@ -1,15 +1,20 @@
 const defaultState = {
-  musicAudios: [],
+  songs: [],
   hasMore: true,
 };
 
 export default (state = defaultState, action) => {
   switch (action.type) {
-    case 'FETCH_MUSIC':
+    case 'FETCH_SONGS':
       return {
         ...state,
-        musicAudios: state.musicAudios.concat(action.musicAudios),
+        songs: state.songs.concat(action.songs),
         hasMore: action.hasMore,
+      };
+    case 'FETCH_SONG':
+      return {
+        ...state,
+        currentSong: action.currentSong,
       };
     default: return state;
   }

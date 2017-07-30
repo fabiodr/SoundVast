@@ -24,7 +24,7 @@ const Header = () => (
           <Link to="livestreams/livestream">Live Streams</Link>
         </li>*/}
         <li>
-          <Link to="music">Music</Link>
+          <Link to="songs">Songs</Link>
         </li>
         <li>
           <Link to="upload">Upload</Link>

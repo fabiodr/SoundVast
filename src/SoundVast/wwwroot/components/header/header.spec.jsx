@@ -25,10 +25,10 @@ const setup = (newProps) => {
 describe('Header', () => {
   let wrapper;
 
-  it('should render Music Link', () => {
+  it('should render Songs Link', () => {
     ({ wrapper } = setup());
 
-    expect(wrapper.findWhere(x => x.prop('to') === 'music').length).toBe(1);
+    expect(wrapper.findWhere(x => x.prop('to') === 'songs').length).toBe(1);
   });
 
   it('should render Upload Link', () => {

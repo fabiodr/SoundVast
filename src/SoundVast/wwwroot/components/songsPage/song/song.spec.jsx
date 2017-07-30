@@ -2,17 +2,19 @@ import React from 'react';
 import expect from 'expect';
 import { shallow } from 'enzyme';
 
-import Audio from './audio';
+import Song from './song';
 
 const setup = (newProps) => {
   const props = {
+    id: 0,
     name: 'bubble',
     artist: 'artist',
     coverImageUrl: 'bubble.jpg',
+    fetchSong: expect.createSpy(),
     ...newProps,
   };
 
-  const wrapper = shallow(<Audio {...props} />);
+  const wrapper = shallow(<Song {...props} />);
 
   return {
     wrapper,
@@ -20,7 +22,7 @@ const setup = (newProps) => {
   };
 };
 
-describe('Audio', () => {
+describe('Song', () => {
   let wrapper;
   let props;
 
@@ -40,5 +42,13 @@ describe('Audio', () => {
     ({ wrapper, props } = setup());
 
     expect((wrapper).find('img').prop('src')).toBe(props.coverImageUrl);
+  });
+
+  it('should fetch song on image container click', () => {
+    ({ wrapper, props } = setup());
+
+    (wrapper).find('.imageContainer').simulate('click');
+
+    expect(props.fetchSong).toHaveBeenCalledWith(props.id);
   });
 });

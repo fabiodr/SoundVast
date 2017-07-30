@@ -70,7 +70,7 @@ namespace SoundVast.Data
             var musicGenres = genreResources.Select(x => new GenreModel
             {
                 Name = (string)x.Value,
-                GenreType = nameof(GenreType.Music)
+                GenreType = nameof(GenreType.Song)
             });
 
             context.Set<GenreModel>().AddRange(musicGenres.Where(genre => !context.Set<GenreModel>().Any(x => x.Name == genre.Name)));

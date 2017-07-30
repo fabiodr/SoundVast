@@ -12,7 +12,7 @@ namespace SoundVast.Components.Genre.Models
 {
     public enum GenreType
     {
-        Music,
+        Song,
         Audio
     }
 

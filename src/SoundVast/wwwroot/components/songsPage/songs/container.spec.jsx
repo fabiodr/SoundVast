@@ -3,15 +3,15 @@ import configureMockStore from 'redux-mock-store';
 import { shallow } from 'enzyme';
 import expect from 'expect';
 
-import AudiosContainer from './container';
+import SongsContainer from './container';
 
-const musicAudios = [
+const songs = [
   { id: 0, name: 'bubble.mp3', artist: 'bubbleArtist', coverImageUrl: 'bubble.jpg' },
   { id: 1, name: 'kalimba.mp3', artist: 'kalimbaArtist', coverImageUrl: 'kalimba.jpg' },
 ];
 const store = configureMockStore()({
-  music: {
-    musicAudios,
+  songs: {
+    songs,
     hasMore: true,
   },
 });
@@ -22,7 +22,7 @@ const setup = (newProps) => {
   };
 
   const wrapper = shallow(
-    <AudiosContainer {...props} />,
+    <SongsContainer {...props} />,
     { context: { store } },
   );
 
@@ -32,13 +32,13 @@ const setup = (newProps) => {
   };
 };
 
-describe('MusicAudiosContainer', () => {
+describe('SongsContainer', () => {
   let wrapper;
 
   it('should map state', () => {
     ({ wrapper } = setup());
 
-    expect(wrapper.prop('musicAudios')).toEqual(musicAudios);
+    expect(wrapper.prop('songs')).toEqual(songs);
   });
 
   it('should map state', () => {

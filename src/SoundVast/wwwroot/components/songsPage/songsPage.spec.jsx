@@ -2,14 +2,14 @@ import React from 'react';
 import expect from 'expect';
 import { shallow } from 'enzyme';
 
-import Music from './music';
+import SongsPage from './songsPage';
 
 const setup = (newProps) => {
   const props = {
     ...newProps,
   };
 
-  const wrapper = shallow(<Music {...props} />);
+  const wrapper = shallow(<SongsPage {...props} />);
 
   return {
     wrapper,
@@ -17,12 +17,12 @@ const setup = (newProps) => {
   };
 };
 
-describe('Music', () => {
+describe('SongsPage', () => {
   let wrapper;
 
-  it('should change document title to music', () => {
+  it('should change document title to songs', () => {
     ({ wrapper } = setup());
 
-    expect((wrapper).prop('title')).toBe('Music');
+    expect((wrapper).prop('title')).toBe('Songs');
   });
 });
