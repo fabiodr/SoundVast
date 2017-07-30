@@ -9,7 +9,7 @@ import { createStore, combineReducers } from 'redux';
 proxyquire.noCallThru();
 
 const ResetPasswordFormContainer = proxyquire('./container', {
-  './form': () => (
+  './component': () => (
     <div>
       <Field name="code" component="input" />
       <Field name="userId" component="input" />

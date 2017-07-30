@@ -9,7 +9,7 @@ import { getAccountDetails } from './actions';
 proxyquire.noCallThru();
 
 const AccountContainer = proxyquire('./container', {
-  './account': () => null,
+  './component': () => null,
 }).default;
 
 const store = configureMockStore()({});

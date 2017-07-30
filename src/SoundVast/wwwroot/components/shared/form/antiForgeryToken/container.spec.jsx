@@ -9,7 +9,7 @@ import { generateAntiForgeryToken } from '../actions';
 proxyquire.noCallThru();
 
 const AntiForgeryTokenContainer = proxyquire('./container', {
-  './antiForgeryToken': () => null,
+  './component': () => null,
 }).default;
 
 const store = configureMockStore()({});

@@ -10,7 +10,7 @@ const songs = [
   { id: 1, name: 'kalimba.mp3', artist: 'kalimbaArtist', coverImageUrl: 'kalimba.jpg' },
 ];
 const store = configureMockStore()({
-  songs: {
+  music: {
     songs,
     hasMore: true,
   },
