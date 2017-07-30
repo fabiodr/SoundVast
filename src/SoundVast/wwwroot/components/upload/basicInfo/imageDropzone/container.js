@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import ImageDropzone from './imageDropzone';
+import ImageDropzone from './component';
 import { updateCoverImageFile, removeCoverImageFile } from '../../actions';
 
 export const mapStateToProps = ({ upload }, { index }) => ({

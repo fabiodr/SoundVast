@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import AdminList from './adminList';
+import AdminList from './component';
 
 const mapStateToProps = ({ account }) => ({
   isAdmin: account.isAdmin,

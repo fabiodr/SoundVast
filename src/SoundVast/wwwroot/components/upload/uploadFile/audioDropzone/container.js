@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import AudioDropzone from './audioDropzone';
+import AudioDropzone from './component';
 import { uploadAudioFiles, removeAudioFile } from '../../actions';
 
 export const mapStateToProps = ({ upload }) => ({

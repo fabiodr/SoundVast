@@ -2,7 +2,7 @@ import { reduxForm } from 'redux-form';
 import { compose } from 'recompose';
 import { connect } from 'react-redux';
 
-import ForgotPasswordForm from './form';
+import ForgotPasswordForm from './component';
 import { submit } from './actions';
 import accountValidation from '../../validation';
 

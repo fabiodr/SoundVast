@@ -3,8 +3,8 @@ import shortid from 'shortid';
 
 import fetchProgress from '../shared/polyfills/fetchProgress';
 import trimFileExtension from '../shared/utilities/trimFileExtension';
-import notOkError from '../shared/fetch/errorHandling/notOkError/notOkError';
-import notOkErrorPopup from '../shared/fetch/errorHandling/notOkError/notOkErrorPopup';
+import notOkError from '../shared/fetch/errorHandling/notOkError/component';
+import notOkErrorPopup from '../shared/fetch/errorHandling/notOkError/popup/component';
 
 export const uploadMp3 = (jsonText, id) => (dispatch) => {
   const body = JSON.parse(jsonText);

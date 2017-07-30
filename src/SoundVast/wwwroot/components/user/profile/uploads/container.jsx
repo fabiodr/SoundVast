@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
 
-import UserUploads from './uploads';
+import UserUploads from './component';
 import { getUserUploads } from '../actions';
 
 const mapStateToProps = ({ profile }) => ({

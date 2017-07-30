@@ -2,7 +2,7 @@ import { reduxForm } from 'redux-form';
 import { compose } from 'recompose';
 import { connect } from 'react-redux';
 
-import RegisterForm from './form';
+import RegisterForm from './component';
 import accountValidation from '../../validation';
 import { submit } from './actions';
 

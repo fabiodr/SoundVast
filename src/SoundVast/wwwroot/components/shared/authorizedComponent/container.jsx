@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { compose, lifecycle, withProps } from 'recompose';
 
 import { showModal } from '../modal/actions';
-import AuthorizedComponent from './authorizedComponent';
+import AuthorizedComponent from './component';
 
 export const mapStateToProps = ({ account }) => ({
   isLoggedIn: account.isLoggedIn,

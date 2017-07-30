@@ -2,7 +2,7 @@ import { reduxForm } from 'redux-form';
 import { compose } from 'recompose';
 import { connect } from 'react-redux';
 
-import LogoutForm from './form';
+import LogoutForm from './component';
 import { submit } from './actions';
 
 const mapDispatchToProps = dispatch => ({

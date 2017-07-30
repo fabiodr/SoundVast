@@ -2,8 +2,8 @@ import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
 import classNames from 'classnames';
 
-import styles from './popup.less';
-import Popup from './popup';
+import styles from './component.less';
+import Popup from './component';
 import { hidePopup } from './actions';
 
 const mapStateToProps = ({ popup }, { id }) => {

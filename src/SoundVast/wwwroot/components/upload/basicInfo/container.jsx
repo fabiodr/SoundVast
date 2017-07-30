@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import BasicInfo from './basicInfo';
+import BasicInfo from './component';
 
 export const mapStateToProps = ({ genre }) => ({
   genres: genre.genres,

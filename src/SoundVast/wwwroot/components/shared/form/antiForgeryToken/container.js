@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { generateAntiForgeryToken } from '../actions';
-import AntiForgeryToken from './antiForgeryToken';
+import AntiForgeryToken from './component';
 
 AntiForgeryToken.propTypes = {
   form: PropTypes.string.isRequired,

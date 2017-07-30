@@ -1,5 +1,5 @@
 import { withState } from 'recompose';
 
-import LinkDropdown from './linkDropdown';
+import LinkDropdown from './component';
 
 export default withState('isDropdownVisible', 'setDropdownVisibility', false)(LinkDropdown);

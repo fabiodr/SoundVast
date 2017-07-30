@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
 
 import { getSocialLogins } from './actions';
-import SocialLogins from './socialLogins';
+import SocialLogins from './component';
 
 const mapStateToProps = ({ socialLogins }) => ({
   loginProviders: socialLogins.loginProviders,

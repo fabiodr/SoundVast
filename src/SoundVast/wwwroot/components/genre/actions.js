@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 
-import notOkError from '../shared/fetch/errorHandling/notOkError/notOkError';
-import notOkErrorPopup from '../shared/fetch/errorHandling/notOkError/notOkErrorPopup';
+import notOkError from '../shared/fetch/errorHandling/notOkError/component';
+import notOkErrorPopup from '../shared/fetch/errorHandling/notOkError/popup/component';
 
 export const getGenres = () => dispatch =>
   fetch('/genre/getGenres')

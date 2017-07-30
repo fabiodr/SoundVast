@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 
 import { submit } from './actions';
-import SocialLoginConfirmationForm from './form';
+import SocialLoginConfirmationForm from './component';
 import accountValidation from '../../../../validation';
 
 const mapStateToProps = (state, { email, returnUrl }) => ({

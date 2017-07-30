@@ -2,7 +2,7 @@ import { reduxForm } from 'redux-form';
 import { compose, lifecycle } from 'recompose';
 import { connect } from 'react-redux';
 
-import ResetPasswordForm from './form';
+import ResetPasswordForm from './component';
 import { submit } from './actions';
 import accountValidation from '../../validation';
 

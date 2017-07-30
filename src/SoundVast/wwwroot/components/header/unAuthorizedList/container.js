@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import UnAuthorizedList from './unAuthorizedList';
+import UnAuthorizedList from './component';
 
 const mapStateToProps = ({ account }) => ({
   isLoggedIn: account.isLoggedIn,

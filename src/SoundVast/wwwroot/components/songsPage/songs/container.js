@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import { fetchSongs } from '../actions';
-import Songs from './songs';
+import Songs from './component';
 
 const mapStateToProps = ({ songs }) => ({
   songs: songs.songs,

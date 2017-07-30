@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import AuthorizedList from './authorizedList';
+import AuthorizedList from './component';
 
 const mapStateToProps = ({ account }) => ({
   userName: account.userName,

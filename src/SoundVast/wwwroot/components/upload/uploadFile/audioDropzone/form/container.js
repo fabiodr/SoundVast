@@ -2,7 +2,7 @@ import { reduxForm, change } from 'redux-form';
 import { compose, lifecycle } from 'recompose';
 import { connect } from 'react-redux';
 
-import UploadFileForm from './form';
+import UploadFileForm from './component';
 import { submit } from './actions';
 import { getGenres } from '../../../../genre/actions';
 import uploadValidation from '../../../validation';

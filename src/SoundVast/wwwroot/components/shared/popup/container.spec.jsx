@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import expect from 'expect';
 
 import PopupContainer from './container';
-import styles from './popup.less';
+import styles from './component.less';
 
 const store = configureMockStore()({
   popup: {

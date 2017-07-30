@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import expect from 'expect';
 
 import ModalContainer from './container';
-import styles from './modal.less';
+import styles from './component.less';
 
 const store = configureMockStore()({
   modal: {

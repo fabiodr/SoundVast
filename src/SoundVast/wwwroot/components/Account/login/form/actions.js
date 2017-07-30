@@ -4,9 +4,9 @@ import { showTextPopup } from '../../../shared/popup/actions';
 import { hideModal } from '../../../shared/modal/actions';
 import { getAccountDetails } from '../../actions';
 
-import notOkError from '../../../shared/fetch/errorHandling/notOkError/notOkError';
-import notOkErrorPopup from '../../../shared/fetch/errorHandling/notOkError/notOkErrorPopup';
-import validationError from '../../../shared/fetch/errorHandling/validationError/validationError';
+import notOkError from '../../../shared/fetch/errorHandling/notOkError/component';
+import notOkErrorPopup from '../../../shared/fetch/errorHandling/notOkError/popup/component';
+import validationError from '../../../shared/fetch/errorHandling/validationError/component';
 
 export const submit = formData => dispatch =>
 fetch('/account/login', {

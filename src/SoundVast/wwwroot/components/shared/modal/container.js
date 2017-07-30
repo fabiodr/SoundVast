@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 
-import styles from './modal.less';
-import Modal from './modal';
+import styles from './component.less';
+import Modal from './component';
 import { hideModal } from './actions';
 
 const mapStateToProps = ({ modal }, { id }) => ({

@@ -26,7 +26,7 @@ module.exports = {
   context: __dirname,
   devtool: dev ? 'inline-sourcemap' : null,
   entry: {
-    app: './wwwroot/components/app/app.jsx',
+    app: './wwwroot/components/app/component.jsx',
     vendor: [
       'react',
       'react-dom',
