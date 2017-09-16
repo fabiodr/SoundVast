@@ -11,11 +11,6 @@ export default (state = defaultState, action) => {
         songs: state.songs.concat(action.songs),
         hasMore: action.hasMore,
       };
-    case 'FETCH_SONG':
-      return {
-        ...state,
-        currentSong: action.currentSong,
-      };
     default: return state;
   }
 };

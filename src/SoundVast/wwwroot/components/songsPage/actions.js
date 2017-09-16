@@ -1,25 +1,8 @@
+import { actions } from 'react-jplaylist';
+
 import notOkError from '../shared/fetch/errorHandling/notOkError/component';
 import notOkErrorPopup from '../shared/fetch/errorHandling/notOkError/popup/component';
-
-export const fetchSong = id => (dispatch) => {
-  const result = fetch('/song/fetchSong', {
-    method: 'post',
-    body: JSON.stringify({
-      id,
-    }),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  }).then(notOkError)
-    .then(response => response.json())
-    .then(json => dispatch({
-      type: 'FETCH_SONG',
-      currentSong: json.song,
-    }))
-    .catch(notOkErrorPopup(dispatch));
-
-  return result;
-};
+import { playlistId } from '../shared/utilities/constants';
 
 const amount = 30;
 let current = 0;
@@ -36,11 +19,24 @@ export const fetchSongs = () => (dispatch) => {
     },
   }).then(notOkError)
     .then(response => response.json())
-    .then(json => dispatch({
-      type: 'FETCH_SONGS',
-      songs: json.songs,
-      hasMore: json.hasMore,
-    }))
+    .then((json) => {
+      dispatch({
+        type: 'FETCH_SONGS',
+        songs: json.songs,
+        hasMore: json.hasMore,
+      });
+      const playlist = json.songs.map(song => ({
+        id: song.id,
+        title: song.name,
+        artist: song.artist,
+        sources: {
+          mp3: `${window.location.origin}/song/stream?id=${song.id}`,
+        },
+        poster: song.coverImageUrl,
+        free: song.free,
+      }));
+      dispatch(actions.setPlaylist(playlistId, playlist));
+    })
     .catch(notOkErrorPopup(dispatch));
 
   current += 30;

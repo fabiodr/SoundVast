@@ -14,7 +14,7 @@ describe('songsReducer', () => {
     });
   });
 
-  it('should get songs', () => {
+  it('should fetch songs', () => {
     const actionProps = {
       songs: [
         { name: 'bubble.mp3' },
@@ -37,26 +37,6 @@ describe('songsReducer', () => {
       ...prevState,
       ...actionProps,
       songs: prevState.songs.concat(actionProps.songs),
-    });
-  });
-
-  it('should get song', () => {
-    const actionProps = {
-      currentSong: {
-        name: 'bubble.mp3',
-      },
-    };
-    const prevState = {
-      test: 'test',
-    };
-    const state = songsReducer(prevState, {
-      type: 'FETCH_SONG',
-      ...actionProps,
-    });
-
-    expect(state).toEqual({
-      ...prevState,
-      ...actionProps,
     });
   });
 });

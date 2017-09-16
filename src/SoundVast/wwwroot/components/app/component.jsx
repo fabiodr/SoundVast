@@ -4,6 +4,8 @@ import { Provider } from 'react-redux';
 import 'isomorphic-fetch';
 import { injectReactEmailAttributes } from 'react-html-email';
 
+import 'react-jplaylist/src/less/skins/sleek.less';
+import 'react-jplaylist/src/less/controls/iconControls.less';
 import './component.less';
 import Routing from './routing/component';
 import store from './store/component';

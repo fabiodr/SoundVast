@@ -6,11 +6,10 @@ import Song from './component';
 
 const setup = (newProps) => {
   const props = {
-    id: 0,
     name: 'bubble',
     artist: 'artist',
     coverImageUrl: 'bubble.jpg',
-    fetchSong: expect.createSpy(),
+    songPlayOnClick: expect.createSpy(),
     ...newProps,
   };
 
@@ -42,13 +41,5 @@ describe('Song', () => {
     ({ wrapper, props } = setup());
 
     expect((wrapper).find('img').prop('src')).toBe(props.coverImageUrl);
-  });
-
-  it('should fetch song on image container click', () => {
-    ({ wrapper, props } = setup());
-
-    (wrapper).find('.imageContainer').simulate('click');
-
-    expect(props.fetchSong).toHaveBeenCalledWith(props.id);
   });
 });

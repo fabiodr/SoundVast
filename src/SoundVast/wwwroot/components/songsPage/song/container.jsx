@@ -1,10 +1,15 @@
 import { connect } from 'react-redux';
+import { compose, withHandlers } from 'recompose';
+import { actions } from 'react-jplaylist';
 
-import { fetchSong } from '../actions';
 import Song from './component';
+import { playlistId } from '../../shared/utilities/constants';
 
-const mapDispatchToProps = dispatch => ({
-  fetchSong: id => dispatch(fetchSong(id)),
-});
+const handlers = {
+  songPlayOnClick: props => () => props.dispatch(actions.play(playlistId, props.index)),
+};
 
-export default connect(null, mapDispatchToProps)(Song);
+export default compose(
+  connect(),
+  withHandlers(handlers),
+)(Song);

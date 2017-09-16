@@ -1,6 +1,8 @@
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import { reducer as form } from 'redux-form';
+import { reducer as jPlayers } from 'react-jplayer';
+import { reducer as jPlaylists } from 'react-jplaylist';
 
 import account from '../../account/reducer';
 import profile from '../../user/profile/reducer';
@@ -13,6 +15,8 @@ import music from '../../songsPage/reducer';
 
 const middleWare = applyMiddleware(thunk);
 const reducers = combineReducers({
+  jPlayers,
+  jPlaylists,
   account,
   profile,
   socialLogins,

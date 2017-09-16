@@ -1,9 +1,9 @@
-﻿/* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable no-var */
+﻿/* eslint-disable no-var */
 
 var Webpack = require('webpack');
 var path = require('path');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var fs = require('fs');
 
 var dev = process.env.NODE_ENV !== 'production';
 var plugins = [
@@ -44,11 +44,42 @@ module.exports = {
         test: /\.jsx?$/,
         include: [
           path.resolve(__dirname, 'wwwroot/components'),
+          fs.realpathSync(`${__dirname}/node_modules/react-jplayer`),
+          fs.realpathSync(`${__dirname}/node_modules/react-jplaylist`),
         ],
         loader: 'babel-loader',
       },
       {
         test: /\.(css|less)$/,
+        include: [
+          fs.realpathSync(`${__dirname}/node_modules/react-jplayer`),
+          fs.realpathSync(`${__dirname}/node_modules/react-jplaylist`),
+        ],
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [{
+            loader: 'css-loader',
+            options: {
+              importLoaders: 2,
+            },
+          }, {
+            loader: 'postcss-loader',
+            options: {
+              config: {
+                path: path.resolve(__dirname, 'postcss.config.js'),
+              },
+            },
+          }, {
+            loader: 'less-loader',
+          }],
+        }),
+      },
+      {
+        test: /\.(css|less)$/,
+        exclude: [
+          fs.realpathSync(`${__dirname}/node_modules/react-jplayer`),
+          fs.realpathSync(`${__dirname}/node_modules/react-jplaylist`),
+        ],
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
           use: [{
@@ -60,6 +91,11 @@ module.exports = {
             },
           }, {
             loader: 'postcss-loader',
+            options: {
+              config: {
+                path: './postcss.config.js',
+              },
+            },
           }, {
             loader: 'less-loader',
           }],

@@ -12,6 +12,7 @@ import Profile from '../../user/profile/container';
 import Upload from '../../upload/component';
 import SongsPage from '../../songsPage/component';
 import Error from '../../error/component';
+import FooterPlaylist from '../../footerPlaylist/component';
 
 export default () => (
   <BrowserRouter>
@@ -31,6 +32,7 @@ export default () => (
           <Route exact path="/error" component={Error} />
         </Switch>
       </Content>
+      <Route path="/" component={FooterPlaylist} />
     </div>
   </BrowserRouter>
 );

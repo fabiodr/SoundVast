@@ -1,12 +1,6 @@
-﻿using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
+﻿
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.IO;
-using System.Linq;
 using System.Net;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SoundVast.Storage.CloudStorage;
@@ -15,21 +9,21 @@ namespace SoundVast.Utilities
 {
 	public class Stream : IActionResult
 	{
-		private readonly string _fileName;
-        private readonly ICloudStorage _cloudStorage;
+	    private readonly ICloudBlob _cloudBlob;
 
-        public Stream(ICloudStorage cloudStorage, string filename)
+        public Stream(ICloudBlob cloudBlob)
         {
-            _cloudStorage = cloudStorage;
-			_fileName = filename;
-		}
+            _cloudBlob = cloudBlob;
+        }
 
 	    public async Task ExecuteResultAsync(ActionContext context)
 	    {
             var response = context.HttpContext.Response;
             var request = context.HttpContext.Request;
-	        var blob = _cloudStorage.GetBlob(CloudStorageType.Audio, _fileName);
-	        var fileProperties = blob.CloudBlockBlob.Properties;
+
+	        await _cloudBlob.CloudBlockBlob.FetchAttributesAsync();
+
+	        var fileProperties = _cloudBlob.CloudBlockBlob.Properties;
             var fileExists = fileProperties.Length > 0;
             var responseLength = fileProperties.Length;
             long startIndex = 0;
@@ -81,7 +75,7 @@ namespace SoundVast.Utilities
             //  response.Cache.SetETag(etag); //required for IE9 resumable downloads
             response.ContentType = fileProperties.ContentType;
 
-	        await blob.DownloadRangeToStreamAsync(response.Body, startIndex, responseLength);
+	        await _cloudBlob.DownloadRangeToStreamAsync(response.Body, startIndex, responseLength);
         }
     }
 }

@@ -149,21 +149,21 @@ namespace SoundVast.Components.FileStream
             return RedirectToLocal("");
         }
 
-        public Stream Stream(int id)
-        {
-            var fileStream = _fileStreamService.GetAudio(id, stream => stream.AudioFile);
+        //public Stream Stream(int id)
+        //{
+        //    var fileStream = _fileStreamService.GetAudio(id, stream => stream.AudioFile);
 
-            Response.Headers.Add("Content-Disposition", "attachment; filename=" + fileStream.AudioFile.Name);
+        //    Response.Headers.Add("Content-Disposition", "attachment; filename=" + fileStream.AudioFile.Name);
 
-            return new Stream(_cloudStorage, fileStream.AudioFile.Name);
-        }
+        //    return new Stream(_cloudStorage, fileStream.AudioFile.Name);
+        //}
 
-        public Stream Download(int id)
-        {
-            var fileStream = _fileStreamService.GetAudio(id, stream => stream.AudioFile);
+        //public Stream Download(int id)
+        //{
+        //    var fileStream = _fileStreamService.GetAudio(id, stream => stream.AudioFile);
 
-            Response.Headers.Add("Content-Disposition", "attachment; filename=" + fileStream.AudioFile.Name);
-            return new Stream(_cloudStorage, fileStream.AudioFile.Name);
-        }
+        //    Response.Headers.Add("Content-Disposition", "attachment; filename=" + fileStream.AudioFile.Name);
+        //    return new Stream(_cloudStorage, fileStream.AudioFile.Name);
+        //}
     }
 }

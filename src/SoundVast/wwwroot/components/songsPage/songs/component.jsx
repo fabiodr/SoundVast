@@ -7,7 +7,8 @@ import styles from './component.less';
 
 const Songs = ({ songs, fetchSongs, hasMore }) => (
   <InfiniteScrollGrid loadMore={fetchSongs} hasMore={hasMore} className={styles.songs}>
-    {songs.map(song => <Song key={song.id} {...song} />)}
+    {songs.map((song, index) =>
+      <Song key={song.id} index={index} playlist={songs} {...song} />)}
   </InfiniteScrollGrid>
 );
 

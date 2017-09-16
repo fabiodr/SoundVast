@@ -82,7 +82,7 @@ namespace SoundVastTests.Components.Upload
                 Artist = viewModel.Artist,
                 CoverImageUrl = viewModel.CoverImageUrl,
                 GenreId = viewModel.GenreId,
-                UserId = userId
+                UserId = userId,
             });
 
             result.Should().BeOfType<OkResult>();
@@ -92,6 +92,7 @@ namespace SoundVastTests.Components.Upload
         public void SaveShouldReturnModelErrorsIfUploadThrowsValidationException()
         {
             var validationResult = new ValidationResult("_error", "testError");
+
             _mockUploadService.Setup(x => x.Add(It.IsAny<AudioModel>())).Throws(new ValidationException(validationResult));
 
             var result = (ObjectResult)_uploadController.Save(new SaveUploadViewModel());
@@ -182,7 +183,7 @@ namespace SoundVastTests.Components.Upload
 
             var mockAudioBlob = new Mock<SoundVast.Storage.CloudStorage.ICloudBlob>();
 
-            _mockCloudStorage.Setup(x => x.GetBlob(CloudStorageType.Audio, audioName)).Returns(mockAudioBlob.Object);
+            _mockCloudStorage.Setup(x => x.GetBlob(CloudStorageType.Audio, Path.GetFileNameWithoutExtension(audioName))).Returns(mockAudioBlob.Object);
             mockAudioBlob.Setup(x => x.UploadChunksFromPathAsync(viewModel.AudioPath, "audio/mpeg", viewModel.FileLength, viewModel.ProgressId)).Returns(Task.CompletedTask);
 
             var result = await _uploadController.UploadMp3(viewModel);

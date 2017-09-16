@@ -108,7 +108,7 @@ namespace SoundVast.Components.Upload
         [HttpPost]
         public async Task<IActionResult> UploadMp3([FromBody] UploadViewModel viewModel)
         {
-            var audioBlob = _cloudStorage.GetBlob(CloudStorageType.Audio, viewModel.AudioName);
+            var audioBlob = _cloudStorage.GetBlob(CloudStorageType.Audio, Path.GetFileNameWithoutExtension(viewModel.AudioName));
 
             await audioBlob.UploadChunksFromPathAsync(viewModel.AudioPath, "audio/mpeg", viewModel.FileLength, viewModel.ProgressId);
 
