@@ -9,7 +9,6 @@ import JPlaylist, {
   Next, Previous,
 } from 'react-jplaylist';
 import FooterPlaylist from './component';
-import { playlistId } from '../shared/utilities/constants';
 
 const setup = (newProps) => {
   const props = {
@@ -28,7 +27,7 @@ describe('FooterPlaylist', () => {
   it('passes id to JPlaylist', () => {
     const { wrapper } = setup();
 
-    expect(wrapper.find(JPlaylist).prop('id')).toBe(playlistId);
+    expect(wrapper.find(JPlaylist).prop('id')).toBe('FooterPlaylist');
   });
 
   it('JPlayer has sleek class', () => {

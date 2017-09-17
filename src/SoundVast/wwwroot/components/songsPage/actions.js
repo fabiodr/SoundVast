@@ -2,7 +2,6 @@ import { actions } from 'react-jplaylist';
 
 import notOkError from '../shared/fetch/errorHandling/notOkError/component';
 import notOkErrorPopup from '../shared/fetch/errorHandling/notOkError/popup/component';
-import { playlistId } from '../shared/utilities/constants';
 
 const amount = 30;
 let current = 0;
@@ -35,7 +34,7 @@ export const fetchSongs = () => (dispatch) => {
         poster: song.coverImageUrl,
         free: song.free,
       }));
-      dispatch(actions.setPlaylist(playlistId, playlist));
+      dispatch(actions.setPlaylist('FooterPlaylist', playlist));
     })
     .catch(notOkErrorPopup(dispatch));
 

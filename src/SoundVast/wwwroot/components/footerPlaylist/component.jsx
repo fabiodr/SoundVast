@@ -10,10 +10,9 @@ import JPlaylist, {
 } from 'react-jplaylist';
 
 import styles from './component.less';
-import { playlistId } from '../shared/utilities/constants';
 
 const jPlayerOptions = {
-  id: playlistId,
+  id: 'FooterPlaylist',
   verticalVolume: true,
 };
 
@@ -24,7 +23,7 @@ const jPlaylistOptions = {
 initializeOptions(jPlayerOptions, jPlaylistOptions);
 
 const FooterPlaylist = () => (
-  <JPlaylist id={playlistId}>
+  <JPlaylist id={jPlayerOptions.id}>
     <JPlayer className={`${styles.footerPlaylist} jp-sleek`}>
       <Audio />
       <Gui>

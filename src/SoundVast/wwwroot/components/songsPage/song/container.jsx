@@ -1,15 +1,29 @@
 import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
 import { actions } from 'react-jplaylist';
+import { actions as jPlayerActions } from 'react-jplayer';
 
 import Song from './component';
-import { playlistId } from '../../shared/utilities/constants';
+
+const mapStateToProps = ({ jPlayers, jPlaylists }, { id }) => ({
+  paused: jPlayers.FooterPlaylist.paused,
+  isCurrent: jPlayers.FooterPlaylist.media.id === id,
+  index: jPlaylists.FooterPlaylist.playlist.findIndex(x => x.id === id),
+});
 
 const handlers = {
-  songPlayOnClick: props => () => props.dispatch(actions.play(playlistId, props.index)),
+  togglePlay: props => () => {
+    const id = 'FooterPlaylist';
+
+    if (props.paused || !props.isCurrent) {
+      props.dispatch(actions.play(id, props.index));
+    } else {
+      props.dispatch(jPlayerActions.pause(id));
+    }
+  },
 };
 
 export default compose(
-  connect(),
+  connect(mapStateToProps),
   withHandlers(handlers),
 )(Song);

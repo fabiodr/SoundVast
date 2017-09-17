@@ -2,14 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import styles from './component.less';
-import PlayIcon from '../../../images/audioControls/play.svg';
+import PlayState from './playState/container';
 
-const Song = ({ name, artist, coverImageUrl, songPlayOnClick }) => (
+const Song = ({ isCurrent, name, artist, coverImageUrl, togglePlay }) => (
   <div className={styles.song}>
     <figure>
-      <button onClick={songPlayOnClick} className={styles.imageContainer}>
+      <button onClick={togglePlay} className={styles.imageContainer}>
         <img alt="" src={coverImageUrl} />
-        <PlayIcon width={50} height={50} className={styles.play} />
+        <PlayState isCurrent={isCurrent} />
       </button>
       <figcaption className={styles.name}>{name}</figcaption>
       <figcaption className={styles.artist}>{artist}</figcaption>
@@ -18,10 +18,11 @@ const Song = ({ name, artist, coverImageUrl, songPlayOnClick }) => (
 );
 
 Song.propTypes = {
+  isCurrent: PropTypes.bool.isRequired,
   name: PropTypes.string.isRequired,
   artist: PropTypes.string.isRequired,
   coverImageUrl: PropTypes.string.isRequired,
-  songPlayOnClick: PropTypes.func.isRequired,
+  togglePlay: PropTypes.func.isRequired,
 };
 
 export default Song;
