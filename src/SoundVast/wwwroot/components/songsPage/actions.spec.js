@@ -2,7 +2,6 @@ import expect from 'expect';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import fetchMock from 'fetch-mock';
-import { constants } from 'react-jplaylist';
 
 import * as actions from './actions';
 
@@ -41,20 +40,6 @@ describe('songActions', () => {
         type: 'FETCH_SONGS',
         songs: response.songs,
         hasMore: response.hasMore,
-      });
-      expect(calledActions[1]).toEqual({
-        id: 'FooterPlaylist',
-        playlist: [{
-          id: 0,
-          title: 'bubble',
-          artist: 'kalimba',
-          sources: {
-            mp3: `${window.location.origin}/song/stream?id=${response.songs[0].id}`,
-          },
-          poster: 'www.test.jpg',
-          free: true,
-        }],
-        type: constants.actionNames.SET_PLAYLIST,
       });
       done();
     });

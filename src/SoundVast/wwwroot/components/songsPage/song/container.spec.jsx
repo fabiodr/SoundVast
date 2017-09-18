@@ -22,16 +22,28 @@ const setup = (newProps) => {
     { context: { store } },
   ).dive().dive();
 
+  const actions = store.getActions();
+
   return {
     wrapper,
     props,
-    store,
+    actions,
   };
 };
 
 describe('SongContainer', () => {
   beforeEach(() => {
     state = {
+      music: {
+        songs: [{
+          id: 0,
+          name: 'bubble',
+          artist: 'kalimba',
+          audioUrl: 'www.test.mp3',
+          coverImageUrl: 'www.test.jpg',
+          free: true,
+        }],
+      },
       jPlayers: {
         FooterPlaylist: {
           media: {},
@@ -54,11 +66,9 @@ describe('SongContainer', () => {
     it('should play when paused', () => {
       state.jPlayers.FooterPlaylist.paused = true;
 
-      const { wrapper, store } = setup();
+      const { wrapper, actions } = setup();
 
       wrapper.find('.imageContainer').simulate('click');
-
-      const actions = store.getActions();
 
       expect(actions[0]).toEqual({
         id: 'FooterPlaylist',
@@ -68,11 +78,9 @@ describe('SongContainer', () => {
     });
 
     it('should play when isCurrent is false', () => {
-      const { wrapper, store } = setup();
+      const { wrapper, actions } = setup();
 
       wrapper.find('.imageContainer').simulate('click');
-
-      const actions = store.getActions();
 
       expect(actions[0]).toEqual({
         id: 'FooterPlaylist',
@@ -84,11 +92,9 @@ describe('SongContainer', () => {
     it('should pause when not paused and isCurrent is true', () => {
       state.jPlayers.FooterPlaylist.media.id = 0;
 
-      const { wrapper, store } = setup();
+      const { wrapper, actions } = setup();
 
       wrapper.find('.imageContainer').simulate('click');
-
-      const actions = store.getActions();
 
       expect(actions[0]).toEqual({
         id: 'FooterPlaylist',
@@ -96,5 +102,29 @@ describe('SongContainer', () => {
         time: undefined,
       });
     });
+
+    it('should set the playlist when the playlist is empty', () => {
+      state.jPlaylists.FooterPlaylist.playlist = [];
+
+      const { wrapper, actions } = setup();
+
+      wrapper.find('.imageContainer').simulate('click');
+
+      expect(actions[0]).toEqual({
+        id: 'FooterPlaylist',
+        playlist: [{
+          id: 0,
+          title: 'bubble',
+          artist: 'kalimba',
+          sources: {
+            mp3: `${window.location.origin}/song/stream?id=${state.music.songs[0].id}`,
+          },
+          poster: 'www.test.jpg',
+          free: true,
+        }],
+        type: constants.actionNames.SET_PLAYLIST,
+      });
+    });
   });
 });
+

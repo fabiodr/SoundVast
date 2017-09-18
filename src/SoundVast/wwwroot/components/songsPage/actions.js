@@ -1,5 +1,3 @@
-import { actions } from 'react-jplaylist';
-
 import notOkError from '../shared/fetch/errorHandling/notOkError/component';
 import notOkErrorPopup from '../shared/fetch/errorHandling/notOkError/popup/component';
 
@@ -24,17 +22,6 @@ export const fetchSongs = () => (dispatch) => {
         songs: json.songs,
         hasMore: json.hasMore,
       });
-      const playlist = json.songs.map(song => ({
-        id: song.id,
-        title: song.name,
-        artist: song.artist,
-        sources: {
-          mp3: `${window.location.origin}/song/stream?id=${song.id}`,
-        },
-        poster: song.coverImageUrl,
-        free: song.free,
-      }));
-      dispatch(actions.setPlaylist('FooterPlaylist', playlist));
     })
     .catch(notOkErrorPopup(dispatch));
 

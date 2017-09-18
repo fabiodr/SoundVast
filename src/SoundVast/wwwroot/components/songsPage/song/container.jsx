@@ -5,20 +5,39 @@ import { actions as jPlayerActions } from 'react-jplayer';
 
 import Song from './component';
 
-const mapStateToProps = ({ jPlayers, jPlaylists }, { id }) => ({
+const mapStateToProps = ({ music, jPlayers, jPlaylists }, { id }) => ({
+  songs: music.songs,
   paused: jPlayers.FooterPlaylist.paused,
   isCurrent: jPlayers.FooterPlaylist.media.id === id,
-  index: jPlaylists.FooterPlaylist.playlist.findIndex(x => x.id === id),
+  playlist: jPlaylists.FooterPlaylist.playlist,
 });
 
 const handlers = {
   togglePlay: props => () => {
-    const id = 'FooterPlaylist';
+    let playlist = props.playlist;
+    const jPlaylistId = 'FooterPlaylist';
+
+    if (playlist.length === 0) {
+      playlist = props.songs.map(song => ({
+        id: song.id,
+        title: song.name,
+        artist: song.artist,
+        sources: {
+          mp3: `${window.location.origin}/song/stream?id=${song.id}`,
+        },
+        poster: song.coverImageUrl,
+        free: song.free,
+      }));
+
+      props.dispatch(actions.setPlaylist(jPlaylistId, playlist));
+    }
 
     if (props.paused || !props.isCurrent) {
-      props.dispatch(actions.play(id, props.index));
+      const index = playlist.findIndex(x => x.id === props.id);
+
+      props.dispatch(actions.play(jPlaylistId, index));
     } else {
-      props.dispatch(jPlayerActions.pause(id));
+      props.dispatch(jPlayerActions.pause(jPlaylistId));
     }
   },
 };
