@@ -1,18 +1,17 @@
-﻿/* eslint-disable no-var */
+﻿const Webpack = require('webpack');
+const path = require('path');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const fs = require('fs');
 
-var Webpack = require('webpack');
-var path = require('path');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var fs = require('fs');
-
-var dev = process.env.NODE_ENV !== 'production';
-var plugins = [
+const dev = process.env.NODE_ENV !== 'production';
+const plugins = [
   new Webpack.optimize.CommonsChunkPlugin({
     name: 'vendor',
     filename: 'vendor.bundle.js',
   }),
   new ExtractTextPlugin('[name].bundle.css'),
 ];
+let devtool = null;
 
 if (!dev) {
   plugins.push([
@@ -20,11 +19,13 @@ if (!dev) {
     new Webpack.optimize.OccurenceOrderPlugin(),
     new Webpack.optimize.UglifyJsPlugin(),
   ]);
+} else {
+  devtool = 'inline-sourcemap';
 }
 
 module.exports = {
   context: __dirname,
-  devtool: dev ? 'inline-sourcemap' : null,
+  devtool,
   entry: {
     app: './wwwroot/components/app/component.jsx',
     vendor: [
@@ -34,8 +35,8 @@ module.exports = {
     ],
   },
   output: {
-    publicPath: '/wwwroot/build/',
     path: path.resolve(__dirname, 'wwwroot/build/'),
+    publicPath: '/wwwroot/build/',
     filename: '[name].bundle.js',
   },
   module: {
@@ -131,6 +132,7 @@ module.exports = {
       '.jsx',
     ],
     alias: {
+      // https://github.com/chromakode/react-html-email/issues/30
       'react/lib/DOMProperty': 'react-dom/lib/DOMProperty',
     },
   },

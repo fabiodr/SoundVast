@@ -8,6 +8,8 @@ import JPlayer, {
 import JPlaylist, {
   Next, Previous,
 } from 'react-jplaylist';
+import { classes } from 'react-jplayer-utils';
+
 import FooterPlaylist from './component';
 
 const setup = (newProps) => {
@@ -24,16 +26,24 @@ const setup = (newProps) => {
 };
 
 describe('FooterPlaylist', () => {
+  describe('JPlayer', () => {
+    it('has sleek class', () => {
+      const { wrapper } = setup();
+
+      expect(wrapper.find(JPlayer).hasClass('jp-sleek')).toBe(true);
+    });
+
+    it('has hidden class when isPlaylistEmpty is true', () => {
+      const { wrapper } = setup({ isPlaylistEmpty: true });
+
+      expect(wrapper.find(JPlayer).hasClass(classes.HIDDEN)).toBe(true);
+    });
+  });
+
   it('passes id to JPlaylist', () => {
     const { wrapper } = setup();
 
     expect(wrapper.find(JPlaylist).prop('id')).toBe('FooterPlaylist');
-  });
-
-  it('JPlayer has sleek class', () => {
-    const { wrapper } = setup();
-
-    expect(wrapper.find(JPlayer).hasClass('jp-sleek')).toBe(true);
   });
 
   it('renders Audio', () => {
