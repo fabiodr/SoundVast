@@ -131,7 +131,7 @@ namespace SoundVast
                 app.UseBrowserLink();
                 app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
                 {
-                    ConfigFile = "./webpack.config.babel.js"
+                    ConfigFile = "./webpack.config.js"
                 });
             }
             else

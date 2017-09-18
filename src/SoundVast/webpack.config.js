@@ -130,5 +130,8 @@ module.exports = {
       '.js',
       '.jsx',
     ],
+    alias: {
+      'react/lib/DOMProperty': 'react-dom/lib/DOMProperty',
+    },
   },
 };

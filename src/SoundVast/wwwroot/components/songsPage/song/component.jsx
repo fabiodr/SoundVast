@@ -17,10 +17,14 @@ const Song = ({ isCurrent, name, artist, coverImageUrl, togglePlay }) => (
   </div>
 );
 
+Song.defaultProps = {
+  artist: null,
+};
+
 Song.propTypes = {
   isCurrent: PropTypes.bool.isRequired,
   name: PropTypes.string.isRequired,
-  artist: PropTypes.string.isRequired,
+  artist: PropTypes.string,
   coverImageUrl: PropTypes.string.isRequired,
   togglePlay: PropTypes.func.isRequired,
 };

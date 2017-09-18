@@ -38,7 +38,14 @@ describe('SongContainer', () => {
         },
       },
       jPlaylists: {
-        FooterPlaylist: {},
+        FooterPlaylist: {
+          playlist: [{
+            id: 0,
+            sources: {
+              mp3: 'test.mp3',
+            },
+          }],
+        },
       },
     };
   });
@@ -47,7 +54,7 @@ describe('SongContainer', () => {
     it('should play when paused', () => {
       state.jPlayers.FooterPlaylist.paused = true;
 
-      const { wrapper, props, store } = setup();
+      const { wrapper, store } = setup();
 
       wrapper.find('.imageContainer').simulate('click');
 
@@ -55,13 +62,13 @@ describe('SongContainer', () => {
 
       expect(actions[0]).toEqual({
         id: 'FooterPlaylist',
-        index: props.index,
+        index: 0,
         type: constants.actionNames.PLAY,
       });
     });
 
     it('should play when isCurrent is false', () => {
-      const { wrapper, props, store } = setup();
+      const { wrapper, store } = setup();
 
       wrapper.find('.imageContainer').simulate('click');
 
@@ -69,7 +76,7 @@ describe('SongContainer', () => {
 
       expect(actions[0]).toEqual({
         id: 'FooterPlaylist',
-        index: props.index,
+        index: 0,
         type: constants.actionNames.PLAY,
       });
     });

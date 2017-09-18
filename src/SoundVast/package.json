@@ -19,6 +19,7 @@
   "homepage": "https://github.com/MartinDawson/SoundVast",
   "license": "ISC",
   "scripts": {
+    "dev": "cross-env ASPNETCORE_ENVIRONMENT=Development dotnet run",
     "lint": "eslint --fix --ext .jsx,.js wwwroot/components",
     "test": "cross-env BABEL_ENV=test mocha wwwroot/components/**/*.spec.{js,jsx} --opts ./mocha.opts",
     "coverage": "cross-env BABEL_ENV=test nyc mocha wwwroot/components/**/*.spec.{js,jsx} --opts ./mocha.opts",
