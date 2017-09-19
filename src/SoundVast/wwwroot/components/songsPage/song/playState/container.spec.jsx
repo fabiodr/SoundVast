@@ -10,6 +10,7 @@ let state;
 
 const setup = (newProps) => {
   const props = {
+    isCurrent: false,
     ...newProps,
   };
   const store = configureMockStore()(state);

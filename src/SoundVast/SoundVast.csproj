@@ -10,9 +10,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\components\frontPage\**" />
     <Compile Remove="wwwroot\components\user\actions\**" />
+    <Content Remove="wwwroot\components\frontPage\**" />
     <Content Remove="wwwroot\components\user\actions\**" />
+    <EmbeddedResource Remove="wwwroot\components\frontPage\**" />
     <EmbeddedResource Remove="wwwroot\components\user\actions\**" />
+    <None Remove="wwwroot\components\frontPage\**" />
     <None Remove="wwwroot\components\user\actions\**" />
   </ItemGroup>
 
@@ -22,11 +26,12 @@
 
   <ItemGroup>
     <Content Include=".vscode\launch.json" />
+    <Content Include="wwwroot\components\app\App.cshtml" />
     <Content Include="wwwroot\components\app\App.htm" />
     <Content Include="wwwroot\components\app\app.jsx" />
+    <Content Include="wwwroot\components\app\Index.cshtml" />
     <Content Include="wwwroot\components\app\routing.jsx" />
     <Content Include="wwwroot\components\app\store.js" />
-    <Content Include="wwwroot\components\frontPage\frontPage.jsx" />
     <Content Include="wwwroot\components\header\header.jsx" />
     <Content Include="wwwroot\components\header\header.less" />
     <Content Include="wwwroot\components\songsPage\actions.js" />

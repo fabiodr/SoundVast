@@ -3,12 +3,15 @@ import expect from 'expect';
 import { shallow } from 'enzyme';
 
 import Song from './component';
+import Like from './ratingControl/like/component';
+import Dislike from './ratingControl/dislike/component';
 
 const setup = (newProps) => {
   const props = {
     name: 'bubble',
     artist: 'artist',
     coverImageUrl: 'bubble.jpg',
+    isCurrent: false,
     togglePlay: expect.createSpy(),
     ...newProps,
   };
@@ -22,24 +25,33 @@ const setup = (newProps) => {
 };
 
 describe('Song', () => {
-  let wrapper;
-  let props;
-
-  it('should render name', () => {
-    ({ wrapper, props } = setup());
+  it('renders name', () => {
+    const { wrapper, props } = setup();
 
     expect((wrapper).find('.name').text()).toContain(props.name);
   });
 
-  it('should render artist', () => {
-    ({ wrapper, props } = setup());
+  it('renders artist', () => {
+    const { wrapper, props } = setup();
 
     expect((wrapper).find('.artist').text()).toContain(props.artist);
   });
 
-  it('should render coverImageUrl', () => {
-    ({ wrapper, props } = setup());
+  it('renders coverImageUrl', () => {
+    const { wrapper, props } = setup();
 
     expect((wrapper).find('img').prop('src')).toBe(props.coverImageUrl);
+  });
+
+  it('renders Like', () => {
+    const { wrapper } = setup();
+
+    expect((wrapper).find(Like).exists()).toBe(true);
+  });
+
+  it('renders Dislike', () => {
+    const { wrapper } = setup();
+
+    expect((wrapper).find(Dislike).exists()).toBe(true);
   });
 });

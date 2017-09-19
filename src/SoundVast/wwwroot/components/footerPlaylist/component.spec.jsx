@@ -14,6 +14,7 @@ import FooterPlaylist from './component';
 
 const setup = (newProps) => {
   const props = {
+    isPlaylistEmpty: false,
     ...newProps,
   };
 

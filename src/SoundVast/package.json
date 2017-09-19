@@ -95,6 +95,7 @@
     "react-addons-test-utils": "^15.3.2",
     "react-test-renderer": "^15.3.2",
     "redux-mock-store": "^1.2.3",
+    "require-hacker": "^3.0.1",
     "style-loader": "^0.18.2",
     "url-search-params-polyfill": "^2.0.0",
     "webpack": "^2.2.0",

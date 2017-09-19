@@ -1,6 +1,7 @@
 ﻿import jsdom from 'jsdom';
 import 'isomorphic-fetch';
 import 'url-search-params-polyfill';
+import requireHacker from 'require-hacker';
 import hook from 'css-modules-require-hook';
 import { injectReactEmailAttributes } from 'react-html-email';
 
@@ -20,3 +21,11 @@ Object.keys(window).forEach((property) => {
     global[property] = window[property];
   }
 });
+
+const fakeSvgComponentString = `
+  const react = require('react');
+
+  module.exports = () => null;
+`;
+
+requireHacker.hook('svg', () => fakeSvgComponentString);

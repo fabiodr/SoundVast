@@ -114,12 +114,6 @@ module.exports = {
           },
           {
             loader: 'react-svg-loader',
-            options: {
-              svgo: {
-                plugins: [{ removeTitle: false }],
-                floatPrecision: 2,
-              },
-            },
           },
         ],
       },

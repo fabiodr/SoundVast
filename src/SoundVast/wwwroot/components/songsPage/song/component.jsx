@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 
 import styles from './component.less';
 import PlayState from './playState/container';
+import Like from './ratingControl/like/component';
+import Dislike from './ratingControl/dislike/component';
 
 const Song = ({ isCurrent, name, artist, coverImageUrl, togglePlay }) => (
   <div className={styles.song}>
@@ -13,6 +15,8 @@ const Song = ({ isCurrent, name, artist, coverImageUrl, togglePlay }) => (
       </button>
       <figcaption className={styles.name}>{name}</figcaption>
       <figcaption className={styles.artist}>{artist}</figcaption>
+      <Like />
+      <Dislike />
     </figure>
   </div>
 );
