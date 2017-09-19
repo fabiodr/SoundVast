@@ -12,11 +12,9 @@ export const like = songId => dispatch =>
     },
   }).then(notOkError)
     .then(response => response.json())
-    .then((json) => {
-      dispatch({
-        type: 'LIKE_SONG',
-        songId,
-        likes: json.likes,
-      });
-    })
+    .then(json => dispatch({
+      type: 'LIKE_SONG',
+      songId,
+      likes: json.likes,
+    }))
     .catch(notOkErrorPopup(dispatch));

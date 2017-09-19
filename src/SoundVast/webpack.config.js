@@ -23,6 +23,11 @@ if (!dev) {
   devtool = 'inline-sourcemap';
 }
 
+const reactJPlayerPaths = [
+  fs.realpathSync(`${__dirname}/node_modules/react-jplayer`),
+  fs.realpathSync(`${__dirname}/node_modules/react-jplaylist`),
+];
+
 module.exports = {
   context: __dirname,
   devtool,
@@ -45,17 +50,13 @@ module.exports = {
         test: /\.jsx?$/,
         include: [
           path.resolve(__dirname, 'wwwroot/components'),
-          fs.realpathSync(`${__dirname}/node_modules/react-jplayer`),
-          fs.realpathSync(`${__dirname}/node_modules/react-jplaylist`),
+          ...reactJPlayerPaths,
         ],
         loader: 'babel-loader',
       },
       {
         test: /\.(css|less)$/,
-        include: [
-          fs.realpathSync(`${__dirname}/node_modules/react-jplayer`),
-          fs.realpathSync(`${__dirname}/node_modules/react-jplaylist`),
-        ],
+        include: reactJPlayerPaths,
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
           use: [{
@@ -77,10 +78,7 @@ module.exports = {
       },
       {
         test: /\.(css|less)$/,
-        exclude: [
-          fs.realpathSync(`${__dirname}/node_modules/react-jplayer`),
-          fs.realpathSync(`${__dirname}/node_modules/react-jplaylist`),
-        ],
+        exclude: reactJPlayerPaths,
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
           use: [{
