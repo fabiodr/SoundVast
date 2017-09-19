@@ -3,7 +3,7 @@ import expect from 'expect';
 import { shallow } from 'enzyme';
 
 import Song from './component';
-import Like from './ratingControl/like/component';
+import Like from './ratingControl/like/container';
 import Dislike from './ratingControl/dislike/component';
 
 const setup = (newProps) => {
@@ -28,30 +28,30 @@ describe('Song', () => {
   it('renders name', () => {
     const { wrapper, props } = setup();
 
-    expect((wrapper).find('.name').text()).toContain(props.name);
+    expect(wrapper.find('.name').text()).toContain(props.name);
   });
 
   it('renders artist', () => {
     const { wrapper, props } = setup();
 
-    expect((wrapper).find('.artist').text()).toContain(props.artist);
+    expect(wrapper.find('.artist').text()).toContain(props.artist);
   });
 
   it('renders coverImageUrl', () => {
     const { wrapper, props } = setup();
 
-    expect((wrapper).find('img').prop('src')).toBe(props.coverImageUrl);
+    expect(wrapper.find('img').prop('src')).toBe(props.coverImageUrl);
   });
 
   it('renders Like', () => {
     const { wrapper } = setup();
 
-    expect((wrapper).find(Like).exists()).toBe(true);
+    expect(wrapper.find(Like).exists()).toBe(true);
   });
 
   it('renders Dislike', () => {
     const { wrapper } = setup();
 
-    expect((wrapper).find(Dislike).exists()).toBe(true);
+    expect(wrapper.find(Dislike).exists()).toBe(true);
   });
 });

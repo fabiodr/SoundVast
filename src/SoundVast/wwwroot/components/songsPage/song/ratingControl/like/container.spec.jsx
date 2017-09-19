@@ -11,7 +11,7 @@ let state;
 let store;
 const setup = (newProps) => {
   const props = {
-    id: 0,
+    songId: 0,
     ...newProps,
   };
   const wrapper = shallow(
