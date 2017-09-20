@@ -8,6 +8,6 @@ namespace SoundVast.Components.Audio
     {
         ICollection<AudioModel> GetSongs(int current, int amount);
         AudioModel GetAudio(int id);
-        void RateAudio(int id, bool liked, string userId);
+        void RateAudio(int audioId, bool liked, string userId);
     }
 }

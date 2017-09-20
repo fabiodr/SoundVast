@@ -27,18 +27,24 @@ namespace SoundVast.Components.Audio
             return _repository.Get(id);
         }
 
-        public void RateAudio(int id, bool liked, string userId)
+        public void RateAudio(int audioId, bool liked, string userId)
         {
-            var audio = _repository.Get(id);
+            var audio = _repository.Include(x => x.Rating).Single(x => x.Id == audioId);
+            var existingRating = audio.Rating?.SingleOrDefault(x => x.UserId == userId);
 
-            audio.Rating = new List<RatingModel>{
-                new RatingModel {
+            if (existingRating != null)
+            {
+                existingRating.Liked = liked;
+            }
+            else
+            {
+                audio.Rating.Add(new RatingModel
+                {
                     Liked = liked,
-                    UserId = userId
-                }
-            };
-
-            _repository.Add();
+                    UserId = userId,
+                    AudioId = audioId
+                });
+            }
 
             _repository.Save();
         }

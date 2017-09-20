@@ -7,18 +7,18 @@ using SoundVast.Repository;
 
 namespace SoundVast.Components.Rating
 {
-    public interface IRatingService<T> where T : RatingModel
+    public interface IRatingdService<T> where T : RatingModel
     {
         ICollection<T> GetRatings();
         bool Add(RatingCountModel ratingCount, T newRating, T existingRating, bool liked);
     }
 
-    public class RatingService<T> : IRatingService<T> where T : RatingModel
+    public class RatingdService<T> : IRatingdService<T> where T : RatingModel
     {
         private readonly IValidationDictionary _validationDictionary;
         private readonly IRepository<T> _repository;
 
-        public RatingService(IValidationDictionary validationDictionary, IRepository<T> repository)
+        public RatingdService(IValidationDictionary validationDictionary, IRepository<T> repository)
         {
             _validationDictionary = validationDictionary;
             _repository = repository;

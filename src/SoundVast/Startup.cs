@@ -44,6 +44,7 @@ using Autofac;
 using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
 using SoundVast.Components.Genre.Models;
+using SoundVast.Components.Rating.Models;
 using SoundVast.Components.Upload;
 using SoundVast.Validation;
 

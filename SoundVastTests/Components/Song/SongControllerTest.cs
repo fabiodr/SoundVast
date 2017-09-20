@@ -10,6 +10,7 @@ using Moq;
 using NUnit.Framework;
 using SoundVast.Components.Audio;
 using SoundVast.Components.Audio.Models;
+using SoundVast.Components.Rating;
 using SoundVast.Components.Song;
 using SoundVast.Components.Song.Models;
 using SoundVast.Components.User;
@@ -31,10 +32,9 @@ namespace SoundVastTests.Components.Song
         {
             var userStore = new Mock<IUserStore<ApplicationUser>>();
 
+            _mockUserManager = new Mock<UserManager<ApplicationUser>>(userStore.Object, null, null, null, null, null, null, null, null);
             _mockAudioService = new Mock<IAudioService>();
             _mockCloudStorage = new Mock<ICloudStorage>();
-            _mockUserManager = new Mock<UserManager<ApplicationUser>>(userStore.Object, null, null, null, null, null, null, null, null);
-
             _songController = new SongController(_mockAudioService.Object, _mockCloudStorage.Object, _mockUserManager.Object);
         }
 
@@ -115,7 +115,7 @@ namespace SoundVastTests.Components.Song
             _mockUserManager.Setup(x => x.GetUserId(It.IsAny<ClaimsPrincipal>())).Returns(userId);
             _mockAudioService.Setup(x => x.RateAudio(model.SongId, model.Liked, userId));
 
-            var result = _songController.Rate(model);
+            var result = _songController.RateSong(model);
 
             _mockUserManager.VerifyAll();
             _mockAudioService.VerifyAll();

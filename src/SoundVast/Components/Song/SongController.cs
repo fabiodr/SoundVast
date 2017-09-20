@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SoundVast.Components.Audio;
+using SoundVast.Components.Rating;
 using SoundVast.Components.Song.Models;
 using SoundVast.Components.User;
 using SoundVast.Storage.CloudStorage;
