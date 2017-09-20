@@ -1,7 +1,12 @@
 using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SoundVast.Components.Audio;
 using SoundVast.Components.Song.Models;
+using SoundVast.Components.User;
 using SoundVast.Storage.CloudStorage;
 using SoundVast.Utilities;
 
@@ -11,11 +16,13 @@ namespace SoundVast.Components.Song
     {
         private readonly IAudioService _audioService;
         private readonly ICloudStorage _cloudStorage;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public SongController(IAudioService audioService, ICloudStorage cloudStorage)
+        public SongController(IAudioService audioService, ICloudStorage cloudStorage, UserManager<ApplicationUser> userManager)
         {
             _audioService = audioService;
             _cloudStorage = cloudStorage;
+            _userManager = userManager;
         }
 
         [HttpPost]
@@ -34,7 +41,7 @@ namespace SoundVast.Components.Song
         [HttpPost]
         public IActionResult FetchSong([FromBody] FetchSongModel model)
         {
-            var song = _audioService.GetSong(model.Id);
+            var song = _audioService.GetAudio(model.Id);
 
             return Ok(new
             {
@@ -42,10 +49,21 @@ namespace SoundVast.Components.Song
             });
         }
 
+        [HttpPost]
+        [Authorize]
+        public IActionResult RateSong([FromBody] RateSongModel model)
+        {
+            var userId = _userManager.GetUserId(User);
+
+            _audioService.RateAudio(model.SongId, model.Liked, userId);
+
+            return Ok();
+        }
+
         [HttpGet]
         public Stream Stream(int id)
         {
-            var song = _audioService.GetSong(id);
+            var song = _audioService.GetAudio(id);
             var blob = _cloudStorage.GetBlob(CloudStorageType.Audio, song.Name);
 
             Response.Headers.Add("Content-Disposition", $"attachment; filename={song.Name}");

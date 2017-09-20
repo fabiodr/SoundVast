@@ -6,6 +6,8 @@ using NUnit.Framework;
 using SoundVast.Components.Audio;
 using SoundVast.Components.Audio.Models;
 using SoundVast.Components.Genre.Models;
+using SoundVast.Components.Rating.Models;
+using SoundVast.Components.User;
 using SoundVast.Repository;
 
 namespace SoundVastTests.Components.Audio
@@ -15,6 +17,7 @@ namespace SoundVastTests.Components.Audio
     {
         private AudioService _audioService;
         private Mock<IRepository<AudioModel>> _mockAudioRepository;
+        const int AudioId = 3;
 
         [SetUp]
         public void Init()
@@ -48,23 +51,54 @@ namespace SoundVastTests.Components.Audio
         }
 
         [Test]
-        public void GetSong()
+        public void GetAudio()
         {
-            const int songId = 3;
-            var song = new AudioModel
+            var audio = new AudioModel
             {
                 Name = "bubble01.mp3",
-                Genre = new GenreModel
-                {
-                    GenreType = nameof(GenreType.Song)
-                },
             };
 
-            _mockAudioRepository.Setup(x => x.Get(songId)).Returns(song);
+            _mockAudioRepository.Setup(x => x.Get(AudioId)).Returns(audio);
 
-            var result = _audioService.GetSong(songId);
+            var result = _audioService.GetAudio(AudioId);
 
-            result.Should().Be(song);
+            result.Should().Be(audio);
+        }
+
+        [Test]
+        public void RateAudio_LikesSongWhenLikedIsTrue()
+        {
+            var userId = "DLEPR-DPELF";
+            var audio = new AudioModel
+            {
+                Name = "bubble01.mp3",
+                Rating = new List<RatingModel>()
+            };
+
+            _mockAudioRepository.Setup(x => x.Get(AudioId)).Returns(audio);
+
+            _audioService.RateAudio(AudioId, true, userId);
+
+            audio.Rating.ElementAt(0).Liked.Should().Be(true);
+            audio.Rating.ElementAt(0).UserId.Should().Be(userId);
+        }
+
+        [Test]
+        public void RateAudio_DisLikesSongWhenLikedIsFalse()
+        {
+            var userId = "DLEPR-DPELF";
+            var audio = new AudioModel
+            {
+                Name = "bubble01.mp3",
+                Rating = new List<RatingModel>()
+            };
+
+            _mockAudioRepository.Setup(x => x.Get(AudioId)).Returns(audio);
+
+            _audioService.RateAudio(AudioId, false, userId);
+
+            audio.Rating.ElementAt(0).Liked.Should().Be(false);
+            audio.Rating.ElementAt(0).UserId.Should().Be(userId);
         }
     }
 }

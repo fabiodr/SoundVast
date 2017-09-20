@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import styles from './component.less';
 import DislikeIcon from '../../../../../images/ratingControls/dislike.svg';
 
-const Dislike = ({ width, height }) => (
-  <DislikeIcon className={styles.dislike} width={width} height={height} />
+const Dislike = ({ width, height, dislike }) => (
+  <DislikeIcon className={styles.dislike} width={width} height={height} onClick={dislike} />
 );
 
 Dislike.defaultProps = {
@@ -14,6 +14,7 @@ Dislike.defaultProps = {
 };
 
 Dislike.propTypes = {
+  dislike: PropTypes.func.isRequired,
   width: PropTypes.number,
   height: PropTypes.number,
 };

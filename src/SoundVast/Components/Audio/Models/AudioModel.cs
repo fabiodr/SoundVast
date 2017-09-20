@@ -32,6 +32,7 @@ namespace SoundVast.Components.Audio.Models
         public string UserId { get; set; }
         public int? GenreId { get; set; }
         public virtual GenreModel Genre { get; set; }
+        public ICollection<RatingModel> Rating { get; set; }
      //   public virtual ApplicationUser User { get; set; }
      //   public virtual ImageFileModel ImageFile { get; set; }
      //   public virtual CategoryModel Category { get; set; }

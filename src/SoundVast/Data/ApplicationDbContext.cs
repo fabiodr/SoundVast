@@ -22,7 +22,7 @@ namespace SoundVast.Data
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         //public DbSet<RatingCountModel> RatingCount { get; set; }
-        //public DbSet<RatingModel> Ratings { get; set; }
+        public DbSet<RatingModel> Ratings { get; set; }
         //public DbSet<LinkModel> Links { get; set; }
         public DbSet<GenreModel> Genres { get; set; }
         //public DbSet<CategoryModel> Categories { get; set; }
@@ -45,6 +45,9 @@ namespace SoundVast.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<AudioModel>().HasMany(x => x.Rating).WithOne(x => x.Audio).OnDelete(DeleteBehavior.Cascade);
             //modelBuilder.Entity<AudioGenreModel>().HasKey(x => new { x.AudioId, x.GenreId });
             //modelBuilder.Entity<FileStreamModel>().HasMany(x => x.Links).WithOne().OnDelete(DeleteBehavior.Cascade);
             //modelBuilder.Entity<CommentRatingJoinModel>().HasKey(x => new { x.CommentId, x.CommentRatingId });
@@ -53,8 +56,6 @@ namespace SoundVast.Data
             //modelBuilder.Entity<AudioRatingJoinModel>().HasKey(x => new { x.AudioId, x.AudioRatingId });
 
             //  modelBuilder.Entity<Comment>().HasOptional(x => x.User);
-
-            base.OnModelCreating(modelBuilder);
         }
     }
 }

@@ -2,6 +2,7 @@
 
 import { showTextPopup } from '../../../../popup/actions';
 
+/** @deprecated  in favour of dispatching showErrorPopup directly */
 export default dispatch => (error) => {
   console.error(error);
 

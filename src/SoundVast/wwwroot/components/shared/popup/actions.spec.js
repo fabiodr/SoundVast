@@ -28,6 +28,18 @@ describe('popupActions', () => {
     ]);
   });
 
+  it('should show generic error popup', () => {
+    store.dispatch(actions.showGenericErrorPopup());
+
+    expect(calledActions).toEqual([
+      {
+        type: 'SHOW_TEXT_POPUP',
+        id: 'textPopup',
+        text: 'An error occured. Please try refreshing the page.',
+      },
+    ]);
+  });
+
   it('should hide popup', () => {
     store.dispatch(actions.hidePopup());
 

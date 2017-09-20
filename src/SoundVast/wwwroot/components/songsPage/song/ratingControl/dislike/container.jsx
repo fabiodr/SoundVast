@@ -2,11 +2,11 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { compose, withHandlers, setPropTypes } from 'recompose';
 
-import Like from './component';
+import Dislike from './component';
 import { rateSong } from '../actions';
 
 const handlers = {
-  like: props => () => props.dispatch(rateSong(props.songId, true)),
+  dislike: props => () => props.dispatch(rateSong(props.songId, false)),
 };
 
 const propTypes = {
@@ -17,4 +17,4 @@ export default compose(
   connect(),
   setPropTypes(propTypes),
   withHandlers(handlers),
-)(Like);
+)(Dislike);

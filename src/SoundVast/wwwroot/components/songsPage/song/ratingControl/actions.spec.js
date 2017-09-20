@@ -18,21 +18,18 @@ describe('ratingControlActions', () => {
 
   afterEach(() => {
     fetchMock.reset().restore();
+    expect.restoreSpies();
   });
 
-  it('should like song', (done) => {
+  it('should rate the song', (done) => {
     const songId = 0;
-    const response = {
-      like: 22,
-    };
 
-    fetchMock.postOnce('/song/like', response);
+    fetchMock.postOnce('/song/rateSong', '200');
 
-    store.dispatch(actions.like(songId)).then(() => {
+    store.dispatch(actions.rateSong(songId, true)).then(() => {
       expect(calledActions[0]).toEqual({
-        type: 'LIKE_SONG',
+        type: 'RATE_SONG',
         songId,
-        likes: response.likes,
       });
       done();
     });

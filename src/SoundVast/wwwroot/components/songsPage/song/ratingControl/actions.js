@@ -1,20 +1,20 @@
 import notOkError from '../../../shared/fetch/errorHandling/notOkError/component';
-import notOkErrorPopup from '../../../shared/fetch/errorHandling/notOkError/popup/component';
+import { showGenericErrorPopup } from '../../../shared/popup/actions';
 
-export const like = songId => dispatch =>
-  fetch('/song/like', {
+export const rateSong = (songId, liked) => dispatch =>
+  fetch('/song/rateSong', {
     method: 'post',
     body: JSON.stringify({
       songId,
+      liked,
     }),
+    credentials: 'same-origin',
     headers: {
       'Content-Type': 'application/json',
     },
   }).then(notOkError)
-    .then(response => response.json())
-    .then(json => dispatch({
-      type: 'LIKE_SONG',
+    .then(() => dispatch({
+      type: 'RATE_SONG',
       songId,
-      likes: json.likes,
     }))
-    .catch(notOkErrorPopup(dispatch));
+    .catch(error => dispatch(showGenericErrorPopup(error)));

@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import expect from 'expect';
 import thunk from 'redux-thunk';
 
-import LikeContainer from './container';
+import DislikeContainer from './container';
 import { rateSong } from '../actions';
 
 let state;
@@ -15,7 +15,7 @@ const setup = (newProps) => {
     ...newProps,
   };
   const wrapper = shallow(
-    <LikeContainer {...props} />,
+    <DislikeContainer {...props} />,
     { context: { store } },
   ).dive();
 
@@ -26,13 +26,13 @@ const setup = (newProps) => {
   };
 };
 
-describe('LikeContainer', () => {
+describe('DislikeContainer', () => {
   beforeEach(() => {
     store = configureMockStore([thunk])(state);
   });
 
-  describe('like', () => {
-    it('should like the song when like is clicked', () => {
+  describe('dislike', () => {
+    it('should dislike the song when dislike is clicked', () => {
       expect.spyOn(store, 'dispatch');
 
       const { wrapper } = setup();

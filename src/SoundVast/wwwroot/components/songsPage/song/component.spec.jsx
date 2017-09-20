@@ -4,10 +4,11 @@ import { shallow } from 'enzyme';
 
 import Song from './component';
 import Like from './ratingControl/like/container';
-import Dislike from './ratingControl/dislike/component';
+import Dislike from './ratingControl/dislike/container';
 
 const setup = (newProps) => {
   const props = {
+    id: 0,
     name: 'bubble',
     artist: 'artist',
     coverImageUrl: 'bubble.jpg',
