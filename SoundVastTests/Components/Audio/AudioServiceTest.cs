@@ -74,7 +74,7 @@ namespace SoundVastTests.Components.Audio
             {
                 Id = AudioId,
                 Name = "bubble01.mp3",
-                Rating = new List<RatingModel>()
+                Ratings = new List<RatingModel>()
             };
 
             var audioModels = new List<AudioModel>
@@ -82,13 +82,13 @@ namespace SoundVastTests.Components.Audio
                 audio
             }.AsQueryable();
 
-            _mockAudioRepository.Setup(x => x.Include(r => r.Rating)).Returns(audioModels);
+            _mockAudioRepository.Setup(x => x.Include(r => r.Ratings)).Returns(audioModels);
 
             _audioService.RateAudio(AudioId, true, UserId);
 
-            audio.Rating.ElementAt(0).Liked.Should().Be(true);
-            audio.Rating.ElementAt(0).UserId.Should().Be(UserId);
-            audio.Rating.ElementAt(0).AudioId.Should().Be(AudioId);
+            audio.Ratings.ElementAt(0).Liked.Should().Be(true);
+            audio.Ratings.ElementAt(0).UserId.Should().Be(UserId);
+            audio.Ratings.ElementAt(0).AudioId.Should().Be(AudioId);
         }
 
         [Test]
@@ -98,7 +98,7 @@ namespace SoundVastTests.Components.Audio
             {
                 Id = AudioId,
                 Name = "bubble01.mp3",
-                Rating = new List<RatingModel>
+                Ratings = new List<RatingModel>
                 {
                     new RatingModel
                     {
@@ -113,11 +113,11 @@ namespace SoundVastTests.Components.Audio
                 audio
             }.AsQueryable();
 
-            _mockAudioRepository.Setup(x => x.Include(r => r.Rating)).Returns(audioModels);
+            _mockAudioRepository.Setup(x => x.Include(r => r.Ratings)).Returns(audioModels);
 
             _audioService.RateAudio(AudioId, true, UserId);
 
-            audio.Rating.ElementAt(0).Liked.Should().Be(true);
+            audio.Ratings.ElementAt(0).Liked.Should().Be(true);
         }
     }
 }
