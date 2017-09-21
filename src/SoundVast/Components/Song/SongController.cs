@@ -50,6 +50,19 @@ namespace SoundVast.Components.Song
             });
         }
 
+        public IActionResult GetSongRatings([FromBody] GetSongRatingModel model)
+        {
+            var songRatings = _audioService.GetAudioRatings(model.Id);
+            var likes = songRatings.Count(x => x.Liked);
+            var disLikes = songRatings.Count(x => !x.Liked);
+
+            return Ok(new
+            {
+                likes,
+                disLikes
+            });
+        }
+
         [HttpPost]
         [Authorize]
         public IActionResult RateSong([FromBody] RateSongModel model)

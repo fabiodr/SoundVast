@@ -43,6 +43,7 @@ using System.Text.RegularExpressions;
 using Autofac;
 using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using SoundVast.Components.Genre.Models;
 using SoundVast.Components.Rating.Models;
 using SoundVast.Components.Upload;
@@ -104,8 +105,9 @@ namespace SoundVast
             {
                 options.TokenLifespan = TimeSpan.FromMinutes(30);
             });
-          
-            services.AddMvc();
+
+            services.AddMvc().AddJsonOptions(x => x.SerializerSettings.ReferenceLoopHandling =
+                ReferenceLoopHandling.Ignore);
             services.AddCloudscribePagination();
             services.AddMemoryCache();
             //services.AddAutoMapper();

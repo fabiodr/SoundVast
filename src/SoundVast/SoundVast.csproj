@@ -119,6 +119,7 @@
   <ItemGroup>
     <None Include=".exe\ffmpeg.exe" />
     <None Include="App.config" />
+    <None Include="Components\Song\Models\GetSongRatingModel.cs" />
     <None Update="wwwroot\**\*;Views\**\*;Areas\**\Views">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>

@@ -15,18 +15,20 @@ describe('songsReducer', () => {
   });
 
   it('should fetch songs', () => {
-    const actionProps = {
-      songs: [
-        { name: 'bubble.mp3' },
-        { name: 'kalimba.mp3' },
-      ],
-      hasMore: true,
-    };
+    const ratings = [
+      { id: 0, liked: true, audioId: 0 },
+    ];
     const prevState = {
       songs: [
-        { name: 'test.mp3' },
+        { id: 0, name: 'test.mp3', ratings },
       ],
       test: 'test',
+    };
+    const actionProps = {
+      songs: [
+        { id: 1, name: 'bubble.mp3' },
+      ],
+      hasMore: true,
     };
     const state = songsReducer(prevState, {
       type: 'FETCH_SONGS',
@@ -36,7 +38,13 @@ describe('songsReducer', () => {
     expect(state).toEqual({
       ...prevState,
       ...actionProps,
-      songs: prevState.songs.concat(actionProps.songs),
+      songs: [
+        { id: 0, name: 'test.mp3', ratings: [0] },
+        { id: 1, name: 'bubble.mp3' },
+      ],
+      ratings: {
+        0: { id: 0, liked: true, audioId: 0 },
+      },
     });
   });
 });

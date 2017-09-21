@@ -16,13 +16,11 @@ export const fetchSongs = () => (dispatch) => {
     },
   }).then(notOkError)
     .then(response => response.json())
-    .then((json) => {
-      dispatch({
-        type: 'FETCH_SONGS',
-        songs: json.songs,
-        hasMore: json.hasMore,
-      });
-    })
+    .then(json => dispatch({
+      type: 'FETCH_SONGS',
+      songs: json.songs,
+      hasMore: json.hasMore,
+    }))
     .catch(notOkErrorPopup(dispatch));
 
   current += 30;

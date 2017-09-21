@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using SoundVast.Components.Audio.Models;
 using SoundVast.Components.Genre.Models;
 using SoundVast.Components.Rating.Models;
@@ -19,7 +20,9 @@ namespace SoundVast.Components.Audio
 
         public ICollection<AudioModel> GetSongs(int current, int amount)
         {
-            return _repository.GetAll().Where(x => x.Genre.GenreType == nameof(GenreType.Song)).Skip(current).Take(amount).ToList();
+            return _repository.GetAll()
+                .Include(x => x.Ratings)
+                .Where(x => x.Genre.GenreType == nameof(GenreType.Song)).Skip(current).Take(amount).ToList();
         }
 
         public AudioModel GetAudio(int id)
@@ -27,10 +30,15 @@ namespace SoundVast.Components.Audio
             return _repository.Get(id);
         }
 
+        public ICollection<RatingModel> GetAudioRatings(int id)
+        {
+            return _repository.GetAll().Include(x => x.Ratings).Single(x => x.Id == id).Ratings;
+        }
+
         public void RateAudio(int audioId, bool liked, string userId)
         {
-            var audio = _repository.Include(x => x.Rating).Single(x => x.Id == audioId);
-            var existingRating = audio.Rating?.SingleOrDefault(x => x.UserId == userId);
+            var audio = _repository.Include(x => x.Ratings).Single(x => x.Id == audioId);
+            var existingRating = audio.Ratings?.SingleOrDefault(x => x.UserId == userId);
 
             if (existingRating != null)
             {
@@ -38,7 +46,7 @@ namespace SoundVast.Components.Audio
             }
             else
             {
-                audio.Rating.Add(new RatingModel
+                audio.Ratings.Add(new RatingModel
                 {
                     Liked = liked,
                     UserId = userId,

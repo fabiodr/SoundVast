@@ -5,13 +5,13 @@ import { actions as jPlayerActions } from 'react-jplayer';
 
 import Song from './component';
 
-const mapStateToProps = ({ music, jPlayers, jPlaylists }, { id }) => ({
+const mapStateToProps = ({ music, jPlayers, jPlaylists }, { id }) => {debugger; return({
   songs: music.songs,
   paused: jPlayers.FooterPlaylist.paused,
   isCurrent: jPlayers.FooterPlaylist.media.id === id,
   playlist: jPlaylists.FooterPlaylist.playlist,
 });
-
+}
 const handlers = {
   togglePlay: props => () => {
     let playlist = props.playlist;
