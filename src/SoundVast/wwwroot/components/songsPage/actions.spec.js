@@ -33,13 +33,46 @@ describe('songActions', () => {
       hasMore: true,
     };
 
-    fetchMock.postOnce('/song/fetchSongs', response);
+    fetchMock.postOnce('/song/getSongs', response);
 
     store.dispatch(actions.fetchSongs()).then(() => {
       expect(calledActions[0]).toEqual({
         type: 'FETCH_SONGS',
         songs: response.songs,
         hasMore: response.hasMore,
+      });
+      done();
+    });
+  });
+
+  it('should rate the song', (done) => {
+    const id = 0;
+
+    fetchMock.postOnce('/song/rateSong', '200');
+
+    store.dispatch(actions.rateSong(id, true)).then(() => {
+      expect(calledActions[0]).toEqual({
+        type: 'RATE_SONG',
+        id,
+      });
+      done();
+    });
+  });
+
+  it('should fetch song ratings', (done) => {
+    const id = 0;
+    const response = {
+      likes: 2,
+      dislikes: 1,
+    };
+
+    fetchMock.getOnce(`/song/getSongRatings?id=${id}`, response);
+
+    store.dispatch(actions.getSongRatings(id)).then(() => {
+      expect(calledActions[0]).toEqual({
+        type: 'FETCH_SONG_RATINGS',
+        likes: response.likes,
+        dislikes: response.dislikes,
       });
       done();
     });

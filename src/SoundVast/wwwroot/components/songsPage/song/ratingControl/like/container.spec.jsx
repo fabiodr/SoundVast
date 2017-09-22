@@ -5,7 +5,7 @@ import expect from 'expect';
 import thunk from 'redux-thunk';
 
 import LikeContainer from './container';
-import { rateSong } from '../actions';
+import { rateSong } from '../../../actions';
 
 let state;
 let store;

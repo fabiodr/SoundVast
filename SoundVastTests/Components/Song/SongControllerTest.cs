@@ -11,6 +11,7 @@ using NUnit.Framework;
 using SoundVast.Components.Audio;
 using SoundVast.Components.Audio.Models;
 using SoundVast.Components.Rating;
+using SoundVast.Components.Rating.Models;
 using SoundVast.Components.Song;
 using SoundVast.Components.Song.Models;
 using SoundVast.Components.User;
@@ -26,6 +27,7 @@ namespace SoundVastTests.Components.Song
         private Mock<IAudioService> _mockAudioService;
         private Mock<ICloudStorage> _mockCloudStorage;
         private Mock<UserManager<ApplicationUser>> _mockUserManager;
+        private const string UserId = "FEKFJ-GKFKL";
 
         [SetUp]
         public void Init()
@@ -39,7 +41,7 @@ namespace SoundVastTests.Components.Song
         }
 
         [Test]
-        public void FetchesSongs()
+        public void GetSongs()
         {
             var songs = new List<AudioModel>
             {
@@ -49,7 +51,7 @@ namespace SoundVastTests.Components.Song
 
             _mockAudioService.Setup(x => x.GetSongs(It.IsAny<int>(), It.IsAny<int>())).Returns(songs);
 
-            var result = (OkObjectResult)_songController.FetchSongs(new FetchSongsModel());
+            var result = (OkObjectResult)_songController.GetSongs(new FetchSongsModel());
 
             result.Value.ShouldBeEquivalentTo(new
             {
@@ -69,7 +71,7 @@ namespace SoundVastTests.Components.Song
 
             _mockAudioService.Setup(x => x.GetAudio(model.Id)).Returns(song);
 
-            var result = (OkObjectResult)_songController.FetchSong(model);
+            var result = (OkObjectResult)_songController.GetSong(model);
 
             result.Value.ShouldBeEquivalentTo(new
             {
@@ -107,13 +109,13 @@ namespace SoundVastTests.Components.Song
         {
             var model = new RateSongModel
             {
-                SongId = 0,
+                Id = 0,
                 Liked = true
             };
             var userId = "FEKFJ-GKFKL";
 
             _mockUserManager.Setup(x => x.GetUserId(It.IsAny<ClaimsPrincipal>())).Returns(userId);
-            _mockAudioService.Setup(x => x.RateAudio(model.SongId, model.Liked, userId));
+            _mockAudioService.Setup(x => x.RateAudio(model.Id, model.Liked, userId));
 
             var result = _songController.RateSong(model);
 
@@ -121,6 +123,28 @@ namespace SoundVastTests.Components.Song
             _mockAudioService.VerifyAll();
 
             result.Should().BeOfType<OkResult>();
+        }
+
+        [Test]
+        public void GetSongRatings()
+        {
+            var audioId = 0;
+            var ratings = new List<RatingModel>
+            {
+                new RatingModel {Liked = true, AudioId = audioId, UserId = UserId},
+                new RatingModel { Liked = true, AudioId  = audioId, UserId = UserId },
+                new RatingModel { Liked = false, AudioId  = audioId, UserId = UserId },
+            };
+
+            _mockAudioService.Setup(x => x.GetAudioRatings(audioId)).Returns(ratings);
+
+            var result = (OkObjectResult)_songController.GetSongRatings(audioId);
+
+            result.Value.ShouldBeEquivalentTo(new
+            {
+                likes = 2,
+                dislikes = 1
+            });
         }
     }
 }

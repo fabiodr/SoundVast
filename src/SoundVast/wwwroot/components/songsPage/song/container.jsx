@@ -1,17 +1,18 @@
 import { connect } from 'react-redux';
-import { compose, withHandlers } from 'recompose';
+import { compose, withHandlers, lifecycle } from 'recompose';
 import { actions } from 'react-jplaylist';
 import { actions as jPlayerActions } from 'react-jplayer';
 
 import Song from './component';
+import { getSongRatings } from '../actions';
 
-const mapStateToProps = ({ music, jPlayers, jPlaylists }, { id }) => {debugger; return({
+const mapStateToProps = ({ music, jPlayers, jPlaylists }, { id }) => ({
   songs: music.songs,
   paused: jPlayers.FooterPlaylist.paused,
   isCurrent: jPlayers.FooterPlaylist.media.id === id,
   playlist: jPlaylists.FooterPlaylist.playlist,
 });
-}
+
 const handlers = {
   togglePlay: props => () => {
     let playlist = props.playlist;
@@ -42,7 +43,14 @@ const handlers = {
   },
 };
 
+const lifecycleFunctions = {
+  componentDidMount() {
+    this.props.dispatch(getSongRatings(this.props.id));
+  },
+};
+
 export default compose(
   connect(mapStateToProps),
   withHandlers(handlers),
+  lifecycle(lifecycleFunctions),
 )(Song);

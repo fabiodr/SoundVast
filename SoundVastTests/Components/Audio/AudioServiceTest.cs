@@ -18,7 +18,6 @@ namespace SoundVastTests.Components.Audio
     {
         private AudioService _audioService;
         private Mock<IRepository<AudioModel>> _mockAudioRepository;
-        private const int AudioId = 3;
         private const string UserId = "DLEPR-DPELF";
 
         [SetUp]
@@ -55,14 +54,15 @@ namespace SoundVastTests.Components.Audio
         [Test]
         public void GetAudio()
         {
+            const int audioId = 0;
             var audio = new AudioModel
             {
                 Name = "bubble01.mp3",
             };
 
-            _mockAudioRepository.Setup(x => x.Get(AudioId)).Returns(audio);
+            _mockAudioRepository.Setup(x => x.Get(audioId)).Returns(audio);
 
-            var result = _audioService.GetAudio(AudioId);
+            var result = _audioService.GetAudio(audioId);
 
             result.Should().Be(audio);
         }
@@ -70,9 +70,10 @@ namespace SoundVastTests.Components.Audio
         [Test]
         public void RateAudio_AddsRatingToAudio()
         {
+            const int audioId = 0;
             var audio = new AudioModel
             {
-                Id = AudioId,
+                Id = audioId,
                 Name = "bubble01.mp3",
                 Ratings = new List<RatingModel>()
             };
@@ -84,19 +85,20 @@ namespace SoundVastTests.Components.Audio
 
             _mockAudioRepository.Setup(x => x.Include(r => r.Ratings)).Returns(audioModels);
 
-            _audioService.RateAudio(AudioId, true, UserId);
+            _audioService.RateAudio(audioId, true, UserId);
 
             audio.Ratings.ElementAt(0).Liked.Should().Be(true);
             audio.Ratings.ElementAt(0).UserId.Should().Be(UserId);
-            audio.Ratings.ElementAt(0).AudioId.Should().Be(AudioId);
+            audio.Ratings.ElementAt(0).AudioId.Should().Be(audioId);
         }
 
         [Test]
         public void RateAudio_ChangesExistingRatingIfItExists()
         {
+            const int audioId = 0;
             var audio = new AudioModel
             {
-                Id = AudioId,
+                Id = audioId,
                 Name = "bubble01.mp3",
                 Ratings = new List<RatingModel>
                 {
@@ -115,9 +117,33 @@ namespace SoundVastTests.Components.Audio
 
             _mockAudioRepository.Setup(x => x.Include(r => r.Ratings)).Returns(audioModels);
 
-            _audioService.RateAudio(AudioId, true, UserId);
+            _audioService.RateAudio(audioId, true, UserId);
 
             audio.Ratings.ElementAt(0).Liked.Should().Be(true);
+        }
+
+        [Test]
+        public void GetAudioRatings()
+        {
+            const int audioId = 0;
+            var ratings = new List<RatingModel>
+            {
+                new RatingModel {
+                    Liked = true,
+                    AudioId = audioId
+                }
+            };
+            var songs = new List<AudioModel>
+            {
+                new AudioModel { Id = 0, Name="podcast.mp3", Genre = new GenreModel { GenreType = nameof(GenreType.Audio) }, Ratings = ratings },
+                new AudioModel { Id = 1, Name="bubble01.mp3", Genre = new GenreModel { GenreType = nameof(GenreType.Song) }}
+            }.AsQueryable();
+
+            _mockAudioRepository.Setup(x => x.GetAll()).Returns(songs);
+
+            var result = _audioService.GetAudioRatings(audioId);
+
+            result.ShouldBeEquivalentTo(ratings);
         }
     }
 }

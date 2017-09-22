@@ -27,7 +27,7 @@ namespace SoundVast.Components.Song
         }
 
         [HttpPost]
-        public IActionResult FetchSongs([FromBody] FetchSongsModel model)
+        public IActionResult GetSongs([FromBody] FetchSongsModel model)
         {
             var songs = _audioService.GetSongs(model.Current, model.Amount);
             var hasMore = _audioService.GetSongs(model.Current + model.Amount, model.Amount).Any();
@@ -40,7 +40,7 @@ namespace SoundVast.Components.Song
         }
 
         [HttpPost]
-        public IActionResult FetchSong([FromBody] FetchSongModel model)
+        public IActionResult GetSong([FromBody] FetchSongModel model)
         {
             var song = _audioService.GetAudio(model.Id);
 
@@ -50,16 +50,17 @@ namespace SoundVast.Components.Song
             });
         }
 
-        public IActionResult GetSongRatings([FromBody] GetSongRatingModel model)
+        [HttpGet]
+        public IActionResult GetSongRatings(int id)
         {
-            var songRatings = _audioService.GetAudioRatings(model.Id);
+            var songRatings = _audioService.GetAudioRatings(id);
             var likes = songRatings.Count(x => x.Liked);
-            var disLikes = songRatings.Count(x => !x.Liked);
+            var dislikes = songRatings.Count(x => !x.Liked);
 
             return Ok(new
             {
                 likes,
-                disLikes
+                dislikes
             });
         }
 
@@ -69,7 +70,7 @@ namespace SoundVast.Components.Song
         {
             var userId = _userManager.GetUserId(User);
 
-            _audioService.RateAudio(model.SongId, model.Liked, userId);
+            _audioService.RateAudio(model.Id, model.Liked, userId);
 
             return Ok();
         }

@@ -1,7 +1,9 @@
 import React from 'react';
 import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
 import { shallow } from 'enzyme';
 import expect from 'expect';
+import fetchMock from 'fetch-mock';
 import { constants } from 'react-jplaylist';
 import { constants as jPlayerConstants } from 'react-jplayer';
 
@@ -16,11 +18,14 @@ const setup = (newProps) => {
     coverImageUrl: 'test.jpg',
     ...newProps,
   };
-  const store = configureMockStore()(state);
+  const store = configureMockStore([thunk])(state);
   const wrapper = shallow(
     <SongContainer {...props} />,
-    { context: { store } },
-  ).dive().dive();
+    {
+      context: { store },
+      lifecycleExperimental: true,
+    },
+  ).dive().dive().dive();
 
   const actions = store.getActions();
 
@@ -33,6 +38,8 @@ const setup = (newProps) => {
 
 describe('SongContainer', () => {
   beforeEach(() => {
+    fetchMock.getOnce('/song/getSongRatings?id=0', '200');
+
     state = {
       music: {
         songs: [{
@@ -60,6 +67,10 @@ describe('SongContainer', () => {
         },
       },
     };
+  });
+
+  afterEach(() => {
+    fetchMock.reset().restore();
   });
 
   describe('togglePlay', () => {
@@ -124,6 +135,14 @@ describe('SongContainer', () => {
         }],
         type: constants.actionNames.SET_PLAYLIST,
       });
+    });
+
+    it('should fetch the song ratings on load', () => {
+      setup();
+
+      const routeCalled = fetchMock.called('/song/getSongRatings?id=0');
+
+      expect(routeCalled).toBe(true);
     });
   });
 });
