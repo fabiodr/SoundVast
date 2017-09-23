@@ -14,7 +14,7 @@ const setup = (newProps) => {
     artist: 'artist',
     coverImageUrl: 'bubble.jpg',
     isCurrent: false,
-    togglePlay: expect.createSpy(),
+    playOnClick: expect.createSpy(),
     ...newProps,
   };
 

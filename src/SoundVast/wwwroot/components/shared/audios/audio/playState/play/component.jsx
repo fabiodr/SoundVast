@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import styles from './component.less';
-import PlayIcon from '../../../../../images/audioControls/play.svg';
+import PlayIcon from '../../../../../../images/audioControls/play.svg';
 
 const Play = ({ isCurrent, hasPlayed }) => {
   const className = classNames(styles.play, {
@@ -18,8 +18,9 @@ Play.defaultProps = {
 };
 
 Play.propTypes = {
-  hasPlayed: PropTypes.bool,
   isCurrent: PropTypes.bool.isRequired,
+  hasPlayed: PropTypes.bool,
 };
+
 
 export default Play;

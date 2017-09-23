@@ -3,7 +3,7 @@ import expect from 'expect';
 import { shallow } from 'enzyme';
 
 import Like from './component';
-import LikeIcon from '../../../../../images/ratingControls/like.svg';
+import LikeIcon from '../../../../../../images/ratingControls/like.svg';
 
 const setup = (newProps) => {
   const props = {

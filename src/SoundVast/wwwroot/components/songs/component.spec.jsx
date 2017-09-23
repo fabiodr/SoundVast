@@ -4,13 +4,12 @@ import { shallow } from 'enzyme';
 
 import Songs from './component';
 import Song from './song/container';
-import InfiniteScrollGrid from '../content/infiniteScrollGrid/component';
+import Audios from '../shared/audios/component';
 
 const setup = (newProps) => {
   const props = {
     songs: [
       { id: 0, name: 'bubble', artist: 'bubbleArtist', coverImageUrl: 'bubble.jpg' },
-      { id: 1, name: 'kalimba', artist: 'kalimbaArtist', coverImageUrl: 'kalimba.jpg' },
     ],
     fetchSongs: expect.createSpy(),
     hasMore: true,
@@ -26,18 +25,15 @@ const setup = (newProps) => {
 };
 
 describe('Songs', () => {
-  let wrapper;
-  let props;
+  it('should render Song as a child of Audios', () => {
+    const { wrapper } = setup();
 
-  it('should render Song for each song', () => {
-    ({ wrapper, props } = setup());
-
-    expect((wrapper).find(InfiniteScrollGrid).find(Song).length).toBe(props.songs.length);
+    expect(wrapper.find(Audios).find(Song).exists()).toBe(true);
   });
 
   it('should change document title to songs', () => {
-    ({ wrapper } = setup());
+    const { wrapper } = setup();
 
-    expect((wrapper).prop('title')).toBe('Songs');
+    expect(wrapper.prop('title')).toBe('Songs');
   });
 });

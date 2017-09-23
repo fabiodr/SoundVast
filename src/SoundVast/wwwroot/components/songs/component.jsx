@@ -1,18 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import InfiniteScrollGrid from '../content/infiniteScrollGrid/component';
 import SoundVastTitle from '../shared/soundVastTitle/component';
 
-import Song from './song/container';
-import styles from './component.less';
+import Song from './song/component';
+import Audios from '../shared/audios/component';
 
-const Songs = ({ songs, fetchSongs, hasMore }) => (
+const Songs = ({ songs, fetchSongs, hasMore, getPlaylist }) => (
   <SoundVastTitle title="Songs">
-    <div className={styles.songsContainer}>
-      <InfiniteScrollGrid loadMore={fetchSongs} hasMore={hasMore} className={styles.songs}>
-        {songs.map((song, index) => <Song key={song.id} index={index} {...song} />)}
-      </InfiniteScrollGrid>
-    </div>
+    <Audios audios={songs} fetchAudios={fetchSongs} getPlaylist={getPlaylist} hasMore={hasMore}>
+      <Song />
+    </Audios>
   </SoundVastTitle>
 );
 
@@ -25,6 +22,7 @@ Songs.propTypes = {
       coverImageUrl: PropTypes.string.isRequired,
     }),
   ).isRequired,
+  getPlaylist: PropTypes.func.isRequired,
   fetchSongs: PropTypes.func.isRequired,
   hasMore: PropTypes.bool.isRequired,
 };

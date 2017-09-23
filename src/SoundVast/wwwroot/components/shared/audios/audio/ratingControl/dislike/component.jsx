@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import styles from './component.less';
-import DislikeIcon from '../../../../../images/ratingControls/dislike.svg';
+import DislikeIcon from '../../../../../../images/ratingControls/dislike.svg';
 
 const Dislike = ({ dislike, dislikes, width, height }) => (
   <div>

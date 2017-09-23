@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import styles from './component.less';
-import LikeIcon from '../../../../../images/ratingControls/like.svg';
+import LikeIcon from '../../../../../../images/ratingControls/like.svg';
 
 const Like = ({ like, likes, width, height }) => (
   <div>

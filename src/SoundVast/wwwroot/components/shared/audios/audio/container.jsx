@@ -1,35 +1,30 @@
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { compose, withHandlers } from 'recompose';
+import { compose, withHandlers, setPropTypes } from 'recompose';
 import { actions } from 'react-jplaylist';
 import { actions as jPlayerActions } from 'react-jplayer';
 
-import Song from './component';
+import Audio from './component';
 
-const mapStateToProps = ({ music, jPlayers, jPlaylists }, { id }) => ({
-  songs: music.songs,
+const propTypes = {
+  getPlaylist: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = ({ jPlayers, jPlaylists }, { id }) => ({
   paused: jPlayers.FooterPlaylist.paused,
   isCurrent: jPlayers.FooterPlaylist.media.id === id,
   playlist: jPlaylists.FooterPlaylist.playlist,
 });
 
 const handlers = {
-  togglePlay: props => () => {
+  playOnClick: props => () => {
     let playlist = props.playlist;
     const jPlaylistId = 'FooterPlaylist';
 
     if (playlist.length === 0) {
-      playlist = props.songs.map(song => ({
-        id: song.id,
-        title: song.name,
-        artist: song.artist,
-        sources: {
-          mp3: `${window.location.origin}/song/stream?id=${song.id}`,
-        },
-        poster: song.coverImageUrl,
-        free: song.free,
-      }));
+      playlist = props.getPlaylist();
 
-      props.dispatch(actions.setPlaylist(jPlaylistId, playlist));
+      props.dispatch(actions.setPlaylist('FooterPlaylist', playlist));
     }
 
     if (props.paused || !props.isCurrent) {
@@ -43,6 +38,7 @@ const handlers = {
 };
 
 export default compose(
+  setPropTypes(propTypes),
   connect(mapStateToProps),
   withHandlers(handlers),
-)(Song);
+)(Audio);

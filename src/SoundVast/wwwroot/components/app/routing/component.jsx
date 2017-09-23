@@ -11,6 +11,7 @@ import ConfirmedEmailSuccess from '../../account/confirmedEmailSuccess/container
 import Profile from '../../user/profile/container';
 import Upload from '../../upload/component';
 import Songs from '../../songs/container';
+// import Radios from '../../radios/container';
 import Error from '../../error/component';
 import FooterPlaylist from '../../footerPlaylist/container';
 
@@ -23,6 +24,7 @@ export default () => (
         <Switch>
           <Route exact path="/" component={Songs} />
           <Route exact path="/songs" component={Songs} />
+          {/* <Route exact path="/radios" component={Radios} /> */}
           <Route exact path="/account/externalLoginConfirmation" component={SocialLoginConfirmation} />
           <Route exact path="/account/externalLoginFailure" component={SocialLoginFailure} />
           <Route exact path="/account/resetPassword" component={ResetPassword} />

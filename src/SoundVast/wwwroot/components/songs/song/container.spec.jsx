@@ -69,7 +69,7 @@ describe('SongContainer', () => {
     fetchMock.reset().restore();
   });
 
-  describe('togglePlay', () => {
+  describe('playOnClick', () => {
     it('should play when paused', () => {
       state.jPlayers.FooterPlaylist.paused = true;
 

@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { compose, withHandlers, setPropTypes } from 'recompose';
 
-import Dislike from './component';
+import Dislike from '../../../../shared/audios/audio/ratingControl/dislike/component';
 import { rateSong } from '../../../actions';
 
 const mapStateToProps = ({ music }, { index }) => ({
