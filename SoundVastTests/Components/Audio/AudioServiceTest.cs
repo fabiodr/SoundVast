@@ -85,11 +85,12 @@ namespace SoundVastTests.Components.Audio
 
             _mockAudioRepository.Setup(x => x.Include(r => r.Ratings)).Returns(audioModels);
 
-            _audioService.RateAudio(audioId, true, UserId);
+            var result = _audioService.RateAudio(audioId, true, UserId);
 
             audio.Ratings.ElementAt(0).Liked.Should().Be(true);
             audio.Ratings.ElementAt(0).UserId.Should().Be(UserId);
             audio.Ratings.ElementAt(0).AudioId.Should().Be(audioId);
+            result.Should().Be(0);
         }
 
         [Test]
@@ -117,9 +118,10 @@ namespace SoundVastTests.Components.Audio
 
             _mockAudioRepository.Setup(x => x.Include(r => r.Ratings)).Returns(audioModels);
 
-            _audioService.RateAudio(audioId, true, UserId);
+            var result = _audioService.RateAudio(audioId, true, UserId);
 
             audio.Ratings.ElementAt(0).Liked.Should().Be(true);
+            result.Should().Be(0);
         }
 
         [Test]

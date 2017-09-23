@@ -9,6 +9,7 @@ import Dislike from './ratingControl/dislike/container';
 const setup = (newProps) => {
   const props = {
     id: 0,
+    index: 0,
     name: 'bubble',
     artist: 'artist',
     coverImageUrl: 'bubble.jpg',

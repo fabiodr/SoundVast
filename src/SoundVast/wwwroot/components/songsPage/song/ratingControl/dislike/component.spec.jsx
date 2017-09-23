@@ -8,6 +8,7 @@ import DislikeIcon from '../../../../../images/ratingControls/dislike.svg';
 const setup = (newProps) => {
   const props = {
     dislike: expect.createSpy(),
+    dislikes: 22,
     ...newProps,
   };
 
@@ -20,17 +21,25 @@ const setup = (newProps) => {
 };
 
 describe('Dislike', () => {
-  it('should render dislike icon', () => {
-    const { wrapper } = setup();
+  describe('DislikeIcon', () => {
+    it('should render', () => {
+      const { wrapper } = setup();
 
-    expect((wrapper).type()).toBe(DislikeIcon);
+      expect(wrapper.find(DislikeIcon).type()).toBe(DislikeIcon);
+    });
+
+    it('should call dislike when clicked', () => {
+      const { wrapper, props } = setup();
+
+      wrapper.find(DislikeIcon).simulate('click');
+
+      expect(props.dislike).toHaveBeenCalled();
+    });
   });
 
-  it('should call dislike when dislike icon clicked', () => {
+  it('should render dislikes', () => {
     const { wrapper, props } = setup();
 
-    wrapper.simulate('click');
-
-    expect(props.dislike).toHaveBeenCalled();
+    expect(wrapper.find('.dislikes').text()).toBe(props.dislikes.toString());
   });
 });

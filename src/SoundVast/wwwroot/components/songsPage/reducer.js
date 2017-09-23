@@ -24,6 +24,16 @@ export default (state = defaultState, action) => {
         hasMore: action.hasMore,
       };
     }
+    case 'RATE_SONG': {
+      const ratings = { ...state.ratings };
+
+      ratings[action.id].liked = action.liked;
+
+      return {
+        ...state,
+        ratings,
+      };
+    }
     default: return state;
   }
 };

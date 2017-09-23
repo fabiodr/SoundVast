@@ -5,6 +5,10 @@ import { compose, withHandlers, setPropTypes } from 'recompose';
 import Dislike from './component';
 import { rateSong } from '../../../actions';
 
+const mapStateToProps = ({ music }, { index }) => ({
+  dislikes: music.songs[index].ratings.filter(x => !music.ratings[x].liked).length,
+});
+
 const handlers = {
   dislike: props => () => props.dispatch(rateSong(props.songId, false)),
 };
@@ -14,7 +18,7 @@ const propTypes = {
 };
 
 export default compose(
-  connect(),
+  connect(mapStateToProps),
   setPropTypes(propTypes),
   withHandlers(handlers),
 )(Dislike);

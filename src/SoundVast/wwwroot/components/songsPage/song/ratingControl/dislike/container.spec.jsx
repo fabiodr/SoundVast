@@ -5,13 +5,14 @@ import expect from 'expect';
 import thunk from 'redux-thunk';
 
 import DislikeContainer from './container';
+import DislikeIcon from '../../../../../images/ratingControls/dislike.svg';
 import { rateSong } from '../../../actions';
 
-let state;
 let store;
 const setup = (newProps) => {
   const props = {
     songId: 0,
+    index: 0,
     ...newProps,
   };
   const wrapper = shallow(
@@ -27,20 +28,35 @@ const setup = (newProps) => {
 };
 
 describe('DislikeContainer', () => {
+  let state;
+
   beforeEach(() => {
+    state = {
+      music: {
+        songs: [{ ratings: [0, 1] }],
+        ratings: {
+          0: { liked: true },
+          1: { liked: false },
+        },
+      },
+    };
     store = configureMockStore([thunk])(state);
   });
 
-  describe('dislike', () => {
-    it('should dislike the song when dislike is clicked', () => {
-      expect.spyOn(store, 'dispatch');
+  it('should dislike the song when dislike is clicked', () => {
+    expect.spyOn(store, 'dispatch');
 
-      const { wrapper } = setup();
+    const { wrapper } = setup();
 
-      wrapper.dive().simulate('click');
+    wrapper.dive().find(DislikeIcon).simulate('click');
 
-      expect(store.dispatch).toHaveBeenCalledWith(rateSong());
-    });
+    expect(store.dispatch).toHaveBeenCalledWith(rateSong());
+  });
+
+  it('passes down dislikes', () => {
+    const { wrapper } = setup();
+
+    expect(wrapper.prop('dislikes')).toBe(1);
   });
 });
 

@@ -6,7 +6,7 @@ import PlayState from './playState/container';
 import Like from './ratingControl/like/container';
 import Dislike from './ratingControl/dislike/container';
 
-const Song = ({ isCurrent, name, artist, coverImageUrl, togglePlay, id }) => (
+const Song = ({ isCurrent, name, artist, coverImageUrl, togglePlay, id, index }) => (
   <div className={styles.song}>
     <figure>
       <button onClick={togglePlay} className={styles.imageContainer}>
@@ -15,8 +15,8 @@ const Song = ({ isCurrent, name, artist, coverImageUrl, togglePlay, id }) => (
       </button>
       <figcaption className={styles.name}>{name}</figcaption>
       <figcaption className={styles.artist}>{artist}</figcaption>
-      <Like songId={id} />
-      <Dislike songId={id} />
+      <Like index={index} songId={id} />
+      <Dislike index={index} songId={id} />
     </figure>
   </div>
 );
@@ -26,6 +26,7 @@ Song.defaultProps = {
 };
 
 Song.propTypes = {
+  index: PropTypes.number.isRequired,
   isCurrent: PropTypes.bool.isRequired,
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,

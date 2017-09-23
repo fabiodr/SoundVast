@@ -50,29 +50,14 @@ namespace SoundVast.Components.Song
             });
         }
 
-        [HttpGet]
-        public IActionResult GetSongRatings(int id)
-        {
-            var songRatings = _audioService.GetAudioRatings(id);
-            var likes = songRatings.Count(x => x.Liked);
-            var dislikes = songRatings.Count(x => !x.Liked);
-
-            return Ok(new
-            {
-                likes,
-                dislikes
-            });
-        }
-
         [HttpPost]
         [Authorize]
         public IActionResult RateSong([FromBody] RateSongModel model)
         {
             var userId = _userManager.GetUserId(User);
+            var ratingId = _audioService.RateAudio(model.Id, model.Liked, userId);
 
-            _audioService.RateAudio(model.Id, model.Liked, userId);
-
-            return Ok();
+            return Ok(ratingId);
         }
 
         [HttpGet]

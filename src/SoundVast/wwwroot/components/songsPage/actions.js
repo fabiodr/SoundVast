@@ -40,20 +40,10 @@ export const rateSong = (id, liked) => dispatch =>
       'Content-Type': 'application/json',
     },
   }).then(notOkError)
-    .then(() => dispatch({
-      type: 'RATE_SONG',
-      id,
-    }))
-    .catch(error => dispatch(showGenericErrorPopup(error)));
-
-export const getSongRatings = id => dispatch =>
-  fetch(`/song/getSongRatings?id=${id}`, {
-    method: 'get',
-  }).then(notOkError)
     .then(response => response.json())
-    .then(json => dispatch({
-      type: 'FETCH_SONG_RATINGS',
-      likes: json.likes,
-      dislikes: json.dislikes,
+    .then(ratingId => dispatch({
+      type: 'RATE_SONG',
+      liked,
+      id: ratingId,
     }))
     .catch(error => dispatch(showGenericErrorPopup(error)));

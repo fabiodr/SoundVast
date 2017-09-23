@@ -5,13 +5,14 @@ import expect from 'expect';
 import thunk from 'redux-thunk';
 
 import LikeContainer from './container';
+import LikeIcon from '../../../../../images/ratingControls/like.svg';
 import { rateSong } from '../../../actions';
 
-let state;
 let store;
 const setup = (newProps) => {
   const props = {
     songId: 0,
+    index: 0,
     ...newProps,
   };
   const wrapper = shallow(
@@ -27,20 +28,35 @@ const setup = (newProps) => {
 };
 
 describe('LikeContainer', () => {
+  let state;
+
   beforeEach(() => {
+    state = {
+      music: {
+        songs: [{ ratings: [0, 1] }],
+        ratings: {
+          0: { liked: true },
+          1: { liked: false },
+        },
+      },
+    };
     store = configureMockStore([thunk])(state);
   });
 
-  describe('like', () => {
-    it('should like the song when like is clicked', () => {
-      expect.spyOn(store, 'dispatch');
+  it('should like the song when like icon is clicked', () => {
+    expect.spyOn(store, 'dispatch');
 
-      const { wrapper } = setup();
+    const { wrapper } = setup();
 
-      wrapper.dive().simulate('click');
+    wrapper.dive().find(LikeIcon).simulate('click');
 
-      expect(store.dispatch).toHaveBeenCalledWith(rateSong());
-    });
+    expect(store.dispatch).toHaveBeenCalledWith(rateSong());
+  });
+
+  it('passes down likes', () => {
+    const { wrapper } = setup();
+
+    expect(wrapper.prop('likes')).toBe(1);
   });
 });
 

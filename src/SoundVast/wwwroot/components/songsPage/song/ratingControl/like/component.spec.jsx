@@ -8,6 +8,7 @@ import LikeIcon from '../../../../../images/ratingControls/like.svg';
 const setup = (newProps) => {
   const props = {
     like: expect.createSpy(),
+    likes: 22,
     ...newProps,
   };
 
@@ -20,17 +21,25 @@ const setup = (newProps) => {
 };
 
 describe('Like', () => {
-  it('should render like icon', () => {
-    const { wrapper } = setup();
+  describe('LikeIcon', () => {
+    it('should render', () => {
+      const { wrapper } = setup();
 
-    expect(wrapper.type()).toBe(LikeIcon);
+      expect(wrapper.find(LikeIcon).type()).toBe(LikeIcon);
+    });
+
+    it('should call like when clicked', () => {
+      const { wrapper, props } = setup();
+
+      wrapper.find(LikeIcon).simulate('click');
+
+      expect(props.like).toHaveBeenCalled();
+    });
   });
 
-  it('should call like when like icon clicked', () => {
+  it('should render likes', () => {
     const { wrapper, props } = setup();
 
-    wrapper.simulate('click');
-
-    expect(props.like).toHaveBeenCalled();
+    expect(wrapper.find('.likes').text()).toBe(props.likes.toString());
   });
 });

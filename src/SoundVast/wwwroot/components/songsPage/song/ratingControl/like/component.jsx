@@ -4,8 +4,13 @@ import PropTypes from 'prop-types';
 import styles from './component.less';
 import LikeIcon from '../../../../../images/ratingControls/like.svg';
 
-const Like = ({ like, width, height }) => (
-  <LikeIcon className={styles.like} width={width} height={height} onClick={like} />
+const Like = ({ like, likes, width, height }) => (
+  <div>
+    <LikeIcon className={styles.likeIcon} width={width} height={height} onClick={like} />
+    <div className={styles.likes}>
+      {likes}
+    </div>
+  </div>
 );
 
 Like.defaultProps = {
@@ -14,6 +19,7 @@ Like.defaultProps = {
 };
 
 Like.propTypes = {
+  likes: PropTypes.number.isRequired,
   like: PropTypes.func.isRequired,
   width: PropTypes.number,
   height: PropTypes.number,

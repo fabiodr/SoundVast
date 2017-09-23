@@ -109,7 +109,7 @@ namespace SoundVastTests.Components.Song
         {
             var model = new RateSongModel
             {
-                Id = 0,
+                Id = 2,
                 Liked = true
             };
             var userId = "FEKFJ-GKFKL";
@@ -117,34 +117,12 @@ namespace SoundVastTests.Components.Song
             _mockUserManager.Setup(x => x.GetUserId(It.IsAny<ClaimsPrincipal>())).Returns(userId);
             _mockAudioService.Setup(x => x.RateAudio(model.Id, model.Liked, userId));
 
-            var result = _songController.RateSong(model);
+            var result = (OkObjectResult)_songController.RateSong(model);
 
             _mockUserManager.VerifyAll();
             _mockAudioService.VerifyAll();
 
-            result.Should().BeOfType<OkResult>();
-        }
-
-        [Test]
-        public void GetSongRatings()
-        {
-            var audioId = 0;
-            var ratings = new List<RatingModel>
-            {
-                new RatingModel {Liked = true, AudioId = audioId, UserId = UserId},
-                new RatingModel { Liked = true, AudioId  = audioId, UserId = UserId },
-                new RatingModel { Liked = false, AudioId  = audioId, UserId = UserId },
-            };
-
-            _mockAudioService.Setup(x => x.GetAudioRatings(audioId)).Returns(ratings);
-
-            var result = (OkObjectResult)_songController.GetSongRatings(audioId);
-
-            result.Value.ShouldBeEquivalentTo(new
-            {
-                likes = 2,
-                dislikes = 1
-            });
+            result.Value.Should().Be(0);
         }
     }
 }
