@@ -3,8 +3,8 @@ import expect from 'expect';
 import { shallow } from 'enzyme';
 
 import Songs from './component';
-import Song from '../song/container';
-import InfiniteScrollGrid from '../../content/infiniteScrollGrid/component';
+import Song from './song/container';
+import InfiniteScrollGrid from '../content/infiniteScrollGrid/component';
 
 const setup = (newProps) => {
   const props = {
@@ -33,5 +33,11 @@ describe('Songs', () => {
     ({ wrapper, props } = setup());
 
     expect((wrapper).find(InfiniteScrollGrid).find(Song).length).toBe(props.songs.length);
+  });
+
+  it('should change document title to songs', () => {
+    ({ wrapper } = setup());
+
+    expect((wrapper).prop('title')).toBe('Songs');
   });
 });

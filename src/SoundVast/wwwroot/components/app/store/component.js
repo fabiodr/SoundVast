@@ -11,7 +11,7 @@ import modal from '../../shared/modal/reducer';
 import popup from '../../shared/popup/reducer';
 import upload from '../../upload/reducer';
 import genre from '../../genre/reducer';
-import music from '../../songsPage/reducer';
+import music from '../../songs/reducer';
 
 const middleWare = applyMiddleware(thunk);
 const reducers = combineReducers({

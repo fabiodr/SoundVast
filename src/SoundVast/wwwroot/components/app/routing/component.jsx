@@ -10,7 +10,7 @@ import ResetPassword from '../../account/resetPassword/form/container';
 import ConfirmedEmailSuccess from '../../account/confirmedEmailSuccess/container';
 import Profile from '../../user/profile/container';
 import Upload from '../../upload/component';
-import SongsPage from '../../songsPage/component';
+import Songs from '../../songs/container';
 import Error from '../../error/component';
 import FooterPlaylist from '../../footerPlaylist/container';
 
@@ -21,8 +21,8 @@ export default () => (
       <Route path="/" component={Header} />
       <Content>
         <Switch>
-          <Route exact path="/" component={SongsPage} />
-          <Route exact path="/songs" component={SongsPage} />
+          <Route exact path="/" component={Songs} />
+          <Route exact path="/songs" component={Songs} />
           <Route exact path="/account/externalLoginConfirmation" component={SocialLoginConfirmation} />
           <Route exact path="/account/externalLoginFailure" component={SocialLoginFailure} />
           <Route exact path="/account/resetPassword" component={ResetPassword} />

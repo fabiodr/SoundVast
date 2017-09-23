@@ -12,19 +12,16 @@ const Header = () => (
   <header className={styles.header}>
     <nav>
       <ul>
-        {/* <li>
+        <li>
           <Link to="/" className={styles.logoLink}>
             <img src={soundVastLogo} alt="SoundVast" />
           </Link>
         </li>
         <li>
-          <Link to="filestream/filestreams">Audios</Link>
+          <Link to="songs">Songs</Link>
         </li>
         <li>
-          <Link to="livestreams/livestream">Live Streams</Link>
-        </li>*/}
-        <li>
-          <Link to="songs">Songs</Link>
+          <Link to="radio">Radio</Link>
         </li>
         <li>
           <Link to="upload">Upload</Link>

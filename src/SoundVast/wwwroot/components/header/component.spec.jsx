@@ -22,40 +22,44 @@ const setup = (newProps) => {
 };
 
 describe('Header', () => {
-  let wrapper;
-
   it('should render Songs Link', () => {
-    ({ wrapper } = setup());
+    const { wrapper } = setup();
 
     expect(wrapper.findWhere(x => x.prop('to') === 'songs').length).toBe(1);
   });
 
+  it('should render Radio Link', () => {
+    const { wrapper } = setup();
+
+    expect(wrapper.findWhere(x => x.prop('to') === 'radio').length).toBe(1);
+  });
+
   it('should render Upload Link', () => {
-    ({ wrapper } = setup());
+    const { wrapper } = setup();
 
     expect(wrapper.findWhere(x => x.prop('to') === 'upload').length).toBe(1);
   });
 
   it('should render AuthorizedList', () => {
-    ({ wrapper } = setup());
+    const { wrapper } = setup();
 
     expect(wrapper.find(AuthorizedList).length).toBe(1);
   });
 
   it('should render UnAuthorizedList', () => {
-    ({ wrapper } = setup());
+    const { wrapper } = setup();
 
     expect(wrapper.find(UnAuthorizedList).length).toBe(1);
   });
 
   it('should render AdminList', () => {
-    ({ wrapper } = setup());
+    const { wrapper } = setup();
 
     expect(wrapper.find(AdminList).length).toBe(1);
   });
 
   it('should render LinkDropdown', () => {
-    ({ wrapper } = setup());
+    const { wrapper } = setup();
 
     const LinkDropdownTitle = shallow(wrapper.find(LinkDropdown).prop('title'));
 
