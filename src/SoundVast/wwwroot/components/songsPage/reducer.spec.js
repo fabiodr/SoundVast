@@ -47,4 +47,29 @@ describe('songsReducer', () => {
       },
     });
   });
+
+  it('should rate song', () => {
+    const prevState = {
+      ratings: {
+        0: {
+          liked: false,
+        },
+      },
+      test: 'test',
+    };
+    const state = songsReducer(prevState, {
+      type: 'RATE_SONG',
+      id: 0,
+      liked: true,
+    });
+
+    expect(state).toEqual({
+      ...prevState,
+      ratings: {
+        0: {
+          liked: true,
+        },
+      },
+    });
+  });
 });

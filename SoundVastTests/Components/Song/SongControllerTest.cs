@@ -122,7 +122,10 @@ namespace SoundVastTests.Components.Song
             _mockUserManager.VerifyAll();
             _mockAudioService.VerifyAll();
 
-            result.Value.Should().Be(0);
+            result.Value.ShouldBeEquivalentTo(new
+            {
+                ratingId = 0,
+            });
         }
     }
 }

@@ -57,7 +57,10 @@ namespace SoundVast.Components.Song
             var userId = _userManager.GetUserId(User);
             var ratingId = _audioService.RateAudio(model.Id, model.Liked, userId);
 
-            return Ok(ratingId);
+            return Ok(new
+            {
+                ratingId
+            });
         }
 
         [HttpGet]

@@ -46,15 +46,17 @@ describe('songActions', () => {
   });
 
   it('should rate the song', (done) => {
-    const id = 0;
+    const response = {
+      ratingId: 0,
+    };
     const liked = true;
 
-    fetchMock.postOnce('/song/rateSong', '200');
+    fetchMock.postOnce('/song/rateSong', response);
 
-    store.dispatch(actions.rateSong(id, liked)).then(() => {
+    store.dispatch(actions.rateSong(0, liked)).then(() => {
       expect(calledActions[0]).toEqual({
         type: 'RATE_SONG',
-        id,
+        id: response.ratingId,
         liked,
       });
       done();

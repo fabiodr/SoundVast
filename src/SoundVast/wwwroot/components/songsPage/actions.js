@@ -41,9 +41,9 @@ export const rateSong = (id, liked) => dispatch =>
     },
   }).then(notOkError)
     .then(response => response.json())
-    .then(ratingId => dispatch({
+    .then(json => dispatch({
       type: 'RATE_SONG',
       liked,
-      id: ratingId,
+      id: json.ratingId,
     }))
     .catch(error => dispatch(showGenericErrorPopup(error)));
