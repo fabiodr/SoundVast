@@ -12,9 +12,6 @@ const setup = (newProps) => {
     index: 0,
     name: 'bubble',
     artist: 'artist',
-    coverImageUrl: 'bubble.jpg',
-    isCurrent: false,
-    playOnClick: expect.createSpy(),
     ...newProps,
   };
 
@@ -37,12 +34,6 @@ describe('Song', () => {
     const { wrapper, props } = setup();
 
     expect(wrapper.find('.artist').text()).toContain(props.artist);
-  });
-
-  it('renders coverImageUrl', () => {
-    const { wrapper, props } = setup();
-
-    expect(wrapper.find('img').prop('src')).toBe(props.coverImageUrl);
   });
 
   it('renders Like', () => {

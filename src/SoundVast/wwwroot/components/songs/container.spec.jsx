@@ -5,26 +5,16 @@ import expect from 'expect';
 
 import SongsContainer from './container';
 
-const songs = [
-  { id: 0, name: 'bubble.mp3', artist: 'bubbleArtist', coverImageUrl: 'bubble.jpg' },
-  { id: 1, name: 'kalimba.mp3', artist: 'kalimbaArtist', coverImageUrl: 'kalimba.jpg' },
-];
-const store = configureMockStore()({
-  music: {
-    songs,
-    hasMore: true,
-  },
-});
-
+let state;
 const setup = (newProps) => {
   const props = {
     ...newProps,
   };
-
+  const store = configureMockStore()(state);
   const wrapper = shallow(
     <SongsContainer {...props} />,
     { context: { store } },
-  );
+  ).dive();
 
   return {
     wrapper,
@@ -33,17 +23,38 @@ const setup = (newProps) => {
 };
 
 describe('SongsContainer', () => {
-  let wrapper;
-
-  it('should map state', () => {
-    ({ wrapper } = setup());
-
-    expect(wrapper.prop('songs')).toEqual(songs);
+  beforeEach(() => {
+    state = {
+      music: {
+        songs: [
+          {
+            id: 0,
+            name: 'bubble',
+            artist: 'bubbleArtist',
+            coverImageUrl: 'bubble.jpg',
+            free: true,
+          },
+        ],
+        hasMore: true,
+      },
+    };
   });
 
-  it('should map state', () => {
-    ({ wrapper } = setup());
+  it('getPlaylist should map songs into playlist', () => {
+    const { wrapper } = setup();
+    const getPlaylist = wrapper.prop('getPlaylist');
+    const playlist = getPlaylist();
+    const song = state.music.songs[0];
 
-    expect(wrapper.prop('hasMore')).toEqual(true);
+    expect(playlist).toEqual([{
+      id: song.id,
+      title: song.name,
+      artist: song.artist,
+      sources: {
+        mp3: `${window.location.origin}/song/stream?id=${state.music.songs[0].id}`,
+      },
+      poster: song.coverImageUrl,
+      free: song.free,
+    }]);
   });
 });

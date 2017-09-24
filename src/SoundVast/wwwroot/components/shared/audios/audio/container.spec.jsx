@@ -7,21 +7,20 @@ import fetchMock from 'fetch-mock';
 import { constants } from 'react-jplaylist';
 import { constants as jPlayerConstants } from 'react-jplayer';
 
-import SongContainer from './container';
+import AudioContainer from './container';
 
 let state;
 const setup = (newProps) => {
   const props = {
     id: 0,
-    index: 0,
-    name: 'test',
-    artist: 'kalimba',
     coverImageUrl: 'test.jpg',
+    getPlaylist: expect.createSpy(),
+    children: 'test',
     ...newProps,
   };
   const store = configureMockStore([thunk])(state);
   const wrapper = shallow(
-    <SongContainer {...props} />,
+    <AudioContainer {...props} />,
     { context: { store } },
   ).dive().dive();
 
@@ -34,19 +33,9 @@ const setup = (newProps) => {
   };
 };
 
-describe('SongContainer', () => {
+describe('AudioContainer', () => {
   beforeEach(() => {
     state = {
-      music: {
-        songs: [{
-          id: 0,
-          name: 'bubble',
-          artist: 'kalimba',
-          audioUrl: 'www.test.mp3',
-          coverImageUrl: 'www.test.jpg',
-          free: true,
-        }],
-      },
       jPlayers: {
         FooterPlaylist: {
           media: {},
@@ -112,23 +101,25 @@ describe('SongContainer', () => {
 
     it('should set the playlist when the playlist is empty', () => {
       state.jPlaylists.FooterPlaylist.playlist = [];
+      const playlist = [{
+        id: 0,
+        title: 'bubble',
+        artist: 'kalimba',
+        sources: {
+          mp3: 'www.test.mp3',
+        },
+        poster: 'www.test.jpg',
+        free: true,
+      }];
+      const { wrapper, actions, props } = setup();
 
-      const { wrapper, actions } = setup();
+      props.getPlaylist.andReturn(playlist);
 
       wrapper.find('.imageContainer').simulate('click');
 
       expect(actions[0]).toEqual({
         id: 'FooterPlaylist',
-        playlist: [{
-          id: 0,
-          title: 'bubble',
-          artist: 'kalimba',
-          sources: {
-            mp3: `${window.location.origin}/song/stream?id=${state.music.songs[0].id}`,
-          },
-          poster: 'www.test.jpg',
-          free: true,
-        }],
+        playlist,
         type: constants.actionNames.SET_PLAYLIST,
       });
     });

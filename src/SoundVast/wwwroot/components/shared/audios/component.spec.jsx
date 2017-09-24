@@ -11,6 +11,7 @@ const setup = (newProps) => {
       { id: 0, name: 'bubble', artist: 'bubbleArtist', coverImageUrl: 'bubble.jpg' },
       { id: 1, name: 'kalimba', artist: 'kalimbaArtist', coverImageUrl: 'kalimba.jpg' },
     ],
+    getPlaylist: expect.createSpy(),
     fetchAudios: expect.createSpy(),
     hasMore: true,
     children: <div className="@@audio" />,
@@ -26,7 +27,7 @@ const setup = (newProps) => {
 };
 
 describe('Audios', () => {
-  it('should render child for each audio', () => {
+  it('should render child for each audio in InfiniteScrollGrid', () => {
     const { wrapper, props } = setup();
 
     expect(wrapper.find(InfiniteScrollGrid).find('.@@audio').length).toBe(props.audios.length);

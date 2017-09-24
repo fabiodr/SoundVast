@@ -3,7 +3,7 @@ import expect from 'expect';
 import { shallow } from 'enzyme';
 
 import Songs from './component';
-import Song from './song/container';
+import Song from './song/component';
 import Audios from '../shared/audios/component';
 
 const setup = (newProps) => {
@@ -12,6 +12,7 @@ const setup = (newProps) => {
       { id: 0, name: 'bubble', artist: 'bubbleArtist', coverImageUrl: 'bubble.jpg' },
     ],
     fetchSongs: expect.createSpy(),
+    getPlaylist: expect.createSpy(),
     hasMore: true,
     ...newProps,
   };
