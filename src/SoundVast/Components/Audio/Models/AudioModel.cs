@@ -1,20 +1,14 @@
-﻿using SoundVast.Components.Category;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using SoundVast.Components.Category.Models;
-using SoundVast.Components.Comment.Models;
 using SoundVast.Components.Genre.Models;
-using SoundVast.Components.Image.Models;
-using SoundVast.Components.Rating;
 using SoundVast.Components.Rating.Models;
-using SoundVast.Components.User;
 
 namespace SoundVast.Components.Audio.Models
 {
-    public class AudioModel
+    public abstract class AudioModel
     {
         [Required]
         public int Id { get; set; }
@@ -22,7 +16,7 @@ namespace SoundVast.Components.Audio.Models
         // public static int PlaylistCount { get; } = 50;
         [Required]
         public string Name { get; set; }
-        public string Artist { get; set; }
+
         [Required]
         public string CoverImageUrl { get; set; }
       //  public int CommentCount { get; private set; }

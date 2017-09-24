@@ -7,11 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.DependencyInjection;
-using SoundVast.Components.Category.Models;
-using SoundVast.Components.FileStream.Models;
 using SoundVast.Components.Genre.Models;
-using SoundVast.Components.Image.Models;
-using SoundVast.Components.LiveStream.Models;
 using SoundVast.Components.Quote.Models;
 using SoundVast.CustomHelpers;
 using SoundVast.Properties;
@@ -35,8 +31,8 @@ namespace SoundVast.Data
                 context.Database.Migrate();
 
                 var musicGenres = MusicGenres.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
-                var radioStationCategoryResources = LiveStreamCategories.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
-                var placeHolderImage = new ImageFileModel("Placeholder.jpg");
+                //var radioStationCategoryResources = LiveStreamCategories.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
+                //var placeHolderImage = new ImageFileModel("Placeholder.jpg");
 
                 InitializeGenres(context, musicGenres);
 
@@ -57,20 +53,19 @@ namespace SoundVast.Data
             //context.Quotes.AddRange(quotes.Where(quote => !context.Quotes.Any(x => x.Quotation == quote.Quotation)));
         }
 
-        public static void InitializeCategories<T>(ApplicationDbContext context, DictionaryEntry[] categoryResources, ImageFileModel imageFile)
-                where T : CategoryModel
-        {
-            var categories = categoryResources.Select(x => (T)Activator.CreateInstance(typeof(T), new object[] { x.Value, imageFile }));
+        //public static void InitializeCategories<T>(ApplicationDbContext context, DictionaryEntry[] categoryResources, ImageFileModel imageFile)
+        //        where T : CategoryModel
+        //{
+        //    var categories = categoryResources.Select(x => (T)Activator.CreateInstance(typeof(T), new object[] { x.Value, imageFile }));
 
-            context.Set<T>().AddRange(categories.Where(category => !context.Set<T>().Any(x => x.Name == category.Name)));
-        }
+        //    context.Set<T>().AddRange(categories.Where(category => !context.Set<T>().Any(x => x.Name == category.Name)));
+        //}
 
         public static void InitializeGenres(ApplicationDbContext context, DictionaryEntry[] genreResources)
         {
             var musicGenres = genreResources.Select(x => new GenreModel
             {
-                Name = (string)x.Value,
-                GenreType = nameof(GenreType.Song)
+                Name = (string)x.Value
             });
 
             context.Set<GenreModel>().AddRange(musicGenres.Where(genre => !context.Set<GenreModel>().Any(x => x.Name == genre.Name)));

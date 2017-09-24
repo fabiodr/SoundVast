@@ -4,21 +4,6 @@ using System.Linq;
 using System.Web;
 using AutoMapper;
 using System.Linq.Expressions;
-using SoundVast.Components;
-using SoundVast.Components.Audio;
-using SoundVast.Components.Audio.Models;
-using SoundVast.Components.Category.Models;
-using SoundVast.Components.Comment.Models;
-using SoundVast.Components.Comment.ViewModels;
-using SoundVast.Components.FileStream.Models;
-using SoundVast.Components.FileStream.ViewModels;
-using SoundVast.Components.LiveStream.Models;
-using SoundVast.Components.LiveStream.ViewModels;
-using SoundVast.Components.Playlist.Models;
-using SoundVast.Components.Quote;
-using SoundVast.Components.Quote.Models;
-using SoundVast.Components.User.ViewModels;
-using SoundVast.CustomHelpers;
 using SoundVast.Storage.CloudStorage;
 
 namespace SoundVast

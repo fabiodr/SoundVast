@@ -1,21 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Moq;
-using SoundVast;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Xunit;
-using AutoMapper;
-using Microsoft.AspNetCore.Identity;
-using SoundVast.Components.Audio;
-using SoundVast.Components.Audio.Models;
-using SoundVast.Components.Comment;
-using SoundVast.Components.Comment.Models;
-using SoundVast.Components.Rating;
-using SoundVast.Components.Report;
-using SoundVast.Components.User;
-using SoundVast.Storage.CloudStorage;
+﻿
 
 namespace SoundVastTests.Controllers
 {

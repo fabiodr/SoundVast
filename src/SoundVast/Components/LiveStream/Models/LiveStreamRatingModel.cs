@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using SoundVast.Components.Rating.Models;
+﻿//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Threading.Tasks;
+//using SoundVast.Components.Rating.Models;
 
-namespace SoundVast.Components.LiveStream.Models
-{
-    public class LiveStreamRatingModel : RatingModel
-    {
-        public virtual LiveStreamModel LiveStream { get; set; }
-    }
-}
+//namespace SoundVast.Components.LiveStream.Models
+//{
+//    public class LiveStreamRatingModel : RatingModel
+//    {
+//        public virtual LiveStreamModel LiveStream { get; set; }
+//    }
+//}

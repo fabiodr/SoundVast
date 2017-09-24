@@ -1,15 +1,20 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
 using SoundVast.Components.Audio.Models;
 using SoundVast.Components.Rating.Models;
 using SoundVast.Components.User;
+using SoundVast.Storage.CloudStorage;
 
 namespace SoundVast.Components.Audio
 {
-    public interface IAudioService
+    public interface IAudioService<T> where T : AudioModel
     {
-        ICollection<AudioModel> GetSongs(int current, int amount);
-        AudioModel GetAudio(int id);
+        ICollection<T> GetAudios(int current, int amount);
+        T GetAudio(int id);
         ICollection<RatingModel> GetAudioRatings(int id);
-        int RateAudio(int audioId, bool liked, string userId);
+        Task UploadCoverImage(ICloudBlob blob, Stream stream, string contentType);
+        void Add(T model);
+        RatingModel RateAudio(int audioId, bool liked, string userId);
     }
 }

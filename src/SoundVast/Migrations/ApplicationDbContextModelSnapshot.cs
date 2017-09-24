@@ -128,9 +128,10 @@ namespace SoundVast.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Artist");
-
                     b.Property<string>("CoverImageUrl")
+                        .IsRequired();
+
+                    b.Property<string>("Discriminator")
                         .IsRequired();
 
                     b.Property<int?>("GenreId");
@@ -146,15 +147,14 @@ namespace SoundVast.Migrations
                     b.HasIndex("GenreId");
 
                     b.ToTable("Audios");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("AudioModel");
                 });
 
             modelBuilder.Entity("SoundVast.Components.Genre.Models.GenreModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
-
-                    b.Property<string>("GenreType")
-                        .IsRequired();
 
                     b.Property<string>("Name")
                         .IsRequired();
@@ -234,6 +234,27 @@ namespace SoundVast.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("SoundVast.Components.Radio.Models.RadioModel", b =>
+                {
+                    b.HasBaseType("SoundVast.Components.Audio.Models.AudioModel");
+
+
+                    b.ToTable("RadioModel");
+
+                    b.HasDiscriminator().HasValue("RadioModel");
+                });
+
+            modelBuilder.Entity("SoundVast.Components.Song.Models.SongModel", b =>
+                {
+                    b.HasBaseType("SoundVast.Components.Audio.Models.AudioModel");
+
+                    b.Property<string>("Artist");
+
+                    b.ToTable("SongModel");
+
+                    b.HasDiscriminator().HasValue("SongModel");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole")
@@ -281,7 +302,7 @@ namespace SoundVast.Migrations
             modelBuilder.Entity("SoundVast.Components.Rating.Models.RatingModel", b =>
                 {
                     b.HasOne("SoundVast.Components.Audio.Models.AudioModel", "Audio")
-                        .WithMany("Rating")
+                        .WithMany("Ratings")
                         .HasForeignKey("AudioId")
                         .OnDelete(DeleteBehavior.Cascade);
 

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using SoundVast.Validation;
 
-namespace SoundVast.Components.Upload
+namespace SoundVast.Components.Audio
 {
-    public interface IUploadValidator
+    public interface IAudioValidator
     {
         void ValidateUploadCoverImage(double fileSize);
     }

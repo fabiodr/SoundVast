@@ -1,33 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using SoundVast.CustomHelpers;
-using System.Linq;
-using System.Linq.Expressions;
-using Microsoft.WindowsAzure.Storage.Blob;
-using System.Threading.Tasks;
-using System.Net;
-using System.Text.RegularExpressions;
-using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using SoundVast.QueryOptions;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using DateFrom = SoundVast.Utilities.DateFrom;
-using Stream = SoundVast.Utilities.Stream;
-using Microsoft.AspNetCore.Identity;
-using SoundVast.Components.Audio;
-using SoundVast.Components.Audio.Models;
-using SoundVast.Components.Category;
-using SoundVast.Components.FileStream.Models;
-using SoundVast.Components.FileStream.ViewModels;
-using SoundVast.Components.Genre;
-using SoundVast.Components.Rating;
-using SoundVast.Components.Report;
-using SoundVast.Components.User;
-using SoundVast.Storage.CloudStorage;
+
 
 namespace SoundVast.Components.FileStream
 {

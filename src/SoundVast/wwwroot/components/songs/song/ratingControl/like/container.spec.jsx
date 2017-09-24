@@ -12,7 +12,6 @@ let store;
 const setup = (newProps) => {
   const props = {
     songId: 0,
-    index: 0,
     ...newProps,
   };
   const wrapper = shallow(
@@ -33,10 +32,10 @@ describe('LikeContainer', () => {
   beforeEach(() => {
     state = {
       music: {
-        songs: [{ ratings: [0, 1] }],
         ratings: {
-          0: { liked: true },
-          1: { liked: false },
+          0: { audioId: 0, liked: true },
+          1: { audioId: 0, liked: false },
+          2: { audioId: 1, liked: true },
         },
       },
     };

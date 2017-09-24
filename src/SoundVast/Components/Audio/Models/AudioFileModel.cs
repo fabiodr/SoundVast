@@ -1,19 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Threading.Tasks;
 
-namespace SoundVast.Components.Audio.Models
-{
-    public class AudioFileModel : FileModel
-    {
-        public AudioFileModel()
-        {
-        }
+//namespace SoundVast.Components.Audio.Models
+//{
+//    public class AudioFileModel : FileModel
+//    {
+//        public AudioFileModel()
+//        {
+//        }
 
-        public AudioFileModel(string name) : base(name)
-        {
+//        public AudioFileModel(string name) : base(name)
+//        {
 
-        }
-    }
-}
+//        }
+//    }
+//}

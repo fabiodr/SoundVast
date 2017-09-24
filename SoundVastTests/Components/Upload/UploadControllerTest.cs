@@ -25,6 +25,8 @@ using SoundVast.Components;
 using SoundVast.Components.Audio.Models;
 using SoundVast.Components.FileStream;
 using SoundVast.Components.FileStream.Models;
+using SoundVast.Components.Song;
+using SoundVast.Components.Song.Models;
 using SoundVast.Components.User;
 using SoundVast.CustomHelpers;
 using SoundVast.Storage.CloudStorage;
@@ -40,7 +42,7 @@ namespace SoundVastTests.Components.Upload
         private UploadController _uploadController;
         private Mock<IFileStorage> _mockFileStorage;
         private Mock<ICloudStorage> _mockCloudStorage;
-        private Mock<IUploadService> _mockUploadService;
+        private Mock<ISongService> _mockSongService;
         private Mock<UserManager<ApplicationUser>> _mockUserManager;
 
         [SetUp]
@@ -50,11 +52,11 @@ namespace SoundVastTests.Components.Upload
 
             _mockFileStorage = new Mock<IFileStorage>();
             _mockCloudStorage = new Mock<ICloudStorage>();
-            _mockUploadService = new Mock<IUploadService>();
+            _mockSongService = new Mock<ISongService>();
             _mockUserManager = new Mock<UserManager<ApplicationUser>>(userStore.Object, null, null, null, null, null, null, null, null);
 
             _uploadController = new UploadController(_mockFileStorage.Object, _mockCloudStorage.Object,
-                _mockUploadService.Object, _mockUserManager.Object);
+                _mockSongService.Object, _mockUserManager.Object);
         }
 
         [Test]
@@ -68,15 +70,15 @@ namespace SoundVastTests.Components.Upload
                 CoverImageUrl = "bubble.jpg",
                 GenreId = 2
             };
-            var model = new AudioModel();
+            var model = new SongModel();
 
             _mockUserManager.Setup(x => x.GetUserId(It.IsAny<ClaimsPrincipal>())).Returns(userId);
-            _mockUploadService.Setup(x => x.Add(It.IsAny<AudioModel>())).Callback<AudioModel>(x => model = x);
+            _mockSongService.Setup(x => x.Add(It.IsAny<SongModel>())).Callback<SongModel>(x => model = x);
 
             var result = (OkResult)_uploadController.Save(viewModel);
 
-            _mockUploadService.Verify(x => x.Add(It.IsAny<AudioModel>()), Times.Once);
-            model.ShouldBeEquivalentTo(new AudioModel
+            _mockSongService.Verify(x => x.Add(It.IsAny<SongModel>()), Times.Once);
+            model.ShouldBeEquivalentTo(new SongModel
             {
                 Name = viewModel.Name,
                 Artist = viewModel.Artist,
@@ -93,7 +95,7 @@ namespace SoundVastTests.Components.Upload
         {
             var validationResult = new ValidationResult("_error", "testError");
 
-            _mockUploadService.Setup(x => x.Add(It.IsAny<AudioModel>())).Throws(new ValidationException(validationResult));
+            _mockSongService.Setup(x => x.Add(It.IsAny<SongModel>())).Throws(new ValidationException(validationResult));
 
             var result = (ObjectResult)_uploadController.Save(new SaveUploadViewModel());
 
@@ -141,11 +143,11 @@ namespace SoundVastTests.Components.Upload
             mockFile.Setup(x => x.FileName).Returns(coverImageName);
             mockFile.Setup(x => x.ContentType).Returns(contentType);
             _mockCloudStorage.Setup(x => x.GetBlob(CloudStorageType.Image, coverImageName)).Returns(imageBlob);
-            _mockUploadService.Setup(x => x.UploadCoverImage(imageBlob, stream, contentType)).Returns(Task.CompletedTask);
+            _mockSongService.Setup(x => x.UploadCoverImage(imageBlob, stream, contentType)).Returns(Task.CompletedTask);
             
             var result = (OkObjectResult)await _uploadController.UploadCoverImage(mockFile.Object);
 
-            _mockUploadService.VerifyAll();
+            _mockSongService.VerifyAll();
             result.Value.ShouldBeEquivalentTo(new
             {
                 imagePath = imageBlob.CloudBlockBlob.Uri.AbsoluteUri
@@ -159,7 +161,7 @@ namespace SoundVastTests.Components.Upload
             var mockFile = new Mock<IFormFile>();
 
             _mockCloudStorage.Setup(x => x.GetBlob(CloudStorageType.Image, It.IsAny<string>()));
-            _mockUploadService.Setup(x => x.UploadCoverImage(It.IsAny<ICloudBlob>(), It.IsAny<Stream>(), It.IsAny<string>()))
+            _mockSongService.Setup(x => x.UploadCoverImage(It.IsAny<ICloudBlob>(), It.IsAny<Stream>(), It.IsAny<string>()))
                 .Throws(new ValidationException(validationResult));
 
             var result = (ObjectResult)await _uploadController.UploadCoverImage(mockFile.Object);

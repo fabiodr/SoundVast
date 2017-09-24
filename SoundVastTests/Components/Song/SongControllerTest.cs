@@ -8,9 +8,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
-using SoundVast.Components.Audio;
-using SoundVast.Components.Audio.Models;
-using SoundVast.Components.Rating;
 using SoundVast.Components.Rating.Models;
 using SoundVast.Components.Song;
 using SoundVast.Components.Song.Models;
@@ -24,7 +21,7 @@ namespace SoundVastTests.Components.Song
     public class SongControllerTest
     {
         private SongController _songController;
-        private Mock<IAudioService> _mockAudioService;
+        private Mock<ISongService> _mockSongService;
         private Mock<ICloudStorage> _mockCloudStorage;
         private Mock<UserManager<ApplicationUser>> _mockUserManager;
         private const string UserId = "FEKFJ-GKFKL";
@@ -35,21 +32,21 @@ namespace SoundVastTests.Components.Song
             var userStore = new Mock<IUserStore<ApplicationUser>>();
 
             _mockUserManager = new Mock<UserManager<ApplicationUser>>(userStore.Object, null, null, null, null, null, null, null, null);
-            _mockAudioService = new Mock<IAudioService>();
+            _mockSongService = new Mock<ISongService>();
             _mockCloudStorage = new Mock<ICloudStorage>();
-            _songController = new SongController(_mockAudioService.Object, _mockCloudStorage.Object, _mockUserManager.Object);
+            _songController = new SongController(_mockSongService.Object, _mockCloudStorage.Object, _mockUserManager.Object);
         }
 
         [Test]
         public void GetSongs()
         {
-            var songs = new List<AudioModel>
+            var songs = new List<SongModel>
             {
-                new AudioModel(),
-                new AudioModel()
+                new SongModel(),
+                new SongModel()
             };
 
-            _mockAudioService.Setup(x => x.GetSongs(It.IsAny<int>(), It.IsAny<int>())).Returns(songs);
+            _mockSongService.Setup(x => x.GetAudios(It.IsAny<int>(), It.IsAny<int>())).Returns(songs);
 
             var result = (OkObjectResult)_songController.GetSongs(0, 30);
 
@@ -63,19 +60,19 @@ namespace SoundVastTests.Components.Song
         [Test]
         public void Stream()
         {
-            var song = new AudioModel
+            var song = new SongModel
             {
                 Name = "test"
             };
 
             _songController.ControllerContext.HttpContext = new DefaultHttpContext();
 
-            _mockAudioService.Setup(x => x.GetAudio(It.IsAny<int>())).Returns(song);
+            _mockSongService.Setup(x => x.GetAudio(It.IsAny<int>())).Returns(song);
             _mockCloudStorage.Setup(x => x.GetBlob(CloudStorageType.Audio, song.Name));
 
             var result = _songController.Stream(22);
 
-            _mockAudioService.VerifyAll();
+            _mockSongService.VerifyAll();
             _mockCloudStorage.VerifyAll();
 
             var responseHeaders = _songController.ControllerContext.HttpContext.Response.Headers;
@@ -93,18 +90,19 @@ namespace SoundVastTests.Components.Song
                 Id = 2,
                 Liked = true
             };
+            var ratingModel = new RatingModel();
 
             _mockUserManager.Setup(x => x.GetUserId(It.IsAny<ClaimsPrincipal>())).Returns(UserId);
-            _mockAudioService.Setup(x => x.RateAudio(model.Id, model.Liked, UserId));
+            _mockSongService.Setup(x => x.RateAudio(model.Id, model.Liked, UserId)).Returns(ratingModel);
 
             var result = (OkObjectResult)_songController.RateSong(model);
 
             _mockUserManager.VerifyAll();
-            _mockAudioService.VerifyAll();
+            _mockSongService.VerifyAll();
 
             result.Value.ShouldBeEquivalentTo(new
             {
-                ratingId = 0,
+                rating = ratingModel
             });
         }
     }

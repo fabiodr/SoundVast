@@ -14,13 +14,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using SoundVast.Components.Audio.Models;
-using SoundVast.Components.Category;
-using SoundVast.Components.Category.Models;
-using SoundVast.Components.Genre;
-using SoundVast.Components.Genre.Models;
-using SoundVast.Components.Rating;
-using SoundVast.Components.Report;
-using SoundVast.Components.Report.Models;
 using SoundVast.Components.User;
 
 namespace SoundVast.Components.Audio

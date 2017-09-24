@@ -1,31 +1,39 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using ByteSizeLib;
 using Microsoft.EntityFrameworkCore;
 using SoundVast.Components.Audio.Models;
 using SoundVast.Components.Genre.Models;
 using SoundVast.Components.Rating.Models;
+using SoundVast.Components.Upload;
 using SoundVast.Components.User;
 using SoundVast.Repository;
+using SoundVast.Storage.CloudStorage;
+using SoundVast.Validation;
 
 namespace SoundVast.Components.Audio
 {
-    public class AudioService : IAudioService
+    public abstract class AudioService<T> : IAudioService<T> where T : AudioModel
     {
-        private readonly IRepository<AudioModel> _repository;
+        private readonly IRepository<T> _repository;
+        private readonly IValidationProvider _validationProvider;
+        private readonly IAudioValidator _audioValidator;
 
-        public AudioService(IRepository<AudioModel> repository)
+        protected AudioService(IRepository<T> repository, IValidationProvider validationProvider, IAudioValidator audioValidator)
         {
             _repository = repository;
+            _validationProvider = validationProvider;
+            _audioValidator = audioValidator;
         }
 
-        public ICollection<AudioModel> GetSongs(int current, int amount)
+        public ICollection<T> GetAudios(int current, int amount)
         {
-            return _repository.GetAll()
-                .Include(x => x.Ratings)
-                .Where(x => x.Genre.GenreType == nameof(GenreType.Song)).Skip(current).Take(amount).ToList();
+            return _repository.GetAll().Include(x => x.Ratings).Skip(current).Take(amount).ToList();
         }
 
-        public AudioModel GetAudio(int id)
+        public T GetAudio(int id)
         {
             return _repository.Get(id);
         }
@@ -35,29 +43,45 @@ namespace SoundVast.Components.Audio
             return _repository.GetAll().Include(x => x.Ratings).Single(x => x.Id == id).Ratings;
         }
 
-        public int RateAudio(int audioId, bool liked, string userId)
+        public async Task UploadCoverImage(ICloudBlob blob, Stream stream, string contentType)
+        {
+            var fileSize = ByteSize.FromBytes(stream.Length);
+
+            _audioValidator.ValidateUploadCoverImage(fileSize.MegaBytes);
+
+            await blob.UploadFromStreamAsync(stream, contentType);
+        }
+
+        public void Add(T model)
+        {
+            _validationProvider.Validate(model);
+
+            _repository.Add(model);
+        }
+
+        public RatingModel RateAudio(int audioId, bool liked, string userId)
         {
             var audio = _repository.Include(x => x.Ratings).Single(x => x.Id == audioId);
-            var existingRating = audio.Ratings?.SingleOrDefault(x => x.UserId == userId);
+            var rating = audio.Ratings?.SingleOrDefault(x => x.UserId == userId);
 
-            if (existingRating != null)
+            if (rating != null)
             {
-                existingRating.Liked = liked;
+                rating.Liked = liked;
             }
             else
             {
-                existingRating = new RatingModel
+                rating = new RatingModel
                 {
                     Liked = liked,
                     UserId = userId,
                     AudioId = audioId
                 };
-                audio.Ratings.Add(existingRating);
+                audio.Ratings.Add(rating);
             }
 
             _repository.Save();
 
-            return existingRating.Id;
+            return rating;
         }
     }
 }

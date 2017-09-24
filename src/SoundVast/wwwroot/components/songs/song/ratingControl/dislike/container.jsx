@@ -5,8 +5,8 @@ import { compose, withHandlers, setPropTypes } from 'recompose';
 import Dislike from '../../../../shared/audios/audio/ratingControl/dislike/component';
 import { rateSong } from '../../../actions';
 
-const mapStateToProps = ({ music }, { index }) => ({
-  dislikes: music.songs[index].ratings.filter(x => !music.ratings[x].liked).length,
+const mapStateToProps = ({ music }, { songId }) => ({
+  dislikes: Object.values(music.ratings).filter(x => x.audioId === songId && !x.liked).length,
 });
 
 const handlers = {

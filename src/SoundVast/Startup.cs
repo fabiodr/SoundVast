@@ -22,22 +22,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Options;
 using SoundVast.Components;
-using SoundVast.Components.Audio;
-using SoundVast.Components.Audio.Models;
-using SoundVast.Components.Category;
-using SoundVast.Components.Comment;
-using SoundVast.Components.Comment.Models;
-using SoundVast.Components.FileStream;
-using SoundVast.Components.FileStream.Models;
-using SoundVast.Components.Genre;
-using SoundVast.Components.LiveStream;
-using SoundVast.Components.LiveStream.Models;
-using SoundVast.Components.Playlist;
-using SoundVast.Components.Playlist.Models;
-using SoundVast.Components.Quote;
-using SoundVast.Components.Quote.Models;
-using SoundVast.Components.Rating;
-using SoundVast.Components.Report;
 using SoundVast.Components.User;
 using System.Text.RegularExpressions;
 using Autofac;
@@ -45,7 +29,9 @@ using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using SoundVast.Components.Genre.Models;
+using SoundVast.Components.Radio.Models;
 using SoundVast.Components.Rating.Models;
+using SoundVast.Components.Song.Models;
 using SoundVast.Components.Upload;
 using SoundVast.Validation;
 
@@ -182,7 +168,7 @@ namespace SoundVast
 
                 return type =>
                 {
-                    var valType = typeof(Validator<>).MakeGenericType(type);
+                    var valType = typeof(Validator<>).MakeGenericType(type.BaseType);
 
                     return (IValidator)context.Resolve(valType);
                 };
@@ -200,7 +186,8 @@ namespace SoundVast
             builder.RegisterType<AuthMessageSender>().As<IEmailSender>();
             builder.RegisterType<AuthMessageSender>().As<ISmsSender>();
             builder.RegisterType<AzureBlob>().As<ICloudBlob>();
-            builder.RegisterType<Repository<AudioModel, ApplicationDbContext>>().As<IRepository<AudioModel>>();
+            builder.RegisterType<Repository<SongModel, ApplicationDbContext>>().As<IRepository<SongModel>>();
+            builder.RegisterType<Repository<RadioModel, ApplicationDbContext>>().As<IRepository<RadioModel>>();
             builder.RegisterType<Repository<GenreModel, ApplicationDbContext>>().As<IRepository<GenreModel>>();
 
             return builder;

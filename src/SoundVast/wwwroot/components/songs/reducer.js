@@ -27,7 +27,7 @@ export default (state = defaultState, action) => {
     case 'RATE_SONG': {
       const ratings = { ...state.ratings };
 
-      ratings[action.id].liked = action.liked;
+      ratings[action.rating.id] = action.rating;
 
       return {
         ...state,

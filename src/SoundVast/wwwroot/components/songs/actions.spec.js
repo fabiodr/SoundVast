@@ -47,7 +47,10 @@ describe('songActions', () => {
 
   it('should rate the song', (done) => {
     const response = {
-      ratingId: 0,
+      rating: {
+        id: 0,
+        liked: true,
+      },
     };
     const liked = true;
 
@@ -56,8 +59,7 @@ describe('songActions', () => {
     store.dispatch(actions.rateSong(0, liked)).then(() => {
       expect(calledActions[0]).toEqual({
         type: 'RATE_SONG',
-        id: response.ratingId,
-        liked,
+        rating: response.rating,
       });
       done();
     });

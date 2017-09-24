@@ -7,14 +7,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using SoundVast.Components;
 using SoundVast.Components.Audio.Models;
-using SoundVast.Components.Category.Models;
-using SoundVast.Components.Comment.Models;
-using SoundVast.Components.FileStream.Models;
 using SoundVast.Components.Genre.Models;
-using SoundVast.Components.LiveStream.Models;
-using SoundVast.Components.Quote.Models;
+using SoundVast.Components.Radio.Models;
 using SoundVast.Components.Rating.Models;
-using SoundVast.Components.Report.Models;
+using SoundVast.Components.Song.Models;
 using SoundVast.Components.User;
 
 namespace SoundVast.Data
@@ -47,6 +43,8 @@ namespace SoundVast.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<SongModel>();
+            modelBuilder.Entity<RadioModel>();
             modelBuilder.Entity<AudioModel>().HasMany(x => x.Ratings).WithOne(x => x.Audio).OnDelete(DeleteBehavior.Cascade);
             //modelBuilder.Entity<AudioGenreModel>().HasKey(x => new { x.AudioId, x.GenreId });
             //modelBuilder.Entity<FileStreamModel>().HasMany(x => x.Links).WithOne().OnDelete(DeleteBehavior.Cascade);

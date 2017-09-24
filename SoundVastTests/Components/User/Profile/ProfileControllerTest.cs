@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SoundVast.Components.Audio.Models;
+using SoundVast.Components.Song.Models;
 using SoundVast.Components.User;
 using SoundVast.Components.User.Profile;
 
@@ -37,10 +38,10 @@ namespace SoundVastTests.Components.User.Profile
         public void GetsUserUploads()
         {
             const string userId = "DORPE-12354-DSADD";
-            var userAudios = new List<AudioModel>
+            var userAudios = new List<SongModel>
             {
-                new AudioModel(),
-                new AudioModel()
+                new SongModel(),
+                new SongModel()
             };
 
             _mockUserManager.Setup(x => x.GetUserId(It.IsAny<ClaimsPrincipal>())).Returns(userId);

@@ -15,13 +15,13 @@ namespace SoundVast.Components.Song
 {
     public class SongController : Controller
     {
-        private readonly IAudioService _audioService;
+        private readonly ISongService _songService;
         private readonly ICloudStorage _cloudStorage;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public SongController(IAudioService audioService, ICloudStorage cloudStorage, UserManager<ApplicationUser> userManager)
+        public SongController(ISongService songService, ICloudStorage cloudStorage, UserManager<ApplicationUser> userManager)
         {
-            _audioService = audioService;
+            _songService = songService;
             _cloudStorage = cloudStorage;
             _userManager = userManager;
         }
@@ -29,8 +29,8 @@ namespace SoundVast.Components.Song
         [HttpGet]
         public IActionResult GetSongs(int current, int amount)
         {
-            var songs = _audioService.GetSongs(current, amount);
-            var hasMore = _audioService.GetSongs(current + amount, amount).Any();
+            var songs = _songService.GetAudios(current, amount);
+            var hasMore = _songService.GetAudios(current + amount, amount).Any();
 
             return Ok(new
             {
@@ -44,18 +44,18 @@ namespace SoundVast.Components.Song
         public IActionResult RateSong([FromBody] RateSongModel model)
         {
             var userId = _userManager.GetUserId(User);
-            var ratingId = _audioService.RateAudio(model.Id, model.Liked, userId);
+            var rating = _songService.RateAudio(model.Id, model.Liked, userId);
 
             return Ok(new
             {
-                ratingId
+                rating
             });
         }
 
         [HttpGet]
         public Stream Stream(int id)
         {
-            var song = _audioService.GetAudio(id);
+            var song = _songService.GetAudio(id);
             var blob = _cloudStorage.GetBlob(CloudStorageType.Audio, song.Name);
 
             Response.Headers.Add("Content-Disposition", $"attachment; filename={song.Name}");

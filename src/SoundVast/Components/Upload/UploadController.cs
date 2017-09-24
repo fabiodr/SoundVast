@@ -20,6 +20,8 @@ using Microsoft.AspNetCore.Identity;
 using SoundVast.Components.Audio.Models;
 using SoundVast.Components.FileStream;
 using SoundVast.Components.FileStream.Models;
+using SoundVast.Components.Song;
+using SoundVast.Components.Song.Models;
 using SoundVast.Components.User;
 using SoundVast.Repository;
 using SoundVast.Storage.CloudStorage.AzureStorage;
@@ -31,15 +33,15 @@ namespace SoundVast.Components.Upload
     {
         private readonly IFileStorage _fileStorage;
         private readonly ICloudStorage _cloudStorage;
-        private readonly IUploadService _uploadService;
+        private readonly ISongService _songService;
         private readonly UserManager<ApplicationUser> _userManager;
 
         public UploadController(IFileStorage fileStorage, ICloudStorage cloudStorage,
-            IUploadService uploadService, UserManager<ApplicationUser> userManager)
+            ISongService songService, UserManager<ApplicationUser> userManager)
         {
             _fileStorage = fileStorage;
             _cloudStorage = cloudStorage;
-            _uploadService = uploadService;
+            _songService = songService;
             _userManager = userManager;
         }
         
@@ -47,7 +49,7 @@ namespace SoundVast.Components.Upload
         [ValidateAntiForgeryToken]
         public IActionResult Save([FromBody] SaveUploadViewModel viewModel)
         {
-            var model = new AudioModel
+            var model = new SongModel
             {
                 Name = viewModel.Name,
                 Artist = viewModel.Artist,
@@ -58,7 +60,7 @@ namespace SoundVast.Components.Upload
 
             try
             {
-                _uploadService.Add(model);
+                _songService.Add(model);
             }
             catch (ValidationException e)
             {
@@ -90,7 +92,7 @@ namespace SoundVast.Components.Upload
 
             try
             {
-                await _uploadService.UploadCoverImage(imageBlob, file.OpenReadStream(), file.ContentType);
+                await _songService.UploadCoverImage(imageBlob, file.OpenReadStream(), file.ContentType);
             }
             catch (ValidationException e)
             {

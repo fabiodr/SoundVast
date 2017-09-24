@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SoundVast.Components.Audio.Models;
+using SoundVast.Components.Song.Models;
 using SoundVast.Validation;
 
-namespace SoundVast.Components.Upload
+namespace SoundVast.Components.Audio
 {
-    public class UploadValidator : Validator<AudioModel>, IUploadValidator
+    public class AudioValidator : Validator<AudioModel>, IAudioValidator
     {
         private const int MaxImageUploadSize = 2;
 

@@ -1,30 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using SoundVast.Components.Audio.Models;
-using SoundVast.Components.Genre.Models;
-using SoundVast.Components.Image.Models;
+﻿//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Threading.Tasks;
+//using SoundVast.Components.Audio.Models;
+//using SoundVast.Components.Genre.Models;
+//using SoundVast.Components.Image.Models;
 
-namespace SoundVast.Components.Category.Models
-{
-    public class CategoryModel
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public virtual ImageFileModel ImageFile { get; }
-        public virtual ICollection<AudioModel> Audios { get; set; }
-        public virtual ICollection<GenreModel> Genres { get; set; }
+//namespace SoundVast.Components.Category.Models
+//{
+//    public class CategoryModel
+//    {
+//        public int Id { get; set; }
+//        public string Name { get; set; }
+//        public virtual ImageFileModel ImageFile { get; }
+//        public virtual ICollection<SongModel> Audios { get; set; }
+//        public virtual ICollection<GenreModel> Genres { get; set; }
 
-        public CategoryModel()
-        {
+//        public CategoryModel()
+//        {
 
-        }
+//        }
 
-        protected CategoryModel(string name, ImageFileModel imageFile)
-        {
-            Name = name;
-            ImageFile = imageFile;
-        }
-    }
-}
+//        protected CategoryModel(string name, ImageFileModel imageFile)
+//        {
+//            Name = name;
+//            ImageFile = imageFile;
+//        }
+//    }
+//}

@@ -57,18 +57,19 @@ describe('songsReducer', () => {
       },
       test: 'test',
     };
-    const state = songsReducer(prevState, {
-      type: 'RATE_SONG',
+    const rating = {
       id: 0,
       liked: true,
+    };
+    const state = songsReducer(prevState, {
+      type: 'RATE_SONG',
+      rating,
     });
 
     expect(state).toEqual({
       ...prevState,
       ratings: {
-        0: {
-          liked: true,
-        },
+        0: rating,
       },
     });
   });

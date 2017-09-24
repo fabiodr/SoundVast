@@ -1,17 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Xunit;
-using Moq;
-using SoundVast.Repository;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using SoundVast.Components;
-using SoundVast.Components.Audio.Models;
-using SoundVast.Components.Comment;
-using SoundVast.Components.Comment.Models;
-using SoundVast.Components.Rating;
-using SoundVast.Components.User;
+﻿
 
 namespace SoundVastTests.Services
 {

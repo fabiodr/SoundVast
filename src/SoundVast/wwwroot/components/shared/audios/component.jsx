@@ -8,7 +8,7 @@ import styles from './component.less';
 const Audios = ({ audios, children, fetchAudios, getPlaylist, hasMore }) => (
   <div className={styles.audiosContainer}>
     <InfiniteScrollGrid loadMore={fetchAudios} hasMore={hasMore} className={styles.audios}>
-      {audios.map((audio, index) => (
+      {audios.map(audio => (
         <Audio
           key={audio.id}
           id={audio.id}
@@ -16,7 +16,6 @@ const Audios = ({ audios, children, fetchAudios, getPlaylist, hasMore }) => (
           getPlaylist={getPlaylist}
         >
           {React.cloneElement(children, {
-            index,
             ...audio,
           })}
         </Audio>

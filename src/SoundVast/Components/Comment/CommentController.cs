@@ -1,21 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using AutoMapper;
-using System.Net;
-using SoundVast.CustomHelpers;
-using Microsoft.AspNetCore.Authorization;
-using SoundVast.QueryOptions;
-using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using SoundVast.Components.Audio;
-using SoundVast.Components.Audio.Models;
-using SoundVast.Components.Comment.Models;
-using SoundVast.Components.Rating;
-using SoundVast.Components.Report;
-using SoundVast.Components.User;
-using SoundVast.Components.Comment.ViewModels;
-using System.Linq;
+﻿
 
 namespace SoundVast.Components.Comment
 {

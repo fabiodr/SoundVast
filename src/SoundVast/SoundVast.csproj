@@ -196,7 +196,6 @@
 
   <ItemGroup>
     <Folder Include="Components\Form\" />
-    <Folder Include="Components\Song\Models\" />
     <Folder Include="Components\User\Profile\" />
   </ItemGroup>
 
