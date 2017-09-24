@@ -119,7 +119,6 @@
   <ItemGroup>
     <None Include=".exe\ffmpeg.exe" />
     <None Include="App.config" />
-    <None Include="Components\Song\Models\GetSongRatingModel.cs" />
     <None Update="wwwroot\**\*;Views\**\*;Areas\**\Views">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
@@ -197,6 +196,7 @@
 
   <ItemGroup>
     <Folder Include="Components\Form\" />
+    <Folder Include="Components\Song\Models\" />
     <Folder Include="Components\User\Profile\" />
   </ItemGroup>
 

@@ -5,16 +5,7 @@ const amount = 30;
 let current = 0;
 
 export const fetchSongs = () => (dispatch) => {
-  const result = fetch('/song/getSongs', {
-    method: 'post',
-    body: JSON.stringify({
-      current,
-      amount,
-    }),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  }).then(notOkError)
+  const result = fetch(`/song/getSongs?current=${current}&amount=${amount}`).then(notOkError)
     .then(response => response.json())
     .then(json => dispatch({
       type: 'FETCH_SONGS',

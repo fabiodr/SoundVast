@@ -51,31 +51,12 @@ namespace SoundVastTests.Components.Song
 
             _mockAudioService.Setup(x => x.GetSongs(It.IsAny<int>(), It.IsAny<int>())).Returns(songs);
 
-            var result = (OkObjectResult)_songController.GetSongs(new FetchSongsModel());
+            var result = (OkObjectResult)_songController.GetSongs(0, 30);
 
             result.Value.ShouldBeEquivalentTo(new
             {
                 songs,
                 hasMore = true
-            });
-        }
-
-        [Test]
-        public void FetchesSong()
-        {
-            var model = new FetchSongModel
-            {
-                Id = 1,
-            };
-            var song = new AudioModel();
-
-            _mockAudioService.Setup(x => x.GetAudio(model.Id)).Returns(song);
-
-            var result = (OkObjectResult)_songController.GetSong(model);
-
-            result.Value.ShouldBeEquivalentTo(new
-            {
-                song
             });
         }
 
@@ -112,10 +93,9 @@ namespace SoundVastTests.Components.Song
                 Id = 2,
                 Liked = true
             };
-            var userId = "FEKFJ-GKFKL";
 
-            _mockUserManager.Setup(x => x.GetUserId(It.IsAny<ClaimsPrincipal>())).Returns(userId);
-            _mockAudioService.Setup(x => x.RateAudio(model.Id, model.Liked, userId));
+            _mockUserManager.Setup(x => x.GetUserId(It.IsAny<ClaimsPrincipal>())).Returns(UserId);
+            _mockAudioService.Setup(x => x.RateAudio(model.Id, model.Liked, UserId));
 
             var result = (OkObjectResult)_songController.RateSong(model);
 

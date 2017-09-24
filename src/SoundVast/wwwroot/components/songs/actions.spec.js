@@ -33,7 +33,7 @@ describe('songActions', () => {
       hasMore: true,
     };
 
-    fetchMock.postOnce('/song/getSongs', response);
+    fetchMock.getOnce('/song/getSongs?current=0&amount=30', response);
 
     store.dispatch(actions.fetchSongs()).then(() => {
       expect(calledActions[0]).toEqual({

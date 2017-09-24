@@ -26,27 +26,16 @@ namespace SoundVast.Components.Song
             _userManager = userManager;
         }
 
-        [HttpPost]
-        public IActionResult GetSongs([FromBody] FetchSongsModel model)
+        [HttpGet]
+        public IActionResult GetSongs(int current, int amount)
         {
-            var songs = _audioService.GetSongs(model.Current, model.Amount);
-            var hasMore = _audioService.GetSongs(model.Current + model.Amount, model.Amount).Any();
+            var songs = _audioService.GetSongs(current, amount);
+            var hasMore = _audioService.GetSongs(current + amount, amount).Any();
 
             return Ok(new
             {
                 songs,
                 hasMore
-            });
-        }
-
-        [HttpPost]
-        public IActionResult GetSong([FromBody] FetchSongModel model)
-        {
-            var song = _audioService.GetAudio(model.Id);
-
-            return Ok(new
-            {
-                song
             });
         }
 
