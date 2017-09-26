@@ -20,26 +20,21 @@ describe('songActions', () => {
     fetchMock.reset().restore();
   });
 
-  it('should fetch songs', (done) => {
+  it('should rate the song', (done) => {
     const response = {
-      songs: [{
+      rating: {
         id: 0,
-        name: 'bubble',
-        artist: 'kalimba',
-        audioUrl: 'www.test.mp3',
-        coverImageUrl: 'www.test.jpg',
-        free: true,
-      }],
-      hasMore: true,
+        liked: true,
+      },
     };
+    const liked = true;
 
-    fetchMock.getOnce('/song/getSongs?current=0&amount=30', response);
+    fetchMock.postOnce('/rating/rateAudio', response);
 
-    store.dispatch(actions.fetchSongs()).then(() => {
+    store.dispatch(actions.rateAudio(0, liked)).then(() => {
       expect(calledActions[0]).toEqual({
-        type: 'FETCH_SONGS',
-        songs: response.songs,
-        hasMore: response.hasMore,
+        type: 'RATE_SONG',
+        rating: response.rating,
       });
       done();
     });

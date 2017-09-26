@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
 
-import { fetchSongs } from './actions';
+import { fetchNextSongs } from './actions';
 import Songs from './component';
 
 const mapStateToProps = ({ music }) => ({
@@ -24,7 +24,7 @@ const handlers = {
 
 export default compose(
   connect(mapStateToProps, {
-    fetchSongs,
+    fetchNextSongs,
   }),
   withHandlers(handlers),
 )(Songs);

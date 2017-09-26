@@ -4,14 +4,14 @@ import { shallow } from 'enzyme';
 
 import Songs from './component';
 import Song from './song/component';
-import Audios from '../shared/audios/component';
+import Audios from '../audios/component';
 
 const setup = (newProps) => {
   const props = {
     songs: [
       { id: 0, name: 'bubble', artist: 'bubbleArtist', coverImageUrl: 'bubble.jpg' },
     ],
-    fetchSongs: expect.createSpy(),
+    fetchNextSongs: expect.createSpy(),
     getPlaylist: expect.createSpy(),
     hasMore: true,
     ...newProps,

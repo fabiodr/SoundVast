@@ -4,8 +4,9 @@ import { showGenericErrorPopup } from '../shared/popup/actions';
 const amount = 30;
 let current = 0;
 
-export const fetchSongs = () => (dispatch) => {
-  const result = fetch(`/song/getSongs?current=${current}&amount=${amount}`).then(notOkError)
+export const fetchNextSongs = () => (dispatch) => {
+  const result = fetch(`/song/getSongs?current=${current}&amount=${amount}`)
+    .then(notOkError)
     .then(response => response.json())
     .then(json => dispatch({
       type: 'FETCH_SONGS',
@@ -20,10 +21,10 @@ export const fetchSongs = () => (dispatch) => {
 };
 
 export const rateSong = (id, liked) => dispatch =>
-  fetch('/song/rateSong', {
+  fetch('/rating/rateAudio', {
     method: 'post',
     body: JSON.stringify({
-      id,
+      audioId: id,
       liked,
     }),
     credentials: 'same-origin',
@@ -31,9 +32,5 @@ export const rateSong = (id, liked) => dispatch =>
       'Content-Type': 'application/json',
     },
   }).then(notOkError)
-    .then(response => response.json())
-    .then(json => dispatch({
-      type: 'RATE_SONG',
-      rating: json.rating,
-    }))
+    // .then(() => dispatch(fetchSongs(id)))
     .catch(error => dispatch(showGenericErrorPopup(error)));

@@ -2,21 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import styles from './component.less';
-import Like from './ratingControl/like/container';
-import Dislike from './ratingControl/dislike/container';
+import Like from './like/container';
+import Dislike from './dislike/container';
 
 const Song = ({ name, artist, id }) => (
   <div>
+    <Like id={id} />
+    <Dislike id={id} />
     <figcaption className={styles.name}>{name}</figcaption>
     <figcaption className={styles.artist}>{artist}</figcaption>
-    <Like songId={id} />
-    <Dislike songId={id} />
   </div>
 );
 
 Song.defaultProps = {
-  index: 0,
-  id: 0,
+  id: null,
   name: null,
   artist: null,
 };

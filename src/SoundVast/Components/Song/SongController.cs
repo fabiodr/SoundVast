@@ -17,13 +17,11 @@ namespace SoundVast.Components.Song
     {
         private readonly ISongService _songService;
         private readonly ICloudStorage _cloudStorage;
-        private readonly UserManager<ApplicationUser> _userManager;
 
-        public SongController(ISongService songService, ICloudStorage cloudStorage, UserManager<ApplicationUser> userManager)
+        public SongController(ISongService songService, ICloudStorage cloudStorage)
         {
             _songService = songService;
             _cloudStorage = cloudStorage;
-            _userManager = userManager;
         }
 
         [HttpGet]
@@ -36,19 +34,6 @@ namespace SoundVast.Components.Song
             {
                 songs,
                 hasMore
-            });
-        }
-
-        [HttpPost]
-        [Authorize]
-        public IActionResult RateSong([FromBody] RateSongModel model)
-        {
-            var userId = _userManager.GetUserId(User);
-            var rating = _songService.RateAudio(model.Id, model.Liked, userId);
-
-            return Ok(new
-            {
-                rating
             });
         }
 

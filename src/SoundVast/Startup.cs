@@ -28,6 +28,8 @@ using Autofac;
 using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using SoundVast.Components.Audio;
+using SoundVast.Components.Audio.Models;
 using SoundVast.Components.Genre.Models;
 using SoundVast.Components.Radio.Models;
 using SoundVast.Components.Rating.Models;
@@ -186,6 +188,8 @@ namespace SoundVast
             builder.RegisterType<AuthMessageSender>().As<IEmailSender>();
             builder.RegisterType<AuthMessageSender>().As<ISmsSender>();
             builder.RegisterType<AzureBlob>().As<ICloudBlob>();
+            builder.RegisterType<AudioService<AudioModel>>().AsImplementedInterfaces();
+            builder.RegisterType<Repository<AudioModel, ApplicationDbContext>>().As<IRepository<AudioModel>>();
             builder.RegisterType<Repository<SongModel, ApplicationDbContext>>().As<IRepository<SongModel>>();
             builder.RegisterType<Repository<RadioModel, ApplicationDbContext>>().As<IRepository<RadioModel>>();
             builder.RegisterType<Repository<GenreModel, ApplicationDbContext>>().As<IRepository<GenreModel>>();

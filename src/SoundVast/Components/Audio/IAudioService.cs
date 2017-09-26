@@ -15,6 +15,8 @@ namespace SoundVast.Components.Audio
         ICollection<RatingModel> GetAudioRatings(int id);
         Task UploadCoverImage(ICloudBlob blob, Stream stream, string contentType);
         void Add(T model);
-        RatingModel RateAudio(int audioId, bool liked, string userId);
+        int GetLikes(int id);
+        int GetDislikes(int id);
+        void RateAudio(int audioId, bool liked, string userId);
     }
 }

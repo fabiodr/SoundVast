@@ -15,13 +15,13 @@ using SoundVast.Validation;
 
 namespace SoundVast.Components.Audio
 {
-    public abstract class AudioService<T> : IAudioService<T> where T : AudioModel
+    public class AudioService<T> : IAudioService<T> where T : AudioModel
     {
         private readonly IRepository<T> _repository;
         private readonly IValidationProvider _validationProvider;
         private readonly IAudioValidator _audioValidator;
 
-        protected AudioService(IRepository<T> repository, IValidationProvider validationProvider, IAudioValidator audioValidator)
+        public AudioService(IRepository<T> repository, IValidationProvider validationProvider, IAudioValidator audioValidator)
         {
             _repository = repository;
             _validationProvider = validationProvider;
@@ -59,7 +59,21 @@ namespace SoundVast.Components.Audio
             _repository.Add(model);
         }
 
-        public RatingModel RateAudio(int audioId, bool liked, string userId)
+        public int GetLikes(int id)
+        {
+            var audio = _repository.Include(x => x.Ratings).Single(x => x.Id == id);
+
+            return audio.Ratings.Count(x => x.Liked);
+        }
+
+        public int GetDislikes(int id)
+        {
+            var audio = _repository.Include(x => x.Ratings).Single(x => x.Id == id);
+
+            return audio.Ratings.Count(x => !x.Liked);
+        }
+
+        public void RateAudio(int audioId, bool liked, string userId)
         {
             var audio = _repository.Include(x => x.Ratings).Single(x => x.Id == audioId);
             var rating = audio.Ratings?.SingleOrDefault(x => x.UserId == userId);
@@ -80,8 +94,6 @@ namespace SoundVast.Components.Audio
             }
 
             _repository.Save();
-
-            return rating;
         }
     }
 }

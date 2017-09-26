@@ -1,0 +1,32 @@
+.audio {
+    margin: 10px;
+    padding: 5px;
+    background-color: #f2f2f2;
+    border-radius: 2px;
+    min-width: 100px;
+    flex-grow: 1;
+    flex-basis: 200px;
+    margin: 0;
+    figcaption {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+}
+
+.imageContainer {
+    position: relative;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+        max-width:100%;
+    }
+}
+
+.imageContainer:hover [data-role="hover"] {
+    visibility: visible;
+    opacity: 1;
+}

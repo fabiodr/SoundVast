@@ -16,37 +16,22 @@ namespace SoundVast.Components.Radio
     public class RadioController : Controller
     {
         private readonly IRadioService _radioService;
-        private readonly UserManager<ApplicationUser> _userManager;
         
-        public RadioController(IRadioService radioService, ICloudStorage cloudStorage, UserManager<ApplicationUser> userManager)
+        public RadioController(IRadioService radioService)
         {
             _radioService = radioService;
-            _userManager = userManager;
         }
 
         [HttpGet]
         public IActionResult GetRadios(int current, int amount)
         {
-            var songs = _radioService.GetAudios(current, amount);
+            var radios = _radioService.GetAudios(current, amount);
             var hasMore = _radioService.GetAudios(current + amount, amount).Any();
 
             return Ok(new
             {
-                songs,
+                radios,
                 hasMore
-            });
-        }
-
-        [HttpPost]
-        [Authorize]
-        public IActionResult RateRadio([FromBody] RateRadioModel model)
-        {
-            var userId = _userManager.GetUserId(User);
-            var ratingId = _radioService.RateAudio(model.Id, model.Liked, userId);
-
-            return Ok(new
-            {
-                ratingId
             });
         }
     }

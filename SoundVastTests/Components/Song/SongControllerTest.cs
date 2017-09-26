@@ -23,18 +23,13 @@ namespace SoundVastTests.Components.Song
         private SongController _songController;
         private Mock<ISongService> _mockSongService;
         private Mock<ICloudStorage> _mockCloudStorage;
-        private Mock<UserManager<ApplicationUser>> _mockUserManager;
-        private const string UserId = "FEKFJ-GKFKL";
 
         [SetUp]
         public void Init()
         {
-            var userStore = new Mock<IUserStore<ApplicationUser>>();
-
-            _mockUserManager = new Mock<UserManager<ApplicationUser>>(userStore.Object, null, null, null, null, null, null, null, null);
             _mockSongService = new Mock<ISongService>();
             _mockCloudStorage = new Mock<ICloudStorage>();
-            _songController = new SongController(_mockSongService.Object, _mockCloudStorage.Object, _mockUserManager.Object);
+            _songController = new SongController(_mockSongService.Object, _mockCloudStorage.Object);
         }
 
         [Test]
@@ -80,30 +75,6 @@ namespace SoundVastTests.Components.Song
             responseHeaders.ContainsKey("Content-Disposition").Should().BeTrue();
 
             result.Should().BeOfType<Stream>();
-        }
-
-        [Test]
-        public void Rate_ShouldRateSong()
-        {
-            var model = new RateSongModel
-            {
-                Id = 2,
-                Liked = true
-            };
-            var ratingModel = new RatingModel();
-
-            _mockUserManager.Setup(x => x.GetUserId(It.IsAny<ClaimsPrincipal>())).Returns(UserId);
-            _mockSongService.Setup(x => x.RateAudio(model.Id, model.Liked, UserId)).Returns(ratingModel);
-
-            var result = (OkObjectResult)_songController.RateSong(model);
-
-            _mockUserManager.VerifyAll();
-            _mockSongService.VerifyAll();
-
-            result.Value.ShouldBeEquivalentTo(new
-            {
-                rating = ratingModel
-            });
         }
     }
 }
