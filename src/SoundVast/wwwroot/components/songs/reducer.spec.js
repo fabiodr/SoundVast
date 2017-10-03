@@ -31,7 +31,7 @@ describe('songsReducer', () => {
       hasMore: true,
     };
     const state = songsReducer(prevState, {
-      type: 'FETCH_SONGS',
+      type: 'FETCH_NEXT_SONGS',
       ...actionProps,
     });
 
@@ -44,6 +44,29 @@ describe('songsReducer', () => {
       ],
       ratings: {
         0: { id: 0, liked: true, audioId: 0 },
+      },
+    });
+  });
+
+  it('should rate song', () => {
+    const prevState = {
+      test: 'test',
+    };
+    const actionProps = {
+      rating: {
+        id: 1,
+        liked: true,
+      },
+    };
+    const state = songsReducer(prevState, {
+      type: 'RATE_SONG',
+      ...actionProps,
+    });
+
+    expect(state).toEqual({
+      ...prevState,
+      ratings: {
+        [actionProps.rating.id]: actionProps.rating,
       },
     });
   });

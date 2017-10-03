@@ -16,13 +16,13 @@ const setup = (newProps) => {
         progressPercent: 33,
       },
       {
-        id: 'testId',
+        id: 'testTwoId',
         title: 'testTwo',
-        preview: 'blob:localhost:8080/test.jpg',
+        preview: 'blob:localhost:8080/testTwo.jpg',
         progressPercent: 25,
       },
     ],
-    removeFile: expect.createSpy(),
+    removeAudioFile: expect.createSpy(),
     onDrop: expect.createSpy(),
     ...newProps,
   };
@@ -36,53 +36,50 @@ const setup = (newProps) => {
 };
 
 describe('AudioDropzone', () => {
-  let wrapper;
-  let props;
-
-  it('should map no forms when no files', () => {
-    ({ wrapper } = setup({ files: [] }));
+  it('should render no forms when no files', () => {
+    const { wrapper } = setup({ files: [] });
 
     expect(wrapper.find(Form).length).toBe(0);
   });
 
-  it('should map no preview images when no files', () => {
-    ({ wrapper } = setup({ files: [] }));
+  it('should render no preview images when no files', () => {
+    const { wrapper } = setup({ files: [] });
 
     expect(wrapper.find('img').length).toBe(0);
   });
 
-  it('should map same number of preview images as files', () => {
-    ({ wrapper } = setup());
+  it('should render same number of preview images as files', () => {
+    const { wrapper } = setup();
 
     expect(wrapper.find('img').length).toBe(2);
   });
 
-  it('should map same number of captions as files', () => {
-    ({ wrapper } = setup());
+  it('should render same number of captions as files', () => {
+    const { wrapper } = setup();
 
     expect(wrapper.find('figcaption').length).toBe(2);
   });
 
   it('preview image should use preview', () => {
-    ({ props, wrapper } = setup());
+    const { props, wrapper } = setup();
 
     expect(wrapper.find('img').at(0).prop('src')).toBe(props.files[0].preview);
   });
 
-  it('should map preview image for each file', () => {
-    ({ props, wrapper } = setup());
+  it('should render preview image for each file', () => {
+    const { props, wrapper } = setup();
 
     expect(wrapper.find('img').length).toBe(props.files.length);
   });
 
-  it('should map form for each file', () => {
-    ({ props, wrapper } = setup());
+  it('should render form for each file', () => {
+    const { props, wrapper } = setup();
 
     expect(wrapper.find(Form).length).toBe(props.files.length);
   });
 
   it('should render a progress bar for each file', () => {
-    ({ props, wrapper } = setup());
+    const { props, wrapper } = setup();
 
     expect(wrapper.find(Progress).length).toBe(props.files.length);
   });

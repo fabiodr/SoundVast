@@ -9,10 +9,14 @@ const Errors = ({ errors }) => (
   </div>
 );
 
+Errors.defaultProps = {
+  errors: [],
+};
+
 Errors.propTypes = {
   errors: PropTypes.arrayOf(
     PropTypes.string,
-  ).isRequired,
+  ),
 };
 
 export default Errors;

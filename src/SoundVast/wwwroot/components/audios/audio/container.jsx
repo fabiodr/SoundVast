@@ -5,7 +5,6 @@ import { actions } from 'react-jplaylist';
 import { actions as jPlayerActions } from 'react-jplayer';
 
 import Audio from './component';
-// import { getRatings } from '../../rating/actions';
 
 const propTypes = {
   getPlaylist: PropTypes.func.isRequired,
@@ -38,15 +37,8 @@ const handlers = {
   },
 };
 
-// const lifecycleFunctions = {
-//   componentDidMount() {
-//     this.props.dispatch(getRatings(this.props.id));
-//   },
-// };
-
 export default compose(
   setPropTypes(propTypes),
   connect(mapStateToProps),
-  // lifecycle(lifecycleFunctions),
   withHandlers(handlers),
 )(Audio);

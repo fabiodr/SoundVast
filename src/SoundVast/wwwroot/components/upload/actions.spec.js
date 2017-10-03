@@ -60,4 +60,41 @@ describe('uploadActions', () => {
       },
     ]);
   });
+
+  it('should add live stream', () => {
+    store.dispatch(actions.addLiveStream());
+
+    expect(calledActions).toEqual([
+      {
+        type: 'ADD_LIVE_STREAM',
+      },
+    ]);
+  });
+
+  it('should remove live stream', () => {
+    const index = 0;
+    store.dispatch(actions.removeLiveStream(index));
+
+    expect(calledActions).toEqual([
+      {
+        type: 'REMOVE_LIVE_STREAM',
+        index,
+      },
+    ]);
+  });
+
+  it('should say which file is pending submit', () => {
+    const index = 0;
+    const isSubmitting = true;
+
+    store.dispatch(actions.submitPending(index, isSubmitting));
+
+    expect(calledActions).toEqual([
+      {
+        type: 'SUBMIT_PENDING',
+        index,
+        isSubmitting,
+      },
+    ]);
+  });
 });

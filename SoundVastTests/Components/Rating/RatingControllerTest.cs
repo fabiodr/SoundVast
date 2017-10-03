@@ -39,13 +39,13 @@ namespace SoundVastTests.Components.Rating
         {
             var model = new RateAudioModel
             {
-                Id = 2,
+                AudioId = 2,
                 Liked = true
             };
             var ratingModel = new RatingModel();
 
             _mockUserManager.Setup(x => x.GetUserId(It.IsAny<ClaimsPrincipal>())).Returns(UserId);
-            _mockAudioService.Setup(x => x.RateAudio(model.Id, model.Liked, UserId)).Returns(ratingModel);
+            _mockAudioService.Setup(x => x.RateAudio(model.AudioId, model.Liked, UserId)).Returns(ratingModel);
 
             var result = (OkObjectResult)_ratingController.RateAudio(model);
 

@@ -6,7 +6,9 @@ import DislikeIcon from '../../../images/ratingControls/dislike.svg';
 const Dislike = ({ dislike, dislikes, width, height }) => (
   <div>
     <DislikeIcon width={width} height={height} onClick={dislike} />
-    {dislikes}
+    <div className="dislikes">
+      {dislikes}
+    </div>
   </div>
 );
 

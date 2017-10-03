@@ -4,11 +4,10 @@ import Dropzone from 'react-dropzone';
 
 import styles from './component.less';
 import dropzoneStyles from '../../../shared/dropzone/component.less';
-import FileInformation from './fileInformation/component';
 import Form from './form/container';
 import Progress from './progress/component';
 
-const AudioDropzone = ({ onDrop, files, removeFile }) => (
+const AudioDropzone = ({ onDrop, files, coverImageFiles, removeAudioFile }) => (
   <div>
     <Dropzone
       className={styles.audioDropzone}
@@ -22,8 +21,8 @@ const AudioDropzone = ({ onDrop, files, removeFile }) => (
       </div>
       {files.map(file => (
         <figure key={file.id}>
-          <img alt="" src={file.preview} />
-          <figcaption>{file.title}</figcaption>
+          <img alt="" src={coverImageFiles[file.id].preview} />
+          <figcaption>{coverImageFiles[file.id].title}</figcaption>
         </figure>
       ))}
     </Dropzone>
@@ -34,10 +33,9 @@ const AudioDropzone = ({ onDrop, files, removeFile }) => (
           <Form
             form={`upload_${file.id}`}
             index={i}
-            removeFile={removeFile}
-          >
-            <FileInformation index={i} />
-          </Form>
+            id={file.id}
+            remove={removeAudioFile}
+          />
         </div>
       ))}
     </aside>
@@ -46,12 +44,16 @@ const AudioDropzone = ({ onDrop, files, removeFile }) => (
 
 AudioDropzone.propTypes = {
   onDrop: PropTypes.func.isRequired,
-  removeFile: PropTypes.func.isRequired,
+  removeAudioFile: PropTypes.func.isRequired,
+  coverImageFiles: PropTypes.shape({
+    id: PropTypes.string,
+    preview: PropTypes.string,
+    title: PropTypes.string,
+  }).isRequired,
   files: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
-      preview: PropTypes.string.isRequired,
       progressPercent: PropTypes.number,
     }).isRequired,
   ).isRequired,

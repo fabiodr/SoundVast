@@ -7,7 +7,7 @@ import ImageDropzone from './component';
 const setup = (newProps) => {
   const props = {
     onDrop: expect.createSpy(),
-    index: 0,
+    id: 'test',
     preview: 'blob:localhost:8080/test.jpg',
     ...newProps,
   };
@@ -21,11 +21,8 @@ const setup = (newProps) => {
 };
 
 describe('ImageDropzone', () => {
-  let wrapper;
-  let props;
-
   it('preview image should use preview', () => {
-    ({ wrapper, props } = setup());
+    const { wrapper, props } = setup();
 
     expect(wrapper.find('img').prop('src')).toBe(props.preview);
   });

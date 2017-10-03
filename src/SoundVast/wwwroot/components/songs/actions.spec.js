@@ -20,7 +20,7 @@ describe('songActions', () => {
     fetchMock.reset().restore();
   });
 
-  it('should fetch songs', (done) => {
+  it('should fetch next songs', (done) => {
     const response = {
       songs: [{
         id: 0,
@@ -35,11 +35,29 @@ describe('songActions', () => {
 
     fetchMock.getOnce('/song/getSongs?current=0&amount=30', response);
 
-    store.dispatch(actions.fetchSongs()).then(() => {
+    store.dispatch(actions.fetchNextSongs()).then(() => {
       expect(calledActions[0]).toEqual({
-        type: 'FETCH_SONGS',
+        type: 'FETCH_NEXT_SONGS',
         songs: response.songs,
         hasMore: response.hasMore,
+      });
+      done();
+    });
+  });
+
+  it('should rate song', (done) => {
+    const response = {
+      rating: {
+        liked: true,
+      },
+    };
+
+    fetchMock.postOnce('/rating/rateAudio', response);
+
+    store.dispatch(actions.rateSong()).then(() => {
+      expect(calledActions[0]).toEqual({
+        type: 'RATE_SONG',
+        rating: response.rating,
       });
       done();
     });

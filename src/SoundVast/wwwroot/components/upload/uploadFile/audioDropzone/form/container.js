@@ -3,11 +3,11 @@ import { compose, lifecycle } from 'recompose';
 import { connect } from 'react-redux';
 
 import UploadFileForm from './component';
-import { submit } from './actions';
+import { submitFiles } from '../../../actions';
 import { getGenres } from '../../../../genre/actions';
 import uploadValidation from '../../../validation';
 
-export const mapStateToProps = ({ genre, upload }, { index }) => ({
+export const mapStateToProps = ({ upload }, { index }) => ({
   initialValues: {
     name: upload.audioFiles[index].title,
     artist: upload.audioFiles[index].artist,
@@ -16,7 +16,7 @@ export const mapStateToProps = ({ genre, upload }, { index }) => ({
 });
 
 const mapDispatchToProps = (dispatch, { index }) => ({
-  onSubmit: values => dispatch(submit(values, index)),
+  onSubmit: values => dispatch(submitFiles(values, index)),
   getGenres: () => dispatch(getGenres()),
   change: (...values) => dispatch(change(values)),
 });

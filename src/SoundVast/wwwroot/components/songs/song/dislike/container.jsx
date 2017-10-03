@@ -6,7 +6,8 @@ import Dislike from '../../../rating/dislike/component';
 import { rateSong } from '../../actions';
 
 const mapStateToProps = ({ music }, { id }) => ({
-  dislikes: Object.values(music.ratings).filter(x => x.audioId === id && !x.liked).length,
+  dislikes: Object.keys(music.ratings).filter(key => music.ratings[key].audioId === id &&
+    !music.ratings[key].liked).length,
 });
 
 const handlers = {

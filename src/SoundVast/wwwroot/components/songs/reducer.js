@@ -12,7 +12,7 @@ const defaultState = {
 
 export default (state = defaultState, action) => {
   switch (action.type) {
-    case 'FETCH_SONGS': {
+    case 'FETCH_NEXT_SONGS': {
       const data = state.songs.concat(action.songs);
       const normalizedSongs = normalize(data, songList);
       const songs = normalizedSongs.result.map(x => normalizedSongs.entities.songs[x]);
@@ -22,6 +22,16 @@ export default (state = defaultState, action) => {
         songs,
         ratings: normalizedSongs.entities.ratings,
         hasMore: action.hasMore,
+      };
+    }
+    case 'RATE_SONG': {
+      const ratings = { ...state.ratings };
+
+      ratings[action.rating.id] = action.rating;
+
+      return {
+        ...state,
+        ratings,
       };
     }
     default: return state;

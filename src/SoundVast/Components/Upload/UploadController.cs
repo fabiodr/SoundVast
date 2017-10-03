@@ -47,7 +47,7 @@ namespace SoundVast.Components.Upload
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Save([FromBody] SaveUploadViewModel viewModel)
+        public IActionResult SaveMusic([FromBody] SaveUploadViewModel viewModel)
         {
             var model = new SongModel
             {

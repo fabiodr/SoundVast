@@ -2,21 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
-import BasicInfo from '../../../basicInfo/container';
+import BasicInfo from './basicInfo/component';
 
-const FileInformation = ({ index }) => (
+const LiveStreamInformation = ({ id }) => (
   <Tabs>
     <TabList>
       <Tab>Basic info</Tab>
     </TabList>
     <TabPanel>
-      <BasicInfo index={index} />
+      <BasicInfo id={id} />
     </TabPanel>
   </Tabs>
 );
 
-FileInformation.propTypes = {
-  index: PropTypes.number.isRequired,
+LiveStreamInformation.propTypes = {
+  id: PropTypes.string.isRequired,
 };
 
-export default FileInformation;
+export default LiveStreamInformation;

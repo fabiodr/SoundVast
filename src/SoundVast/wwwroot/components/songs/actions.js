@@ -9,7 +9,7 @@ export const fetchNextSongs = () => (dispatch) => {
     .then(notOkError)
     .then(response => response.json())
     .then(json => dispatch({
-      type: 'FETCH_SONGS',
+      type: 'FETCH_NEXT_SONGS',
       songs: json.songs,
       hasMore: json.hasMore,
     }))
@@ -32,5 +32,9 @@ export const rateSong = (id, liked) => dispatch =>
       'Content-Type': 'application/json',
     },
   }).then(notOkError)
-    // .then(() => dispatch(fetchSongs(id)))
+    .then(response => response.json())
+    .then(json => dispatch({
+      type: 'RATE_SONG',
+      rating: json.rating,
+    }))
     .catch(error => dispatch(showGenericErrorPopup(error)));

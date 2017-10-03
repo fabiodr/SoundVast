@@ -4,12 +4,9 @@ import { shallow } from 'enzyme';
 
 import Audio from './component';
 import PlayState from './playState/container';
-import Like from '../../rating/like/container';
-import Dislike from '../../rating/dislike/container';
 
 const setup = (newProps) => {
   const props = {
-    id: 0,
     isCurrent: false,
     coverImageUrl: 'test.jpg',
     children: <div className="@@children" />,
@@ -51,17 +48,5 @@ describe('Audio', () => {
     const { wrapper } = setup();
 
     expect(wrapper.find('.@@children').exists()).toBe(true);
-  });
-
-  it('should render Like', () => {
-    const { wrapper } = setup();
-
-    expect(wrapper.find(Like).exists()).toBe(true);
-  });
-
-  it('should render Dislike', () => {
-    const { wrapper } = setup();
-
-    expect(wrapper.find(Dislike).exists()).toBe(true);
   });
 });

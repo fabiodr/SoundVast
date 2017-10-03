@@ -60,7 +60,7 @@ namespace SoundVastTests.Components.Upload
         }
 
         [Test]
-        public void SaveShouldAddUploadToDatabase()
+        public void SaveMusic_ShouldAddUploadToDatabase()
         {
             const string userId = "DORPE-12354-DSADD";
             var viewModel = new SaveUploadViewModel
@@ -75,7 +75,7 @@ namespace SoundVastTests.Components.Upload
             _mockUserManager.Setup(x => x.GetUserId(It.IsAny<ClaimsPrincipal>())).Returns(userId);
             _mockSongService.Setup(x => x.Add(It.IsAny<SongModel>())).Callback<SongModel>(x => model = x);
 
-            var result = (OkResult)_uploadController.Save(viewModel);
+            var result = (OkResult)_uploadController.SaveMusic(viewModel);
 
             _mockSongService.Verify(x => x.Add(It.IsAny<SongModel>()), Times.Once);
             model.ShouldBeEquivalentTo(new SongModel
@@ -91,13 +91,13 @@ namespace SoundVastTests.Components.Upload
         }
 
         [Test]
-        public void SaveShouldReturnModelErrorsIfUploadThrowsValidationException()
+        public void SaveMusic_ShouldReturnModelErrorsIfUploadThrowsValidationException()
         {
             var validationResult = new ValidationResult("_error", "testError");
 
             _mockSongService.Setup(x => x.Add(It.IsAny<SongModel>())).Throws(new ValidationException(validationResult));
 
-            var result = (ObjectResult)_uploadController.Save(new SaveUploadViewModel());
+            var result = (ObjectResult)_uploadController.SaveMusic(new SaveUploadViewModel());
 
             result.StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
             result.Value.Should().Be(_uploadController.ModelState.ConvertToJson());

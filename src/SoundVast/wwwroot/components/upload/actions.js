@@ -4,7 +4,8 @@ import shortid from 'shortid';
 import fetchProgress from '../shared/polyfills/fetchProgress';
 import trimFileExtension from '../shared/utilities/trimFileExtension';
 import notOkError from '../shared/fetch/errorHandling/notOkError/component';
-import notOkErrorPopup from '../shared/fetch/errorHandling/notOkError/popup/component';
+import validationError from '../shared/fetch/errorHandling/validationError/component';
+import { showGenericErrorPopup } from '../shared/popup/actions';
 
 export const uploadMp3 = (jsonText, id) => (dispatch) => {
   const body = JSON.parse(jsonText);
@@ -45,8 +46,8 @@ export const uploadMp3 = (jsonText, id) => (dispatch) => {
         eventSource.close();
       }
     })
-    .catch(() => {
-      notOkErrorPopup(dispatch);
+    .catch((error) => {
+      dispatch(showGenericErrorPopup(error));
       eventSource.close();
     });
 };
@@ -60,34 +61,40 @@ export const convertToMp3 = (file, id) => (dispatch) => {
     method: 'post',
     body: formData,
   }, {
-    readystatechange() {
-      if (this.readyState === 4) {
-        uploadMp3(this.responseText, id)(dispatch);
-      }
-    },
-  }, {
-    load: () => {
-      dispatch({
-        type: 'UPDATE_UPLOAD_PROGRESS',
-        progressPercent: 25,
-        id,
-        message: 'Converting to mp3...',
-      });
-    },
-    progress: (e) => {
-      if (e.lengthComputable) {
-        const progressPercent = parseInt((e.loaded / e.total) * 25, 10);
-
+      readystatechange() {
+        if (this.readyState === 4) {
+          uploadMp3(this.responseText, id)(dispatch);
+        }
+      },
+    }, {
+      load: () => {
         dispatch({
           type: 'UPDATE_UPLOAD_PROGRESS',
-          progressPercent,
+          progressPercent: 25,
           id,
-          message: 'Sending file to server...',
+          message: 'Converting to mp3...',
         });
-      }
-    },
-  });
+      },
+      progress: (e) => {
+        if (e.lengthComputable) {
+          const progressPercent = parseInt((e.loaded / e.total) * 25, 10);
+
+          dispatch({
+            type: 'UPDATE_UPLOAD_PROGRESS',
+            progressPercent,
+            id,
+            message: 'Sending file to server...',
+          });
+        }
+      },
+    });
 };
+
+export const updateCoverImageFile = (file, id) => ({
+  type: 'UPDATE_COVER_IMAGE_FILE',
+  file,
+  id,
+});
 
 export const uploadAudioFiles = files => (dispatch) => {
   files.forEach((file) => {
@@ -105,19 +112,21 @@ export const uploadAudioFiles = files => (dispatch) => {
             audioFile.album = tag.tags.album;
             audioFile.title = tag.tags.title;
 
-            if (tag.tags.picture !== undefined) {
-              const coverImageBytes = new Uint8Array(tag.tags.picture.data);
-
-              audioFile.coverImageFile = new File([coverImageBytes], audioFile.title, {
-                type: tag.tags.picture.format,
-              });
-              audioFile.coverImagePreview = URL.createObjectURL(audioFile.coverImageFile);
-            }
-
             dispatch({
               type: 'ADD_AUDIO_FILE',
               audioFile,
             });
+
+            if (tag.tags.picture !== undefined) {
+              const coverImageBytes = new Uint8Array(tag.tags.picture.data);
+              const coverImageFile = new File([coverImageBytes], audioFile.title, {
+                type: tag.tags.picture.format,
+              });
+
+              coverImageFile.preview = URL.createObjectURL(coverImageFile);
+
+              dispatch(updateCoverImageFile(coverImageFile, audioFile.id));
+            }
 
             convertToMp3(file, audioFile.id)(dispatch);
           },
@@ -133,7 +142,7 @@ export const uploadAudioFiles = files => (dispatch) => {
           },
         });
       })
-      .catch(notOkErrorPopup(dispatch));
+      .catch(error => dispatch(showGenericErrorPopup(error)));
   });
 };
 
@@ -142,13 +151,88 @@ export const removeAudioFile = index => ({
   index,
 });
 
-export const updateCoverImageFile = (file, index) => ({
-  type: 'UPDATE_COVER_IMAGE_FILE',
-  file,
+export const removeLiveStream = index => ({
+  type: 'REMOVE_LIVE_STREAM',
   index,
+});
+
+export const addLiveStream = () => ({
+  type: 'ADD_LIVE_STREAM',
 });
 
 export const removeCoverImageFile = index => ({
   type: 'REMOVE_COVER_IMAGE_FILE',
   index,
+});
+
+export const uploadCoverImage = coverImageFile => (dispatch) => {
+  if (coverImageFile === undefined) {
+    return Promise.resolve();
+  }
+  const formData = new FormData();
+
+  formData.set('file', coverImageFile);
+
+  return fetch('/upload/uploadCoverImage', {
+    method: 'post',
+    body: formData,
+  }).then(validationError)
+    .then(notOkError)
+    .then(response => response.json())
+    .then(json => json.imagePath)
+    .catch(error => dispatch(showGenericErrorPopup(error)));
+};
+
+export const submitLiveStreams = ({ __RequestVerificationToken, ...values }, index) =>
+  (dispatch, getState) => {
+    const coverImageFile = getState().upload.liveStreams[index].coverImageFile;
+
+    return dispatch(uploadCoverImage(coverImageFile)).then(coverImageUrl =>
+      fetch('/upload/saveRadios', {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+          RequestVerificationToken: __RequestVerificationToken,
+        },
+        body: JSON.stringify({
+          ...values,
+          coverImageUrl,
+        }),
+        credentials: 'same-origin',
+      }).then(validationError)
+        .then(notOkError)
+        .catch(error => dispatch(showGenericErrorPopup(error))));
+  };
+
+export const submitFiles = ({ __RequestVerificationToken, ...values }, index) =>
+  (dispatch, getState) => {
+    dispatch({
+      type: 'SUBMIT_PENDING',
+      index,
+      isSubmitting: true,
+    });
+
+    const coverImageFile = getState().upload.audioFiles[index].coverImageFile;
+
+    return dispatch(uploadCoverImage(coverImageFile)).then(coverImageUrl =>
+      fetch('/upload/saveMusic', {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+          RequestVerificationToken: __RequestVerificationToken,
+        },
+        body: JSON.stringify({
+          ...values,
+          coverImageUrl,
+        }),
+        credentials: 'same-origin',
+      }).then(validationError)
+        .then(notOkError)
+        .catch(error => dispatch(showGenericErrorPopup(error))));
+  };
+
+export const submitPending = (index, isSubmitting) => ({
+  type: 'SUBMIT_PENDING',
+  index,
+  isSubmitting,
 });

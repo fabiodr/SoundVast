@@ -4,6 +4,7 @@ import { shallow } from 'enzyme';
 import { Field } from 'redux-form';
 
 import BasicInfo from './component';
+import ImageDropzone from './imageDropzone/container';
 
 const setup = (newProps) => {
   const props = {
@@ -11,7 +12,7 @@ const setup = (newProps) => {
       { id: 0, name: 'metal' },
       { id: 1, name: 'rock' },
     ],
-    index: 0,
+    id: 'test',
     ...newProps,
   };
 
@@ -24,17 +25,21 @@ const setup = (newProps) => {
 };
 
 describe('BasicInfo', () => {
-  let wrapper;
+  it('should render ImageDropzone', () => {
+    const { wrapper } = setup();
+
+    expect(wrapper.find(ImageDropzone).exists()).toBe(true);
+  });
 
   it('should map no selectable genres when no genres', () => {
-    ({ wrapper } = setup({ genres: [] }));
+    const { wrapper } = setup({ genres: [] });
     const genreSelect = wrapper.find(Field).filter('[name="genreId"]');
 
     expect(genreSelect.find('option').length).toBe(1);
   });
 
   it('should map selectable genres when genres', () => {
-    ({ wrapper } = setup());
+    const { wrapper } = setup();
     const genreSelect = wrapper.find(Field).filter('[name="genreId"]');
 
     expect(genreSelect.find('option').length).toBe(3);

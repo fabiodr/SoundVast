@@ -6,7 +6,9 @@ import LikeIcon from '../../../images/ratingControls/like.svg';
 const Like = ({ like, likes, width, height }) => (
   <div>
     <LikeIcon width={width} height={height} onClick={like}>{likes}</LikeIcon>
-    {likes}
+    <div className="likes">
+      {likes}
+    </div>
   </div>
 );
 

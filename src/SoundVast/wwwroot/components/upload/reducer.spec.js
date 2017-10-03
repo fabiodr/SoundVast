@@ -8,9 +8,8 @@ describe('uploadReducer', () => {
       type: 'NONE',
     });
 
-    expect(state).toEqual({
-      audioFiles: [],
-    });
+    expect(state.audioFiles).toEqual([]);
+    expect(state.liveStreams[0]).toBeTruthy();
   });
 
   it('should add audio files to existing files', () => {
@@ -116,6 +115,47 @@ describe('uploadReducer', () => {
     });
 
     expect(state.audioFiles[index].coverImagePreview).toBe(null);
+  });
+
+  it('should add live streams to existing live streams', () => {
+    const actionProps = {
+      liveStream: {
+        name: 'galaxy',
+      },
+    };
+    const prevState = {
+      liveStreams: [{
+        name: 'bbcnews',
+      }],
+    };
+
+    const state = uploadReducer(prevState, {
+      type: 'ADD_LIVE_STREAM',
+      ...actionProps,
+    });
+
+    expect(state).toEqual({
+      liveStreams: [
+        { name: 'bbcnews' },
+        { name: 'galaxy' },
+      ],
+    });
+  });
+
+  it('should remove live stream', () => {
+    const prevState = {
+      liveStreams: [
+        { name: 'galaxy' },
+        { name: 'bbcnews' },
+      ],
+    };
+
+    const state = uploadReducer(prevState, {
+      type: 'REMOVE_LIVE_STREAM',
+      index: 0,
+    });
+
+    expect(state.liveStreams.length).toBe(1);
   });
 
   it('should update upload progress', () => {

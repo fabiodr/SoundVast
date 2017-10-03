@@ -1,41 +1,55 @@
+import shortId from 'shortid';
 import filePlaceholder from '../../images/logo/icon/SoundVast_Icon_310x310.png';
 
+const liveStreamId = shortId.generate();
 const defaultState = {
   audioFiles: [],
+  coverImageFiles: {
+    [liveStreamId]: {
+      preview: filePlaceholder,
+    },
+  },
+  liveStreams: [{
+    id: liveStreamId,
+  }],
 };
 
-const removeFile = (files, index) => {
-  const newFiles = [...files];
+const removeForm = (forms, index) => {
+  const newForms = [...forms];
 
-  newFiles.splice(index, 1);
+  newForms.splice(index, 1);
 
-  return newFiles;
+  return newForms;
 };
 
 export default (state = defaultState, action) => {
   switch (action.type) {
-    case 'ADD_AUDIO_FILE':
+    case 'ADD_AUDIO_FILE': {
+      const coverImageFiles = { ...state.coverImageFiles };
+
+      coverImageFiles[action.audioFile.id] = {
+        preview: filePlaceholder,
+      };
+
       return {
         ...state,
-        audioFiles: state.audioFiles.concat([{
-          coverImagePreview: filePlaceholder,
-          ...action.audioFile,
-        }]),
+        audioFiles: state.audioFiles.concat([action.audioFile]),
+        coverImageFiles,
       };
+    }
     case 'REMOVE_AUDIO_FILE':
       return {
         ...state,
-        audioFiles: removeFile(state.audioFiles, action.index),
+        audioFiles: removeForm(state.audioFiles, action.index),
       };
     case 'UPDATE_COVER_IMAGE_FILE': {
-      const audioFiles = [...state.audioFiles];
+      const coverImageFiles = { ...state.coverImageFiles };
 
-      audioFiles[action.index].coverImagePreview = action.file.preview;
-      audioFiles[action.index].coverImageFile = action.file;
+      coverImageFiles[action.id] = action.file;
 
       return {
         ...state,
-        audioFiles,
+        coverImageFiles,
       };
     }
     case 'REMOVE_COVER_IMAGE_FILE': {
@@ -62,6 +76,16 @@ export default (state = defaultState, action) => {
         audioFiles,
       };
     }
+    case 'ADD_LIVE_STREAM':
+      return {
+        ...state,
+        liveStreams: state.liveStreams.concat([action.liveStream]),
+      };
+    case 'REMOVE_LIVE_STREAM':
+      return {
+        ...state,
+        liveStreams: removeForm(state.liveStreams, action.index),
+      };
     case 'SUBMIT_PENDING': {
       const audioFiles = [...state.audioFiles];
 

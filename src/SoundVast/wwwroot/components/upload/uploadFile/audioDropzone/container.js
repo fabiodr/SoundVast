@@ -4,15 +4,11 @@ import AudioDropzone from './component';
 import { uploadAudioFiles, removeAudioFile } from '../../actions';
 
 export const mapStateToProps = ({ upload }) => ({
-  files: upload.audioFiles.map(file => ({
-    id: file.id,
-    title: file.title,
-    preview: file.coverImagePreview,
-    progress: file.progress,
-  })),
+  files: upload.audioFiles,
+  coverImageFiles: upload.coverImageFiles,
 });
 
 export default connect(mapStateToProps, {
   onDrop: uploadAudioFiles,
-  removeFile: removeAudioFile,
+  removeAudioFile,
 })(AudioDropzone);

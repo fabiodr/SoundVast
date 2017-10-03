@@ -1,40 +1,39 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import FileInformation from './fileInformation/component';
 import ValidationErrors from '../../../../shared/form/validation/errors/component';
 import AntiForgeryToken from '../../../../shared/form/antiForgeryToken/container';
 import SpinnerButton from '../../../../shared/spinners/button/component';
+import CancelButton from '../../../common/cancelButton/container';
 
-const Form = ({ error: errors, children, handleSubmit, removeFile,
-index, form, isSubmitting }) => (
-  <form onSubmit={handleSubmit} action="">
-    <AntiForgeryToken form={form} />
-    <ValidationErrors errors={errors} />
+const Form = ({ errors: error, remove, ...props }) => (
+  <form onSubmit={props.handleSubmit} action="">
+    <AntiForgeryToken form={props.form} />
+    <ValidationErrors errors={props.errors} />
 
-    {children}
+    <FileInformation id={props.id} />
 
-    <SpinnerButton isLoading={isSubmitting}>
+    <SpinnerButton isLoading={props.isSubmitting}>
       Save
     </SpinnerButton>
-    <button type="button" className="cancel" onClick={() => removeFile(index)}>
-      Cancel
-    </button>
+    <CancelButton remove={remove} index={props.index} />
   </form>
 );
 
 Form.defaultProps = {
-  error: [],
+  errors: [],
   isSubmitting: false,
 };
 
 Form.propTypes = {
-  form: PropTypes.string.isRequired,
-  children: PropTypes.node.isRequired,
+  id: PropTypes.string.isRequired,
   index: PropTypes.number.isRequired,
-  removeFile: PropTypes.func.isRequired,
+  form: PropTypes.string.isRequired,
+  remove: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   isSubmitting: PropTypes.bool,
-  error: PropTypes.arrayOf(PropTypes.string.isRequired),
+  errors: PropTypes.arrayOf(PropTypes.string.isRequired),
 };
 
 export default Form;

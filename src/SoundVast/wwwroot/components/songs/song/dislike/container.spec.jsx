@@ -5,13 +5,13 @@ import expect from 'expect';
 import thunk from 'redux-thunk';
 
 import DislikeContainer from './container';
-import DislikeIcon from '../../../images/ratingControls/dislike.svg';
-import { rateAudio } from '../actions';
+import DislikeIcon from '../../../../images/ratingControls/dislike.svg';
+import { rateSong } from '../../actions';
 
 let store;
 const setup = (newProps) => {
   const props = {
-    audioId: 0,
+    id: 0,
     ...newProps,
   };
   const wrapper = shallow(
@@ -31,7 +31,7 @@ describe('DislikeContainer', () => {
 
   beforeEach(() => {
     state = {
-      rating: {
+      music: {
         ratings: {
           0: { audioId: 0, liked: true },
           1: { audioId: 0, liked: false },
@@ -49,7 +49,7 @@ describe('DislikeContainer', () => {
 
     wrapper.dive().find(DislikeIcon).simulate('click');
 
-    expect(store.dispatch).toHaveBeenCalledWith(rateAudio());
+    expect(store.dispatch).toHaveBeenCalledWith(rateSong());
   });
 
   it('passes down dislikes', () => {
