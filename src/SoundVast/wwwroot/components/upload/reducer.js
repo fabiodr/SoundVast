@@ -1,14 +1,9 @@
 import shortId from 'shortid';
-import filePlaceholder from '../../images/logo/icon/SoundVast_Icon_310x310.png';
 
 const liveStreamId = shortId.generate();
 const defaultState = {
   audioFiles: [],
-  coverImageFiles: {
-    [liveStreamId]: {
-      preview: filePlaceholder,
-    },
-  },
+  coverImageFiles: {},
   liveStreams: [{
     id: liveStreamId,
   }],
@@ -25,16 +20,9 @@ const removeForm = (forms, index) => {
 export default (state = defaultState, action) => {
   switch (action.type) {
     case 'ADD_AUDIO_FILE': {
-      const coverImageFiles = { ...state.coverImageFiles };
-
-      coverImageFiles[action.audioFile.id] = {
-        preview: filePlaceholder,
-      };
-
       return {
         ...state,
         audioFiles: state.audioFiles.concat([action.audioFile]),
-        coverImageFiles,
       };
     }
     case 'REMOVE_AUDIO_FILE':

@@ -6,6 +6,7 @@ import styles from './component.less';
 import dropzoneStyles from '../../../shared/dropzone/component.less';
 import Form from './form/container';
 import Progress from './progress/component';
+import CoverImage from './coverImage/component';
 
 const AudioDropzone = ({ onDrop, files, coverImageFiles, removeAudioFile }) => (
   <div>
@@ -19,12 +20,7 @@ const AudioDropzone = ({ onDrop, files, coverImageFiles, removeAudioFile }) => (
           Upload audio
         </div>
       </div>
-      {files.map(file => (
-        <figure key={file.id}>
-          <img alt="" src={coverImageFiles[file.id].preview} />
-          <figcaption>{coverImageFiles[file.id].title}</figcaption>
-        </figure>
-      ))}
+      {files.map(file => <CoverImage key={file.id} coverImageFile={coverImageFiles[file.id]} />)}
     </Dropzone>
     <aside>
       {files.map((file, i) => (

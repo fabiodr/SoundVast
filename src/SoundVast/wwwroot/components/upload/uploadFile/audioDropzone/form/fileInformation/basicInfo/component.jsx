@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 
 import styles from '../../../../../common/basicInfo/component.less';
-import ImageDropzone from './imageDropzone/container';
+import ImageDropzone from '../../../../../common/imageDropzone/container';
 import FormInput from '../../../../../../shared/form/editableField/input/component';
 import FormSelect from '../../../../../../shared/form/editableField/select/component';
 

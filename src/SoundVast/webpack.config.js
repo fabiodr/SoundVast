@@ -107,12 +107,8 @@ module.exports = {
       {
         test: /\.svg$/,
         use: [
-          {
-            loader: 'babel-loader',
-          },
-          {
-            loader: 'react-svg-loader',
-          },
+          'babel-loader',
+          'react-svg-loader',
         ],
       },
     ],
@@ -129,3 +125,4 @@ module.exports = {
     },
   },
 };
+path.sep

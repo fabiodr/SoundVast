@@ -158,6 +158,9 @@ export const removeLiveStream = index => ({
 
 export const addLiveStream = () => ({
   type: 'ADD_LIVE_STREAM',
+  liveStream: {
+    id: shortid.generate(),
+  },
 });
 
 export const removeCoverImageFile = index => ({

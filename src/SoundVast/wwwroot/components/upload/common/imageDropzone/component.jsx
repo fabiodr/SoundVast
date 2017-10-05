@@ -5,6 +5,8 @@ import Dropzone from 'react-dropzone';
 import dropzoneStyles from '../../../shared/dropzone/component.less';
 import styles from './component.less';
 
+const previewPlaceholderPath = '../../../../images/logo/icon/SV_Icon.svg';
+
 const ImageDropzone = ({ onDrop, id, preview }) => (
   <div className={styles.imageDropzoneContainer}>
     <span>Cover Image</span>
@@ -14,7 +16,7 @@ const ImageDropzone = ({ onDrop, id, preview }) => (
       multiple={false}
       onDrop={files => onDrop(files[0], id)}
     >
-      <img alt="" src={preview} />
+      <img alt="" src={preview || previewPlaceholderPath} />
       <div className={dropzoneStyles.placeholder}>
         Update image
       </div>
