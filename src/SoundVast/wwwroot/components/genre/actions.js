@@ -3,14 +3,25 @@
 import notOkError from '../shared/fetch/errorHandling/notOkError/component';
 import notOkErrorPopup from '../shared/fetch/errorHandling/notOkError/popup/component';
 
-export const getGenres = () => dispatch =>
-  fetch('/genre/getGenres')
+export const getMusicGenres = () => dispatch =>
+  fetch('/genre/getMusicGenres')
     .then(notOkError)
     .then(response => response.json())
-    .then((json) => {
+    .then(json =>
       dispatch({
-        type: 'GET_GENRES',
-        genres: json.genres,
-      });
-    })
+        type: 'GET_MUSIC_GENRES',
+        musicGenres: json.musicGenres,
+      }))
     .catch(notOkErrorPopup(dispatch));
+
+export const getLiveStreamGenres = () => dispatch =>
+  fetch('/genre/getLiveStreamGenres')
+    .then(notOkError)
+    .then(response => response.json())
+    .then(json =>
+      dispatch({
+        type: 'GET_LIVE_STREAM_GENRES',
+        liveStreamGenres: json.liveStreamGenres,
+      }))
+    .catch(notOkErrorPopup(dispatch));
+

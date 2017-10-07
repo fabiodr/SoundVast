@@ -19,13 +19,11 @@ namespace SoundVast.Components.Audio
     {
         private readonly IRepository<T> _repository;
         private readonly IValidationProvider _validationProvider;
-        private readonly IAudioValidator _audioValidator;
 
-        public AudioService(IRepository<T> repository, IValidationProvider validationProvider, IAudioValidator audioValidator)
+        public AudioService(IRepository<T> repository, IValidationProvider validationProvider)
         {
             _repository = repository;
             _validationProvider = validationProvider;
-            _audioValidator = audioValidator;
         }
 
         public ICollection<T> GetAudios(int current, int amount)
@@ -41,15 +39,6 @@ namespace SoundVast.Components.Audio
         public ICollection<RatingModel> GetAudioRatings(int id)
         {
             return _repository.GetAll().Include(x => x.Ratings).Single(x => x.Id == id).Ratings;
-        }
-
-        public async Task UploadCoverImage(ICloudBlob blob, Stream stream, string contentType)
-        {
-            var fileSize = ByteSize.FromBytes(stream.Length);
-
-            _audioValidator.ValidateUploadCoverImage(fileSize.MegaBytes);
-
-            await blob.UploadFromStreamAsync(stream, contentType);
         }
 
         public void Add(T model)

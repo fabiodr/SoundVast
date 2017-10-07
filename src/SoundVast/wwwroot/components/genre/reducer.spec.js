@@ -9,19 +9,34 @@ describe('userReducer', () => {
     });
 
     expect(state).toEqual({
-      genres: [],
+      musicGenres: [],
+      liveStreamGenres: [],
     });
   });
 
-  it('should get genres', () => {
+  it('should get music genres', () => {
     const actionProps = {
-      genres: [
+      musicGenres: [
         { name: 'metal' },
         { name: 'rock' },
       ],
     };
     const state = genreReducer(null, {
-      type: 'GET_GENRES',
+      type: 'GET_MUSIC_GENRES',
+      ...actionProps,
+    });
+
+    expect(state).toEqual(actionProps);
+  });
+
+  it('should get live stream genres', () => {
+    const actionProps = {
+      liveStreamGenres: [
+        { name: 'football' },
+      ],
+    };
+    const state = genreReducer(null, {
+      type: 'GET_LIVE_STREAM_GENRES',
       ...actionProps,
     });
 

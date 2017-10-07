@@ -5,11 +5,10 @@ import Form from './form/container';
 
 const UploadLiveStream = ({ liveStreams, removeLiveStream, addLiveStream }) => (
   <div>
-    {liveStreams.map((liveStream, i) => (
+    {liveStreams.map(liveStream => (
       <Form
         key={liveStream.id}
-        form={`liveStream_${liveStream.id}`}
-        index={i}
+        form={`upload_${liveStream.id}`}
         id={liveStream.id}
         remove={removeLiveStream}
       />

@@ -14,8 +14,7 @@ namespace SoundVast.Components.Song
 {
     public class SongService : AudioService<SongModel>, ISongService
     {
-        public SongService(IRepository<SongModel> repository, IValidationProvider validationProvider, 
-            IAudioValidator audioValidator) : base(repository, validationProvider, audioValidator)
+        public SongService(IRepository<SongModel> repository, IValidationProvider validationProvider) : base(repository, validationProvider)
         {
         }
     }

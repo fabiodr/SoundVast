@@ -6,7 +6,7 @@ import CancelButton from './container';
 
 const setup = (newProps) => {
   const props = {
-    index: 0,
+    id: 'test',
     remove: expect.createSpy(),
     ...newProps,
   };

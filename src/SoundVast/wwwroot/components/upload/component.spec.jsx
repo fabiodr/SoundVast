@@ -12,7 +12,7 @@ const setup = (newProps) => {
     ...newProps,
   };
 
-  const wrapper = shallow(<Upload {...props} />);
+  const wrapper = shallow(<Upload {...props} />).dive();
 
   return {
     wrapper,

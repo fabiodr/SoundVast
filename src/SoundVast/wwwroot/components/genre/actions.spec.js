@@ -20,19 +20,36 @@ describe('genreActions', () => {
     fetchMock.reset().restore();
   });
 
-  it('should fetch genres', () => {
+  it('should fetch music genres', () => {
     const response = {
-      genres: [
+      musicGenres: [
         { name: 'metal' },
         { name: 'rock' },
       ],
     };
 
-    fetchMock.getOnce('/genre/getGenres', response);
+    fetchMock.getOnce('/genre/getMusicGenres', response);
 
-    store.dispatch(actions.getGenres()).then(() => {
+    store.dispatch(actions.getMusicGenres()).then(() => {
       expect(calledActions).toEqual([{
-        type: 'GET_GENRES',
+        type: 'GET_MUSIC_GENRES',
+        ...response,
+      }]);
+    });
+  });
+
+  it('should fetch live stream genres', () => {
+    const response = {
+      liveStreamGenres: [
+        { name: 'football' },
+      ],
+    };
+
+    fetchMock.getOnce('/genre/getLiveStreamGenres', response);
+
+    store.dispatch(actions.getLiveStreamGenres()).then(() => {
+      expect(calledActions).toEqual([{
+        type: 'GET_LIVE_STREAM_GENRES',
         ...response,
       }]);
     });

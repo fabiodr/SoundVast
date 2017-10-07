@@ -1,17 +1,14 @@
 import React from 'react';
 import expect from 'expect';
 import { shallow } from 'enzyme';
-import { Field } from 'redux-form';
 
 import BasicInfo from './component';
-import ImageDropzone from './imageDropzone/container';
+import ImageDropzone from '../../../../common/imageDropzone/container';
+import NameField from '../../../../common/basicInfo/fields/name/component';
+import GenreField from '../../../../common/basicInfo/fields/genre/container';
 
 const setup = (newProps) => {
   const props = {
-    genres: [
-      { id: 0, name: 'metal' },
-      { id: 1, name: 'rock' },
-    ],
     id: 'test',
     ...newProps,
   };
@@ -24,24 +21,22 @@ const setup = (newProps) => {
   };
 };
 
-describe('BasicInfo', () => {
+describe('LiveStreamBasicInfo', () => {
   it('should render ImageDropzone', () => {
     const { wrapper } = setup();
 
-    expect(wrapper.find(ImageDropzone).exists()).toBe(true);
+    expect(wrapper.find(ImageDropzone).length).toBe(1);
   });
 
-  it('should map no selectable genres when no genres', () => {
-    const { wrapper } = setup({ genres: [] });
-    const genreSelect = wrapper.find(Field).filter('[name="genreId"]');
-
-    expect(genreSelect.find('option').length).toBe(1);
-  });
-
-  it('should map selectable genres when genres', () => {
+  it('should render Name field', () => {
     const { wrapper } = setup();
-    const genreSelect = wrapper.find(Field).filter('[name="genreId"]');
 
-    expect(genreSelect.find('option').length).toBe(3);
+    expect(wrapper.find(NameField).length).toBe(1);
+  });
+
+  it('should render Genre field', () => {
+    const { wrapper } = setup();
+
+    expect(wrapper.find(GenreField).length).toBe(1);
   });
 });

@@ -12,7 +12,6 @@ const setup = (newProps) => {
     handleSubmit: expect.createSpy(),
     remove: expect.createSpy(),
     form: 'upload_0',
-    index: 0,
     ...newProps,
   };
 

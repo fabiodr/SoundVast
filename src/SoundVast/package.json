@@ -97,6 +97,7 @@
     "redux-mock-store": "^1.2.3",
     "require-hacker": "^3.0.1",
     "style-loader": "^0.18.2",
+    "svg-react-loader": "^0.4.5",
     "url-search-params-polyfill": "^2.0.0",
     "webpack": "^2.2.0",
     "webpack-dev-server": "^2.4.1"
@@ -123,9 +124,9 @@
     "react-jplaylist": "latest",
     "react-redux": "^5.0.5",
     "react-router-dom": "^4.1.1",
-    "react-svg-loader": "^1.1.1",
     "react-tabs": "^1.1.0",
     "recompose": "^0.23.4",
+    "reduce-reducers": "^0.1.2",
     "redux": "^3.5.2",
     "redux-form": "^6.7.0",
     "redux-thunk": "^2.2.0",

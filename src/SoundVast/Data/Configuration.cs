@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.DependencyInjection;
+using SoundVast.Components.Genre;
 using SoundVast.Components.Genre.Models;
 using SoundVast.Components.Quote.Models;
 using SoundVast.CustomHelpers;
@@ -31,14 +32,16 @@ namespace SoundVast.Data
                 context.Database.Migrate();
 
                 var musicGenres = MusicGenres.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
+                var liveStreamGenres = LiveStreamGenres.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
                 //var radioStationCategoryResources = LiveStreamCategories.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
                 //var placeHolderImage = new ImageFileModel("Placeholder.jpg");
 
-                InitializeGenres(context, musicGenres);
+                InitializeGenres(context, musicGenres, GenreType.Music);
+                InitializeGenres(context, liveStreamGenres, GenreType.LiveStream);
 
-             //   InitializeQuotes(context);
-             //   InitializeCategories<FileStreamCategoryModel>(context, fileStreamCategoryResources, placeHolderImage);
-             //   InitializeCategories<LiveStreamCategoryModel>(context, radioStationCategoryResources, placeHolderImage);
+                //   InitializeQuotes(context);
+                //   InitializeCategories<FileStreamCategoryModel>(context, fileStreamCategoryResources, placeHolderImage);
+                //   InitializeCategories<LiveStreamCategoryModel>(context, radioStationCategoryResources, placeHolderImage);
                 //InitializeIdentityForEf(context);
 
                 context.SaveChanges();
@@ -61,14 +64,16 @@ namespace SoundVast.Data
         //    context.Set<T>().AddRange(categories.Where(category => !context.Set<T>().Any(x => x.Name == category.Name)));
         //}
 
-        public static void InitializeGenres(ApplicationDbContext context, DictionaryEntry[] genreResources)
+        public static void InitializeGenres(ApplicationDbContext context, DictionaryEntry[] genreResources, string genreType)
         {
-            var musicGenres = genreResources.Select(x => new GenreModel
+            var genres = genreResources.Select(x => new GenreModel
             {
-                Name = (string)x.Value
+                Name = (string)x.Value,
+                Type = genreType
             });
-
-            context.Set<GenreModel>().AddRange(musicGenres.Where(genre => !context.Set<GenreModel>().Any(x => x.Name == genre.Name)));
+    
+            context.Set<GenreModel>().AddRange(genres.Where(genre => !context.Set<GenreModel>()
+                .Any(x => x.Name == genre.Name && x.Type == genre.Type)));
         }
 
         //public static void InitializeIdentityForEf(ApplicationDbContext context)

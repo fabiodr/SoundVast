@@ -159,6 +159,9 @@ namespace SoundVast.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
+                    b.Property<string>("Type")
+                        .IsRequired();
+
                     b.HasKey("Id");
 
                     b.ToTable("Genres");

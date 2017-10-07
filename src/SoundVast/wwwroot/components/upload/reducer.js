@@ -3,10 +3,10 @@ import shortId from 'shortid';
 const liveStreamId = shortId.generate();
 const defaultState = {
   audioFiles: [],
-  coverImageFiles: {},
   liveStreams: [{
     id: liveStreamId,
   }],
+  coverImageFiles: {},
 };
 
 const removeForm = (forms, index) => {
@@ -41,13 +41,13 @@ export default (state = defaultState, action) => {
       };
     }
     case 'REMOVE_COVER_IMAGE_FILE': {
-      const audioFiles = [...state.audioFiles];
+      const coverImageFiles = [...state.coverImageFiles];
 
-      audioFiles[action.index].coverImagePreview = null;
+      delete coverImageFiles[action.id];
 
       return {
         ...state,
-        audioFiles,
+        coverImageFiles,
       };
     }
     case 'UPDATE_UPLOAD_PROGRESS': {
@@ -74,16 +74,6 @@ export default (state = defaultState, action) => {
         ...state,
         liveStreams: removeForm(state.liveStreams, action.index),
       };
-    case 'SUBMIT_PENDING': {
-      const audioFiles = [...state.audioFiles];
-
-      audioFiles[action.index].isSubmitting = action.isSubmitting;
-
-      return {
-        ...state,
-        audioFiles,
-      };
-    }
     default: return state;
   }
 };

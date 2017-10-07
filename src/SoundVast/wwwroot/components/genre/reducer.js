@@ -1,13 +1,19 @@
 const defaultState = {
-  genres: [],
+  musicGenres: [],
+  liveStreamGenres: [],
 };
 
 export default (state = defaultState, action) => {
   switch (action.type) {
-    case 'GET_GENRES':
+    case 'GET_MUSIC_GENRES':
       return {
         ...state,
-        genres: action.genres,
+        musicGenres: action.musicGenres,
+      };
+    case 'GET_LIVE_STREAM_GENRES':
+      return {
+        ...state,
+        liveStreamGenres: action.liveStreamGenres,
       };
     default: return state;
   }

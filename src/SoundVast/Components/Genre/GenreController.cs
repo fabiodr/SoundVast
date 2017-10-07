@@ -16,12 +16,23 @@ namespace SoundVast.Components.Genre
         }
 
         [HttpGet]
-        public IActionResult GetGenres()
+        public IActionResult GetMusicGenres()
         {
-            var genres = _genreService.GetGenres();
+            var musicGenres = _genreService.GetMusicGenres();
 
             return Ok(new {
-                genres
+                musicGenres
+            });
+        }
+
+        [HttpGet]
+        public IActionResult GetLiveStreamGenres()
+        {
+            var liveStreamGenres = _genreService.GetLiveStreamGenres();
+
+            return Ok(new
+            {
+                liveStreamGenres
             });
         }
     }

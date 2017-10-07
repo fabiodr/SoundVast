@@ -8,23 +8,13 @@ using SoundVast.Validation;
 
 namespace SoundVast.Components.Audio
 {
-    public class AudioValidator : Validator<AudioModel>, IAudioValidator
+    public class AudioValidator : Validator<AudioModel>
     {
-        private const int MaxImageUploadSize = 2;
-
         protected override IEnumerable<ValidationResult> Validate(AudioModel model)
         {
             if (string.IsNullOrWhiteSpace(model.Name))
             {
                 yield return new ValidationResult("Name", "Name is required");
-            }
-        }
-
-        public void ValidateUploadCoverImage(double fileSize)
-        {
-            if (fileSize > MaxImageUploadSize)
-            {
-                throw new ValidationException(new ValidationResult("_error", $"Maximum image size is {MaxImageUploadSize}MB"));
             }
         }
     }

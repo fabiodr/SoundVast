@@ -1,6 +1,7 @@
 import React from 'react';
 import expect from 'expect';
 import { shallow } from 'enzyme';
+import Dropzone from 'react-dropzone';
 
 import ImageDropzone from './component';
 
@@ -8,7 +9,6 @@ const setup = (newProps) => {
   const props = {
     onDrop: expect.createSpy(),
     id: 'test',
-    preview: 'blob:localhost:8080/test.jpg',
     ...newProps,
   };
 
@@ -21,9 +21,31 @@ const setup = (newProps) => {
 };
 
 describe('ImageDropzone', () => {
-  it('preview image should use preview', () => {
-    const { wrapper, props } = setup();
+  describe('preview image', () => {
+    it('src should use preview when specified', () => {
+      const preview = 'blob:localhost:8080/test.jpg';
+      const { wrapper, props } = setup({ preview });
 
-    expect(wrapper.find('img').prop('src')).toBe(props.preview);
+      expect(wrapper.find('img').prop('src')).toBe(props.preview);
+    });
+
+    it('src should use placeholder when not specified', () => {
+      const { wrapper } = setup();
+
+      expect(wrapper.find('img').prop('src')).toExist();
+    });
+  });
+
+  it('onDrop should pass in first file and id only', () => {
+    const { wrapper, props } = setup();
+    const dropzone = wrapper.find(Dropzone);
+    const files = [
+      new File('test.jpg'),
+      new File('test2.jpg'),
+    ];
+
+    dropzone.simulate('drop', files);
+
+    expect(props.onDrop).toHaveBeenCalledWith(files[0], props.id);
   });
 });

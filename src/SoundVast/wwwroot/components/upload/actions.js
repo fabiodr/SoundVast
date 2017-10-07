@@ -6,6 +6,7 @@ import trimFileExtension from '../shared/utilities/trimFileExtension';
 import notOkError from '../shared/fetch/errorHandling/notOkError/component';
 import validationError from '../shared/fetch/errorHandling/validationError/component';
 import { showGenericErrorPopup } from '../shared/popup/actions';
+import { submitPending } from '../shared/form/actions';
 
 export const uploadMp3 = (jsonText, id) => (dispatch) => {
   const body = JSON.parse(jsonText);
@@ -130,7 +131,9 @@ export const uploadAudioFiles = files => (dispatch) => {
 
             convertToMp3(file, audioFile.id)(dispatch);
           },
-          onError: () => {
+          onError: (error) => {
+            console.log(error); // eslint-disable-line no-console
+
             audioFile.title = trimFileExtension(file.name);
 
             dispatch({
@@ -168,7 +171,9 @@ export const removeCoverImageFile = index => ({
   index,
 });
 
-export const uploadCoverImage = coverImageFile => (dispatch) => {
+export const uploadCoverImage = id => (dispatch, getState) => {
+  const coverImageFile = getState().upload.coverImageFiles[id];
+
   if (coverImageFile === undefined) {
     return Promise.resolve();
   }
@@ -186,56 +191,26 @@ export const uploadCoverImage = coverImageFile => (dispatch) => {
     .catch(error => dispatch(showGenericErrorPopup(error)));
 };
 
-export const submitLiveStreams = ({ __RequestVerificationToken, ...values }, index) =>
-  (dispatch, getState) => {
-    const coverImageFile = getState().upload.liveStreams[index].coverImageFile;
+const submit = (url, id, { __RequestVerificationToken, ...values }) => (dispatch) => {
+  dispatch(submitPending(`upload_${id}`));
 
-    return dispatch(uploadCoverImage(coverImageFile)).then(coverImageUrl =>
-      fetch('/upload/saveRadios', {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json',
-          RequestVerificationToken: __RequestVerificationToken,
-        },
-        body: JSON.stringify({
-          ...values,
-          coverImageUrl,
-        }),
-        credentials: 'same-origin',
-      }).then(validationError)
-        .then(notOkError)
-        .catch(error => dispatch(showGenericErrorPopup(error))));
-  };
+  return dispatch(uploadCoverImage(id)).then(coverImageUrl =>
+    fetch(url, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+        RequestVerificationToken: __RequestVerificationToken,
+      },
+      body: JSON.stringify({
+        ...values,
+        coverImageUrl,
+      }),
+      credentials: 'same-origin',
+    }).then(validationError)
+      .then(notOkError)
+      .catch(error => dispatch(showGenericErrorPopup(error))));
+};
 
-export const submitFiles = ({ __RequestVerificationToken, ...values }, index) =>
-  (dispatch, getState) => {
-    dispatch({
-      type: 'SUBMIT_PENDING',
-      index,
-      isSubmitting: true,
-    });
+export const submitLiveStreams = (id, values) => () => submit('/upload/saveRadios', id, values);
 
-    const coverImageFile = getState().upload.audioFiles[index].coverImageFile;
-
-    return dispatch(uploadCoverImage(coverImageFile)).then(coverImageUrl =>
-      fetch('/upload/saveMusic', {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json',
-          RequestVerificationToken: __RequestVerificationToken,
-        },
-        body: JSON.stringify({
-          ...values,
-          coverImageUrl,
-        }),
-        credentials: 'same-origin',
-      }).then(validationError)
-        .then(notOkError)
-        .catch(error => dispatch(showGenericErrorPopup(error))));
-  };
-
-export const submitPending = (index, isSubmitting) => ({
-  type: 'SUBMIT_PENDING',
-  index,
-  isSubmitting,
-});
+export const submitFiles = (id, values) => () => submit('/upload/saveMusic', id, values);

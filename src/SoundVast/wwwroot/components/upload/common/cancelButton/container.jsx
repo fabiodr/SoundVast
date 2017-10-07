@@ -4,11 +4,11 @@ import { compose, withHandlers, setPropTypes } from 'recompose';
 import CancelButton from './component';
 
 const propTypes = {
-  index: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
 };
 
 const handlers = {
-  remove: props => () => props.remove(props.index),
+  remove: props => () => props.remove(props.id),
 };
 
 export default compose(

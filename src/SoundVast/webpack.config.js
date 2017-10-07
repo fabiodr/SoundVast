@@ -106,10 +106,10 @@ module.exports = {
       },
       {
         test: /\.svg$/,
-        use: [
-          'babel-loader',
-          'react-svg-loader',
-        ],
+        loader: 'svg-react-loader',
+        query: {
+          classIdPrefix: '[name]-[hash:8]__',
+        },
       },
     ],
   },
@@ -125,4 +125,3 @@ module.exports = {
     },
   },
 };
-path.sep

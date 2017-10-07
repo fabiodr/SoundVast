@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import FileInformation from './fileInformation/component';
 import ValidationErrors from '../../../../shared/form/validation/errors/component';
 import AntiForgeryToken from '../../../../shared/form/antiForgeryToken/container';
-import SpinnerButton from '../../../../shared/spinners/button/component';
+import SpinnerSubmit from '../../../../shared/form/spinnerSubmit/container';
 import CancelButton from '../../../common/cancelButton/container';
 
 const Form = ({ errors: error, remove, ...props }) => (
@@ -14,10 +14,10 @@ const Form = ({ errors: error, remove, ...props }) => (
 
     <FileInformation id={props.id} />
 
-    <SpinnerButton isLoading={props.isSubmitting}>
+    <SpinnerSubmit formName={props.form}>
       Save
-    </SpinnerButton>
-    <CancelButton remove={remove} index={props.index} />
+    </SpinnerSubmit>
+    <CancelButton remove={remove} id={props.id} />
   </form>
 );
 
@@ -28,7 +28,6 @@ Form.defaultProps = {
 
 Form.propTypes = {
   id: PropTypes.string.isRequired,
-  index: PropTypes.number.isRequired,
   form: PropTypes.string.isRequired,
   remove: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,

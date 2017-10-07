@@ -200,6 +200,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Properties\LiveStreamGenres.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>LiveStreamGenres.resx</DependentUpon>
+    </Compile>
     <Compile Update="Properties\MusicGenres.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -208,6 +213,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Properties\LiveStreamGenres.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>LiveStreamGenres.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Properties\MusicGenres.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>MusicGenres.Designer.cs</LastGenOutput>

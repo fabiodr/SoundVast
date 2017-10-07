@@ -11,6 +11,7 @@ const mapStateToProps = ({ upload }, { id }) => ({
 export default compose(
   connect(mapStateToProps, {
     onDrop: (file, id) => updateCoverImageFile(file, id),
+    // TODO: Implement in component
     removeFile: removeCoverImageFile,
   }),
   flattenProp('coverImageFile'),

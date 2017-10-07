@@ -34,15 +34,17 @@ namespace SoundVast.Components.Upload
         private readonly IFileStorage _fileStorage;
         private readonly ICloudStorage _cloudStorage;
         private readonly ISongService _songService;
+        private readonly IUploadService _uploadService;
         private readonly UserManager<ApplicationUser> _userManager;
 
         public UploadController(IFileStorage fileStorage, ICloudStorage cloudStorage,
-            ISongService songService, UserManager<ApplicationUser> userManager)
+            ISongService songService, UserManager<ApplicationUser> userManager, IUploadService uploadService)
         {
             _fileStorage = fileStorage;
             _cloudStorage = cloudStorage;
             _songService = songService;
             _userManager = userManager;
+            _uploadService = uploadService;
         }
         
         [HttpPost]
@@ -92,7 +94,7 @@ namespace SoundVast.Components.Upload
 
             try
             {
-                await _songService.UploadCoverImage(imageBlob, file.OpenReadStream(), file.ContentType);
+                await _uploadService.UploadCoverImage(imageBlob, file.OpenReadStream(), file.ContentType);
             }
             catch (ValidationException e)
             {

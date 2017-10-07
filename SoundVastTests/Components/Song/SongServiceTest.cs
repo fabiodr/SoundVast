@@ -24,7 +24,6 @@ namespace SoundVastTests.Components.Song
         private SongService _songService;
         private Mock<IRepository<SongModel>> _mockSongRepository;
         private Mock<IValidationProvider> _mockValidationProvider;
-        private Mock<IAudioValidator> _mockAudioValidator;
         private const string UserId = "DLEPR-DPELF";
 
         [SetUp]
@@ -32,9 +31,8 @@ namespace SoundVastTests.Components.Song
         {
             _mockSongRepository = new Mock<IRepository<SongModel>>();
             _mockValidationProvider = new Mock<IValidationProvider>();
-            _mockAudioValidator = new Mock<IAudioValidator>();
 
-            _songService = new SongService(_mockSongRepository.Object, _mockValidationProvider.Object, _mockAudioValidator.Object);
+            _songService = new SongService(_mockSongRepository.Object, _mockValidationProvider.Object);
         }
 
         [Test]
@@ -151,23 +149,6 @@ namespace SoundVastTests.Components.Song
             var result = _songService.GetAudioRatings(songId);
 
             result.ShouldBeEquivalentTo(ratings);
-        }
-
-
-        [Test]
-        public async Task ShouldUploadCoverImage()
-        {
-            const string contentType = "image/jpeg";
-            var stream = new MemoryStream();
-            var mockBlob = new Mock<ICloudBlob>();
-
-            mockBlob.Setup(x => x.UploadFromStreamAsync(stream, contentType)).Returns(Task.CompletedTask);
-            _mockAudioValidator.Setup(x => x.ValidateUploadCoverImage(stream.Length));
-
-            await _songService.UploadCoverImage(mockBlob.Object, stream, contentType);
-
-            _mockAudioValidator.VerifyAll();
-            mockBlob.VerifyAll();
         }
 
         [Test]

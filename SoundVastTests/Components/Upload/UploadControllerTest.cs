@@ -43,6 +43,7 @@ namespace SoundVastTests.Components.Upload
         private Mock<IFileStorage> _mockFileStorage;
         private Mock<ICloudStorage> _mockCloudStorage;
         private Mock<ISongService> _mockSongService;
+        private Mock<IUploadService> _mockUploadService;
         private Mock<UserManager<ApplicationUser>> _mockUserManager;
 
         [SetUp]
@@ -53,10 +54,11 @@ namespace SoundVastTests.Components.Upload
             _mockFileStorage = new Mock<IFileStorage>();
             _mockCloudStorage = new Mock<ICloudStorage>();
             _mockSongService = new Mock<ISongService>();
+            _mockUploadService = new Mock<IUploadService>();
             _mockUserManager = new Mock<UserManager<ApplicationUser>>(userStore.Object, null, null, null, null, null, null, null, null);
 
             _uploadController = new UploadController(_mockFileStorage.Object, _mockCloudStorage.Object,
-                _mockSongService.Object, _mockUserManager.Object);
+                _mockSongService.Object, _mockUserManager.Object, _mockUploadService.Object);
         }
 
         [Test]
@@ -143,7 +145,7 @@ namespace SoundVastTests.Components.Upload
             mockFile.Setup(x => x.FileName).Returns(coverImageName);
             mockFile.Setup(x => x.ContentType).Returns(contentType);
             _mockCloudStorage.Setup(x => x.GetBlob(CloudStorageType.Image, coverImageName)).Returns(imageBlob);
-            _mockSongService.Setup(x => x.UploadCoverImage(imageBlob, stream, contentType)).Returns(Task.CompletedTask);
+            _mockUploadService.Setup(x => x.UploadCoverImage(imageBlob, stream, contentType)).Returns(Task.CompletedTask);
             
             var result = (OkObjectResult)await _uploadController.UploadCoverImage(mockFile.Object);
 
@@ -161,7 +163,7 @@ namespace SoundVastTests.Components.Upload
             var mockFile = new Mock<IFormFile>();
 
             _mockCloudStorage.Setup(x => x.GetBlob(CloudStorageType.Image, It.IsAny<string>()));
-            _mockSongService.Setup(x => x.UploadCoverImage(It.IsAny<ICloudBlob>(), It.IsAny<Stream>(), It.IsAny<string>()))
+            _mockUploadService.Setup(x => x.UploadCoverImage(It.IsAny<ICloudBlob>(), It.IsAny<Stream>(), It.IsAny<string>()))
                 .Throws(new ValidationException(validationResult));
 
             var result = (ObjectResult)await _uploadController.UploadCoverImage(mockFile.Object);

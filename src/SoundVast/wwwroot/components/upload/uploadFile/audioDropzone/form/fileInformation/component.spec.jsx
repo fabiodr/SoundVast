@@ -4,6 +4,7 @@ import { shallow } from 'enzyme';
 import { TabPanel } from 'react-tabs';
 
 import FileInformation from './component';
+import BasicInfo from './basicInfo/component';
 
 const setup = (newProps) => {
   const props = {
@@ -23,6 +24,6 @@ describe('FileInformation', () => {
   it('should render BasicInfo', () => {
     const { wrapper } = setup();
 
-    expect(wrapper.find(TabPanel).length).toBe(1);
+    expect(wrapper.find(TabPanel).find(BasicInfo).length).toBe(1);
   });
 });

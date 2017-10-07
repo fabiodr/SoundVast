@@ -26,16 +26,31 @@ namespace SoundVastTests.Components.Genre
         }
 
         [Test]
-        public void ShouldGetGenres()
+        public void ShouldGetMusicGenres()
         {
-            var genres = new List<GenreModel>();
+            var musicGenres = new List<GenreModel>();
 
-            _mockGenreService.Setup(x => x.GetGenres()).Returns(genres);
+            _mockGenreService.Setup(x => x.GetMusicGenres()).Returns(musicGenres);
 
-            var result = (OkObjectResult)_genreController.GetGenres();
+            var result = (OkObjectResult)_genreController.GetMusicGenres();
 
             result.Value.ShouldBeEquivalentTo(new {
-                genres
+                musicGenres
+            });
+        }
+
+        [Test]
+        public void ShouldGetLiveStreamGenres()
+        {
+            var liveStreamGenres = new List<GenreModel>();
+
+            _mockGenreService.Setup(x => x.GetLiveStreamGenres()).Returns(liveStreamGenres);
+
+            var result = (OkObjectResult)_genreController.GetLiveStreamGenres();
+
+            result.Value.ShouldBeEquivalentTo(new
+            {
+                liveStreamGenres
             });
         }
     }

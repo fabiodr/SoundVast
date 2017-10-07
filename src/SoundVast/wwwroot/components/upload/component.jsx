@@ -4,6 +4,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import styles from './component.less';
 import AudioDropzone from './uploadFile/audioDropzone/container';
 import UploadLiveStream from './uploadLiveStream/container';
+import authorizedComponent from '../shared/authorizedComponent/container';
 
 const Upload = () => (
   <div className={styles.upload}>
@@ -22,4 +23,4 @@ const Upload = () => (
   </div>
 );
 
-export default Upload;
+export default authorizedComponent(Upload);
