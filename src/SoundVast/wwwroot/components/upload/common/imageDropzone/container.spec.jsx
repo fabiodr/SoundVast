@@ -5,7 +5,7 @@ import expect from 'expect';
 import Dropzone from 'react-dropzone';
 
 import ImageDropzoneContainer from './container';
-import { updateCoverImageFile, removeCoverImageFile } from '../../actions';
+import { updateCoverImage, removeCoverImage } from '../../actions';
 
 let store;
 const setup = (newProps) => {
@@ -16,7 +16,7 @@ const setup = (newProps) => {
   const wrapper = shallow(
     <ImageDropzoneContainer {...props} />,
     { context: { store } },
-  ).dive().dive();
+  ).dive();
 
   return {
     wrapper,
@@ -30,7 +30,7 @@ describe('ImageDropzoneContainer', () => {
   beforeEach(() => {
     state = {
       upload: {
-        coverImageFiles: {},
+        coverImages: {},
       },
     };
     store = configureMockStore()(state);
@@ -47,6 +47,6 @@ describe('ImageDropzoneContainer', () => {
 
     dropzone.simulate('drop', files);
 
-    expect(store.dispatch).toHaveBeenCalledWith(updateCoverImageFile);
+    expect(store.dispatch).toHaveBeenCalledWith(updateCoverImage);
   });
 });

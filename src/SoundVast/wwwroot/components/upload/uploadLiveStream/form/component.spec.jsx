@@ -5,7 +5,7 @@ import { shallow } from 'enzyme';
 import LiveStreamInformation from './liveStreamInformation/component';
 import UploadLiveStreamForm from './component';
 import ValidationErrors from '../../../shared/form/validation/errors/component';
-import CancelButton from '../../common/cancelButton/container';
+import CancelButton from '../../common/cancelButton/component';
 
 const setup = (newProps) => {
   const props = {

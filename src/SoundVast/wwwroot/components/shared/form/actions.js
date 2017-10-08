@@ -5,11 +5,6 @@ import { change } from 'redux-form';
 import notOkError from '../../shared/fetch/errorHandling/notOkError/component';
 import notOkErrorPopup from '../../shared/fetch/errorHandling/notOkError/popup/component';
 
-export const submitPending = form => ({
-  type: 'FORM_SUBMIT_PENDING',
-  form,
-});
-
 export const generateAntiForgeryToken = form => dispatch =>
   fetch('/form/generateAntiForgeryToken', {
     method: 'post',

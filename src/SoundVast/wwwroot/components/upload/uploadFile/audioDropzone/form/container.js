@@ -3,7 +3,7 @@ import { compose, lifecycle } from 'recompose';
 import { connect } from 'react-redux';
 
 import UploadFileForm from './component';
-import { submitFiles } from '../../../actions';
+import { submitFile, removeMusicForm } from '../../../actions';
 import { getMusicGenres } from '../../../../genre/actions';
 import uploadValidation from '../../../validation';
 
@@ -14,9 +14,10 @@ const mapStateToProps = ({ upload }, { index }) => ({
   },
 });
 
-const mapDispatchToProps = (dispatch, { id }) => ({
-  onSubmit: values => dispatch(submitFiles(id, values)),
+const mapDispatchToProps = (dispatch, { id, index }) => ({
+  onSubmit: values => dispatch(submitFile(id, values)),
   getMusicGenres: () => dispatch(getMusicGenres()),
+  removeMusicForm: () => dispatch(removeMusicForm(index)),
 });
 
 export default compose(

@@ -25,6 +25,8 @@ using SoundVast.Components;
 using SoundVast.Components.Audio.Models;
 using SoundVast.Components.FileStream;
 using SoundVast.Components.FileStream.Models;
+using SoundVast.Components.LiveStream;
+using SoundVast.Components.LiveStream.Models;
 using SoundVast.Components.Song;
 using SoundVast.Components.Song.Models;
 using SoundVast.Components.User;
@@ -43,6 +45,7 @@ namespace SoundVastTests.Components.Upload
         private Mock<IFileStorage> _mockFileStorage;
         private Mock<ICloudStorage> _mockCloudStorage;
         private Mock<ISongService> _mockSongService;
+        private Mock<ILiveStreamService> _mockLiveStreamService;
         private Mock<IUploadService> _mockUploadService;
         private Mock<UserManager<ApplicationUser>> _mockUserManager;
 
@@ -54,18 +57,63 @@ namespace SoundVastTests.Components.Upload
             _mockFileStorage = new Mock<IFileStorage>();
             _mockCloudStorage = new Mock<ICloudStorage>();
             _mockSongService = new Mock<ISongService>();
+            _mockLiveStreamService = new Mock<ILiveStreamService>();
             _mockUploadService = new Mock<IUploadService>();
             _mockUserManager = new Mock<UserManager<ApplicationUser>>(userStore.Object, null, null, null, null, null, null, null, null);
 
             _uploadController = new UploadController(_mockFileStorage.Object, _mockCloudStorage.Object,
-                _mockSongService.Object, _mockUserManager.Object, _mockUploadService.Object);
+                _mockSongService.Object, _mockUserManager.Object, _mockUploadService.Object, _mockLiveStreamService.Object);
+        }
+
+        [Test]
+        public void SaveLiveStream_ShouldAddUploadToDatabase()
+        {
+            const string userId = "DORPE-12354-DSADD";
+            var viewModel = new SaveLiveStreamViewModel
+            {
+                Name = "bubble",
+                LiveStreamUrl = "bubbleArtist.mp3",
+                CoverImageUrl = "bubble.jpg",
+                GenreId = 2
+            };
+            var model = new LiveStreamModel();
+
+            _mockUserManager.Setup(x => x.GetUserId(It.IsAny<ClaimsPrincipal>())).Returns(userId);
+            _mockLiveStreamService.Setup(x => x.Add(It.IsAny<LiveStreamModel>())).Callback<LiveStreamModel>(x => model = x);
+
+            var result = (OkResult)_uploadController.SaveLiveStream(viewModel);
+
+            _mockLiveStreamService.Verify(x => x.Add(It.IsAny<LiveStreamModel>()), Times.Once);
+            model.ShouldBeEquivalentTo(new LiveStreamModel
+            {
+                Name = viewModel.Name,
+                LiveStreamUrl = viewModel.LiveStreamUrl,
+                CoverImageUrl = viewModel.CoverImageUrl,
+                GenreId = viewModel.GenreId,
+                UserId = userId,
+            });
+
+            result.Should().BeOfType<OkResult>();
+        }
+
+        [Test]
+        public void SaveLiveStream_ShouldReturnModelErrorsIfUploadThrowsValidationException()
+        {
+            var validationResult = new ValidationResult("_error", "testError");
+
+            _mockLiveStreamService.Setup(x => x.Add(It.IsAny<LiveStreamModel>())).Throws(new ValidationException(validationResult));
+
+            var result = (ObjectResult)_uploadController.SaveLiveStream(new SaveLiveStreamViewModel());
+
+            result.StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
+            result.Value.Should().Be(_uploadController.ModelState.ConvertToJson());
         }
 
         [Test]
         public void SaveMusic_ShouldAddUploadToDatabase()
         {
             const string userId = "DORPE-12354-DSADD";
-            var viewModel = new SaveUploadViewModel
+            var viewModel = new SaveSongViewModel
             {
                 Name = "bubble",
                 Artist = "bubbleArtist",
@@ -77,7 +125,7 @@ namespace SoundVastTests.Components.Upload
             _mockUserManager.Setup(x => x.GetUserId(It.IsAny<ClaimsPrincipal>())).Returns(userId);
             _mockSongService.Setup(x => x.Add(It.IsAny<SongModel>())).Callback<SongModel>(x => model = x);
 
-            var result = (OkResult)_uploadController.SaveMusic(viewModel);
+            var result = (OkResult)_uploadController.SaveSong(viewModel);
 
             _mockSongService.Verify(x => x.Add(It.IsAny<SongModel>()), Times.Once);
             model.ShouldBeEquivalentTo(new SongModel
@@ -99,7 +147,7 @@ namespace SoundVastTests.Components.Upload
 
             _mockSongService.Setup(x => x.Add(It.IsAny<SongModel>())).Throws(new ValidationException(validationResult));
 
-            var result = (ObjectResult)_uploadController.SaveMusic(new SaveUploadViewModel());
+            var result = (ObjectResult)_uploadController.SaveSong(new SaveSongViewModel());
 
             result.StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
             result.Value.Should().Be(_uploadController.ModelState.ConvertToJson());
@@ -178,14 +226,14 @@ namespace SoundVastTests.Components.Upload
             const string progressId = "testId";
             const string audioName = "testFile.mp3";
 
-            var viewModel = new UploadViewModel
+            var viewModel = new UploadSongViewModel
             {
                 AudioPath = Path.Combine("testPath", audioName),
                 AudioName = audioName,
                 ProgressId = progressId
             };
 
-            var mockAudioBlob = new Mock<SoundVast.Storage.CloudStorage.ICloudBlob>();
+            var mockAudioBlob = new Mock<ICloudBlob>();
 
             _mockCloudStorage.Setup(x => x.GetBlob(CloudStorageType.Audio, Path.GetFileNameWithoutExtension(audioName))).Returns(mockAudioBlob.Object);
             mockAudioBlob.Setup(x => x.UploadChunksFromPathAsync(viewModel.AudioPath, "audio/mpeg", viewModel.FileLength, viewModel.ProgressId)).Returns(Task.CompletedTask);

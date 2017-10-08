@@ -1,18 +1,10 @@
 import { connect } from 'react-redux';
-import { compose, flattenProp } from 'recompose';
 
 import ImageDropzone from './component';
-import { updateCoverImageFile, removeCoverImageFile } from '../../actions';
+import { updateCoverImage, removeCoverImage } from '../../actions';
 
-const mapStateToProps = ({ upload }, { id }) => ({
-  coverImageFile: upload.coverImageFiles[id],
-});
-
-export default compose(
-  connect(mapStateToProps, {
-    onDrop: (file, id) => updateCoverImageFile(file, id),
-    // TODO: Implement in component
-    removeFile: removeCoverImageFile,
-  }),
-  flattenProp('coverImageFile'),
-)(ImageDropzone);
+export default connect(null, {
+  onDrop: (file, id) => updateCoverImage(id, file),
+  // TODO: Implement in component
+  removeFile: removeCoverImage,
+})(ImageDropzone);

@@ -1,12 +1,7 @@
-import shortId from 'shortid';
-
-const liveStreamId = shortId.generate();
 const defaultState = {
   audioFiles: [],
-  liveStreams: [{
-    id: liveStreamId,
-  }],
-  coverImageFiles: {},
+  liveStreams: [],
+  coverImages: {},
 };
 
 const removeForm = (forms, index) => {
@@ -25,29 +20,30 @@ export default (state = defaultState, action) => {
         audioFiles: state.audioFiles.concat([action.audioFile]),
       };
     }
-    case 'REMOVE_AUDIO_FILE':
+    case 'REMOVE_MUSIC_FORM':
       return {
         ...state,
         audioFiles: removeForm(state.audioFiles, action.index),
       };
-    case 'UPDATE_COVER_IMAGE_FILE': {
-      const coverImageFiles = { ...state.coverImageFiles };
+    case 'UPDATE_COVER_IMAGE': {
+      const coverImages = { ...state.coverImages };
 
-      coverImageFiles[action.id] = action.file;
+      coverImages[action.id] = action.file;
+      coverImages[action.id].previewUrl = URL.createObjectURL(action.file);
 
       return {
         ...state,
-        coverImageFiles,
+        coverImages,
       };
     }
-    case 'REMOVE_COVER_IMAGE_FILE': {
-      const coverImageFiles = [...state.coverImageFiles];
+    case 'REMOVE_COVER_IMAGE': {
+      const coverImages = [...state.coverImages];
 
-      delete coverImageFiles[action.id];
+      delete coverImages[action.id];
 
       return {
         ...state,
-        coverImageFiles,
+        coverImages,
       };
     }
     case 'UPDATE_UPLOAD_PROGRESS': {
@@ -69,7 +65,7 @@ export default (state = defaultState, action) => {
         ...state,
         liveStreams: state.liveStreams.concat([action.liveStream]),
       };
-    case 'REMOVE_LIVE_STREAM':
+    case 'REMOVE_LIVE_STREAM_FORM':
       return {
         ...state,
         liveStreams: removeForm(state.liveStreams, action.index),

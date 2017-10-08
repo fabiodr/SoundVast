@@ -31,8 +31,7 @@ using Newtonsoft.Json;
 using SoundVast.Components.Audio;
 using SoundVast.Components.Audio.Models;
 using SoundVast.Components.Genre.Models;
-using SoundVast.Components.Radio.Models;
-using SoundVast.Components.Rating.Models;
+using SoundVast.Components.LiveStream.Models;
 using SoundVast.Components.Song.Models;
 using SoundVast.Components.Upload;
 using SoundVast.Validation;
@@ -191,7 +190,7 @@ namespace SoundVast
             builder.RegisterType<AudioService<AudioModel>>().AsImplementedInterfaces();
             builder.RegisterType<Repository<AudioModel, ApplicationDbContext>>().As<IRepository<AudioModel>>();
             builder.RegisterType<Repository<SongModel, ApplicationDbContext>>().As<IRepository<SongModel>>();
-            builder.RegisterType<Repository<RadioModel, ApplicationDbContext>>().As<IRepository<RadioModel>>();
+            builder.RegisterType<Repository<LiveStreamModel, ApplicationDbContext>>().As<IRepository<LiveStreamModel>>();
             builder.RegisterType<Repository<GenreModel, ApplicationDbContext>>().As<IRepository<GenreModel>>();
 
             return builder;

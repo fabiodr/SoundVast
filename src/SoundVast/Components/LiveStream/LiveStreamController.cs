@@ -6,27 +6,27 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SoundVast.Components.Audio;
-using SoundVast.Components.Radio.Models;
 using SoundVast.Components.Song.Models;
 using SoundVast.Components.User;
 using SoundVast.Storage.CloudStorage;
+using SoundVast.Components.LiveStream;
 
-namespace SoundVast.Components.Radio
+namespace SoundVast.Components.LiveStream
 {
-    public class RadioController : Controller
+    public class LiveStreamController : Controller
     {
-        private readonly IRadioService _radioService;
+        private readonly ILiveStreamService _liveStreamService;
         
-        public RadioController(IRadioService radioService)
+        public LiveStreamController(ILiveStreamService liveStreamService)
         {
-            _radioService = radioService;
+            _liveStreamService = liveStreamService;
         }
 
         [HttpGet]
         public IActionResult GetRadios(int current, int amount)
         {
-            var radios = _radioService.GetAudios(current, amount);
-            var hasMore = _radioService.GetAudios(current + amount, amount).Any();
+            var radios = _liveStreamService.GetAudios(current, amount);
+            var hasMore = _liveStreamService.GetAudios(current + amount, amount).Any();
 
             return Ok(new
             {

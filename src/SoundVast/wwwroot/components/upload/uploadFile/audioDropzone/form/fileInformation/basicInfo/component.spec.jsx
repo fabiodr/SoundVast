@@ -5,7 +5,7 @@ import { shallow } from 'enzyme';
 import BasicInfo from './component';
 import ImageDropzone from '../../../../../common/imageDropzone/container';
 import NameField from '../../../../../common/basicInfo/fields/name/component';
-import GenreField from '../../../../../common/basicInfo/fields/genre/container';
+import GenreField from './fields/genre/container';
 
 const setup = (newProps) => {
   const props = {

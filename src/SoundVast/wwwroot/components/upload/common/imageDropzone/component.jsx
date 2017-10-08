@@ -4,10 +4,9 @@ import Dropzone from 'react-dropzone';
 
 import dropzoneStyles from '../../../shared/dropzone/component.less';
 import styles from './component.less';
+import PreviewImage from '../previewImage/container';
 
-const previewPlaceholderPath = '../../../../images/logo/icon/SV_Icon.svg';
-
-const ImageDropzone = ({ onDrop, id, preview }) => (
+const ImageDropzone = ({ onDrop, id }) => (
   <div className={styles.imageDropzoneContainer}>
     <span>Cover Image</span>
     <Dropzone
@@ -16,7 +15,7 @@ const ImageDropzone = ({ onDrop, id, preview }) => (
       multiple={false}
       onDrop={files => onDrop(files[0], id)}
     >
-      <img alt="" src={preview || previewPlaceholderPath} />
+      <PreviewImage id={id} />
       <div className={dropzoneStyles.placeholder}>
         Update image
       </div>
@@ -24,14 +23,9 @@ const ImageDropzone = ({ onDrop, id, preview }) => (
   </div>
 );
 
-ImageDropzone.defaultProps = {
-  preview: null,
-};
-
 ImageDropzone.propTypes = {
   id: PropTypes.string.isRequired,
   onDrop: PropTypes.func.isRequired,
-  preview: PropTypes.string,
 };
 
 export default ImageDropzone;

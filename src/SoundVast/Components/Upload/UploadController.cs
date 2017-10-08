@@ -20,6 +20,8 @@ using Microsoft.AspNetCore.Identity;
 using SoundVast.Components.Audio.Models;
 using SoundVast.Components.FileStream;
 using SoundVast.Components.FileStream.Models;
+using SoundVast.Components.LiveStream;
+using SoundVast.Components.LiveStream.Models;
 using SoundVast.Components.Song;
 using SoundVast.Components.Song.Models;
 using SoundVast.Components.User;
@@ -34,22 +36,52 @@ namespace SoundVast.Components.Upload
         private readonly IFileStorage _fileStorage;
         private readonly ICloudStorage _cloudStorage;
         private readonly ISongService _songService;
+        private readonly ILiveStreamService _liveStreamService;
         private readonly IUploadService _uploadService;
         private readonly UserManager<ApplicationUser> _userManager;
 
         public UploadController(IFileStorage fileStorage, ICloudStorage cloudStorage,
-            ISongService songService, UserManager<ApplicationUser> userManager, IUploadService uploadService)
+            ISongService songService, UserManager<ApplicationUser> userManager, IUploadService uploadService,
+            ILiveStreamService liveStreamService)
         {
             _fileStorage = fileStorage;
             _cloudStorage = cloudStorage;
             _songService = songService;
             _userManager = userManager;
             _uploadService = uploadService;
+            _liveStreamService = liveStreamService;
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult SaveMusic([FromBody] SaveUploadViewModel viewModel)
+        public IActionResult SaveLiveStream([FromBody] SaveLiveStreamViewModel viewModel)
+        {
+            var model = new LiveStreamModel
+            {
+                Name = viewModel.Name,
+                LiveStreamUrl = viewModel.LiveStreamUrl,
+                CoverImageUrl = viewModel.CoverImageUrl,
+                GenreId = viewModel.GenreId,
+                UserId = _userManager.GetUserId(User)
+            };
+
+            try
+            {
+                _liveStreamService.Add(model);
+            }
+            catch (ValidationException e)
+            {
+                ModelState.AddModelErrors(e);
+
+                return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ConvertToJson());
+            }
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SaveSong([FromBody] SaveSongViewModel viewModel)
         {
             var model = new SongModel
             {
@@ -110,7 +142,7 @@ namespace SoundVast.Components.Upload
         }
 
         [HttpPost]
-        public async Task<IActionResult> UploadMp3([FromBody] UploadViewModel viewModel)
+        public async Task<IActionResult> UploadMp3([FromBody] UploadSongViewModel viewModel)
         {
             var audioBlob = _cloudStorage.GetBlob(CloudStorageType.Audio, Path.GetFileNameWithoutExtension(viewModel.AudioName));
 

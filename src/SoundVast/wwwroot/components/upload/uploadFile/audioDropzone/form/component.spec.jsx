@@ -6,14 +6,13 @@ import FileInformation from './fileInformation/component';
 import UploadFileForm from './component';
 import ValidationErrors from '../../../../shared/form/validation/errors/component';
 import SpinnerButton from '../../../../shared/spinners/button/component';
-import CancelButton from '../../../common/cancelButton/container';
+import CancelButton from '../../../common/cancelButton/component';
 
 const setup = (newProps) => {
   const props = {
     handleSubmit: expect.createSpy(),
     remove: expect.createSpy(),
     form: 'upload_0',
-    index: 0,
     ...newProps,
   };
 

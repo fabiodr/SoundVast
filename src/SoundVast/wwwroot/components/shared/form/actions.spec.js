@@ -20,16 +20,6 @@ describe('formActions', () => {
     fetchMock.reset().restore();
   });
 
-  it('should submit pending', () => {
-    const id = 'test';
-    const action = actions.submitPending('test');
-
-    expect(action).toEqual({
-      type: 'FORM_SUBMIT_PENDING',
-      id,
-    });
-  });
-
   it('should fetch an anti forgery token', () => {
     const json = {
       antiForgeryToken: '0#DERG£%%FDD£',

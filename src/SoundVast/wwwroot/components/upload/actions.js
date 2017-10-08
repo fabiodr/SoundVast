@@ -6,7 +6,8 @@ import trimFileExtension from '../shared/utilities/trimFileExtension';
 import notOkError from '../shared/fetch/errorHandling/notOkError/component';
 import validationError from '../shared/fetch/errorHandling/validationError/component';
 import { showGenericErrorPopup } from '../shared/popup/actions';
-import { submitPending } from '../shared/form/actions';
+
+const coverImagePlaceholderPath = '../../images/logo/icon/SV_Icon.svg';
 
 export const uploadMp3 = (jsonText, id) => (dispatch) => {
   const body = JSON.parse(jsonText);
@@ -91,11 +92,21 @@ export const convertToMp3 = (file, id) => (dispatch) => {
     });
 };
 
-export const updateCoverImageFile = (file, id) => ({
-  type: 'UPDATE_COVER_IMAGE_FILE',
-  file,
+export const updateCoverImage = (id, file) => ({
+  type: 'UPDATE_COVER_IMAGE',
   id,
+  file,
 });
+
+export const removeCoverImage = index => ({
+  type: 'REMOVE_PREVIEW_IMAGE',
+  index,
+});
+
+const setCoverImagePlaceholder = id => dispatch =>
+  fetch(coverImagePlaceholderPath)
+    .then(res => res.blob())
+    .then(blob => dispatch(updateCoverImage(id, new File([blob], 'SoundVast', { type: blob.type }))));
 
 export const uploadAudioFiles = files => (dispatch) => {
   files.forEach((file) => {
@@ -106,6 +117,8 @@ export const uploadAudioFiles = files => (dispatch) => {
         const audioFile = {
           id: shortid.generate(),
         };
+
+        setCoverImagePlaceholder(audioFile.id)(dispatch);
 
         jsmediatags.read(blob, {
           onSuccess: (tag) => {
@@ -120,13 +133,11 @@ export const uploadAudioFiles = files => (dispatch) => {
 
             if (tag.tags.picture !== undefined) {
               const coverImageBytes = new Uint8Array(tag.tags.picture.data);
-              const coverImageFile = new File([coverImageBytes], audioFile.title, {
+              const coverImage = new File([coverImageBytes], audioFile.title, {
                 type: tag.tags.picture.format,
               });
 
-              coverImageFile.preview = URL.createObjectURL(coverImageFile);
-
-              dispatch(updateCoverImageFile(coverImageFile, audioFile.id));
+              dispatch(updateCoverImage(audioFile.id, coverImage));
             }
 
             convertToMp3(file, audioFile.id)(dispatch);
@@ -149,37 +160,34 @@ export const uploadAudioFiles = files => (dispatch) => {
   });
 };
 
-export const removeAudioFile = index => ({
-  type: 'REMOVE_AUDIO_FILE',
+export const removeMusicForm = index => ({
+  type: 'REMOVE_MUSIC_FORM',
   index,
 });
 
-export const removeLiveStream = index => ({
-  type: 'REMOVE_LIVE_STREAM',
+export const removeLiveStreamForm = index => ({
+  type: 'REMOVE_LIVE_STREAM_FORM',
   index,
 });
 
-export const addLiveStream = () => ({
-  type: 'ADD_LIVE_STREAM',
-  liveStream: {
-    id: shortid.generate(),
-  },
-});
+export const addLiveStream = () => (dispatch) => {
+  const id = shortid.generate();
 
-export const removeCoverImageFile = index => ({
-  type: 'REMOVE_COVER_IMAGE_FILE',
-  index,
-});
+  setCoverImagePlaceholder(id)(dispatch);
+
+  return dispatch({
+    type: 'ADD_LIVE_STREAM',
+    liveStream: {
+      id,
+    },
+  });
+};
 
 export const uploadCoverImage = id => (dispatch, getState) => {
-  const coverImageFile = getState().upload.coverImageFiles[id];
-
-  if (coverImageFile === undefined) {
-    return Promise.resolve();
-  }
+  const coverImage = getState().upload.coverImages[id];
   const formData = new FormData();
 
-  formData.set('file', coverImageFile);
+  formData.set('file', coverImage);
 
   return fetch('/upload/uploadCoverImage', {
     method: 'post',
@@ -191,10 +199,8 @@ export const uploadCoverImage = id => (dispatch, getState) => {
     .catch(error => dispatch(showGenericErrorPopup(error)));
 };
 
-const submit = (url, id, { __RequestVerificationToken, ...values }) => (dispatch) => {
-  dispatch(submitPending(`upload_${id}`));
-
-  return dispatch(uploadCoverImage(id)).then(coverImageUrl =>
+const submit = (url, id, { __RequestVerificationToken, ...values }) => dispatch =>
+  dispatch(uploadCoverImage(id)).then(coverImageUrl =>
     fetch(url, {
       method: 'post',
       headers: {
@@ -209,8 +215,7 @@ const submit = (url, id, { __RequestVerificationToken, ...values }) => (dispatch
     }).then(validationError)
       .then(notOkError)
       .catch(error => dispatch(showGenericErrorPopup(error))));
-};
 
-export const submitLiveStreams = (id, values) => () => submit('/upload/saveRadios', id, values);
+export const submitLiveStream = (id, values) => dispatch => submit('/upload/saveLiveStream', id, values)(dispatch);
 
-export const submitFiles = (id, values) => () => submit('/upload/saveMusic', id, values);
+export const submitFile = (id, values) => dispatch => submit('/upload/saveSong', id, values)(dispatch);

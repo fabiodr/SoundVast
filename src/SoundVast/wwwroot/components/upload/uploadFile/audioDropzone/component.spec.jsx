@@ -83,4 +83,13 @@ describe('AudioDropzone', () => {
 
     expect(wrapper.find(Progress).length).toBe(props.files.length);
   });
+
+  describe('PreviewImage caption', () => {
+    it('should render title in caption', () => {
+      const { wrapper, props } = setup();
+      const figcaption = wrapper.find('figcaption');
+
+      expect(figcaption.text()).toBe(props.title);
+    });
+  });
 });

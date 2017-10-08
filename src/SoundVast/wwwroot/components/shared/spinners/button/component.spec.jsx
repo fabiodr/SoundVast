@@ -3,6 +3,7 @@ import expect from 'expect';
 import { shallow } from 'enzyme';
 
 import SpinnerButton from './component';
+import Spinner from '../../../../images/spinners/ellipsis.svg';
 
 const setup = (newProps) => {
   const props = {
@@ -22,7 +23,13 @@ describe('SpinnerButton', () => {
   let wrapper;
   let props;
 
-  it('should render custom text when it is not loading', () => {
+  it('should render Spinner when loading', () => {
+    ({ wrapper, props } = setup({ isLoading: true }));
+
+    expect(wrapper.find(Spinner)).toExist();
+  });
+
+  it('should render custom text when not loading', () => {
     ({ wrapper, props } = setup());
 
     expect(wrapper.text()).toBe(props.children);

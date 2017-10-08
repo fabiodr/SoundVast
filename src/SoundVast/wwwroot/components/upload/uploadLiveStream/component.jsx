@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 
 import Form from './form/container';
 
-const UploadLiveStream = ({ liveStreams, removeLiveStream, addLiveStream }) => (
+const UploadLiveStream = ({ liveStreams, addLiveStream }) => (
   <div>
-    {liveStreams.map(liveStream => (
+    {liveStreams.map((liveStream, i) => (
       <Form
         key={liveStream.id}
         form={`upload_${liveStream.id}`}
         id={liveStream.id}
-        remove={removeLiveStream}
+        index={i}
       />
     ))}
 
@@ -22,7 +22,6 @@ const UploadLiveStream = ({ liveStreams, removeLiveStream, addLiveStream }) => (
 
 UploadLiveStream.propTypes = {
   addLiveStream: PropTypes.func.isRequired,
-  removeLiveStream: PropTypes.func.isRequired,
   liveStreams: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,

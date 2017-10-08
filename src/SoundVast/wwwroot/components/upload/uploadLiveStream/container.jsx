@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import UploadLiveStream from './component';
-import { addLiveStream, removeLiveStream } from '../actions';
+import { addLiveStream } from '../actions';
 
 const mapStateToProps = ({ upload }) => ({
   liveStreams: upload.liveStreams,
@@ -9,5 +9,4 @@ const mapStateToProps = ({ upload }) => ({
 
 export default connect(mapStateToProps, {
   addLiveStream,
-  removeLiveStream,
 })(UploadLiveStream);

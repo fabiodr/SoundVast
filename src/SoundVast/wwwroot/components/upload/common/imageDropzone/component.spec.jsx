@@ -4,6 +4,7 @@ import { shallow } from 'enzyme';
 import Dropzone from 'react-dropzone';
 
 import ImageDropzone from './component';
+import PreviewImage from '../previewImage/container';
 
 const setup = (newProps) => {
   const props = {
@@ -21,19 +22,10 @@ const setup = (newProps) => {
 };
 
 describe('ImageDropzone', () => {
-  describe('preview image', () => {
-    it('src should use preview when specified', () => {
-      const preview = 'blob:localhost:8080/test.jpg';
-      const { wrapper, props } = setup({ preview });
+  it('should render PreviewImage', () => {
+    const { wrapper } = setup();
 
-      expect(wrapper.find('img').prop('src')).toBe(props.preview);
-    });
-
-    it('src should use placeholder when not specified', () => {
-      const { wrapper } = setup();
-
-      expect(wrapper.find('img').prop('src')).toExist();
-    });
+    expect(wrapper.find(PreviewImage).length).toBe(1);
   });
 
   it('onDrop should pass in first file and id only', () => {

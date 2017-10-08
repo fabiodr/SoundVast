@@ -4,12 +4,13 @@ import { connect } from 'react-redux';
 
 import UploadFileForm from './component';
 import uploadValidation from '../../validation';
-import { submitLiveStreams } from '../../actions';
+import { submitLiveStream, removeLiveStreamForm } from '../../actions';
 import { getLiveStreamGenres } from '../../../genre/actions';
 
-const mapDispatchToProps = (dispatch, { id }) => ({
-  onSubmit: values => dispatch(submitLiveStreams(id, values)),
+const mapDispatchToProps = (dispatch, { id, index }) => ({
+  onSubmit: values => dispatch(submitLiveStream(id, values)),
   getLiveStreamGenres: () => dispatch(getLiveStreamGenres()),
+  removeLiveStreamForm: () => dispatch(removeLiveStreamForm(index)),
 });
 
 export default compose(
