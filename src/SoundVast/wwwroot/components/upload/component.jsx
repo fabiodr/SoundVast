@@ -1,10 +1,13 @@
 import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import { connect } from 'react-redux';
+import { compose, lifecycle } from 'recompose';
 
 import styles from './component.less';
 import AudioDropzone from './uploadFile/audioDropzone/container';
 import UploadLiveStream from './uploadLiveStream/container';
 import authorizedComponent from '../shared/authorizedComponent/container';
+import { addLiveStream } from './actions';
 
 const Upload = () => (
   <div className={styles.upload}>
@@ -23,4 +26,16 @@ const Upload = () => (
   </div>
 );
 
-export default authorizedComponent(Upload);
+const lifecycleFunctions = {
+  componentDidMount() {
+    this.props.addLiveStream();
+  },
+};
+
+export default compose(
+  authorizedComponent,
+  connect(null, {
+    addLiveStream,
+  }),
+  lifecycle(lifecycleFunctions),
+)(Upload);
