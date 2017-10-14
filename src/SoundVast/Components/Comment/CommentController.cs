@@ -6,7 +6,7 @@ namespace SoundVast.Components.Comment
     //public class CommentController : CustomBaseController
     //{
     //    private readonly ICommentService _commentService;
-    //    private readonly IAudioService<AudioModel> _audioService;
+    //    private readonly IAudioService<Audio> _audioService;
     //    private readonly IReportService<CommentReportModel> _reportService;
     //    private readonly UserManager<ApplicationUser> _userManager;
 

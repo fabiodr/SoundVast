@@ -10,7 +10,7 @@ import ResetPassword from '../../account/resetPassword/form/container';
 import ConfirmedEmailSuccess from '../../account/confirmedEmailSuccess/container';
 import Profile from '../../user/profile/container';
 import Upload from '../../upload/component';
-import Songs from '../../songs/container';
+import Songs from '../../songs/songsContainer';
 // import Radios from '../../radios/container';
 import Error from '../../error/component';
 import FooterPlaylist from '../../footerPlaylist/container';

@@ -16,10 +16,10 @@ namespace SoundVast.Components.Rating
     [Authorize]
     public class RatingController : Controller
     {
-        private readonly IAudioService<AudioModel> _audioService;
+        private readonly IAudioService<Audio.Models.Audio> _audioService;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public RatingController(IAudioService<AudioModel> audioService, UserManager<ApplicationUser> userManager)
+        public RatingController(IAudioService<Audio.Models.Audio> audioService, UserManager<ApplicationUser> userManager)
         {
             _audioService = audioService;
             _userManager = userManager;

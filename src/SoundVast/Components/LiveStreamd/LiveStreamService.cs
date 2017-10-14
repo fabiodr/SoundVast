@@ -10,13 +10,13 @@
 
 //namespace SoundVast.Components.LiveStream
 //{
-//    public interface ILiveStreamService : IAudioService<LiveStreamModel>
+//    public interface ILiveStreamService : IAudioService<LiveStream>
 //    {
 //    }
 
-//    public class LiveStreamService : AudioService<LiveStreamModel>, ILiveStreamService
+//    public class LiveStreamService : AudioService<LiveStream>, ILiveStreamService
 //    {
-//        public LiveStreamService(IValidationDictionary validationDictionary, IRepository<LiveStreamModel> repository, ICloudStorage cloudStorage,
+//        public LiveStreamService(IValidationDictionary validationDictionary, IRepository<LiveStream> repository, ICloudStorage cloudStorage,
 //            IConfiguration configuration) 
 //            : base (validationDictionary, repository, cloudStorage, configuration)
 //        {

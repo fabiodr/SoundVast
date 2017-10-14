@@ -16,7 +16,7 @@ namespace SoundVast.Migrations
                 oldNullable: true);
 
             migrationBuilder.AlterColumn<string>(
-                name: "GenreType",
+                name: "GenreName",
                 table: "Genres",
                 nullable: false,
                 oldClrType: typeof(string),
@@ -32,7 +32,7 @@ namespace SoundVast.Migrations
                 oldClrType: typeof(string));
 
             migrationBuilder.AlterColumn<string>(
-                name: "GenreType",
+                name: "GenreName",
                 table: "Genres",
                 nullable: true,
                 oldClrType: typeof(string));

@@ -9,7 +9,7 @@ namespace SoundVast.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "GenreType",
+                name: "GenreName",
                 table: "Genres",
                 nullable: true);
         }
@@ -17,7 +17,7 @@ namespace SoundVast.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "GenreType",
+                name: "GenreName",
                 table: "Genres");
         }
     }

@@ -124,7 +124,7 @@ namespace SoundVast.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("SoundVast.Components.Audio.Models.AudioModel", b =>
+            modelBuilder.Entity("SoundVast.Components.Audio.Models.Audio", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -142,7 +142,7 @@ namespace SoundVast.Migrations
                     b.ToTable("Audios");
                 });
 
-            modelBuilder.Entity("SoundVast.Components.Genre.Models.GenreModel", b =>
+            modelBuilder.Entity("SoundVast.Components.Genre.Models.Genre", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();

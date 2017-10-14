@@ -20,7 +20,7 @@ namespace SoundVastTests.Components.Rating
     public class RatingControllerTest
     {
         private RatingController _ratingController;
-        private Mock<IAudioService<AudioModel>> _mockAudioService;
+        private Mock<IAudioService<Audio>> _mockAudioService;
         private Mock<UserManager<ApplicationUser>> _mockUserManager;
         private const string UserId = "FEKFJ-GKFKL";
 
@@ -30,7 +30,7 @@ namespace SoundVastTests.Components.Rating
             var userStore = new Mock<IUserStore<ApplicationUser>>();
 
             _mockUserManager = new Mock<UserManager<ApplicationUser>>(userStore.Object, null, null, null, null, null, null, null, null);
-            _mockAudioService = new Mock<IAudioService<AudioModel>>();
+            _mockAudioService = new Mock<IAudioService<Audio>>();
             _ratingController = new RatingController(_mockAudioService.Object, _mockUserManager.Object);
         }
 
@@ -42,7 +42,7 @@ namespace SoundVastTests.Components.Rating
                 AudioId = 2,
                 Liked = true
             };
-            var ratingModel = new RatingModel();
+            var ratingModel = new SoundVast.Components.Rating.Models.Rating();
 
             _mockUserManager.Setup(x => x.GetUserId(It.IsAny<ClaimsPrincipal>())).Returns(UserId);
             _mockAudioService.Setup(x => x.RateAudio(model.AudioId, model.Liked, UserId)).Returns(ratingModel);

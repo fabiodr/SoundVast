@@ -7,7 +7,7 @@ using SoundVast.Components.LiveStream.Models;
 
 namespace SoundVast.Components.LiveStream
 {
-    public interface ILiveStreamService : IAudioService<LiveStreamModel>
+    public interface ILiveStreamService : IAudioService<Models.LiveStream>
     {
     }
 }

@@ -9,7 +9,9 @@ const plugins = [
     name: 'vendor',
     filename: 'vendor.bundle.js',
   }),
-  new ExtractTextPlugin('[name].bundle.css'),
+  new ExtractTextPlugin({
+    filename: '[name].bundle.css',
+  }),
 ];
 let devtool = null;
 
@@ -23,16 +25,12 @@ if (!dev) {
   devtool = 'inline-sourcemap';
 }
 
-const reactJPlayerPaths = [
-  fs.realpathSync(`${__dirname}/node_modules/react-jplayer`),
-  fs.realpathSync(`${__dirname}/node_modules/react-jplaylist`),
-];
-
 module.exports = {
   context: __dirname,
   devtool,
   entry: {
-    app: './wwwroot/components/app/component.jsx',
+    app: './wwwroot/components/app/app.jsx',
+    graphiQl: './wwwroot/components/_config/graphiQl/graphiQl.jsx',
     vendor: [
       'react',
       'react-dom',
@@ -50,13 +48,14 @@ module.exports = {
         test: /\.jsx?$/,
         include: [
           path.resolve(__dirname, 'wwwroot/components'),
-          ...reactJPlayerPaths,
+          fs.realpathSync(`${__dirname}/node_modules/react-jplayer`),
+          fs.realpathSync(`${__dirname}/node_modules/react-jplaylist`),
         ],
         loader: 'babel-loader',
       },
       {
         test: /\.(css|less)$/,
-        include: reactJPlayerPaths,
+        include: /node_modules/,
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
           use: [{
@@ -78,7 +77,7 @@ module.exports = {
       },
       {
         test: /\.(css|less)$/,
-        exclude: reactJPlayerPaths,
+        exclude: /node_modules/,
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
           use: [{

@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace SoundVast.Components.Genre.Models
 {
-    public class GenreModel
+    public class Genre
     {
         [Required]
         public int Id { get; set; }
@@ -17,7 +17,7 @@ namespace SoundVast.Components.Genre.Models
         //public virtual CategoryModel Category { get; set; }
         //public virtual ICollection<AudioGenreModel> Audios { get; set; }
 
-        //protected GenreModel(string name, ImageFileModel imageFile)
+        //protected Genre(string name, ImageFileModel imageFile)
         //{
         //    Name = name;
         //    ImageFile = imageFile;

@@ -56,7 +56,7 @@ namespace SoundVast.Components.Upload
         [ValidateAntiForgeryToken]
         public IActionResult SaveLiveStream([FromBody] SaveLiveStreamViewModel viewModel)
         {
-            var model = new LiveStreamModel
+            var model = new Components.LiveStream.Models.LiveStream
             {
                 Name = viewModel.Name,
                 LiveStreamUrl = viewModel.LiveStreamUrl,
@@ -83,7 +83,7 @@ namespace SoundVast.Components.Upload
         [ValidateAntiForgeryToken]
         public IActionResult SaveSong([FromBody] SaveSongViewModel viewModel)
         {
-            var model = new SongModel
+            var model = new Song.Models.Song
             {
                 Name = viewModel.Name,
                 Artist = viewModel.Artist,

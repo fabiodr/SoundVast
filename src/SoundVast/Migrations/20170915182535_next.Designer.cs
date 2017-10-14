@@ -152,12 +152,12 @@ namespace SoundVast.Migrations
                     b.ToTable("Audios");
                 });
 
-            modelBuilder.Entity("SoundVast.Components.Genre.Models.GenreModel", b =>
+            modelBuilder.Entity("SoundVast.Components.Genre.Models.Genre", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("GenreType")
+                    b.Property<string>("GenreName")
                         .IsRequired();
 
                     b.Property<string>("Name")
@@ -255,9 +255,9 @@ namespace SoundVast.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("SoundVast.Components.Audio.Models.AudioModel", b =>
+            modelBuilder.Entity("SoundVast.Components.Audio.Models.Audio", b =>
                 {
-                    b.HasOne("SoundVast.Components.Genre.Models.GenreModel", "Genre")
+                    b.HasOne("SoundVast.Components.Genre.Models.Genre", "Genre")
                         .WithMany()
                         .HasForeignKey("GenreId");
                 });

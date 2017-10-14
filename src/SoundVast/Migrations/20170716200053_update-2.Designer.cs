@@ -147,7 +147,7 @@ namespace SoundVast.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("GenreType")
+                    b.Property<string>("GenreName")
                         .IsRequired();
 
                     b.Property<string>("Name")

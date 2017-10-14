@@ -5,7 +5,7 @@ namespace SoundVastTests.Controllers
     //public class CommentControllerTest
     //{
     //    private readonly Mock<ICommentService> _service;
-    //    private readonly Mock<IAudioService<AudioModel>> _audioService;
+    //    private readonly Mock<IAudioService<Audio>> _audioService;
     //    private readonly Mock<IRatingService<CommentRatingModel>> _ratingService;
     //    private readonly Mock<IReportService<CommentReportModel>> _reportService;
     //    private readonly Mock<IServiceProvider> _serviceProvider;
@@ -20,7 +20,7 @@ namespace SoundVastTests.Controllers
     //        var userManager = new UserManager<ApplicationUser>(userStore.Object, null, null, null, null, null, null, null, null);
 
     //        _service = new Mock<ICommentService>();
-    //        _audioService = new Mock<IAudioService<AudioModel>>();
+    //        _audioService = new Mock<IAudioService<Audio>>();
     //        _ratingService = new Mock<IRatingService<CommentRatingModel>>();
     //        _reportService = new Mock<IReportService<CommentReportModel>>();
     //        _serviceProvider = new Mock<IServiceProvider>();

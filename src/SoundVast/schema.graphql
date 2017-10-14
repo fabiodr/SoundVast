@@ -1,0 +1,21 @@
+# source: http://localhost:8080/graphql
+# timestamp: Sat Oct 14 2017 17:49:10 GMT+0200 (W. Europe Daylight Time)
+
+schema {
+  query: SongsQuery
+}
+
+# The `Date` scalar type represents a timestamp provided in UTC. `Date` expects
+# timestamps to be formatted in accordance with the
+# [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) standard.
+scalar Date
+
+scalar Decimal
+
+type Song {
+  name: String!
+}
+
+type SongsQuery {
+  song(id: Int): Song
+}

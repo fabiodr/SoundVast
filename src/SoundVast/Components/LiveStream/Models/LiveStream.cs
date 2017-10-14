@@ -6,7 +6,7 @@ using SoundVast.Components.Audio.Models;
 
 namespace SoundVast.Components.LiveStream.Models
 {
-    public class LiveStreamModel : AudioModel
+    public class LiveStream : Audio.Models.Audio
     {
         public string LiveStreamUrl { get; set; }
     }

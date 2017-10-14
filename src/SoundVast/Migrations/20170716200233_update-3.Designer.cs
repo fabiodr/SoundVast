@@ -144,12 +144,12 @@ namespace SoundVast.Migrations
                     b.ToTable("Audios");
                 });
 
-            modelBuilder.Entity("SoundVast.Components.Genre.Models.GenreModel", b =>
+            modelBuilder.Entity("SoundVast.Components.Genre.Models.Genre", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("GenreType")
+                    b.Property<string>("GenreName")
                         .IsRequired();
 
                     b.Property<string>("Name")

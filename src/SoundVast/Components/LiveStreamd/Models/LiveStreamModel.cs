@@ -6,17 +6,17 @@
 
 //namespace SoundVast.Components.LiveStream.Models
 //{
-//    public class LiveStreamModel : SongModel
+//    public class LiveStream : SongModel
 //    {
 //        public string WebsiteUrl { get; set; }
 //        public string AudioUrl { get; set; }
 
-//        public LiveStreamModel()
+//        public LiveStream()
 //        {
 
 //        }
 
-//        //public LiveStreamModel(string userId)
+//        //public LiveStream(string userId)
 //        //    : base(userId)
 //        //{
 

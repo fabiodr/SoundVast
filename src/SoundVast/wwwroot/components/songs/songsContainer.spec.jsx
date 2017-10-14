@@ -3,7 +3,7 @@ import configureMockStore from 'redux-mock-store';
 import { shallow } from 'enzyme';
 import expect from 'expect';
 
-import SongsContainer from './container';
+import SongsContainer from './songsContainer';
 
 let state;
 const setup = (newProps) => {

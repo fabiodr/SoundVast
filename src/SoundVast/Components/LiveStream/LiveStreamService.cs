@@ -10,9 +10,9 @@ using SoundVast.Validation;
 
 namespace SoundVast.Components.LiveStream
 {
-    public class LiveStreamService : AudioService<LiveStreamModel>, ILiveStreamService
+    public class LiveStreamService : AudioService<Models.LiveStream>, ILiveStreamService
     {
-        public LiveStreamService(IRepository<LiveStreamModel> repository, IValidationProvider validationProvider) : base(repository, validationProvider)
+        public LiveStreamService(IRepository<Models.LiveStream> repository, IValidationProvider validationProvider) : base(repository, validationProvider)
         {
         }
     }

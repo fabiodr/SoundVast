@@ -76,15 +76,15 @@ namespace SoundVastTests.Components.Upload
                 CoverImageUrl = "bubble.jpg",
                 GenreId = 2
             };
-            var model = new LiveStreamModel();
+            var model = new SoundVast.Components.LiveStream.Models.LiveStream();
 
             _mockUserManager.Setup(x => x.GetUserId(It.IsAny<ClaimsPrincipal>())).Returns(userId);
-            _mockLiveStreamService.Setup(x => x.Add(It.IsAny<LiveStreamModel>())).Callback<LiveStreamModel>(x => model = x);
+            _mockLiveStreamService.Setup(x => x.Add(It.IsAny<SoundVast.Components.LiveStream.Models.LiveStream>())).Callback<SoundVast.Components.LiveStream.Models.LiveStream>(x => model = x);
 
             var result = (OkResult)_uploadController.SaveLiveStream(viewModel);
 
-            _mockLiveStreamService.Verify(x => x.Add(It.IsAny<LiveStreamModel>()), Times.Once);
-            model.ShouldBeEquivalentTo(new LiveStreamModel
+            _mockLiveStreamService.Verify(x => x.Add(It.IsAny<SoundVast.Components.LiveStream.Models.LiveStream>()), Times.Once);
+            model.ShouldBeEquivalentTo(new SoundVast.Components.LiveStream.Models.LiveStream
             {
                 Name = viewModel.Name,
                 LiveStreamUrl = viewModel.LiveStreamUrl,
@@ -101,7 +101,7 @@ namespace SoundVastTests.Components.Upload
         {
             var validationResult = new ValidationResult("_error", "testError");
 
-            _mockLiveStreamService.Setup(x => x.Add(It.IsAny<LiveStreamModel>())).Throws(new ValidationException(validationResult));
+            _mockLiveStreamService.Setup(x => x.Add(It.IsAny<SoundVast.Components.LiveStream.Models.LiveStream>())).Throws(new ValidationException(validationResult));
 
             var result = (ObjectResult)_uploadController.SaveLiveStream(new SaveLiveStreamViewModel());
 
@@ -120,15 +120,15 @@ namespace SoundVastTests.Components.Upload
                 CoverImageUrl = "bubble.jpg",
                 GenreId = 2
             };
-            var model = new SongModel();
+            var model = new SoundVast.Components.Song.Models.Song();
 
             _mockUserManager.Setup(x => x.GetUserId(It.IsAny<ClaimsPrincipal>())).Returns(userId);
-            _mockSongService.Setup(x => x.Add(It.IsAny<SongModel>())).Callback<SongModel>(x => model = x);
+            _mockSongService.Setup(x => x.Add(It.IsAny<SoundVast.Components.Song.Models.Song>())).Callback<SoundVast.Components.Song.Models.Song>(x => model = x);
 
             var result = (OkResult)_uploadController.SaveSong(viewModel);
 
-            _mockSongService.Verify(x => x.Add(It.IsAny<SongModel>()), Times.Once);
-            model.ShouldBeEquivalentTo(new SongModel
+            _mockSongService.Verify(x => x.Add(It.IsAny<SoundVast.Components.Song.Models.Song>()), Times.Once);
+            model.ShouldBeEquivalentTo(new SoundVast.Components.Song.Models.Song
             {
                 Name = viewModel.Name,
                 Artist = viewModel.Artist,
@@ -145,7 +145,7 @@ namespace SoundVastTests.Components.Upload
         {
             var validationResult = new ValidationResult("_error", "testError");
 
-            _mockSongService.Setup(x => x.Add(It.IsAny<SongModel>())).Throws(new ValidationException(validationResult));
+            _mockSongService.Setup(x => x.Add(It.IsAny<SoundVast.Components.Song.Models.Song>())).Throws(new ValidationException(validationResult));
 
             var result = (ObjectResult)_uploadController.SaveSong(new SaveSongViewModel());
 

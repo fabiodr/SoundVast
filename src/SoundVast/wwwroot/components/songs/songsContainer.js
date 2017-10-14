@@ -1,11 +1,13 @@
 import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
+import { graphql } from 'react-relay';
+import { fragmentContainer } from 'recompose-relay-modern';
 
 import { fetchNextSongs } from './actions';
 import Songs from './component';
 
 const mapStateToProps = ({ music }) => ({
-  songs: music.songs,
+  // songs: music.songs,
   hasMore: music.hasMore,
 });
 
@@ -22,7 +24,14 @@ const handlers = {
   })),
 };
 
+const fragment = fragmentContainer(graphql`
+  fragment songsContainer_songs on Song {
+    name
+  }`,
+);
+
 export default compose(
+  fragment,
   connect(mapStateToProps, {
     fetchNextSongs,
   }),

@@ -8,12 +8,13 @@ using SoundVast.Storage.CloudStorage;
 
 namespace SoundVast.Components.Audio
 {
-    public interface IAudioService<T> where T : AudioModel
+    public interface IAudioService<T> where T : Models.Audio
     {
+        ICollection<T> GetAudios();
         ICollection<T> GetAudios(int current, int amount);
         T GetAudio(int id);
-        ICollection<RatingModel> GetAudioRatings(int id);
+        ICollection<Rating.Models.Rating> GetAudioRatings(int id);
         void Add(T model);
-        RatingModel RateAudio(int audioId, bool liked, string userId);
+        Rating.Models.Rating RateAudio(int audioId, bool liked, string userId);
     }
 }

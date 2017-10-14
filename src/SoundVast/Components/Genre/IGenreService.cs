@@ -8,8 +8,8 @@ namespace SoundVast.Components.Genre
 {
     public interface IGenreService
     {
-       // ICollection<GenreModel> GetGenresInCategory(string category);
-        ICollection<GenreModel> GetMusicGenres();
-        ICollection<GenreModel> GetLiveStreamGenres();
+       // ICollection<Genre> GetGenresInCategory(string category);
+        ICollection<Models.Genre> GetMusicGenres();
+        ICollection<Models.Genre> GetLiveStreamGenres();
     }
 }

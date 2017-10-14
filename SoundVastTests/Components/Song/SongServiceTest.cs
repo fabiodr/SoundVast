@@ -22,14 +22,14 @@ namespace SoundVastTests.Components.Song
     public class SongServiceTest
     {
         private SongService _songService;
-        private Mock<IRepository<SongModel>> _mockSongRepository;
+        private Mock<IRepository<SoundVast.Components.Song.Models.Song>> _mockSongRepository;
         private Mock<IValidationProvider> _mockValidationProvider;
         private const string UserId = "DLEPR-DPELF";
 
         [SetUp]
         public void Init()
         {
-            _mockSongRepository = new Mock<IRepository<SongModel>>();
+            _mockSongRepository = new Mock<IRepository<SoundVast.Components.Song.Models.Song>>();
             _mockValidationProvider = new Mock<IValidationProvider>();
 
             _songService = new SongService(_mockSongRepository.Object, _mockValidationProvider.Object);
@@ -40,10 +40,10 @@ namespace SoundVastTests.Components.Song
         {
             const int current = 1;
             const int amount = 2;
-            var songs = new List<SongModel>
+            var songs = new List<SoundVast.Components.Song.Models.Song>
             {
-                new SongModel { Name="bubble03.mp3" },
-                new SongModel { Name="bubble04.mp3" }
+                new SoundVast.Components.Song.Models.Song { Name="bubble03.mp3" },
+                new SoundVast.Components.Song.Models.Song { Name="bubble04.mp3" }
             }.AsQueryable();
 
             _mockSongRepository.Setup(x => x.GetAll()).Returns(songs);
@@ -58,7 +58,7 @@ namespace SoundVastTests.Components.Song
         public void GetSong()
         {
             const int songId = 0;
-            var song = new SongModel
+            var song = new SoundVast.Components.Song.Models.Song
             {
                 Name = "bubble01.mp3",
             };
@@ -74,14 +74,14 @@ namespace SoundVastTests.Components.Song
         public void RateSong_AddsRatingToSong()
         {
             const int songId = 0;
-            var song = new SongModel
+            var song = new SoundVast.Components.Song.Models.Song
             {
                 Id = songId,
                 Name = "bubble01.mp3",
-                Ratings = new List<RatingModel>()
+                Ratings = new List<SoundVast.Components.Rating.Models.Rating>()
             };
 
-            var songModels = new List<SongModel>
+            var songModels = new List<SoundVast.Components.Song.Models.Song>
             {
                 song
             }.AsQueryable();
@@ -93,20 +93,20 @@ namespace SoundVastTests.Components.Song
             song.Ratings.ElementAt(0).Liked.Should().Be(true);
             song.Ratings.ElementAt(0).UserId.Should().Be(UserId);
             song.Ratings.ElementAt(0).AudioId.Should().Be(songId);
-            result.Should().BeOfType<RatingModel>();
+            result.Should().BeOfType<SoundVast.Components.Rating.Models.Rating>();
         }
 
         [Test]
         public void RateSong_ChangesExistingRatingIfItExists()
         {
             const int songId = 0;
-            var song = new SongModel
+            var song = new SoundVast.Components.Song.Models.Song
             {
                 Id = songId,
                 Name = "bubble01.mp3",
-                Ratings = new List<RatingModel>
+                Ratings = new List<SoundVast.Components.Rating.Models.Rating>
                 {
-                    new RatingModel
+                    new SoundVast.Components.Rating.Models.Rating
                     {
                         UserId = UserId,
                         Liked = false
@@ -114,7 +114,7 @@ namespace SoundVastTests.Components.Song
                 }
             };
 
-            var songModels = new List<SongModel>
+            var songModels = new List<SoundVast.Components.Song.Models.Song>
             {
                 song
             }.AsQueryable();
@@ -124,24 +124,24 @@ namespace SoundVastTests.Components.Song
             var result = _songService.RateAudio(songId, true, UserId);
 
             song.Ratings.ElementAt(0).Liked.Should().Be(true);
-            result.Should().BeOfType<RatingModel>();
+            result.Should().BeOfType<SoundVast.Components.Rating.Models.Rating>();
         }
 
         [Test]
         public void GetSongRatings()
         {
             const int songId = 0;
-            var ratings = new List<RatingModel>
+            var ratings = new List<SoundVast.Components.Rating.Models.Rating>
             {
-                new RatingModel {
+                new SoundVast.Components.Rating.Models.Rating {
                     Liked = true,
                     AudioId = songId
                 }
             };
-            var songs = new List<SongModel>
+            var songs = new List<SoundVast.Components.Song.Models.Song>
             {
-                new SongModel { Id = 0, Name="bubble01.mp3", Ratings = ratings },
-                new SongModel { Id = 1, Name="bubble02.mp3" }
+                new SoundVast.Components.Song.Models.Song { Id = 0, Name="bubble01.mp3", Ratings = ratings },
+                new SoundVast.Components.Song.Models.Song { Id = 1, Name="bubble02.mp3" }
             }.AsQueryable();
 
             _mockSongRepository.Setup(x => x.GetAll()).Returns(songs);
@@ -154,10 +154,10 @@ namespace SoundVastTests.Components.Song
         [Test]
         public void ShouldAddAudioModelToRepository()
         {
-            _mockValidationProvider.Setup(x => x.Validate(It.IsAny<SongModel>()));
-            _mockSongRepository.Setup(x => x.Add(It.IsAny<SongModel>()));
+            _mockValidationProvider.Setup(x => x.Validate(It.IsAny<SoundVast.Components.Song.Models.Song>()));
+            _mockSongRepository.Setup(x => x.Add(It.IsAny<SoundVast.Components.Song.Models.Song>()));
 
-            _songService.Add(new SongModel());
+            _songService.Add(new SoundVast.Components.Song.Models.Song());
 
             _mockValidationProvider.VerifyAll();
             _mockSongRepository.VerifyAll();

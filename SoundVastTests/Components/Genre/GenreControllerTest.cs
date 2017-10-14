@@ -28,7 +28,7 @@ namespace SoundVastTests.Components.Genre
         [Test]
         public void ShouldGetMusicGenres()
         {
-            var musicGenres = new List<GenreModel>();
+            var musicGenres = new List<SoundVast.Components.Genre.Models.Genre>();
 
             _mockGenreService.Setup(x => x.GetMusicGenres()).Returns(musicGenres);
 
@@ -42,7 +42,7 @@ namespace SoundVastTests.Components.Genre
         [Test]
         public void ShouldGetLiveStreamGenres()
         {
-            var liveStreamGenres = new List<GenreModel>();
+            var liveStreamGenres = new List<SoundVast.Components.Genre.Models.Genre>();
 
             _mockGenreService.Setup(x => x.GetLiveStreamGenres()).Returns(liveStreamGenres);
 

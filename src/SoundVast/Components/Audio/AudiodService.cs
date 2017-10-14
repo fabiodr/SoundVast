@@ -15,7 +15,7 @@
 
 //namespace SoundVast.Components.Audio
 //{
-//    public interface IAudioService<T> where T : AudioModel
+//    public interface IAudioService<T> where T : Audio
 //    {
 //        T GetAudio(int id);
 //        T GetAudio(int id, params Expression<Func<T, object>>[] includeExpressions);
@@ -34,7 +34,7 @@
 //      //  void IncrementView(T audio);
 //    }
 
-//    public class AudioService<T> : IAudioService<T> where T : AudioModel
+//    public class AudioService<T> : IAudioService<T> where T : Audio
 //    {
 //        private readonly IValidationDictionary _validationDictionary;
 //        private readonly IRepository<T> _repository;

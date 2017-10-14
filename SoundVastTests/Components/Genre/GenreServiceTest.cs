@@ -17,13 +17,13 @@ namespace SoundVastTests.Components.Genre
     [TestFixture]
     public class GenreServiceTest
     {
-        private Mock<IRepository<GenreModel>> _mockGenreRepository;
+        private Mock<IRepository<SoundVast.Components.Genre.Models.Genre>> _mockGenreRepository;
         private GenreService _genreService;
 
         [SetUp]
         public void Init()
         {
-            _mockGenreRepository = new Mock<IRepository<GenreModel>>();
+            _mockGenreRepository = new Mock<IRepository<SoundVast.Components.Genre.Models.Genre>>();
      
             _genreService = new GenreService(_mockGenreRepository.Object);
         }
@@ -31,10 +31,10 @@ namespace SoundVastTests.Components.Genre
         [Test]
         public void GetMusicGenres_ReturnOnlyMusicGenres()
         {
-            var genres = new List<GenreModel>
+            var genres = new List<SoundVast.Components.Genre.Models.Genre>
             {
-                new GenreModel {Name = "Pop", Type = GenreType.Music},
-                new GenreModel {Name = "Football", Type = GenreType.LiveStream},
+                new SoundVast.Components.Genre.Models.Genre {Name = "Pop", Type = GenreName.Music},
+                new SoundVast.Components.Genre.Models.Genre {Name = "Football", Type = GenreName.LiveStream},
             }.AsQueryable();
       
             _mockGenreRepository.Setup(x => x.GetAll()).Returns(genres);
@@ -48,10 +48,10 @@ namespace SoundVastTests.Components.Genre
         [Test]
         public void GetMusicGenres_ReturnOnlyLiveStreamGenres()
         {
-            var genres = new List<GenreModel>
+            var genres = new List<SoundVast.Components.Genre.Models.Genre>
             {
-                new GenreModel {Name = "Pop", Type = GenreType.Music},
-                new GenreModel {Name = "Football", Type = GenreType.LiveStream},
+                new SoundVast.Components.Genre.Models.Genre {Name = "Pop", Type = GenreName.Music},
+                new SoundVast.Components.Genre.Models.Genre {Name = "Football", Type = GenreName.LiveStream},
             }.AsQueryable();
 
             _mockGenreRepository.Setup(x => x.GetAll()).Returns(genres);

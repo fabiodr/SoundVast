@@ -31,7 +31,7 @@ namespace SoundVast.Components.FileStream
     //    //{
     //    //    var playlistData = new List<object>();
 
-    //    //    foreach (var audio in _fileStreamService.GetPlaylist(id, AudioModel.PlaylistCount,
+    //    //    foreach (var audio in _fileStreamService.GetPlaylist(id, Audio.PlaylistCount,
     //    //        HttpContext.Session.GetString("Category"), HttpContext.Session.GetString("Genre")))
     //    //    {
     //    //        var fileProperties = _cloudStorage.GetBlob(CloudStorageType.Image, audio.ImageFile.Name).FileProperties;

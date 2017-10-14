@@ -12,9 +12,9 @@ using SoundVast.Validation;
 
 namespace SoundVast.Components.Song
 {
-    public class SongService : AudioService<SongModel>, ISongService
+    public class SongService : AudioService<Models.Song>, ISongService
     {
-        public SongService(IRepository<SongModel> repository, IValidationProvider validationProvider) : base(repository, validationProvider)
+        public SongService(IRepository<Models.Song> repository, IValidationProvider validationProvider) : base(repository, validationProvider)
         {
         }
     }

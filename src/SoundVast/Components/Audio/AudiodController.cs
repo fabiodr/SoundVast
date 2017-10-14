@@ -19,9 +19,9 @@ using SoundVast.Components.User;
 namespace SoundVast.Components.Audio
 {
     //public abstract class AudioController<TAudio, TCategory, TGenre, TReport> : CustomBaseController
-    //    where TAudio : AudioModel, new()
+    //    where TAudio : Audio, new()
     //    where TCategory : CategoryModel, new()
-    //    where TGenre : GenreModel, new()
+    //    where TGenre : Genre, new()
     //    where TReport : ReportModel, new()
     //{
     //    private readonly IAudioService<TAudio> _audioService;

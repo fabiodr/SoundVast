@@ -53,13 +53,13 @@ namespace SoundVast
                 //    .ForMember(vm => vm.UserName, m => m.MapFrom(z => z.User.UserName))
                 //    .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => imageFileProperties(src.ImageFile.Name).Uri.AbsoluteUri));
 
-                //x.CreateMap<LiveStreamModel, LikedLiveStreamViewModel>()
+                //x.CreateMap<LiveStream, LikedLiveStreamViewModel>()
                 //    .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => imageFileProperties(src.ImageFile.Name).Uri.AbsoluteUri));
 
                 //x.CreateMap<PlaylistModel, LikedPlaylistViewModel>()
                 //    .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => imageFileProperties(src.ImageFile.Name).Uri.AbsoluteUri));
 
-                //x.CreateMap<AudioModel, SimilarFileStreamViewModel>()
+                //x.CreateMap<Audio, SimilarFileStreamViewModel>()
                 //    .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => imageFileProperties(src.ImageFile.Name).Uri.AbsoluteUri));
 
                 //x.CreateMap<FileStreamModel, LikedFileStreamViewModel>()
@@ -94,10 +94,10 @@ namespace SoundVast
                 //x.CreateMap<FileStreamReportModel, ReportFileStreamDisplayViewModel>();
                 ////.ForMember(vm => vm.ReportFileStreamsViewModel, m => m.MapFrom(z => (FileStream)z.Audio));
 
-                //x.CreateMap<LiveStreamModel, LiveStreamsViewModel>()
+                //x.CreateMap<LiveStream, LiveStreamsViewModel>()
                 //    .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => imageFileProperties(src.ImageFile.Name).Uri.AbsoluteUri));
 
-                //x.CreateMap<LiveStreamModel, LiveStreamViewModel>()
+                //x.CreateMap<LiveStream, LiveStreamViewModel>()
                 //    .ForMember(vm => vm.ImagePath, m => m.MapFrom(src => imageFileProperties(src.ImageFile.Name).Uri.AbsoluteUri));
             });
 

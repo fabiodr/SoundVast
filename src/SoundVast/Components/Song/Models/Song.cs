@@ -7,7 +7,7 @@ using SoundVast.Components.Audio.Models;
 
 namespace SoundVast.Components.Song.Models
 {
-    public class SongModel : AudioModel
+    public class Song : Audio.Models.Audio
     {
         public string Artist { get; set; }
     }

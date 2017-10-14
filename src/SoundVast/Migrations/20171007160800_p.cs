@@ -10,7 +10,7 @@ namespace SoundVast.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_AudioModel_Genres_GenreId",
-                table: "AudioModel");
+                table: "Audio");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_Ratings_AudioModel_AudioId",
@@ -18,10 +18,10 @@ namespace SoundVast.Migrations
 
             migrationBuilder.DropPrimaryKey(
                 name: "PK_AudioModel",
-                table: "AudioModel");
+                table: "Audio");
 
             migrationBuilder.RenameTable(
-                name: "AudioModel",
+                name: "Audio",
                 newName: "Audios");
 
             migrationBuilder.RenameIndex(
@@ -67,21 +67,21 @@ namespace SoundVast.Migrations
 
             migrationBuilder.RenameTable(
                 name: "Audios",
-                newName: "AudioModel");
+                newName: "Audio");
 
             migrationBuilder.RenameIndex(
                 name: "IX_Audios_GenreId",
-                table: "AudioModel",
+                table: "Audio",
                 newName: "IX_AudioModel_GenreId");
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_AudioModel",
-                table: "AudioModel",
+                table: "Audio",
                 column: "Id");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_AudioModel_Genres_GenreId",
-                table: "AudioModel",
+                table: "Audio",
                 column: "GenreId",
                 principalTable: "Genres",
                 principalColumn: "Id",
@@ -91,7 +91,7 @@ namespace SoundVast.Migrations
                 name: "FK_Ratings_AudioModel_AudioId",
                 table: "Ratings",
                 column: "AudioId",
-                principalTable: "AudioModel",
+                principalTable: "Audio",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
         }

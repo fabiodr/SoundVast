@@ -19,11 +19,11 @@
 //{
 //    public class SearchController : CustomBaseController
 //    {
-//        private readonly IAudioService<SongModel> _audioService;
+//        private readonly IAudioService<Song> _audioService;
 //        private readonly IFileStreamService _fileStreamService;
 //        private readonly ILiveStreamService _liveStreamService;
 
-//        public SearchController(IMapper mapper, IServiceProvider serviceProvider, IAudioService<SongModel> audioService,
+//        public SearchController(IMapper mapper, IServiceProvider serviceProvider, IAudioService<Song> audioService,
 //            IFileStreamService fileStreamService, ILiveStreamService liveStreamService)
 //            : base(mapper, serviceProvider)
 //        {
@@ -48,7 +48,7 @@
 //        //    var audioViewModels = new List<AudiosViewModel>();
 
 //        //    audioViewModels.AddRange(Mapper.Map<IEnumerable<FileStreamsViewModel>>(audios.OfType<FileStreamModel>()));
-//        //    audioViewModels.AddRange(Mapper.Map<IEnumerable<LiveStreamsViewModel>>(audios.OfType<LiveStreamModel>()));
+//        //    audioViewModels.AddRange(Mapper.Map<IEnumerable<LiveStreamsViewModel>>(audios.OfType<LiveStream>()));
 
 //        //    foreach (var audioViewModel in audioViewModels)
 //        //    {

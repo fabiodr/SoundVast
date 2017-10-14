@@ -31,6 +31,7 @@ using Newtonsoft.Json;
 using SoundVast.Components.Audio;
 using SoundVast.Components.Audio.Models;
 using SoundVast.Components.Genre.Models;
+using SoundVast.Components.GraphQl;
 using SoundVast.Components.LiveStream.Models;
 using SoundVast.Components.Song.Models;
 using SoundVast.Components.Upload;
@@ -135,17 +136,14 @@ namespace SoundVast
             app.UseIdentity();
             app.SeedData();
             app.UseSession();
-
+        
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     "app",
                     "{controller}/{action}"
                 );
-            });
 
-            app.UseMvc(routes =>
-            {
                 routes.MapSpaFallbackRoute(
                     "default",
                     new
@@ -181,17 +179,18 @@ namespace SoundVast
             builder.RegisterAssemblyTypes(assembly).AsClosedTypesOf(typeof(Validator<>));
             builder.RegisterAssemblyTypes(assembly).Where(x => x.Name.EndsWith("Service")).AsImplementedInterfaces();
             builder.RegisterAssemblyTypes(assembly).Where(x => x.Name.EndsWith("Validator")).AsImplementedInterfaces();
+            builder.RegisterAssemblyTypes(assembly).Where(x => x.Name.EndsWith("Query"));
 
             builder.RegisterType<FileStorage>().As<IFileStorage>().SingleInstance();
             builder.RegisterType<ValidationProvider>().As<IValidationProvider>().SingleInstance();
             builder.RegisterType<AuthMessageSender>().As<IEmailSender>();
             builder.RegisterType<AuthMessageSender>().As<ISmsSender>();
             builder.RegisterType<AzureBlob>().As<ICloudBlob>();
-            builder.RegisterType<AudioService<AudioModel>>().AsImplementedInterfaces();
-            builder.RegisterType<Repository<AudioModel, ApplicationDbContext>>().As<IRepository<AudioModel>>();
-            builder.RegisterType<Repository<SongModel, ApplicationDbContext>>().As<IRepository<SongModel>>();
-            builder.RegisterType<Repository<LiveStreamModel, ApplicationDbContext>>().As<IRepository<LiveStreamModel>>();
-            builder.RegisterType<Repository<GenreModel, ApplicationDbContext>>().As<IRepository<GenreModel>>();
+            builder.RegisterType<AudioService<Audio>>().AsImplementedInterfaces();
+            builder.RegisterType<Repository<Audio, ApplicationDbContext>>().As<IRepository<Audio>>();
+            builder.RegisterType<Repository<Song, ApplicationDbContext>>().As<IRepository<Song>>();
+            builder.RegisterType<Repository<LiveStream, ApplicationDbContext>>().As<IRepository<LiveStream>>();
+            builder.RegisterType<Repository<Genre, ApplicationDbContext>>().As<IRepository<Genre>>();
 
             return builder;
         }

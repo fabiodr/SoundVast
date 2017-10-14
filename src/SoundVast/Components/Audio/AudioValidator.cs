@@ -8,9 +8,9 @@ using SoundVast.Validation;
 
 namespace SoundVast.Components.Audio
 {
-    public class AudioValidator : Validator<AudioModel>
+    public class AudioValidator : Validator<Models.Audio>
     {
-        protected override IEnumerable<ValidationResult> Validate(AudioModel model)
+        protected override IEnumerable<ValidationResult> Validate(Models.Audio model)
         {
             if (string.IsNullOrWhiteSpace(model.Name))
             {

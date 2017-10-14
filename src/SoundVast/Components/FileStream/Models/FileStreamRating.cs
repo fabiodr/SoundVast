@@ -6,7 +6,7 @@ using SoundVast.Components.Rating.Models;
 
 namespace SoundVast.Components.FileStream.Models
 {
-    public class FileStreamRatingModel : RatingModel
+    public class FileStreamRating : Rating.Models.Rating
     {
     }
 }

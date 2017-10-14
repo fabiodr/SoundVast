@@ -38,10 +38,10 @@ namespace SoundVastTests.Components.User.Profile
         public void GetsUserUploads()
         {
             const string userId = "DORPE-12354-DSADD";
-            var userAudios = new List<SongModel>
+            var userAudios = new List<SoundVast.Components.Song.Models.Song>
             {
-                new SongModel(),
-                new SongModel()
+                new SoundVast.Components.Song.Models.Song(),
+                new SoundVast.Components.Song.Models.Song()
             };
 
             _mockUserManager.Setup(x => x.GetUserId(It.IsAny<ClaimsPrincipal>())).Returns(userId);

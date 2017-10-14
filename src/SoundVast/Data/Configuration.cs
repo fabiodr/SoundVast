@@ -36,8 +36,8 @@ namespace SoundVast.Data
                 //var radioStationCategoryResources = LiveStreamCategories.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
                 //var placeHolderImage = new ImageFileModel("Placeholder.jpg");
 
-                InitializeGenres(context, musicGenres, GenreType.Music);
-                InitializeGenres(context, liveStreamGenres, GenreType.LiveStream);
+                InitializeGenres(context, musicGenres, GenreName.Music);
+                InitializeGenres(context, liveStreamGenres, GenreName.LiveStream);
 
                 //   InitializeQuotes(context);
                 //   InitializeCategories<FileStreamCategoryModel>(context, fileStreamCategoryResources, placeHolderImage);
@@ -66,13 +66,13 @@ namespace SoundVast.Data
 
         public static void InitializeGenres(ApplicationDbContext context, DictionaryEntry[] genreResources, string genreType)
         {
-            var genres = genreResources.Select(x => new GenreModel
+            var genres = genreResources.Select(x => new Genre
             {
                 Name = (string)x.Value,
                 Type = genreType
             });
     
-            context.Set<GenreModel>().AddRange(genres.Where(genre => !context.Set<GenreModel>()
+            context.Set<Genre>().AddRange(genres.Where(genre => !context.Set<Genre>()
                 .Any(x => x.Name == genre.Name && x.Type == genre.Type)));
         }
 

@@ -8,7 +8,7 @@ using SoundVast.Components.Rating.Models;
 
 namespace SoundVast.Components.Audio.Models
 {
-    public abstract class AudioModel
+    public abstract class Audio
     {
         [Required]
         public int Id { get; set; }
@@ -25,8 +25,8 @@ namespace SoundVast.Components.Audio.Models
         [Required]
         public string UserId { get; set; }
         public int? GenreId { get; set; }
-        public virtual GenreModel Genre { get; set; }
-        public virtual ICollection<RatingModel> Ratings { get; set; }
+        public virtual Genre.Models.Genre Genre { get; set; }
+        public virtual ICollection<Rating.Models.Rating> Ratings { get; set; }
      //   public virtual ApplicationUser User { get; set; }
      //   public virtual ImageFileModel ImageFile { get; set; }
      //   public virtual CategoryModel Category { get; set; }
@@ -35,7 +35,7 @@ namespace SoundVast.Components.Audio.Models
      //   public virtual ICollection<CommentModel> Comments { get; set; }
      //   public virtual ICollection<AudioRatingJoinModel> AudioRatingJoins { get; set; }
 
-        //public AudioModel(string userId)
+        //public Audio(string userId)
         //{
         //    UserId = userId;
         //    UploadDate = DateTimeOffset.Now;
