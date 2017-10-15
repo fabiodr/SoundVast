@@ -2,7 +2,7 @@ import React from 'react';
 import expect from 'expect';
 import { shallow } from 'enzyme';
 
-import Songs from './component';
+import Songs from './songs';
 import Song from './song/component';
 import Audios from '../audios/component';
 

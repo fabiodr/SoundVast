@@ -21,7 +21,7 @@ Song.defaultProps = {
 };
 
 Song.propTypes = {
-  id: PropTypes.number,
+  id: PropTypes.string,
   name: PropTypes.string,
   artist: PropTypes.string,
 };

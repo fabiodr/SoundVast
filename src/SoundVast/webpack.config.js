@@ -34,7 +34,7 @@ module.exports = {
     vendor: [
       'react',
       'react-dom',
-      'react-router',
+      'found',
     ],
   },
   output: {

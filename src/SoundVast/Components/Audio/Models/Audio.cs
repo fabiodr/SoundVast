@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SoundVast.Components.Genre.Models;
 using SoundVast.Components.Rating.Models;
+using SoundVast.Components.User;
 
 namespace SoundVast.Components.Audio.Models
 {
@@ -24,6 +25,7 @@ namespace SoundVast.Components.Audio.Models
      //   public DateTimeOffset UploadDate { get; private set; }
         [Required]
         public string UserId { get; set; }
+        public ApplicationUser User { get; set; }
         public int? GenreId { get; set; }
         public virtual Genre.Models.Genre Genre { get; set; }
         public virtual ICollection<Rating.Models.Rating> Ratings { get; set; }

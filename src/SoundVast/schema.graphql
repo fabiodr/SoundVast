@@ -1,8 +1,25 @@
 # source: http://localhost:8080/graphql
-# timestamp: Sat Oct 14 2017 17:49:10 GMT+0200 (W. Europe Daylight Time)
+# timestamp: Sun Oct 15 2017 22:28:31 GMT+0200 (W. Europe Daylight Time)
 
 schema {
-  query: SongsQuery
+  query: SongQuery
+}
+
+interface Audio {
+  id: ID
+  name: String!
+
+  # The poster image for the audio
+  coverImageUrl: String!
+
+  # The user who uploaded the audio
+  user: User
+
+  # The genre the audio belongs to
+  genre: Genre
+
+  # The ratings that have been applied by users to this audio
+  ratings: [Rating]
 }
 
 # The `Date` scalar type represents a timestamp provided in UTC. `Date` expects
@@ -12,10 +29,53 @@ scalar Date
 
 scalar Decimal
 
-type Song {
+type Genre {
+  id: ID
   name: String!
+
+  # The type of category the genre belongs to, e.g. Music, Radio etc
+  type: String!
 }
 
-type SongsQuery {
-  song(id: Int): Song
+type Rating {
+  id: ID
+
+  # Whether the user has liked the audio or not
+  liked: Boolean!
+
+  # The user that rated the audio
+  user: User
+
+  # The audio that was rated by the user
+  audio: Audio
+}
+
+type Song implements Audio {
+  id: ID
+  name: String!
+
+  # The poster image for the song
+  coverImageUrl: String!
+  artist: String
+
+  # The user who uploaded the song
+  user: User
+
+  # The genre the song belongs to
+  genre: Genre
+
+  # The ratings that have been applied by users to this song
+  ratings: [Rating]
+}
+
+type SongQuery {
+  song(id: String): Song
+  songs: [Song]
+}
+
+type User {
+  id: ID
+  userName: String!
+  email: String!
+  emailConfirmed: Boolean!
 }

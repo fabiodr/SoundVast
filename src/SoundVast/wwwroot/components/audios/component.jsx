@@ -26,7 +26,7 @@ const Audios = ({ audios, children, fetchNextAudios, getPlaylist, hasMore }) => 
 Audios.propTypes = {
   audios: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.number.isRequired,
+      id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
       artist: PropTypes.string,
       coverImageUrl: PropTypes.string.isRequired,

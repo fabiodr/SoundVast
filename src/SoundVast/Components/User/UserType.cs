@@ -14,7 +14,7 @@ namespace SoundVast.Components.User
         {
             Name = "User";
 
-            Field(x => x.Id);
+            Field<IdGraphType>("id");
             Field(x => x.UserName);
             Field(x => x.Email);
             Field(x => x.EmailConfirmed);

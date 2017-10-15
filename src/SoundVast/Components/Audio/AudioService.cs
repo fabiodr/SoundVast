@@ -28,7 +28,7 @@ namespace SoundVast.Components.Audio
 
         public ICollection<T> GetAudios()
         {
-            return _repository.GetAll().ToList();
+            return _repository.GetAll().BuildAudio().Cast<T>().ToList();
         }
 
         public ICollection<T> GetAudios(int current, int amount)
@@ -38,7 +38,7 @@ namespace SoundVast.Components.Audio
 
         public T GetAudio(int id)
         {
-            return _repository.Get(id);
+            return (T)_repository.GetAll().BuildAudio().Single(x => x.Id == id);
         }
 
         public ICollection<Rating.Models.Rating> GetAudioRatings(int id)

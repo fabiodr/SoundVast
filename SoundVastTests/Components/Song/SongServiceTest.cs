@@ -57,17 +57,23 @@ namespace SoundVastTests.Components.Song
         [Test]
         public void GetSong()
         {
-            const int songId = 0;
-            var song = new SoundVast.Components.Song.Models.Song
+            const int id = 0;
+            var songs = new List<SoundVast.Components.Song.Models.Song>()
             {
-                Name = "bubble01.mp3",
+                new SoundVast.Components.Song.Models.Song
+                {
+                    Id = id,
+                    Name = "bubble01.mp3",
+                    Genre = new SoundVast.Components.Genre.Models.Genre { Name = "pop" }
+                },
+                new SoundVast.Components.Song.Models.Song {Name = "bubble02.mp3", Id = 2},
             };
 
-            _mockSongRepository.Setup(x => x.Get(songId)).Returns(song);
+            _mockSongRepository.Setup(x => x.GetAll()).Returns(songs.AsQueryable);
 
-            var result = _songService.GetAudio(songId);
+            var result = _songService.GetAudio(id);
 
-            result.Should().Be(song);
+            result.Should().Be(songs[0]);
         }
 
         [Test]

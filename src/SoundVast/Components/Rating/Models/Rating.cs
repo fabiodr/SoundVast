@@ -12,13 +12,9 @@ namespace SoundVast.Components.Rating.Models
     {
         public int Id { get; set; }
         public bool Liked { get; set; }
-        [Required]
         public string UserId { get; set; }
-        [Required]
         public virtual ApplicationUser User { get; set; }
-        [Required]
-        public int AudioId { get; set; }
-        [Required]
+        public int? AudioId { get; set; }
         public virtual Audio.Models.Audio Audio { get; set; }
     }
 }

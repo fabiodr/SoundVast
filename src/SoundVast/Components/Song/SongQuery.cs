@@ -7,16 +7,16 @@ using SoundVast.Components.Song.Models;
 
 namespace SoundVast.Components.Song
 {
-    public class SongsQuery : ObjectGraphType
+    public class SongQuery : ObjectGraphType
     {
-        public SongsQuery(ISongService songService)
+        public SongQuery(ISongService songService)
         {
             Field<SongType>("Song",
-                arguments: new QueryArguments(new QueryArgument<IntGraphType> { Name = "id" }),
+                arguments: new QueryArguments(new QueryArgument<StringGraphType> { Name = "id" }),
                 resolve: context => songService.GetAudio(context.GetArgument<int>("id")));
 
-            //Field<ListGraphType<SongType>>("songs",
-            //    resolve: context => songService.GetAudios());
+            Field<ListGraphType<SongType>>("songs",
+                resolve: context => songService.GetAudios());
         }
     }
 }

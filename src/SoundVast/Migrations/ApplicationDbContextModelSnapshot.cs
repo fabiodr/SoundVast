@@ -146,6 +146,8 @@ namespace SoundVast.Migrations
 
                     b.HasIndex("GenreId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Audios");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Audio");
@@ -172,12 +174,11 @@ namespace SoundVast.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("AudioId");
+                    b.Property<int?>("AudioId");
 
                     b.Property<bool>("Liked");
 
-                    b.Property<string>("UserId")
-                        .IsRequired();
+                    b.Property<string>("UserId");
 
                     b.HasKey("Id");
 
@@ -302,6 +303,11 @@ namespace SoundVast.Migrations
                     b.HasOne("SoundVast.Components.Genre.Models.Genre", "Genre")
                         .WithMany()
                         .HasForeignKey("GenreId");
+
+                    b.HasOne("SoundVast.Components.User.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("SoundVast.Components.Rating.Models.Rating", b =>
@@ -313,8 +319,7 @@ namespace SoundVast.Migrations
 
                     b.HasOne("SoundVast.Components.User.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("UserId");
                 });
         }
     }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'found';
 
 import soundVastLogo from '../../images/soundvast-nav-logo.png';
 import styles from './component.less';
@@ -18,13 +18,13 @@ const Header = () => (
           </Link>
         </li>
         <li>
-          <Link to="songs">Songs</Link>
+          <Link to="/songs">Songs</Link>
         </li>
         <li>
-          <Link to="radio">Radio</Link>
+          <Link to="/radio">Radio</Link>
         </li>
         <li>
-          <Link to="upload">Upload</Link>
+          <Link to="/upload">Upload</Link>
         </li>
       </ul>
       <ul>
@@ -34,16 +34,16 @@ const Header = () => (
           <LinkDropdown title={<i className="fa fa-bars" />}>
             <ul>
               <li>
-                <Link to="content/aboutuUs">About us</Link>
+                <Link to="/content/aboutuUs">About us</Link>
               </li>
               <li>
-                <Link to="content/privacy">Privacy</Link>
+                <Link to="/content/privacy">Privacy</Link>
               </li>
               <li>
-                <Link to="content/copyright">Copyright</Link>
+                <Link to="/content/copyright">Copyright</Link>
               </li>
               <li>
-                <Link to="content/termsOfUse">Terms of Use</Link>
+                <Link to="/content/termsOfUse">Terms of Use</Link>
               </li>
               <AdminList />
             </ul>

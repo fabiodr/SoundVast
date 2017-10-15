@@ -5,7 +5,7 @@ import SoundVastTitle from '../shared/soundVastTitle/component';
 import Song from './song/component';
 import Audios from '../audios/component';
 
-const Songs = ({ songs, fetchNextSongs, hasMore, getPlaylist }) => (
+const Songs = ({ songs, fetchNextSongs, getPlaylist, hasMore }) => (
   <SoundVastTitle title="Songs">
     <Audios
       audios={songs}
@@ -21,7 +21,7 @@ const Songs = ({ songs, fetchNextSongs, hasMore, getPlaylist }) => (
 Songs.propTypes = {
   songs: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.number.isRequired,
+      id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
       artist: PropTypes.string,
       coverImageUrl: PropTypes.string.isRequired,

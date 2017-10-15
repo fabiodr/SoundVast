@@ -1,10 +1,11 @@
+import React from 'react';
 import { connect } from 'react-redux';
-import { compose, withHandlers } from 'recompose';
-import { graphql } from 'react-relay';
+import { compose, withHandlers, flattenProp } from 'recompose';
+import { graphql, createFragmentContainer } from 'react-relay';
 import { fragmentContainer } from 'recompose-relay-modern';
 
 import { fetchNextSongs } from './actions';
-import Songs from './component';
+import Songs from './songs';
 
 const mapStateToProps = ({ music }) => ({
   // songs: music.songs,
@@ -24,16 +25,27 @@ const handlers = {
   })),
 };
 
-const fragment = fragmentContainer(graphql`
-  fragment songsContainer_songs on Song {
-    name
-  }`,
-);
+export const query = graphql`
+  query songsContainerQuery {
+    songs {
+      ...songsContainer_songs
+    }
+  }
+`;
 
-export default compose(
-  fragment,
+const enhance = compose(
+  fragmentContainer(graphql`
+    fragment songsContainer_songs on Song @relay(plural: true) {
+      id,
+      name
+      coverImageUrl,
+      artist,
+    }`,
+  ),
   connect(mapStateToProps, {
     fetchNextSongs,
   }),
   withHandlers(handlers),
-)(Songs);
+);
+
+export default enhance(Songs);

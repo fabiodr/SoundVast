@@ -8,8 +8,8 @@ using SoundVast.Data;
 namespace SoundVast.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20171007160019_test")]
-    partial class test
+    [Migration("20171014221013_w")]
+    partial class w
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -147,12 +147,14 @@ namespace SoundVast.Migrations
 
                     b.HasIndex("GenreId");
 
-                    b.ToTable("Audio");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Audios");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Audio");
                 });
 
-            modelBuilder.Entity("SoundVast.Components.Genre.Models.GenreModel", b =>
+            modelBuilder.Entity("SoundVast.Components.Genre.Models.Genre", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -160,12 +162,15 @@ namespace SoundVast.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
+                    b.Property<string>("Type")
+                        .IsRequired();
+
                     b.HasKey("Id");
 
                     b.ToTable("Genres");
                 });
 
-            modelBuilder.Entity("SoundVast.Components.Rating.Models.RatingModel", b =>
+            modelBuilder.Entity("SoundVast.Components.Rating.Models.Rating", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -235,14 +240,15 @@ namespace SoundVast.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("SoundVast.Components.Radio.Models.RadioModel", b =>
+            modelBuilder.Entity("SoundVast.Components.LiveStream.Models.LiveStream", b =>
                 {
                     b.HasBaseType("SoundVast.Components.Audio.Models.Audio");
 
+                    b.Property<string>("LiveStreamUrl");
 
-                    b.ToTable("RadioModel");
+                    b.ToTable("LiveStream");
 
-                    b.HasDiscriminator().HasValue("RadioModel");
+                    b.HasDiscriminator().HasValue("LiveStream");
                 });
 
             modelBuilder.Entity("SoundVast.Components.Song.Models.Song", b =>
@@ -298,9 +304,14 @@ namespace SoundVast.Migrations
                     b.HasOne("SoundVast.Components.Genre.Models.Genre", "Genre")
                         .WithMany()
                         .HasForeignKey("GenreId");
+
+                    b.HasOne("SoundVast.Components.User.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("SoundVast.Components.Rating.Models.RatingModel", b =>
+            modelBuilder.Entity("SoundVast.Components.Rating.Models.Rating", b =>
                 {
                     b.HasOne("SoundVast.Components.Audio.Models.Audio", "Audio")
                         .WithMany("Ratings")

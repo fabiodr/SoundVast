@@ -14,7 +14,7 @@ namespace SoundVast.Components.Genre
         {
             Name = nameof(Models.Genre);
 
-            Field(x => x.Id);
+            Field<IdGraphType>("id");
             Field(x => x.Name);
             Field(x => x.Type).Description("The type of category the genre belongs to, e.g. Music, Radio etc");
         }

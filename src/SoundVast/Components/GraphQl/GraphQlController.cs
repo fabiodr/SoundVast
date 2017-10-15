@@ -13,9 +13,9 @@ namespace SoundVast.Components.GraphQl
     [Route("graphql")]
     public class GraphQlController : Controller
     {
-        private readonly SongsQuery _songsQuery;
+        private readonly SongQuery _songsQuery;
 
-        public GraphQlController(SongsQuery songsQuery)
+        public GraphQlController(SongQuery songsQuery)
         {
             _songsQuery = songsQuery;
         }

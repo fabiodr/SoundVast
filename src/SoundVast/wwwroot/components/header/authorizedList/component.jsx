@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link } from 'found';
 
 import LinkDropdown from '../../shared/dropDown/container';
 import LogoutForm from '../../account/logout/form/container';
@@ -10,14 +10,14 @@ const AuthorizedList = ({ isLoggedIn, userName }) => (
     <li>
       <LinkDropdown title={userName}>
         <li>
-          <Link to="profile">Profile</Link>
+          <Link to="/profile">Profile</Link>
         </li>
         <li>
           <LogoutForm />
         </li>
       </LinkDropdown>
     </li>
-  : null
+    : null
 );
 
 AuthorizedList.defaultProps = {

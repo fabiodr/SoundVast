@@ -198,7 +198,6 @@
 
   <ItemGroup>
     <Folder Include="Components\Form\" />
-    <Folder Include="Components\GraphQl\" />
     <Folder Include="Components\User\Profile\" />
   </ItemGroup>
 

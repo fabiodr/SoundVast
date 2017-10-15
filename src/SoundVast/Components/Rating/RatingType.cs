@@ -14,12 +14,12 @@ namespace SoundVast.Components.Rating
     {
         public RatingType()
         {
-            Name = "User";
+            Name = nameof(Models.Rating);
 
-            Field(x => x.Id);
+            Field<IdGraphType>("id");
             Field(x => x.Liked).Description("Whether the user has liked the audio or not");
-            Field<UserType>().Description("The user that rated the audio");
-            Field<AudioInterface>().Description("The audio that was rated by the user");
+            Field<UserType>("user", "The user that rated the audio");
+            Field<AudioInterface>("audio", "The audio that was rated by the user");
         }
     }
 }
