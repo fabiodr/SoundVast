@@ -1,8 +1,9 @@
 # source: http://localhost:8080/graphql
-# timestamp: Sun Oct 15 2017 22:28:31 GMT+0200 (W. Europe Daylight Time)
+# timestamp: Mon Oct 16 2017 22:43:09 GMT+0200 (W. Europe Daylight Time)
 
 schema {
   query: SongQuery
+  mutation: Mutation
 }
 
 interface Audio {
@@ -35,6 +36,17 @@ type Genre {
 
   # The type of category the genre belongs to, e.g. Music, Radio etc
   type: String!
+}
+
+input Input {
+  audioName: String!
+  audioPath: String!
+  fileLength: Int!
+  progressId: String!
+}
+
+type Mutation {
+  addSong(song: Input!): Song
 }
 
 type Rating {

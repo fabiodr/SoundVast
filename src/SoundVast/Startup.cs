@@ -180,6 +180,7 @@ namespace SoundVast
             builder.RegisterAssemblyTypes(assembly).Where(x => x.Name.EndsWith("Service")).AsImplementedInterfaces();
             builder.RegisterAssemblyTypes(assembly).Where(x => x.Name.EndsWith("Validator")).AsImplementedInterfaces();
             builder.RegisterAssemblyTypes(assembly).Where(x => x.Name.EndsWith("Query"));
+            builder.RegisterAssemblyTypes(assembly).Where(x => x.Name.EndsWith("Mutation"));
 
             builder.RegisterType<FileStorage>().As<IFileStorage>().SingleInstance();
             builder.RegisterType<ValidationProvider>().As<IValidationProvider>().SingleInstance();

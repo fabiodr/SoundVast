@@ -14,16 +14,22 @@ namespace SoundVast.Components.GraphQl
     public class GraphQlController : Controller
     {
         private readonly SongQuery _songsQuery;
+        private readonly SongMutation _songsMutation;
 
-        public GraphQlController(SongQuery songsQuery)
+        public GraphQlController(SongQuery songsQuery, SongMutation songsMutation)
         {
             _songsQuery = songsQuery;
+            _songsMutation = songsMutation;
         }
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] GraphQlQuery graphQlQuery)
         {
-            var schema = new Schema { Query = _songsQuery };
+            var schema = new Schema
+            {
+                Query = _songsQuery,
+                Mutation = _songsMutation
+            };
             var inputs = graphQlQuery.Variables.ToInputs();
 
             var result = await new DocumentExecuter().ExecuteAsync(_ =>
