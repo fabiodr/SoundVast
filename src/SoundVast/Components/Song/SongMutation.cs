@@ -13,15 +13,16 @@ namespace SoundVast.Components.Song
         {
             Name = nameof(SongMutation);
 
-            Field<SongType>(
-                "addSong",
+            Field<SongType>("saveSong",
                 arguments: new QueryArguments(new QueryArgument<NonNullGraphType<SongInputType>> { Name = "song" }
                 ),
                 resolve: context =>
                 {
-                    songService.Add(context.GetArgument<Models.Song>("song"));
+                    var song = context.GetArgument<Models.Song>("song");
 
-                    return null;
+                    songService.Add(song);
+
+                    return song;
                 });
         }
     }

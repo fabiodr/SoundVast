@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using GraphQL;
 using GraphQL.Types;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using SoundVast.Components.GraphQl.Models;
 using SoundVast.Components.Song;
 
@@ -25,12 +26,12 @@ namespace SoundVast.Components.GraphQl
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] GraphQlQuery graphQlQuery)
         {
+            var inputs = JsonConvert.SerializeObject(graphQlQuery.Variables).ToInputs();
             var schema = new Schema
             {
                 Query = _songsQuery,
                 Mutation = _songsMutation
             };
-            var inputs = graphQlQuery.Variables.ToInputs();
 
             var result = await new DocumentExecuter().ExecuteAsync(_ =>
             {

@@ -12,10 +12,11 @@ namespace SoundVast.Components.Song
         {
             Name = "SongInput";
            
-            Field<NonNullGraphType<StringGraphType>>("AudioName");
-            Field<NonNullGraphType<StringGraphType>>("AudioPath");
-            Field<NonNullGraphType<IntGraphType>>("FileLength");
-            Field<NonNullGraphType<StringGraphType>>("ProgressId");
+            Field<NonNullGraphType<StringGraphType>>("Name");
+            Field<StringGraphType>("Artist");
+            Field<NonNullGraphType<StringGraphType>>("CoverImageUrl");
+            Field<IntGraphType>("GenreId");
+            Field<NonNullGraphType<StringGraphType>>("UserId");
         }
     }
 }

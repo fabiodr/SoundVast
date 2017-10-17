@@ -5,7 +5,7 @@ import {
   Store,
 } from 'relay-runtime';
 
-const network = Network.create(operation =>
+const network = Network.create((operation, variables) =>
   fetch('/graphql', {
     method: 'post',
     headers: {
@@ -13,6 +13,7 @@ const network = Network.create(operation =>
     },
     body: JSON.stringify({
       query: operation.text,
+      variables,
     }),
   }).then(response => response.json()));
 
