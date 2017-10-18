@@ -1,10 +1,5 @@
 # source: http://localhost:8080/graphql
-# timestamp: Tue Oct 17 2017 23:30:29 GMT+0200 (W. Europe Daylight Time)
-
-schema {
-  query: SongQuery
-  mutation: SongMutation
-}
+# timestamp: Thu Oct 19 2017 00:21:46 GMT+0200 (W. Europe Daylight Time)
 
 interface Audio {
   id: ID
@@ -36,6 +31,15 @@ type Genre {
 
   # The type of category the genre belongs to, e.g. Music, Radio etc
   type: String!
+}
+
+type Mutation {
+  saveSong(song: SongInput!): Song
+}
+
+type Query {
+  song(id: String): Song
+  songs: [Song]
 }
 
 type Rating {
@@ -70,20 +74,11 @@ type Song implements Audio {
 }
 
 input SongInput {
-  name: String!
+  name: String
   artist: String
   coverImageUrl: String!
   genreId: Int
   userId: String!
-}
-
-type SongMutation {
-  saveSong(song: SongInput!): Song
-}
-
-type SongQuery {
-  song(id: String): Song
-  songs: [Song]
 }
 
 type User {

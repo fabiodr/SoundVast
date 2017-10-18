@@ -59,7 +59,13 @@ namespace SoundVast.Repository
 
         public virtual void Add(T entity)
         {
-            Context.Set<T>().Add(entity);
+            var addedEntity = Context.Set<T>().Add(entity);
+
+            foreach (var reference in addedEntity.Navigations)
+            {
+                reference.Load();
+            }
+
             Save();
         }
 

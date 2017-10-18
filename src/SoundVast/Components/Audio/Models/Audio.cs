@@ -17,7 +17,6 @@ namespace SoundVast.Components.Audio.Models
         // public static int PlaylistCount { get; } = 50;
         [Required]
         public string Name { get; set; }
-
         [Required]
         public string CoverImageUrl { get; set; }
       //  public int CommentCount { get; private set; }

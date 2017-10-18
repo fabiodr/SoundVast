@@ -1,15 +1,11 @@
 ﻿using GraphQL.Types;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using SoundVast.Components.Song.Models;
+using SoundVast.Components.Song;
 
-namespace SoundVast.Components.Song
+namespace SoundVast.Components.GraphQl
 {
-    public class SongQuery : ObjectGraphType
+    public class Query : ObjectGraphType
     {
-        public SongQuery(ISongService songService)
+        public Query(ISongService songService)
         {
             Field<SongType>("Song",
                 arguments: new QueryArguments(new QueryArgument<StringGraphType> { Name = "id" }),

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using GraphQL;
 using GraphQL.Types;
@@ -8,19 +9,23 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SoundVast.Components.GraphQl.Models;
 using SoundVast.Components.Song;
+using SoundVast.CustomHelpers;
+using SoundVast.Validation;
 
 namespace SoundVast.Components.GraphQl
 {
     [Route("graphql")]
     public class GraphQlController : Controller
     {
-        private readonly SongQuery _songsQuery;
-        private readonly SongMutation _songsMutation;
+        private readonly Query _query;
+        private readonly Mutation _mutation;
+        private readonly IValidationProvider _validationProvider;
 
-        public GraphQlController(SongQuery songsQuery, SongMutation songsMutation)
+        public GraphQlController(Query query, Mutation mutation, IValidationProvider validationProvider)
         {
-            _songsQuery = songsQuery;
-            _songsMutation = songsMutation;
+            _query = query;
+            _mutation = mutation;
+            _validationProvider = validationProvider;
         }
 
         [HttpPost]
@@ -29,24 +34,28 @@ namespace SoundVast.Components.GraphQl
             var inputs = JsonConvert.SerializeObject(graphQlQuery.Variables).ToInputs();
             var schema = new Schema
             {
-                Query = _songsQuery,
-                Mutation = _songsMutation
+                Query = _query,
+                Mutation = _mutation
             };
-
-            var result = await new DocumentExecuter().ExecuteAsync(_ =>
+          
+            var executionResult = await new DocumentExecuter().ExecuteAsync(_ =>
             {
                 _.Schema = schema;
                 _.Query = graphQlQuery.Query;
                 _.Inputs = inputs;
+            });
 
-            }).ConfigureAwait(false);
-
-            if (result.Errors?.Count > 0)
+            if (_validationProvider.HasErrors)
             {
-                return BadRequest(result.Errors);
+                return BadRequest(_validationProvider.ModelErrors);
+            }
+            
+            if (executionResult?.Errors?.Count > 0)
+            {
+                return BadRequest(executionResult.Errors);
             }
 
-            return Ok(result);
+            return Ok(executionResult);
         }
     }
 }

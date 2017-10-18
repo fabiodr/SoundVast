@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash e73dc63d855bf07226d4d2fac9ba133a
+ * @relayHash e6de47fa7440096e9663022e1990259f
  */
 
 /* eslint-disable */
@@ -55,7 +55,7 @@ const batch /*: ConcreteBatch*/ = {
         "storageKey": null
       }
     ],
-    "type": "SongQuery"
+    "type": "Query"
   },
   "id": null,
   "kind": "Batch",

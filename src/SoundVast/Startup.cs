@@ -183,7 +183,7 @@ namespace SoundVast
             builder.RegisterAssemblyTypes(assembly).Where(x => x.Name.EndsWith("Mutation"));
 
             builder.RegisterType<FileStorage>().As<IFileStorage>().SingleInstance();
-            builder.RegisterType<ValidationProvider>().As<IValidationProvider>().SingleInstance();
+            builder.RegisterType<ValidationProvider>().As<IValidationProvider>().InstancePerLifetimeScope();
             builder.RegisterType<AuthMessageSender>().As<IEmailSender>();
             builder.RegisterType<AuthMessageSender>().As<ISmsSender>();
             builder.RegisterType<AzureBlob>().As<ICloudBlob>();

@@ -49,7 +49,7 @@ namespace SoundVast.Components.Audio
         public void Add(T model)
         {
             _validationProvider.Validate(model);
-
+            
             _repository.Add(model);
         }
 
