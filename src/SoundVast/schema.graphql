@@ -1,5 +1,5 @@
 # source: http://localhost:8080/graphql
-# timestamp: Thu Oct 19 2017 00:21:46 GMT+0200 (W. Europe Daylight Time)
+# timestamp: Fri Oct 20 2017 00:06:19 GMT+0200 (W. Europe Daylight Time)
 
 interface Audio {
   id: ID
@@ -74,7 +74,7 @@ type Song implements Audio {
 }
 
 input SongInput {
-  name: String
+  name: String!
   artist: String
   coverImageUrl: String!
   genreId: Int

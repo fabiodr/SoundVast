@@ -218,4 +218,4 @@ const submit = (url, id, { __RequestVerificationToken, ...values }) => dispatch 
 
 export const submitLiveStream = (id, values) => dispatch => submit('/upload/saveLiveStream', id, values)(dispatch);
 
-export const submitFile = (id, values) => dispatch => submit('/upload/saveSong', id, values)(dispatch);
+// export const submitFile = (id, values) => dispatch => submit('/upload/saveSong', id, values)(dispatch);

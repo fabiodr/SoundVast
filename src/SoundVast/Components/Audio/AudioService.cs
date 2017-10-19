@@ -49,8 +49,11 @@ namespace SoundVast.Components.Audio
         public void Add(T model)
         {
             _validationProvider.Validate(model);
-            
-            _repository.Add(model);
+
+            if (!_validationProvider.HasErrors)
+            {
+                _repository.Add(model);
+            }
         }
 
         public Rating.Models.Rating RateAudio(int audioId, bool liked, string userId)

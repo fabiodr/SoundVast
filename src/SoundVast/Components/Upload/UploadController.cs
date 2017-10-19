@@ -73,7 +73,7 @@ namespace SoundVast.Components.Upload
             {
                 ModelState.AddModelErrors(e);
 
-                return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ConvertToJson());
+                return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ConvertErrorsToJson());
             }
 
             return Ok();
@@ -100,7 +100,7 @@ namespace SoundVast.Components.Upload
             {
                 ModelState.AddModelErrors(e);
 
-                return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ConvertToJson());
+                return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ConvertErrorsToJson());
             }
 
             return Ok();
@@ -132,7 +132,7 @@ namespace SoundVast.Components.Upload
             {
                 ModelState.AddModelErrors(e);
 
-                return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ConvertToJson());
+                return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ConvertErrorsToJson());
             }
 
             return Ok(new

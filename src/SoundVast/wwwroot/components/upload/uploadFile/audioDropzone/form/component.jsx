@@ -3,13 +3,11 @@ import PropTypes from 'prop-types';
 
 import FileInformation from './fileInformation/component';
 import ValidationErrors from '../../../../shared/form/validation/errors/component';
-import AntiForgeryToken from '../../../../shared/form/antiForgeryToken/container';
 import SpinnerSubmit from '../../../../shared/form/spinnerSubmit/container';
 import CancelButton from '../../../common/cancelButton/component';
 
 const Form = ({ errors: error, ...props }) => (
   <form onSubmit={props.handleSubmit} action="">
-    <AntiForgeryToken form={props.form} />
     <ValidationErrors errors={props.errors} />
 
     <FileInformation id={props.id} />

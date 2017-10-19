@@ -11,7 +11,7 @@ namespace SoundVast.Components.GraphQl
 {
     public class Mutation : ObjectGraphType
     {
-        public Mutation(IValidationProvider validationProvider, ISongService songService)
+        public Mutation(ISongService songService)
         {
             Field<SongType>("saveSong",
                 arguments: new QueryArguments(new QueryArgument<NonNullGraphType<SongInputType>> { Name = "song" }),
@@ -19,14 +19,8 @@ namespace SoundVast.Components.GraphQl
                 {
                     var song = context.GetArgument<Song.Models.Song>("song");
 
-                    try
-                    {
-                        songService.Add(song);
-                    }
-                    catch (ValidationException e)
-                    {
-                        validationProvider.AddModelErrors(e);
-                    }
+                    songService.Add(song);
+                    
                     return song;
                 });
         }

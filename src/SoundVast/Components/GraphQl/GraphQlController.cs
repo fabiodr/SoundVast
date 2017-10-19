@@ -37,7 +37,7 @@ namespace SoundVast.Components.GraphQl
                 Query = _query,
                 Mutation = _mutation
             };
-          
+
             var executionResult = await new DocumentExecuter().ExecuteAsync(_ =>
             {
                 _.Schema = schema;
@@ -47,12 +47,12 @@ namespace SoundVast.Components.GraphQl
 
             if (_validationProvider.HasErrors)
             {
-                return BadRequest(_validationProvider.ModelErrors);
+                return BadRequest(_validationProvider.ValidationErrors);
             }
-            
+
             if (executionResult?.Errors?.Count > 0)
             {
-                return BadRequest(executionResult.Errors);
+                return StatusCode((int)HttpStatusCode.InternalServerError, executionResult.Errors);
             }
 
             return Ok(executionResult);

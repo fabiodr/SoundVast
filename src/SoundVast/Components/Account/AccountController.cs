@@ -87,7 +87,7 @@ namespace SoundVast.Components.Account
                 ModelState.AddModelError(ModelError, "Invalid login attempt.");
             }
 
-            return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ConvertToJson());
+            return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ConvertErrorsToJson());
         }
 
         [HttpPost]
@@ -125,7 +125,7 @@ namespace SoundVast.Components.Account
                 AddErrors(result);
             }
 
-            return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ConvertToJson());
+            return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ConvertErrorsToJson());
         }
 
         [HttpPost]
@@ -159,7 +159,7 @@ namespace SoundVast.Components.Account
             {
                 ModelState.AddModelError(ModelError, $"Error from external provider: {remoteError}");
 
-                return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ConvertToJson());
+                return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ConvertErrorsToJson());
             }
             var info = await _signInManager.GetExternalLoginInfoAsync();
             if (info == null)
@@ -227,7 +227,7 @@ namespace SoundVast.Components.Account
                 AddErrors(result);
             }
 
-            return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ConvertToJson());
+            return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ConvertErrorsToJson());
         }
 
         [HttpGet]
@@ -258,7 +258,7 @@ namespace SoundVast.Components.Account
                 {
                     ModelState.AddModelError(ModelError, "We couldn't find that email address");
 
-                    return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ConvertToJson());
+                    return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ConvertErrorsToJson());
                 }
 
                 // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
@@ -277,7 +277,7 @@ namespace SoundVast.Components.Account
                 });
             }
 
-            return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ConvertToJson());
+            return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ConvertErrorsToJson());
         }
 
         [HttpPost]
@@ -287,7 +287,7 @@ namespace SoundVast.Components.Account
         {
             if (!ModelState.IsValid)
             {
-                return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ConvertToJson());
+                return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ConvertErrorsToJson());
             }
             var user = await _userManager.FindByIdAsync(model.UserId);
             var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
@@ -299,7 +299,7 @@ namespace SoundVast.Components.Account
 
             AddErrors(result);
 
-            return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ConvertToJson());
+            return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ConvertErrorsToJson());
         }
 
         private void AddErrors(IdentityResult result)

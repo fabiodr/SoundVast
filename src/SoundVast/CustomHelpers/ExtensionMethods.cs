@@ -130,9 +130,22 @@ namespace SoundVast.CustomHelpers
             profile.IgnoreUnmapped(typeof(TSrc), typeof(TDest));
         }
 
-        public static string ConvertToJson(this ModelStateDictionary modelStateDictionary)
+        public static string ConvertErrorsToJson(this ModelStateDictionary modelStateDictionary)
         {
             var modelStateErrors = modelStateDictionary.ToDictionary(x => x.Key, x => x.Value.Errors.Select(e => e.ErrorMessage));
+            var validErrormessages = modelStateErrors.Where(z => z.Value.Any()).ToDictionary(x => x.Key, x => x.Value);
+            var serializerSettings = new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
+            var jsonString = JsonConvert.SerializeObject(validErrormessages, serializerSettings);
+
+            return jsonString;
+        }
+
+        public static string ConvertToJson(this ICollection<KeyValuePair<string, string>> keyValuePairs)
+        {
+            var modelStateErrors = keyValuePairs.ToDictionary(x => x.Key, x => x.Value);
             var validErrormessages = modelStateErrors.Where(z => z.Value.Any()).ToDictionary(x => x.Key, x => x.Value);
             var serializerSettings = new JsonSerializerSettings
             {

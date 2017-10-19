@@ -106,7 +106,7 @@ namespace SoundVastTests.Components.Upload
             var result = (ObjectResult)_uploadController.SaveLiveStream(new SaveLiveStreamViewModel());
 
             result.StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
-            result.Value.Should().Be(_uploadController.ModelState.ConvertToJson());
+            result.Value.Should().Be(_uploadController.ModelState.ConvertErrorsToJson());
         }
 
         [Test]
@@ -150,7 +150,7 @@ namespace SoundVastTests.Components.Upload
             var result = (ObjectResult)_uploadController.SaveSong(new SaveSongViewModel());
 
             result.StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
-            result.Value.Should().Be(_uploadController.ModelState.ConvertToJson());
+            result.Value.Should().Be(_uploadController.ModelState.ConvertErrorsToJson());
         }
 
         [Test]
@@ -217,7 +217,7 @@ namespace SoundVastTests.Components.Upload
             var result = (ObjectResult)await _uploadController.UploadCoverImage(mockFile.Object);
 
             result.StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
-            result.Value.Should().Be(_uploadController.ModelState.ConvertToJson());
+            result.Value.Should().Be(_uploadController.ModelState.ConvertErrorsToJson());
         }
 
         [Test]
