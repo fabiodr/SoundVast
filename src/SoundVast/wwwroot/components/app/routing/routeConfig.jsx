@@ -3,10 +3,10 @@ import makeRouteConfig from 'found/lib/makeRouteConfig';
 import Route from 'found/lib/Route';
 
 import PrimaryLayout from '../../layouts/primaryLayout/primaryLayout';
-import SocialLoginConfirmation from '../../account/login/socialLogin/confirmation/component';
-import SocialLoginFailure from '../../account/login/socialLogin/failure/component';
-import ResetPassword from '../../account/resetPassword/form/container';
-import ConfirmedEmailSuccess from '../../account/confirmedEmailSuccess/container';
+import SocialLoginConfirmation from '../../account/login/socialLogin/socialLoginConfirmation';
+import SocialLoginFailure from '../../account/login/socialLogin/socialLoginFailure';
+import ResetPassword from '../../account/resetPassword/resetPasswordContainer';
+import ConfirmedEmailSuccess from '../../account/confirmedEmailSuccess/confirmedEmailSuccessContainer';
 import Profile from '../../user/profile/container';
 import Upload from '../../upload/component';
 import Songs, { query as songsQuery } from '../../songs/songsContainer';

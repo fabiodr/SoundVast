@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Header from '../../header/component';
-import Account from '../../account/container';
-import FooterPlaylist from '../../footerPlaylist/container';
-import Content from '../../content/component';
+import Header from '../../header/header';
+import Account from '../../account/accountContainer';
+import FooterPlaylist from '../../footerPlaylist/footerPlaylistContainer';
+import Content from '../../content/content';
 
 const PrimaryLayout = ({ children }) => (
   <div>

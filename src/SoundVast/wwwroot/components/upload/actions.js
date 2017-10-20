@@ -3,8 +3,8 @@ import shortid from 'shortid';
 
 import fetchProgress from '../shared/polyfills/fetchProgress';
 import trimFileExtension from '../shared/utilities/trimFileExtension';
-import notOkError from '../shared/fetch/errorHandling/notOkError/component';
-import validationError from '../shared/fetch/errorHandling/validationError/component';
+import notOkError from '../shared/fetch/notOkError/notOkError';
+import validationError from '../shared/fetch/validationError/validationError';
 import { showGenericErrorPopup } from '../shared/popup/actions';
 
 const coverImagePlaceholderPath = '../../images/logo/icon/SV_Icon.svg';

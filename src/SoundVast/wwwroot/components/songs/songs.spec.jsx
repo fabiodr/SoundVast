@@ -3,8 +3,8 @@ import expect from 'expect';
 import { shallow } from 'enzyme';
 
 import Songs from './songs';
-import Song from './song/component';
-import Audios from '../audios/component';
+import Song from './song/song';
+import Audios from '../audios/audios';
 
 const setup = (newProps) => {
   const props = {

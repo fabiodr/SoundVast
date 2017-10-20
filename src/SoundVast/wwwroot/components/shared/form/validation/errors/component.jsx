@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import ValidationError from '../error/component';
+import ValidationError from '../error/error';
 
 const Errors = ({ errors }) => (
   <div>

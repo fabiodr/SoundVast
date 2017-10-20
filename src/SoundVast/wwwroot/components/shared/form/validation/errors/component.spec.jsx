@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import expect from 'expect';
 
 import ValidationErrors from './component';
-import ValidationError from '../error/component';
+import ValidationError from '../error/error';
 
 const setup = (newProps) => {
   const props = {
@@ -23,11 +23,8 @@ const setup = (newProps) => {
 };
 
 describe('ValidationErrors', () => {
-  let wrapper;
-  let props;
-
   it('should render ValidationError components for all errors', () => {
-    ({ wrapper, props } = setup());
+    const { wrapper, props } = setup();
 
     expect(wrapper.find(ValidationError).length).toBe(props.errors.length);
   });

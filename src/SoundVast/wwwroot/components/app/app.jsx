@@ -7,7 +7,7 @@ import { Resolver } from 'found-relay';
 
 import 'react-jplaylist/src/less/skins/sleek.less';
 import 'react-jplaylist/src/less/controls/iconControls.less';
-import './component.less';
+import './app.less';
 import Router from './routing/router';
 import store from './store/component';
 import environment from './environment/environment';

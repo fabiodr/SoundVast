@@ -2,7 +2,7 @@ import expect from 'expect';
 
 import genreReducer from './reducer';
 
-describe('userReducer', () => {
+describe('genreReducer', () => {
   it('should return defaultState if undefined', () => {
     const state = genreReducer(undefined, {
       type: 'NONE',
