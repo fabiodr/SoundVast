@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 
-import FormSelect from '../../../../../shared/form/editableField/select/component';
+import FormSelect from '../../../shared/form/editableField/select/select';
 
 const GenreField = ({ id, genres, label }) => (
   <label htmlFor={`genre_${id}`}>{label}

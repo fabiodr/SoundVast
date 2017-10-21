@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'found';
 
-import LinkDropdown from '../../shared/dropDown/container';
+import LinkDropdown from '../../shared/dropDown/dropDownContainer';
 import Logout from '../../account/logout/logoutContainer';
 
 const AuthorizedList = ({ isLoggedIn, userName }) => (

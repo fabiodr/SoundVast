@@ -3,7 +3,7 @@ import expect from 'expect';
 import { shallow } from 'enzyme';
 import { Field } from 'redux-form';
 
-import GenreField from './component';
+import GenreField from './genreField';
 
 const setup = (newProps) => {
   const props = {

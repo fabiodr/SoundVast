@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import styles from '../header.less';
-import ModalLink from '../../shared/modal/link/container';
+import ModalLink from '../../shared/modal/modalLinkContainer';
 
 const UnAuthorizedList = ({ isLoggedIn }) => (
   !isLoggedIn ?

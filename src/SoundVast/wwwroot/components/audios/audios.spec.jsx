@@ -3,7 +3,7 @@ import expect from 'expect';
 import { shallow } from 'enzyme';
 
 import Audios from './audio/audioContainer';
-import InfiniteScrollGrid from '../content/infiniteScrollGrid/component';
+import InfiniteScrollGrid from '../content/infiniteScrollGrid/infiniteScrollGrid';
 
 const setup = (newProps) => {
   const props = {

@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import expect from 'expect';
 
 import SocialLoginConfirmationForm from './socialLoginConfirmationForm';
-import AntiForgeryToken from '../../../shared/form/antiForgeryToken/container';
+import AntiForgeryToken from '../../../shared/form/antiForgeryToken/antiForgeryTokenContainer';
 import ValidationErrors from '../../../shared/form/validation/errors/component';
 
 const setup = (newProps) => {

@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import styles from './socialLogins.less';
-import { hr } from '../../../shared/modal/component.less';
+import { hr } from '../../../shared/modal/modal.less';
 import SocialLoginsButton from './socialLoginsButton';
-import AntiForgeryToken from '../../../shared/form/antiForgeryToken/container';
+import AntiForgeryToken from '../../../shared/form/antiForgeryToken/antiForgeryTokenContainer';
 
 const SocialLogins = ({ loginProviders }) => (
   <form action="account/externalLogin" method="post">

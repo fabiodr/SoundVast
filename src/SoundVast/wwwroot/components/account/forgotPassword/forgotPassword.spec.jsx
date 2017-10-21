@@ -2,10 +2,10 @@ import React from 'react';
 import expect from 'expect';
 import { shallow } from 'enzyme';
 
-import AntiForgeryToken from '../../shared/form/antiForgeryToken/container';
+import AntiForgeryToken from '../../shared/form/antiForgeryToken/antiForgeryTokenContainer';
 import ValidationErrors from '../../shared/form/validation/errors/component';
 import ForgotPassword from './forgotPassword';
-import Modal from '../../shared/modal/container';
+import Modal from '../../shared/modal/modalContainer';
 import ForgotPasswordForm from './forgotPasswordContainer';
 
 const setup = (newProps) => {

@@ -2,9 +2,9 @@ import { reduxForm } from 'redux-form';
 import { compose, lifecycle } from 'recompose';
 import { connect } from 'react-redux';
 
-import ResetPasswordForm from './component';
+import ResetPassword from './resetPassword';
 import { submit } from './actions';
-import accountValidation from '../../validation';
+import accountValidation from '../validation';
 
 const mapDispatchToProps = dispatch => ({
   onSubmit: (values) => {
@@ -34,4 +34,4 @@ export default compose(
       this.props.change('code', code);
     },
   }),
-)(ResetPasswordForm);
+)(ResetPassword);

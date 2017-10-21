@@ -10,7 +10,7 @@ import JPlaylist, {
 } from 'react-jplaylist';
 import { classes } from 'react-jplayer-utils';
 
-import FooterPlaylist from './component';
+import FooterPlaylist from './footerPlaylist';
 
 const setup = (newProps) => {
   const props = {

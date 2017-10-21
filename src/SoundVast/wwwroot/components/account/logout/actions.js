@@ -2,8 +2,8 @@
 
 import { showTextPopup } from '../../shared/popup/actions';
 import { getAccountDetails } from '../actions';
-import notOkError from '../../shared/fetch/errorHandling/notOkError/component';
-import notOkErrorPopup from '../../shared/fetch/errorHandling/notOkError/popup/component';
+import notOkError from '../../shared/fetch/notOkError/notOkError';
+import notOkErrorPopup from '../../shared/fetch/notOkError/popup/popup';
 
 export const submit = formData => dispatch =>
   fetch('/account/logout', {

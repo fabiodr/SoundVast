@@ -1,4 +1,4 @@
-import notOkError from '../shared/fetch/errorHandling/notOkError/component';
+import notOkError from '../shared/fetch/notOkError/notOkError';
 import { showGenericErrorPopup } from '../shared/popup/actions';
 
 const amount = 30;

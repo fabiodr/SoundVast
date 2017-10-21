@@ -3,7 +3,7 @@ import expect from 'expect';
 import { shallow } from 'enzyme';
 
 import AuthorizedList from './authorizedList';
-import LinkDropdown from '../../shared/dropDown/container';
+import LinkDropdown from '../../shared/dropDown/dropDownContainer';
 import Logout from '../../account/logout/logoutContainer';
 
 const setup = (newProps) => {

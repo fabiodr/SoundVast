@@ -5,7 +5,7 @@ import expect from 'expect';
 import SocialLogins from './socialLogins';
 import SocialLoginsErrorMessage from './socialLoginsErrorMessage';
 import SocialLoginsButton from './socialLoginsButton';
-import AntiForgeryToken from '../../../shared/form/antiForgeryToken/container';
+import AntiForgeryToken from '../../../shared/form/antiForgeryToken/antiForgeryTokenContainer';
 
 const setup = (newProps) => {
   const props = {

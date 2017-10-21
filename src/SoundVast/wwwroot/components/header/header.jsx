@@ -6,7 +6,7 @@ import styles from './header.less';
 import AuthorizedList from './authorizedList/authorizedListContainer';
 import UnAuthorizedList from './unAuthorizedList/unAuthorizedListContainer';
 import AdminList from './adminList/adminListContainer';
-import LinkDropdown from '../shared/dropDown/container';
+import LinkDropdown from '../shared/dropDown/dropDownContainer';
 
 const Header = () => (
   <header className={styles.header}>

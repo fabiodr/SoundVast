@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 
-import Modal from '../../shared/modal/container';
-import formStyles from '../../shared/form/component.less';
+import Modal from '../../shared/modal/modalContainer';
+import formStyles from '../../shared/form/form.less';
 import genericStyles from '../../shared/generic.less';
-import AntiForgeryToken from '../../shared/form/antiForgeryToken/container';
-import FormInput from '../../shared/form/editableField/input/component';
+import AntiForgeryToken from '../../shared/form/antiForgeryToken/antiForgeryTokenContainer';
+import FormInput from '../../shared/form/editableField/input/input';
 import ValidationErrors from '../../shared/form/validation/errors/component';
 
 const ForgotPassword = ({ error: errors, handleSubmit }) => (

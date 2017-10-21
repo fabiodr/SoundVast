@@ -6,10 +6,10 @@ import { showTextPopup } from '../../shared/popup/actions';
 import { hideModal } from '../../shared/modal/actions';
 import { getAccountDetails } from '../actions';
 import { sendEmail } from '../../email/actions';
-import ConfirmEmail from '../../email/confirmEmail/component';
-import notOkError from '../../shared/fetch/errorHandling/notOkError/component';
-import notOkErrorPopup from '../../shared/fetch/errorHandling/notOkError/popup/component';
-import validationError from '../../shared/fetch/errorHandling/validationError/component';
+import ConfirmEmail from '../../email/confirmEmail/confirmEmail';
+import notOkError from '../../shared/fetch/notOkError/notOkError';
+import notOkErrorPopup from '../../shared/fetch/notOkError/popup/popup';
+import validationError from '../../shared/fetch/validationError/validationError';
 
 export const submit = formData => dispatch =>
   fetch('/account/register', {

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import InfiniteScrollGrid from '../content/infiniteScrollGrid/component';
+import InfiniteScrollGrid from '../content/infiniteScrollGrid/infiniteScrollGrid';
 
 import Audio from './audio/audioContainer';
 import styles from './audios.less';

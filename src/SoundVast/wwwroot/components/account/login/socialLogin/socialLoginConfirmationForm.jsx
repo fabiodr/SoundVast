@@ -2,8 +2,8 @@ import React from 'react';
 import { Field } from 'redux-form';
 import PropTypes from 'prop-types';
 
-import AntiForgeryToken from '../../../shared/form/antiForgeryToken/container';
-import FormInput from '../../../shared/form/editableField/input/component';
+import AntiForgeryToken from '../../../shared/form/antiForgeryToken/antiForgeryTokenContainer';
+import FormInput from '../../../shared/form/editableField/input/input';
 import genericStyles from '../../../shared/generic.less';
 import ValidationErrors from '../../../shared/form/validation/errors/component';
 

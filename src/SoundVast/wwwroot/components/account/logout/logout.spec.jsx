@@ -3,7 +3,7 @@ import expect from 'expect';
 import { shallow } from 'enzyme';
 
 import Logout from './logout';
-import AntiForgeryToken from '../../shared/form/antiForgeryToken/container';
+import AntiForgeryToken from '../../shared/form/antiForgeryToken/antiForgeryTokenContainer';
 
 const setup = (newProps) => {
   const props = {

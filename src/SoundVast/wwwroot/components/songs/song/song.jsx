@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import styles from './component.less';
+import styles from './song.less';
 import Like from './like/likeContainer';
 import Dislike from './dislike/dislikeContainer';
 

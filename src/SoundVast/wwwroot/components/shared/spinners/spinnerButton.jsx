@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Spinner from '../../../../images/spinners/ellipsis.svg';
+import Spinner from '../../../images/spinners/ellipsis.svg';
 
 const SpinnerButton = ({ isLoading, children }) => (
   <button>

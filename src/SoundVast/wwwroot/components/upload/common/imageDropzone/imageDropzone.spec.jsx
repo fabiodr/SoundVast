@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import Dropzone from 'react-dropzone';
 
 import ImageDropzone from './imageDropzone';
-import PreviewImage from '../previewImage/container';
+import PreviewImage from '../previewImage/previewImageContainer';
 
 const setup = (newProps) => {
   const props = {

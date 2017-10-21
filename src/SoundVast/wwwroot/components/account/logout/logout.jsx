@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import AntiForgeryToken from '../../shared/form/antiForgeryToken/container';
+import AntiForgeryToken from '../../shared/form/antiForgeryToken/antiForgeryTokenContainer';
 
 const Logout = ({ handleSubmit }) => (
   <form onSubmit={handleSubmit} action="">

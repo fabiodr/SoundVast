@@ -7,11 +7,11 @@ import SocialLoginConfirmation from '../../account/login/socialLogin/socialLogin
 import SocialLoginFailure from '../../account/login/socialLogin/socialLoginFailure';
 import ResetPassword from '../../account/resetPassword/resetPasswordContainer';
 import ConfirmedEmailSuccess from '../../account/confirmedEmailSuccess/confirmedEmailSuccessContainer';
-import Profile from '../../user/profile/container';
-import Upload from '../../upload/component';
+import Profile from '../../user/profile/userProfileContainer';
+import Upload from '../../upload/upload';
 import Songs, { query as songsQuery } from '../../songs/songsContainer';
 // import Radios from '../../radios/container';
-import Error from '../../error/component';
+import Error from '../../error/error';
 
 export default makeRouteConfig(
   <Route path="/">

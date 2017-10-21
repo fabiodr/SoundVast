@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 
-import FormInput from '../../../../../shared/form/editableField/input/component';
+import FormInput from '../../../shared/form/editableField/input/input';
 
 const NameField = ({ id, label }) => (
   <label htmlFor={`name_${id}`}>{label} *

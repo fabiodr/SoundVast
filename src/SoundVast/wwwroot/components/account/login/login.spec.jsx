@@ -3,9 +3,9 @@ import expect from 'expect';
 import { shallow } from 'enzyme';
 
 import Login from './login';
-import SocialLoginsContainer from '../login/socialLogins/container';
-import Modal from '../../shared/modal/container';
-import AntiForgeryToken from '../../shared/form/antiForgeryToken/container';
+import SocialLoginsContainer from '../login/socialLogins/socialLoginsContainer';
+import Modal from '../../shared/modal/modalContainer';
+import AntiForgeryToken from '../../shared/form/antiForgeryToken/antiForgeryTokenContainer';
 import ValidationErrors from '../../shared/form/validation/errors/component';
 
 const setup = (newProps) => {

@@ -2,8 +2,8 @@ import React from 'react';
 import expect from 'expect';
 import { shallow } from 'enzyme';
 
-import SpinnerButton from './component';
-import Spinner from '../../../../images/spinners/ellipsis.svg';
+import SpinnerButton from './spinnerButton';
+import Spinner from '../../../images/spinners/ellipsis.svg';
 
 const setup = (newProps) => {
   const props = {

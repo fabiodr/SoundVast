@@ -3,10 +3,9 @@ import expect from 'expect';
 import { shallow } from 'enzyme';
 
 import Register from './register';
-import Modal from '../../shared/modal/container';
+import Modal from '../../shared/modal/modalContainer';
 import SocialLoginsContainer from '../login/socialLogins/socialLoginsContainer';
-import RegisterForm from './form/container';
-import AntiForgeryToken from '../../shared/form/antiForgeryToken/container';
+import AntiForgeryToken from '../../shared/form/antiForgeryToken/antiForgeryTokenContainer';
 import ValidationErrors from '../../shared/form/validation/errors/component';
 
 const setup = (newProps) => {
@@ -31,11 +30,12 @@ describe('Register', () => {
     expect(modal.find(SocialLoginsContainer).length).toBe(1);
   });
 
-  it('should render a register form in a Modal', () => {
+  it('should render a form in a Modal', () => {
     const { wrapper } = setup();
     const modal = wrapper.find(Modal);
+    const form = modal.find('form');
 
-    expect(modal.find(RegisterForm).length).toBe(1);
+    expect(modal.find(form).length).toBe(1);
   });
 
   it('should render an anti-forgery token', () => {
