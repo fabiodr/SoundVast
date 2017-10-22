@@ -2,11 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 
+import genreTypeNames from '../../../genre/genreTypeNames';
 import styles from '../../common/basicInfo/basicInfo.less';
 import ImageDropzone from '../../common/imageDropzone/imageDropzoneContainer';
 import FormInput from '../../../shared/form/editableField/input/input';
 import NameField from '../../common/fields/nameField';
-import GenreField from '../../common/fields/genreField';
+import GenreField from '../../common/fields/genreFieldContainer';
 
 const BasicInfo = ({ id }) => (
   <div className={styles.basicInfo}>
@@ -18,7 +19,7 @@ const BasicInfo = ({ id }) => (
         <Field name="artist" id={`artist_${id}`} component={FormInput} />
       </label>
 
-      <GenreField id={id} />
+      <GenreField id={id} type={genreTypeNames.music} />
     </div>
   </div>
 );

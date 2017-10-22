@@ -1,11 +1,17 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using GraphQL;
 using GraphQL.Types;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Newtonsoft.Json;
 using SoundVast.Components.GraphQl.Models;
 using SoundVast.Components.Song;
@@ -29,20 +35,20 @@ namespace SoundVast.Components.GraphQl
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] GraphQlQuery graphQlQuery)
+        public async Task<IActionResult> Post(GraphQlQuery graphQlQuery)
         {
-            var inputs = JsonConvert.SerializeObject(graphQlQuery.Variables).ToInputs();
+            var inputs = graphQlQuery.Variables.ToInputs();
             var schema = new Schema
             {
                 Query = _query,
                 Mutation = _mutation
             };
-
             var executionResult = await new DocumentExecuter().ExecuteAsync(_ =>
             {
                 _.Schema = schema;
                 _.Query = graphQlQuery.Query;
                 _.Inputs = inputs;
+                _.UserContext = graphQlQuery.Uploadables;
             });
 
             if (_validationProvider.HasErrors)

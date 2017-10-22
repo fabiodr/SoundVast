@@ -1,19 +1,9 @@
-const defaultState = {
-  musicGenres: [],
-  liveStreamGenres: [],
-};
-
-export default (state = defaultState, action) => {
+export default (state = {}, action) => {
   switch (action.type) {
-    case 'GET_MUSIC_GENRES':
+    case 'SET_GENRES':
       return {
         ...state,
-        musicGenres: action.musicGenres,
-      };
-    case 'GET_LIVE_STREAM_GENRES':
-      return {
-        ...state,
-        liveStreamGenres: action.liveStreamGenres,
+        genres: action.genres,
       };
     default: return state;
   }

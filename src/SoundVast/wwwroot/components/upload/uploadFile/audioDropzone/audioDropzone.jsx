@@ -49,6 +49,7 @@ AudioDropzone.propTypes = {
       id: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
       progressPercent: PropTypes.number,
+      coverImageUrl: PropTypes.string.isRequired,
     }).isRequired,
   ).isRequired,
 };

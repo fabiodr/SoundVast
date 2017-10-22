@@ -1,10 +1,18 @@
 import { connect } from 'react-redux';
+import { compose, withHandlers } from 'recompose';
 
 import ImageDropzone from './imageDropzone';
-import { updateCoverImage, removeCoverImage } from '../../actions';
+import { removeCoverImage } from '../../actions';
+import uploadImageMutation from './uploadImageMutation';
 
-export default connect(null, {
-  onDrop: (file, id) => updateCoverImage(id, file),
-  // TODO: Implement in component
-  removeFile: removeCoverImage,
-})(ImageDropzone);
+const enhance = compose(
+  connect(null, {
+    // TODO: Implement in component
+    removeFile: removeCoverImage,
+  }),
+  withHandlers({
+    onDrop: () => uploadImageMutation,
+  }),
+);
+
+export default enhance(ImageDropzone);

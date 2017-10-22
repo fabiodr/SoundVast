@@ -8,7 +8,7 @@ import SocialLoginFailure from '../../account/login/socialLogin/socialLoginFailu
 import ResetPassword from '../../account/resetPassword/resetPasswordContainer';
 import ConfirmedEmailSuccess from '../../account/confirmedEmailSuccess/confirmedEmailSuccessContainer';
 import Profile from '../../user/profile/userProfileContainer';
-import Upload from '../../upload/upload';
+import Upload, { query as uploadQuery } from '../../upload/upload';
 import Songs, { query as songsQuery } from '../../songs/songsContainer';
 // import Radios from '../../radios/container';
 import Error from '../../error/error';
@@ -25,7 +25,7 @@ export default makeRouteConfig(
         <Route path="resetPassword" Component={ResetPassword} />
         <Route path="successfullyConfirmedEmail" Component={ConfirmedEmailSuccess} />
       </Route>
-      <Route path="upload" Component={Upload} />
+      <Route path="upload" Component={Upload} query={uploadQuery} />
       <Route path="profile" Component={Profile} />
       <Route path="error" Component={Error} />
     </Route>

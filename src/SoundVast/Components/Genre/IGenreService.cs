@@ -9,7 +9,6 @@ namespace SoundVast.Components.Genre
     public interface IGenreService
     {
        // ICollection<Genre> GetGenresInCategory(string category);
-        ICollection<Models.Genre> GetMusicGenres();
-        ICollection<Models.Genre> GetLiveStreamGenres();
+        ICollection<Models.Genre> GetGenres();
     }
 }

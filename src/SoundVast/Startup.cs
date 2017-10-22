@@ -193,6 +193,8 @@ namespace SoundVast
             builder.RegisterType<Repository<LiveStream, ApplicationDbContext>>().As<IRepository<LiveStream>>();
             builder.RegisterType<Repository<Genre, ApplicationDbContext>>().As<IRepository<Genre>>();
 
+            builder.RegisterType<Uploader>().As<IUploader>();
+
             return builder;
         }
 

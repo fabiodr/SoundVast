@@ -21,14 +21,9 @@ namespace SoundVast.Components.Genre
         //    return _repository.GetAll().Where(x => x.Category.Name == category).ToList();
         //}
 
-        public ICollection<Models.Genre> GetMusicGenres()
+        public ICollection<Models.Genre> GetGenres()
         {
-            return _repository.GetAll().Where(x => x.Type == GenreName.Music).ToList();
-        }
-
-        public ICollection<Models.Genre> GetLiveStreamGenres()
-        {
-            return _repository.GetAll().Where(x => x.Type == GenreName.LiveStream).ToList();
+            return _repository.GetAll().ToList();
         }
     }
 }

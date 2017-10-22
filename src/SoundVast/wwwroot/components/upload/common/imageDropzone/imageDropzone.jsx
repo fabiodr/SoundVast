@@ -13,7 +13,7 @@ const ImageDropzone = ({ onDrop, id }) => (
       className={styles.imageDropzone}
       accept="image/*"
       multiple={false}
-      onDrop={files => onDrop(files[0], id)}
+      onDrop={files => onDrop(id, files[0])}
     >
       <PreviewImage id={id} />
       <div className={dropzoneStyles.placeholder}>

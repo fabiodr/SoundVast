@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import 'isomorphic-fetch';
 import { injectReactEmailAttributes } from 'react-html-email';
 import { Resolver } from 'found-relay';
 
@@ -11,7 +10,7 @@ import './app.less';
 import Router from './routing/router';
 import store from './store/component';
 import environment from './environment/environment';
-import TextPopup from '../shared/popup/container';
+import TextPopup from '../shared/popup/popupContainer';
 
 injectReactEmailAttributes();
 

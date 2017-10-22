@@ -1,8 +1,9 @@
 import React from 'react';
 import expect from 'expect';
 import { shallow } from 'enzyme';
+import { TabPanel } from 'react-tabs';
 
-import FileInformation from './fileInformation';
+import FileBasicInfo from './fileBasicInfo';
 import ValidationErrors from '../../../shared/form/validation/errors/component';
 import UploadFileForm from './uploadFileForm';
 import SpinnerSubmit from '../../../shared/form/spinnerSubmit/spinnerSubmitContainer';
@@ -13,6 +14,7 @@ const setup = (newProps) => {
     handleSubmit: expect.createSpy(),
     remove: expect.createSpy(),
     form: 'upload_0',
+    id: 'test',
     ...newProps,
   };
 
@@ -25,10 +27,10 @@ const setup = (newProps) => {
 };
 
 describe('UploadFileForm', () => {
-  it('should render FileInformation', () => {
+  it('should render BasicInfo', () => {
     const { wrapper } = setup();
 
-    expect(wrapper.find(FileInformation).length).toBe(1);
+    expect(wrapper.find(TabPanel).find(FileBasicInfo).length).toBe(1);
   });
 
   it('should call submit handler when form is submitted', () => {

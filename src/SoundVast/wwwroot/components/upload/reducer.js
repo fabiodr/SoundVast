@@ -28,14 +28,29 @@ export default (state = defaultState, action) => {
     case 'UPDATE_COVER_IMAGE': {
       const coverImages = { ...state.coverImages };
 
-      coverImages[action.id] = action.file;
-      coverImages[action.id].previewUrl = URL.createObjectURL(action.file);
+      coverImages[action.id] = {
+        imagePath: action.imagePath,
+      };
 
       return {
         ...state,
         coverImages,
       };
     }
+    // case 'UPDATE_COVER_IMAGE': {
+    //   const coverImages = { ...state.coverImages };
+    //   const audioFiles = [...state.audioFiles];
+
+    //   coverImages[action.id] = action.file;
+    //   coverImages[action.id].previewUrl = URL.createObjectURL(action.file);
+    //   audioFiles[action.id].imagePath = action.imagePath;
+
+    //   return {
+    //     ...state,
+    //     coverImages,
+    //     audioFiles,
+    //   };
+    // }
     case 'REMOVE_COVER_IMAGE': {
       const coverImages = [...state.coverImages];
 

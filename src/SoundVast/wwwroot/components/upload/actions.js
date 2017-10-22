@@ -92,12 +92,6 @@ export const convertToMp3 = (file, id) => (dispatch) => {
     });
 };
 
-export const updateCoverImage = (id, file) => ({
-  type: 'UPDATE_COVER_IMAGE',
-  id,
-  file,
-});
-
 export const removeCoverImage = index => ({
   type: 'REMOVE_PREVIEW_IMAGE',
   index,
@@ -183,11 +177,16 @@ export const addLiveStream = () => (dispatch) => {
   });
 };
 
-export const uploadCoverImage = id => (dispatch, getState) => {
-  const coverImage = getState().upload.coverImages[id];
+export const updateCoverImage = (audioId, imagePath) => ({
+  type: 'UPDATE_COVER_IMAGE',
+  id: audioId,
+  imagePath,
+});
+
+export const uploadCoverImage = (id, file) => (dispatch) => {
   const formData = new FormData();
 
-  formData.set('file', coverImage);
+  formData.set('file', file);
 
   return fetch('/upload/uploadCoverImage', {
     method: 'post',
@@ -195,27 +194,32 @@ export const uploadCoverImage = id => (dispatch, getState) => {
   }).then(validationError)
     .then(notOkError)
     .then(response => response.json())
-    .then(json => json.imagePath)
+    .then(json => dispatch({
+      type: 'UPDATE_COVER_IMAGE',
+      id,
+      file,
+      imagePath: json.imagePath,
+    }))
     .catch(error => dispatch(showGenericErrorPopup(error)));
 };
 
-const submit = (url, id, { __RequestVerificationToken, ...values }) => dispatch =>
-  dispatch(uploadCoverImage(id)).then(coverImageUrl =>
-    fetch(url, {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-        RequestVerificationToken: __RequestVerificationToken,
-      },
-      body: JSON.stringify({
-        ...values,
-        coverImageUrl,
-      }),
-      credentials: 'same-origin',
-    }).then(validationError)
-      .then(notOkError)
-      .catch(error => dispatch(showGenericErrorPopup(error))));
+// const submit = (url, id, { __RequestVerificationToken, ...values }) => dispatch =>
+//   dispatch(uploadCoverImage(id)).then(coverImageUrl =>
+//     fetch(url, {
+//       method: 'post',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         RequestVerificationToken: __RequestVerificationToken,
+//       },
+//       body: JSON.stringify({
+//         ...values,
+//         coverImageUrl,
+//       }),
+//       credentials: 'same-origin',
+//     }).then(validationError)
+//       .then(notOkError)
+//       .catch(error => dispatch(showGenericErrorPopup(error))));
 
-export const submitLiveStream = (id, values) => dispatch => submit('/upload/saveLiveStream', id, values)(dispatch);
+// export const submitLiveStream = (id, values) => dispatch => submit('/upload/saveLiveStream', id, values)(dispatch);
 
 // export const submitFile = (id, values) => dispatch => submit('/upload/saveSong', id, values)(dispatch);

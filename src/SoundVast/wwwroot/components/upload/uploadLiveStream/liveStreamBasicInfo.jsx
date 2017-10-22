@@ -6,7 +6,8 @@ import styles from '../common/basicInfo/basicInfo.less';
 import ImageDropzone from '../common/imageDropzone/imageDropzoneContainer';
 import FormInput from '../../shared/form/editableField/input/input';
 import NameField from '../common/fields/nameField';
-import GenreField from './genreFieldContainer';
+import GenreField from '../common/fields/genreFieldContainer';
+import genreTypeNames from '../../genre/genreTypeNames';
 
 const BasicInfo = ({ id }) => (
   <div className={styles.basicInfo}>
@@ -18,7 +19,7 @@ const BasicInfo = ({ id }) => (
         <Field name="liveStreamURL" id={`liveStreamURL_${id}`} component={FormInput} />
       </label>
 
-      <GenreField id={id} />
+      <GenreField id={id} type={genreTypeNames.liveStream} />
     </div>
   </div>
 );

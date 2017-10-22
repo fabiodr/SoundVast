@@ -5,7 +5,7 @@ import SoundVastTitle from '../shared/title/soundVastTitle';
 import Song from './song/song';
 import Audios from '../audios/audios';
 
-const Songs = ({ songs, fetchNextSongs, getPlaylist, hasMore }) => (
+const Songs = ({ songs, fetchNextSongs, getPlaylist, hasMore, ...props }) => (
   <SoundVastTitle title="Songs">
     <Audios
       audios={songs}

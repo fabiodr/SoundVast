@@ -1,7 +1,6 @@
-import React from 'react';
 import { connect } from 'react-redux';
-import { compose, withHandlers, flattenProp } from 'recompose';
-import { graphql, createFragmentContainer } from 'react-relay';
+import { compose, withHandlers } from 'recompose';
+import { graphql } from 'react-relay';
 import { fragmentContainer } from 'recompose-relay-modern';
 
 import { fetchNextSongs } from './actions';
