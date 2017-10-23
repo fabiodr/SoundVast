@@ -1,7 +1,6 @@
 import { graphql, commitMutation } from 'react-relay';
 
 import environment from '../../../app/environment/environment';
-import { updateCoverImage } from '../../actions';
 
 const mutation = graphql`
   mutation uploadImageMutation {
@@ -11,7 +10,9 @@ const mutation = graphql`
 
 export default (id, file) => {
   commitMutation(environment, {
-    onCompleted: () => updateCoverImage(id, file),
+    upadater: (proxyStore) => {
+      debugger
+    },
     mutation,
     uploadables: {
       file,

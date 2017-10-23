@@ -6,6 +6,14 @@ import { fragmentContainer } from 'recompose-relay-modern';
 import { fetchNextSongs } from './actions';
 import Songs from './songs';
 
+const fragment = graphql`
+fragment songsContainer_songs on Song @relay(plural: true) {
+  id,
+  name
+  coverImageUrl,
+  artist,
+}`;
+
 const mapStateToProps = ({ music }) => ({
   // songs: music.songs,
   hasMore: music.hasMore,
@@ -33,14 +41,7 @@ export const query = graphql`
 `;
 
 const enhance = compose(
-  fragmentContainer(graphql`
-    fragment songsContainer_songs on Song @relay(plural: true) {
-      id,
-      name
-      coverImageUrl,
-      artist,
-    }`,
-  ),
+  fragmentContainer(fragment),
   connect(mapStateToProps, {
     fetchNextSongs,
   }),

@@ -1,6 +1,8 @@
 import { reduxForm } from 'redux-form';
 import { compose, withHandlers, flattenProp } from 'recompose';
 import { connect } from 'react-redux';
+import { graphql } from 'react-relay';
+import { fragmentContainer } from 'recompose-relay-modern';
 
 import UploadFileForm from './uploadFileForm';
 import { submitFile, removeMusicForm } from '../../actions';
@@ -13,7 +15,6 @@ const mapStateToProps = ({ upload }, { index, id }) => ({
     name: upload.audioFiles[index].title,
     artist: upload.audioFiles[index].artist,
   },
-  coverImage: upload.coverImages[id],
 });
 
 const mapDispatchToProps = (dispatch, { id, index }) => ({

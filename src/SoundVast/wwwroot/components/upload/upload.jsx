@@ -11,7 +11,7 @@ import authorizedComponent from '../shared/authorizedComponent/authorizedCompone
 import { addLiveStream } from './actions';
 import { setGenres } from '../genre/actions';
 
-const Upload = () => (
+const Upload = (props) => (
   <div className={styles.upload}>
     <h3>Upload</h3>
 
@@ -40,6 +40,7 @@ export const query = graphql`
     genres {
       ...genreFieldContainer_genres
     }
+    ...uploadImageMutation
   }
 `;
 
