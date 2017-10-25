@@ -34,7 +34,7 @@ namespace SoundVast.Components.GraphQl
                     return song;
                 });
 
-            Field<StringGraphType>("uploadImage",
+            Field<UploadImageType>("uploadImage",
                 resolve: UploadImage);
         }
 
@@ -43,7 +43,10 @@ namespace SoundVast.Components.GraphQl
             var files = context.UserContext.As<IFormFileCollection>();
             var imagePath = await _uploader.UploadImage(files[0]);
 
-            return imagePath;
+            return new
+            {
+                imagePath
+            };
         }
     }
 }

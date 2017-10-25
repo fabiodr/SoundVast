@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 2cdf6771dc6a4a06c614de7ed8345e56
+ * @relayHash ae7642db2c081db45ad4e41af7febbc4
  */
 
 /* eslint-disable */
@@ -11,14 +11,18 @@
 import type {ConcreteBatch} from 'relay-runtime';
 export type uploadImageMutationVariables = {| |};
 export type uploadImageMutationResponse = {|
-  +uploadImage: ?string;
+  +uploadImage: ?{|
+    +imagePath: ?string;
+  |};
 |};
 */
 
 
 /*
 mutation uploadImageMutation {
-  uploadImage
+  uploadImage {
+    imagePath
+  }
 }
 */
 
@@ -30,10 +34,21 @@ const batch /*: ConcreteBatch*/ = {
     "name": "uploadImageMutation",
     "selections": [
       {
-        "kind": "ScalarField",
+        "kind": "LinkedField",
         "alias": null,
         "args": null,
+        "concreteType": "UploadImage",
         "name": "uploadImage",
+        "plural": false,
+        "selections": [
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "args": null,
+            "name": "imagePath",
+            "storageKey": null
+          }
+        ],
         "storageKey": null
       }
     ],
@@ -50,15 +65,26 @@ const batch /*: ConcreteBatch*/ = {
     "operation": "mutation",
     "selections": [
       {
-        "kind": "ScalarField",
+        "kind": "LinkedField",
         "alias": null,
         "args": null,
+        "concreteType": "UploadImage",
         "name": "uploadImage",
+        "plural": false,
+        "selections": [
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "args": null,
+            "name": "imagePath",
+            "storageKey": null
+          }
+        ],
         "storageKey": null
       }
     ]
   },
-  "text": "mutation uploadImageMutation {\n  uploadImage\n}\n"
+  "text": "mutation uploadImageMutation {\n  uploadImage {\n    imagePath\n  }\n}\n"
 };
 
 module.exports = batch;

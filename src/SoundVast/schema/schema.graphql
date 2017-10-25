@@ -32,7 +32,7 @@ type Genre {
 
 type Mutation {
   saveSong(song: SongInput!): Song
-  uploadImage: String
+  uploadImage: UploadImage
 }
 
 type Query {
@@ -78,6 +78,10 @@ input SongInput {
   coverImageUrl: String!
   genreId: Int
   userId: String!
+}
+
+type UploadImage {
+  imagePath: String
 }
 
 type User {

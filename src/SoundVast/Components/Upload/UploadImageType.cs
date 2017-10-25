@@ -12,14 +12,13 @@ using SoundVast.Components.User;
 
 namespace SoundVast.Components.Upload
 {
-    public class FormFileType : ObjectGraphType<IFormFile>
+    public class UploadImageType : ObjectGraphType<object>
     {
-        public FormFileType()
+        public UploadImageType()
         {
-            Name = "FormFile";
+            Name = "UploadImage";
 
-            Field<IdGraphType>("id");
-            Field<StringGraphType>("filePath");
+            Field<StringGraphType>("imagePath");
         }
     }
 }

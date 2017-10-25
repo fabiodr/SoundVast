@@ -40,7 +40,6 @@ export const query = graphql`
     genres {
       ...genreFieldContainer_genres
     }
-    ...uploadImageMutation
   }
 `;
 

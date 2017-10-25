@@ -4,14 +4,20 @@ import environment from '../../../app/environment/environment';
 
 const mutation = graphql`
   mutation uploadImageMutation {
-    uploadImage
+    uploadImage {
+      imagePath
+    }
   }
 `;
 
 export default (id, file) => {
   commitMutation(environment, {
-    upadater: (proxyStore) => {
+    updater: (proxyStore) => {
       debugger
+      const uploadImage = proxyStore.getRootField('uploadImage');
+      const imagePath = uploadImage.getValue('imagePath');
+
+
     },
     mutation,
     uploadables: {
