@@ -13,6 +13,5 @@ namespace SoundVast.Components.GraphQl.Models
         public string NamedQuery { get; set; }
         public string Query { get; set; }
         public string Variables { get; set; }
-        public IFormFileCollection Uploadables { get; set; }
     }
 }

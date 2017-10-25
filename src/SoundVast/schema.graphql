@@ -1,3 +1,6 @@
+# source: http://localhost:8080/graphql
+# timestamp: Thu Oct 26 2017 01:00:55 GMT+0200 (W. Europe Daylight Time)
+
 interface Audio {
   id: ID
   name: String!
@@ -32,7 +35,6 @@ type Genre {
 
 type Mutation {
   saveSong(song: SongInput!): Song
-  uploadImage: UploadImage
 }
 
 type Query {
@@ -77,11 +79,6 @@ input SongInput {
   artist: String
   coverImageUrl: String!
   genreId: Int
-  userId: String!
-}
-
-type UploadImage {
-  imagePath: String
 }
 
 type User {

@@ -65,7 +65,7 @@ export const convertToMp3 = (file, id) => (dispatch) => {
   }, {
       readystatechange() {
         if (this.readyState === 4) {
-          uploadMp3(this.responseText, id)(dispatch);
+          dispatch(uploadMp3(this.responseText, id));
         }
       },
     }, {
@@ -97,10 +97,34 @@ export const removeCoverImage = index => ({
   index,
 });
 
+export const uploadCoverImage = (id, file) => (dispatch) => {
+  const formData = new FormData();
+
+  formData.set('file', file);
+
+  return fetch('/upload/uploadCoverImage', {
+    method: 'post',
+    body: formData,
+  }).then(validationError)
+    .then(notOkError)
+    .then(response => response.json())
+    .then(json => dispatch({
+      type: 'UPDATE_COVER_IMAGE',
+      id,
+      previewUrl: URL.createObjectURL(file),
+      imagePath: json.imagePath,
+    }))
+    .catch(error => dispatch(showGenericErrorPopup(error)));
+};
+
 const setCoverImagePlaceholder = id => dispatch =>
   fetch(coverImagePlaceholderPath)
     .then(res => res.blob())
-    .then(blob => dispatch(updateCoverImage(id, new File([blob], 'SoundVast', { type: blob.type }))));
+    .then((blob) => {
+      const file = new File([blob], 'SoundVast', { type: blob.type });
+
+      return dispatch(uploadCoverImage(id, file));
+    });
 
 export const uploadAudioFiles = files => (dispatch) => {
   files.forEach((file) => {
@@ -111,8 +135,6 @@ export const uploadAudioFiles = files => (dispatch) => {
         const audioFile = {
           id: shortid.generate(),
         };
-
-        setCoverImagePlaceholder(audioFile.id)(dispatch);
 
         jsmediatags.read(blob, {
           onSuccess: (tag) => {
@@ -131,10 +153,12 @@ export const uploadAudioFiles = files => (dispatch) => {
                 type: tag.tags.picture.format,
               });
 
-              dispatch(updateCoverImage(audioFile.id, coverImage));
+              dispatch(uploadCoverImage(audioFile.id, coverImage));
+            } else {
+              dispatch(setCoverImagePlaceholder(audioFile.id));
             }
 
-            convertToMp3(file, audioFile.id)(dispatch);
+            dispatch(convertToMp3(file, audioFile.id));
           },
           onError: (error) => {
             console.log(error); // eslint-disable-line no-console
@@ -146,7 +170,8 @@ export const uploadAudioFiles = files => (dispatch) => {
               audioFile,
             });
 
-            convertToMp3(file, audioFile.id)(dispatch);
+            dispatch(setCoverImagePlaceholder(audioFile.id));
+            dispatch(convertToMp3(file, audioFile.id));
           },
         });
       })
@@ -167,7 +192,7 @@ export const removeLiveStreamForm = index => ({
 export const addLiveStream = () => (dispatch) => {
   const id = shortid.generate();
 
-  setCoverImagePlaceholder(id)(dispatch);
+  dispatch(setCoverImagePlaceholder(id));
 
   return dispatch({
     type: 'ADD_LIVE_STREAM',
@@ -175,32 +200,6 @@ export const addLiveStream = () => (dispatch) => {
       id,
     },
   });
-};
-
-export const updateCoverImage = (audioId, imagePath) => ({
-  type: 'UPDATE_COVER_IMAGE',
-  id: audioId,
-  imagePath,
-});
-
-export const uploadCoverImage = (id, file) => (dispatch) => {
-  const formData = new FormData();
-
-  formData.set('file', file);
-
-  return fetch('/upload/uploadCoverImage', {
-    method: 'post',
-    body: formData,
-  }).then(validationError)
-    .then(notOkError)
-    .then(response => response.json())
-    .then(json => dispatch({
-      type: 'UPDATE_COVER_IMAGE',
-      id,
-      file,
-      imagePath: json.imagePath,
-    }))
-    .catch(error => dispatch(showGenericErrorPopup(error)));
 };
 
 // const submit = (url, id, { __RequestVerificationToken, ...values }) => dispatch =>
@@ -220,6 +219,6 @@ export const uploadCoverImage = (id, file) => (dispatch) => {
 //       .then(notOkError)
 //       .catch(error => dispatch(showGenericErrorPopup(error))));
 
-// export const submitLiveStream = (id, values) => dispatch => submit('/upload/saveLiveStream', id, values)(dispatch);
+// export const submitLiveStream = (id, values) => dispatch => dispatch(submit('/upload/saveLiveStream', id, values));
 
-// export const submitFile = (id, values) => dispatch => submit('/upload/saveSong', id, values)(dispatch);
+// export const submitFile = (id, values) => dispatch => dispatch(submit('/upload/saveSong', id, values));

@@ -3,7 +3,7 @@ import { graphql, commitMutation } from 'react-relay';
 import environment from '../../../app/environment/environment';
 
 const mutation = graphql`
-  mutation uploadImageMutation {
+  mutation uploadAudioFilesMutation {
     uploadImage {
       imagePath
     }
@@ -12,11 +12,7 @@ const mutation = graphql`
 
 export default (id, file) => {
   commitMutation(environment, {
-    updater: (proxyStore) => {
-      debugger
-      const uploadImage = proxyStore.getRootField('uploadImage');
-      const imagePath = uploadImage.getValue('imagePath');
-
+    onCompleted: (respone) => {
 
     },
     mutation,

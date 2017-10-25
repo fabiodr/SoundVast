@@ -16,7 +16,6 @@ namespace SoundVast.Components.Song
             Field<StringGraphType>("Artist");
             Field<NonNullGraphType<StringGraphType>>("CoverImageUrl");
             Field<IntGraphType>("GenreId");
-            Field<NonNullGraphType<StringGraphType>>("UserId");
         }
     }
 }

@@ -1,5 +1,5 @@
 import { reduxForm } from 'redux-form';
-import { compose, withHandlers, flattenProp } from 'recompose';
+import { compose, withHandlers, flattenProp, withProps } from 'recompose';
 import { connect } from 'react-redux';
 import { graphql } from 'react-relay';
 import { fragmentContainer } from 'recompose-relay-modern';
@@ -11,10 +11,8 @@ import validationError from '../../../shared/fetch/validationError/validationErr
 import saveSongMutation from './saveSongMutation';
 
 const mapStateToProps = ({ upload }, { index, id }) => ({
-  initialValues: {
-    name: upload.audioFiles[index].title,
-    artist: upload.audioFiles[index].artist,
-  },
+  audioFile: upload.audioFiles[index],
+  coverImage: upload.coverImages[id],
 });
 
 const mapDispatchToProps = (dispatch, { id, index }) => ({
@@ -23,13 +21,25 @@ const mapDispatchToProps = (dispatch, { id, index }) => ({
 });
 
 const handlers = {
-  // onSubmit: () => values => saveSongMutation(values),
+  onSubmit: () => saveSongMutation,
 };
+
+const createProps = ({ title, artist, imagePath }) => ({
+  initialValues: {
+    name: title,
+    artist,
+    imagePath,
+  },
+});
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   withHandlers(handlers),
+  flattenProp('coverImage'),
+  flattenProp('audioFile'),
+  withProps(createProps),
   reduxForm({
     validate: uploadValidation,
+    enableReinitialize: true,
   }),
 )(UploadFileForm);
