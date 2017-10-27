@@ -1,5 +1,5 @@
 # source: http://localhost:8080/graphql
-# timestamp: Thu Oct 26 2017 01:00:55 GMT+0200 (W. Europe Daylight Time)
+# timestamp: Fri Oct 27 2017 00:43:09 GMT+0200 (W. Europe Daylight Time)
 
 interface Audio {
   id: ID
@@ -33,8 +33,34 @@ type Genre {
   type: String!
 }
 
+type LiveStream implements Audio {
+  id: ID
+  name: String!
+
+  # The poster image for the live stream
+  coverImageUrl: String!
+  liveStreamUrl: String!
+
+  # The user who uploaded the live stream
+  user: User
+
+  # The genre the live stream belongs to
+  genre: Genre
+
+  # The ratings that have been applied by users to this live stream
+  ratings: [Rating]
+}
+
+input LiveStreamInput {
+  name: String!
+  liveStreamUrl: String!
+  coverImageUrl: String!
+  genreId: Int
+}
+
 type Mutation {
   saveSong(song: SongInput!): Song
+  saveLiveStream(liveStream: LiveStreamInput!): LiveStream
 }
 
 type Query {

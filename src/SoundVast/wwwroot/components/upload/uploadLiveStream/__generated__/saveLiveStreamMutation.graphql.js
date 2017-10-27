@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 99f2b33dfbb64208b54620e04b25d9e1
+ * @relayHash 4cbea0c61c985b3ffb19af8845486cf7
  */
 
 /* eslint-disable */
@@ -9,16 +9,16 @@
 
 /*::
 import type {ConcreteBatch} from 'relay-runtime';
-export type saveSongMutationVariables = {|
+export type saveLiveStreamMutationVariables = {|
   formValues: {
     name: string;
-    artist?: ?string;
+    liveStreamUrl: string;
     coverImageUrl: string;
     genreId?: ?number;
   };
 |};
-export type saveSongMutationResponse = {|
-  +saveSong: ?{|
+export type saveLiveStreamMutationResponse = {|
+  +saveLiveStream: ?{|
     +id: ?string;
   |};
 |};
@@ -26,10 +26,10 @@ export type saveSongMutationResponse = {|
 
 
 /*
-mutation saveSongMutation(
-  $formValues: SongInput!
+mutation saveLiveStreamMutation(
+  $formValues: LiveStreamInput!
 ) {
-  saveSong(song: $formValues) {
+  saveLiveStream(liveStream: $formValues) {
     id
   }
 }
@@ -41,13 +41,13 @@ const batch /*: ConcreteBatch*/ = {
       {
         "kind": "LocalArgument",
         "name": "formValues",
-        "type": "SongInput!",
+        "type": "LiveStreamInput!",
         "defaultValue": null
       }
     ],
     "kind": "Fragment",
     "metadata": null,
-    "name": "saveSongMutation",
+    "name": "saveLiveStreamMutation",
     "selections": [
       {
         "kind": "LinkedField",
@@ -55,13 +55,13 @@ const batch /*: ConcreteBatch*/ = {
         "args": [
           {
             "kind": "Variable",
-            "name": "song",
+            "name": "liveStream",
             "variableName": "formValues",
-            "type": "SongInput!"
+            "type": "LiveStreamInput!"
           }
         ],
-        "concreteType": "Song",
-        "name": "saveSong",
+        "concreteType": "LiveStream",
+        "name": "saveLiveStream",
         "plural": false,
         "selections": [
           {
@@ -80,18 +80,18 @@ const batch /*: ConcreteBatch*/ = {
   "id": null,
   "kind": "Batch",
   "metadata": {},
-  "name": "saveSongMutation",
+  "name": "saveLiveStreamMutation",
   "query": {
     "argumentDefinitions": [
       {
         "kind": "LocalArgument",
         "name": "formValues",
-        "type": "SongInput!",
+        "type": "LiveStreamInput!",
         "defaultValue": null
       }
     ],
     "kind": "Root",
-    "name": "saveSongMutation",
+    "name": "saveLiveStreamMutation",
     "operation": "mutation",
     "selections": [
       {
@@ -100,13 +100,13 @@ const batch /*: ConcreteBatch*/ = {
         "args": [
           {
             "kind": "Variable",
-            "name": "song",
+            "name": "liveStream",
             "variableName": "formValues",
-            "type": "SongInput!"
+            "type": "LiveStreamInput!"
           }
         ],
-        "concreteType": "Song",
-        "name": "saveSong",
+        "concreteType": "LiveStream",
+        "name": "saveLiveStream",
         "plural": false,
         "selections": [
           {
@@ -121,7 +121,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "mutation saveSongMutation(\n  $formValues: SongInput!\n) {\n  saveSong(song: $formValues) {\n    id\n  }\n}\n"
+  "text": "mutation saveLiveStreamMutation(\n  $formValues: LiveStreamInput!\n) {\n  saveLiveStream(liveStream: $formValues) {\n    id\n  }\n}\n"
 };
 
 module.exports = batch;

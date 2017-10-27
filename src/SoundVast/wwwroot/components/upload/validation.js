@@ -7,8 +7,8 @@ const validation = (values) => {
     errors.name = 'Name is required';
   }
 
-  if (!values.liveStreamURL || !noWhiteSpace(values.name)) {
-    errors.liveStreamURL = 'The live stream URL is required';
+  if (!values.liveStreamUrl || !noWhiteSpace(values.liveStreamUrl)) {
+    errors.liveStreamUrl = 'The live stream Url is required';
   }
 
   return errors;

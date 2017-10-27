@@ -3,9 +3,10 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { injectReactEmailAttributes } from 'react-html-email';
 import { Resolver } from 'found-relay';
-
 import 'react-jplaylist/src/less/skins/sleek.less';
 import 'react-jplaylist/src/less/controls/iconControls.less';
+
+import '../shared/fetch/fetch';
 import './app.less';
 import Router from './routing/router';
 import store from './store/component';

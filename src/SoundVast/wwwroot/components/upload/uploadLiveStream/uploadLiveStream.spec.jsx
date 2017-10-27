@@ -3,7 +3,7 @@ import expect from 'expect';
 import { shallow } from 'enzyme';
 
 import UploadLiveStream from './uploadLiveStream';
-import Form from './liveStreamForm';
+import Form from './liveStreamFormContainer';
 
 const setup = (newProps) => {
   const props = {

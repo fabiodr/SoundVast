@@ -9,6 +9,7 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using GraphQL;
 using GraphQL.Types;
+using GraphQL.Validation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -43,21 +44,27 @@ namespace SoundVast.Components.GraphQl
         public async Task<IActionResult> Post([FromBody]GraphQlQuery graphQlQuery)
         {
             var inputs = graphQlQuery.Variables.ToInputs();
-            var userContext = new UserContext
+            var context = new Context
             {
-                UserId = _userManager.GetUserId(User)
+                ApplicationUser = await _userManager.GetUserAsync(HttpContext.User),
+                User = User
             };
             var schema = new Schema
             {
                 Query = _query,
                 Mutation = _mutation
             };
+            var validationRules = new List<IValidationRule>
+            {
+                new RequiresAuthValidationRule(),
+            }.Concat(DocumentValidator.CoreRules());
             var executionResult = await new DocumentExecuter().ExecuteAsync(_ =>
             {
                 _.Schema = schema;
                 _.Query = graphQlQuery.Query;
                 _.Inputs = inputs;
-                _.UserContext = userContext;
+                _.UserContext = context;
+                _.ValidationRules = validationRules;
             });
 
             if (_validationProvider.HasErrors)

@@ -13,10 +13,10 @@ const BasicInfo = ({ id }) => (
   <div className={styles.basicInfo}>
     <ImageDropzone id={id} />
     <div className={styles.formGroup}>
-      <NameField id={id} label="Station Name" />
+      <NameField id={id} />
 
-      <label htmlFor={`liveStreamURL_${id}`}>Live Stream URL *
-        <Field name="liveStreamURL" id={`liveStreamURL_${id}`} component={FormInput} />
+      <label htmlFor={`liveStreamUrl_${id}`}>Live Stream Url *
+        <Field name="liveStreamUrl" id={`liveStreamUrl_${id}`} component={FormInput} />
       </label>
 
       <GenreField id={id} type={genreTypeNames.liveStream} />

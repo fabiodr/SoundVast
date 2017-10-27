@@ -13,7 +13,7 @@ namespace SoundVast.Storage.CloudStorage
         CloudBlockBlob CloudBlockBlob { get; set; }
 
         Task UploadFromStreamAsync(Stream stream, string contentType);
-        Task UploadChunksFromPathAsync(string path, string contentType, long fileLength, string progressId);
+        Task UploadChunksFromPathAsync(string path, string contentType, long fileLength);
         Task DownloadRangeToStreamAsync(Stream target, long? offset, long? length);
     }
 }

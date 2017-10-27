@@ -1,125 +1,28 @@
 import jsmediatags from 'jsmediatags/dist/jsmediatags';
 import shortid from 'shortid';
 
-import fetchProgress from '../shared/polyfills/fetchProgress';
 import trimFileExtension from '../shared/utilities/trimFileExtension';
-import notOkError from '../shared/fetch/notOkError/notOkError';
-import validationError from '../shared/fetch/validationError/validationError';
-import { showGenericErrorPopup } from '../shared/popup/actions';
 
 const coverImagePlaceholderPath = '../../images/logo/icon/SV_Icon.svg';
 
-export const uploadMp3 = (jsonText, id) => (dispatch) => {
-  const body = JSON.parse(jsonText);
-  const eventSource = new EventSource(`upload/uploadProgress?progressId=${id}`);
-
-  body.progressId = id;
-
-  eventSource.onmessage = (e) => {
-    const progressPercent = parseInt(e.data, 10);
-
-    if (progressPercent === 100) {
-      eventSource.close();
-      dispatch({
-        type: 'UPDATE_UPLOAD_PROGRESS',
-        progressPercent,
-        message: 'Successfully uploaded.',
-        id,
-      });
-    } else {
-      dispatch({
-        type: 'UPDATE_UPLOAD_PROGRESS',
-        progressPercent: 50 + (progressPercent / 2),
-        message: 'Uploading to SoundVast...',
-        id,
-      });
-    }
-  };
-
-  fetch('/upload/uploadMp3', {
-    method: 'post',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(body),
-  }).then(notOkError)
-    .then((response) => {
-      if (!response.ok) {
-        eventSource.close();
-      }
-    })
-    .catch((error) => {
-      dispatch(showGenericErrorPopup(error));
-      eventSource.close();
-    });
-};
-
-export const convertToMp3 = (file, id) => (dispatch) => {
-  const formData = new FormData();
-
-  formData.set('file', file);
-
-  fetchProgress('/upload/convertToMp3', {
-    method: 'post',
-    body: formData,
-  }, {
-      readystatechange() {
-        if (this.readyState === 4) {
-          dispatch(uploadMp3(this.responseText, id));
-        }
-      },
-    }, {
-      load: () => {
-        dispatch({
-          type: 'UPDATE_UPLOAD_PROGRESS',
-          progressPercent: 25,
-          id,
-          message: 'Converting to mp3...',
-        });
-      },
-      progress: (e) => {
-        if (e.lengthComputable) {
-          const progressPercent = parseInt((e.loaded / e.total) * 25, 10);
-
-          dispatch({
-            type: 'UPDATE_UPLOAD_PROGRESS',
-            progressPercent,
-            id,
-            message: 'Sending file to server...',
-          });
-        }
-      },
-    });
-};
+export const uploadSong = file => () => fetch.postForm('/upload/uploadSong', { response: 'response' })({ file });
 
 export const removeCoverImage = index => ({
   type: 'REMOVE_PREVIEW_IMAGE',
   index,
 });
 
-export const uploadCoverImage = (id, file) => (dispatch) => {
-  const formData = new FormData();
-
-  formData.set('file', file);
-
-  return fetch('/upload/uploadCoverImage', {
-    method: 'post',
-    body: formData,
-  }).then(validationError)
-    .then(notOkError)
-    .then(response => response.json())
+export const uploadCoverImage = (id, file) => dispatch =>
+  fetch.postForm('/upload/uploadCoverImage')({ file })
     .then(json => dispatch({
       type: 'UPDATE_COVER_IMAGE',
       id,
       previewUrl: URL.createObjectURL(file),
       imagePath: json.imagePath,
-    }))
-    .catch(error => dispatch(showGenericErrorPopup(error)));
-};
+    }));
 
 const setCoverImagePlaceholder = id => dispatch =>
-  fetch(coverImagePlaceholderPath)
-    .then(res => res.blob())
+  fetch.get(coverImagePlaceholderPath, { response: 'blob' })
     .then((blob) => {
       const file = new File([blob], 'SoundVast', { type: blob.type });
 
@@ -128,9 +31,7 @@ const setCoverImagePlaceholder = id => dispatch =>
 
 export const uploadAudioFiles = files => (dispatch) => {
   files.forEach((file) => {
-    fetch(file.preview)
-      .then(notOkError)
-      .then(response => response.blob())
+    fetch.get(file.preview, { response: 'blob' })
       .then((blob) => {
         const audioFile = {
           id: shortid.generate(),
@@ -158,7 +59,7 @@ export const uploadAudioFiles = files => (dispatch) => {
               dispatch(setCoverImagePlaceholder(audioFile.id));
             }
 
-            dispatch(convertToMp3(file, audioFile.id));
+            dispatch(uploadSong(file));
           },
           onError: (error) => {
             console.log(error); // eslint-disable-line no-console
@@ -171,11 +72,10 @@ export const uploadAudioFiles = files => (dispatch) => {
             });
 
             dispatch(setCoverImagePlaceholder(audioFile.id));
-            dispatch(convertToMp3(file, audioFile.id));
+            dispatch(uploadSong(file));
           },
         });
-      })
-      .catch(error => dispatch(showGenericErrorPopup(error)));
+      });
   });
 };
 

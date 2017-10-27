@@ -10,7 +10,10 @@ const graphQLFetcher = graphQLParams =>
     headers: {
       'content-type': 'application/json',
     },
-    body: JSON.stringify(graphQLParams),
+    body: JSON.stringify({
+      ...graphQLParams,
+      variables: JSON.stringify(graphQLParams.variables),
+    }),
   }).then(response => response.json());
 
 ReactDOM.render(<GraphiQL fetcher={graphQLFetcher} />,

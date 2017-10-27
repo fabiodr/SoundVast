@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
@@ -47,7 +48,7 @@ namespace SoundVast.Components.Account
         public async Task<IActionResult> GetAccountDetails()
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
-
+            
             return Ok(new
             {
                 user?.UserName,
@@ -102,6 +103,11 @@ namespace SoundVast.Components.Account
                     UserName = model.Username,
                     Email = model.Email
                 };
+                user.Claims.Add(new IdentityUserClaim<string>
+                {
+                    ClaimType = "Authorization",
+                    ClaimValue = "Authorized"
+                });
 
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
@@ -213,6 +219,11 @@ namespace SoundVast.Components.Account
                     UserName = userName,
                     Email = model.Email
                 };
+                user.Claims.Add(new IdentityUserClaim<string>
+                {
+                    ClaimType = "Authorization",
+                    ClaimValue = "Authorized"
+                });
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {

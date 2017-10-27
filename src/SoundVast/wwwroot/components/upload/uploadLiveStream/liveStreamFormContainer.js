@@ -1,19 +1,37 @@
 import { reduxForm } from 'redux-form';
-import { compose } from 'recompose';
+import { compose, withHandlers, flattenProp, withProps } from 'recompose';
 import { connect } from 'react-redux';
 
 import LiveStreamForm from './liveStreamForm';
 import uploadValidation from '../validation';
-import { submitLiveStream, removeLiveStreamForm } from '../actions';
+import saveLiveStreamMutation from './saveLiveStreamMutation';
+import { removeLiveStreamForm } from '../actions';
 
-const mapDispatchToProps = (dispatch, { id, index }) => ({
-  onSubmit: values => dispatch(submitLiveStream(id, values)),
+const mapStateToProps = ({ upload }, { id }) => ({
+  coverImage: upload.coverImages[id],
+});
+
+const mapDispatchToProps = (dispatch, { index }) => ({
   removeLiveStreamForm: () => dispatch(removeLiveStreamForm(index)),
 });
 
+const handlers = {
+  onSubmit: () => saveLiveStreamMutation,
+};
+
+const createProps = ({ imagePath }) => ({
+  initialValues: {
+    imagePath,
+  },
+});
+
 export default compose(
-  connect(null, mapDispatchToProps),
+  connect(mapStateToProps, mapDispatchToProps),
+  withHandlers(handlers),
+  flattenProp('coverImage'),
+  withProps(createProps),
   reduxForm({
     validate: uploadValidation,
+    enableReinitialize: true,
   }),
 )(LiveStreamForm);

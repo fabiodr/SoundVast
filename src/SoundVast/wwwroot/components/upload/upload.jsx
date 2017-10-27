@@ -11,7 +11,7 @@ import authorizedComponent from '../shared/authorizedComponent/authorizedCompone
 import { addLiveStream } from './actions';
 import { setGenres } from '../genre/actions';
 
-const Upload = (props) => (
+const Upload = () => (
   <div className={styles.upload}>
     <h3>Upload</h3>
 
