@@ -5,9 +5,9 @@ import InfiniteScrollGrid from '../content/infiniteScrollGrid/infiniteScrollGrid
 import Audio from './audio/audioContainer';
 import styles from './audios.less';
 
-const Audios = ({ audios, children, fetchNextAudios, getPlaylist, hasMore }) => (
+const Audios = ({ audios, children, loadMore, getPlaylist, hasMore }) => (
   <div className={styles.audiosContainer}>
-    <InfiniteScrollGrid loadMore={fetchNextAudios} hasMore={hasMore} className={styles.audios}>
+    <InfiniteScrollGrid loadMore={loadMore} hasMore={hasMore} className={styles.audios}>
       {audios.map(audio => (
         <Audio
           key={audio.id}
@@ -34,7 +34,7 @@ Audios.propTypes = {
   ).isRequired,
   getPlaylist: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
-  fetchNextAudios: PropTypes.func.isRequired,
+  loadMore: PropTypes.func.isRequired,
   hasMore: PropTypes.bool.isRequired,
 };
 

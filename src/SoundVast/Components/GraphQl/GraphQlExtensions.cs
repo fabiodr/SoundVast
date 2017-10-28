@@ -50,5 +50,16 @@ namespace SoundVast.Components.GraphQl
             builder.FieldType.AddPermission(permission);
             return builder;
         }
+
+        public static ConnectionArguments GetConnectionArguments<T>(this ResolveConnectionContext<T> ctx)
+        {
+            return new ConnectionArguments
+            {
+                First = ctx.First,
+                After = ctx.After,
+                Last = ctx.Last,
+                Before = ctx.Before,
+            };
+        }
     }
 }

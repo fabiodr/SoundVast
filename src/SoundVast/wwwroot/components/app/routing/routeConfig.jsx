@@ -16,7 +16,7 @@ import Error from '../../error/error';
 export default makeRouteConfig(
   <Route path="/">
     <Route Component={PrimaryLayout}>
-      <Route path="/" Component={Songs} query={songsQuery} />
+      <Route path="/" Component={Songs} query={songsQuery} prepareVariables={params => ({ ...params, first: 2 })} />
       {/* <Route path="/songs" Component={Songs} query={songsQuery} /> */}
       {/* <Route exact path="/radios" component={Radios} /> */}
       <Route path="account">

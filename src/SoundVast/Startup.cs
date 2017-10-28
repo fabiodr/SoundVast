@@ -98,6 +98,12 @@ namespace SoundVast
                 ReferenceLoopHandling.Ignore);
             services.AddCloudscribePagination();
             services.AddMemoryCache();
+            services.AddScoped(_ =>
+                new AppSchema(graphType => {
+                    var type = _.GetService(graphType);
+                    return type ?? Activator.CreateInstance(graphType);
+                })
+            );
             //services.AddAutoMapper();
 
             var builder = RegisterServices();
@@ -181,6 +187,7 @@ namespace SoundVast
             builder.RegisterAssemblyTypes(assembly).Where(x => x.Name.EndsWith("Validator")).AsImplementedInterfaces();
             builder.RegisterAssemblyTypes(assembly).Where(x => x.Name.EndsWith("Query"));
             builder.RegisterAssemblyTypes(assembly).Where(x => x.Name.EndsWith("Mutation"));
+            builder.RegisterAssemblyTypes(assembly).Where(x => x.Name.EndsWith("Type"));
 
             builder.RegisterType<FileStorage>().As<IFileStorage>().SingleInstance();
             builder.RegisterType<ValidationProvider>().As<IValidationProvider>().InstancePerLifetimeScope();
@@ -192,6 +199,14 @@ namespace SoundVast
             builder.RegisterType<Repository<Song, ApplicationDbContext>>().As<IRepository<Song>>();
             builder.RegisterType<Repository<LiveStream, ApplicationDbContext>>().As<IRepository<LiveStream>>();
             builder.RegisterType<Repository<Genre, ApplicationDbContext>>().As<IRepository<Genre>>();
+
+            //builder.Register(x => new AppSchema(graphType =>
+            //{
+            //    var type = x.Resolve<IComponentContext>();
+
+            //    return type ?? Activator.CreateInstance(graphType);
+            //}));
+
 
             return builder;
         }

@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 99f2b33dfbb64208b54620e04b25d9e1
+ * @relayHash 34b189872f83ad2e892d3e3f3c3287d2
  */
 
 /* eslint-disable */
@@ -19,7 +19,7 @@ export type saveSongMutationVariables = {|
 |};
 export type saveSongMutationResponse = {|
   +saveSong: ?{|
-    +id: ?string;
+    +id: string;
   |};
 |};
 */
@@ -75,7 +75,7 @@ const batch /*: ConcreteBatch*/ = {
         "storageKey": null
       }
     ],
-    "type": "Mutation"
+    "type": "AppMutation"
   },
   "id": null,
   "kind": "Batch",

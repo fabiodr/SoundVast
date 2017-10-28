@@ -1,5 +1,27 @@
 # source: http://localhost:8080/graphql
-# timestamp: Fri Oct 27 2017 00:43:09 GMT+0200 (W. Europe Daylight Time)
+# timestamp: Sat Oct 28 2017 18:39:38 GMT+0200 (W. Europe Daylight Time)
+
+schema {
+  query: AppQuery
+  mutation: AppMutation
+}
+
+type AppMutation {
+  saveSong(song: SongInput!): Song
+  saveLiveStream(liveStream: LiveStreamInput!): LiveStream
+}
+
+type AppQuery {
+  song(id: String): Song
+  songs(
+    # Only look at connected edges with cursors greater than the value of `after`.
+    after: String
+
+    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
+    first: Int
+  ): SongConnection
+  genres: [Genre]
+}
 
 interface Audio {
   id: ID
@@ -58,15 +80,24 @@ input LiveStreamInput {
   genreId: Int
 }
 
-type Mutation {
-  saveSong(song: SongInput!): Song
-  saveLiveStream(liveStream: LiveStreamInput!): LiveStream
+interface Node {
+  # Global node Id
+  id: ID
 }
 
-type Query {
-  song(id: String): Song
-  songs: [Song]
-  genres: [Genre]
+# Information about pagination in a connection.
+type PageInfo {
+  # When paginating forwards, are there more items?
+  hasNextPage: Boolean!
+
+  # When paginating backwards, are there more items?
+  hasPreviousPage: Boolean!
+
+  # When paginating backwards, the cursor to continue.
+  startCursor: String
+
+  # When paginating forwards, the cursor to continue.
+  endCursor: String
 }
 
 type Rating {
@@ -82,8 +113,12 @@ type Rating {
   audio: Audio
 }
 
-type Song implements Audio {
-  id: ID
+type Song implements Node, Audio {
+  # The Id of the Song
+  songId: Int!
+
+  # The Global Id of the Song
+  id: ID!
   name: String!
 
   # The poster image for the song
@@ -98,6 +133,39 @@ type Song implements Audio {
 
   # The ratings that have been applied by users to this song
   ratings: [Rating]
+}
+
+# A connection from an object to a list of objects of type `Song`.
+type SongConnection {
+  # A count of the total number of objects in this connection, ignoring
+  # pagination. This allows a client to fetch the first five objects by passing
+  # "5" as the argument to `first`, then fetch the total count so it could display
+  # "5 of 83", for example. In cases where we employ infinite scrolling or don't
+  # have an exact count of entries, this field will return `null`.
+  totalCount: Int
+
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # Information to aid in pagination.
+  edges: [SongEdge]
+
+  # A list of all of the objects returned in the connection. This is a convenience
+  # field provided for quickly exploring the API; rather than querying for "{
+  # edges { node } }" when no edge data is needed, this field can be used instead.
+  # Note that when clients like Relay need to fetch the "cursor" field on the edge
+  # to enable efficient pagination, this shortcut cannot be used, and the full "{
+  # edges { node } } " version should be used instead.
+  items: [Song]
+}
+
+# An edge in a connection from an object to another object of type `Song`.
+type SongEdge {
+  # A cursor for use in pagination
+  cursor: String!
+
+  # The item at the end of the edge
+  node: Song
 }
 
 input SongInput {

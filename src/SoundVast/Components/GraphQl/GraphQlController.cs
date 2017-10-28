@@ -26,16 +26,14 @@ namespace SoundVast.Components.GraphQl
     [Route("graphql")]
     public class GraphQlController : Controller
     {
-        private readonly Query _query;
-        private readonly Mutation _mutation;
+        private readonly AppSchema _schema;
         private readonly IValidationProvider _validationProvider;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public GraphQlController(Query query, Mutation mutation, IValidationProvider validationProvider,
+        public GraphQlController(AppSchema schema, IValidationProvider validationProvider,
             UserManager<ApplicationUser> userManager)
         {
-            _query = query;
-            _mutation = mutation;
+            _schema = schema;
             _validationProvider = validationProvider;
             _userManager = userManager;
         }
@@ -49,18 +47,13 @@ namespace SoundVast.Components.GraphQl
                 ApplicationUser = await _userManager.GetUserAsync(HttpContext.User),
                 User = User
             };
-            var schema = new Schema
-            {
-                Query = _query,
-                Mutation = _mutation
-            };
             var validationRules = new List<IValidationRule>
             {
                 new RequiresAuthValidationRule(),
             }.Concat(DocumentValidator.CoreRules());
             var executionResult = await new DocumentExecuter().ExecuteAsync(_ =>
             {
-                _.Schema = schema;
+                _.Schema = _schema;
                 _.Query = graphQlQuery.Query;
                 _.Inputs = inputs;
                 _.UserContext = context;

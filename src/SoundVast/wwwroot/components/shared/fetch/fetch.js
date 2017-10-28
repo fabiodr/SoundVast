@@ -1,5 +1,6 @@
 import notOkError from './notOkError/notOkError';
 import validationError from './validationError/validationError';
+import fetchProgress from './fetchProgress';
 
 const getResponse = (serverResponse, response = 'json') => {
   if (response === 'json') {
@@ -33,3 +34,15 @@ window.fetch.get = (url, options = {}) =>
     .then(notOkError)
     .then(serverResponse => getResponse(serverResponse, options.response))
     .catch(handleError);
+
+// Remove this when fetch supports progress
+window.fetch.fetchProgress = (url, uploadEvents = {}) => (params) => {
+  const formData = new FormData();
+
+  Object.keys(params).forEach(key => formData.set(key, params[key]));
+
+  fetchProgress(url, {
+    method: 'post',
+    body: formData,
+  }, {}, uploadEvents);
+};

@@ -18,9 +18,9 @@ using SoundVast.Components.User;
 
 namespace SoundVast.Components.GraphQl
 {
-    public class Mutation : ObjectGraphType
+    public class AppMutation : ObjectGraphType
     {
-        public Mutation(ISongService songService, ILiveStreamService liveStreamService)
+        public AppMutation(ISongService songService, ILiveStreamService liveStreamService)
         {
             Field<SongType>("saveSong",
                 arguments: new QueryArguments(new QueryArgument<NonNullGraphType<SongInputType>> { Name = "song" }),
@@ -30,7 +30,7 @@ namespace SoundVast.Components.GraphQl
 
                     song.UserId = context.UserContext.As<Context>().ApplicationUser.Id;
                     songService.Add(song);
-                    
+
                     return song;
                 }).AddPermission("Authorized");
 

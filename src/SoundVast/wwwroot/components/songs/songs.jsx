@@ -5,17 +5,18 @@ import SoundVastTitle from '../shared/title/soundVastTitle';
 import Song from './song/song';
 import Audios from '../audios/audios';
 
-const Songs = ({ songs, fetchNextSongs, getPlaylist, hasMore, ...props }) => (
-  <SoundVastTitle title="Songs">
-    <Audios
-      audios={songs}
-      fetchNextAudios={fetchNextSongs}
-      getPlaylist={getPlaylist}
-      hasMore={hasMore}
-    >
-      <Song />
-    </Audios>
-  </SoundVastTitle>
+const Songs = ({ songs, getPlaylist, loadMore, hasMore, ...props }) => (
+  <div />
+  // <SoundVastTitle title="Songs">
+  //   <Audios
+  //     audios={songs}
+  //     getPlaylist={getPlaylist}
+  //     loadMore={loadMore}
+  //     hasMore={hasMore}
+  //   >
+  //     <Song />
+  //   </Audios>
+  // </SoundVastTitle>
 );
 
 Songs.propTypes = {
@@ -28,7 +29,7 @@ Songs.propTypes = {
     }),
   ).isRequired,
   getPlaylist: PropTypes.func.isRequired,
-  fetchNextSongs: PropTypes.func.isRequired,
+  loadMore: PropTypes.func.isRequired,
   hasMore: PropTypes.bool.isRequired,
 };
 

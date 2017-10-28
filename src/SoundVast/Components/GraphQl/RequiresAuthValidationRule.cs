@@ -20,7 +20,7 @@ namespace SoundVast.Components.GraphQl
                 _.Match<Field>(fieldAst =>
                 {
                     var fieldDef = context.TypeInfo.GetFieldDef();
-                    if (fieldDef.RequiresPermissions() &&
+                    if (fieldDef != null && fieldDef.RequiresPermissions() &&
                         (!loggedIn || !fieldDef.CanAccess(userContext.User.Claims)))
                     {
                         context.ReportError(new ValidationError(

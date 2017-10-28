@@ -1,21 +1,64 @@
 import { connect } from 'react-redux';
-import { compose, withHandlers } from 'recompose';
-import { graphql } from 'react-relay';
+import { compose, withHandlers, withProps } from 'recompose';
+import { graphql, createPaginationContainer } from 'react-relay';
 import { fragmentContainer } from 'recompose-relay-modern';
 
 import { fetchNextSongs } from './actions';
 import Songs from './songs';
+import paginationContainer from './createPaginationContainer';
 
-const fragment = graphql`
-fragment songsContainer_songs on Song @relay(plural: true) {
-  id,
-  name
-  coverImageUrl,
-  artist,
+export const query = graphql`
+  query songsContainerQuery(
+    $first: Int!
+    $after: String
+  ) {
+    ...songsContainer_songs
+  }
+`;
+
+const fragments = graphql`
+fragment songsContainer_songs on AppQuery {
+  songs(
+    first: $first,
+    after: $after,
+  ) @connection(key: "songsContainer_songs") {
+    edges {
+      node {
+        songId,
+        name,
+        coverImageUrl,
+        artist,
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
 }`;
 
+const connectionConfig = {
+  direction: 'forward',
+  query: graphql`
+    query songsContainerForwardQuery(
+      $first: Int!
+      $after: String
+    ) {
+      ...songsContainer_songs
+    }
+  `,
+  getConnectionFromProps: props => props.songs && props.songs.songs,
+  getFragmentVariables: (previousVariables, first) => ({
+    ...previousVariables,
+    first,
+  }),
+  getVariables: (props, paginationInfo) => ({
+    first: paginationInfo.first,
+    after: paginationInfo.cursor,
+  }),
+};
+
 const mapStateToProps = ({ music }) => ({
-  // songs: music.songs,
   hasMore: music.hasMore,
 });
 
@@ -30,22 +73,24 @@ const handlers = {
     poster: song.coverImageUrl,
     free: song.free,
   })),
+  loadMore: ({ relay }) => () => {
+    if (relay.isLoading()) {
+      return;
+    }
+
+    relay.loadMore(2);
+  },
 };
 
-export const query = graphql`
-  query songsContainerQuery {
-    songs {
-      ...songsContainer_songs
-    }
-  }
-`;
+const createProps = ({ relay }) => ({
+  hasMore: relay.hasMore(),
+});
 
 const enhance = compose(
-  fragmentContainer(fragment),
-  connect(mapStateToProps, {
-    fetchNextSongs,
-  }),
+  paginationContainer(fragments, connectionConfig),
+  connect(mapStateToProps),
   withHandlers(handlers),
+  withProps(createProps),
 );
 
 export default enhance(Songs);

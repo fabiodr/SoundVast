@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GraphQL.Relay.Types;
+using GraphQL.Types.Relay.DataObjects;
 using SoundVast.Components.Audio;
 using SoundVast.Components.Genre;
 using SoundVast.Components.Rating;
@@ -11,13 +13,17 @@ using SoundVast.Components.User;
 
 namespace SoundVast.Components.Song
 {
-    public class SongType : ObjectGraphType<Models.Song>
+    public class SongType : NodeGraphType<Models.Song>
     {
-        public SongType()
+        private readonly ISongService _songService;
+
+        public SongType(ISongService songService)
         {
+            _songService = songService;
+
             Name = nameof(Models.Song);
 
-            Field<IdGraphType>("id");
+            Id(x => x.Id);
             Field(x => x.Name);
             Field(x => x.CoverImageUrl).Description("The poster image for the song");
             Field(x => x.Artist, true);
@@ -26,6 +32,11 @@ namespace SoundVast.Components.Song
             Field<ListGraphType<RatingType>>("ratings", "The ratings that have been applied by users to this song");
 
             Interface<AudioInterface>();
+        }
+
+        public override Models.Song GetById(string id)
+        {
+            return _songService.GetAudio(int.Parse(id));
         }
     }
 }
