@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 77ac27c422ca6f998d58704aa0dcd594
+ * @relayHash 25c1cb2c0084d034ec1bec66d9a4df9c
  */
 
 /* eslint-disable */
@@ -19,7 +19,7 @@ export type saveLiveStreamMutationVariables = {|
 |};
 export type saveLiveStreamMutationResponse = {|
   +saveLiveStream: ?{|
-    +id: ?string;
+    +id: string;
   |};
 |};
 */

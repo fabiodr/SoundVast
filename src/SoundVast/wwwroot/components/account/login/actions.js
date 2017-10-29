@@ -8,15 +8,21 @@ import notOkError from '../../shared/fetch/notOkError/notOkError';
 import notOkErrorPopup from '../../shared/fetch/notOkError/popup/popup';
 import validationError from '../../shared/fetch/validationError/validationError';
 
-export const submit = formData => dispatch => fetch('/account/login', {
-  method: 'post',
-  body: formData,
-  credentials: 'same-origin',
-}).then(validationError)
-  .then(notOkError)
-  .then(() => {
-    dispatch(getAccountDetails());
-    dispatch(hideModal());
-    dispatch(showTextPopup('You have successfully logged in.'));
-  })
-  .catch(notOkErrorPopup(dispatch));
+export const submit = values => dispatch =>
+  fetch('/account/login', {
+    method: 'post',
+    body: JSON.stringify({
+      ...values,
+    }),
+    headers: {
+      'content-type': 'application/json',
+    },
+    credentials: 'same-origin',
+  }).then(validationError)
+    .then(notOkError)
+    .then(() => {
+      dispatch(getAccountDetails());
+      dispatch(hideModal());
+      dispatch(showTextPopup('You have successfully logged in.'));
+    })
+    .catch(notOkErrorPopup(dispatch));

@@ -13,14 +13,14 @@ const Audios = ({ audios, children, loadMore, getPlaylist, hasMore }) => (
       hasMore={hasMore}
       className={styles.audios}
     >
-      {audios.edges.map(({ node }) => (
+      {audios.map(audio => (
         <Audio
-          key={node.songId}
-          coverImageUrl={node.coverImageUrl}
+          key={audio.audioId}
+          coverImageUrl={audio.coverImageUrl}
           getPlaylist={getPlaylist}
         >
           {React.cloneElement(children, {
-            ...node,
+            ...audio,
           })}
         </Audio>
       ))}
@@ -31,7 +31,7 @@ const Audios = ({ audios, children, loadMore, getPlaylist, hasMore }) => (
 Audios.propTypes = {
   audios: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string.isRequired,
+      audioId: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
       artist: PropTypes.string,
       coverImageUrl: PropTypes.string.isRequired,

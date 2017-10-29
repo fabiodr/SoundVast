@@ -17,6 +17,7 @@ namespace SoundVast.Components.Audio
             Name = nameof(Models.Audio);
 
             Field<IdGraphType>("id");
+            Field("audioId", x => x.Id);
             Field(x => x.Name);
             Field(x => x.CoverImageUrl).Description("The poster image for the audio");
             Field<UserType>("user", "The user who uploaded the audio");

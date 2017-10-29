@@ -1,5 +1,5 @@
 # source: http://localhost:8080/graphql
-# timestamp: Sat Oct 28 2017 18:39:38 GMT+0200 (W. Europe Daylight Time)
+# timestamp: Sun Oct 29 2017 16:55:30 GMT+0100 (W. Europe Standard Time)
 
 schema {
   query: AppQuery
@@ -9,6 +9,7 @@ schema {
 type AppMutation {
   saveSong(song: SongInput!): Song
   saveLiveStream(liveStream: LiveStreamInput!): LiveStream
+  rateAudio(audioRating: AudioRatingInput!): Rating
 }
 
 type AppQuery {
@@ -20,11 +21,19 @@ type AppQuery {
     # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
     first: Int
   ): SongConnection
+  liveStreams(
+    # Only look at connected edges with cursors greater than the value of `after`.
+    after: String
+
+    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
+    first: Int
+  ): LiveStreamConnection
   genres: [Genre]
 }
 
 interface Audio {
   id: ID
+  audioId: Int!
   name: String!
 
   # The poster image for the audio
@@ -38,6 +47,11 @@ interface Audio {
 
   # The ratings that have been applied by users to this audio
   ratings: [Rating]
+}
+
+input AudioRatingInput {
+  audioId: Int!
+  liked: Boolean!
 }
 
 # The `Date` scalar type represents a timestamp provided in UTC. `Date` expects
@@ -55,8 +69,12 @@ type Genre {
   type: String!
 }
 
-type LiveStream implements Audio {
-  id: ID
+type LiveStream implements Node, Audio {
+  # The Id of the LiveStream
+  audioId: Int!
+
+  # The Global Id of the LiveStream
+  id: ID!
   name: String!
 
   # The poster image for the live stream
@@ -71,6 +89,39 @@ type LiveStream implements Audio {
 
   # The ratings that have been applied by users to this live stream
   ratings: [Rating]
+}
+
+# A connection from an object to a list of objects of type `LiveStream`.
+type LiveStreamConnection {
+  # A count of the total number of objects in this connection, ignoring
+  # pagination. This allows a client to fetch the first five objects by passing
+  # "5" as the argument to `first`, then fetch the total count so it could display
+  # "5 of 83", for example. In cases where we employ infinite scrolling or don't
+  # have an exact count of entries, this field will return `null`.
+  totalCount: Int
+
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # Information to aid in pagination.
+  edges: [LiveStreamEdge]
+
+  # A list of all of the objects returned in the connection. This is a convenience
+  # field provided for quickly exploring the API; rather than querying for "{
+  # edges { node } }" when no edge data is needed, this field can be used instead.
+  # Note that when clients like Relay need to fetch the "cursor" field on the edge
+  # to enable efficient pagination, this shortcut cannot be used, and the full "{
+  # edges { node } } " version should be used instead.
+  items: [LiveStream]
+}
+
+# An edge in a connection from an object to another object of type `LiveStream`.
+type LiveStreamEdge {
+  # A cursor for use in pagination
+  cursor: String!
+
+  # The item at the end of the edge
+  node: LiveStream
 }
 
 input LiveStreamInput {
@@ -115,7 +166,7 @@ type Rating {
 
 type Song implements Node, Audio {
   # The Id of the Song
-  songId: Int!
+  audioId: Int!
 
   # The Global Id of the Song
   id: ID!

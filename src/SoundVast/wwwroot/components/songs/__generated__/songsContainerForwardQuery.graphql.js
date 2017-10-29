@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 1b3901e9399b208cdb73c07472f70b6f
+ * @relayHash eca9daf7f25f92a3f40f53d37e963ce7
  */
 
 /* eslint-disable */
@@ -26,7 +26,7 @@ fragment songsContainer on AppQuery {
     edges {
       node {
         __typename
-        songId
+        audioId
         name
         coverImageUrl
         artist
@@ -141,7 +141,7 @@ const batch /*: ConcreteBatch*/ = {
                     "kind": "ScalarField",
                     "alias": null,
                     "args": null,
-                    "name": "songId",
+                    "name": "audioId",
                     "storageKey": null
                   },
                   {
@@ -237,7 +237,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query songsContainerForwardQuery(\n  $count: Int!\n  $cursor: String\n) {\n  ...songsContainer\n}\n\nfragment songsContainer on AppQuery {\n  songs(first: $count, after: $cursor) {\n    edges {\n      node {\n        __typename\n        songId\n        name\n        coverImageUrl\n        artist\n        id\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+  "text": "query songsContainerForwardQuery(\n  $count: Int!\n  $cursor: String\n) {\n  ...songsContainer\n}\n\nfragment songsContainer on AppQuery {\n  songs(first: $count, after: $cursor) {\n    edges {\n      node {\n        __typename\n        audioId\n        name\n        coverImageUrl\n        artist\n        id\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
 };
 
 module.exports = batch;

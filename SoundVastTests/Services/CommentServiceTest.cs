@@ -52,7 +52,7 @@ namespace SoundVastTests.Services
     //        {
     //            Email = "test123@gmail.com",
     //            PhoneNumber = "07456313767",
-    //            UserName = "TestUserName"
+    //            Username = "TestUserName"
     //        };
 
     //        var result = _service.Edit(comment, "[Deleted]", user);

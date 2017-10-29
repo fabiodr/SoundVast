@@ -12,7 +12,7 @@ export type songsContainer = {|
   +songs: ?{|
     +edges: ?$ReadOnlyArray<?{|
       +node: ?{|
-        +songId: number;
+        +audioId: number;
         +name: string;
         +coverImageUrl: string;
         +artist: ?string;
@@ -79,7 +79,7 @@ const fragment /*: ConcreteFragment*/ = {
                   "kind": "ScalarField",
                   "alias": null,
                   "args": null,
-                  "name": "songId",
+                  "name": "audioId",
                   "storageKey": null
                 },
                 {

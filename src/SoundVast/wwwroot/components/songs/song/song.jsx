@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import styles from './song.less';
-import Like from './like/likeContainer';
-import Dislike from './dislike/dislikeContainer';
+import Like from '../../rating/like/likeContainer';
+import Dislike from '../../rating/dislike/dislikeContainer';
 
 const Song = ({ name, artist, id }) => (
   <div>

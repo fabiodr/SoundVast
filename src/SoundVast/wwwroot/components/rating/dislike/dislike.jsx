@@ -18,10 +18,10 @@ Dislike.defaultProps = {
 };
 
 Dislike.propTypes = {
-  dislikes: PropTypes.number.isRequired,
-  dislike: PropTypes.func.isRequired,
-  width: PropTypes.number,
-  height: PropTypes.number,
+  // dislikes: PropTypes.number.isRequired,
+  // dislike: PropTypes.func.isRequired,
+  // width: PropTypes.number,
+  // height: PropTypes.number,
 };
 
 export default Dislike;

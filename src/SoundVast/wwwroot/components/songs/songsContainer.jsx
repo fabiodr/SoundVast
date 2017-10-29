@@ -3,9 +3,9 @@ import { compose, withHandlers, withProps } from 'recompose';
 import { graphql } from 'react-relay';
 
 import Songs from './songs';
-import paginationContainer from './createPaginationContainer';
+import paginationContainer from '../shared/createPaginationContainer';
 
-const songsToLoad = 20;
+const songsToLoad = 30;
 const query = graphql`
   query songsContainerQuery(
     $count: Int!
@@ -23,7 +23,7 @@ fragment songsContainer on AppQuery {
   ) @connection(key: "songsContainer_songs") {
     edges {
       node {
-        songId,
+        audioId,
         name,
         coverImageUrl,
         artist,
@@ -49,21 +49,22 @@ const connectionConfig = {
 };
 
 const handlers = {
-  getPlaylist: props => () => props.songs.map(song => ({
-    id: song.id,
-    title: song.name,
-    artist: song.artist,
-    sources: {
-      mp3: `${window.location.origin}/song/stream?id=${song.id}`,
-    },
-    poster: song.coverImageUrl,
-    free: song.free,
-  })),
+  // getPlaylist: props => () => props.songs.map(song => ({
+  //   id: song.id,
+  //   title: song.name,
+  //   artist: song.artist,
+  //   sources: {
+  //     mp3: `${window.location.origin}/song/stream?id=${song.id}`,
+  //   },
+  //   poster: song.coverImageUrl,
+  //   free: song.free,
+  // })),
   loadMore: ({ relay }) => () => relay.loadMore(songsToLoad),
 };
 
-const createProps = ({ relay }) => ({
+const createProps = ({ relay, data }) => ({
   hasMore: relay.hasMore(),
+  songs: data.songs.edges.map(x => x.node),
 });
 
 const enhance = compose(

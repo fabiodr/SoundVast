@@ -11,10 +11,15 @@ import notOkError from '../../shared/fetch/notOkError/notOkError';
 import notOkErrorPopup from '../../shared/fetch/notOkError/popup/popup';
 import validationError from '../../shared/fetch/validationError/validationError';
 
-export const submit = formData => dispatch =>
+export const submit = values => dispatch =>
   fetch('/account/register', {
     method: 'post',
-    body: formData,
+    body: JSON.stringify({
+      ...values,
+    }),
+    headers: {
+      'content-type': 'application/json',
+    },
     credentials: 'same-origin',
   }).then(validationError)
     .then(notOkError)

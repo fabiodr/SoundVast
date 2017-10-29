@@ -51,13 +51,13 @@ namespace SoundVast.Components.GraphQl
             {
                 new RequiresAuthValidationRule(),
             }.Concat(DocumentValidator.CoreRules());
-            var executionResult = await new DocumentExecuter().ExecuteAsync(_ =>
+            var executionResult = await new DocumentExecuter().ExecuteAsync(options =>
             {
-                _.Schema = _schema;
-                _.Query = graphQlQuery.Query;
-                _.Inputs = inputs;
-                _.UserContext = context;
-                _.ValidationRules = validationRules;
+                options.Schema = _schema;
+                options.Query = graphQlQuery.Query;
+                options.Inputs = inputs;
+                options.UserContext = context;
+                options.ValidationRules = validationRules;
             });
 
             if (_validationProvider.HasErrors)

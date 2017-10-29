@@ -12,7 +12,9 @@ using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SoundVast.Components.Audio;
 using SoundVast.Components.LiveStream;
+using SoundVast.Components.Rating;
 using SoundVast.Components.Upload;
 using SoundVast.Components.User;
 
@@ -20,31 +22,47 @@ namespace SoundVast.Components.GraphQl
 {
     public class AppMutation : ObjectGraphType
     {
-        public AppMutation(ISongService songService, ILiveStreamService liveStreamService)
+        private const string AuthorizedPermission = "Authorized";
+        private static string GetUserId (ResolveFieldContext<object> context) => context.UserContext.As<Context>().ApplicationUser.Id;
+
+        public AppMutation(IAudioService<Audio.Models.Audio> audioService,
+            ISongService songService, ILiveStreamService liveStreamService)
         {
             Field<SongType>("saveSong",
                 arguments: new QueryArguments(new QueryArgument<NonNullGraphType<SongInputType>> { Name = "song" }),
-                resolve: context =>
+                resolve: x =>
                 {
-                    var song = context.GetArgument<Song.Models.Song>("song");
+                    var song = x.GetArgument<Song.Models.Song>("song");
 
-                    song.UserId = context.UserContext.As<Context>().ApplicationUser.Id;
+                    song.UserId = GetUserId(x);
                     songService.Add(song);
 
                     return song;
-                }).AddPermission("Authorized");
+                }).AddPermission(AuthorizedPermission);
 
             Field<LiveStreamType>("saveLiveStream",
                 arguments: new QueryArguments(new QueryArgument<NonNullGraphType<LiveStreamInputType>> { Name = "liveStream" }),
-                resolve: context =>
+                resolve: x =>
                 {
-                    var liveStream = context.GetArgument<LiveStream.Models.LiveStream>("liveStream");
+                    var liveStream = x.GetArgument<LiveStream.Models.LiveStream>("liveStream");
 
-                    liveStream.UserId = context.UserContext.As<Context>().ApplicationUser.Id;
+                    liveStream.UserId = GetUserId(x);
                     liveStreamService.Add(liveStream);
 
                     return liveStream;
-                }).AddPermission("Authorized");
+                }).AddPermission(AuthorizedPermission);
+
+            Field<RatingType>("rateAudio",
+                arguments: new QueryArguments(new QueryArgument<NonNullGraphType<AudioRatingInputType>> { Name = "audioRating" }),
+                resolve: x =>
+                {
+                    var audioRating = x.GetArgument<Rating.Models.Rating>("audioRating");
+
+                    audioRating.UserId = GetUserId(x);
+                    audioService.RateAudio(audioRating);
+
+                    return audioRating;
+                }).AddPermission(AuthorizedPermission);
         }
     }
 }

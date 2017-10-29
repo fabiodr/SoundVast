@@ -5,11 +5,10 @@ import SoundVastTitle from '../shared/title/soundVastTitle';
 import Song from './song/song';
 import Audios from '../audios/audios';
 
-const Songs = ({ data, getPlaylist, loadMore, hasMore }) => (
+const Songs = ({ songs, loadMore, hasMore }) => (
   <SoundVastTitle title="Songs">
     <Audios
-      audios={data.songs}
-      getPlaylist={getPlaylist}
+      audios={songs}
       loadMore={loadMore}
       hasMore={hasMore}
     >
@@ -19,8 +18,14 @@ const Songs = ({ data, getPlaylist, loadMore, hasMore }) => (
 );
 
 Songs.propTypes = {
-  songs: PropTypes.object.isRequired,
-  getPlaylist: PropTypes.func.isRequired,
+  songs: PropTypes.arrayOf(
+    PropTypes.shape({
+      audioId: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+      artist: PropTypes.string,
+      coverImageUrl: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
   loadMore: PropTypes.func.isRequired,
   hasMore: PropTypes.bool.isRequired,
 };

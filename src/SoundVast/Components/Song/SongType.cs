@@ -15,15 +15,11 @@ namespace SoundVast.Components.Song
 {
     public class SongType : NodeGraphType<Models.Song>
     {
-        private readonly ISongService _songService;
-
-        public SongType(ISongService songService)
+        public SongType()
         {
-            _songService = songService;
-
             Name = nameof(Models.Song);
 
-            Id(x => x.Id);
+            Id("audioId", x => x.Id);
             Field(x => x.Name);
             Field(x => x.CoverImageUrl).Description("The poster image for the song");
             Field(x => x.Artist, true);
@@ -36,7 +32,7 @@ namespace SoundVast.Components.Song
 
         public override Models.Song GetById(string id)
         {
-            return _songService.GetAudio(int.Parse(id));
+            throw new NotImplementedException();
         }
     }
 }

@@ -25,16 +25,16 @@ namespace SoundVast.Components.Rating
             _userManager = userManager;
         }
 
-        [HttpPost]
-        public IActionResult RateAudio([FromBody] RateAudioModel model)
-        {
-            var userId = _userManager.GetUserId(User);
-            var rating = _audioService.RateAudio(model.AudioId, model.Liked, userId);
+        //[HttpPost]
+        //public IActionResult RateAudio([FromBody] RateAudioModel model)
+        //{
+        //    var userId = _userManager.GetUserId(User);
+        //    var rating = _audioService.RateAudio(model.AudioId, model.Liked, userId);
 
-            return Ok(new
-            {
-                rating
-            });
-        }
+        //    return Ok(new
+        //    {
+        //        rating
+        //    });
+        //}
     }
 }

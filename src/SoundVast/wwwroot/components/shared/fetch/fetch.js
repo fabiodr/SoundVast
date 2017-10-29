@@ -13,7 +13,7 @@ const getResponse = (serverResponse, response = 'json') => {
   return Promise.reject('invalid response supplied');
 };
 
-const handleError = error => console.error(error); // eslint-disable-line no-console
+const handleError = error => Promise.reject(error);
 
 window.fetch.postForm = (url, options = {}) => (params) => {
   const formData = new FormData();
@@ -32,6 +32,20 @@ window.fetch.postForm = (url, options = {}) => (params) => {
 window.fetch.get = (url, options = {}) =>
   fetch(url)
     .then(notOkError)
+    .then(serverResponse => getResponse(serverResponse, options.response))
+    .catch(handleError);
+
+window.fetch.post = (url, options = {}) => params =>
+  fetch(url, {
+    method: 'post',
+    body: JSON.stringify({
+      ...params,
+    }),
+    headers: {
+      'content-type': 'application/json',
+    },
+    credentials: 'same-origin',
+  }).then(notOkError)
     .then(serverResponse => getResponse(serverResponse, options.response))
     .catch(handleError);
 

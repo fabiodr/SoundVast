@@ -18,10 +18,10 @@ Like.defaultProps = {
 };
 
 Like.propTypes = {
-  likes: PropTypes.number.isRequired,
-  like: PropTypes.func.isRequired,
-  width: PropTypes.number,
-  height: PropTypes.number,
+  // likes: PropTypes.number.isRequired,
+  // like: PropTypes.func.isRequired,
+  // width: PropTypes.number,
+  // height: PropTypes.number,
 };
 
 export default Like;
