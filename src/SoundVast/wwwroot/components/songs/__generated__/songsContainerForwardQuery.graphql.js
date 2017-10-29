@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 83940f42f6f1ada4d23bc9df7c1ef44c
+ * @relayHash 1b3901e9399b208cdb73c07472f70b6f
  */
 
 /* eslint-disable */
@@ -15,14 +15,14 @@ export type songsContainerForwardQueryResponse = {| |};
 
 /*
 query songsContainerForwardQuery(
-  $first: Int!
-  $after: String
+  $count: Int!
+  $cursor: String
 ) {
-  ...songsContainer_songs
+  ...songsContainer
 }
 
-fragment songsContainer_songs on AppQuery {
-  songs(first: $first, after: $after) {
+fragment songsContainer on AppQuery {
+  songs(first: $count, after: $cursor) {
     edges {
       node {
         __typename
@@ -35,8 +35,8 @@ fragment songsContainer_songs on AppQuery {
       cursor
     }
     pageInfo {
-      hasNextPage
       endCursor
+      hasNextPage
     }
   }
 }
@@ -47,13 +47,13 @@ const batch /*: ConcreteBatch*/ = {
     "argumentDefinitions": [
       {
         "kind": "LocalArgument",
-        "name": "first",
+        "name": "count",
         "type": "Int!",
         "defaultValue": null
       },
       {
         "kind": "LocalArgument",
-        "name": "after",
+        "name": "cursor",
         "type": "String",
         "defaultValue": null
       }
@@ -64,7 +64,7 @@ const batch /*: ConcreteBatch*/ = {
     "selections": [
       {
         "kind": "FragmentSpread",
-        "name": "songsContainer_songs",
+        "name": "songsContainer",
         "args": null
       }
     ],
@@ -78,13 +78,13 @@ const batch /*: ConcreteBatch*/ = {
     "argumentDefinitions": [
       {
         "kind": "LocalArgument",
-        "name": "first",
+        "name": "count",
         "type": "Int!",
         "defaultValue": null
       },
       {
         "kind": "LocalArgument",
-        "name": "after",
+        "name": "cursor",
         "type": "String",
         "defaultValue": null
       }
@@ -100,13 +100,13 @@ const batch /*: ConcreteBatch*/ = {
           {
             "kind": "Variable",
             "name": "after",
-            "variableName": "after",
+            "variableName": "cursor",
             "type": "String"
           },
           {
             "kind": "Variable",
             "name": "first",
-            "variableName": "first",
+            "variableName": "count",
             "type": "Int"
           }
         ],
@@ -197,14 +197,14 @@ const batch /*: ConcreteBatch*/ = {
                 "kind": "ScalarField",
                 "alias": null,
                 "args": null,
-                "name": "hasNextPage",
+                "name": "endCursor",
                 "storageKey": null
               },
               {
                 "kind": "ScalarField",
                 "alias": null,
                 "args": null,
-                "name": "endCursor",
+                "name": "hasNextPage",
                 "storageKey": null
               }
             ],
@@ -220,13 +220,13 @@ const batch /*: ConcreteBatch*/ = {
           {
             "kind": "Variable",
             "name": "after",
-            "variableName": "after",
+            "variableName": "cursor",
             "type": "String"
           },
           {
             "kind": "Variable",
             "name": "first",
-            "variableName": "first",
+            "variableName": "count",
             "type": "Int"
           }
         ],
@@ -237,7 +237,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query songsContainerForwardQuery(\n  $first: Int!\n  $after: String\n) {\n  ...songsContainer_songs\n}\n\nfragment songsContainer_songs on AppQuery {\n  songs(first: $first, after: $after) {\n    edges {\n      node {\n        __typename\n        songId\n        name\n        coverImageUrl\n        artist\n        id\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n"
+  "text": "query songsContainerForwardQuery(\n  $count: Int!\n  $cursor: String\n) {\n  ...songsContainer\n}\n\nfragment songsContainer on AppQuery {\n  songs(first: $count, after: $cursor) {\n    edges {\n      node {\n        __typename\n        songId\n        name\n        coverImageUrl\n        artist\n        id\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
 };
 
 module.exports = batch;

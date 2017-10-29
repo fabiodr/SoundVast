@@ -9,14 +9,14 @@ import ResetPassword from '../../account/resetPassword/resetPasswordContainer';
 import ConfirmedEmailSuccess from '../../account/confirmedEmailSuccess/confirmedEmailSuccessContainer';
 import Profile from '../../user/profile/userProfileContainer';
 import Upload, { query as uploadQuery } from '../../upload/upload';
-import Songs, { query as songsQuery } from '../../songs/songsContainer';
+import { routeConfig as SongsContainerRouteConfig } from '../../songs/songsContainer';
 // import Radios from '../../radios/container';
 import Error from '../../error/error';
 
 export default makeRouteConfig(
   <Route path="/">
     <Route Component={PrimaryLayout}>
-      <Route path="/" Component={Songs} query={songsQuery} prepareVariables={params => ({ ...params, first: 2 })} />
+      <Route {...SongsContainerRouteConfig} />
       {/* <Route path="/songs" Component={Songs} query={songsQuery} /> */}
       {/* <Route exact path="/radios" component={Radios} /> */}
       <Route path="account">

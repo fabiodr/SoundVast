@@ -7,15 +7,20 @@ import styles from './audios.less';
 
 const Audios = ({ audios, children, loadMore, getPlaylist, hasMore }) => (
   <div className={styles.audiosContainer}>
-    <InfiniteScrollGrid loadMore={loadMore} hasMore={hasMore} className={styles.audios}>
-      {audios.map(audio => (
+    <InfiniteScrollGrid
+      initialLoad={false}
+      loadMore={loadMore}
+      hasMore={hasMore}
+      className={styles.audios}
+    >
+      {audios.edges.map(({ node }) => (
         <Audio
-          key={audio.id}
-          coverImageUrl={audio.coverImageUrl}
+          key={node.songId}
+          coverImageUrl={node.coverImageUrl}
           getPlaylist={getPlaylist}
         >
           {React.cloneElement(children, {
-            ...audio,
+            ...node,
           })}
         </Audio>
       ))}

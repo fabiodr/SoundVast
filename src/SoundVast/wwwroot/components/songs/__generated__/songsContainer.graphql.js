@@ -8,7 +8,7 @@
 
 /*::
 import type {ConcreteFragment} from 'relay-runtime';
-export type songsContainer_songs = {|
+export type songsContainer = {|
   +songs: ?{|
     +edges: ?$ReadOnlyArray<?{|
       +node: ?{|
@@ -18,10 +18,6 @@ export type songsContainer_songs = {|
         +artist: ?string;
       |};
     |}>;
-    +pageInfo: {|
-      +hasNextPage: boolean;
-      +endCursor: ?string;
-    |};
   |};
 |};
 */
@@ -31,12 +27,12 @@ const fragment /*: ConcreteFragment*/ = {
   "argumentDefinitions": [
     {
       "kind": "RootArgument",
-      "name": "first",
+      "name": "count",
       "type": "Int"
     },
     {
       "kind": "RootArgument",
-      "name": "after",
+      "name": "cursor",
       "type": "String"
     }
   ],
@@ -44,8 +40,8 @@ const fragment /*: ConcreteFragment*/ = {
   "metadata": {
     "connection": [
       {
-        "count": "first",
-        "cursor": "after",
+        "count": "count",
+        "cursor": "cursor",
         "direction": "forward",
         "path": [
           "songs"
@@ -53,7 +49,7 @@ const fragment /*: ConcreteFragment*/ = {
       }
     ]
   },
-  "name": "songsContainer_songs",
+  "name": "songsContainer",
   "selections": [
     {
       "kind": "LinkedField",
@@ -139,14 +135,14 @@ const fragment /*: ConcreteFragment*/ = {
               "kind": "ScalarField",
               "alias": null,
               "args": null,
-              "name": "hasNextPage",
+              "name": "endCursor",
               "storageKey": null
             },
             {
               "kind": "ScalarField",
               "alias": null,
               "args": null,
-              "name": "endCursor",
+              "name": "hasNextPage",
               "storageKey": null
             }
           ],
