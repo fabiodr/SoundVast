@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 using SoundVast.Components.Genre.Models;
+using SoundVast.Components.Rating;
 using SoundVast.Components.Rating.Models;
 using SoundVast.Components.User;
 
@@ -19,19 +21,21 @@ namespace SoundVast.Components.Audio.Models
         public string Name { get; set; }
         [Required]
         public string CoverImageUrl { get; set; }
-      //  public int CommentCount { get; private set; }
-      //  public int UniqueViews { get; private set; }
-     //   public DateTimeOffset UploadDate { get; private set; }
+        //  public int CommentCount { get; private set; }
+        //  public int UniqueViews { get; private set; }
+        //   public DateTimeOffset UploadDate { get; private set; }
         [Required]
         public string UserId { get; set; }
         public ApplicationUser User { get; set; }
         public int? GenreId { get; set; }
         public virtual Genre.Models.Genre Genre { get; set; }
+        public int Likes => Ratings.Count(x => x.Liked);
+        public int Dislikes => Ratings.Count(x => !x.Liked);
         public virtual ICollection<Rating.Models.Rating> Ratings { get; set; }
      //   public virtual ApplicationUser User { get; set; }
      //   public virtual ImageFileModel ImageFile { get; set; }
      //   public virtual CategoryModel Category { get; set; }
-     //   public virtual RatingCountModel RatingCount { get; set; } = new RatingCountModel();
+     //   public virtual RatingCountModel Rating { get; set; } = new RatingCountModel();
      //   public virtual ICollection<AudioGenreModel> Genres { get; set; }
      //   public virtual ICollection<CommentModel> Comments { get; set; }
      //   public virtual ICollection<AudioRatingJoinModel> AudioRatingJoins { get; set; }

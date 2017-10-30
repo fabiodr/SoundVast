@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GraphQL.Relay.Types;
 using GraphQL.Types;
 
-namespace SoundVast.Components.Audio
+namespace SoundVast.Components.Rating
 {
-    public class AudioRatingInputType : InputObjectGraphType
+    public class RateAudioInput : MutationInputGraphType
     {
-        public AudioRatingInputType()
+        public RateAudioInput()
         {
-            Name = "AudioRatingInput";
+            Name = nameof(RateAudioInput);
 
             Field<NonNullGraphType<IntGraphType>>("AudioId");
             Field<NonNullGraphType<BooleanGraphType>>("Liked");

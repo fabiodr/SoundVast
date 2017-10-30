@@ -22,6 +22,8 @@ namespace SoundVast.Components.LiveStream
             Field(x => x.Name);
             Field(x => x.CoverImageUrl).Description("The poster image for the live stream");
             Field(x => x.LiveStreamUrl);
+            Field(x => x.Likes);
+            Field(x => x.Dislikes);
             Field<UserType>("user", "The user who uploaded the live stream");
             Field<GenreType>("genre", "The genre the live stream belongs to");
             Field<ListGraphType<RatingType>>("ratings", "The ratings that have been applied by users to this live stream");

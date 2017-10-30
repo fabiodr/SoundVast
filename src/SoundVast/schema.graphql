@@ -1,5 +1,5 @@
 # source: http://localhost:8080/graphql
-# timestamp: Mon Oct 30 2017 02:01:00 GMT+0100 (W. Europe Standard Time)
+# timestamp: Mon Oct 30 2017 22:36:20 GMT+0100 (W. Europe Standard Time)
 
 schema {
   query: AppQuery
@@ -38,6 +38,8 @@ interface Audio {
 
   # The poster image for the audio
   coverImageUrl: String!
+  likes: Int!
+  dislikes: Int!
 
   # The user who uploaded the audio
   user: User
@@ -80,6 +82,8 @@ type LiveStream implements Node, Audio {
   # The poster image for the live stream
   coverImageUrl: String!
   liveStreamUrl: String!
+  likes: Int!
+  dislikes: Int!
 
   # The user who uploaded the live stream
   user: User
@@ -156,8 +160,6 @@ type Rating {
 
   # Whether the user has liked the audio or not
   liked: Boolean!
-  likes: Int!
-  dislikes: Int!
 
   # The user that rated the audio
   user: User
@@ -177,6 +179,8 @@ type Song implements Node, Audio {
   # The poster image for the song
   coverImageUrl: String!
   artist: String
+  likes: Int!
+  dislikes: Int!
 
   # The user who uploaded the song
   user: User

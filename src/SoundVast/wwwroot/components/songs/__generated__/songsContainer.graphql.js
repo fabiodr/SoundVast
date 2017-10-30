@@ -16,6 +16,8 @@ export type songsContainer = {|
         +name: string;
         +coverImageUrl: string;
         +artist: ?string;
+        +likes: number;
+        +dislikes: number;
       |};
     |}>;
   |};
@@ -101,6 +103,20 @@ const fragment /*: ConcreteFragment*/ = {
                   "alias": null,
                   "args": null,
                   "name": "artist",
+                  "storageKey": null
+                },
+                {
+                  "kind": "ScalarField",
+                  "alias": null,
+                  "args": null,
+                  "name": "likes",
+                  "storageKey": null
+                },
+                {
+                  "kind": "ScalarField",
+                  "alias": null,
+                  "args": null,
+                  "name": "dislikes",
                   "storageKey": null
                 },
                 {

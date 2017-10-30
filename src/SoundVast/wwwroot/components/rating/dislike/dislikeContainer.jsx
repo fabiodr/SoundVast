@@ -1,23 +1,18 @@
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { compose, withHandlers, setPropTypes } from 'recompose';
+import { compose, setPropTypes, withHandlers } from 'recompose';
 
 import Dislike from './dislike';
-
-const mapStateToProps = ({ music }, { id }) => ({
-  // dislikes: Object.keys(music.ratings).filter(key => music.ratings[key].audioId === id &&
-  //   !music.ratings[key].liked).length,
-});
-
-// const handlers = {
-//   dislike: props => () => props.dispatch(rateSong(props.id, false)),
-// };
+import rateAudioMutation from '../rateAudioMutation';
 
 const propTypes = {
-  // id: PropTypes.string.isRequired,
+  audioId: PropTypes.number.isRequired,
+};
+
+const handlers = {
+  onClick: ({ audioId }) => () => rateAudioMutation(audioId, false),
 };
 
 export default compose(
   setPropTypes(propTypes),
-  connect(mapStateToProps),
+  withHandlers(handlers),
 )(Dislike);

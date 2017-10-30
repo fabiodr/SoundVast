@@ -9,15 +9,17 @@ const mapStateToProps = ({ genre }) => ({
   genres: genre.genres,
 });
 
+const fragment = graphql`
+  fragment genreFieldContainer_genres on Genre @relay(plural: true) {
+    id,
+    name,
+    type,
+  }
+`;
+
 const enhance = compose(
   connect(mapStateToProps),
-  fragmentContainer(graphql`
-    fragment genreFieldContainer_genres on Genre @relay(plural: true) {
-      id,
-      name,
-      type,
-    }
-  `),
+  fragmentContainer(fragment),
 );
 
 export default enhance(GenreField);

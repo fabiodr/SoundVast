@@ -20,6 +20,8 @@ namespace SoundVast.Components.Audio
             Field("audioId", x => x.Id);
             Field(x => x.Name);
             Field(x => x.CoverImageUrl).Description("The poster image for the audio");
+            Field(x => x.Likes);
+            Field(x => x.Dislikes);
             Field<UserType>("user", "The user who uploaded the audio");
             Field<GenreType>("genre", "The genre the audio belongs to");
             Field<ListGraphType<RatingType>>("ratings", "The ratings that have been applied by users to this audio");

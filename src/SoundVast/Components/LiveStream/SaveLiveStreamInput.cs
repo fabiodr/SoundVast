@@ -2,18 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GraphQL.Relay.Types;
 using GraphQL.Types;
 
-namespace SoundVast.Components.Song
+namespace SoundVast.Components.LiveStream
 {
-    public class SongInputType : InputObjectGraphType
+    public class SaveLiveStreamInput : MutationInputGraphType
     {
-        public SongInputType()
+        public SaveLiveStreamInput()
         {
-            Name = "SongInput";
+            Name = nameof(SaveLiveStreamInput);
            
             Field<NonNullGraphType<StringGraphType>>("Name");
-            Field<StringGraphType>("Artist");
+            Field<NonNullGraphType<StringGraphType>>("LiveStreamUrl");
             Field<NonNullGraphType<StringGraphType>>("CoverImageUrl");
             Field<IntGraphType>("GenreId");
         }

@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash eca9daf7f25f92a3f40f53d37e963ce7
+ * @relayHash 93b9be6ee093b2d4fe011661a9458932
  */
 
 /* eslint-disable */
@@ -30,6 +30,8 @@ fragment songsContainer on AppQuery {
         name
         coverImageUrl
         artist
+        likes
+        dislikes
         id
       }
       cursor
@@ -169,6 +171,20 @@ const batch /*: ConcreteBatch*/ = {
                     "kind": "ScalarField",
                     "alias": null,
                     "args": null,
+                    "name": "likes",
+                    "storageKey": null
+                  },
+                  {
+                    "kind": "ScalarField",
+                    "alias": null,
+                    "args": null,
+                    "name": "dislikes",
+                    "storageKey": null
+                  },
+                  {
+                    "kind": "ScalarField",
+                    "alias": null,
+                    "args": null,
                     "name": "id",
                     "storageKey": null
                   }
@@ -237,7 +253,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query songsContainerForwardQuery(\n  $count: Int!\n  $cursor: String\n) {\n  ...songsContainer\n}\n\nfragment songsContainer on AppQuery {\n  songs(first: $count, after: $cursor) {\n    edges {\n      node {\n        __typename\n        audioId\n        name\n        coverImageUrl\n        artist\n        id\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+  "text": "query songsContainerForwardQuery(\n  $count: Int!\n  $cursor: String\n) {\n  ...songsContainer\n}\n\nfragment songsContainer on AppQuery {\n  songs(first: $count, after: $cursor) {\n    edges {\n      node {\n        __typename\n        audioId\n        name\n        coverImageUrl\n        artist\n        likes\n        dislikes\n        id\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
 };
 
 module.exports = batch;

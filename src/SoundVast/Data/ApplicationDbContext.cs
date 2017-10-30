@@ -17,7 +17,7 @@ namespace SoundVast.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        //public DbSet<RatingCountModel> RatingCount { get; set; }
+        //public DbSet<RatingCountModel> Rating { get; set; }
         public DbSet<Rating> Ratings { get; set; }
         //public DbSet<LinkModel> Links { get; set; }
         public DbSet<Genre> Genres { get; set; }

@@ -18,8 +18,6 @@ namespace SoundVast.Components.Rating
 
             Field<IdGraphType>("id");
             Field(x => x.Liked).Description("Whether the user has liked the audio or not");
-            Field(x => x.Likes);
-            Field(x => x.Dislikes);
             Field<UserType>("user", "The user that rated the audio");
             Field<AudioInterface>("audio", "The audio that was rated by the user");
         }

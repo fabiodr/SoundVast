@@ -7,8 +7,10 @@ const mutation = graphql`
     $audioRating: AudioRatingInput!
   ) {
     rateAudio(audioRating: $audioRating) {
-      likes,
-      dislikes,
+      audio {
+        likes,
+        dislikes,
+      }
     }
   }
 `;
@@ -24,12 +26,5 @@ export default (audioId, liked) => {
   commitMutation(environment, {
     mutation,
     variables,
-    updater: (proxyStore) => {
-      debugger;
-      const rateAudio = proxyStore.getRootField('rateAudio');
-      const likes = rateAudio.getValue('likes');
-
-      const audio = proxyStore.get(audioId);
-    },
   });
 };

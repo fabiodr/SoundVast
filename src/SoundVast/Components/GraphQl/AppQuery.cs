@@ -1,11 +1,12 @@
-﻿using GraphQL.Types;
+﻿using GraphQL.Relay.Types;
+using GraphQL.Types;
 using SoundVast.Components.Genre;
 using SoundVast.Components.LiveStream;
 using SoundVast.Components.Song;
 
 namespace SoundVast.Components.GraphQl
 {
-    public class AppQuery : ObjectGraphType
+    public class AppQuery : QueryGraphType
     {
         public AppQuery(ISongService songService, ILiveStreamService liveStreamService, IGenreService genreService)
         {

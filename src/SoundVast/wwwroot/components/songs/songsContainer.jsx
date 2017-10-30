@@ -27,6 +27,8 @@ fragment songsContainer on AppQuery {
         name,
         coverImageUrl,
         artist,
+        likes,
+        dislikes,
       }
     }
   }
@@ -39,7 +41,7 @@ const connectionConfig = {
       $count: Int!
       $cursor: String
     ) {
-      ...songsContainer
+      ...songsContainer,
     }
   `,
   getVariables: (_, { count, cursor }) => ({
