@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 using SoundVast.Components.Audio.Models;
@@ -12,6 +13,10 @@ namespace SoundVast.Components.Rating.Models
     {
         public int Id { get; set; }
         public bool Liked { get; set; }
+        [NotMapped]
+        public int Likes { get; set; }
+        [NotMapped]
+        public int Dislikes { get; set; }
         public string UserId { get; set; }
         public virtual ApplicationUser User { get; set; }
         public int? AudioId { get; set; }

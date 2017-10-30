@@ -314,8 +314,7 @@ namespace SoundVast.Migrations
                 {
                     b.HasOne("SoundVast.Components.Audio.Models.Audio", "Audio")
                         .WithMany("Ratings")
-                        .HasForeignKey("AudioId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("AudioId");
 
                     b.HasOne("SoundVast.Components.User.ApplicationUser", "User")
                         .WithMany()

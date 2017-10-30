@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ using SoundVast.Components.Genre.Models;
 using SoundVast.Components.Rating.Models;
 using SoundVast.Components.Upload;
 using SoundVast.Components.User;
+using SoundVast.CustomHelpers;
 using SoundVast.Repository;
 using SoundVast.Storage.CloudStorage;
 using SoundVast.Validation;
@@ -63,13 +65,11 @@ namespace SoundVast.Components.Audio
 
             if (existingRating != null)
             {
-                existingRating.Liked = rating.Liked;
-            }
-            else
-            {
-                audio.Ratings.Add(rating);
+                audio.Ratings.Remove(existingRating);
             }
 
+            audio.Ratings.Add(rating);
+   
             _repository.Save();
         }
     }

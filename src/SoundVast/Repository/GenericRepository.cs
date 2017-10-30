@@ -15,6 +15,7 @@ namespace SoundVast.Repository
         IQueryable<T> GetAll();
         T Get(int id);
         IQueryable<T> Include(params Expression<Func<T, object>>[] paths);
+        void LoadProperties(T entity);
         void Add(T item);
         void Remove(T item);
         void RemoveRange(IEnumerable<T> items);
@@ -67,6 +68,16 @@ namespace SoundVast.Repository
             }
 
             Save();
+        }
+
+        public virtual void LoadProperties(T entity)
+        {
+            var updatedEntity = Context.Set<T>().Update(entity);
+
+            foreach (var reference in updatedEntity.Navigations)
+            {
+                reference.Load();
+            }
         }
 
         public void RemoveRange(IEnumerable<T> items)

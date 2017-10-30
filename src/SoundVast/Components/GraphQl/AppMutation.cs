@@ -60,6 +60,8 @@ namespace SoundVast.Components.GraphQl
 
                     audioRating.UserId = GetUserId(x);
                     audioService.RateAudio(audioRating);
+                    audioRating.Likes = audioRating.Audio.Ratings.Count(z => z.Liked);
+                    audioRating.Dislikes = audioRating.Audio.Ratings.Count(z => !z.Liked);
 
                     return audioRating;
                 }).AddPermission(AuthorizedPermission);

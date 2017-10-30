@@ -5,23 +5,23 @@ import styles from './song.less';
 import Like from '../../rating/like/likeContainer';
 import Dislike from '../../rating/dislike/dislikeContainer';
 
-const Song = ({ name, artist, id }) => (
+const Song = ({ name, artist, audioId }) => (
   <div>
-    <Like id={id} />
-    <Dislike id={id} />
+    <Like audioId={audioId} />
+    <Dislike audioId={audioId} />
     <figcaption className={styles.name}>{name}</figcaption>
     <figcaption className={styles.artist}>{artist}</figcaption>
   </div>
 );
 
 Song.defaultProps = {
-  id: null,
+  audioId: null,
   name: null,
   artist: null,
 };
 
 Song.propTypes = {
-  id: PropTypes.string,
+  audioId: PropTypes.number,
   name: PropTypes.string,
   artist: PropTypes.string,
 };

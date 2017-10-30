@@ -1,5 +1,5 @@
 # source: http://localhost:8080/graphql
-# timestamp: Sun Oct 29 2017 16:55:30 GMT+0100 (W. Europe Standard Time)
+# timestamp: Mon Oct 30 2017 02:01:00 GMT+0100 (W. Europe Standard Time)
 
 schema {
   query: AppQuery
@@ -156,6 +156,8 @@ type Rating {
 
   # Whether the user has liked the audio or not
   liked: Boolean!
+  likes: Int!
+  dislikes: Int!
 
   # The user that rated the audio
   user: User

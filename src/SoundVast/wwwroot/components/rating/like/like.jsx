@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 
 import LikeIcon from '../../../images/ratingControls/like.svg';
 
-const Like = ({ like, likes, width, height }) => (
+const Like = ({ onClick, likes, width, height, ...props }) => (
   <div>
-    <LikeIcon width={width} height={height} onClick={like}>{likes}</LikeIcon>
+    <LikeIcon width={width} height={height} onClick={onClick}>{likes}</LikeIcon>
     <div className="likes">
       {likes}
     </div>
@@ -19,9 +19,9 @@ Like.defaultProps = {
 
 Like.propTypes = {
   // likes: PropTypes.number.isRequired,
-  // like: PropTypes.func.isRequired,
-  // width: PropTypes.number,
-  // height: PropTypes.number,
+  onClick: PropTypes.func.isRequired,
+  width: PropTypes.number,
+  height: PropTypes.number,
 };
 
 export default Like;
