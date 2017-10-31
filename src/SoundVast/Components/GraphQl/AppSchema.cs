@@ -16,10 +16,9 @@ namespace SoundVast.Components.GraphQl
             : base(type => (GraphType)resolveType(type))
         {
             var query = resolveType(typeof(AppQuery));
-            var mutation = resolveType(typeof(AppMutation));
 
             Query = query as AppQuery;
-            Mutation = mutation as AppMutation;
+            Mutation = new AppMutation();
 
             RegisterType<SongType>();
             RegisterType<LiveStreamType>();

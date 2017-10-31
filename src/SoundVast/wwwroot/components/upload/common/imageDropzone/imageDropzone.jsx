@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Dropzone from 'react-dropzone';
 
-import dropzoneStyles from '../../../shared/dropzone/dropzone.less';
+import Dropzone from '../../../shared/dropzone/dropzone';
 import styles from './imageDropzone.less';
 import PreviewImage from '../previewImage/previewImageContainer';
 
@@ -11,14 +10,12 @@ const ImageDropzone = ({ onDrop, id }) => (
     <span>Cover Image</span>
     <Dropzone
       className={styles.imageDropzone}
+      title="Update image"
       accept="image/*"
       multiple={false}
       onDrop={files => onDrop(id, files[0])}
     >
       <PreviewImage id={id} />
-      <div className={dropzoneStyles.placeholder}>
-        Update image
-      </div>
     </Dropzone>
   </div>
 );

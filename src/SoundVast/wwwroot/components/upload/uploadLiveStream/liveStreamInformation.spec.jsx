@@ -1,10 +1,11 @@
 import React from 'react';
 import expect from 'expect';
 import { shallow } from 'enzyme';
-import { TabPanel } from 'react-tabs';
 
 import LiveStreamInformation from './liveStreamInformation';
-import LiveStreamBasicInfo from './liveStreamBasicInfo';
+import BasicInfo from '../common/basicInfo/basicInfo';
+import NameField from '../../shared/fields/nameField/nameField';
+import GenreField from '../../shared/fields/genreField/genreField';
 
 const setup = (newProps) => {
   const props = {
@@ -13,17 +14,27 @@ const setup = (newProps) => {
   };
 
   const wrapper = shallow(<LiveStreamInformation {...props} />);
+  const basicInfo = wrapper.find(BasicInfo);
 
   return {
     wrapper,
     props,
+    basicInfo,
   };
 };
 
 describe('LiveStreamInformation', () => {
-  it('should render BasicInfo', () => {
-    const { wrapper } = setup();
+  describe('Basic Info', () => {
+    it('should render Name field', () => {
+      const { basicInfo } = setup();
 
-    expect(wrapper.find(TabPanel).find(LiveStreamBasicInfo).length).toBe(1);
+      expect(basicInfo.find(NameField).length).toBe(1);
+    });
+
+    it('should render Genre field', () => {
+      const { basicInfo } = setup();
+
+      expect(basicInfo.find(GenreField).length).toBe(1);
+    });
   });
 });

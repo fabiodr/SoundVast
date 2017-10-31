@@ -27,6 +27,7 @@ using System.Text.RegularExpressions;
 using Autofac;
 using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
+using GraphQL.Relay.Types;
 using Newtonsoft.Json;
 using SoundVast.Components.Audio;
 using SoundVast.Components.Audio.Models;
@@ -183,10 +184,10 @@ namespace SoundVast
             builder.Register(x => azureStorage).As<ICloudStorage>().SingleInstance();
 
             builder.RegisterAssemblyTypes(assembly).AsClosedTypesOf(typeof(Validator<>));
+            builder.RegisterAssemblyTypes(assembly).AsClosedTypesOf(typeof(MutationPayloadGraphType<,>));
             builder.RegisterAssemblyTypes(assembly).Where(x => x.Name.EndsWith("Service")).AsImplementedInterfaces();
             builder.RegisterAssemblyTypes(assembly).Where(x => x.Name.EndsWith("Validator")).AsImplementedInterfaces();
             builder.RegisterAssemblyTypes(assembly).Where(x => x.Name.EndsWith("Query"));
-            builder.RegisterAssemblyTypes(assembly).Where(x => x.Name.EndsWith("Mutation"));
             builder.RegisterAssemblyTypes(assembly).Where(x => x.Name.EndsWith("Type"));
 
             builder.RegisterType<FileStorage>().As<IFileStorage>().SingleInstance();

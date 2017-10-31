@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose, flattenProp, setPropTypes } from 'recompose';
 
-import PreviewImage from './previewImage';
+import PreviewImage from '../../../shared/dropzone/previewImage/previewImage';
 
 const mapStateToProps = ({ upload }, { id }) => ({
   coverImage: upload.coverImages[id],

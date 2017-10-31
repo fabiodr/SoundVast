@@ -10,7 +10,7 @@ using SoundVast.Components.GraphQl;
 
 namespace SoundVast.Components.Rating
 {
-    public class RateAudioPayload : MutationPayloadGraphType<RatingPayload, Models.Rating>
+    public class RateAudioPayload : MutationPayloadGraphType<RatingPayload, RatingPayload>
     {
         private readonly IAudioService<Audio.Models.Audio> _audioService;
         private static string GetUserId(ResolveFieldContext<object> context) => context.UserContext.As<Context>().ApplicationUser.Id;
@@ -21,20 +21,17 @@ namespace SoundVast.Components.Rating
 
             Name = nameof(RateAudioPayload);
            
-            Field(
-                name: "rating",
-                type: typeof(Models.Rating)
-            );
+            //Field<RateAudioPayload>("rating");
         }
 
-        public override Models.Rating MutateAndGetPayload(MutationInputs inputs, ResolveFieldContext<object> context)
+        public override RatingPayload MutateAndGetPayload(MutationInputs inputs, ResolveFieldContext<object> context)
         {
             var audioRating = inputs.As<Models.Rating>();
 
             audioRating.UserId = GetUserId(context);
             _audioService.RateAudio(audioRating);
 
-            return audioRating;
+            return new RatingPayload {Rating = audioRating};
         }
     }
 }

@@ -2,11 +2,11 @@ import React from 'react';
 import { Field } from 'redux-form';
 import PropTypes from 'prop-types';
 
-import formStyles from '../../shared/form/form.less';
 import genericStyles from '../../shared/generic.less';
 import AntiForgeryToken from '../../shared/form/antiForgeryToken/antiForgeryTokenContainer';
-import FormInput from '../../shared/form/editableField/input/input';
-import ValidationErrors from '../../shared/form/validation/errors/component';
+import FormGroup from '../../shared/form/formGroup';
+import Input from '../../shared/fields/input/input';
+import ValidationErrors from '../../shared/validation/validationErrors';
 import ModalLink from '../../shared/modal/modalLinkContainer';
 import Modal from '../../shared/modal/modalContainer';
 import SocialLogins from '../login/socialLogins/socialLoginsContainer';
@@ -18,12 +18,12 @@ const Register = ({ error: errors, handleSubmit }) => (
       <AntiForgeryToken form="register" />
       <ValidationErrors errors={errors} />
 
-      <div className={formStyles.formGroup}>
-        <Field name="username" component={FormInput} placeholder="Username" />
-        <Field name="email" component={FormInput} type="email" placeholder="Email" />
-        <Field name="password" component={FormInput} type="password" placeholder="Password" />
-        <Field name="confirmPassword" component={FormInput} type="password" placeholder="Confirm password" />
-      </div>
+      <FormGroup>
+        <Field name="username" component={Input} placeholder="Username" />
+        <Field name="email" component={Input} type="email" placeholder="Email" />
+        <Field name="password" component={Input} type="password" placeholder="Password" />
+        <Field name="confirmPassword" component={Input} type="password" placeholder="Confirm password" />
+      </FormGroup>
       <div>
         Or <ModalLink modalId="login">login</ModalLink> if you already have an account.
       </div>

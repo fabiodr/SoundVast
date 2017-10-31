@@ -1,35 +1,5 @@
 # source: http://localhost:8080/graphql
-# timestamp: Mon Oct 30 2017 22:36:20 GMT+0100 (W. Europe Standard Time)
-
-schema {
-  query: AppQuery
-  mutation: AppMutation
-}
-
-type AppMutation {
-  saveSong(song: SongInput!): Song
-  saveLiveStream(liveStream: LiveStreamInput!): LiveStream
-  rateAudio(audioRating: AudioRatingInput!): Rating
-}
-
-type AppQuery {
-  song(id: String): Song
-  songs(
-    # Only look at connected edges with cursors greater than the value of `after`.
-    after: String
-
-    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
-    first: Int
-  ): SongConnection
-  liveStreams(
-    # Only look at connected edges with cursors greater than the value of `after`.
-    after: String
-
-    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
-    first: Int
-  ): LiveStreamConnection
-  genres: [Genre]
-}
+# timestamp: Tue Oct 31 2017 13:00:29 GMT+0100 (W. Europe Standard Time)
 
 interface Audio {
   id: ID
@@ -49,11 +19,6 @@ interface Audio {
 
   # The ratings that have been applied by users to this audio
   ratings: [Rating]
-}
-
-input AudioRatingInput {
-  audioId: Int!
-  liked: Boolean!
 }
 
 # The `Date` scalar type represents a timestamp provided in UTC. `Date` expects
@@ -128,11 +93,8 @@ type LiveStreamEdge {
   node: LiveStream
 }
 
-input LiveStreamInput {
-  name: String!
-  liveStreamUrl: String!
-  coverImageUrl: String!
-  genreId: Int
+type Mutation {
+  rateAudio(input: RateAudioInput!): RateAudioPayload
 }
 
 interface Node {
@@ -155,7 +117,41 @@ type PageInfo {
   endCursor: String
 }
 
-type Rating {
+type Query {
+  # Fetches an object given its global Id
+  node(
+    # The global Id of the object
+    id: ID!
+  ): Node
+  song(id: String): Song
+  songs(
+    # Only look at connected edges with cursors greater than the value of `after`.
+    after: String
+
+    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
+    first: Int
+  ): SongConnection
+  liveStreams(
+    # Only look at connected edges with cursors greater than the value of `after`.
+    after: String
+
+    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
+    first: Int
+  ): LiveStreamConnection
+  genres: [Genre]
+}
+
+input RateAudioInput {
+  clientMutationId: String
+  audioId: Int!
+  liked: Boolean!
+}
+
+type RateAudioPayload {
+  clientMutationId: String
+}
+
+type Rating implements Node {
   id: ID
 
   # Whether the user has liked the audio or not
@@ -223,13 +219,6 @@ type SongEdge {
 
   # The item at the end of the edge
   node: Song
-}
-
-input SongInput {
-  name: String!
-  artist: String
-  coverImageUrl: String!
-  genreId: Int
 }
 
 type User {

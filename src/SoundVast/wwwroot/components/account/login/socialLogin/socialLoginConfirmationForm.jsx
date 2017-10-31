@@ -3,9 +3,9 @@ import { Field } from 'redux-form';
 import PropTypes from 'prop-types';
 
 import AntiForgeryToken from '../../../shared/form/antiForgeryToken/antiForgeryTokenContainer';
-import FormInput from '../../../shared/form/editableField/input/input';
+import Input from '../../../shared/fields/input/input';
 import genericStyles from '../../../shared/generic.less';
-import ValidationErrors from '../../../shared/form/validation/errors/component';
+import ValidationErrors from '../../../shared/validation/validationErrors';
 
 const Form = ({ error: errors, handleSubmit, loginProvider }) => (
   <form onSubmit={handleSubmit} action="" method="post">
@@ -22,7 +22,7 @@ const Form = ({ error: errors, handleSubmit, loginProvider }) => (
         logging in.
     </p>
     <div className="form-group">
-      <Field name="email" component={FormInput} type="email" placeholder="Email" />
+      <Field name="email" component={Input} type="email" placeholder="Email" />
     </div>
     <button className={genericStyles.button}>
       Register

@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 
 import Modal from '../../shared/modal/modalContainer';
-import formStyles from '../../shared/form/form.less';
+import FormGroup from '../../shared/form/formGroup';
 import genericStyles from '../../shared/generic.less';
 import AntiForgeryToken from '../../shared/form/antiForgeryToken/antiForgeryTokenContainer';
-import FormInput from '../../shared/form/editableField/input/input';
-import ValidationErrors from '../../shared/form/validation/errors/component';
+import Input from '../../shared/fields/input/input';
+import ValidationErrors from '../../shared/validation/validationErrors';
 
 const ForgotPassword = ({ error: errors, handleSubmit }) => (
   <Modal title="Reset your password." id="forgotPassword">
@@ -15,9 +15,9 @@ const ForgotPassword = ({ error: errors, handleSubmit }) => (
       <AntiForgeryToken form="forgotPassword" />
       <ValidationErrors errors={errors} />
 
-      <div className={formStyles.formGroup}>
-        <Field name="email" component={FormInput} type="email" placeholder="Email" />
-      </div>
+      <FormGroup>
+        <Field name="email" component={Input} type="email" placeholder="Email" />
+      </FormGroup>
 
       <button className={genericStyles.button}>
         Submit

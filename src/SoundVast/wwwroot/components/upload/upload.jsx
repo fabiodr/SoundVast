@@ -5,7 +5,7 @@ import { compose, lifecycle } from 'recompose';
 import { graphql } from 'react-relay';
 
 import styles from './upload.less';
-import AudioDropzone from './uploadFile/audioDropzone/audioDropzoneContainer';
+import AudioDropzone from './uploadFile/audioDropzoneContainer';
 import UploadLiveStream from './uploadLiveStream/uploadLiveStreamContainer';
 import authorizedComponent from '../shared/authorizedComponent/authorizedComponentContainer';
 import { addLiveStream } from './actions';

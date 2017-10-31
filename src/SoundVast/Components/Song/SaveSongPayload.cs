@@ -9,7 +9,7 @@ using SoundVast.Components.GraphQl;
 
 namespace SoundVast.Components.Song
 {
-    public class SaveSongPayload : MutationPayloadGraphType<SongPayload, Models.Song>
+    public class SaveSongPayload : MutationPayloadGraphType<SongPayload, SongPayload>
     {
         private readonly ISongService _songService;
         private static string GetUserId(ResolveFieldContext<object> context) => context.UserContext.As<Context>().ApplicationUser.Id;
@@ -22,18 +22,18 @@ namespace SoundVast.Components.Song
            
             Field(
                 name: "song",
-                type: typeof(Models.Song)
+                type: typeof(SongType)
             );
         }
 
-        public override Models.Song MutateAndGetPayload(MutationInputs inputs, ResolveFieldContext<object> context)
+        public override SongPayload MutateAndGetPayload(MutationInputs inputs, ResolveFieldContext<object> context)
         {
             var song = inputs.As<Models.Song>();
         
             song.UserId = GetUserId(context);
             _songService.Add(song);
 
-            return song;
+            return new SongPayload {Song = song};
         }
     }
 }

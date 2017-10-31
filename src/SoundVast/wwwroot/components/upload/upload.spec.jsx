@@ -6,7 +6,7 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
 import Upload from './upload';
-import AudioDropzone from './uploadFile/audioDropzone/audioDropzoneContainer';
+import AudioDropzone from './uploadFile/audioDropzoneContainer';
 import UploadLiveStream from './uploadLiveStream/uploadLiveStreamContainer';
 
 let state;
