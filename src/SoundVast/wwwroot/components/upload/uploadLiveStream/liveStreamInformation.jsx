@@ -7,7 +7,7 @@ import BasicInfo from '../common/basicInfo/basicInfo';
 import genreTypeNames from '../../genre/genreTypeNames';
 import Input from '../../shared/fields/input/input';
 import NameField from '../../shared/fields/nameField/nameField';
-import GenreField from '../../shared/fields/genreField/genreField';
+import GenreField from '../../shared/fields/genreField/genreFieldContainer';
 
 const LiveStreamInformation = ({ id }) => (
   <Tabs>

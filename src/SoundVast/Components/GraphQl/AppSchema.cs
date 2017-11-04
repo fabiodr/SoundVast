@@ -20,10 +20,10 @@ namespace SoundVast.Components.GraphQl
             Query = query as AppQuery;
             Mutation = new AppMutation();
 
-            RegisterType<SongType>();
-            RegisterType<LiveStreamType>();
+            RegisterType<SongPayload>();
+            RegisterType<LiveStreamPayload>();
             RegisterType<GenreType>();
-            RegisterType<RatingType>();
+            RegisterType<RatingPayload>();
         }
     }
 }

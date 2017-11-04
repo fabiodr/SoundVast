@@ -57,7 +57,7 @@ const fragment /*: ConcreteFragment*/ = {
       "kind": "LinkedField",
       "alias": "songs",
       "args": null,
-      "concreteType": "SongConnection",
+      "concreteType": "SongPayloadConnection",
       "name": "__songsContainer_songs_connection",
       "plural": false,
       "selections": [
@@ -65,7 +65,7 @@ const fragment /*: ConcreteFragment*/ = {
           "kind": "LinkedField",
           "alias": null,
           "args": null,
-          "concreteType": "SongEdge",
+          "concreteType": "SongPayloadEdge",
           "name": "edges",
           "plural": true,
           "selections": [
@@ -168,7 +168,7 @@ const fragment /*: ConcreteFragment*/ = {
       "storageKey": null
     }
   ],
-  "type": "AppQuery"
+  "type": "Query"
 };
 
 module.exports = fragment;

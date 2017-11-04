@@ -1,5 +1,5 @@
 # source: http://localhost:8080/graphql
-# timestamp: Tue Oct 31 2017 13:00:29 GMT+0100 (W. Europe Standard Time)
+# timestamp: Sat Nov 04 2017 01:27:51 GMT+0100 (W. Europe Standard Time)
 
 interface Audio {
   id: ID
@@ -60,8 +60,8 @@ type LiveStream implements Node, Audio {
   ratings: [Rating]
 }
 
-# A connection from an object to a list of objects of type `LiveStream`.
-type LiveStreamConnection {
+# A connection from an object to a list of objects of type `LiveStreamPayload`.
+type LiveStreamPayloadConnection {
   # A count of the total number of objects in this connection, ignoring
   # pagination. This allows a client to fetch the first five objects by passing
   # "5" as the argument to `first`, then fetch the total count so it could display
@@ -73,7 +73,7 @@ type LiveStreamConnection {
   pageInfo: PageInfo!
 
   # Information to aid in pagination.
-  edges: [LiveStreamEdge]
+  edges: [LiveStreamPayloadEdge]
 
   # A list of all of the objects returned in the connection. This is a convenience
   # field provided for quickly exploring the API; rather than querying for "{
@@ -84,8 +84,8 @@ type LiveStreamConnection {
   items: [LiveStream]
 }
 
-# An edge in a connection from an object to another object of type `LiveStream`.
-type LiveStreamEdge {
+# An edge in a connection from an object to another object of type `LiveStreamPayload`.
+type LiveStreamPayloadEdge {
   # A cursor for use in pagination
   cursor: String!
 
@@ -94,6 +94,8 @@ type LiveStreamEdge {
 }
 
 type Mutation {
+  saveSong(input: SaveSongInput!): SaveSongPayload
+  saveLiveStream(input: SaveLiveStreamInput!): SaveLiveStreamPayload
   rateAudio(input: RateAudioInput!): RateAudioPayload
 }
 
@@ -130,14 +132,14 @@ type Query {
 
     # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
     first: Int
-  ): SongConnection
+  ): SongPayloadConnection
   liveStreams(
     # Only look at connected edges with cursors greater than the value of `after`.
     after: String
 
     # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
     first: Int
-  ): LiveStreamConnection
+  ): LiveStreamPayloadConnection
   genres: [Genre]
 }
 
@@ -149,9 +151,10 @@ input RateAudioInput {
 
 type RateAudioPayload {
   clientMutationId: String
+  rating: Rating
 }
 
-type Rating implements Node {
+type Rating {
   id: ID
 
   # Whether the user has liked the audio or not
@@ -162,6 +165,32 @@ type Rating implements Node {
 
   # The audio that was rated by the user
   audio: Audio
+}
+
+input SaveLiveStreamInput {
+  clientMutationId: String
+  name: String!
+  liveStreamUrl: String!
+  coverImageUrl: String!
+  genreId: Int
+}
+
+type SaveLiveStreamPayload {
+  clientMutationId: String
+  liveStream: LiveStream
+}
+
+input SaveSongInput {
+  clientMutationId: String
+  name: String!
+  artist: String
+  coverImageUrl: String!
+  genreId: Int
+}
+
+type SaveSongPayload {
+  clientMutationId: String
+  song: Song
 }
 
 type Song implements Node, Audio {
@@ -188,8 +217,8 @@ type Song implements Node, Audio {
   ratings: [Rating]
 }
 
-# A connection from an object to a list of objects of type `Song`.
-type SongConnection {
+# A connection from an object to a list of objects of type `SongPayload`.
+type SongPayloadConnection {
   # A count of the total number of objects in this connection, ignoring
   # pagination. This allows a client to fetch the first five objects by passing
   # "5" as the argument to `first`, then fetch the total count so it could display
@@ -201,7 +230,7 @@ type SongConnection {
   pageInfo: PageInfo!
 
   # Information to aid in pagination.
-  edges: [SongEdge]
+  edges: [SongPayloadEdge]
 
   # A list of all of the objects returned in the connection. This is a convenience
   # field provided for quickly exploring the API; rather than querying for "{
@@ -212,8 +241,8 @@ type SongConnection {
   items: [Song]
 }
 
-# An edge in a connection from an object to another object of type `Song`.
-type SongEdge {
+# An edge in a connection from an object to another object of type `SongPayload`.
+type SongPayloadEdge {
   # A cursor for use in pagination
   cursor: String!
 

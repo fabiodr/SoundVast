@@ -4,12 +4,14 @@ import environment from '../app/environment/environment';
 
 const mutation = graphql`
   mutation rateAudioMutation(
-    $audioRating: AudioRatingInput!
+    $input: RateAudioInput!
   ) {
-    rateAudio(audioRating: $audioRating) {
-      audio {
-        likes,
-        dislikes,
+    rateAudio(input: $input) {
+      rating{
+        audio {
+          likes
+          dislikes
+        }
       }
     }
   }
@@ -17,7 +19,7 @@ const mutation = graphql`
 
 export default (audioId, liked) => {
   const variables = {
-    audioRating: {
+    input: {
       audioId,
       liked,
     },

@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 6e75f8d59d1d40a36d70feef7c769142
+ * @relayHash afdd0c48f3a1af4d2694aed0500551b7
  */
 
 /* eslint-disable */
@@ -9,18 +9,18 @@
 
 /*::
 import type {ConcreteBatch} from 'relay-runtime';
-export type saveLiveStreamMutationVariables = {|
+export type saveSongMutationVariables = {|
   input: {
     clientMutationId?: ?string;
     name: string;
-    liveStreamUrl: string;
+    artist?: ?string;
     coverImageUrl: string;
     genreId?: ?number;
   };
 |};
-export type saveLiveStreamMutationResponse = {|
-  +saveLiveStream: ?{|
-    +liveStream: ?{|
+export type saveSongMutationResponse = {|
+  +saveSong: ?{|
+    +song: ?{|
       +audioId: number;
     |};
   |};
@@ -29,11 +29,11 @@ export type saveLiveStreamMutationResponse = {|
 
 
 /*
-mutation saveLiveStreamMutation(
-  $input: SaveLiveStreamInput!
+mutation saveSongMutation(
+  $input: SaveSongInput!
 ) {
-  saveLiveStream(input: $input) {
-    liveStream {
+  saveSong(input: $input) {
+    song {
       audioId
       id
     }
@@ -47,13 +47,13 @@ const batch /*: ConcreteBatch*/ = {
       {
         "kind": "LocalArgument",
         "name": "input",
-        "type": "SaveLiveStreamInput!",
+        "type": "SaveSongInput!",
         "defaultValue": null
       }
     ],
     "kind": "Fragment",
     "metadata": null,
-    "name": "saveLiveStreamMutation",
+    "name": "saveSongMutation",
     "selections": [
       {
         "kind": "LinkedField",
@@ -63,19 +63,19 @@ const batch /*: ConcreteBatch*/ = {
             "kind": "Variable",
             "name": "input",
             "variableName": "input",
-            "type": "SaveLiveStreamInput!"
+            "type": "SaveSongInput!"
           }
         ],
-        "concreteType": "SaveLiveStreamPayload",
-        "name": "saveLiveStream",
+        "concreteType": "SaveSongPayload",
+        "name": "saveSong",
         "plural": false,
         "selections": [
           {
             "kind": "LinkedField",
             "alias": null,
             "args": null,
-            "concreteType": "LiveStream",
-            "name": "liveStream",
+            "concreteType": "Song",
+            "name": "song",
             "plural": false,
             "selections": [
               {
@@ -97,18 +97,18 @@ const batch /*: ConcreteBatch*/ = {
   "id": null,
   "kind": "Batch",
   "metadata": {},
-  "name": "saveLiveStreamMutation",
+  "name": "saveSongMutation",
   "query": {
     "argumentDefinitions": [
       {
         "kind": "LocalArgument",
         "name": "input",
-        "type": "SaveLiveStreamInput!",
+        "type": "SaveSongInput!",
         "defaultValue": null
       }
     ],
     "kind": "Root",
-    "name": "saveLiveStreamMutation",
+    "name": "saveSongMutation",
     "operation": "mutation",
     "selections": [
       {
@@ -119,19 +119,19 @@ const batch /*: ConcreteBatch*/ = {
             "kind": "Variable",
             "name": "input",
             "variableName": "input",
-            "type": "SaveLiveStreamInput!"
+            "type": "SaveSongInput!"
           }
         ],
-        "concreteType": "SaveLiveStreamPayload",
-        "name": "saveLiveStream",
+        "concreteType": "SaveSongPayload",
+        "name": "saveSong",
         "plural": false,
         "selections": [
           {
             "kind": "LinkedField",
             "alias": null,
             "args": null,
-            "concreteType": "LiveStream",
-            "name": "liveStream",
+            "concreteType": "Song",
+            "name": "song",
             "plural": false,
             "selections": [
               {
@@ -156,7 +156,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "mutation saveLiveStreamMutation(\n  $input: SaveLiveStreamInput!\n) {\n  saveLiveStream(input: $input) {\n    liveStream {\n      audioId\n      id\n    }\n  }\n}\n"
+  "text": "mutation saveSongMutation(\n  $input: SaveSongInput!\n) {\n  saveSong(input: $input) {\n    song {\n      audioId\n      id\n    }\n  }\n}\n"
 };
 
 module.exports = batch;

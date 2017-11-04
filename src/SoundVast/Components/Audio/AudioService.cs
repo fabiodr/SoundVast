@@ -58,19 +58,29 @@ namespace SoundVast.Components.Audio
             }
         }
 
-        public void RateAudio(Rating.Models.Rating rating)
+        public Rating.Models.Rating RateAudio(int audioId, string userId, bool liked)
         {
-            var audio = _repository.Include(x => x.Ratings).Single(x => x.Id == rating.AudioId);
-            var existingRating = audio.Ratings?.SingleOrDefault(x => x.UserId == rating.UserId);
+            var audio = _repository.Include(x => x.Ratings).Single(x => x.Id == audioId);
+            var rating = audio.Ratings?.SingleOrDefault(x => x.UserId == userId);
 
-            if (existingRating != null)
+            if (rating != null)
             {
-                audio.Ratings.Remove(existingRating);
+                rating.Liked = liked;
+            } else
+            {
+                rating = new Rating.Models.Rating
+                {
+                    Audio = audio,
+                    User = audio.User,
+                    Liked = liked
+                };
+
+                audio.Ratings.Add(rating);
             }
 
-            audio.Ratings.Add(rating);
-   
             _repository.Save();
+
+            return rating;
         }
     }
 }

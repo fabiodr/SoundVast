@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 912a4cc8f520ad8d71301f46f02ce4f7
+ * @relayHash 13ae8fd84a8bfbdcf805e2e0d2f0c09b
  */
 
 /* eslint-disable */
@@ -21,7 +21,7 @@ query songsContainerQuery(
   ...songsContainer
 }
 
-fragment songsContainer on AppQuery {
+fragment songsContainer on Query {
   songs(first: $count, after: $cursor) {
     edges {
       node {
@@ -70,7 +70,7 @@ const batch /*: ConcreteBatch*/ = {
         "args": null
       }
     ],
-    "type": "AppQuery"
+    "type": "Query"
   },
   "id": null,
   "kind": "Batch",
@@ -112,7 +112,7 @@ const batch /*: ConcreteBatch*/ = {
             "type": "Int"
           }
         ],
-        "concreteType": "SongConnection",
+        "concreteType": "SongPayloadConnection",
         "name": "songs",
         "plural": false,
         "selections": [
@@ -120,7 +120,7 @@ const batch /*: ConcreteBatch*/ = {
             "kind": "LinkedField",
             "alias": null,
             "args": null,
-            "concreteType": "SongEdge",
+            "concreteType": "SongPayloadEdge",
             "name": "edges",
             "plural": true,
             "selections": [
@@ -253,7 +253,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query songsContainerQuery(\n  $count: Int!\n  $cursor: String\n) {\n  ...songsContainer\n}\n\nfragment songsContainer on AppQuery {\n  songs(first: $count, after: $cursor) {\n    edges {\n      node {\n        __typename\n        audioId\n        name\n        coverImageUrl\n        artist\n        likes\n        dislikes\n        id\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+  "text": "query songsContainerQuery(\n  $count: Int!\n  $cursor: String\n) {\n  ...songsContainer\n}\n\nfragment songsContainer on Query {\n  songs(first: $count, after: $cursor) {\n    edges {\n      node {\n        __typename\n        audioId\n        name\n        coverImageUrl\n        artist\n        likes\n        dislikes\n        id\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
 };
 
 module.exports = batch;

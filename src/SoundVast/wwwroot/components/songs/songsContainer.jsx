@@ -16,7 +16,7 @@ const query = graphql`
 `;
 
 const fragments = graphql`
-fragment songsContainer on AppQuery {
+fragment songsContainer on Query {
   songs(
     first: $count,
     after: $cursor,

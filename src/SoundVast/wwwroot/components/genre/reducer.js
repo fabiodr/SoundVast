@@ -1,4 +1,8 @@
-export default (state = {}, action) => {
+const defaultState = {
+  genres: [],
+};
+
+export default (state = defaultState, action) => {
   switch (action.type) {
     case 'SET_GENRES':
       return {

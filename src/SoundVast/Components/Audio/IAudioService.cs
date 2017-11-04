@@ -15,6 +15,6 @@ namespace SoundVast.Components.Audio
         T GetAudio(int id);
         ICollection<Rating.Models.Rating> GetAudioRatings(int id);
         void Add(T model);
-       void RateAudio(Rating.Models.Rating rating);
+        Rating.Models.Rating RateAudio(int audioId, string userId, bool liked);
     }
 }

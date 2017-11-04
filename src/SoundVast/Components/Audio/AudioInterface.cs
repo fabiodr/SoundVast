@@ -24,7 +24,7 @@ namespace SoundVast.Components.Audio
             Field(x => x.Dislikes);
             Field<UserType>("user", "The user who uploaded the audio");
             Field<GenreType>("genre", "The genre the audio belongs to");
-            Field<ListGraphType<RatingType>>("ratings", "The ratings that have been applied by users to this audio");
+            Field<ListGraphType<RatingPayload>>("ratings", "The ratings that have been applied by users to this audio");
         }
     }
 }

@@ -7,7 +7,7 @@ import BasicInfo from '../common/basicInfo/basicInfo';
 import genreTypeNames from '../../genre/genreTypeNames';
 import Input from '../../shared/fields/input/input';
 import NameField from '../../shared/fields/nameField/nameField';
-import GenreField from '../../shared/fields/genreField/genreField';
+import GenreField from '../../shared/fields/genreField/genreFieldContainer';
 import ValidationErrors from '../../shared/validation/validationErrors';
 import SpinnerSubmit from '../../shared/form/spinnerSubmit/spinnerSubmitContainer';
 import CancelButton from '../common/cancelButton/cancelButton';

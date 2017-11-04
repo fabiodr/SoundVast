@@ -8,17 +8,18 @@ namespace SoundVast.Components.GraphQl
 {
     public class AppQuery : QueryGraphType
     {
-        public AppQuery(ISongService songService, ILiveStreamService liveStreamService, IGenreService genreService)
+        public AppQuery(ISongService songService, ILiveStreamService liveStreamService,
+            IGenreService genreService)
         {
-            Field<SongType>("song",
+            Field<SongPayload>("song",
                 arguments: new QueryArguments(new QueryArgument<StringGraphType> { Name = "id" }),
                 resolve: context => songService.GetAudio(context.GetArgument<int>("id")));
 
-            Connection<SongType>()
+            Connection<SongPayload>()
                 .Name("songs")
                 .Resolve(x => GraphQL.Relay.Types.Connection.ToConnection(songService.GetAudios(), x));
 
-            Connection<LiveStreamType>()
+            Connection<LiveStreamPayload>()
                 .Name("liveStreams")
                 .Resolve(x => GraphQL.Relay.Types.Connection.ToConnection(liveStreamService.GetAudios(), x));
 

@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 9358071a5e304c76371aeb163695619a
+ * @relayHash d71f4ff5df4dd980aa42be95f0d45e29
  */
 
 /* eslint-disable */
@@ -10,16 +10,19 @@
 /*::
 import type {ConcreteBatch} from 'relay-runtime';
 export type rateAudioMutationVariables = {|
-  audioRating: {
+  input: {
+    clientMutationId?: ?string;
     audioId: number;
     liked: boolean;
   };
 |};
 export type rateAudioMutationResponse = {|
   +rateAudio: ?{|
-    +audio: ?{|
-      +likes: number;
-      +dislikes: number;
+    +rating: ?{|
+      +audio: ?{|
+        +likes: number;
+        +dislikes: number;
+      |};
     |};
   |};
 |};
@@ -28,16 +31,18 @@ export type rateAudioMutationResponse = {|
 
 /*
 mutation rateAudioMutation(
-  $audioRating: AudioRatingInput!
+  $input: RateAudioInput!
 ) {
-  rateAudio(audioRating: $audioRating) {
-    audio {
-      __typename
-      likes
-      dislikes
+  rateAudio(input: $input) {
+    rating {
+      audio {
+        __typename
+        likes
+        dislikes
+        id
+      }
       id
     }
-    id
   }
 }
 */
@@ -47,8 +52,8 @@ const batch /*: ConcreteBatch*/ = {
     "argumentDefinitions": [
       {
         "kind": "LocalArgument",
-        "name": "audioRating",
-        "type": "AudioRatingInput!",
+        "name": "input",
+        "type": "RateAudioInput!",
         "defaultValue": null
       }
     ],
@@ -62,12 +67,12 @@ const batch /*: ConcreteBatch*/ = {
         "args": [
           {
             "kind": "Variable",
-            "name": "audioRating",
-            "variableName": "audioRating",
-            "type": "AudioRatingInput!"
+            "name": "input",
+            "variableName": "input",
+            "type": "RateAudioInput!"
           }
         ],
-        "concreteType": "Rating",
+        "concreteType": "RateAudioPayload",
         "name": "rateAudio",
         "plural": false,
         "selections": [
@@ -75,22 +80,33 @@ const batch /*: ConcreteBatch*/ = {
             "kind": "LinkedField",
             "alias": null,
             "args": null,
-            "concreteType": null,
-            "name": "audio",
+            "concreteType": "Rating",
+            "name": "rating",
             "plural": false,
             "selections": [
               {
-                "kind": "ScalarField",
+                "kind": "LinkedField",
                 "alias": null,
                 "args": null,
-                "name": "likes",
-                "storageKey": null
-              },
-              {
-                "kind": "ScalarField",
-                "alias": null,
-                "args": null,
-                "name": "dislikes",
+                "concreteType": null,
+                "name": "audio",
+                "plural": false,
+                "selections": [
+                  {
+                    "kind": "ScalarField",
+                    "alias": null,
+                    "args": null,
+                    "name": "likes",
+                    "storageKey": null
+                  },
+                  {
+                    "kind": "ScalarField",
+                    "alias": null,
+                    "args": null,
+                    "name": "dislikes",
+                    "storageKey": null
+                  }
+                ],
                 "storageKey": null
               }
             ],
@@ -100,7 +116,7 @@ const batch /*: ConcreteBatch*/ = {
         "storageKey": null
       }
     ],
-    "type": "AppMutation"
+    "type": "Mutation"
   },
   "id": null,
   "kind": "Batch",
@@ -110,8 +126,8 @@ const batch /*: ConcreteBatch*/ = {
     "argumentDefinitions": [
       {
         "kind": "LocalArgument",
-        "name": "audioRating",
-        "type": "AudioRatingInput!",
+        "name": "input",
+        "type": "RateAudioInput!",
         "defaultValue": null
       }
     ],
@@ -125,12 +141,12 @@ const batch /*: ConcreteBatch*/ = {
         "args": [
           {
             "kind": "Variable",
-            "name": "audioRating",
-            "variableName": "audioRating",
-            "type": "AudioRatingInput!"
+            "name": "input",
+            "variableName": "input",
+            "type": "RateAudioInput!"
           }
         ],
-        "concreteType": "Rating",
+        "concreteType": "RateAudioPayload",
         "name": "rateAudio",
         "plural": false,
         "selections": [
@@ -138,29 +154,47 @@ const batch /*: ConcreteBatch*/ = {
             "kind": "LinkedField",
             "alias": null,
             "args": null,
-            "concreteType": null,
-            "name": "audio",
+            "concreteType": "Rating",
+            "name": "rating",
             "plural": false,
             "selections": [
               {
-                "kind": "ScalarField",
+                "kind": "LinkedField",
                 "alias": null,
                 "args": null,
-                "name": "__typename",
-                "storageKey": null
-              },
-              {
-                "kind": "ScalarField",
-                "alias": null,
-                "args": null,
-                "name": "likes",
-                "storageKey": null
-              },
-              {
-                "kind": "ScalarField",
-                "alias": null,
-                "args": null,
-                "name": "dislikes",
+                "concreteType": null,
+                "name": "audio",
+                "plural": false,
+                "selections": [
+                  {
+                    "kind": "ScalarField",
+                    "alias": null,
+                    "args": null,
+                    "name": "__typename",
+                    "storageKey": null
+                  },
+                  {
+                    "kind": "ScalarField",
+                    "alias": null,
+                    "args": null,
+                    "name": "likes",
+                    "storageKey": null
+                  },
+                  {
+                    "kind": "ScalarField",
+                    "alias": null,
+                    "args": null,
+                    "name": "dislikes",
+                    "storageKey": null
+                  },
+                  {
+                    "kind": "ScalarField",
+                    "alias": null,
+                    "args": null,
+                    "name": "id",
+                    "storageKey": null
+                  }
+                ],
                 "storageKey": null
               },
               {
@@ -172,20 +206,13 @@ const batch /*: ConcreteBatch*/ = {
               }
             ],
             "storageKey": null
-          },
-          {
-            "kind": "ScalarField",
-            "alias": null,
-            "args": null,
-            "name": "id",
-            "storageKey": null
           }
         ],
         "storageKey": null
       }
     ]
   },
-  "text": "mutation rateAudioMutation(\n  $audioRating: AudioRatingInput!\n) {\n  rateAudio(audioRating: $audioRating) {\n    audio {\n      __typename\n      likes\n      dislikes\n      id\n    }\n    id\n  }\n}\n"
+  "text": "mutation rateAudioMutation(\n  $input: RateAudioInput!\n) {\n  rateAudio(input: $input) {\n    rating {\n      audio {\n        __typename\n        likes\n        dislikes\n        id\n      }\n      id\n    }\n  }\n}\n"
 };
 
 module.exports = batch;
