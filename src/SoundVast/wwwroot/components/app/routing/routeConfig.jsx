@@ -17,7 +17,6 @@ export default makeRouteConfig(
   <Route path="/">
     <Route Component={PrimaryLayout}>
       <Route {...SongsContainerRouteConfig} />
-      {/* <Route path="/songs" Component={Songs} query={songsQuery} /> */}
       {/* <Route exact path="/radios" component={Radios} /> */}
       <Route path="account">
         <Route path="externalLoginConfirmation" Component={SocialLoginConfirmation} />

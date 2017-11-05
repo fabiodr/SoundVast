@@ -6,10 +6,11 @@ import rateAudioMutation from '../rateAudioMutation';
 
 const propTypes = {
   audioId: PropTypes.number.isRequired,
+  dislikes: PropTypes.number.isRequired,
 };
 
 const handlers = {
-  onClick: ({ audioId }) => () => rateAudioMutation(audioId, false),
+  onClick: ({ audioId, dislikes }) => () => rateAudioMutation(audioId, dislikes, false),
 };
 
 export default compose(

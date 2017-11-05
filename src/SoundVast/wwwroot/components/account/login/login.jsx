@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 
 import ModalLink from '../../shared/modal/modalLinkContainer';
 import genericStyles from '../../shared/generic.less';
-import AntiForgeryToken from '../../shared/form/antiForgeryToken/antiForgeryTokenContainer';
 import FormGroup from '../../shared/form/formGroup';
 import Input from '../../shared/fields/input/input';
 import ValidationErrors from '../../shared/validation/validationErrors';
@@ -15,7 +14,6 @@ const Login = ({ error: errors, handleSubmit }) => (
   <Modal title="Login." id="login">
     <SocialLogins />
     <form onSubmit={handleSubmit} action="">
-      <AntiForgeryToken form="login" />
       <ValidationErrors errors={errors} />
 
       <FormGroup>
@@ -23,7 +21,7 @@ const Login = ({ error: errors, handleSubmit }) => (
         <Field name="password" component={Input} type="password" placeholder="Password" />
       </FormGroup>
 
-      <Field name="rememberMe" component="checkbox" checked />
+      <Field name="rememberMe" component={Input} type="checkbox" />
       <div>
         Or <ModalLink modalId="register">register</ModalLink> if you don&apos;t have an account.
       </div>

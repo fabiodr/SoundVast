@@ -13,7 +13,9 @@ using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SoundVast.Components.Account;
 using SoundVast.Components.Audio;
+using SoundVast.Components.Email;
 using SoundVast.Components.LiveStream;
 using SoundVast.Components.Rating;
 using SoundVast.Components.Upload;
@@ -30,6 +32,9 @@ namespace SoundVast.Components.GraphQl
             Mutation<SaveSongInput, SaveSongPayload>("saveSong").AddPermission(AuthorizedPermission);
             Mutation<SaveLiveStreamInput, SaveLiveStreamPayload>("saveLiveStream").AddPermission(AuthorizedPermission);
             Mutation<RateAudioInput, RateAudioPayload>("rateAudio").AddPermission(AuthorizedPermission);
+            Mutation<RegisterAccountInput, RegisterAccountPayload>("register");
+            Mutation<LoginAccountInput, LoginAccountPayload>("login");
+            Mutation<SendEmailInput, SendEmailPayload>("sendEmail");
         }
     }
 }

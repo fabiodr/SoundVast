@@ -45,7 +45,7 @@ namespace SoundVast.Components.GraphQl
             var context = new Context
             {
                 ApplicationUser = await _userManager.GetUserAsync(HttpContext.User),
-                User = User
+                User = User,
             };
             var validationRules = new List<IValidationRule>
             {
@@ -62,7 +62,10 @@ namespace SoundVast.Components.GraphQl
 
             if (_validationProvider.HasErrors)
             {
-                return BadRequest(_validationProvider.ValidationErrors);
+                return BadRequest(new
+                {
+                    errors = _validationProvider.ValidationErrors
+                });
             }
 
             if (executionResult?.Errors?.Count > 0)

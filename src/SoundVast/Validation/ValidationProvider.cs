@@ -17,22 +17,27 @@ namespace SoundVast.Validation
             _validatorFactory = validatorFactory;
         }
 
+        public void AddError(string key, string message)
+        {
+            if (ValidationErrors.ContainsKey(key))
+            {
+                var validationError = ValidationErrors[key];
+
+                validationError.Add(message);
+            }
+            else
+            {
+                ValidationErrors[key] = new List<string> { message };
+            }
+        }
+
         public void Validate(object entity)
         {
             var validationResults = _validatorFactory(entity.GetType()).Validate(entity).ToArray();
 
             foreach (var validationResult in validationResults)
             {
-                if (ValidationErrors.ContainsKey(validationResult.Key))
-                {
-                    var validationError = ValidationErrors[validationResult.Key];
-
-                    validationError.Add(validationResult.Message);
-                }
-                else
-                {
-                    ValidationErrors[validationResult.Key] = new List<string> { validationResult.Message };
-                }
+                AddError(validationResult.Key, validationResult.Message);
             }
         }
     }

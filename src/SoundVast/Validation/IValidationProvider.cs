@@ -12,5 +12,6 @@ namespace SoundVast.Validation
         bool HasErrors { get; }
   
         void Validate(object entity);
+        void AddError(string key, string message);
     }
 }

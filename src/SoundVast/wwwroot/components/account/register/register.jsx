@@ -3,7 +3,6 @@ import { Field } from 'redux-form';
 import PropTypes from 'prop-types';
 
 import genericStyles from '../../shared/generic.less';
-import AntiForgeryToken from '../../shared/form/antiForgeryToken/antiForgeryTokenContainer';
 import FormGroup from '../../shared/form/formGroup';
 import Input from '../../shared/fields/input/input';
 import ValidationErrors from '../../shared/validation/validationErrors';
@@ -15,7 +14,6 @@ const Register = ({ error: errors, handleSubmit }) => (
   <Modal title="Register." id="register">
     <SocialLogins />
     <form onSubmit={handleSubmit} action="">
-      <AntiForgeryToken form="register" />
       <ValidationErrors errors={errors} />
 
       <FormGroup>

@@ -35,6 +35,8 @@ Audios.propTypes = {
       name: PropTypes.string.isRequired,
       artist: PropTypes.string,
       coverImageUrl: PropTypes.string.isRequired,
+      likes: PropTypes.number.isRequired,
+      dislikes: PropTypes.number.isRequired,
     }),
   ).isRequired,
   getPlaylist: PropTypes.func.isRequired,

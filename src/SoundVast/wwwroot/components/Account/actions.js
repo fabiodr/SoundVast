@@ -2,6 +2,7 @@
 
 import notOkError from '../shared/fetch/notOkError/notOkError';
 import notOkErrorPopup from '../shared/fetch/notOkError/popup/popup';
+import { showTextPopup } from '../shared/popup/actions';
 
 export const getAccountDetails = () => dispatch =>
   fetch('/account/getAccountDetails', {
@@ -15,3 +16,5 @@ export const getAccountDetails = () => dispatch =>
       isAdmin: json.isAdmin,
     }))
     .catch(notOkErrorPopup(dispatch));
+
+export const showLoginPopup = () => showTextPopup('You have successfully logged in.');

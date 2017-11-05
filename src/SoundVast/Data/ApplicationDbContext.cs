@@ -45,7 +45,7 @@ namespace SoundVast.Data
 
             modelBuilder.Entity<Song>();
             modelBuilder.Entity<LiveStream>();
-          //  modelBuilder.Entity<Audio>().HasMany(x => x.Ratings).WithOne(x => x.Audio).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Audio>().HasMany(x => x.Ratings).WithOne(x => x.Audio).OnDelete(DeleteBehavior.Cascade);
             //modelBuilder.Entity<AudioGenreModel>().HasKey(x => new { x.AudioId, x.GenreId });
             //modelBuilder.Entity<FileStreamModel>().HasMany(x => x.Links).WithOne().OnDelete(DeleteBehavior.Cascade);
             //modelBuilder.Entity<CommentRatingJoinModel>().HasKey(x => new { x.CommentId, x.CommentRatingId });

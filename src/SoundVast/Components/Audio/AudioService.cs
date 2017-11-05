@@ -65,13 +65,20 @@ namespace SoundVast.Components.Audio
 
             if (rating != null)
             {
-                rating.Liked = liked;
+                if (rating.Liked == liked)
+                {
+                    audio.Ratings.Remove(rating);
+                }
+                else
+                {
+                    rating.Liked = liked;
+                }
             } else
             {
                 rating = new Rating.Models.Rating
                 {
-                    Audio = audio,
-                    User = audio.User,
+                    AudioId = audioId,
+                    UserId = userId,
                     Liked = liked
                 };
 

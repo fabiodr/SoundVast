@@ -1,5 +1,10 @@
 # source: http://localhost:8080/graphql
-# timestamp: Sat Nov 04 2017 01:27:51 GMT+0100 (W. Europe Standard Time)
+# timestamp: Sat Nov 04 2017 22:04:02 GMT+0100 (W. Europe Standard Time)
+
+type ApplicationUser {
+  id: ID
+  email: String!
+}
 
 interface Audio {
   id: ID
@@ -93,10 +98,24 @@ type LiveStreamPayloadEdge {
   node: LiveStream
 }
 
+input LoginAccountInput {
+  clientMutationId: String
+  username: String!
+  password: String!
+  rememberMe: Boolean!
+}
+
+type LoginAccountPayload {
+  clientMutationId: String
+}
+
 type Mutation {
   saveSong(input: SaveSongInput!): SaveSongPayload
   saveLiveStream(input: SaveLiveStreamInput!): SaveLiveStreamPayload
   rateAudio(input: RateAudioInput!): RateAudioPayload
+  register(input: RegisterAccountInput!): RegisterAccountPayload
+  login(input: LoginAccountInput!): LoginAccountPayload
+  sendEmail(input: SendEmailInput!): SendEmailPayload
 }
 
 interface Node {
@@ -154,7 +173,7 @@ type RateAudioPayload {
   rating: Rating
 }
 
-type Rating {
+type Rating implements Node {
   id: ID
 
   # Whether the user has liked the audio or not
@@ -165,6 +184,19 @@ type Rating {
 
   # The audio that was rated by the user
   audio: Audio
+}
+
+input RegisterAccountInput {
+  clientMutationId: String
+  username: String!
+  email: String!
+  password: String!
+}
+
+type RegisterAccountPayload {
+  clientMutationId: String
+  user: ApplicationUser
+  emailConfirmationToken: String
 }
 
 input SaveLiveStreamInput {
@@ -191,6 +223,17 @@ input SaveSongInput {
 type SaveSongPayload {
   clientMutationId: String
   song: Song
+}
+
+input SendEmailInput {
+  clientMutationId: String
+  email: String!
+  message: String!
+  subject: String!
+}
+
+type SendEmailPayload {
+  clientMutationId: String
 }
 
 type Song implements Node, Audio {

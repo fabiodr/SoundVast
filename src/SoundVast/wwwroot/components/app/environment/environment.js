@@ -16,7 +16,15 @@ const network = Network.create((operation, variables) =>
       query: operation.text,
       variables: JSON.stringify(variables),
     }),
-  }).then(response => response.json()));
+  }).then(response => response.json())
+    .then((json) => {
+      // https://github.com/facebook/relay/issues/1816
+      if (operation.query.operation === 'mutation' && json.errors) {
+        return Promise.reject(json.errors);
+      }
+
+      return Promise.resolve(json);
+    }));
 
 const source = new RecordSource();
 const store = new Store(source);

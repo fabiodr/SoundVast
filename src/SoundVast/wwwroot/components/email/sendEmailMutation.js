@@ -3,25 +3,21 @@ import { graphql, commitMutation } from 'react-relay';
 import environment from '../app/environment/environment';
 
 const mutation = graphql`
-  mutation rateAudioMutation(
-    $input: RateAudioInput!
+  mutation sendEmailMutation(
+    $input: SendEmailInput!
   ) {
-    rateAudio(input: $input) {
-      rating {
-        audio {
-          likes
-          dislikes
-        }
-      }
+    sendEmail(input: $input) {
+      clientMutationId
     }
   }
 `;
 
-export default (audioId, ratings, liked) => {
+export default (email, subject, message) => {
   const variables = {
     input: {
-      audioId,
-      liked,
+      email,
+      subject,
+      message,
     },
   };
 
