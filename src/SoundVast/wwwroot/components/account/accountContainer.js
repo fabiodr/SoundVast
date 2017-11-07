@@ -5,7 +5,7 @@ import Account from './account';
 const query = graphql`
   query accountContainerQuery {
     loginProviders {
-      ...socialLoginsContainer_loginProviders
+      ...socialLoginsContainer_loginProviders,
     }
   }
 `;

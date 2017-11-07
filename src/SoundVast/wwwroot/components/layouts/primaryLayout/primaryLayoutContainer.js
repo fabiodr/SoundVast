@@ -6,6 +6,7 @@ const query = graphql`
   query primaryLayoutContainerQuery {
     user {
       ...authorizedListContainer_user,
+      ...unAuthorizedListContainer_user,
     }
   }
 `;

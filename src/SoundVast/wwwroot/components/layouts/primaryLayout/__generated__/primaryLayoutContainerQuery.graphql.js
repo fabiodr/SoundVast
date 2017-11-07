@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 2da7515ac5ae3f44b0b46f67b6cde891
+ * @relayHash 28bc4f9a8fb26830dfc3e3da9e7b3a6b
  */
 
 /* eslint-disable */
@@ -19,11 +19,16 @@ export type primaryLayoutContainerQueryResponse = {|
 query primaryLayoutContainerQuery {
   user {
     ...authorizedListContainer_user
+    ...unAuthorizedListContainer_user
     id
   }
 }
 
 fragment authorizedListContainer_user on ApplicationUser {
+  userName
+}
+
+fragment unAuthorizedListContainer_user on ApplicationUser {
   userName
 }
 */
@@ -46,6 +51,11 @@ const batch /*: ConcreteBatch*/ = {
           {
             "kind": "FragmentSpread",
             "name": "authorizedListContainer_user",
+            "args": null
+          },
+          {
+            "kind": "FragmentSpread",
+            "name": "unAuthorizedListContainer_user",
             "args": null
           }
         ],
@@ -91,7 +101,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query primaryLayoutContainerQuery {\n  user {\n    ...authorizedListContainer_user\n    id\n  }\n}\n\nfragment authorizedListContainer_user on ApplicationUser {\n  userName\n}\n"
+  "text": "query primaryLayoutContainerQuery {\n  user {\n    ...authorizedListContainer_user\n    ...unAuthorizedListContainer_user\n    id\n  }\n}\n\nfragment authorizedListContainer_user on ApplicationUser {\n  userName\n}\n\nfragment unAuthorizedListContainer_user on ApplicationUser {\n  userName\n}\n"
 };
 
 module.exports = batch;

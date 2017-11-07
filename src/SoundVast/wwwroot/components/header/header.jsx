@@ -30,7 +30,7 @@ const Header = ({ user }) => (
       </ul>
       <ul>
         <AuthorizedList user={user} />
-        <UnAuthorizedList />
+        <UnAuthorizedList user={user} />
         <li>
           <LinkDropdown title={<i className="fa fa-bars" />}>
             <ul>

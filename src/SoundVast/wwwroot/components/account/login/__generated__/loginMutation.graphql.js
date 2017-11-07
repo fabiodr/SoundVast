@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash f16d9788c0d8ec8d4ffbf99bb9d708eb
+ * @relayHash 46e510f5ebde8d4530d4cc166c85b155
  */
 
 /* eslint-disable */
@@ -19,9 +19,7 @@ export type loginMutationVariables = {|
 |};
 export type loginMutationResponse = {|
   +login: ?{|
-    +user: ?{|
-      +userName: string;
-    |};
+    +user: ?{| |};
   |};
 |};
 */
@@ -33,10 +31,14 @@ mutation loginMutation(
 ) {
   login(input: $input) {
     user {
-      userName
+      ...authorizedListContainer_user
       id
     }
   }
+}
+
+fragment authorizedListContainer_user on ApplicationUser {
+  userName
 }
 */
 
@@ -78,11 +80,9 @@ const batch /*: ConcreteBatch*/ = {
             "plural": false,
             "selections": [
               {
-                "kind": "ScalarField",
-                "alias": null,
-                "args": null,
-                "name": "userName",
-                "storageKey": null
+                "kind": "FragmentSpread",
+                "name": "authorizedListContainer_user",
+                "args": null
               }
             ],
             "storageKey": null
@@ -155,7 +155,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "mutation loginMutation(\n  $input: LoginInput!\n) {\n  login(input: $input) {\n    user {\n      userName\n      id\n    }\n  }\n}\n"
+  "text": "mutation loginMutation(\n  $input: LoginInput!\n) {\n  login(input: $input) {\n    user {\n      ...authorizedListContainer_user\n      id\n    }\n  }\n}\n\nfragment authorizedListContainer_user on ApplicationUser {\n  userName\n}\n"
 };
 
 module.exports = batch;

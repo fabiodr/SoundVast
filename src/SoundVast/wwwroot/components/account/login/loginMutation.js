@@ -1,6 +1,5 @@
 import { graphql, commitMutation } from 'react-relay';
 
-import environment from '../../app/environment/environment';
 import { hideModal } from '../../shared/modal/actions';
 import { showLoginPopup } from '../actions';
 
@@ -10,18 +9,18 @@ const mutation = graphql`
   ) {
     login(input: $input) {
       user {
-        userName
+        ...authorizedListContainer_user
       }
     }
   }
 `;
 
-export default ({ username, password, rememberMe }, dispatch, onError, onCompleted) => {
+export default (environment, input, dispatch, onError, onCompleted) => {
   const variables = {
     input: {
-      username,
-      password,
-      rememberMe,
+      username: input.username,
+      password: input.password,
+      rememberMe: input.rememberMe,
     },
   };
 
