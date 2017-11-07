@@ -1,24 +1,17 @@
 import { reduxForm } from 'redux-form';
-import { compose } from 'recompose';
+import { compose, withHandlers } from 'recompose';
 import { connect } from 'react-redux';
 
 import Logout from './logout';
-import { submit } from './actions';
+import logoutAccountMutation from './logoutAccountMutation';
 
-const mapDispatchToProps = dispatch => ({
-  onSubmit: (values) => {
-    const formData = new FormData();
-
-    Object.keys(values).forEach((key) => {
-      formData.append(key, values[key]);
-    });
-
-    return dispatch(submit(formData));
-  },
-});
+const handlers = {
+  onSubmit: ({ dispatch }) => () => logoutAccountMutation(dispatch),
+};
 
 export default compose(
-  connect(null, mapDispatchToProps),
+  connect(),
+  withHandlers(handlers),
   reduxForm({
     form: 'logout',
   }),

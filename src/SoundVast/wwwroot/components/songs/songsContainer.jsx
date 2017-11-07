@@ -16,23 +16,24 @@ const query = graphql`
 `;
 
 const fragments = graphql`
-fragment songsContainer on Query {
-  songs(
-    first: $count,
-    after: $cursor,
-  ) @connection(key: "songsContainer_songs") {
-    edges {
-      node {
-        audioId,
-        name,
-        coverImageUrl,
-        artist,
-        likes,
-        dislikes,
+  fragment songsContainer on Query {
+    songs(
+      first: $count,
+      after: $cursor,
+    ) @connection(key: "songsContainer_songs") {
+      edges {
+        node {
+          audioId,
+          name,
+          coverImageUrl,
+          artist,
+          likes,
+          dislikes,
+        }
       }
     }
   }
-}`;
+`;
 
 const connectionConfig = {
   direction: 'forward',
@@ -75,14 +76,14 @@ const enhance = compose(
   withProps(createProps),
 );
 
-const songsContainer = enhance(Songs);
+const SongsContainer = enhance(Songs);
 
 export const routeConfig = {
   path: '/',
-  Component: songsContainer,
+  Component: SongsContainer,
   query,
-  render: ({ Component, props }) => props && <Component data={props} />,
+  render: ({ props }) => props && <SongsContainer data={props} />,
   prepareVariables: () => ({ count: songsToLoad }),
 };
 
-export default songsContainer;
+export default SongsContainer;

@@ -5,29 +5,21 @@ import { Link } from 'found';
 import LinkDropdown from '../../shared/dropDown/dropDownContainer';
 import Logout from '../../account/logout/logoutContainer';
 
-const AuthorizedList = ({ isLoggedIn, userName }) => (
-  isLoggedIn ?
-    <li>
-      <LinkDropdown title={userName}>
-        <li>
-          <Link to="/profile">Profile</Link>
-        </li>
-        <li>
-          <Logout />
-        </li>
-      </LinkDropdown>
-    </li>
-    : null
+const AuthorizedList = ({ userName }) => (
+  <li>
+    <LinkDropdown title={userName}>
+      <li>
+        <Link to="/profile">Profile</Link>
+      </li>
+      <li>
+        <Logout />
+      </li>
+    </LinkDropdown>
+  </li>
 );
 
-AuthorizedList.defaultProps = {
-  userName: null,
-  isLoggedIn: false,
-};
-
 AuthorizedList.propTypes = {
-  isLoggedIn: PropTypes.bool,
-  userName: PropTypes.string,
+  userName: PropTypes.string.isRequired,
 };
 
 export default AuthorizedList;

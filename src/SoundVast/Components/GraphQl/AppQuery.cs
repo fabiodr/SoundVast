@@ -1,30 +1,44 @@
-﻿using GraphQL.Relay.Types;
+﻿using System.Linq;
+using GraphQL;
+using GraphQL.Relay.Types;
 using GraphQL.Types;
+using Microsoft.AspNetCore.Http.Authentication;
+using Microsoft.AspNetCore.Identity;
+using SoundVast.Components.Account;
 using SoundVast.Components.Genre;
 using SoundVast.Components.LiveStream;
 using SoundVast.Components.Song;
+using SoundVast.Components.User;
 
 namespace SoundVast.Components.GraphQl
 {
     public class AppQuery : QueryGraphType
     {
         public AppQuery(ISongService songService, ILiveStreamService liveStreamService,
-            IGenreService genreService)
+            IGenreService genreService, SignInManager<ApplicationUser> signInManager)
         {
             Field<SongPayload>("song",
                 arguments: new QueryArguments(new QueryArgument<StringGraphType> { Name = "id" }),
-                resolve: context => songService.GetAudio(context.GetArgument<int>("id")));
+                resolve: c => songService.GetAudio(c.GetArgument<int>("id")));
 
             Connection<SongPayload>()
                 .Name("songs")
-                .Resolve(x => GraphQL.Relay.Types.Connection.ToConnection(songService.GetAudios(), x));
+                .Resolve(c => GraphQL.Relay.Types.Connection.ToConnection(songService.GetAudios(), c));
 
             Connection<LiveStreamPayload>()
                 .Name("liveStreams")
-                .Resolve(x => GraphQL.Relay.Types.Connection.ToConnection(liveStreamService.GetAudios(), x));
+                .Resolve(c => GraphQL.Relay.Types.Connection.ToConnection(liveStreamService.GetAudios(), c));
 
             Field<ListGraphType<GenreType>>("genres",
-                resolve: context => genreService.GetGenres());
+                resolve: c => genreService.GetGenres());
+
+            Field<AccountPayload>()
+                .Name("user")
+                .Resolve(c => c.UserContext.As<Context>().ApplicationUser);
+
+            Field<ListGraphType<LoginProvidersPayload>>()
+                .Name("loginProviders")
+                .Resolve(c => signInManager.GetExternalAuthenticationSchemes());
         }
     }
 }

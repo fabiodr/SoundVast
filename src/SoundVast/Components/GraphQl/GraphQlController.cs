@@ -45,7 +45,7 @@ namespace SoundVast.Components.GraphQl
             var context = new Context
             {
                 ApplicationUser = await _userManager.GetUserAsync(HttpContext.User),
-                User = User,
+                User = User
             };
             var validationRules = new List<IValidationRule>
             {

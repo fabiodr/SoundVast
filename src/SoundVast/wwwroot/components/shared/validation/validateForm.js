@@ -2,11 +2,11 @@ import { SubmissionError } from 'redux-form';
 
 export default (...args) => (
   func,
-  success = Function.prototype,
   error = Function.prototype,
+  completed = Function.prototype,
 ) => new Promise((resolve, reject) => {
   func(...args, () => {
-    success();
+    completed();
     resolve();
   }, (errors) => {
     error(errors);

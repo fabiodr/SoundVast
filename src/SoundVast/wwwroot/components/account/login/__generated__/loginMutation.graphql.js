@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 04ddb86e400d723300b362beb0f07f33
+ * @relayHash f16d9788c0d8ec8d4ffbf99bb9d708eb
  */
 
 /* eslint-disable */
@@ -9,36 +9,33 @@
 
 /*::
 import type {ConcreteBatch} from 'relay-runtime';
-export type registerAccountMutationVariables = {|
+export type loginMutationVariables = {|
   input: {
     clientMutationId?: ?string;
     username: string;
-    email: string;
     password: string;
+    rememberMe?: ?boolean;
   };
 |};
-export type registerAccountMutationResponse = {|
-  +register: ?{|
+export type loginMutationResponse = {|
+  +login: ?{|
     +user: ?{|
-      +id: ?string;
-      +email: string;
+      +userName: string;
     |};
-    +emailConfirmationToken: ?string;
   |};
 |};
 */
 
 
 /*
-mutation registerAccountMutation(
-  $input: RegisterAccountInput!
+mutation loginMutation(
+  $input: LoginInput!
 ) {
-  register(input: $input) {
+  login(input: $input) {
     user {
+      userName
       id
-      email
     }
-    emailConfirmationToken
   }
 }
 */
@@ -49,13 +46,13 @@ const batch /*: ConcreteBatch*/ = {
       {
         "kind": "LocalArgument",
         "name": "input",
-        "type": "RegisterAccountInput!",
+        "type": "LoginInput!",
         "defaultValue": null
       }
     ],
     "kind": "Fragment",
     "metadata": null,
-    "name": "registerAccountMutation",
+    "name": "loginMutation",
     "selections": [
       {
         "kind": "LinkedField",
@@ -65,11 +62,11 @@ const batch /*: ConcreteBatch*/ = {
             "kind": "Variable",
             "name": "input",
             "variableName": "input",
-            "type": "RegisterAccountInput!"
+            "type": "LoginInput!"
           }
         ],
-        "concreteType": "RegisterAccountPayload",
-        "name": "register",
+        "concreteType": "LoginPayload",
+        "name": "login",
         "plural": false,
         "selections": [
           {
@@ -84,24 +81,10 @@ const batch /*: ConcreteBatch*/ = {
                 "kind": "ScalarField",
                 "alias": null,
                 "args": null,
-                "name": "id",
-                "storageKey": null
-              },
-              {
-                "kind": "ScalarField",
-                "alias": null,
-                "args": null,
-                "name": "email",
+                "name": "userName",
                 "storageKey": null
               }
             ],
-            "storageKey": null
-          },
-          {
-            "kind": "ScalarField",
-            "alias": null,
-            "args": null,
-            "name": "emailConfirmationToken",
             "storageKey": null
           }
         ],
@@ -113,18 +96,18 @@ const batch /*: ConcreteBatch*/ = {
   "id": null,
   "kind": "Batch",
   "metadata": {},
-  "name": "registerAccountMutation",
+  "name": "loginMutation",
   "query": {
     "argumentDefinitions": [
       {
         "kind": "LocalArgument",
         "name": "input",
-        "type": "RegisterAccountInput!",
+        "type": "LoginInput!",
         "defaultValue": null
       }
     ],
     "kind": "Root",
-    "name": "registerAccountMutation",
+    "name": "loginMutation",
     "operation": "mutation",
     "selections": [
       {
@@ -135,11 +118,11 @@ const batch /*: ConcreteBatch*/ = {
             "kind": "Variable",
             "name": "input",
             "variableName": "input",
-            "type": "RegisterAccountInput!"
+            "type": "LoginInput!"
           }
         ],
-        "concreteType": "RegisterAccountPayload",
-        "name": "register",
+        "concreteType": "LoginPayload",
+        "name": "login",
         "plural": false,
         "selections": [
           {
@@ -154,24 +137,17 @@ const batch /*: ConcreteBatch*/ = {
                 "kind": "ScalarField",
                 "alias": null,
                 "args": null,
-                "name": "id",
+                "name": "userName",
                 "storageKey": null
               },
               {
                 "kind": "ScalarField",
                 "alias": null,
                 "args": null,
-                "name": "email",
+                "name": "id",
                 "storageKey": null
               }
             ],
-            "storageKey": null
-          },
-          {
-            "kind": "ScalarField",
-            "alias": null,
-            "args": null,
-            "name": "emailConfirmationToken",
             "storageKey": null
           }
         ],
@@ -179,7 +155,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "mutation registerAccountMutation(\n  $input: RegisterAccountInput!\n) {\n  register(input: $input) {\n    user {\n      id\n      email\n    }\n    emailConfirmationToken\n  }\n}\n"
+  "text": "mutation loginMutation(\n  $input: LoginInput!\n) {\n  login(input: $input) {\n    user {\n      userName\n      id\n    }\n  }\n}\n"
 };
 
 module.exports = batch;

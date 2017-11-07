@@ -16,20 +16,22 @@ using SoundVast.Validation;
 
 namespace SoundVast.Components.Account
 {
-    public class LoginAccountPayload : MutationPayloadGraphType<object, Task<object>>
+    public class LoginPayload : MutationPayloadGraphType<object, Task<object>>
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger _logger;
         private readonly IValidationProvider _validationProvider;
 
-        public LoginAccountPayload(SignInManager<ApplicationUser> signInManager, ILoggerFactory loggerFactory,
+        public LoginPayload(SignInManager<ApplicationUser> signInManager, ILoggerFactory loggerFactory,
             IValidationProvider validationProvider)
         {
             _signInManager = signInManager;
             _validationProvider = validationProvider;
-            _logger = loggerFactory.CreateLogger<LoginAccountPayload>();
+            _logger = loggerFactory.CreateLogger<LoginPayload>();
 
-            Name = nameof(LoginAccountPayload);
+            Name = nameof(LoginPayload);
+
+            Field<AccountPayload>("user");
         }
 
         public override async Task<object> MutateAndGetPayload(MutationInputs inputs, ResolveFieldContext<object> context)
@@ -48,8 +50,15 @@ namespace SoundVast.Components.Account
             {
                 _validationProvider.AddError("_error", "Invalid login attempt.");
             }
+            var user = new ApplicationUser
+            {
+                UserName = username,
+            };
 
-            return null;
+            return new
+            {
+                user
+            };
         }
     }
 }

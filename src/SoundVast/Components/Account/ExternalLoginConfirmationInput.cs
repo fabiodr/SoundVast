@@ -7,15 +7,13 @@ using GraphQL.Types;
 
 namespace SoundVast.Components.Account
 {
-    public class LoginAccountInput : MutationInputGraphType
+    public class ExternalLoginConfirmationInput : MutationInputGraphType
     {
-        public LoginAccountInput()
+        public ExternalLoginConfirmationInput()
         {
-            Name = nameof(LoginAccountInput);
+            Name = nameof(ExternalLoginConfirmationInput);
 
             Field<NonNullGraphType<StringGraphType>>("Username");
-            Field<NonNullGraphType<StringGraphType>>("Password");
-            Field<BooleanGraphType>("RememberMe");
         }
     }
 }

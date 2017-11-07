@@ -1,14 +1,20 @@
-import { connect } from 'react-redux';
-import { compose, lifecycle } from 'recompose';
+import { graphql } from 'react-relay';
 
-import { getAccountDetails } from './actions';
 import Account from './account';
 
-export default compose(
-  connect(),
-  lifecycle({
-    componentDidMount() {
-      this.props.dispatch(getAccountDetails());
-    },
-  }),
-)(Account);
+const query = graphql`
+  query accountContainerQuery {
+    loginProviders {
+      ...socialLoginsContainer_loginProviders
+    }
+  }
+`;
+
+const AccountContainer = Account;
+
+export const routeConfig = {
+  Component: AccountContainer,
+  query,
+};
+
+export default AccountContainer;

@@ -7,11 +7,11 @@ using GraphQL.Types;
 
 namespace SoundVast.Components.Account
 {
-    public class RegisterAccountInput : MutationInputGraphType
+    public class RegisterInput : MutationInputGraphType
     {
-        public RegisterAccountInput()
+        public RegisterInput()
         {
-            Name = nameof(RegisterAccountInput);
+            Name = nameof(RegisterInput);
 
             Field<NonNullGraphType<StringGraphType>>("Username");
             Field<NonNullGraphType<StringGraphType>>("Email");

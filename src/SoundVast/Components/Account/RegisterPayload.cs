@@ -16,23 +16,23 @@ using SoundVast.Validation;
 
 namespace SoundVast.Components.Account
 {
-    public class RegisterAccountPayload : MutationPayloadGraphType<object, Task<object>>
+    public class RegisterPayload : MutationPayloadGraphType<object, Task<object>>
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger _logger;
         private readonly IValidationProvider _validationProvider;
 
-        public RegisterAccountPayload(UserManager<ApplicationUser> userManager,
+        public RegisterPayload(UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager, ILoggerFactory loggerFactory,
             IValidationProvider validationProvider)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _validationProvider = validationProvider;
-            _logger = loggerFactory.CreateLogger<RegisterAccountPayload>();
+            _logger = loggerFactory.CreateLogger<RegisterPayload>();
 
-            Name = nameof(RegisterAccountPayload);
+            Name = nameof(RegisterPayload);
            
             Field<AccountPayload>("user");
             Field<StringGraphType>("emailConfirmationToken");

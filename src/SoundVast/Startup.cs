@@ -138,13 +138,12 @@ namespace SoundVast
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            RegisterSocialLogins(app);
-
             app.UseStaticFiles();
             app.UseIdentity();
             app.SeedData();
             app.UseSession();
-        
+            RegisterSocialLogins(app);
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

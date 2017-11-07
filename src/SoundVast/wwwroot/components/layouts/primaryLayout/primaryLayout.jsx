@@ -2,14 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Header from '../../header/header';
-import Account from '../../account/accountContainer';
 import FooterPlaylist from '../../footerPlaylist/footerPlaylistContainer';
 import Content from '../../content/content';
 
-const PrimaryLayout = ({ children }) => (
+const PrimaryLayout = ({ user, children }) => (
   <div>
-    <Header />
-    <Account />
+    <Header user={user} />
     <Content>
       {children}
     </Content>
@@ -23,6 +21,9 @@ PrimaryLayout.defaultProps = {
 
 PrimaryLayout.propTypes = {
   children: PropTypes.node,
+  user: PropTypes.shape({
+    username: PropTypes.string,
+  }).isRequired,
 };
 
 export default PrimaryLayout;

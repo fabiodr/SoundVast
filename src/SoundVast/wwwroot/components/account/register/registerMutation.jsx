@@ -5,10 +5,12 @@ import { renderEmail } from 'react-html-email';
 import environment from '../../app/environment/environment';
 import ConfirmEmail from '../../email/confirmEmail/confirmEmail';
 import sendEmailMutation from '../../email/sendEmailMutation';
+import { hideModal } from '../../shared/modal/actions';
+import { showLoginPopup } from '../actions';
 
 const mutation = graphql`
-  mutation registerAccountMutation(
-    $input: RegisterAccountInput!
+  mutation registerMutation(
+    $input: RegisterInput!
   ) {
     register(input: $input) {
       user {
@@ -20,7 +22,7 @@ const mutation = graphql`
   }
 `;
 
-export default ({ username, password, email }, onSuccess, onError) => {
+export default ({ username, password, email }, dispatch, onError, onCompleted) => {
   const variables = {
     input: {
       username,
@@ -33,17 +35,16 @@ export default ({ username, password, email }, onSuccess, onError) => {
     mutation,
     variables,
     onError,
-    onCompleted: ({ register }, errors) => {
-      if (errors !== undefined) {
-        return;
-      }
+    onCompleted: ({ register }) => {
       const emailMessage = renderEmail(
         <ConfirmEmail confirmEmailLink={`/account/confirmEmail?code=${register.code}&userId=${register.user.id}`} />,
       );
       const subject = 'Confirm your email';
 
       sendEmailMutation(register.user.email, subject, emailMessage);
-      onSuccess(register);
+      dispatch(hideModal());
+      dispatch(showLoginPopup());
+      onCompleted();
     },
   });
 };

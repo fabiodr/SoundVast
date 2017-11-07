@@ -1,9 +1,10 @@
 # source: http://localhost:8080/graphql
-# timestamp: Sat Nov 04 2017 22:04:02 GMT+0100 (W. Europe Standard Time)
+# timestamp: Tue Nov 07 2017 01:57:12 GMT+0100 (W. Europe Standard Time)
 
 type ApplicationUser {
   id: ID
-  email: String!
+  userName: String!
+  email: String
 }
 
 interface Audio {
@@ -32,6 +33,15 @@ interface Audio {
 scalar Date
 
 scalar Decimal
+
+input ExternalLoginConfirmationInput {
+  clientMutationId: String
+  username: String!
+}
+
+type ExternalLoginConfirmationPayload {
+  clientMutationId: String
+}
 
 type Genre {
   id: ID
@@ -98,14 +108,24 @@ type LiveStreamPayloadEdge {
   node: LiveStream
 }
 
-input LoginAccountInput {
+input LoginInput {
   clientMutationId: String
   username: String!
   password: String!
-  rememberMe: Boolean!
+  rememberMe: Boolean
 }
 
-type LoginAccountPayload {
+type LoginPayload {
+  clientMutationId: String
+  user: ApplicationUser
+}
+
+type LoginProvider {
+  authenticationScheme: String!
+  displayName: String!
+}
+
+type LogoutPayload {
   clientMutationId: String
 }
 
@@ -113,8 +133,10 @@ type Mutation {
   saveSong(input: SaveSongInput!): SaveSongPayload
   saveLiveStream(input: SaveLiveStreamInput!): SaveLiveStreamPayload
   rateAudio(input: RateAudioInput!): RateAudioPayload
-  register(input: RegisterAccountInput!): RegisterAccountPayload
-  login(input: LoginAccountInput!): LoginAccountPayload
+  register(input: RegisterInput!): RegisterPayload
+  login(input: LoginInput!): LoginPayload
+  externalLoginConfirmation(input: ExternalLoginConfirmationInput!): ExternalLoginConfirmationPayload
+  logout: LogoutPayload
   sendEmail(input: SendEmailInput!): SendEmailPayload
 }
 
@@ -160,6 +182,8 @@ type Query {
     first: Int
   ): LiveStreamPayloadConnection
   genres: [Genre]
+  user: ApplicationUser
+  loginProviders: [LoginProvider]
 }
 
 input RateAudioInput {
@@ -186,14 +210,14 @@ type Rating implements Node {
   audio: Audio
 }
 
-input RegisterAccountInput {
+input RegisterInput {
   clientMutationId: String
   username: String!
   email: String!
   password: String!
 }
 
-type RegisterAccountPayload {
+type RegisterPayload {
   clientMutationId: String
   user: ApplicationUser
   emailConfirmationToken: String

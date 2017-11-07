@@ -22,6 +22,7 @@ using SoundVast.Components.FileStream;
 using SoundVast.Components.User;
 using SoundVast.CustomHelpers;
 using SoundVast.Services;
+using SoundVast.Validation;
 
 namespace SoundVast.Components.Account
 {
@@ -31,121 +32,23 @@ namespace SoundVast.Components.Account
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger _logger;
+        private readonly IValidationProvider _validationProvider;
         private const string ModelError = "_error";
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory, 
+            IValidationProvider validationProvider)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _validationProvider = validationProvider;
             _logger = loggerFactory.CreateLogger<AccountController>();
         }
 
-        [HttpGet]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetAccountDetails()
-        {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            
-            return Ok(new
-            {
-                user?.UserName,
-                IsLoggedIn = user != null,
-                IsAdmin = User.IsInRole("Admin")
-            });
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult GetSocialLogins()
-        {
-            var loginProviders = _signInManager.GetExternalAuthenticationSchemes().ToList();
-
-            return Ok(new
-            {
-                loginProviders
-            });
-        }
-
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Login([FromBody] LoginViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, false);
-                if (result.Succeeded)
-                {
-                    _logger.LogInformation(1, "User logged in.");
-
-                    return Ok();
-                }
-                ModelState.AddModelError(ModelError, "Invalid login attempt.");
-            }
-
-            return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ConvertErrorsToJson());
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var user = new ApplicationUser
-                {
-                    UserName = model.Username,
-                    Email = model.Email
-                };
-                user.Claims.Add(new IdentityUserClaim<string>
-                {
-                    ClaimType = "Authorization",
-                    ClaimValue = "Authorized"
-                });
-
-                var result = await _userManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var confirmEmailLink = Url.Action(nameof(ConfirmEmail), "Account", new
-                    {
-                        userId = user.Id,
-                        code
-                    }, HttpContext.Request.Scheme);
-
-                    await _signInManager.SignInAsync(user, true);
-                    _logger.LogInformation(3, "User created a new account with password.");
-
-                    return Ok(new
-                    {
-                        email = user.Email,
-                        confirmEmailLink
-                    });
-                }
-                AddErrors(result);
-            }
-
-            return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ConvertErrorsToJson());
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> LogOut()
-        {
-            await _signInManager.SignOutAsync();
-
-            _logger.LogInformation(4, "User logged out.");
-
-            return Ok();
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
         public IActionResult ExternalLogin(string provider, string returnUrl)
         {
             // Request a redirect to the external login provider.
@@ -161,9 +64,9 @@ namespace SoundVast.Components.Account
         {
             if (remoteError != null)
             {
-                ModelState.AddModelError(ModelError, $"Error from external provider: {remoteError}");
+                _validationProvider.AddError(ModelError, $"Error from external provider: {remoteError}");
 
-                return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ConvertErrorsToJson());
+                return StatusCode((int)HttpStatusCode.BadRequest, _validationProvider.ValidationErrors);
             }
             var info = await _signInManager.GetExternalLoginInfoAsync();
             if (info == null)
@@ -175,14 +78,9 @@ namespace SoundVast.Components.Account
             var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, true);
             if (result.Succeeded)
             {
-                _logger.LogInformation(5, "User logged in with {Name} provider.", info.LoginProvider);
+                _logger.LogInformation(5, $"User logged in with {info.LoginProvider} provider.");
 
                 return LocalRedirect(returnUrl);
-            }
-
-            if (result.IsLockedOut)
-            {
-                return LocalRedirect(Url.Action("Lockout"));
             }
 
             // If the user does not have an account, then ask the user to create an account.
@@ -199,7 +97,6 @@ namespace SoundVast.Components.Account
 
         [HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model)
         {
             if (ModelState.IsValid)

@@ -32,8 +32,10 @@ namespace SoundVast.Components.GraphQl
             Mutation<SaveSongInput, SaveSongPayload>("saveSong").AddPermission(AuthorizedPermission);
             Mutation<SaveLiveStreamInput, SaveLiveStreamPayload>("saveLiveStream").AddPermission(AuthorizedPermission);
             Mutation<RateAudioInput, RateAudioPayload>("rateAudio").AddPermission(AuthorizedPermission);
-            Mutation<RegisterAccountInput, RegisterAccountPayload>("register");
-            Mutation<LoginAccountInput, LoginAccountPayload>("login");
+            Mutation<RegisterInput, RegisterPayload>("register");
+            Mutation<LoginInput, LoginPayload>("login");
+            Mutation<ExternalLoginConfirmationInput, ExternalLoginConfirmationPayload>("externalLoginConfirmation");
+            Field<LogoutPayload>("logout", resolve: c => ((LogoutPayload)c.ReturnType).MutateAndGetPayload(null, c));
             Mutation<SendEmailInput, SendEmailPayload>("sendEmail");
         }
     }

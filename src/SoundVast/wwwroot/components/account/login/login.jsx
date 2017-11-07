@@ -10,9 +10,9 @@ import ValidationErrors from '../../shared/validation/validationErrors';
 import Modal from '../../shared/modal/modalContainer';
 import SocialLogins from '../login/socialLogins/socialLoginsContainer';
 
-const Login = ({ error: errors, handleSubmit }) => (
+const Login = ({ error: errors, handleSubmit, loginProviders }) => (
   <Modal title="Login." id="login">
-    <SocialLogins />
+    <SocialLogins loginProviders={loginProviders} />
     <form onSubmit={handleSubmit} action="">
       <ValidationErrors errors={errors} />
 
@@ -42,6 +42,7 @@ Login.defaultProps = {
 };
 
 Login.propTypes = {
+  loginProviders: PropTypes.arrayOf(PropTypes.object).isRequired,
   handleSubmit: PropTypes.func.isRequired,
   error: PropTypes.arrayOf(PropTypes.string.isRequired),
 };

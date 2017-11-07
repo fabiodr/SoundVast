@@ -1,22 +1,20 @@
-import { connect } from 'react-redux';
-import { compose, lifecycle, branch, renderComponent } from 'recompose';
+import { compose, branch, renderComponent } from 'recompose';
 import { reduxForm } from 'redux-form';
+import { fragmentContainer } from 'recompose-relay-modern';
+import { graphql } from 'react-relay';
 
-import { getSocialLogins } from './actions';
 import SocialLogins from './socialLogins';
 import SocialLoginsErrorMessage from './socialLoginsErrorMessage';
 
-const mapStateToProps = ({ socialLogins }) => ({
-  loginProviders: socialLogins.loginProviders,
-});
+const fragments = graphql`
+  fragment socialLoginsContainer_loginProviders on LoginProvider @relay(plural: true) {
+    authenticationScheme,
+    displayName
+  }
+`;
 
 export default compose(
-  connect(mapStateToProps),
-  lifecycle({
-    componentDidMount() {
-      this.props.dispatch(getSocialLogins());
-    },
-  }),
+  fragmentContainer(fragments),
   branch(
     ({ loginProviders }) => loginProviders === null,
     renderComponent(SocialLoginsErrorMessage),

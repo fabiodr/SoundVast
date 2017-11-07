@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash e421413c29dc6852da7dcebc995dff66
+ * @relayHash b0a3f5b176e46763c876d4cfb79bbb8a
  */
 
 /* eslint-disable */
@@ -9,16 +9,14 @@
 
 /*::
 import type {ConcreteBatch} from 'relay-runtime';
-export type loginAccountMutationVariables = {|
+export type socialLoginConfirmationMutationVariables = {|
   input: {
     clientMutationId?: ?string;
     username: string;
-    password: string;
-    rememberMe: boolean;
   };
 |};
-export type loginAccountMutationResponse = {|
-  +login: ?{|
+export type socialLoginConfirmationMutationResponse = {|
+  +externalLoginConfirmation: ?{|
     +clientMutationId: ?string;
   |};
 |};
@@ -26,10 +24,10 @@ export type loginAccountMutationResponse = {|
 
 
 /*
-mutation loginAccountMutation(
-  $input: LoginAccountInput!
+mutation socialLoginConfirmationMutation(
+  $input: ExternalLoginConfirmationInput!
 ) {
-  login(input: $input) {
+  externalLoginConfirmation(input: $input) {
     clientMutationId
   }
 }
@@ -41,13 +39,13 @@ const batch /*: ConcreteBatch*/ = {
       {
         "kind": "LocalArgument",
         "name": "input",
-        "type": "LoginAccountInput!",
+        "type": "ExternalLoginConfirmationInput!",
         "defaultValue": null
       }
     ],
     "kind": "Fragment",
     "metadata": null,
-    "name": "loginAccountMutation",
+    "name": "socialLoginConfirmationMutation",
     "selections": [
       {
         "kind": "LinkedField",
@@ -57,11 +55,11 @@ const batch /*: ConcreteBatch*/ = {
             "kind": "Variable",
             "name": "input",
             "variableName": "input",
-            "type": "LoginAccountInput!"
+            "type": "ExternalLoginConfirmationInput!"
           }
         ],
-        "concreteType": "LoginAccountPayload",
-        "name": "login",
+        "concreteType": "ExternalLoginConfirmationPayload",
+        "name": "externalLoginConfirmation",
         "plural": false,
         "selections": [
           {
@@ -80,18 +78,18 @@ const batch /*: ConcreteBatch*/ = {
   "id": null,
   "kind": "Batch",
   "metadata": {},
-  "name": "loginAccountMutation",
+  "name": "socialLoginConfirmationMutation",
   "query": {
     "argumentDefinitions": [
       {
         "kind": "LocalArgument",
         "name": "input",
-        "type": "LoginAccountInput!",
+        "type": "ExternalLoginConfirmationInput!",
         "defaultValue": null
       }
     ],
     "kind": "Root",
-    "name": "loginAccountMutation",
+    "name": "socialLoginConfirmationMutation",
     "operation": "mutation",
     "selections": [
       {
@@ -102,11 +100,11 @@ const batch /*: ConcreteBatch*/ = {
             "kind": "Variable",
             "name": "input",
             "variableName": "input",
-            "type": "LoginAccountInput!"
+            "type": "ExternalLoginConfirmationInput!"
           }
         ],
-        "concreteType": "LoginAccountPayload",
-        "name": "login",
+        "concreteType": "ExternalLoginConfirmationPayload",
+        "name": "externalLoginConfirmation",
         "plural": false,
         "selections": [
           {
@@ -121,7 +119,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "mutation loginAccountMutation(\n  $input: LoginAccountInput!\n) {\n  login(input: $input) {\n    clientMutationId\n  }\n}\n"
+  "text": "mutation socialLoginConfirmationMutation(\n  $input: ExternalLoginConfirmationInput!\n) {\n  externalLoginConfirmation(input: $input) {\n    clientMutationId\n  }\n}\n"
 };
 
 module.exports = batch;
