@@ -46,7 +46,7 @@ namespace SoundVast.Components.Account
             var info = await _signInManager.GetExternalLoginInfoAsync();
             if (info == null)
             {
-                _validationProvider.AddError("_error", "Failed to create an account.");
+                _validationProvider.AddError("_error", "Unsuccessful login with service.");
 
                 return null;
             }
@@ -72,8 +72,15 @@ namespace SoundVast.Components.Account
                 {
                     await _signInManager.SignInAsync(user, true);
 
-                    _logger.LogInformation(6, "User created an account using {Name} provider.", info.LoginProvider);
+                    _logger.LogInformation(6, $"User created an account using {info.LoginProvider} provider.");
+
+                    return null;
                 }
+            }
+
+            foreach (var identityError in result.Errors)
+            {
+                _validationProvider.AddError("_error", identityError.Description);
             }
 
             return null;

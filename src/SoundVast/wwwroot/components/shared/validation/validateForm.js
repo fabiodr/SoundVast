@@ -5,11 +5,12 @@ export default (...args) => (
   error = Function.prototype,
   completed = Function.prototype,
 ) => new Promise((resolve, reject) => {
-  func(...args, () => {
-    completed();
-    resolve();
-  }, (errors) => {
-    error(errors);
-    reject(new SubmissionError(errors));
-  });
+  func(...args,
+    (errors) => {
+      error(errors);
+      reject(new SubmissionError(errors));
+    }, () => {
+      completed();
+      resolve();
+    });
 });

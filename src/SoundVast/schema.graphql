@@ -1,5 +1,5 @@
 # source: http://localhost:8080/graphql
-# timestamp: Tue Nov 07 2017 01:57:12 GMT+0100 (W. Europe Standard Time)
+# timestamp: Wed Nov 08 2017 01:24:01 GMT+0100 (W. Europe Standard Time)
 
 type ApplicationUser {
   id: ID
@@ -36,7 +36,7 @@ scalar Decimal
 
 input ExternalLoginConfirmationInput {
   clientMutationId: String
-  username: String!
+  email: String!
 }
 
 type ExternalLoginConfirmationPayload {

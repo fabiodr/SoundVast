@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import ValidationError from './validationError';
 
-const Errors = ({ errors, ...props }) => (
+const Errors = ({ errors }) => (
   <div>
     {errors.map(error => <ValidationError key={error} error={error} />)}
   </div>

@@ -3,7 +3,6 @@ import makeRouteConfig from 'found/lib/makeRouteConfig';
 import Route from 'found/lib/Route';
 
 import SocialLoginConfirmation from '../../account/login/socialLogin/socialLoginConfirmation';
-import SocialLoginFailure from '../../account/login/socialLogin/socialLoginFailure';
 import ResetPassword from '../../account/resetPassword/resetPasswordContainer';
 import ConfirmedEmailSuccess from '../../account/confirmedEmailSuccess/confirmedEmailSuccessContainer';
 import Profile from '../../user/profile/userProfileContainer';
@@ -20,7 +19,6 @@ export default makeRouteConfig(
       <Route {...songsContainerRouteConfig} />
       <Route path="account">
         <Route path="externalLoginConfirmation" Component={SocialLoginConfirmation} />
-        <Route path="externalLoginFailure" Component={SocialLoginFailure} />
         <Route path="resetPassword" Component={ResetPassword} />
         <Route path="successfullyConfirmedEmail" Component={ConfirmedEmailSuccess} />
       </Route>

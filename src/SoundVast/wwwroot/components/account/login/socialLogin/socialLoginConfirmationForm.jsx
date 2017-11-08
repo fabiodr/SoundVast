@@ -2,14 +2,12 @@ import React from 'react';
 import { Field } from 'redux-form';
 import PropTypes from 'prop-types';
 
-import AntiForgeryToken from '../../../shared/form/antiForgeryToken/antiForgeryTokenContainer';
 import Input from '../../../shared/fields/input/input';
 import genericStyles from '../../../shared/generic.less';
 import ValidationErrors from '../../../shared/validation/validationErrors';
 
 const Form = ({ error: errors, handleSubmit, loginProvider }) => (
   <form onSubmit={handleSubmit} action="" method="post">
-    <AntiForgeryToken form="socialLoginConfirmation" />
     <ValidationErrors errors={errors} />
 
     <h4>Association Form</h4>

@@ -13,7 +13,7 @@ namespace SoundVast.Components.Account
         {
             Name = nameof(ExternalLoginConfirmationInput);
 
-            Field<NonNullGraphType<StringGraphType>>("Username");
+            Field<NonNullGraphType<StringGraphType>>("Email");
         }
     }
 }

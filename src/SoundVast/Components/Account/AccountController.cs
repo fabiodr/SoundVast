@@ -85,7 +85,7 @@ namespace SoundVast.Components.Account
 
             // If the user does not have an account, then ask the user to create an account.
             var email = info.Principal.FindFirstValue(ClaimTypes.Email);
-            var redirectUrl = Url.Action(nameof(ExternalLoginConfirmation), new
+            var redirectUrl = Url.RouteUrl("externalLoginConfirmation", new
             {
                 loginProvider = info.LoginProvider,
                 returnUrl,
@@ -93,47 +93,6 @@ namespace SoundVast.Components.Account
             });
 
             return LocalRedirect(redirectUrl);
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                // Get the information about the user from the external login provider
-                var info = await _signInManager.GetExternalLoginInfoAsync();
-                if (info == null)
-                {
-                    return LocalRedirect("/Account/ExternalLoginFailure");
-                }
-                var userName = info.Principal.FindFirstValue(ClaimTypes.Name);
-
-                var user = new ApplicationUser
-                {
-                    UserName = userName,
-                    Email = model.Email
-                };
-                user.Claims.Add(new IdentityUserClaim<string>
-                {
-                    ClaimType = "Authorization",
-                    ClaimValue = "Authorized"
-                });
-                var result = await _userManager.CreateAsync(user);
-                if (result.Succeeded)
-                {
-                    result = await _userManager.AddLoginAsync(user, info);
-                    if (result.Succeeded)
-                    {
-                        await _signInManager.SignInAsync(user, true);
-                        _logger.LogInformation(6, "User created an account using {Name} provider.", info.LoginProvider);
-                        return LocalRedirect(model.ReturnUrl);
-                    }
-                }
-                AddErrors(result);
-            }
-
-            return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ConvertErrorsToJson());
         }
 
         [HttpGet]

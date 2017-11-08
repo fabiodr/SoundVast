@@ -1,13 +1,12 @@
 import { reduxForm } from 'redux-form';
-import { connect } from 'react-redux';
-import { compose, withHandlers } from 'recompose';
+import { compose, withHandlers, withProps } from 'recompose';
 
 import validateForm from '../../../shared/validation/validateForm';
 import SocialLoginConfirmationForm from './socialLoginConfirmationForm';
 import accountValidation from '../../validation';
 import socialLoginConfirmationMutation from './socialLoginConfirmationMutation';
 
-const mapStateToProps = (state, { email, returnUrl }) => ({
+const createProps = ({ email, returnUrl }) => ({
   initialValues: {
     email,
     returnUrl,
@@ -19,7 +18,7 @@ const handlers = {
 };
 
 export default compose(
-  connect(mapStateToProps),
+  withProps(createProps),
   withHandlers(handlers),
   reduxForm({
     form: 'socialLoginConfirmation',

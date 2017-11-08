@@ -12,10 +12,10 @@ const mutation = graphql`
   }
 `;
 
-export default ({ username }, onError) => {
+export default ({ email, returnUrl }, onError, onCompleted) => {
   const variables = {
     input: {
-      username,
+      email,
     },
   };
 
@@ -23,5 +23,10 @@ export default ({ username }, onError) => {
     mutation,
     variables,
     onError,
+    onCompleted: () => {
+      location.href = returnUrl;
+
+      onCompleted();
+    },
   });
 };
