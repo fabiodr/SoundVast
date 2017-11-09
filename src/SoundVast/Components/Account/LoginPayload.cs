@@ -50,6 +50,7 @@ namespace SoundVast.Components.Account
             {
                 _validationProvider.AddError("_error", "Invalid login attempt.");
             }
+
             var user = new ApplicationUser
             {
                 UserName = username,

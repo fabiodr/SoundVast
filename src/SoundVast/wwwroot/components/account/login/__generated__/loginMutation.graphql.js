@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 46e510f5ebde8d4530d4cc166c85b155
+ * @relayHash f5ba97c1f615b0b2684e30f3dfaa4def
  */
 
 /* eslint-disable */
@@ -19,7 +19,9 @@ export type loginMutationVariables = {|
 |};
 export type loginMutationResponse = {|
   +login: ?{|
-    +user: ?{| |};
+    +user: ?{|
+      +id: ?string;
+    |};
   |};
 |};
 */
@@ -31,8 +33,8 @@ mutation loginMutation(
 ) {
   login(input: $input) {
     user {
-      ...authorizedListContainer_user
       id
+      ...authorizedListContainer_user
     }
   }
 }
@@ -79,6 +81,13 @@ const batch /*: ConcreteBatch*/ = {
             "name": "user",
             "plural": false,
             "selections": [
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "id",
+                "storageKey": null
+              },
               {
                 "kind": "FragmentSpread",
                 "name": "authorizedListContainer_user",
@@ -137,14 +146,14 @@ const batch /*: ConcreteBatch*/ = {
                 "kind": "ScalarField",
                 "alias": null,
                 "args": null,
-                "name": "userName",
+                "name": "id",
                 "storageKey": null
               },
               {
                 "kind": "ScalarField",
                 "alias": null,
                 "args": null,
-                "name": "id",
+                "name": "userName",
                 "storageKey": null
               }
             ],
@@ -155,7 +164,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "mutation loginMutation(\n  $input: LoginInput!\n) {\n  login(input: $input) {\n    user {\n      ...authorizedListContainer_user\n      id\n    }\n  }\n}\n\nfragment authorizedListContainer_user on ApplicationUser {\n  userName\n}\n"
+  "text": "mutation loginMutation(\n  $input: LoginInput!\n) {\n  login(input: $input) {\n    user {\n      id\n      ...authorizedListContainer_user\n    }\n  }\n}\n\nfragment authorizedListContainer_user on ApplicationUser {\n  userName\n}\n"
 };
 
 module.exports = batch;

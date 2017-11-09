@@ -13,7 +13,8 @@ namespace SoundVast.Components.GraphQl
         public INodeVisitor Validate(ValidationContext context)
         {
             var userContext = context.UserContext.As<Context>();
-            var loggedIn = userContext.ApplicationUser != null;
+            var loggedIn = userContext.CurrentUser != null;
+            var claims = userContext.HttpContext.User.Claims;
 
             return new EnterLeaveListener(_ =>
             {
@@ -21,7 +22,7 @@ namespace SoundVast.Components.GraphQl
                 {
                     var fieldDef = context.TypeInfo.GetFieldDef();
                     if (fieldDef != null && fieldDef.RequiresPermissions() &&
-                        (!loggedIn || !fieldDef.CanAccess(userContext.User.Claims)))
+                        (!loggedIn || !fieldDef.CanAccess(claims)))
                     {
                         context.ReportError(new ValidationError(
                             context.OriginalQuery,

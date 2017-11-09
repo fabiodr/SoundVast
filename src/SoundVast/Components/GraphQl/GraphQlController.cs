@@ -44,8 +44,8 @@ namespace SoundVast.Components.GraphQl
             var inputs = graphQlQuery.Variables.ToInputs();
             var context = new Context
             {
-                ApplicationUser = await _userManager.GetUserAsync(HttpContext.User),
-                User = User
+                CurrentUser = await _userManager.GetUserAsync(HttpContext.User),
+                HttpContext = HttpContext
             };
             var validationRules = new List<IValidationRule>
             {

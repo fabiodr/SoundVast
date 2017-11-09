@@ -1,5 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using GraphQL;
+using GraphQL.Builders;
 using GraphQL.Relay.Types;
 using GraphQL.Types;
 using Microsoft.AspNetCore.Http.Authentication;
@@ -15,7 +18,7 @@ namespace SoundVast.Components.GraphQl
     public class AppQuery : QueryGraphType
     {
         public AppQuery(ISongService songService, ILiveStreamService liveStreamService,
-            IGenreService genreService, SignInManager<ApplicationUser> signInManager)
+            IGenreService genreService, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         {
             Field<SongPayload>("song",
                 arguments: new QueryArguments(new QueryArgument<StringGraphType> { Name = "id" }),
@@ -34,7 +37,7 @@ namespace SoundVast.Components.GraphQl
 
             Field<AccountPayload>()
                 .Name("user")
-                .Resolve(c => c.UserContext.As<Context>().ApplicationUser);
+                .Resolve(c => c.UserContext.As<Context>().CurrentUser);
 
             Field<ListGraphType<LoginProvidersPayload>>()
                 .Name("loginProviders")

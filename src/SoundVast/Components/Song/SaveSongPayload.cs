@@ -12,7 +12,6 @@ namespace SoundVast.Components.Song
     public class SaveSongPayload : MutationPayloadGraphType
     {
         private readonly ISongService _songService;
-        private static string GetUserId(ResolveFieldContext<object> context) => context.UserContext.As<Context>().ApplicationUser.Id;
 
         public SaveSongPayload(ISongService songService)
         {
@@ -29,13 +28,14 @@ namespace SoundVast.Components.Song
             var name = inputs.Get<string>("name");
             var artist = inputs.Get<string>("artist");
             var genreId = inputs.Get<int>("genreId");
+            var user = context.UserContext.As<Context>().CurrentUser;
             var song = new Models.Song
             {
                 CoverImageUrl = coverImageUrl,
                 Name = name,
                 Artist = artist,
                 GenreId = genreId,
-                UserId = GetUserId(context),
+                UserId = user.Id,
             };
 
             _songService.Add(song);

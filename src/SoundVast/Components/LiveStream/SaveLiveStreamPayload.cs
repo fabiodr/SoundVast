@@ -12,7 +12,6 @@ namespace SoundVast.Components.LiveStream
     public class SaveLiveStreamPayload : MutationPayloadGraphType
     {
         private readonly ILiveStreamService _liveStreamService;
-        private static string GetUserId(ResolveFieldContext<object> context) => context.UserContext.As<Context>().ApplicationUser.Id;
 
         public SaveLiveStreamPayload(ILiveStreamService liveService)
         {
@@ -29,13 +28,14 @@ namespace SoundVast.Components.LiveStream
             var name = inputs.Get<string>("name");
             var liveStreamUrl = inputs.Get<string>("liveStreamUrl");
             var genreId = inputs.Get<int>("genreId");
+            var user = context.UserContext.As<Context>().CurrentUser;
             var liveStream = new Models.LiveStream
             {
                 CoverImageUrl = coverImageUrl,
                 Name = name,
                 LiveStreamUrl = liveStreamUrl,
                 GenreId = genreId,
-                UserId = GetUserId(context)
+                UserId = user.Id
             };
 
             _liveStreamService.Add(liveStream);

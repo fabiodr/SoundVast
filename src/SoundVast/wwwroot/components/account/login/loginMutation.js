@@ -9,6 +9,7 @@ const mutation = graphql`
   ) {
     login(input: $input) {
       user {
+        id,
         ...authorizedListContainer_user
       }
     }
@@ -32,6 +33,15 @@ export default (environment, input, dispatch, onError, onCompleted) => {
       dispatch(hideModal());
       dispatch(showLoginPopup());
       onCompleted();
+    },
+    updater: (store) => {
+      const login = store.getRootField('login');
+      const user = login.getLinkedRecord('user');
+      const userName = user.getValue('userName');
+      const id = user.getValue('id');
+
+      const newUser = store.get(id);
+      newUser.setValue(userName, 'userName');
     },
   });
 };
