@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 28bc4f9a8fb26830dfc3e3da9e7b3a6b
+ * @relayHash 984a56df0fa465cf28845c85c919e36c
  */
 
 /* eslint-disable */
@@ -11,6 +11,7 @@
 import type {ConcreteBatch} from 'relay-runtime';
 export type primaryLayoutContainerQueryResponse = {|
   +user: ?{| |};
+  +loginProviders: ?$ReadOnlyArray<?{| |}>;
 |};
 */
 
@@ -22,6 +23,9 @@ query primaryLayoutContainerQuery {
     ...unAuthorizedListContainer_user
     id
   }
+  loginProviders {
+    ...socialLoginsContainer_loginProviders
+  }
 }
 
 fragment authorizedListContainer_user on ApplicationUser {
@@ -30,6 +34,11 @@ fragment authorizedListContainer_user on ApplicationUser {
 
 fragment unAuthorizedListContainer_user on ApplicationUser {
   userName
+}
+
+fragment socialLoginsContainer_loginProviders on LoginProvider {
+  authenticationScheme
+  displayName
 }
 */
 
@@ -56,6 +65,22 @@ const batch /*: ConcreteBatch*/ = {
           {
             "kind": "FragmentSpread",
             "name": "unAuthorizedListContainer_user",
+            "args": null
+          }
+        ],
+        "storageKey": null
+      },
+      {
+        "kind": "LinkedField",
+        "alias": null,
+        "args": null,
+        "concreteType": "LoginProvider",
+        "name": "loginProviders",
+        "plural": true,
+        "selections": [
+          {
+            "kind": "FragmentSpread",
+            "name": "socialLoginsContainer_loginProviders",
             "args": null
           }
         ],
@@ -98,10 +123,41 @@ const batch /*: ConcreteBatch*/ = {
           }
         ],
         "storageKey": null
+      },
+      {
+        "kind": "LinkedField",
+        "alias": null,
+        "args": null,
+        "concreteType": "LoginProvider",
+        "name": "loginProviders",
+        "plural": true,
+        "selections": [
+          {
+            "kind": "InlineFragment",
+            "type": "LoginProvider",
+            "selections": [
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "authenticationScheme",
+                "storageKey": null
+              },
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "displayName",
+                "storageKey": null
+              }
+            ]
+          }
+        ],
+        "storageKey": null
       }
     ]
   },
-  "text": "query primaryLayoutContainerQuery {\n  user {\n    ...authorizedListContainer_user\n    ...unAuthorizedListContainer_user\n    id\n  }\n}\n\nfragment authorizedListContainer_user on ApplicationUser {\n  userName\n}\n\nfragment unAuthorizedListContainer_user on ApplicationUser {\n  userName\n}\n"
+  "text": "query primaryLayoutContainerQuery {\n  user {\n    ...authorizedListContainer_user\n    ...unAuthorizedListContainer_user\n    id\n  }\n  loginProviders {\n    ...socialLoginsContainer_loginProviders\n  }\n}\n\nfragment authorizedListContainer_user on ApplicationUser {\n  userName\n}\n\nfragment unAuthorizedListContainer_user on ApplicationUser {\n  userName\n}\n\nfragment socialLoginsContainer_loginProviders on LoginProvider {\n  authenticationScheme\n  displayName\n}\n"
 };
 
 module.exports = batch;

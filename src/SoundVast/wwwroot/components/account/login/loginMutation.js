@@ -10,7 +10,7 @@ const mutation = graphql`
     login(input: $input) {
       user {
         id,
-        ...authorizedListContainer_user
+        userName
       }
     }
   }
@@ -37,11 +37,9 @@ export default (environment, input, dispatch, onError, onCompleted) => {
     updater: (store) => {
       const login = store.getRootField('login');
       const user = login.getLinkedRecord('user');
-      const userName = user.getValue('userName');
-      const id = user.getValue('id');
+      const root = store.getRoot();
 
-      const newUser = store.get(id);
-      newUser.setValue(userName, 'userName');
+      root.setLinkedRecord(user, 'user');
     },
   });
 };

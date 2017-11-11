@@ -79,7 +79,6 @@ const enhance = compose(
 const SongsContainer = enhance(Songs);
 
 export const routeConfig = {
-  path: '/',
   Component: SongsContainer,
   query,
   render: ({ props }) => props && <SongsContainer data={props} />,

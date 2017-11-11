@@ -7,7 +7,6 @@ import ResetPassword from '../../account/resetPassword/resetPasswordContainer';
 import ConfirmedEmailSuccess from '../../account/confirmedEmailSuccess/confirmedEmailSuccessContainer';
 import Profile from '../../user/profile/userProfileContainer';
 import Upload, { query as uploadQuery } from '../../upload/upload';
-import { routeConfig as accountContainerRouteConfig } from '../../account/accountContainer';
 import { routeConfig as songsContainerRouteConfig } from '../../songs/songsContainer';
 import { routeConfig as primaryLayoutContainerRouteConfig } from '../../layouts/primaryLayout/primaryLayoutContainer';
 import Error from '../../error/error';
@@ -15,7 +14,6 @@ import Error from '../../error/error';
 export default makeRouteConfig(
   <Route path="/">
     <Route {...primaryLayoutContainerRouteConfig}>
-      <Route {...accountContainerRouteConfig} />
       <Route {...songsContainerRouteConfig} />
       <Route path="account">
         <Route path="externalLoginConfirmation" Component={SocialLoginConfirmation} />

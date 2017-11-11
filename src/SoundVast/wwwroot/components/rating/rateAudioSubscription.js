@@ -1,9 +1,9 @@
-import { graphql, commitMutation } from 'react-relay';
+import { graphql, requestSubscription } from 'react-relay';
 
 import environment from '../app/environment/environment';
 
-const mutation = graphql`
-  mutation rateAudioMutation(
+const subscription = graphql`
+  subscription rateAudioSubscription(
     $input: RateAudioInput!
   ) {
     rateAudio(input: $input) {
@@ -25,8 +25,8 @@ export default (audioId, ratings, liked) => {
     },
   };
 
-  commitMutation(environment, {
-    mutation,
+  requestSubscription(environment, {
+    subscription,
     variables,
   });
 };

@@ -9,7 +9,7 @@ using SoundVast.Components.User;
 
 namespace SoundVast.Components.Rating
 {
-    public class RatingPayload : NodeGraphType<Models.Rating>
+    public class RatingPayload : ObjectGraphType<Models.Rating>
     {
         public RatingPayload()
         {
@@ -19,11 +19,6 @@ namespace SoundVast.Components.Rating
             Field(x => x.Liked).Description("Whether the user has liked the audio or not");
             Field<UserType>("user", "The user that rated the audio");
             Field<AudioInterface>("audio", "The audio that was rated by the user");
-        }
-
-        public override Models.Rating GetById(string id)
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -18,7 +18,7 @@ namespace SoundVast.Components.GraphQl
     public class AppQuery : QueryGraphType
     {
         public AppQuery(ISongService songService, ILiveStreamService liveStreamService,
-            IGenreService genreService, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
+            IGenreService genreService, SignInManager<ApplicationUser> signInManager)
         {
             Field<SongPayload>("song",
                 arguments: new QueryArguments(new QueryArgument<StringGraphType> { Name = "id" }),

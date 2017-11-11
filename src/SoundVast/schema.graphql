@@ -1,11 +1,10 @@
 # source: http://localhost:8080/graphql
-# timestamp: Thu Nov 09 2017 23:39:16 GMT+0100 (W. Europe Standard Time)
+# timestamp: Sat Nov 11 2017 00:14:23 GMT+0100 (W. Europe Standard Time)
 
 type ApplicationUser {
   id: ID
   userName: String!
   email: String
-  count: Int
 }
 
 interface Audio {
@@ -128,6 +127,7 @@ type LoginProvider {
 
 type LogoutPayload {
   clientMutationId: String
+  user: ApplicationUser
 }
 
 type Mutation {

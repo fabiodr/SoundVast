@@ -8,6 +8,9 @@ const query = graphql`
       ...authorizedListContainer_user,
       ...unAuthorizedListContainer_user,
     }
+    loginProviders {
+      ...socialLoginsContainer_loginProviders,
+    }
   }
 `;
 

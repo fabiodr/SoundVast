@@ -17,5 +17,11 @@ export default (dispatch) => {
     onCompleted: () => {
       dispatch(showTextPopup('You have successfully logged out.'));
     },
+    updater: (store) => {
+      const root = store.getRoot();
+      const user = root.getLinkedRecord('user');
+
+      user.setValue(null, 'userName');
+    },
   });
 };
