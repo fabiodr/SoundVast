@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Azure;
 using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.ServiceRuntime;
 using System.Configuration;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -25,11 +24,11 @@ namespace SoundVast.Storage.CloudStorage.AzureStorage
             foreach (CloudStorageType cloudStorageType in Enum.GetValues(typeof(CloudStorageType)))
             {
                 var cloudBlobContainer = blobClient.GetContainerReference(cloudStorageType.ToString().ToLower());
-                cloudBlobContainer.CreateIfNotExists();
-                cloudBlobContainer.SetPermissions(new BlobContainerPermissions
+                cloudBlobContainer.CreateIfNotExistsAsync().Wait();
+                cloudBlobContainer.SetPermissionsAsync(new BlobContainerPermissions
                 {
                     PublicAccess = BlobContainerPublicAccessType.Container
-                });
+                }).Wait();
 
                 CloudBlobContainers.Add(cloudStorageType, cloudBlobContainer);
             }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Policy;
 using System.Threading.Tasks;
 using GraphQL;
@@ -48,11 +49,8 @@ namespace SoundVast.Components.Account
                 UserName = username,
                 Email = email
             };
-            user.Claims.Add(new IdentityUserClaim<string>
-            {
-                ClaimType = "Authorization",
-                ClaimValue = "Authorized"
-            });
+
+            await _userManager.AddClaimAsync(user, new Claim("Authorization", "Authorized"));
 
             var result = await _userManager.CreateAsync(user, password);
 

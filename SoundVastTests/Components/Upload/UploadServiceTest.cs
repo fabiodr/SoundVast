@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using SoundVast.Components.Audio;

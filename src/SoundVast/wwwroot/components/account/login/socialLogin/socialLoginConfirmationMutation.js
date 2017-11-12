@@ -1,6 +1,5 @@
-import { graphql, commitMutation } from 'react-relay';
-
-import environment from '../../../app/environment/environment';
+import { graphql } from 'react-relay';
+import { createMutation } from 'relay-compose';
 
 const mutation = graphql`
   mutation socialLoginConfirmationMutation(
@@ -12,21 +11,17 @@ const mutation = graphql`
   }
 `;
 
-export default ({ email, returnUrl }, onError, onCompleted) => {
+export default ({ email, returnUrl }) => {
   const variables = {
     input: {
       email,
     },
   };
 
-  commitMutation(environment, {
+  return createMutation(
     mutation,
     variables,
-    onError,
-    onCompleted: () => {
-      location.href = returnUrl;
-
-      onCompleted();
-    },
+  ).then(() => {
+    location.href = returnUrl;
   });
 };

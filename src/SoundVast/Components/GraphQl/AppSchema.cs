@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GraphQL;
 using GraphQL.Types;
 using SoundVast.Components.Genre;
 using SoundVast.Components.LiveStream;
@@ -12,13 +13,13 @@ namespace SoundVast.Components.GraphQl
 {
     public class AppSchema : Schema
     {
-        public AppSchema(Func<Type, object> resolveType)
-            : base(type => (GraphType)resolveType(type))
+        public AppSchema(Func<Type, IGraphType> resolveType) : base(resolveType)
         {
-            var query = resolveType(typeof(AppQuery));
+            var query = (AppQuery)resolveType(typeof(AppQuery));
+            var mutation = (AppMutation)resolveType(typeof(AppMutation));
 
-            Query = query as AppQuery;
-            Mutation = new AppMutation();
+            Query = query;
+            Mutation = mutation;
         }
     }
 }

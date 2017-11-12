@@ -1,15 +1,16 @@
-import { reduxForm } from 'redux-form';
+import { reduxForm, SubmissionError } from 'redux-form';
 import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
 
 import Register from './register';
 import accountValidation from '../validation';
 import registerMutation from './registerMutation';
-import validateForm from '../../shared/validation/validateForm';
 
 const handlers = {
   onSubmit: ({ dispatch }) => input =>
-    validateForm(input, dispatch)(registerMutation),
+    registerMutation(input, dispatch).catch((error) => {
+      throw new SubmissionError(error);
+    }),
 };
 
 export default compose(

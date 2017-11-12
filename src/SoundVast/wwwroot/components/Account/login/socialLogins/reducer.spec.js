@@ -14,7 +14,7 @@ describe('socialLoginsReducer', () => {
   it('should get social logins', () => {
     const actionProps = {
       loginProviders: [{
-        authenticationScheme: 'facebook',
+        name: 'facebook',
         displayName: 'Facebook',
       }],
     };

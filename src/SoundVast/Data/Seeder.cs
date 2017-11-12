@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Globalization;
 using System.Collections;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,46 +17,43 @@ using SoundVast.Properties;
 
 namespace SoundVast.Data
 {
-    public static class DataSeeder
+    public static class Seeder
     {
-        // Todo: Move this code when seed data is implemented in EF 7
-        /// <summary>
-        /// This is a workaround for missing seed data functionality in EF 7.0-rc1
-        /// More info: https://github.com/aspnet/EntityFramework/issues/629
-        /// </summary>
-        /// <param name="app">
-        /// An instance that provides the mechanisms to get instance of the database context.
-        /// </param>
-        public static void SeedData(this IApplicationBuilder app)
+        public static IWebHost SeedData(this IWebHost webHost)
         {
-            using (var context = app.ApplicationServices.GetService<ApplicationDbContext>())
+            using (var scope = webHost.Services.GetService<IServiceScopeFactory>().CreateScope())
             {
-                context.Database.Migrate();
+                using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
+                {
+                    context.Database.Migrate();
 
-                var musicGenres = MusicGenres.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
-                var liveStreamGenres = LiveStreamGenres.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
-                //var radioStationCategoryResources = LiveStreamCategories.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
-                //var placeHolderImage = new ImageFileModel("Placeholder.jpg");
+                    var musicGenres = MusicGenres.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
+                    var liveStreamGenres = LiveStreamGenres.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
+                    //var radioStationCategoryResources = LiveStreamCategories.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
+                    //var placeHolderImage = new ImageFileModel("Placeholder.jpg");
 
-                InitializeGenres(context, musicGenres, GenreName.Music);
-                InitializeGenres(context, liveStreamGenres, GenreName.LiveStream);
+                    SeedGenres(context, musicGenres, GenreName.Music);
+                    SeedGenres(context, liveStreamGenres, GenreName.LiveStream);
 
-                //   InitializeQuotes(context);
-                //   InitializeCategories<FileStreamCategoryModel>(context, fileStreamCategoryResources, placeHolderImage);
-                //   InitializeCategories<LiveStreamCategoryModel>(context, radioStationCategoryResources, placeHolderImage);
-                //InitializeIdentityForEf(context);
+                    //   InitializeQuotes(context);
+                    //   InitializeCategories<FileStreamCategoryModel>(context, fileStreamCategoryResources, placeHolderImage);
+                    //   InitializeCategories<LiveStreamCategoryModel>(context, radioStationCategoryResources, placeHolderImage);
+                    //InitializeIdentityForEf(context);
 
-                context.SaveChanges();
+                    context.SaveChanges();
+                }
             }
+
+            return webHost;
         }
 
-        private static void InitializeQuotes(ApplicationDbContext context)
-        {
-            var quoteResources = Quotes.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
-            var quotes = quoteResources.Select(x => new QuoteModel { Quotation = (string)x.Value });
+        //private static void InitializeQuotes(ApplicationDbContext context)
+        //{
+        //    var quoteResources = Quotes.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
+        //    var quotes = quoteResources.Select(x => new QuoteModel { Quotation = (string)x.Value });
 
-            //context.Quotes.AddRange(quotes.Where(quote => !context.Quotes.Any(x => x.Quotation == quote.Quotation)));
-        }
+        //    context.Quotes.AddRange(quotes.Where(quote => !context.Quotes.Any(x => x.Quotation == quote.Quotation)));
+        //}
 
         //public static void InitializeCategories<T>(ApplicationDbContext context, DictionaryEntry[] categoryResources, ImageFileModel imageFile)
         //        where T : CategoryModel
@@ -64,7 +63,7 @@ namespace SoundVast.Data
         //    context.Set<T>().AddRange(categories.Where(category => !context.Set<T>().Any(x => x.Name == category.Name)));
         //}
 
-        public static void InitializeGenres(ApplicationDbContext context, DictionaryEntry[] genreResources, string genreType)
+        public static void SeedGenres(ApplicationDbContext context, DictionaryEntry[] genreResources, string genreType)
         {
             var genres = genreResources.Select(x => new Genre
             {

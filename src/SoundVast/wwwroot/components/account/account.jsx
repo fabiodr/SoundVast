@@ -7,7 +7,7 @@ import ForgotPassword from './forgotPassword/forgotPasswordContainer';
 
 const Account = ({ loginProviders }) => (
   <div>
-    <Register />
+    <Register loginProviders={loginProviders} />
     <Login loginProviders={loginProviders} />
     <ForgotPassword />
   </div>

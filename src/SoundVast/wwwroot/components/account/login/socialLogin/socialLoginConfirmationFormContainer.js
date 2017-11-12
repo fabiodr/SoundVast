@@ -1,7 +1,6 @@
-import { reduxForm } from 'redux-form';
+import { reduxForm, SubmissionError } from 'redux-form';
 import { compose, withHandlers, withProps } from 'recompose';
 
-import validateForm from '../../../shared/validation/validateForm';
 import SocialLoginConfirmationForm from './socialLoginConfirmationForm';
 import accountValidation from '../../validation';
 import socialLoginConfirmationMutation from './socialLoginConfirmationMutation';
@@ -14,7 +13,9 @@ const createProps = ({ email, returnUrl }) => ({
 });
 
 const handlers = {
-  onSubmit: () => input => validateForm(input)(socialLoginConfirmationMutation),
+  onSubmit: () => input => socialLoginConfirmationMutation(input).catch((error) => {
+    throw new SubmissionError(error);
+  }),
 };
 
 export default compose(

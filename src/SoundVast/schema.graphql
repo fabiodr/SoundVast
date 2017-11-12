@@ -1,5 +1,5 @@
 # source: http://localhost:8080/graphql
-# timestamp: Sat Nov 11 2017 00:14:23 GMT+0100 (W. Europe Standard Time)
+# timestamp: Sun Nov 12 2017 22:46:24 GMT+0100 (W. Europe Standard Time)
 
 type ApplicationUser {
   id: ID
@@ -121,13 +121,12 @@ type LoginPayload {
 }
 
 type LoginProvider {
-  authenticationScheme: String!
+  name: String!
   displayName: String!
 }
 
 type LogoutPayload {
   clientMutationId: String
-  user: ApplicationUser
 }
 
 type Mutation {
@@ -198,7 +197,7 @@ type RateAudioPayload {
   rating: Rating
 }
 
-type Rating implements Node {
+type Rating {
   id: ID
 
   # Whether the user has liked the audio or not

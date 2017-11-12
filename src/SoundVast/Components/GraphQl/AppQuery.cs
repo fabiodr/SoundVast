@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GraphQL;
 using GraphQL.Builders;
 using GraphQL.Relay.Types;
 using GraphQL.Types;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Identity;
 using SoundVast.Components.Account;
@@ -41,7 +44,12 @@ namespace SoundVast.Components.GraphQl
 
             Field<ListGraphType<LoginProvidersPayload>>()
                 .Name("loginProviders")
-                .Resolve(c => signInManager.GetExternalAuthenticationSchemes());
+                .Resolve(new Func<ResolveFieldContext<object>, Task<IEnumerable<AuthenticationScheme>>>(async c =>
+                {
+                    var providers = await signInManager.GetExternalAuthenticationSchemesAsync();
+
+                    return providers;
+                }));
         }
     }
 }

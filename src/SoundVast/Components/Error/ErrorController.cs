@@ -18,14 +18,14 @@ namespace SoundVast.Components.Error
             _quoteService = quoteService;
         }
 
-        public IActionResult BadGateway()
-        {
-            var quoteViewModel = Mapper.Map<QuoteModel, QuoteViewModel>(_quoteService.GetRandomQuote());
+        //public IActionResult BadGateway()
+        //{
+        //    var quoteViewModel = Mapper.Map<QuoteModel, QuoteViewModel>(_quoteService.GetRandomQuote());
 
-            Response.StatusCode = (int)HttpStatusCode.BadGateway;
+        //    Response.StatusCode = (int)HttpStatusCode.BadGateway;
 
-            return View("~/Views/Errors/BadGateway.cshtml", quoteViewModel);
-        }
+        //    return View("~/Views/Errors/BadGateway.cshtml", quoteViewModel);
+        //}
 
         //public IActionResult BadRequest()
         //{
@@ -36,32 +36,32 @@ namespace SoundVast.Components.Error
         //    return View("~/Views/Errors/BadRequest.cshtml", quoteViewModel);
         //}
 
-        public IActionResult GatewayTimeout()
-        {
-            var quoteViewModel = Mapper.Map<QuoteModel, QuoteViewModel>(_quoteService.GetRandomQuote());
+        //public IActionResult GatewayTimeout()
+        //{
+        //    var quoteViewModel = Mapper.Map<QuoteModel, QuoteViewModel>(_quoteService.GetRandomQuote());
 
-            Response.StatusCode = (int)HttpStatusCode.GatewayTimeout;
+        //    Response.StatusCode = (int)HttpStatusCode.GatewayTimeout;
 
-            return View("~/Views/Errors/GatewayTimeout.cshtml", quoteViewModel);
-        }
+        //    return View("~/Views/Errors/GatewayTimeout.cshtml", quoteViewModel);
+        //}
 
-        public IActionResult Gone()
-        {
-            var quoteViewModel = Mapper.Map<QuoteModel, QuoteViewModel>(_quoteService.GetRandomQuote());
+        //public IActionResult Gone()
+        //{
+        //    var quoteViewModel = Mapper.Map<QuoteModel, QuoteViewModel>(_quoteService.GetRandomQuote());
 
-            Response.StatusCode = (int)HttpStatusCode.Gone;
+        //    Response.StatusCode = (int)HttpStatusCode.Gone;
 
-            return View("~/Views/Errors/Gone.cshtml", quoteViewModel);
-        }
+        //    return View("~/Views/Errors/Gone.cshtml", quoteViewModel);
+        //}
 
-        public IActionResult InternalServerError()
-        {
-            var quoteViewModel = Mapper.Map<QuoteModel, QuoteViewModel>(_quoteService.GetRandomQuote());
+        //public IActionResult InternalServerError()
+        //{
+        //    var quoteViewModel = Mapper.Map<QuoteModel, QuoteViewModel>(_quoteService.GetRandomQuote());
 
-            Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+        //    Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-            return View("~/Views/Errors/InternalServerError.cshtml", quoteViewModel);
-        }
+        //    return View("~/Views/Errors/InternalServerError.cshtml", quoteViewModel);
+        //}
 
         //public IActionResult NotFound()
         //{
@@ -72,22 +72,22 @@ namespace SoundVast.Components.Error
         //    return View("~/Views/Errors/NotFound.cshtml", quoteViewModel);
         //}
 
-        public IActionResult RequestTimeout()
-        {
-            var quoteViewModel = Mapper.Map<QuoteModel, QuoteViewModel>(_quoteService.GetRandomQuote());
+        //public IActionResult RequestTimeout()
+        //{
+        //    var quoteViewModel = Mapper.Map<QuoteModel, QuoteViewModel>(_quoteService.GetRandomQuote());
 
-            Response.StatusCode = (int)HttpStatusCode.RequestTimeout;
+        //    Response.StatusCode = (int)HttpStatusCode.RequestTimeout;
 
-            return View("~/Views/Errors/RequestTimeout.cshtml", quoteViewModel);
-        }
+        //    return View("~/Views/Errors/RequestTimeout.cshtml", quoteViewModel);
+        //}
 
-        public IActionResult ServiceUnavailable()
-        {
-            var quoteViewModel = Mapper.Map<QuoteModel, QuoteViewModel>(_quoteService.GetRandomQuote());
+        //public IActionResult ServiceUnavailable()
+        //{
+        //    var quoteViewModel = Mapper.Map<QuoteModel, QuoteViewModel>(_quoteService.GetRandomQuote());
 
-            Response.StatusCode = (int)HttpStatusCode.ServiceUnavailable;
+        //    Response.StatusCode = (int)HttpStatusCode.ServiceUnavailable;
 
-            return View("~/Views/Errors/ServiceUnavailable.cshtml", quoteViewModel);
-        }
+        //    return View("~/Views/Errors/ServiceUnavailable.cshtml", quoteViewModel);
+        //}
     }
 }

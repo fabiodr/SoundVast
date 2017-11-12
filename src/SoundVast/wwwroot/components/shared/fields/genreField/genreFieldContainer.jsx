@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import { fragmentContainer } from 'recompose-relay-modern';
+import { fragment } from 'relay-compose';
 import { graphql } from 'react-relay';
 
 import GenreField from './genreField';
@@ -9,7 +9,7 @@ const mapStateToProps = ({ genre }) => ({
   genres: genre.genres,
 });
 
-const fragment = graphql`
+const fragments = graphql`
   fragment genreFieldContainer_genres on Genre @relay(plural: true) {
     id,
     name,
@@ -18,8 +18,8 @@ const fragment = graphql`
 `;
 
 const enhance = compose(
+  fragment(fragments),
   connect(mapStateToProps),
-  fragmentContainer(fragment),
 );
 
 export default enhance(GenreField);

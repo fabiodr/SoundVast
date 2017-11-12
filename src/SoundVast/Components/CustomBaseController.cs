@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
@@ -15,7 +14,6 @@ namespace SoundVast.Components
 {
     public class CustomBaseController : Controller
     {
-        protected IMapper Mapper;
         private readonly IServiceProvider _serviceProvider;
 
         public CustomBaseController()
@@ -23,9 +21,8 @@ namespace SoundVast.Components
             
         }
 
-        public CustomBaseController(IMapper mapper, IServiceProvider serviceProvider)
+        public CustomBaseController(IServiceProvider serviceProvider)
         {
-            Mapper = mapper;
             _serviceProvider = serviceProvider;
         }
 

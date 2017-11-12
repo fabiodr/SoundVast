@@ -1,4 +1,5 @@
-import { graphql, commitMutation } from 'react-relay';
+import { graphql } from 'react-relay';
+import { createMutation } from 'relay-compose';
 
 import { hideModal } from '../../shared/modal/actions';
 import { showLoginPopup } from '../actions';
@@ -16,7 +17,7 @@ const mutation = graphql`
   }
 `;
 
-export default (environment, input, dispatch, onError, onCompleted) => {
+export default (input, dispatch) => {
   const variables = {
     input: {
       username: input.username,
@@ -25,21 +26,23 @@ export default (environment, input, dispatch, onError, onCompleted) => {
     },
   };
 
-  commitMutation(environment, {
+  return createMutation(
     mutation,
     variables,
-    onError,
-    onCompleted: () => {
-      dispatch(hideModal());
-      dispatch(showLoginPopup());
-      onCompleted();
-    },
-    updater: (store) => {
+    null,
+    null,
+    (store) => {
       const login = store.getRootField('login');
-      const user = login.getLinkedRecord('user');
-      const root = store.getRoot();
 
-      root.setLinkedRecord(user, 'user');
+      if (login !== null) {
+        const user = login.getLinkedRecord('user');
+        const root = store.getRoot();
+
+        root.setLinkedRecord(user, 'user');
+      }
     },
+  ).then((response, errors) => {
+    dispatch(hideModal());
+    dispatch(showLoginPopup());
   });
 };

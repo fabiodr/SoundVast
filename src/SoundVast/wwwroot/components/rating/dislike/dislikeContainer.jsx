@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { compose, setPropTypes, withHandlers } from 'recompose';
 
 import Dislike from './dislike';
-import rateAudioSubscription from '../rateAudioSubscription';
+import rateAudioMutation from '../rateAudioMutation';
 
 const propTypes = {
   audioId: PropTypes.number.isRequired,
@@ -10,7 +10,7 @@ const propTypes = {
 };
 
 const handlers = {
-  onClick: ({ audioId, dislikes }) => () => rateAudioSubscription(audioId, dislikes, false),
+  onClick: ({ audioId, dislikes }) => () => rateAudioMutation(audioId, dislikes, false),
 };
 
 export default compose(

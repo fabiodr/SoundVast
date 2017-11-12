@@ -9,7 +9,7 @@
 /*::
 import type {ConcreteFragment} from 'relay-runtime';
 export type socialLoginsContainer_loginProviders = $ReadOnlyArray<{|
-  +authenticationScheme: string;
+  +name: string;
   +displayName: string;
 |}>;
 */
@@ -27,7 +27,7 @@ const fragment /*: ConcreteFragment*/ = {
       "kind": "ScalarField",
       "alias": null,
       "args": null,
-      "name": "authenticationScheme",
+      "name": "name",
       "storageKey": null
     },
     {

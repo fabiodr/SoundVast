@@ -5,7 +5,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Web;
-using AutoMapper;
 using SoundVast.QueryOptions;
 using SoundVast.Utilities;
 using Microsoft.AspNetCore.Mvc;

@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 984a56df0fa465cf28845c85c919e36c
+ * @relayHash fde2df461d41ced60ed78eee82e9e30c
  */
 
 /* eslint-disable */
@@ -37,7 +37,7 @@ fragment unAuthorizedListContainer_user on ApplicationUser {
 }
 
 fragment socialLoginsContainer_loginProviders on LoginProvider {
-  authenticationScheme
+  name
   displayName
 }
 */
@@ -140,7 +140,7 @@ const batch /*: ConcreteBatch*/ = {
                 "kind": "ScalarField",
                 "alias": null,
                 "args": null,
-                "name": "authenticationScheme",
+                "name": "name",
                 "storageKey": null
               },
               {
@@ -157,7 +157,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query primaryLayoutContainerQuery {\n  user {\n    ...authorizedListContainer_user\n    ...unAuthorizedListContainer_user\n    id\n  }\n  loginProviders {\n    ...socialLoginsContainer_loginProviders\n  }\n}\n\nfragment authorizedListContainer_user on ApplicationUser {\n  userName\n}\n\nfragment unAuthorizedListContainer_user on ApplicationUser {\n  userName\n}\n\nfragment socialLoginsContainer_loginProviders on LoginProvider {\n  authenticationScheme\n  displayName\n}\n"
+  "text": "query primaryLayoutContainerQuery {\n  user {\n    ...authorizedListContainer_user\n    ...unAuthorizedListContainer_user\n    id\n  }\n  loginProviders {\n    ...socialLoginsContainer_loginProviders\n  }\n}\n\nfragment authorizedListContainer_user on ApplicationUser {\n  userName\n}\n\nfragment unAuthorizedListContainer_user on ApplicationUser {\n  userName\n}\n\nfragment socialLoginsContainer_loginProviders on LoginProvider {\n  name\n  displayName\n}\n"
 };
 
 module.exports = batch;

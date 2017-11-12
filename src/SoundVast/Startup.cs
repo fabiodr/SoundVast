@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
@@ -16,7 +17,6 @@ using SoundVast.Services;
 using SoundVast.Storage.CloudStorage;
 using SoundVast.Storage.CloudStorage.AzureStorage;
 using SoundVast.Storage.FileStorage;
-using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SpaServices.Webpack;
@@ -27,7 +27,13 @@ using System.Text.RegularExpressions;
 using Autofac;
 using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
+using GraphQL;
 using GraphQL.Relay.Types;
+using GraphQL.Types;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Facebook;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.Twitter;
 using Newtonsoft.Json;
 using SoundVast.Components.Audio;
 using SoundVast.Components.Audio.Models;
@@ -43,24 +49,11 @@ namespace SoundVast
     public class Startup
     {
         private readonly IConfiguration _configuration;
-        private readonly ILogger _logger;
 
-        public Startup(IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public Startup(IConfiguration configuration, ILoggerFactory loggerFactory)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
-
-            if (env.IsDevelopment())
-            {
-                // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
-                builder.AddUserSecrets<Startup>();
-            }
-
-            builder.AddEnvironmentVariables();
-            _configuration = builder.Build();
-            _logger = loggerFactory.CreateLogger<Startup>();
+            _configuration = configuration;
+            loggerFactory.CreateLogger<Startup>();
 
             JobScheduler.Start();
         }
@@ -87,7 +80,7 @@ namespace SoundVast
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
-                options.CookieName = ".SoundVast";
+                options.Cookie.Name = ".SoundVast";
             });
            
             services.Configure<DataProtectionTokenProviderOptions>(options =>
@@ -97,16 +90,26 @@ namespace SoundVast
 
             services.AddMvc().AddJsonOptions(x => x.SerializerSettings.ReferenceLoopHandling =
                 ReferenceLoopHandling.Ignore);
-            services.AddCloudscribePagination();
             services.AddMemoryCache();
-            services.AddScoped(_ =>
-                new AppSchema(graphType =>
+            //  services.AddGraphQLHttpTransport<AppSchema>();
+            // services.AddGraphQLWebSocketsTransport<AppSchema>();
+            // services.AddGraphQL();
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(o => o.LoginPath = new PathString("/login"))
+                .AddFacebook(o =>
                 {
-                    var type = _.GetService(graphType);
-                    return type ?? Activator.CreateInstance(graphType);
-                })
-            );
-            //services.AddAutoMapper();
+                    o.AppId = _configuration["OAuth:Facebook:Id"];
+                    o.AppSecret = _configuration["OAuth:Facebook:Secret"];
+                }).AddTwitter(o =>
+                {
+                    o.ConsumerKey = _configuration["OAuth:Twitter:Id"];
+                    o.ConsumerSecret = _configuration["OAuth:Twitter:Secret"];
+                }).AddGoogle(o =>
+                {
+                    o.ClientId = _configuration["OAuth:Google:Id"];
+                    o.ClientSecret = _configuration["OAuth:Google:Secret"];
+                });
 
             var builder = RegisterServices();
 
@@ -139,10 +142,10 @@ namespace SoundVast
             }
 
             app.UseStaticFiles();
-            app.UseIdentity();
-            app.SeedData();
+            app.UseAuthentication();
             app.UseSession();
-            RegisterSocialLogins(app);
+         //   app.UseWebSockets();
+          //  app.UseGraphQLEndPoint<AppSchema>("/graphql");
 
             app.UseMvc(routes =>
             {
@@ -187,13 +190,26 @@ namespace SoundVast
 
             builder.Register(x => _configuration).As<IConfiguration>().SingleInstance();
             builder.Register(x => azureStorage).As<ICloudStorage>().SingleInstance();
+            builder.Register(x =>
+            {
+                var context = x.Resolve<IComponentContext>();
+
+                return new AppSchema(t =>
+                {
+                    var type = context.ResolveOptional(t);
+                    var resolvedType = type ?? Activator.CreateInstance(t);
+
+                    return resolvedType.As<IGraphType>();
+                });
+            });
 
             builder.RegisterAssemblyTypes(assembly).AsClosedTypesOf(typeof(Validator<>));
             builder.RegisterAssemblyTypes(assembly).AsClosedTypesOf(typeof(MutationPayloadGraphType<,>));
             builder.RegisterAssemblyTypes(assembly).Where(x => x.Name.EndsWith("Service")).AsImplementedInterfaces();
             builder.RegisterAssemblyTypes(assembly).Where(x => x.Name.EndsWith("Validator")).AsImplementedInterfaces();
-            builder.RegisterAssemblyTypes(assembly).Where(x => x.Name.EndsWith("Query"));
 
+            builder.RegisterType<AppQuery>();
+            builder.RegisterType<AppMutation>();
             builder.RegisterType<FileStorage>().As<IFileStorage>().SingleInstance();
             builder.RegisterType<ValidationProvider>().As<IValidationProvider>().InstancePerLifetimeScope();
             builder.RegisterType<AuthMessageSender>().As<IEmailSender>();
@@ -206,52 +222,6 @@ namespace SoundVast
             builder.RegisterType<Repository<Genre, ApplicationDbContext>>().As<IRepository<Genre>>();
 
             return builder;
-        }
-
-        private void RegisterSocialLogins(IApplicationBuilder app)
-        {
-            var faceBookSecret = _configuration["OAuth:Facebook:Secret"];
-            var twitterSecret = _configuration["OAuth:Twitter:Secret"];
-            var googleSecret = _configuration["OAuth:Google:Secret"];
-
-            if (faceBookSecret != null)
-            {
-                app.UseFacebookAuthentication(new FacebookOptions
-                {
-                    AppId = _configuration["OAuth:Facebook:Id"],
-                    AppSecret = faceBookSecret
-                });
-            }
-            else
-            {
-                _logger.LogWarning("FaceBook OAuth not setup because the Facebook secret is null");
-            }
-
-            if (twitterSecret != null)
-            {
-                app.UseTwitterAuthentication(new TwitterOptions
-                {
-                    ConsumerKey = _configuration["OAuth:Twitter:Id"],
-                    ConsumerSecret = twitterSecret
-                });
-            }
-            else
-            {
-                _logger.LogWarning("Twitter OAuth not setup because the Twitter secret is null");
-            }
-
-            if (googleSecret != null)
-            {
-                app.UseGoogleAuthentication(new GoogleOptions
-                {
-                    ClientId = _configuration["OAuth:Google:Id"],
-                    ClientSecret = googleSecret
-                });
-            }
-            else
-            {
-                _logger.LogWarning("Google OAuth not setup because the Google secret is null");
-            }
         }
     }
 }

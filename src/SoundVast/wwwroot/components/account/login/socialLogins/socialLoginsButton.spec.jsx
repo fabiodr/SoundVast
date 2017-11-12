@@ -6,7 +6,7 @@ import SocialLogin from './socialLogins';
 
 const setup = (newProps) => {
   const props = {
-    authenticationScheme: 'facebook',
+    name: 'facebook',
     displayName: 'Facebook',
     ...newProps,
   };

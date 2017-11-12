@@ -13,7 +13,7 @@ const SocialLogins = ({ loginProviders }) => (
       {
         loginProviders.map(loginProvider => (
           <SocialLoginsButton
-            key={loginProvider.authenticationScheme}
+            key={loginProvider.name}
             {...loginProvider}
           />
         ))
@@ -30,7 +30,7 @@ SocialLogins.defaultProps = {
 SocialLogins.propTypes = {
   loginProviders: PropTypes.arrayOf(
     PropTypes.shape({
-      authenticationScheme: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
       displayName: PropTypes.string.isRequired,
     }).isRequired,
   ).isRequired,

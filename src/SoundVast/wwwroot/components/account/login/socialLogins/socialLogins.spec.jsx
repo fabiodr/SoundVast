@@ -21,7 +21,7 @@ const setup = (newProps) => {
 };
 const loginProviders = [
   {
-    authenticationScheme: 'facebook',
+    name: 'facebook',
     displayName: 'Facebook',
   },
 ];

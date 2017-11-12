@@ -4,6 +4,7 @@ import {
   RecordSource,
   Store,
 } from 'relay-runtime';
+import { setEnviroment } from 'relay-compose';
 
 const network = Network.create((operation, variables) =>
   fetch('/graphql', {
@@ -32,5 +33,7 @@ const environment = new Environment({
   network,
   store,
 });
+
+setEnviroment(environment);
 
 export default environment;

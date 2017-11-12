@@ -1,9 +1,9 @@
 import React from 'react';
 import { compose, withHandlers, withProps } from 'recompose';
 import { graphql } from 'react-relay';
+import { paginationContainer } from 'relay-compose-test';
 
 import Songs from './songs';
-import paginationContainer from '../shared/createPaginationContainer';
 
 const songsToLoad = 30;
 const query = graphql`

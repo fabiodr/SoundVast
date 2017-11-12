@@ -3,19 +3,19 @@ import PropTypes from 'prop-types';
 
 import styles from './socialLogins.less';
 
-const SocialLoginsButton = ({ authenticationScheme, displayName }) => (
+const SocialLoginsButton = ({ name, displayName }) => (
   <button
     className={styles.socialLoginProviderButton}
-    value={authenticationScheme}
+    value={name}
     name="provider"
     title={`Log in using your ${displayName} account`}
   >
-    <img src={`/images/loginProviders/${authenticationScheme}_40.png`} alt={displayName} />
+    <img src={`/images/loginProviders/${name}_40.png`} alt={displayName} />
   </button>
 );
 
 SocialLoginsButton.propTypes = {
-  authenticationScheme: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
   displayName: PropTypes.string.isRequired,
 };
 

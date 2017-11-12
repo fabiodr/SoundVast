@@ -19,7 +19,6 @@ namespace SoundVastTests.Components.LiveStream
         private LiveStreamController _liveStreamController;
         private Mock<ILiveStreamService> _mockLiveStreamService;
 
-
         [SetUp]
         public void Init()
         {

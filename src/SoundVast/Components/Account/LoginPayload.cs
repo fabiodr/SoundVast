@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Policy;
 using System.Threading.Tasks;
 using GraphQL;
 using GraphQL.Relay.Types;
@@ -45,21 +44,22 @@ namespace SoundVast.Components.Account
             if (result.Succeeded)
             {
                 _logger.LogInformation(1, "User logged in.");
-            }
-            else
-            {
-                _validationProvider.AddError("_error", "Invalid login attempt.");
+
+
+                var user = new ApplicationUser
+                {
+                    UserName = username,
+                };
+
+                return new
+                {
+                    user
+                };
             }
 
-            var user = new ApplicationUser
-            {
-                UserName = username,
-            };
+            _validationProvider.AddError("_error", "Invalid login attempt.");
 
-            return new
-            {
-                user
-            };
+            return null;
         }
     }
 }

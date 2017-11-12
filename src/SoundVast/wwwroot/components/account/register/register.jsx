@@ -10,9 +10,9 @@ import ModalLink from '../../shared/modal/modalLinkContainer';
 import Modal from '../../shared/modal/modalContainer';
 import SocialLogins from '../login/socialLogins/socialLoginsContainer';
 
-const Register = ({ error: errors, handleSubmit }) => (
+const Register = ({ error: errors, handleSubmit, loginProviders }) => (
   <Modal title="Register." id="register">
-    <SocialLogins />
+    <SocialLogins loginProviders={loginProviders} />
     <form onSubmit={handleSubmit} action="">
       <ValidationErrors errors={errors} />
 
@@ -39,6 +39,7 @@ Register.defaultProps = {
 };
 
 Register.propTypes = {
+  loginProviders: PropTypes.arrayOf(PropTypes.object).isRequired,
   handleSubmit: PropTypes.func.isRequired,
   error: PropTypes.arrayOf(PropTypes.string.isRequired),
 };
