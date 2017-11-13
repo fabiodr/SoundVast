@@ -28,8 +28,10 @@ export default (state = defaultState, action) => {
     case 'UPDATE_COVER_IMAGE': {
       const coverImages = { ...state.coverImages };
 
-      coverImages[action.id] = action.file;
-      coverImages[action.id].previewUrl = URL.createObjectURL(action.file);
+      coverImages[action.id] = {
+        previewUrl: action.previewUrl,
+        imagePath: action.imagePath,
+      };
 
       return {
         ...state,

@@ -9,30 +9,36 @@ namespace SoundVast.Validation
     internal sealed class ValidationProvider : IValidationProvider
     {
         private readonly Func<Type, IValidator> _validatorFactory;
-
+        public IDictionary<string, ICollection<string>> ValidationErrors { get; } = new Dictionary<string, ICollection<string>>();
+        public bool HasErrors => ValidationErrors.Any();
+  
         public ValidationProvider(Func<Type, IValidator> validatorFactory)
         {
             _validatorFactory = validatorFactory;
         }
 
-        public void Validate(object entity)
+        public void AddError(string key, string message)
         {
-            var results = _validatorFactory(entity.GetType()).Validate(entity).ToArray();
+            if (ValidationErrors.ContainsKey(key))
+            {
+                var validationError = ValidationErrors[key];
 
-            if (results.Length > 0)
-                throw new ValidationException(results);
+                validationError.Add(message);
+            }
+            else
+            {
+                ValidationErrors[key] = new List<string> { message };
+            }
         }
 
-        public void ValidateAll(IEnumerable entities)
+        public void Validate(object entity)
         {
-            var results = (
-                from entity in entities.Cast<object>()
-                let validator = _validatorFactory(entity.GetType())
-                from result in validator.Validate(entity)
-                select result).ToArray();
+            var validationResults = _validatorFactory(entity.GetType()).Validate(entity).ToArray();
 
-            if (results.Length > 0)
-                throw new ValidationException(results);
+            foreach (var validationResult in validationResults)
+            {
+                AddError(validationResult.Key, validationResult.Message);
+            }
         }
     }
 }

@@ -6,7 +6,7 @@
 
 //namespace SoundVast.Components.FileStream.Models
 //{
-//    public class FileStreamGenreModel : GenreModel
+//    public class FileStreamGenreModel : Genre
 //    {
 //        public FileStreamGenreModel()
 //        {

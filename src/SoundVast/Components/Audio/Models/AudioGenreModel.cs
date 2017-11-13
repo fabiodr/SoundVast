@@ -9,9 +9,9 @@
 //    public class AudioGenreModel
 //    {
 //        public int AudioId { get; set; }
-//        public SongModel Audio { get; set; }
+//        public Song Audio { get; set; }
 
 //        public int GenreId { get; set; }
-//        public GenreModel Genre { get; set; }
+//        public Genre Genre { get; set; }
 //    }
 //}

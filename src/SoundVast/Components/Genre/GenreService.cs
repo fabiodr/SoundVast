@@ -9,26 +9,21 @@ namespace SoundVast.Components.Genre
 {
     public class GenreService : IGenreService
     {
-        private readonly IRepository<GenreModel> _repository;
+        private readonly IRepository<Models.Genre> _repository;
 
-        public GenreService(IRepository<GenreModel> repository)
+        public GenreService(IRepository<Models.Genre> repository)
         {
             _repository = repository;
         }
 
-        //public ICollection<GenreModel> GetGenresInCategory(string category)
+        //public ICollection<Genre> GetGenresInCategory(string category)
         //{
         //    return _repository.GetAll().Where(x => x.Category.Name == category).ToList();
         //}
 
-        public ICollection<GenreModel> GetMusicGenres()
+        public ICollection<Models.Genre> GetGenres()
         {
-            return _repository.GetAll().Where(x => x.Type == GenreType.Music).ToList();
-        }
-
-        public ICollection<GenreModel> GetLiveStreamGenres()
-        {
-            return _repository.GetAll().Where(x => x.Type == GenreType.LiveStream).ToList();
+            return _repository.GetAll().ToList();
         }
     }
 }

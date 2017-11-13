@@ -19,7 +19,6 @@ namespace SoundVastTests.Components.LiveStream
         private LiveStreamController _liveStreamController;
         private Mock<ILiveStreamService> _mockLiveStreamService;
 
-
         [SetUp]
         public void Init()
         {
@@ -30,10 +29,10 @@ namespace SoundVastTests.Components.LiveStream
         [Test]
         public void GetRadios()
         {
-            var radios = new List<LiveStreamModel>
+            var radios = new List<SoundVast.Components.LiveStream.Models.LiveStream>
             {
-                new LiveStreamModel(),
-                new LiveStreamModel()
+                new SoundVast.Components.LiveStream.Models.LiveStream(),
+                new SoundVast.Components.LiveStream.Models.LiveStream()
             };
 
             _mockLiveStreamService.Setup(x => x.GetAudios(It.IsAny<int>(), It.IsAny<int>())).Returns(radios);

@@ -5,7 +5,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Web;
-using ExpressiveAnnotations.Attributes;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SoundVast.CustomHelpers;
@@ -102,16 +101,16 @@ namespace SoundVast.Components.Audio
     //    public string AdditionalDetails { get; set; }
     //}
 
-    public class ReportCreateViewModel
-    {
-        public int Id { get; set; }
-        public string Reason { get; set; }
-        public int ReportId { get; set; }
-        public SelectList OtherAudios { get; set; }
+    //public class ReportCreateViewModel
+    //{
+    //    public int Id { get; set; }
+    //    public string Reason { get; set; }
+    //    public int ReportId { get; set; }
+    //    public SelectList OtherAudios { get; set; }
 
-        [RequiredIf("Reason == 'Other'", ErrorMessage = @"Additional details must be entered")]
-        public string AdditionalDetails { get; set; }
-    }
+    //    [RequiredIf("Reason == 'Other'", ErrorMessage = @"Additional details must be entered")]
+    //    public string AdditionalDetails { get; set; }
+    //}
 
     public class EditAudioViewModel : IRatable
     {

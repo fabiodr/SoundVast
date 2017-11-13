@@ -14,21 +14,8 @@ namespace SoundVast.Storage.CloudStorage.AzureStorage
     public class AzureBlob : ICloudBlob
     {
         public CloudBlockBlob CloudBlockBlob { get; set; }
-        private static readonly IDictionary<string, int> UploadProgresses = new Dictionary<string, int>();
 
-        public static int GetProgressPercent(string progressId)
-        {
-            UploadProgresses.TryGetValue(progressId, out int progressPercent);
-
-            if (progressPercent == 100)
-            {
-                UploadProgresses.Remove(progressId);
-            }
-
-            return progressPercent;
-        }
-
-        public async Task UploadChunksFromPathAsync(string path, string contentType, long fileLength, string progressId)
+        public async Task UploadChunksFromPathAsync(string path, string contentType, long fileLength)
         {
             const int blockSize = 256 * 1024;
             var bytesToUpload = fileLength;
@@ -60,7 +47,6 @@ namespace SoundVast.Storage.CloudStorage.AzureStorage
                 index++;
 
                 var percent = (int)(((double)bytesUploaded / (double)fileLength) * 100);
-                UploadProgresses[progressId] = percent;
             } while (bytesToUpload > 0);
 
             CloudBlockBlob.Properties.ContentType = contentType;

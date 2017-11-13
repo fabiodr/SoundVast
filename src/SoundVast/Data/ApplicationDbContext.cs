@@ -17,10 +17,10 @@ namespace SoundVast.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        //public DbSet<RatingCountModel> RatingCount { get; set; }
-        public DbSet<RatingModel> Ratings { get; set; }
+        //public DbSet<RatingCountModel> Rating { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
         //public DbSet<LinkModel> Links { get; set; }
-        public DbSet<GenreModel> Genres { get; set; }
+        public DbSet<Genre> Genres { get; set; }
         //public DbSet<CategoryModel> Categories { get; set; }
         //public DbSet<FileStreamGenreModel> FileStreamGenres { get; set; }
         //public DbSet<LiveStreamGenreModel> LiveStreamGenres { get; set; }
@@ -31,8 +31,8 @@ namespace SoundVast.Data
         //public DbSet<CommentModel> Comments { get; set; }
        // public DbSet<FileModel> Files { get; set; }
        // public DbSet<AudioGenreModel> AudioGenres { get; set; }
-        public DbSet<AudioModel> Audios { get; set; }
-       // public DbSet<LiveStreamModel> LiveStreams { get; set; }
+        public DbSet<Audio> Audios { get; set; }
+       // public DbSet<LiveStream> LiveStreams { get; set; }
 
         public ApplicationDbContext(DbContextOptions options)
             : base(options)
@@ -43,9 +43,9 @@ namespace SoundVast.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<SongModel>();
-            modelBuilder.Entity<LiveStreamModel>();
-            modelBuilder.Entity<AudioModel>().HasMany(x => x.Ratings).WithOne(x => x.Audio).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Song>();
+            modelBuilder.Entity<LiveStream>();
+            modelBuilder.Entity<Audio>().HasMany(x => x.Ratings).WithOne(x => x.Audio).OnDelete(DeleteBehavior.Cascade);
             //modelBuilder.Entity<AudioGenreModel>().HasKey(x => new { x.AudioId, x.GenreId });
             //modelBuilder.Entity<FileStreamModel>().HasMany(x => x.Links).WithOne().OnDelete(DeleteBehavior.Cascade);
             //modelBuilder.Entity<CommentRatingJoinModel>().HasKey(x => new { x.CommentId, x.CommentRatingId });

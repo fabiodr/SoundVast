@@ -14,13 +14,13 @@
     "mocha": true,
     "es6": true
   },
-  "ecmaFeatures": {
-    "modules": true
-  },
   "extends": "airbnb",
   "rules": {
     "react/wrap-multilines": "off",
     "react/require-extension": "off"
+    // "graphql/template-strings": ["error", {
+    //   "env": "relay"
+    // }]
   },
   "overrides": [
     {
@@ -33,6 +33,8 @@
     }
   ],
   "plugins": [
-    "react"
+    "react",
+    // "graphql",
+    "relay"
   ]
 }

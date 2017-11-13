@@ -33,7 +33,7 @@ namespace SoundVast.Components
 
         public string ConvertToJson()
         {
-            return _modelState.ConvertToJson();
+            return _modelState.ConvertErrorsToJson();
         }
     }
 }

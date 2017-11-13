@@ -13,8 +13,8 @@
 //        public int Id { get; set; }
 //        public string Name { get; set; }
 //        public virtual ImageFileModel ImageFile { get; }
-//        public virtual ICollection<SongModel> Audios { get; set; }
-//        public virtual ICollection<GenreModel> Genres { get; set; }
+//        public virtual ICollection<Song> Audios { get; set; }
+//        public virtual ICollection<Genre> Genres { get; set; }
 
 //        public CategoryModel()
 //        {

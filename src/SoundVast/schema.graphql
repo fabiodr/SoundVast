@@ -1,0 +1,325 @@
+# source: http://localhost:8080/graphql
+# timestamp: Sun Nov 12 2017 22:46:24 GMT+0100 (W. Europe Standard Time)
+
+type ApplicationUser {
+  id: ID
+  userName: String!
+  email: String
+}
+
+interface Audio {
+  id: ID
+  audioId: Int!
+  name: String!
+
+  # The poster image for the audio
+  coverImageUrl: String!
+  likes: Int!
+  dislikes: Int!
+
+  # The user who uploaded the audio
+  user: User
+
+  # The genre the audio belongs to
+  genre: Genre
+
+  # The ratings that have been applied by users to this audio
+  ratings: [Rating]
+}
+
+# The `Date` scalar type represents a timestamp provided in UTC. `Date` expects
+# timestamps to be formatted in accordance with the
+# [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) standard.
+scalar Date
+
+scalar Decimal
+
+input ExternalLoginConfirmationInput {
+  clientMutationId: String
+  email: String!
+}
+
+type ExternalLoginConfirmationPayload {
+  clientMutationId: String
+}
+
+type Genre {
+  id: ID
+  name: String!
+
+  # The type of category the genre belongs to, e.g. Music, Radio etc
+  type: String!
+}
+
+type LiveStream implements Node, Audio {
+  # The Id of the LiveStream
+  audioId: Int!
+
+  # The Global Id of the LiveStream
+  id: ID!
+  name: String!
+
+  # The poster image for the live stream
+  coverImageUrl: String!
+  liveStreamUrl: String!
+  likes: Int!
+  dislikes: Int!
+
+  # The user who uploaded the live stream
+  user: User
+
+  # The genre the live stream belongs to
+  genre: Genre
+
+  # The ratings that have been applied by users to this live stream
+  ratings: [Rating]
+}
+
+# A connection from an object to a list of objects of type `LiveStreamPayload`.
+type LiveStreamPayloadConnection {
+  # A count of the total number of objects in this connection, ignoring
+  # pagination. This allows a client to fetch the first five objects by passing
+  # "5" as the argument to `first`, then fetch the total count so it could display
+  # "5 of 83", for example. In cases where we employ infinite scrolling or don't
+  # have an exact count of entries, this field will return `null`.
+  totalCount: Int
+
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # Information to aid in pagination.
+  edges: [LiveStreamPayloadEdge]
+
+  # A list of all of the objects returned in the connection. This is a convenience
+  # field provided for quickly exploring the API; rather than querying for "{
+  # edges { node } }" when no edge data is needed, this field can be used instead.
+  # Note that when clients like Relay need to fetch the "cursor" field on the edge
+  # to enable efficient pagination, this shortcut cannot be used, and the full "{
+  # edges { node } } " version should be used instead.
+  items: [LiveStream]
+}
+
+# An edge in a connection from an object to another object of type `LiveStreamPayload`.
+type LiveStreamPayloadEdge {
+  # A cursor for use in pagination
+  cursor: String!
+
+  # The item at the end of the edge
+  node: LiveStream
+}
+
+input LoginInput {
+  clientMutationId: String
+  username: String!
+  password: String!
+  rememberMe: Boolean
+}
+
+type LoginPayload {
+  clientMutationId: String
+  user: ApplicationUser
+}
+
+type LoginProvider {
+  name: String!
+  displayName: String!
+}
+
+type LogoutPayload {
+  clientMutationId: String
+}
+
+type Mutation {
+  saveSong(input: SaveSongInput!): SaveSongPayload
+  saveLiveStream(input: SaveLiveStreamInput!): SaveLiveStreamPayload
+  rateAudio(input: RateAudioInput!): RateAudioPayload
+  register(input: RegisterInput!): RegisterPayload
+  login(input: LoginInput!): LoginPayload
+  externalLoginConfirmation(input: ExternalLoginConfirmationInput!): ExternalLoginConfirmationPayload
+  logout: LogoutPayload
+  sendEmail(input: SendEmailInput!): SendEmailPayload
+}
+
+interface Node {
+  # Global node Id
+  id: ID
+}
+
+# Information about pagination in a connection.
+type PageInfo {
+  # When paginating forwards, are there more items?
+  hasNextPage: Boolean!
+
+  # When paginating backwards, are there more items?
+  hasPreviousPage: Boolean!
+
+  # When paginating backwards, the cursor to continue.
+  startCursor: String
+
+  # When paginating forwards, the cursor to continue.
+  endCursor: String
+}
+
+type Query {
+  # Fetches an object given its global Id
+  node(
+    # The global Id of the object
+    id: ID!
+  ): Node
+  song(id: String): Song
+  songs(
+    # Only look at connected edges with cursors greater than the value of `after`.
+    after: String
+
+    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
+    first: Int
+  ): SongPayloadConnection
+  liveStreams(
+    # Only look at connected edges with cursors greater than the value of `after`.
+    after: String
+
+    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
+    first: Int
+  ): LiveStreamPayloadConnection
+  genres: [Genre]
+  user: ApplicationUser
+  loginProviders: [LoginProvider]
+}
+
+input RateAudioInput {
+  clientMutationId: String
+  audioId: Int!
+  liked: Boolean!
+}
+
+type RateAudioPayload {
+  clientMutationId: String
+  rating: Rating
+}
+
+type Rating {
+  id: ID
+
+  # Whether the user has liked the audio or not
+  liked: Boolean!
+
+  # The user that rated the audio
+  user: User
+
+  # The audio that was rated by the user
+  audio: Audio
+}
+
+input RegisterInput {
+  clientMutationId: String
+  username: String!
+  email: String!
+  password: String!
+}
+
+type RegisterPayload {
+  clientMutationId: String
+  user: ApplicationUser
+  emailConfirmationToken: String
+}
+
+input SaveLiveStreamInput {
+  clientMutationId: String
+  name: String!
+  liveStreamUrl: String!
+  coverImageUrl: String!
+  genreId: Int
+}
+
+type SaveLiveStreamPayload {
+  clientMutationId: String
+  liveStream: LiveStream
+}
+
+input SaveSongInput {
+  clientMutationId: String
+  name: String!
+  artist: String
+  coverImageUrl: String!
+  genreId: Int
+}
+
+type SaveSongPayload {
+  clientMutationId: String
+  song: Song
+}
+
+input SendEmailInput {
+  clientMutationId: String
+  email: String!
+  message: String!
+  subject: String!
+}
+
+type SendEmailPayload {
+  clientMutationId: String
+}
+
+type Song implements Node, Audio {
+  # The Id of the Song
+  audioId: Int!
+
+  # The Global Id of the Song
+  id: ID!
+  name: String!
+
+  # The poster image for the song
+  coverImageUrl: String!
+  artist: String
+  likes: Int!
+  dislikes: Int!
+
+  # The user who uploaded the song
+  user: User
+
+  # The genre the song belongs to
+  genre: Genre
+
+  # The ratings that have been applied by users to this song
+  ratings: [Rating]
+}
+
+# A connection from an object to a list of objects of type `SongPayload`.
+type SongPayloadConnection {
+  # A count of the total number of objects in this connection, ignoring
+  # pagination. This allows a client to fetch the first five objects by passing
+  # "5" as the argument to `first`, then fetch the total count so it could display
+  # "5 of 83", for example. In cases where we employ infinite scrolling or don't
+  # have an exact count of entries, this field will return `null`.
+  totalCount: Int
+
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # Information to aid in pagination.
+  edges: [SongPayloadEdge]
+
+  # A list of all of the objects returned in the connection. This is a convenience
+  # field provided for quickly exploring the API; rather than querying for "{
+  # edges { node } }" when no edge data is needed, this field can be used instead.
+  # Note that when clients like Relay need to fetch the "cursor" field on the edge
+  # to enable efficient pagination, this shortcut cannot be used, and the full "{
+  # edges { node } } " version should be used instead.
+  items: [Song]
+}
+
+# An edge in a connection from an object to another object of type `SongPayload`.
+type SongPayloadEdge {
+  # A cursor for use in pagination
+  cursor: String!
+
+  # The item at the end of the edge
+  node: Song
+}
+
+type User {
+  id: ID
+  userName: String!
+  email: String!
+  emailConfirmed: Boolean!
+}

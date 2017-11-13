@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,13 +10,14 @@ using SoundVast.Components.Genre.Models;
 using SoundVast.Components.Rating.Models;
 using SoundVast.Components.Upload;
 using SoundVast.Components.User;
+using SoundVast.CustomHelpers;
 using SoundVast.Repository;
 using SoundVast.Storage.CloudStorage;
 using SoundVast.Validation;
 
 namespace SoundVast.Components.Audio
 {
-    public class AudioService<T> : IAudioService<T> where T : AudioModel
+    public class AudioService<T> : IAudioService<T> where T : Models.Audio
     {
         private readonly IRepository<T> _repository;
         private readonly IValidationProvider _validationProvider;
@@ -26,6 +28,11 @@ namespace SoundVast.Components.Audio
             _validationProvider = validationProvider;
         }
 
+        public ICollection<T> GetAudios()
+        {
+            return _repository.GetAll().BuildAudio();
+        }
+
         public ICollection<T> GetAudios(int current, int amount)
         {
             return _repository.GetAll().Include(x => x.Ratings).Skip(current).Take(amount).ToList();
@@ -33,10 +40,10 @@ namespace SoundVast.Components.Audio
 
         public T GetAudio(int id)
         {
-            return _repository.Get(id);
+            return _repository.GetAll().BuildAudio().Single(x => x.Id == id);
         }
 
-        public ICollection<RatingModel> GetAudioRatings(int id)
+        public ICollection<Rating.Models.Rating> GetAudioRatings(int id)
         {
             return _repository.GetAll().Include(x => x.Ratings).Single(x => x.Id == id).Ratings;
         }
@@ -45,26 +52,36 @@ namespace SoundVast.Components.Audio
         {
             _validationProvider.Validate(model);
 
-            _repository.Add(model);
+            if (!_validationProvider.HasErrors)
+            {
+                _repository.Add(model);
+            }
         }
 
-        public RatingModel RateAudio(int audioId, bool liked, string userId)
+        public Rating.Models.Rating RateAudio(int audioId, string userId, bool liked)
         {
             var audio = _repository.Include(x => x.Ratings).Single(x => x.Id == audioId);
             var rating = audio.Ratings?.SingleOrDefault(x => x.UserId == userId);
 
             if (rating != null)
             {
-                rating.Liked = liked;
-            }
-            else
-            {
-                rating = new RatingModel
+                if (rating.Liked == liked)
                 {
-                    Liked = liked,
+                    audio.Ratings.Remove(rating);
+                }
+                else
+                {
+                    rating.Liked = liked;
+                }
+            } else
+            {
+                rating = new Rating.Models.Rating
+                {
+                    AudioId = audioId,
                     UserId = userId,
-                    AudioId = audioId
+                    Liked = liked
                 };
+
                 audio.Ratings.Add(rating);
             }
 

@@ -10,7 +10,7 @@ namespace SoundVast.Components.Account.ViewModels
     {
         [Required]
         [StringLength(15)]
-        public string UserName { get; set; }
+        public string Username { get; set; }
 
         [Required]
         [StringLength(300)]

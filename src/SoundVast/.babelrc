@@ -4,6 +4,9 @@
     "stage-2",
     "react"
   ],
+  "plugins": [
+    "relay"
+  ],
   "env": {
     "test": {
       "plugins": [

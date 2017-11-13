@@ -6,7 +6,7 @@
 
 //namespace SoundVast.Components.Playlist.Models
 //{
-//    public class PlaylistModel : SongModel
+//    public class PlaylistModel : Song
 //    {
 //        public PlaylistModel()
 //        {

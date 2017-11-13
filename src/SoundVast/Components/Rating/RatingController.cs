@@ -16,25 +16,25 @@ namespace SoundVast.Components.Rating
     [Authorize]
     public class RatingController : Controller
     {
-        private readonly IAudioService<AudioModel> _audioService;
+        private readonly IAudioService<Audio.Models.Audio> _audioService;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public RatingController(IAudioService<AudioModel> audioService, UserManager<ApplicationUser> userManager)
+        public RatingController(IAudioService<Audio.Models.Audio> audioService, UserManager<ApplicationUser> userManager)
         {
             _audioService = audioService;
             _userManager = userManager;
         }
 
-        [HttpPost]
-        public IActionResult RateAudio([FromBody] RateAudioModel model)
-        {
-            var userId = _userManager.GetUserId(User);
-            var rating = _audioService.RateAudio(model.AudioId, model.Liked, userId);
+        //[HttpPost]
+        //public IActionResult RateAudio([FromBody] RateAudioModel model)
+        //{
+        //    var userId = _userManager.GetUserId(User);
+        //    var rating = _audioService.RateAudio(model.AudioId, model.Liked, userId);
 
-            return Ok(new
-            {
-                rating
-            });
-        }
+        //    return Ok(new
+        //    {
+        //        rating
+        //    });
+        //}
     }
 }

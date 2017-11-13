@@ -57,7 +57,7 @@
 
 //        //        imageBlob.UploadFromPathAsync(_configuration["Directory:TempResources"] + jpgFileName, "image/jpg");
 
-//        //        var liveStream = new LiveStreamModel(User.FindFirst(ClaimTypes.NameIdentifier).Value)
+//        //        var liveStream = new LiveStream(User.FindFirst(ClaimTypes.NameIdentifier).Value)
 //        //        {
 //        //            Name = liveStreamCreateViewModel.Name,
 //        //            AudioUrl = liveStreamCreateViewModel.AudioUrl,

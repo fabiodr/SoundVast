@@ -7,7 +7,7 @@ using SoundVast.Components.Song.Models;
 
 namespace SoundVast.Components.Song
 {
-    public interface ISongService : IAudioService<SongModel>
+    public interface ISongService : IAudioService<Models.Song>
     {
     }
 }

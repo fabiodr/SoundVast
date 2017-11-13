@@ -6,7 +6,7 @@
 
 //namespace SoundVast.Components.FileStream.Models
 //{
-//    public class FileStreamModel : SongModel
+//    public class FileStreamModel : Song
 //    {
 //        public TimeSpan? Duration { get; set; }
 //        public DateTime? ReleaseDate { get; set; }

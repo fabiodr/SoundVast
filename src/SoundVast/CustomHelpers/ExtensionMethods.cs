@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Security.Policy;
 using System.Text;
 using System.Text.RegularExpressions;
-using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using SoundVast.Utilities;
 using System.Linq.Expressions;
@@ -89,50 +87,63 @@ namespace SoundVast.CustomHelpers
 
             return request.Headers["X-Requested-With"] == "XMLHttpRequest";
         }
-        private static void IgnoreUnmappedProperties(TypeMap map, IMappingExpression expr)
-        {
-            foreach (string propName in map.GetUnmappedPropertyNames())
-            {
-                if (map.SourceType.GetProperty(propName) != null)
-                {
-                    expr.ForSourceMember(propName, opt => opt.Ignore());
-                }
-                if (map.DestinationType.GetProperty(propName) != null)
-                {
-                    expr.ForMember(propName, opt => opt.Ignore());
-                }
-            }
-        }
+        //private static void IgnoreUnmappedProperties(TypeMap map, IMappingExpression expr)
+        //{
+        //    foreach (string propName in map.GetUnmappedPropertyNames())
+        //    {
+        //        if (map.SourceType.GetProperty(propName) != null)
+        //        {
+        //            expr.ForSourceMember(propName, opt => opt.Ignore());
+        //        }
+        //        if (map.DestinationType.GetProperty(propName) != null)
+        //        {
+        //            expr.ForMember(propName, opt => opt.Ignore());
+        //        }
+        //    }
+        //}
 
-        public static void IgnoreUnmapped(this IProfileExpression profile)
-        {
-            profile.ForAllMaps(IgnoreUnmappedProperties);
-        }
+        //public static void IgnoreUnmapped(this IProfileExpression profile)
+        //{
+        //    profile.ForAllMaps(IgnoreUnmappedProperties);
+        //}
 
-        public static void IgnoreUnmapped(this IProfileExpression profile, Func<TypeMap, bool> filter)
-        {
-            profile.ForAllMaps((map, expr) =>
-            {
-                if (filter(map))
-                {
-                    IgnoreUnmappedProperties(map, expr);
-                }
-            });
-        }
+        //public static void IgnoreUnmapped(this IProfileExpression profile, Func<TypeMap, bool> filter)
+        //{
+        //    profile.ForAllMaps((map, expr) =>
+        //    {
+        //        if (filter(map))
+        //        {
+        //            IgnoreUnmappedProperties(map, expr);
+        //        }
+        //    });
+        //}
 
-        public static void IgnoreUnmapped(this IProfileExpression profile, Type src, Type dest)
-        {
-            profile.IgnoreUnmapped((TypeMap map) => map.SourceType == src && map.DestinationType == dest);
-        }
+        //public static void IgnoreUnmapped(this IProfileExpression profile, Type src, Type dest)
+        //{
+        //    profile.IgnoreUnmapped((TypeMap map) => map.SourceType == src && map.DestinationType == dest);
+        //}
 
-        public static void IgnoreUnmapped<TSrc, TDest>(this IProfileExpression profile)
-        {
-            profile.IgnoreUnmapped(typeof(TSrc), typeof(TDest));
-        }
+        //public static void IgnoreUnmapped<TSrc, TDest>(this IProfileExpression profile)
+        //{
+        //    profile.IgnoreUnmapped(typeof(TSrc), typeof(TDest));
+        //}
 
-        public static string ConvertToJson(this ModelStateDictionary modelStateDictionary)
+        public static string ConvertErrorsToJson(this ModelStateDictionary modelStateDictionary)
         {
             var modelStateErrors = modelStateDictionary.ToDictionary(x => x.Key, x => x.Value.Errors.Select(e => e.ErrorMessage));
+            var validErrormessages = modelStateErrors.Where(z => z.Value.Any()).ToDictionary(x => x.Key, x => x.Value);
+            var serializerSettings = new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
+            var jsonString = JsonConvert.SerializeObject(validErrormessages, serializerSettings);
+
+            return jsonString;
+        }
+
+        public static string ConvertToJson(this ICollection<KeyValuePair<string, string>> keyValuePairs)
+        {
+            var modelStateErrors = keyValuePairs.ToDictionary(x => x.Key, x => x.Value);
             var validErrormessages = modelStateErrors.Where(z => z.Value.Any()).ToDictionary(x => x.Key, x => x.Value);
             var serializerSettings = new JsonSerializerSettings
             {

@@ -35,10 +35,10 @@ namespace SoundVastTests.Components.Song
         [Test]
         public void GetSongs()
         {
-            var songs = new List<SongModel>
+            var songs = new List<SoundVast.Components.Song.Models.Song>
             {
-                new SongModel(),
-                new SongModel()
+                new SoundVast.Components.Song.Models.Song(),
+                new SoundVast.Components.Song.Models.Song()
             };
 
             _mockSongService.Setup(x => x.GetAudios(It.IsAny<int>(), It.IsAny<int>())).Returns(songs);
@@ -55,7 +55,7 @@ namespace SoundVastTests.Components.Song
         [Test]
         public void Stream()
         {
-            var song = new SongModel
+            var song = new SoundVast.Components.Song.Models.Song
             {
                 Name = "test"
             };

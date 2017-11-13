@@ -8,7 +8,10 @@ namespace SoundVast.Validation
 {
     public interface IValidationProvider
     {
+        IDictionary<string, ICollection<string>> ValidationErrors { get; }
+        bool HasErrors { get; }
+  
         void Validate(object entity);
-        void ValidateAll(IEnumerable entities);
+        void AddError(string key, string message);
     }
 }

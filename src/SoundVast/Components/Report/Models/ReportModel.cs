@@ -11,6 +11,6 @@
 //        public int Id { get; set; }
 //        public string Reason { get; set; }
 //        public string AdditionalDetails { get; set; }
-//        public virtual SongModel Audio { get; set; }
+//        public virtual Song Audio { get; set; }
 //    }
 //}

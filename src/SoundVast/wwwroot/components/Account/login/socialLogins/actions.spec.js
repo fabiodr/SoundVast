@@ -23,7 +23,7 @@ describe('socialLoginsActions', () => {
   it('should fetch social logins', (done) => {
     const response = {
       loginProviders: [{
-        authenticationScheme: 'facebook',
+        name: 'facebook',
         displayName: 'Facebook',
       }],
     };

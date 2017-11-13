@@ -45,7 +45,7 @@
 //            var likedAudioListViewModel = new LikedAudioListViewModel
 //            {
 //                //LikedFileStreamViewModels = Mapper.Map<ICollection<FileStreamModel>, ICollection<LikedFileStreamViewModel>>(_fileStreamService.GetLikedAudiosForUser(userId)),
-//                //LikedLiveStreamViewModels = Mapper.Map<ICollection<LiveStreamModel>, ICollection<LikedLiveStreamViewModel>>(_liveStreamService.GetLikedAudiosForUser(userId)),
+//                //LikedLiveStreamViewModels = Mapper.Map<ICollection<LiveStream>, ICollection<LikedLiveStreamViewModel>>(_liveStreamService.GetLikedAudiosForUser(userId)),
 //                //LikedPlaylistViewModels = Mapper.Map<ICollection<PlaylistModel>, ICollection<LikedPlaylistViewModel>>(_playlistService.GetLikedAudiosForUser(userId))
 //            };
 

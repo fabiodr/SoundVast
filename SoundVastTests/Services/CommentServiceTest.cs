@@ -19,7 +19,7 @@ namespace SoundVastTests.Services
     //    {
     //        var comment = new CommentModel("BodyText")
     //        {
-    //            Audio = new AudioModel()
+    //            Audio = new Audio()
     //        };
 
     //        _mockRepository.Setup(x => x.Add(It.IsAny<CommentModel>()));
@@ -34,7 +34,7 @@ namespace SoundVastTests.Services
     //    {
     //        var comment = new CommentModel("BodyText")
     //        {
-    //            Audio = new AudioModel()
+    //            Audio = new Audio()
     //        };
 
     //        var originalCommentCount = comment.Audio.CommentCount;
@@ -52,7 +52,7 @@ namespace SoundVastTests.Services
     //        {
     //            Email = "test123@gmail.com",
     //            PhoneNumber = "07456313767",
-    //            UserName = "TestUserName"
+    //            Username = "TestUserName"
     //        };
 
     //        var result = _service.Edit(comment, "[Deleted]", user);
@@ -65,7 +65,7 @@ namespace SoundVastTests.Services
     //    {
     //        var comment = new CommentModel("BodyText")
     //        {
-    //            Audio = new AudioModel()
+    //            Audio = new Audio()
     //        };
 
     //        _mockRepository.Setup(x => x.Remove(It.IsAny<CommentModel>()));
@@ -80,7 +80,7 @@ namespace SoundVastTests.Services
     //    {
     //        var comment = new CommentModel("BodyText")
     //        {
-    //            Audio = new AudioModel()
+    //            Audio = new Audio()
     //        };
 
     //        var originalCommentCount = comment.Audio.CommentCount;

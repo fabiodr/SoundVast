@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 
-import notOkError from '../../../shared/fetch/errorHandling/notOkError/component';
-import notOkErrorPopup from '../../../shared/fetch/errorHandling/notOkError/popup/component';
+import notOkError from '../../../shared/fetch/notOkError/notOkError';
+import notOkErrorPopup from '../../../shared/fetch/notOkError/popup/popup';
 
 export const getSocialLogins = () => dispatch =>
   fetch('/account/getSocialLogins')

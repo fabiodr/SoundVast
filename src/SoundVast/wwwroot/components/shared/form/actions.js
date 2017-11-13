@@ -2,8 +2,8 @@
 
 import { change } from 'redux-form';
 
-import notOkError from '../../shared/fetch/errorHandling/notOkError/component';
-import notOkErrorPopup from '../../shared/fetch/errorHandling/notOkError/popup/component';
+import notOkError from '../../shared/fetch/notOkError/notOkError';
+import notOkErrorPopup from '../../shared/fetch/notOkError/popup/popup';
 
 export const generateAntiForgeryToken = form => dispatch =>
   fetch('/form/generateAntiForgeryToken', {

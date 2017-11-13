@@ -17,7 +17,7 @@
 //        public string Body { get; set; }
 //        public DateTime Date { get; set; }
 //        public virtual RatingCountModel RatingCount { get; set; } = new RatingCountModel();
-//        public virtual SongModel Audio { get; set; }
+//        public virtual Song Audio { get; set; }
 //        public string UserId { get; set; }
 //        public virtual ApplicationUser User { get; set; }
 //        public virtual ICollection<CommentRatingJoinModel> CommentRatingJoins { get; set; }

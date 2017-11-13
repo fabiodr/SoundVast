@@ -8,6 +8,6 @@
 //{
 //    public class LiveStreamRatingModel : RatingModel
 //    {
-//        public virtual LiveStreamModel LiveStream { get; set; }
+//        public virtual LiveStream LiveStream { get; set; }
 //    }
 //}

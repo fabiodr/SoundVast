@@ -8,7 +8,7 @@
 //    public class AudioRatingJoinModel
 //    {
 //        public int AudioId { get; set; }
-//        public virtual SongModel Audio { get; set; }
+//        public virtual Song Audio { get; set; }
 
 //        public int AudioRatingId { get; set; }
 //        public virtual AudioRatingModel AudioRating { get; set; }

@@ -16,12 +16,12 @@
 //    public class UserServiceTest
 //    {
 //        private UserService _userService;
-//        private Mock<IRepository<SongModel>> _mockAudioRepository;
+//        private Mock<IRepository<Song>> _mockAudioRepository;
 
 //        [SetUp]
 //        public void Init()
 //        {
-//            _mockAudioRepository = new Mock<IRepository<SongModel>>();
+//            _mockAudioRepository = new Mock<IRepository<Song>>();
 
 //            _userService = new UserService(_mockAudioRepository.Object);
 //        }
@@ -31,11 +31,11 @@
 //        {
 //            const string userId = "DWPER-23121D-EDADA";
 
-//            var audioModels = new List<SongModel>
+//            var audioModels = new List<Song>
 //            {
-//                new SongModel { UserId = userId },
-//                new SongModel { UserId = userId },
-//                new SongModel { UserId = "XXFDD-DFGEDE-XFFFF" }
+//                new Song { UserId = userId },
+//                new Song { UserId = userId },
+//                new Song { UserId = "XXFDD-DFGEDE-XFFFF" }
 //            }.AsQueryable();
 
 //            _mockAudioRepository.Setup(x => x.GetAll()).Returns(audioModels);
