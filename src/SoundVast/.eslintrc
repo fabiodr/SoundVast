@@ -17,10 +17,10 @@
   "extends": "airbnb",
   "rules": {
     "react/wrap-multilines": "off",
-    "react/require-extension": "off",
-    "graphql/template-strings": ["error", {
-      "env": "relay"
-    }]
+    "react/require-extension": "off"
+    // "graphql/template-strings": ["error", {
+    //   "env": "relay"
+    // }]
   },
   "overrides": [
     {
@@ -34,7 +34,7 @@
   ],
   "plugins": [
     "react",
-    "graphql",
+    // "graphql",
     "relay"
   ]
 }

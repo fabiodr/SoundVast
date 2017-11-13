@@ -1,14 +1,11 @@
-import { connect } from 'react-redux';
-import { compose, lifecycle } from 'recompose';
+/* eslint-disable import/prefer-default-export */
 
-import { showTextPopup } from '../../shared/popup/actions';
+import { showEmailConfirmationPopup } from '../actions';
 
-export default compose(
-  connect(),
-  lifecycle({
-    componentDidMount() {
-      this.props.dispatch(showTextPopup('You have successfully confirmed your email.'));
-      this.props.history.replace('/');
-    },
-  }),
-)(() => null);
+export const routeConfig = {
+  to: (data) => {
+    data.context.store.dispatch(showEmailConfirmationPopup());
+
+    return '/';
+  },
+};

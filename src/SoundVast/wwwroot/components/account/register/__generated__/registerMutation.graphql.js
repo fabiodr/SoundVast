@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash a9246bccfec2093ede709a57a710a420
+ * @relayHash 3f1f6167e14dba7a226baa31b9823246
  */
 
 /* eslint-disable */
@@ -21,7 +21,6 @@ export type registerMutationResponse = {|
   +register: ?{|
     +user: ?{|
       +id: ?string;
-      +email: ?string;
     |};
     +emailConfirmationToken: ?string;
   |};
@@ -36,7 +35,6 @@ mutation registerMutation(
   register(input: $input) {
     user {
       id
-      email
     }
     emailConfirmationToken
   }
@@ -85,13 +83,6 @@ const batch /*: ConcreteBatch*/ = {
                 "alias": null,
                 "args": null,
                 "name": "id",
-                "storageKey": null
-              },
-              {
-                "kind": "ScalarField",
-                "alias": null,
-                "args": null,
-                "name": "email",
                 "storageKey": null
               }
             ],
@@ -156,13 +147,6 @@ const batch /*: ConcreteBatch*/ = {
                 "args": null,
                 "name": "id",
                 "storageKey": null
-              },
-              {
-                "kind": "ScalarField",
-                "alias": null,
-                "args": null,
-                "name": "email",
-                "storageKey": null
               }
             ],
             "storageKey": null
@@ -179,7 +163,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "mutation registerMutation(\n  $input: RegisterInput!\n) {\n  register(input: $input) {\n    user {\n      id\n      email\n    }\n    emailConfirmationToken\n  }\n}\n"
+  "text": "mutation registerMutation(\n  $input: RegisterInput!\n) {\n  register(input: $input) {\n    user {\n      id\n    }\n    emailConfirmationToken\n  }\n}\n"
 };
 
 module.exports = batch;

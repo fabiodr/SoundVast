@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Security.Policy;
 using System.Threading.Tasks;
 using GraphQL;
 using GraphQL.Relay.Types;
@@ -50,15 +49,13 @@ namespace SoundVast.Components.Account
                 Email = email
             };
 
-            await _userManager.AddClaimAsync(user, new Claim("Authorization", "Authorized"));
-
             var result = await _userManager.CreateAsync(user, password);
 
             if (result.Succeeded)
             {
-                var emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                var emailConfirmationToken = System.Web.HttpUtility.UrlEncode(code);
 
-                await _signInManager.SignInAsync(user, true);
                 _logger.LogInformation(3, "User created a new account with password.");
 
                 return new

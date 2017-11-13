@@ -18,3 +18,9 @@ export const getAccountDetails = () => dispatch =>
     .catch(notOkErrorPopup(dispatch));
 
 export const showLoginPopup = () => showTextPopup('You have successfully logged in.');
+
+export const showLogoutPopup = () => showTextPopup('You have successfully logged out.');
+
+export const showRegisteredPopup = () => showTextPopup('We have sent you an email to confirm your account registration.');
+
+export const showEmailConfirmationPopup = () => showTextPopup('You have successfully confirmed your email.');

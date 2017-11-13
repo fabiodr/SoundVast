@@ -5,8 +5,8 @@ import { createMutation } from 'relay-compose';
 
 import ConfirmEmail from '../../email/confirmEmail/confirmEmail';
 import sendEmailMutation from '../../email/sendEmailMutation';
-import { hideModal } from '../../shared/modal/actions';
-import { showLoginPopup } from '../actions';
+import loginMutation from '../login/loginMutation';
+import { showRegisteredPopup } from '../actions';
 
 const mutation = graphql`
   mutation registerMutation(
@@ -15,7 +15,6 @@ const mutation = graphql`
     register(input: $input) {
       user {
         id,
-        email,
       },
       emailConfirmationToken
     }
@@ -34,14 +33,17 @@ export default ({ username, password, email }, dispatch) => {
   return createMutation(
     mutation,
     variables,
+    null,
+    null,
   ).then(({ register }) => {
     const emailMessage = renderEmail(
-      <ConfirmEmail confirmEmailLink={`/account/confirmEmail?code=${register.code}&userId=${register.user.id}`} />,
+      <ConfirmEmail confirmEmailLink={`${window.location.origin}/account/confirmEmail?code=${register.emailConfirmationToken}&userId=${register.user.id}`} />,
     );
     const subject = 'Confirm your email';
 
-    sendEmailMutation(register.user.email, subject, emailMessage);
-    dispatch(hideModal());
-    dispatch(showLoginPopup());
+    loginMutation({ username, password, rememberMe: true }, dispatch).then(() => {
+      dispatch(showRegisteredPopup());
+    });
+    sendEmailMutation(email, subject, emailMessage);
   });
 };

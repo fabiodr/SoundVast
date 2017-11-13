@@ -17,12 +17,12 @@ const mutation = graphql`
   }
 `;
 
-export default (input, dispatch) => {
+export default ({ username, password, rememberMe }, dispatch) => {
   const variables = {
     input: {
-      username: input.username,
-      password: input.password,
-      rememberMe: input.rememberMe,
+      username,
+      password,
+      rememberMe,
     },
   };
 
@@ -41,7 +41,7 @@ export default (input, dispatch) => {
         root.setLinkedRecord(user, 'user');
       }
     },
-  ).then((response, errors) => {
+  ).then(() => {
     dispatch(hideModal());
     dispatch(showLoginPopup());
   });

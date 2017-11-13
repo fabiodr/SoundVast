@@ -20,7 +20,7 @@ const resolver = new Resolver(environment);
 ReactDOM.render((
   <Provider store={store}>
     <div>
-      <Router resolver={resolver} />
+      <Router matchContext={{ store }} resolver={resolver} />
       <TextPopup id="textPopup" />
     </div>
   </Provider>

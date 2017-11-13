@@ -57,8 +57,6 @@ namespace SoundVast.Components.Account
                 Email = email
             };
 
-            await _userManager.AddClaimAsync(user, new Claim("Authorization", "Authorized"));
-
             var result = await _userManager.CreateAsync(user);
  
             if (result.Succeeded)

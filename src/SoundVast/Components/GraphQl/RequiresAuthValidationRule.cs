@@ -14,15 +14,14 @@ namespace SoundVast.Components.GraphQl
         {
             var userContext = context.UserContext.As<Context>();
             var loggedIn = userContext.CurrentUser != null;
-            var claims = userContext.HttpContext.User.Claims;
 
             return new EnterLeaveListener(_ =>
             {
                 _.Match<Field>(fieldAst =>
                 {
                     var fieldDef = context.TypeInfo.GetFieldDef();
-                    if (fieldDef != null && fieldDef.RequiresPermissions() &&
-                        (!loggedIn || !fieldDef.CanAccess(claims)))
+
+                    if (fieldDef.RequiresPermissions() && !loggedIn)
                     {
                         context.ReportError(new ValidationError(
                             context.OriginalQuery,
