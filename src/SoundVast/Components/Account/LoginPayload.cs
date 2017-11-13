@@ -45,7 +45,6 @@ namespace SoundVast.Components.Account
             {
                 _logger.LogInformation(1, "User logged in.");
 
-
                 var user = new ApplicationUser
                 {
                     UserName = username,

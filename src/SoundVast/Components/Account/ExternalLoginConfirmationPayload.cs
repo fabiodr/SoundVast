@@ -68,8 +68,6 @@ namespace SoundVast.Components.Account
                     await _signInManager.SignInAsync(user, true);
 
                     _logger.LogInformation(6, $"User created an account using {info.LoginProvider} provider.");
-
-                    return null;
                 }
             }
 

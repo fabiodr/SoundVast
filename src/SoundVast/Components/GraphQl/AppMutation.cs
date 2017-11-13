@@ -37,6 +37,8 @@ namespace SoundVast.Components.GraphQl
             Mutation<ExternalLoginConfirmationInput, ExternalLoginConfirmationPayload>("externalLoginConfirmation");
             Field<LogoutPayload>("logout", resolve: c => ((LogoutPayload)c.ReturnType).MutateAndGetPayload(null, c));
             Mutation<SendEmailInput, SendEmailPayload>("sendEmail");
+            Mutation<GenerateResetPasswordTokenInput, GenerateResetPasswordTokenPayload>("generateResetPasswordToken");
+            Mutation<ResetPasswordInput, ResetPasswordPayload>("resetPassword");
         }
     }
 }

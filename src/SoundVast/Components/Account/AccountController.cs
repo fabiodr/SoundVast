@@ -32,7 +32,6 @@ namespace SoundVast.Components.Account
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger _logger;
         private readonly IValidationProvider _validationProvider;
-        private const string ModelError = "_error";
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
@@ -63,7 +62,7 @@ namespace SoundVast.Components.Account
         {
             if (remoteError != null)
             {
-                _validationProvider.AddError(ModelError, $"Error from external provider: {remoteError}");
+                _validationProvider.AddError("_error", $"Error from external provider: {remoteError}");
 
                 return StatusCode((int)HttpStatusCode.BadRequest, _validationProvider.ValidationErrors);
             }
@@ -107,71 +106,6 @@ namespace SoundVast.Components.Account
             var result = await _userManager.ConfirmEmailAsync(user, model.Code);
 
             return LocalRedirect(result.Succeeded ? "/Account/SuccessfullyConfirmedEmail" : "/Error");
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> GeneratePasswordResetLink(ForgotPasswordViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var user = await _userManager.FindByEmailAsync(model.Email);
-
-                if (user == null)
-                {
-                    ModelState.AddModelError(ModelError, "We couldn't find that email address");
-
-                    return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ConvertErrorsToJson());
-                }
-
-                // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
-                // Send an email with this link
-                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-                var resetPasswordLink = Url.Action(nameof(ResetPassword), "Account", new
-                {
-                    userId = user.Id,
-                    code
-                }, HttpContext.Request.Scheme);
-
-                return Ok(new
-                {
-                    email = model.Email,
-                    resetPasswordLink
-                });
-            }
-
-            return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ConvertErrorsToJson());
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ConvertErrorsToJson());
-            }
-            var user = await _userManager.FindByIdAsync(model.UserId);
-            var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
-
-            if (result.Succeeded)
-            {
-                return Ok();
-            }
-
-            AddErrors(result);
-
-            return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ConvertErrorsToJson());
-        }
-
-        private void AddErrors(IdentityResult result)
-        {
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(ModelError, error.Description);
-            }
         }
     }
 }

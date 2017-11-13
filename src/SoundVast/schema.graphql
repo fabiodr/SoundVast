@@ -1,5 +1,5 @@
 # source: http://localhost:8080/graphql
-# timestamp: Sun Nov 12 2017 22:46:24 GMT+0100 (W. Europe Standard Time)
+# timestamp: Mon Nov 13 2017 23:47:31 GMT+0100 (W. Europe Standard Time)
 
 type ApplicationUser {
   id: ID
@@ -41,6 +41,17 @@ input ExternalLoginConfirmationInput {
 
 type ExternalLoginConfirmationPayload {
   clientMutationId: String
+}
+
+input GenerateResetPasswordTokenInput {
+  clientMutationId: String
+  email: String!
+}
+
+type GenerateResetPasswordTokenPayload {
+  clientMutationId: String
+  user: ApplicationUser
+  passwordResetToken: String
 }
 
 type Genre {
@@ -138,6 +149,8 @@ type Mutation {
   externalLoginConfirmation(input: ExternalLoginConfirmationInput!): ExternalLoginConfirmationPayload
   logout: LogoutPayload
   sendEmail(input: SendEmailInput!): SendEmailPayload
+  generateResetPasswordToken(input: GenerateResetPasswordTokenInput!): GenerateResetPasswordTokenPayload
+  resetPassword(input: ResetPasswordInput!): ResetPasswordPayload
 }
 
 interface Node {
@@ -221,6 +234,17 @@ type RegisterPayload {
   clientMutationId: String
   user: ApplicationUser
   emailConfirmationToken: String
+}
+
+input ResetPasswordInput {
+  clientMutationId: String
+  password: String!
+  userId: String!
+  token: String!
+}
+
+type ResetPasswordPayload {
+  clientMutationId: String
 }
 
 input SaveLiveStreamInput {
