@@ -15,17 +15,19 @@ using SoundVast.Components.Genre;
 using SoundVast.Components.LiveStream;
 using SoundVast.Components.Song;
 using SoundVast.Components.User;
+using SoundVast.Validation;
 
 namespace SoundVast.Components.GraphQl
 {
     public class AppQuery : QueryGraphType
     {
-        public AppQuery(ISongService songService, ILiveStreamService liveStreamService,
-            IGenreService genreService, SignInManager<ApplicationUser> signInManager)
+        public AppQuery(ISongService songService, ILiveStreamService liveStreamService, IValidationProvider validationProvider,
+            IGenreService genreService, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         {
-            Field<SongPayload>("song",
-                arguments: new QueryArguments(new QueryArgument<StringGraphType> { Name = "id" }),
-                resolve: c => songService.GetAudio(c.GetArgument<int>("id")));
+            Field<SongPayload>()
+                .Name("song")
+                .Argument<StringGraphType>("id", "The id of the song")
+                .Resolve(c => songService.GetAudio(c.GetArgument<int>("id")));
 
             Connection<SongPayload>()
                 .Name("songs")
@@ -41,6 +43,33 @@ namespace SoundVast.Components.GraphQl
             Field<AccountPayload>()
                 .Name("user")
                 .Resolve(c => c.UserContext.As<Context>().CurrentUser);
+
+            Field<ObjectGraphType>()
+                .Name("confirmEmail")
+                .Argument<StringGraphType>("userId", "The id of the user")
+                .Argument<StringGraphType>("token", "The unique code to verify the email")
+                .Resolve(new Func<ResolveFieldContext<object>, Task<IEnumerable<AuthenticationScheme>>>(async c =>
+                {
+                    var userId = c.GetArgument<string>("userId");
+                    var token = c.GetArgument<string>("token");
+
+                    var user = await userManager.FindByIdAsync(userId);
+
+                    if (user == null)
+                    {
+                        validationProvider.AddError("_error", "No user could not be found");
+
+                        return null;
+                    }
+                    var result = await userManager.ConfirmEmailAsync(user, token);
+
+                    if (!result.Succeeded)
+                    {
+                        validationProvider.AddError("_error", "Could not confirm your email");
+                    }
+
+                    return null;
+                }));
 
             Field<ListGraphType<LoginProvidersPayload>>()
                 .Name("loginProviders")
