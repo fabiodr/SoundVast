@@ -1,6 +1,6 @@
-import { graphql, commitMutation } from 'react-relay';
+import { graphql } from 'react-relay';
+import { createMutation } from 'relay-compose';
 
-import environment from '../../app/environment/environment';
 import { showLogoutPopup } from '../actions';
 
 const mutation = graphql`
@@ -11,17 +11,16 @@ const mutation = graphql`
   }
 `;
 
-export default (dispatch) => {
-  commitMutation(environment, {
+export default dispatch =>
+  createMutation(
     mutation,
-    onCompleted: () => {
-      dispatch(showLogoutPopup());
-    },
-    updater: (store) => {
+    null,
+    null,
+    null,
+    (store) => {
       const root = store.getRoot();
       const user = root.getLinkedRecord('user');
 
       user.setValue(null, 'userName');
     },
-  });
-};
+  ).then(() => dispatch(showLogoutPopup()));

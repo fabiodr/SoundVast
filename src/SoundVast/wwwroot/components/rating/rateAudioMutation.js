@@ -1,6 +1,5 @@
-import { graphql, commitMutation } from 'react-relay';
-
-import environment from '../app/environment/environment';
+import { graphql } from 'react-relay';
+import { createMutation } from 'relay-compose';
 
 const mutation = graphql`
   mutation rateAudioMutation(
@@ -25,8 +24,8 @@ export default (audioId, ratings, liked) => {
     },
   };
 
-  commitMutation(environment, {
+  return createMutation(
     mutation,
     variables,
-  });
+  );
 };

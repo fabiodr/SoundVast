@@ -5,14 +5,12 @@ import { Field } from 'redux-form';
 import Modal from '../../shared/modal/modalContainer';
 import FormGroup from '../../shared/form/formGroup';
 import genericStyles from '../../shared/generic.less';
-import AntiForgeryToken from '../../shared/form/antiForgeryToken/antiForgeryTokenContainer';
 import Input from '../../shared/fields/input/input';
 import ValidationErrors from '../../shared/validation/validationErrors';
 
 const ForgotPassword = ({ error: errors, handleSubmit }) => (
   <Modal title="Reset your password." id="forgotPassword">
     <form onSubmit={handleSubmit} action="">
-      <AntiForgeryToken form="forgotPassword" />
       <ValidationErrors errors={errors} />
 
       <FormGroup>

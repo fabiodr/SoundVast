@@ -1,7 +1,6 @@
 import { graphql } from 'react-relay';
 import { createMutation } from 'relay-compose';
 
-import { hideModal } from '../../shared/modal/actions';
 import { showLoginPopup } from '../actions';
 
 const mutation = graphql`
@@ -42,7 +41,6 @@ export default ({ username, password, rememberMe }, dispatch) => {
       }
     },
   ).then(() => {
-    dispatch(hideModal());
     dispatch(showLoginPopup());
   });
 };

@@ -1,6 +1,5 @@
-import { graphql, commitMutation } from 'react-relay';
-
-import environment from '../../app/environment/environment';
+import { graphql } from 'react-relay';
+import { createMutation } from 'relay-compose';
 
 const mutation = graphql`
   mutation saveSongMutation($input: SaveSongInput!) {
@@ -22,8 +21,8 @@ export default ({ name, artist, imagePath, genreId }) => {
     },
   };
 
-  commitMutation(environment, {
+  return createMutation(
     mutation,
     variables,
-  });
+  );
 };

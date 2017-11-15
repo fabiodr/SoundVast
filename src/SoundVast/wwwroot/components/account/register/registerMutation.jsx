@@ -43,7 +43,7 @@ export default ({ username, password, email }, dispatch) => {
 
     loginMutation({ username, password, rememberMe: true }, dispatch).then(() => {
       dispatch(showRegisteredPopup());
+      sendEmailMutation(email, subject, emailMessage);
     });
-    sendEmailMutation(email, subject, emailMessage);
   });
 };

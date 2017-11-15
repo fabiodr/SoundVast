@@ -3,7 +3,7 @@ import expect from 'expect';
 import { shallow } from 'enzyme';
 import { A } from 'react-html-email';
 
-import ForgotPasswordEmail from './forgotPasswordEmail';
+import ResetPasswordEmail from './resetPasswordEmail';
 
 const setup = (newProps) => {
   const props = {
@@ -11,7 +11,7 @@ const setup = (newProps) => {
     ...newProps,
   };
 
-  const wrapper = shallow(<ForgotPasswordEmail {...props} />);
+  const wrapper = shallow(<ResetPasswordEmail {...props} />);
 
   return {
     wrapper,
@@ -19,18 +19,15 @@ const setup = (newProps) => {
   };
 };
 
-describe('ForgotPasswordEmail', () => {
-  let wrapper;
-  let props;
-
+describe('ResetPasswordEmail', () => {
   it('should render a link with correct href to reset password', () => {
-    ({ wrapper, props } = setup());
+    const { wrapper, props } = setup();
 
     expect(wrapper.find(A).prop('href')).toBe(props.resetPasswordLink);
   });
 
   it('should pass title to SharedEmail', () => {
-    ({ wrapper } = setup());
+    const { wrapper } = setup();
 
     expect(wrapper.prop('title')).toBe('Reset your password');
   });

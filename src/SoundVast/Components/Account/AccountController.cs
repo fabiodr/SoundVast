@@ -103,7 +103,7 @@ namespace SoundVast.Components.Account
             {
                 return LocalRedirect("/Error");
             }
-            var result = await _userManager.ConfirmEmailAsync(user, model.Code);
+            var result = await _userManager.ConfirmEmailAsync(user, model.Token);
 
             return LocalRedirect(result.Succeeded ? "/Account/SuccessfullyConfirmedEmail" : "/Error");
         }

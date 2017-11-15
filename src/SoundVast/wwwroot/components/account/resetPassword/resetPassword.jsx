@@ -3,16 +3,12 @@ import { Field } from 'redux-form';
 import PropTypes from 'prop-types';
 
 import genericStyles from '../../shared/generic.less';
-import AntiForgeryToken from '../../shared/form/antiForgeryToken/antiForgeryTokenContainer';
 import FormGroup from '../../shared/form/formGroup';
 import Input from '../../shared/fields/input/input';
 import ValidationErrors from '../../shared/validation/validationErrors';
 
 const ResetPassword = ({ error: errors, handleSubmit }) => (
   <form onSubmit={handleSubmit} action="">
-    <AntiForgeryToken form="resetPassword" />
-    <Field name="userId" component="input" type="hidden" />
-    <Field name="code" component="input" type="hidden" />
     <ValidationErrors errors={errors} />
 
     <FormGroup>
