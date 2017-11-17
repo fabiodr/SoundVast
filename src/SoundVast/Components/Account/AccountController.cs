@@ -92,20 +92,5 @@ namespace SoundVast.Components.Account
 
             return LocalRedirect(redirectUrl);
         }
-
-        [HttpGet]
-        [AllowAnonymous]
-        public async Task<IActionResult> ConfirmEmail(ConfirmEmailViewModel model)
-        {
-            var user = await _userManager.FindByIdAsync(model.UserId);
-
-            if (user == null)
-            {
-                return LocalRedirect("/Error");
-            }
-            var result = await _userManager.ConfirmEmailAsync(user, model.Token);
-
-            return LocalRedirect(result.Succeeded ? "/Account/SuccessfullyConfirmedEmail" : "/Error");
-        }
     }
 }

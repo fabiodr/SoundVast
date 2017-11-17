@@ -1,5 +1,5 @@
 # source: http://localhost:8080/graphql
-# timestamp: Mon Nov 13 2017 23:47:31 GMT+0100 (W. Europe Standard Time)
+# timestamp: Thu Nov 16 2017 22:31:47 GMT+0100 (W. Europe Standard Time)
 
 type ApplicationUser {
   id: ID
@@ -179,7 +179,10 @@ type Query {
     # The global Id of the object
     id: ID!
   ): Node
-  song(id: String): Song
+  song(
+    # The id of the song
+    id: String
+  ): Song
   songs(
     # Only look at connected edges with cursors greater than the value of `after`.
     after: String
@@ -196,6 +199,13 @@ type Query {
   ): LiveStreamPayloadConnection
   genres: [Genre]
   user: ApplicationUser
+  confirmEmail(
+    # The id of the user
+    userId: String
+
+    # The unique code to verify the email
+    token: String
+  ): Boolean
   loginProviders: [LoginProvider]
 }
 

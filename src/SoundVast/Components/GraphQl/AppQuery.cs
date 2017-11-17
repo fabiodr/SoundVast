@@ -26,7 +26,7 @@ namespace SoundVast.Components.GraphQl
         {
             Field<SongPayload>()
                 .Name("song")
-                .Argument<StringGraphType>("id", "The id of the song")
+                .Argument<NonNullGraphType<StringGraphType>>("id", "The id of the song")
                 .Resolve(c => songService.GetAudio(c.GetArgument<int>("id")));
 
             Connection<SongPayload>()
@@ -44,10 +44,10 @@ namespace SoundVast.Components.GraphQl
                 .Name("user")
                 .Resolve(c => c.UserContext.As<Context>().CurrentUser);
 
-            Field<ObjectGraphType>()
+            Field<BooleanGraphType>()
                 .Name("confirmEmail")
-                .Argument<StringGraphType>("userId", "The id of the user")
-                .Argument<StringGraphType>("token", "The unique code to verify the email")
+                .Argument<NonNullGraphType<StringGraphType>>("userId", "The id of the user")
+                .Argument<NonNullGraphType<StringGraphType>>("token", "The unique code to verify the email")
                 .Resolve(new Func<ResolveFieldContext<object>, Task<IEnumerable<AuthenticationScheme>>>(async c =>
                 {
                     var userId = c.GetArgument<string>("userId");
@@ -57,7 +57,7 @@ namespace SoundVast.Components.GraphQl
 
                     if (user == null)
                     {
-                        validationProvider.AddError("_error", "No user could not be found");
+                        validationProvider.AddError("_error", "No user could be found");
 
                         return null;
                     }
@@ -65,7 +65,7 @@ namespace SoundVast.Components.GraphQl
 
                     if (!result.Succeeded)
                     {
-                        validationProvider.AddError("_error", "Could not confirm your email");
+                        validationProvider.AddError("_error", "Could not confirm your email. Please try again.");
                     }
 
                     return null;

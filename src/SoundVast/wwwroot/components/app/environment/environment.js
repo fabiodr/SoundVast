@@ -20,7 +20,7 @@ const network = Network.create((operation, variables) =>
   }).then(response => response.json())
     .then((json) => {
       // https://github.com/facebook/relay/issues/1816
-      if (operation.query.operation === 'mutation' && json.errors) {
+      if (json.errors) {
         return Promise.reject(json.errors);
       }
 

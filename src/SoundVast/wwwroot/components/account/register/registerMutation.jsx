@@ -37,7 +37,7 @@ export default ({ username, password, email }, dispatch) => {
     null,
   ).then(({ register }) => {
     const emailMessage = renderEmail(
-      <ConfirmEmail confirmEmailLink={`${window.location.origin}/account/confirmEmail?code=${register.emailConfirmationToken}&userId=${register.user.id}`} />,
+      <ConfirmEmail confirmEmailLink={`${window.location.origin}/account/confirmEmail/${register.user.id}/${register.emailConfirmationToken}`} />,
     );
     const subject = 'Confirm your email';
 
