@@ -15,7 +15,8 @@ const query = graphql`
   }
 `;
 
-const render = ({ props, error }) => {debugger;
+/* eslint-disable react/prop-types */
+const render = ({ props, error }) => {
   if (error) {
     const errors = Object.keys(error).map(key => error[key]);
 
@@ -30,6 +31,7 @@ const render = ({ props, error }) => {debugger;
 
   return null;
 };
+/* eslint-disable react/prop-types */
 
 export const routeConfig = {
   query,

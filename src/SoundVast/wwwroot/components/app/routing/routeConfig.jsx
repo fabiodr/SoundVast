@@ -2,7 +2,6 @@ import React from 'react';
 import makeRouteConfig from 'found/lib/makeRouteConfig';
 import Route from 'found/lib/Route';
 
-import ErrorHandledRoute from './ErrorHandledRoute';
 import SocialLoginConfirmation from '../../account/login/socialLogin/socialLoginConfirmation';
 import Profile from '../../user/profile/userProfileContainer';
 import Upload, { query as uploadQuery } from '../../upload/upload';
@@ -20,7 +19,7 @@ export default makeRouteConfig(
       <Route path="account">
         <Route path="externalLoginConfirmation" Component={SocialLoginConfirmation} />
         <Route path="resetPassword" {...resetPasswordContainerRouteConfig} />
-        <ErrorHandledRoute path="confirmEmail/:userId/:token" {...confirmEmailContainerRouteConfig} />
+        <Route path="confirmEmail/:userId/:token" {...confirmEmailContainerRouteConfig} />
       </Route>
       <Route path="upload" Component={Upload} query={uploadQuery} />
       <Route path="profile" Component={Profile} />
