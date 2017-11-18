@@ -1,6 +1,6 @@
 import { graphql } from 'react-relay';
 import { compose, flattenProp, branch, renderNothing } from 'recompose';
-import { fragment } from 'relay-compose';
+import { fragment } from 'relay-modern-hoc';
 
 import AuthorizedList from './authorizedList';
 

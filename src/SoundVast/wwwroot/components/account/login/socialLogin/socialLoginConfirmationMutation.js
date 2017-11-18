@@ -1,5 +1,5 @@
 import { graphql } from 'react-relay';
-import { createMutation } from 'relay-compose';
+import { createMutation } from 'relay-modern-hoc';
 
 const mutation = graphql`
   mutation socialLoginConfirmationMutation(

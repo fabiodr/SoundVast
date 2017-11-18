@@ -1,27 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import DislikeIcon from '../../../images/ratingControls/dislike.svg';
+import DislikeIcon from '../../icons/dislike';
+import styles from './dislike.less';
 
-const Dislike = ({ onClick, dislikes, width, height }) => (
+const Dislike = ({ onClick, dislikes }) => (
   <div>
-    <DislikeIcon width={width} height={height} onClick={onClick} />
+    <DislikeIcon className={styles.dislikeIcon} onClick={onClick} />
     <div className="dislikes">
       {dislikes}
     </div>
   </div>
 );
 
-Dislike.defaultProps = {
-  width: 14,
-  height: 14,
-};
-
 Dislike.propTypes = {
   dislikes: PropTypes.number.isRequired,
   onClick: PropTypes.func.isRequired,
-  width: PropTypes.number,
-  height: PropTypes.number,
 };
 
 export default Dislike;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { graphql } from 'react-relay';
 import { renderEmail } from 'react-html-email';
-import { createMutation } from 'relay-compose';
+import { createMutation } from 'relay-modern-hoc';
 
 import ResetPasswordEmail from '../../email/resetPasswordEmail/resetPasswordEmail';
 import sendEmailMutation from '../../email/sendEmailMutation';

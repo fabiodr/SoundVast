@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import { fragment } from 'relay-compose';
+import { fragment } from 'relay-modern-hoc';
 import { graphql } from 'react-relay';
 
 import GenreField from './genreField';

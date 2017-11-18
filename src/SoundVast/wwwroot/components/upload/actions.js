@@ -2,8 +2,7 @@ import jsmediatags from 'jsmediatags/dist/jsmediatags';
 import shortid from 'shortid';
 
 import trimFileExtension from '../shared/utilities/trimFileExtension';
-
-const coverImagePlaceholderPath = '../../images/logo/icon/SV_Icon.svg';
+import coverImagePlaceholder from '../../images/logo/icon/SV_Icon.svg';
 
 export const uploadSong = (id, file) => dispatch =>
   fetch.fetchProgress('/upload/uploadSong', {
@@ -36,7 +35,7 @@ export const uploadCoverImage = (id, file) => dispatch =>
     }));
 
 const setCoverImagePlaceholder = id => dispatch =>
-  fetch.get(coverImagePlaceholderPath, { response: 'blob' })
+  fetch.get(coverImagePlaceholder, { response: 'blob' })
     .then((blob) => {
       const file = new File([blob], 'SoundVast', { type: blob.type });
 

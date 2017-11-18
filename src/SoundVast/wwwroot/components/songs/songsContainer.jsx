@@ -1,7 +1,7 @@
 import React from 'react';
 import { compose, withHandlers, withProps } from 'recompose';
 import { graphql } from 'react-relay';
-import { paginationContainer } from 'relay-compose-test';
+import { paginationContainer } from 'relay-modern-hoc';
 
 import Songs from './songs';
 

@@ -1,27 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import LikeIcon from '../../../images/ratingControls/like.svg';
+import LikeIcon from '../../icons/like';
+import styles from './like.less';
 
-const Like = ({ onClick, likes, width, height }) => (
+const Like = ({ onClick, likes }) => (
   <div>
-    <LikeIcon width={width} height={height} onClick={onClick}>{likes}</LikeIcon>
+    <LikeIcon className={styles.likeIcon} onClick={onClick}>{likes}</LikeIcon>
     <div className="likes">
       {likes}
     </div>
   </div>
 );
 
-Like.defaultProps = {
-  width: 14,
-  height: 14,
-};
-
 Like.propTypes = {
   likes: PropTypes.number.isRequired,
   onClick: PropTypes.func.isRequired,
-  width: PropTypes.number,
-  height: PropTypes.number,
 };
 
 export default Like;

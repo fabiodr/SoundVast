@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Spinner from '../../../images/spinners/ellipsis.svg';
+import SpinnerIcon from '../../icons/spinner';
 
 const SpinnerButton = ({ isLoading, children }) => (
   <button>
-    {isLoading ? <Spinner /> : children}
+    {isLoading ? <SpinnerIcon /> : children}
   </button>
 );
 

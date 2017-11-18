@@ -1,6 +1,6 @@
 import { compose, branch, renderComponent } from 'recompose';
 import { reduxForm } from 'redux-form';
-import { fragment } from 'relay-compose';
+import { fragment } from 'relay-modern-hoc';
 import { graphql } from 'react-relay';
 
 import SocialLogins from './socialLogins';

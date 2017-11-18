@@ -1,6 +1,6 @@
 import { compose, branch, renderNothing, flattenProp } from 'recompose';
 import { graphql } from 'react-relay';
-import { fragment } from 'relay-compose';
+import { fragment } from 'relay-modern-hoc';
 
 import UnAuthorizedList from './unAuthorizedList';
 

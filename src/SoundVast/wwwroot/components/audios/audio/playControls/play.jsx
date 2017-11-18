@@ -2,15 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
+import PlayIcon from '../../../icons/play';
 import styles from './playControls.less';
-import PlayIcon from '../../../../images/audioControls/play.svg';
 
 const Play = ({ isCurrent, hasPlayed }) => {
   const className = classNames(styles.play, {
     [styles.currentlyPlayed]: isCurrent && hasPlayed,
   });
 
-  return <PlayIcon width={50} height={50} className={className} data-role="hover" />;
+  return <PlayIcon className={className} data-role="hover" />;
 };
 
 Play.defaultProps = {
