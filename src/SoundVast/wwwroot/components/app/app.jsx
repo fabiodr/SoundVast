@@ -11,6 +11,7 @@ import Router from './routing/router';
 import store from './store/component';
 import environment from './environment/environment';
 import TextPopup from '../shared/popup/popupContainer';
+import ErrorBoundary from './ErrorBoundary';
 
 const resolver = new Resolver(environment);
 

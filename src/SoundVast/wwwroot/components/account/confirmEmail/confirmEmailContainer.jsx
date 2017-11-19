@@ -1,10 +1,9 @@
 /* eslint-disable import/prefer-default-export */
-
 import React from 'react';
 import { graphql } from 'react-relay';
 
 import { showEmailConfirmationPopup } from '../actions';
-import ValidationErrors from '../../shared/validation/validationErrors';
+import HandleRouteError from '../../app/routing/handleRouteError';
 
 const query = graphql`
   query confirmEmailContainerQuery(
@@ -15,26 +14,22 @@ const query = graphql`
   }
 `;
 
-/* eslint-disable react/prop-types */
-const render = ({ props, error }) => {
-  if (error) {
-    const errors = Object.keys(error).map(key => error[key]);
+const render = (route) => {
+  if (route.props) {
+    route.props.context.store.dispatch(showEmailConfirmationPopup());
 
-    return <ValidationErrors errors={errors} />;
-  }
-
-  if (props) {
-    props.context.store.dispatch(showEmailConfirmationPopup());
-
-    props.router.replace('/');
+    route.props.router.replace('/');
   }
 
   return null;
 };
-/* eslint-disable react/prop-types */
 
 export const routeConfig = {
   query,
   prepareVariables: ({ userId, token }) => ({ userId, token }),
-  render,
+  render: route => (
+    <HandleRouteError error={route.error}>
+      {() => render(route)}
+    </HandleRouteError>
+  ),
 };

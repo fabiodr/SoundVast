@@ -5,6 +5,7 @@ import Route from 'found/lib/Route';
 import SocialLoginConfirmation from '../../account/login/socialLogin/socialLoginConfirmation';
 import Profile from '../../user/profile/userProfileContainer';
 import Upload, { query as uploadQuery } from '../../upload/upload';
+import { routeConfig as socialLoginCallbackContainerRouteConfig } from '../../account/login/socialLogin//socialLoginCallbackContainer';
 import { routeConfig as confirmEmailContainerRouteConfig } from '../../account/confirmEmail/confirmEmailContainer';
 import { routeConfig as resetPasswordContainerRouteConfig } from '../../account/resetPassword/resetPasswordContainer';
 import { routeConfig as songsContainerRouteConfig } from '../../songs/songsContainer';
@@ -17,6 +18,7 @@ export default makeRouteConfig(
       <Route {...songsContainerRouteConfig} />
       <Route path="songs" {...songsContainerRouteConfig} />
       <Route path="account">
+        <Route path="externalLoginCallback/:returnUrl" {...socialLoginCallbackContainerRouteConfig} />
         <Route path="externalLoginConfirmation" Component={SocialLoginConfirmation} />
         <Route path="resetPassword" {...resetPasswordContainerRouteConfig} />
         <Route path="confirmEmail/:userId/:token" {...confirmEmailContainerRouteConfig} />

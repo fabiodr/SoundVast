@@ -155,8 +155,8 @@ namespace SoundVast
                 );
 
                 routes.MapRoute(
-                    "externalLoginConfirmation",
-                    "Account/externalLoginConfirmation"
+                    "externalLoginCallback",
+                    "Account/externalLoginCallback/{returnUrl}"
                 );
 
                 routes.MapSpaFallbackRoute(

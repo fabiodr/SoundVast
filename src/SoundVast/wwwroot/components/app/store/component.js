@@ -12,9 +12,7 @@ import createMatchEnhancer from 'found/lib/createMatchEnhancer';
 import Matcher from 'found/lib/Matcher';
 
 import routeConfig from '../routing/routeConfig';
-import account from '../../account/reducer';
 import profile from '../../user/profile/reducer';
-import socialLogins from '../../account/login/socialLogins/reducer';
 import modal from '../../shared/modal/reducer';
 import popup from '../../shared/popup/reducer';
 import upload from '../../upload/reducer';
@@ -40,9 +38,7 @@ const reducers = combineReducers({
   found,
   jPlayers,
   jPlaylists,
-  account,
   profile,
-  socialLogins,
   modal,
   form,
   popup,

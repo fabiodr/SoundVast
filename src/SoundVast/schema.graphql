@@ -1,10 +1,10 @@
 # source: http://localhost:8080/graphql
-# timestamp: Thu Nov 16 2017 22:31:47 GMT+0100 (W. Europe Standard Time)
+# timestamp: Sun Nov 19 2017 02:14:25 GMT+0100 (W. Europe Standard Time)
 
 type ApplicationUser {
   id: ID
   userName: String!
-  email: String
+  email: String!
 }
 
 interface Audio {
@@ -33,6 +33,14 @@ interface Audio {
 scalar Date
 
 scalar Decimal
+
+type ExternalLoginCallbackPayload {
+  # The current login provider, i.e facebook, twitter, google etc
+  loginProvider: String
+
+  # The users login provider email
+  email: String
+}
 
 input ExternalLoginConfirmationInput {
   clientMutationId: String
@@ -181,7 +189,7 @@ type Query {
   ): Node
   song(
     # The id of the song
-    id: String
+    id: String!
   ): Song
   songs(
     # Only look at connected edges with cursors greater than the value of `after`.
@@ -199,12 +207,13 @@ type Query {
   ): LiveStreamPayloadConnection
   genres: [Genre]
   user: ApplicationUser
+  externalLoginCallback: ExternalLoginCallbackPayload
   confirmEmail(
     # The id of the user
-    userId: String
+    userId: String!
 
     # The unique code to verify the email
-    token: String
+    token: String!
   ): Boolean
   loginProviders: [LoginProvider]
 }

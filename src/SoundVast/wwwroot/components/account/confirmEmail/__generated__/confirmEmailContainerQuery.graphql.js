@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash c40a33255d6fee2175991162d1891c87
+ * @relayHash 083acc7ad9ff60eee906a568235e494e
  */
 
 /* eslint-disable */
@@ -52,13 +52,13 @@ const batch /*: ConcreteBatch*/ = {
             "kind": "Variable",
             "name": "token",
             "variableName": "token",
-            "type": "String"
+            "type": "String!"
           },
           {
             "kind": "Variable",
             "name": "userId",
             "variableName": "userId",
-            "type": "String"
+            "type": "String!"
           }
         ],
         "name": "confirmEmail",
@@ -98,13 +98,13 @@ const batch /*: ConcreteBatch*/ = {
             "kind": "Variable",
             "name": "token",
             "variableName": "token",
-            "type": "String"
+            "type": "String!"
           },
           {
             "kind": "Variable",
             "name": "userId",
             "variableName": "userId",
-            "type": "String"
+            "type": "String!"
           }
         ],
         "name": "confirmEmail",

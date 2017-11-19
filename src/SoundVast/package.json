@@ -21,7 +21,7 @@
   "scripts": {
     "start": "npm-run-all --parallel dotnet-run relay-compiler:watch",
     "dotnet-run": "cross-env ASPNETCORE_ENVIRONMENT=Development dotnet run",
-    "relay-compiler": "relay-compiler --src ./wwwroot/components --schema ./schema.graphql --extensions=js --extensions=jsx",
+    "relay-compiler": "relay-compiler --src ./wwwroot/components --schema schema.graphql --extensions=js --extensions=jsx",
     "relay-compiler:watch": "npm run relay-compiler -- --watch",
     "get-schema:dev": "graphql get-schema dev",
     "lint": "eslint --fix --ext .jsx,.js wwwroot/components",
@@ -83,7 +83,6 @@
     "eslint-config-airbnb": "^15.0.1",
     "eslint-config-defaults": "^9.0.0",
     "eslint-plugin-babel": "^4.1.1",
-    "eslint-plugin-graphql": "^1.4.1",
     "eslint-plugin-import": "^2.3.0",
     "eslint-plugin-jsx-a11y": "^5.0.1",
     "eslint-plugin-react": "^7.0.1",
