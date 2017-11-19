@@ -1,6 +1,3 @@
-# source: http://localhost:8080/graphql
-# timestamp: Sun Nov 19 2017 02:14:25 GMT+0100 (W. Europe Standard Time)
-
 type ApplicationUser {
   id: ID
   userName: String!
@@ -35,16 +32,19 @@ scalar Date
 scalar Decimal
 
 type ExternalLoginCallbackPayload {
+  # The existing logged in user
+  user: ApplicationUser
+
   # The current login provider, i.e facebook, twitter, google etc
   loginProvider: String
 
-  # The users login provider email
-  email: String
+  # The new users user name
+  userName: String
 }
 
 input ExternalLoginConfirmationInput {
   clientMutationId: String
-  email: String!
+  userName: String!
 }
 
 type ExternalLoginConfirmationPayload {

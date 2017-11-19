@@ -22,8 +22,9 @@ namespace SoundVast.Components.Account
         {
             Name = nameof(ExternalLoginCallbackPayload);
 
+            Field<AccountPayload>("user", "The existing logged in user");
             Field<StringGraphType>("loginProvider", "The current login provider, i.e facebook, twitter, google etc");
-            Field<StringGraphType>("email", "The users login provider email");
+            Field<StringGraphType>("userName", "The new users user name");
         }
     }
 }

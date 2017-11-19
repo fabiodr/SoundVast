@@ -1,13 +1,13 @@
 import { reduxForm, SubmissionError } from 'redux-form';
 import { compose, withHandlers, withProps } from 'recompose';
 
-import SocialLoginConfirmationForm from './socialLoginConfirmationForm';
+import SocialLoginConfirmation from './socialLoginConfirmation';
 import accountValidation from '../../validation';
 import socialLoginConfirmationMutation from './socialLoginConfirmationMutation';
 
-const createProps = ({ email, returnUrl }) => ({
+const createProps = ({ userName, returnUrl }) => ({
   initialValues: {
-    email,
+    userName,
     returnUrl,
   },
 });
@@ -25,4 +25,4 @@ export default compose(
     form: 'socialLoginConfirmation',
     validate: accountValidation,
   }),
-)(SocialLoginConfirmationForm);
+)(SocialLoginConfirmation);

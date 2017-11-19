@@ -1,9 +1,9 @@
 /* eslint-disable import/prefer-default-export */
-import React from 'react';
 import { graphql } from 'react-relay';
+import { RedirectException } from 'found';
 
 import { showEmailConfirmationPopup } from '../actions';
-import HandleRouteError from '../../app/routing/handleRouteError';
+import withRouteValidation from '../../app/routing/withRouteValidation';
 
 const query = graphql`
   query confirmEmailContainerQuery(
@@ -18,7 +18,7 @@ const render = (route) => {
   if (route.props) {
     route.props.context.store.dispatch(showEmailConfirmationPopup());
 
-    route.props.router.replace('/');
+    throw new RedirectException('/');
   }
 
   return null;
@@ -27,9 +27,5 @@ const render = (route) => {
 export const routeConfig = {
   query,
   prepareVariables: ({ userId, token }) => ({ userId, token }),
-  render: route => (
-    <HandleRouteError error={route.error}>
-      {() => render(route)}
-    </HandleRouteError>
-  ),
+  render: route => withRouteValidation(route)(render),
 };

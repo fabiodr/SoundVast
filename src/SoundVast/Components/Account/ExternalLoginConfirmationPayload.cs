@@ -39,7 +39,7 @@ namespace SoundVast.Components.Account
 
         public override async Task<object> MutateAndGetPayload(MutationInputs inputs, ResolveFieldContext<object> context)
         {
-            var email = inputs.Get<string>("email");
+            var userName = inputs.Get<string>("userName");
 
             // Get the information about the user from the external login provider
             var info = await _signInManager.GetExternalLoginInfoAsync();
@@ -49,7 +49,7 @@ namespace SoundVast.Components.Account
 
                 return null;
             }
-            var userName = info.Principal.FindFirstValue(ClaimTypes.Name);
+            var email = info.Principal.FindFirstValue(ClaimTypes.Email);
 
             var user = new ApplicationUser
             {

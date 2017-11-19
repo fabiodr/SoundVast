@@ -101,14 +101,17 @@ namespace SoundVast
                 {
                     o.AppId = _configuration["OAuth:Facebook:Id"];
                     o.AppSecret = _configuration["OAuth:Facebook:Secret"];
+                    o.Scope.Add("email");
                 }).AddTwitter(o =>
                 {
                     o.ConsumerKey = _configuration["OAuth:Twitter:Id"];
                     o.ConsumerSecret = _configuration["OAuth:Twitter:Secret"];
+                    o.RetrieveUserDetails = true;
                 }).AddGoogle(o =>
                 {
                     o.ClientId = _configuration["OAuth:Google:Id"];
                     o.ClientSecret = _configuration["OAuth:Google:Secret"];
+                    o.Scope.Add("email");
                 });
 
             var builder = RegisterServices();

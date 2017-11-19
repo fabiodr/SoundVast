@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 3e2355bb9c7d16787f6a2ea82db94a61
+ * @relayHash 7058a402cc1005b70e48865c98bb5d60
  */
 
 /* eslint-disable */
@@ -12,7 +12,10 @@ import type {ConcreteBatch} from 'relay-runtime';
 export type socialLoginCallbackContainerQueryResponse = {|
   +externalLoginCallback: ?{|
     +loginProvider: ?string;
-    +email: ?string;
+    +userName: ?string;
+    +user: ?{|
+      +userName: string;
+    |};
   |};
 |};
 */
@@ -22,7 +25,11 @@ export type socialLoginCallbackContainerQueryResponse = {|
 query socialLoginCallbackContainerQuery {
   externalLoginCallback {
     loginProvider
-    email
+    userName
+    user {
+      userName
+      id
+    }
   }
 }
 */
@@ -53,7 +60,25 @@ const batch /*: ConcreteBatch*/ = {
             "kind": "ScalarField",
             "alias": null,
             "args": null,
-            "name": "email",
+            "name": "userName",
+            "storageKey": null
+          },
+          {
+            "kind": "LinkedField",
+            "alias": null,
+            "args": null,
+            "concreteType": "ApplicationUser",
+            "name": "user",
+            "plural": false,
+            "selections": [
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "userName",
+                "storageKey": null
+              }
+            ],
             "storageKey": null
           }
         ],
@@ -91,7 +116,32 @@ const batch /*: ConcreteBatch*/ = {
             "kind": "ScalarField",
             "alias": null,
             "args": null,
-            "name": "email",
+            "name": "userName",
+            "storageKey": null
+          },
+          {
+            "kind": "LinkedField",
+            "alias": null,
+            "args": null,
+            "concreteType": "ApplicationUser",
+            "name": "user",
+            "plural": false,
+            "selections": [
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "userName",
+                "storageKey": null
+              },
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "id",
+                "storageKey": null
+              }
+            ],
             "storageKey": null
           }
         ],
@@ -99,7 +149,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query socialLoginCallbackContainerQuery {\n  externalLoginCallback {\n    loginProvider\n    email\n  }\n}\n"
+  "text": "query socialLoginCallbackContainerQuery {\n  externalLoginCallback {\n    loginProvider\n    userName\n    user {\n      userName\n      id\n    }\n  }\n}\n"
 };
 
 module.exports = batch;

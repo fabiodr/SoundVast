@@ -1,36 +1,37 @@
 module.exports = {
-  parser: "babel-eslint",
+  parser: 'babel-eslint',
   parserOptions: {
     ecmaVersion: 6,
-    sourceType: "module",
+    sourceType: 'module',
     ecmaFeatures: {
       jsx: true,
-      modules: true
+      modules: true,
     }
   },
   env: {
     browser: true,
     node: true,
-    mocha: true,
-    es6: true
+    es6: true,
+    'jest/globals': true,
   },
-  extends: "airbnb",
+  extends: ['airbnb', 'plugin:jest/recommended'],
   rules: {
-    "react/wrap-multilines": "off",
-    "react/require-extension": "off",
+    'react/wrap-multilines': 'off',
+    'react/require-extension': 'off',
   },
   overrides: [
     {
       files: [
-        "**/actions.js"
+        '**/actions.js'
       ],
       rules: {
-        "import/prefer-default-export": "off"
+        'import/prefer-default-export': 'off'
       }
     }
   ],
   plugins: [
-    "react",
-    "relay"
+    'react',
+    'relay',
+    'jest'
   ]
 }

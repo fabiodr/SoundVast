@@ -48,7 +48,11 @@ namespace SoundVast.Components.GraphQl
 
             Field<AccountPayload>()
                 .Name("user")
-                .Resolve(c => c.UserContext.As<Context>().CurrentUser);
+                .Resolve(c =>
+                {
+                    var p = c.UserContext.As<Context>();
+                    return c.UserContext.As<Context>().CurrentUser;
+                });
 
             Field<ExternalLoginCallbackPayload>()
                 .Name("externalLoginCallback")
@@ -64,20 +68,22 @@ namespace SoundVast.Components.GraphQl
 
                     // Sign in the user with this external login provider if the user already has a login.
                     var result = await signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, true);
+                    ApplicationUser user = null;
+
                     if (result.Succeeded)
                     {
-                        logger.LogInformation(5, $"User logged in with {info.LoginProvider} provider.");
+                        user = await signInManager.UserManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
 
-                        return null;
+                        logger.LogInformation(5, $"User logged in with {info.LoginProvider} provider.");
                     }
+                    var userName = info.Principal.FindFirstValue(ClaimTypes.Name);
 
                     // If the user does not have an account, then ask the user to create an account.
-                    var email = info.Principal.FindFirstValue(ClaimTypes.Email);
-     
                     return new
                     {
+                        user,
                         loginProvider = info.LoginProvider,
-                        email
+                        userName
                     };
                 }));
 

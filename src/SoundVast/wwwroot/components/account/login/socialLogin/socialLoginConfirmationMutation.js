@@ -11,10 +11,10 @@ const mutation = graphql`
   }
 `;
 
-export default ({ email, returnUrl }) => {
+export default ({ userName, returnUrl }) => {
   const variables = {
     input: {
-      email,
+      userName,
     },
   };
 

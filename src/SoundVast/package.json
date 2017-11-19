@@ -25,11 +25,23 @@
     "relay-compiler:watch": "npm run relay-compiler -- --watch",
     "get-schema:dev": "graphql get-schema dev",
     "lint": "eslint --fix --ext .jsx,.js wwwroot/components",
-    "test": "cross-env BABEL_ENV=test mocha wwwroot/components/**/*.spec.{js,jsx} --opts ./mocha.opts",
-    "test:watch": "npm test -- -w",
-    "coverage": "cross-env BABEL_ENV=test nyc mocha wwwroot/components/**/*.spec.{js,jsx} --opts ./mocha.opts",
+    "test:unit": "cross-env NODE_ENV=test jest",
     "packages": "david",
     "packages:update": "david update"
+  },
+  "jest": {
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|integration))\\.jsx?$",
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
+      "\\.(css|scss|less)$": "identity-obj-proxy"
+    },
+    "setupFiles": [
+      "./wwwroot/components/_config/testHelper/shim.js",
+      "./wwwroot/components/_config/testHelper/index.js"
+    ],
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ]
   },
   "pre-commit": [
     "lint",
@@ -79,11 +91,14 @@
     "david": "^11.0.0",
     "editorconfig": "^0.13.2",
     "enzyme": "^3.2.0",
+    "enzyme-adapter-react-16": "^1.1.0",
+    "enzyme-to-json": "^3.2.2",
     "eslint": "^4.3.0",
     "eslint-config-airbnb": "^15.0.1",
     "eslint-config-defaults": "^9.0.0",
     "eslint-plugin-babel": "^4.1.1",
     "eslint-plugin-import": "^2.3.0",
+    "eslint-plugin-jest": "^21.3.2",
     "eslint-plugin-jsx-a11y": "^5.0.1",
     "eslint-plugin-react": "^7.0.1",
     "eslint-plugin-relay": "^0.0.19",
@@ -94,11 +109,12 @@
     "get-args": "^1.0.2",
     "graphiql": "^0.11.5",
     "graphql-cli": "^1.1.0",
+    "graphql-tools": "^2.8.0",
+    "identity-obj-proxy": "^3.0.0",
     "ignore-styles": "^5.0.1",
-    "jsdom": "^11.0.0",
+    "jest": "^21.2.1",
     "less": "^2.7.2",
     "less-loader": "^4.0.4",
-    "mocha": "^3.1.2",
     "npm-run-all": "^4.1.1",
     "nyc": "^11.0.3",
     "postcss-loader": "^2.0.6",
