@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import { compose, withPropsOnChange, setPropTypes, defaultProps } from 'recompose';
-import genreTypeNames from '../../../genre/genreTypeNames';
+import genreTypeNames from '../../../shared/utilities/genreTypeNames';
 
 import Select from '../select/select';
 

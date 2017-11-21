@@ -6,7 +6,9 @@ import styles from './dislike.less';
 
 const Dislike = ({ onClick, dislikes }) => (
   <div>
-    <DislikeIcon className={styles.dislikeIcon} onClick={onClick} />
+    <span role="button" tabIndex={0} onClick={onClick}>
+      <DislikeIcon className={styles.dislikeIcon} />
+    </span>
     <div className="dislikes">
       {dislikes}
     </div>

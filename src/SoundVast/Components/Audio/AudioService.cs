@@ -73,8 +73,7 @@ namespace SoundVast.Components.Audio
                 {
                     rating.Liked = liked;
                 }
-            } else
-            {
+            } else {
                 rating = new Rating.Models.Rating
                 {
                     AudioId = audioId,

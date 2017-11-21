@@ -4,7 +4,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { Field } from 'redux-form';
 
 import BasicInfo from '../common/basicInfo/basicInfo';
-import genreTypeNames from '../../genre/genreTypeNames';
+import genreTypeNames from '../../shared/utilities/genreTypeNames';
 import Input from '../../shared/fields/input/input';
 import NameField from '../../shared/fields/nameField/nameField';
 import GenreField from '../../shared/fields/genreField/genreFieldContainer';

@@ -16,8 +16,6 @@ import profile from '../../user/profile/reducer';
 import modal from '../../shared/modal/reducer';
 import popup from '../../shared/popup/reducer';
 import upload from '../../upload/reducer';
-import genre from '../../genre/reducer';
-import music from '../../songs/reducer';
 
 const historyEnhancer = createHistoryEnhancer({
   protocol: new BrowserProtocol(),
@@ -43,8 +41,6 @@ const reducers = combineReducers({
   form,
   popup,
   upload,
-  genre,
-  music,
 });
 
 const store = createStore(reducers, middleWare);
