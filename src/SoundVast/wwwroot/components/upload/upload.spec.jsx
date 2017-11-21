@@ -32,7 +32,7 @@ const setup = (newProps) => {
   };
 };
 
-describe.only('Upload', () => {
+describe('Upload', () => {
   beforeEach(() => {
     state = {
       account: {

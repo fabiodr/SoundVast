@@ -57,10 +57,14 @@ const Header = ({ user }) => (
   </header>
 );
 
+Header.defaultProps = {
+  user: null,
+};
+
 Header.propTypes = {
   user: PropTypes.shape({
     username: PropTypes.string,
-  }).isRequired,
+  }),
 };
 
 export default Header;

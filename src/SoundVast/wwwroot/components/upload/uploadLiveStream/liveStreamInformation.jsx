@@ -9,7 +9,7 @@ import Input from '../../shared/fields/input/input';
 import NameField from '../../shared/fields/nameField/nameField';
 import GenreField from '../../shared/fields/genreField/genreFieldContainer';
 
-const LiveStreamInformation = ({ id }) => (
+const LiveStreamInformation = ({ id, genres }) => (
   <Tabs>
     <TabList>
       <Tab>Basic info</Tab>
@@ -22,13 +22,14 @@ const LiveStreamInformation = ({ id }) => (
           <Field name="liveStreamUrl" id={`liveStreamUrl_${id}`} component={Input} />
         </label>
 
-        <GenreField id={id} type={genreTypeNames.liveStream} />
+        <GenreField id={id} type={genreTypeNames.liveStream} genres={genres} />
       </BasicInfo>
     </TabPanel>
   </Tabs>
 );
 
 LiveStreamInformation.propTypes = {
+  genres: PropTypes.arrayOf(PropTypes.object).isRequired,
   id: PropTypes.string.isRequired,
 };
 

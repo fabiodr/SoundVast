@@ -7,7 +7,7 @@ import Form from './uploadFileFormContainer';
 import Progress from '../../shared/loaders/progress';
 import PreviewImage from '../common/previewImage/previewImageContainer';
 
-const AudioDropzone = ({ onDrop, files }) => (
+const AudioDropzone = ({ onDrop, files, genres }) => (
   <div>
     <Dropzone
       className={styles.audioDropzone}
@@ -30,6 +30,7 @@ const AudioDropzone = ({ onDrop, files }) => (
             form={`upload_${file.id}`}
             id={file.id}
             index={i}
+            genres={genres}
           />
         </div>
       ))}
@@ -38,6 +39,7 @@ const AudioDropzone = ({ onDrop, files }) => (
 );
 
 AudioDropzone.propTypes = {
+  genres: PropTypes.arrayOf(PropTypes.object).isRequired,
   onDrop: PropTypes.func.isRequired,
   files: PropTypes.arrayOf(
     PropTypes.shape({

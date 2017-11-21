@@ -19,6 +19,7 @@ const PrimaryLayout = ({ children, user, loginProviders }) => (
 
 PrimaryLayout.defaultProps = {
   children: null,
+  user: null,
 };
 
 PrimaryLayout.propTypes = {
@@ -26,7 +27,7 @@ PrimaryLayout.propTypes = {
   loginProviders: PropTypes.arrayOf(PropTypes.object).isRequired,
   user: PropTypes.shape({
     username: PropTypes.string,
-  }).isRequired,
+  }),
 };
 
 export default PrimaryLayout;

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import Form from './liveStreamFormContainer';
 
-const UploadLiveStream = ({ liveStreams, addLiveStream }) => (
+const UploadLiveStream = ({ liveStreams, addLiveStream, genres }) => (
   <div>
     {liveStreams.map((liveStream, i) => (
       <Form
@@ -11,6 +11,7 @@ const UploadLiveStream = ({ liveStreams, addLiveStream }) => (
         form={`upload_${liveStream.id}`}
         id={liveStream.id}
         index={i}
+        genres={genres}
       />
     ))}
 
@@ -21,6 +22,7 @@ const UploadLiveStream = ({ liveStreams, addLiveStream }) => (
 );
 
 UploadLiveStream.propTypes = {
+  genres: PropTypes.arrayOf(PropTypes.object).isRequired,
   addLiveStream: PropTypes.func.isRequired,
   liveStreams: PropTypes.arrayOf(
     PropTypes.shape({

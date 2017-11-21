@@ -48,11 +48,7 @@ namespace SoundVast.Components.GraphQl
 
             Field<AccountPayload>()
                 .Name("user")
-                .Resolve(c =>
-                {
-                    var p = c.UserContext.As<Context>();
-                    return c.UserContext.As<Context>().CurrentUser;
-                });
+                .Resolve(c => c.UserContext.As<Context>().CurrentUser);
 
             Field<ExternalLoginCallbackPayload>()
                 .Name("externalLoginCallback")

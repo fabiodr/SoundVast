@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash ee745f21731eb19e191e6405fef055fe
+ * @relayHash 6dec221897692be6b9948cdcb066775f
  */
 
 /* eslint-disable */
@@ -9,16 +9,21 @@
 
 /*::
 import type {ConcreteBatch} from 'relay-runtime';
-export type uploadQueryResponse = {|
+export type uploadContainerQueryResponse = {|
   +genres: ?$ReadOnlyArray<?{| |}>;
+  +user: ?{| |};
 |};
 */
 
 
 /*
-query uploadQuery {
+query uploadContainerQuery {
   genres {
     ...genreFieldContainer_genres
+    id
+  }
+  user {
+    ...withAuthorization_user
     id
   }
 }
@@ -28,6 +33,10 @@ fragment genreFieldContainer_genres on Genre {
   name
   type
 }
+
+fragment withAuthorization_user on ApplicationUser {
+  userName
+}
 */
 
 const batch /*: ConcreteBatch*/ = {
@@ -35,7 +44,7 @@ const batch /*: ConcreteBatch*/ = {
     "argumentDefinitions": [],
     "kind": "Fragment",
     "metadata": null,
-    "name": "uploadQuery",
+    "name": "uploadContainerQuery",
     "selections": [
       {
         "kind": "LinkedField",
@@ -52,6 +61,22 @@ const batch /*: ConcreteBatch*/ = {
           }
         ],
         "storageKey": null
+      },
+      {
+        "kind": "LinkedField",
+        "alias": null,
+        "args": null,
+        "concreteType": "ApplicationUser",
+        "name": "user",
+        "plural": false,
+        "selections": [
+          {
+            "kind": "FragmentSpread",
+            "name": "withAuthorization_user",
+            "args": null
+          }
+        ],
+        "storageKey": null
       }
     ],
     "type": "Query"
@@ -59,11 +84,11 @@ const batch /*: ConcreteBatch*/ = {
   "id": null,
   "kind": "Batch",
   "metadata": {},
-  "name": "uploadQuery",
+  "name": "uploadContainerQuery",
   "query": {
     "argumentDefinitions": [],
     "kind": "Root",
-    "name": "uploadQuery",
+    "name": "uploadContainerQuery",
     "operation": "query",
     "selections": [
       {
@@ -103,10 +128,35 @@ const batch /*: ConcreteBatch*/ = {
           }
         ],
         "storageKey": null
+      },
+      {
+        "kind": "LinkedField",
+        "alias": null,
+        "args": null,
+        "concreteType": "ApplicationUser",
+        "name": "user",
+        "plural": false,
+        "selections": [
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "args": null,
+            "name": "userName",
+            "storageKey": null
+          },
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "args": null,
+            "name": "id",
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
       }
     ]
   },
-  "text": "query uploadQuery {\n  genres {\n    ...genreFieldContainer_genres\n    id\n  }\n}\n\nfragment genreFieldContainer_genres on Genre {\n  id\n  name\n  type\n}\n"
+  "text": "query uploadContainerQuery {\n  genres {\n    ...genreFieldContainer_genres\n    id\n  }\n  user {\n    ...withAuthorization_user\n    id\n  }\n}\n\nfragment genreFieldContainer_genres on Genre {\n  id\n  name\n  type\n}\n\nfragment withAuthorization_user on ApplicationUser {\n  userName\n}\n"
 };
 
 module.exports = batch;

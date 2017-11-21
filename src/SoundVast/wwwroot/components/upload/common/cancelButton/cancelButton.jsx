@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import Button from '../../../shared/button/button';
+
 const CancelButton = ({ remove }) => (
-  <button type="button" onClick={remove}>
+  <Button type="button" onClick={remove}>
     Cancel
-  </button>
+  </Button>
 );
 
 CancelButton.propTypes = {

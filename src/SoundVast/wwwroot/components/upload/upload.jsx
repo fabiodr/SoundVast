@@ -1,17 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import { connect } from 'react-redux';
-import { compose, lifecycle } from 'recompose';
-import { graphql } from 'react-relay';
 
 import styles from './upload.less';
 import AudioDropzone from './uploadFile/audioDropzoneContainer';
 import UploadLiveStream from './uploadLiveStream/uploadLiveStreamContainer';
-import authorizedComponent from '../shared/authorizedComponent/authorizedComponentContainer';
-import { addLiveStream } from './actions';
-import { setGenres } from '../genre/actions';
 
-const Upload = () => (
+const Upload = ({ genres }) => (
   <div className={styles.upload}>
     <h3>Upload</h3>
 
@@ -22,32 +17,14 @@ const Upload = () => (
       </TabList>
       <br />
 
-      <TabPanel><AudioDropzone /></TabPanel>
-      <TabPanel><UploadLiveStream /></TabPanel>
+      <TabPanel><AudioDropzone genres={genres} /></TabPanel>
+      <TabPanel><UploadLiveStream genres={genres} /></TabPanel>
     </Tabs>
   </div>
 );
 
-const lifecycleFunctions = {
-  componentDidMount() {
-    this.props.addLiveStream();
-    this.props.setGenres(this.props.genres);
-  },
+Upload.propTypes = {
+  genres: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
-export const query = graphql`
-  query uploadQuery {
-    genres {
-      ...genreFieldContainer_genres
-    }
-  }
-`;
-
-export default compose(
-  authorizedComponent,
-  connect(null, {
-    addLiveStream,
-    setGenres,
-  }),
-  lifecycle(lifecycleFunctions),
-)(Upload);
+export default Upload;
