@@ -8,18 +8,18 @@ import 'react-jplaylist/src/less/controls/iconControls.less';
 import '../shared/fetch/fetch';
 import './app.less';
 import Router from './routing/router';
-import store from './store/component';
+import store from './store/store';
 import environment from './environment/environment';
-import TextPopup from '../shared/popup/popupContainer';
 import ErrorBoundary from './ErrorBoundary';
 
 const resolver = new Resolver(environment);
 
 ReactDOM.render((
-  <Provider store={store}>
-    <div>
-      <Router matchContext={{ store }} resolver={resolver} />
-      <TextPopup id="textPopup" />
-    </div>
-  </Provider>
+  <ErrorBoundary>
+    <Provider store={store}>
+      <div>
+        <Router matchContext={{ store }} resolver={resolver} />
+      </div>
+    </Provider>
+  </ErrorBoundary>
 ), document.getElementById('app'));

@@ -1,8 +1,6 @@
 import { graphql } from 'react-relay';
 import { createMutation } from 'relay-modern-hoc';
 
-import { showLogoutPopup } from '../actions';
-
 const mutation = graphql`
   mutation logoutAccountMutation {
     logout {
@@ -11,7 +9,7 @@ const mutation = graphql`
   }
 `;
 
-export default dispatch =>
+export default () =>
   createMutation(
     mutation,
     null,
@@ -23,4 +21,4 @@ export default dispatch =>
 
       user.setValue(null, 'userName');
     },
-  ).then(() => dispatch(showLogoutPopup()));
+  );

@@ -5,7 +5,6 @@ import { createMutation } from 'relay-modern-hoc';
 
 import ResetPasswordEmail from '../../email/resetPasswordEmail/resetPasswordEmail';
 import sendEmailMutation from '../../email/sendEmailMutation';
-import { showPasswordResetSentPopup } from '../actions';
 
 const mutation = graphql`
   mutation generateResetPasswordTokenMutation(
@@ -20,7 +19,7 @@ const mutation = graphql`
   }
 `;
 
-export default ({ email }, dispatch) => {
+export default ({ email }) => {
   const variables = {
     input: {
       email,
@@ -39,8 +38,9 @@ export default ({ email }, dispatch) => {
     );
     const subject = 'Reset your password';
 
-    sendEmailMutation(email, subject, emailMessage).then(() => {
-      dispatch(showPasswordResetSentPopup());
-    });
+    return sendEmailMutation(email, subject, emailMessage)
+      .catch(() => Promise.reject({
+        _error: ['We could\'t send you an email for you to reset your password.'],
+      }));
   });
 };

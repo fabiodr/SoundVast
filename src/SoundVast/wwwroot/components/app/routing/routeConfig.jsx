@@ -12,18 +12,16 @@ import { routeConfig as primaryLayoutContainerRouteConfig } from '../../layouts/
 import Error from '../../error/error';
 
 export default makeRouteConfig(
-  <Route path="/">
-    <Route {...primaryLayoutContainerRouteConfig}>
-      <Route {...songsContainerRouteConfig} />
-      <Route path="songs" {...songsContainerRouteConfig} />
-      <Route path="account">
-        <Route path="externalLoginCallback/:returnUrl" {...socialLoginCallbackContainerRouteConfig} />
-        <Route path="resetPassword" {...resetPasswordContainerRouteConfig} />
-        <Route path="confirmEmail/:userId/:token" {...confirmEmailContainerRouteConfig} />
-      </Route>
-      <Route path="upload" Component={Upload} query={uploadQuery} />
-      <Route path="profile" Component={Profile} />
-      <Route path="error" Component={Error} />
+  <Route path="/" {...primaryLayoutContainerRouteConfig}>
+    <Route {...songsContainerRouteConfig} />
+    <Route path="songs" {...songsContainerRouteConfig} />
+    <Route path="account">
+      <Route path="externalLoginCallback/:returnUrl" {...socialLoginCallbackContainerRouteConfig} />
+      <Route path="resetPassword" {...resetPasswordContainerRouteConfig} />
+      <Route path="confirmEmail/:userId/:token" {...confirmEmailContainerRouteConfig} />
     </Route>
+    <Route path="upload" Component={Upload} query={uploadQuery} />
+    <Route path="profile" Component={Profile} />
+    <Route path="error" Component={Error} />
   </Route>,
 );

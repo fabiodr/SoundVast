@@ -1,8 +1,6 @@
 import { graphql } from 'react-relay';
 import { createMutation } from 'relay-modern-hoc';
 
-import { showPasswordResetPopup } from '../actions';
-
 const mutation = graphql`
   mutation resetPasswordMutation(
     $input: ResetPasswordInput!
@@ -13,7 +11,7 @@ const mutation = graphql`
   }
 `;
 
-export default ({ password, userId, token }, dispatch) => {
+export default ({ password, userId, token }) => {
   const variables = {
     input: {
       password,
@@ -25,7 +23,5 @@ export default ({ password, userId, token }, dispatch) => {
   return createMutation(
     mutation,
     variables,
-  ).then(() => {
-    dispatch(showPasswordResetPopup());
-  });
+  );
 };

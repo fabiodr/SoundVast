@@ -24,7 +24,6 @@ const render = (route) => {
     // User already has an account that is logged in
     if (route.props.externalLoginCallback.user) {
       route.props.context.store.dispatch(showLoginPopup());
-      route.props.location.state = route.props.externalLoginCallback.user;
 
       throw new RedirectException(route.props.params.returnUrl);
     } else {

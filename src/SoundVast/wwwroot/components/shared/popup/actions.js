@@ -1,16 +1,27 @@
-export const showTextPopup = text => ({
-  type: 'SHOW_TEXT_POPUP',
-  id: 'textPopup',
+import shortid from 'shortid';
+
+/**
+ *
+ * @param {string} text - The text to show in the popup
+ */
+export const showPopup = text => ({
+  type: 'SHOW_POPUP',
   text,
+  id: shortid.generate(),
 });
 
-export const hidePopup = () => ({
+/**
+ *
+ * @param {number} index - The index of the popup to hide
+ */
+export const hidePopup = index => ({
   type: 'HIDE_POPUP',
+  index,
 });
 
 export const showGenericErrorPopup = (error) => {
   // eslint-disable-next-line no-console
   console.error(error);
 
-  return showTextPopup('An error has occurred. Please try refreshing the page.');
+  return showPopup('An error has occurred. Please try refreshing the page.');
 };

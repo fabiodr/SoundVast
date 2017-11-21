@@ -7,12 +7,16 @@ import { connect } from 'react-redux';
 import ResetPassword from './resetPassword';
 import resetPasswordMutation from './resetPasswordMutation';
 import accountValidation from '../validation';
+import { showPasswordResetPopup } from '../actions';
 
 const handlers = {
   onSubmit: ({ dispatch }) => input =>
-    resetPasswordMutation(input, dispatch).catch((error) => {
-      throw new SubmissionError(error);
-    }),
+    resetPasswordMutation(input, dispatch)
+      .then(() => {
+        dispatch(showPasswordResetPopup());
+      }).catch((error) => {
+        throw new SubmissionError(error);
+      }),
 };
 
 const createProps = ({ userId, token }) => ({

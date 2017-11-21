@@ -5,12 +5,18 @@ import { connect } from 'react-redux';
 import ForgotPassword from './forgotPassword';
 import generateResetPasswordTokenMutation from './generateResetPasswordTokenMutation';
 import accountValidation from '../validation';
+import { showPasswordResetSentPopup } from '../actions';
+import { hideModal } from '../../shared/modal/actions';
 
 const handlers = {
   onSubmit: ({ dispatch }) => input =>
-    generateResetPasswordTokenMutation(input, dispatch).catch((error) => {
-      throw new SubmissionError(error);
-    }),
+    generateResetPasswordTokenMutation(input, dispatch)
+      .then(() => {
+        dispatch(showPasswordResetSentPopup());
+        dispatch(hideModal());
+      }).catch((error) => {
+        throw new SubmissionError(error);
+      }),
 };
 
 const enhance = compose(

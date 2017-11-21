@@ -4,7 +4,7 @@ import { Field } from 'redux-form';
 
 import Modal from '../../shared/modal/modalContainer';
 import FormGroup from '../../shared/form/formGroup';
-import genericStyles from '../../shared/generic.less';
+import Button from '../../shared/button/button';
 import Input from '../../shared/fields/input/input';
 import ValidationErrors from '../../shared/validation/validationErrors';
 
@@ -17,9 +17,9 @@ const ForgotPassword = ({ error: errors, handleSubmit }) => (
         <Field name="email" component={Input} type="email" placeholder="Email" />
       </FormGroup>
 
-      <button className={genericStyles.button}>
-        Submit
-      </button>
+      <Button>
+        Reset
+      </Button>
     </form>
   </Modal>
 );

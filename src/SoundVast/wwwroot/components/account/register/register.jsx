@@ -2,13 +2,14 @@ import React from 'react';
 import { Field } from 'redux-form';
 import PropTypes from 'prop-types';
 
-import genericStyles from '../../shared/generic.less';
+import styles from './register.less';
 import FormGroup from '../../shared/form/formGroup';
 import Input from '../../shared/fields/input/input';
 import ValidationErrors from '../../shared/validation/validationErrors';
 import ModalLink from '../../shared/modal/modalLinkContainer';
 import Modal from '../../shared/modal/modalContainer';
 import SocialLogins from '../login/socialLogins/socialLoginsContainer';
+import Button from '../../shared/button/button';
 
 const Register = ({ error: errors, handleSubmit, loginProviders }) => (
   <Modal title="Register." id="register">
@@ -22,14 +23,12 @@ const Register = ({ error: errors, handleSubmit, loginProviders }) => (
         <Field name="password" component={Input} type="password" placeholder="Password" />
         <Field name="confirmPassword" component={Input} type="password" placeholder="Confirm password" />
       </FormGroup>
-      <div>
+      <div className={styles.loginLink}>
         Or <ModalLink modalId="login">login</ModalLink> if you already have an account.
       </div>
       <br />
 
-      <button className={genericStyles.button}>
-        Register
-      </button>
+      <Button>Register</Button>
     </form>
   </Modal>
 );

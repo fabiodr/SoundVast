@@ -1,16 +1,28 @@
-const reducer = (state = {}, action) => {
+const defaultState = {
+  popups: [],
+};
+
+const reducer = (state = defaultState, action) => {
   switch (action.type) {
-    case 'SHOW_TEXT_POPUP':
-      return {
-        ...state,
-        currentPopup: action.id,
+    case 'SHOW_POPUP': {
+      const popups = [...state.popups, {
+        id: action.id,
         text: action.text,
-      };
-    case 'HIDE_POPUP':
+      }];
+
       return {
         ...state,
-        currentPopup: null,
+        popups,
       };
+    }
+    case 'HIDE_POPUP': {
+      const popups = state.popups.filter((_, i) => i !== action.index);
+
+      return {
+        ...state,
+        popups,
+      };
+    }
     default: return state;
   }
 };
