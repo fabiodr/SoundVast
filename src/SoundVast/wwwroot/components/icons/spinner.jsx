@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const SpinnerIcon = ({ className }) => (
-  <svg className={className} width="80px" height="80px" viewBox="0 0 100 100">
+const SpinnerIcon = ({ className, ...props }) => (
+  <svg className={className} {...props} width="80px" height="80px" viewBox="0 0 100 100">
     <circle cx="84" cy="50" r="1.43464" fill="#55acee">
       <animate attributeName="r" values="8;0;0;0;0" keyTimes="0;0.25;0.5;0.75;1" keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1" calcMode="spline" dur="1.7s" repeatCount="indefinite" begin="0s" />
       <animate attributeName="cx" values="84;84;84;84;84" keyTimes="0;0.25;0.5;0.75;1" keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1" calcMode="spline" dur="1.7s" repeatCount="indefinite" begin="0s" />

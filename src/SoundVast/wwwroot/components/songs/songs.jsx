@@ -3,17 +3,40 @@ import PropTypes from 'prop-types';
 import SoundVastTitle from '../shared/title/soundVastTitle';
 
 import Song from './song/song';
-import Audios from '../audios/audios';
+import Grid from '../shared/grid/grid';
+import InfiniteScrollGrid from '../shared/grid/infiniteScrollGrid';
 
 const Songs = ({ songs, loadMore, hasMore }) => (
   <SoundVastTitle title="Songs">
-    <Audios
-      audios={songs}
-      loadMore={loadMore}
-      hasMore={hasMore}
-    >
-      <Song />
-    </Audios>
+    <Grid>
+      <InfiniteScrollGrid
+        initialLoad={false}
+        loadMore={loadMore}
+        hasMore={hasMore}
+      >
+        {songs.map(song => (
+          <Song
+            key={song.audioId}
+            audioId={song.audioId}
+            coverImageUrl={song.coverImageUrl}
+            name={song.name}
+            artist={song.artist}
+            likes={song.likes}
+            dislikes={song.dislikes}
+            initialPlaylist={{
+              id: song.audioId,
+              title: song.name,
+              artist: song.artist,
+              sources: {
+                mp3: `${window.location.origin}/song/stream?id=${song.id}`,
+              },
+              poster: song.coverImageUrl,
+              free: song.free,
+            }}
+          />
+        ))}
+      </InfiniteScrollGrid>
+    </Grid>
   </SoundVastTitle>
 );
 

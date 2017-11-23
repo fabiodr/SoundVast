@@ -5,7 +5,7 @@ import { paginationContainer } from 'relay-modern-hoc';
 
 import Songs from './songs';
 
-const songsToLoad = 30;
+const songsToLoad = 10;
 const query = graphql`
   query songsContainerQuery(
     $count: Int!
@@ -52,16 +52,6 @@ const connectionConfig = {
 };
 
 const handlers = {
-  // getPlaylist: props => () => props.songs.map(song => ({
-  //   id: song.id,
-  //   title: song.name,
-  //   artist: song.artist,
-  //   sources: {
-  //     mp3: `${window.location.origin}/song/stream?id=${song.id}`,
-  //   },
-  //   poster: song.coverImageUrl,
-  //   free: song.free,
-  // })),
   loadMore: ({ relay }) => () => relay.loadMore(songsToLoad),
 };
 

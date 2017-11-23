@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const LogoIcon = ({ className }) => (
-  <svg className={className} height="159.64px" width="932.62665px" viewBox="0 0 932.62665 159.64" id="svg2">
+const LogoIcon = ({ className, ...props }) => (
+  <svg className={className} {...props} height="159.64px" width="932.62665px" viewBox="0 0 932.62665 159.64" id="svg2">
     <metadata id="metadata8" />
     <defs id="defs6" />
     <g transform="matrix(1.3333333,0,0,-1.3333333,0,159.64)" id="g10">
