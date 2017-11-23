@@ -12,10 +12,13 @@ const Song = ({ coverImageUrl, likes, dislikes, name, artist, audioId }) => (
     <Play id={audioId}>
       <img alt="" src={coverImageUrl} className={styles.coverImage} />
     </Play>
-    <Like audioId={audioId} likes={likes} />
-    <Dislike audioId={audioId} dislikes={dislikes} />
     <div className={styles.name}>{name}</div>
     <div className={styles.artist}>{artist}</div>
+    <div className={styles.rating}>
+      <span>percent</span>
+      <Like className={styles.like} audioId={audioId} />
+      <Dislike className={styles.dislike} audioId={audioId} />
+    </div>
   </GridCell>
 );
 

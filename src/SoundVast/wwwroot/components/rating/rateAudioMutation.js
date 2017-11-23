@@ -16,7 +16,7 @@ const mutation = graphql`
   }
 `;
 
-export default (audioId, ratings, liked) => {
+export default (audioId, liked) => {
   const variables = {
     input: {
       audioId,
