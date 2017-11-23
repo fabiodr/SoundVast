@@ -6,30 +6,30 @@ import { graphql } from 'react-relay';
 import { paginationContainer } from 'relay-modern-hoc';
 import { actions } from 'react-jplaylist';
 
-import Songs from './songs';
+import LiveStreams from './liveStreams';
 import { audiosToLoad } from '../audio/utilities';
 
 const query = graphql`
-  query songsContainerQuery(
+  query liveStreamsContainerQuery(
     $count: Int!
     $cursor: String
   ) {
-    ...songsContainer
+    ...liveStreamsContainer
   }
 `;
 
 const fragments = graphql`
-  fragment songsContainer on Query {
-    songs(
+  fragment liveStreamsContainer on Query {
+    liveStreams(
       first: $count,
       after: $cursor,
-    ) @connection(key: "songsContainer_songs") {
+    ) @connection(key: "liveStreamsContainer_liveStreams") {
       edges {
         node {
           audioId,
           name,
           coverImageUrl,
-          artist,
+          liveStreamUrl,
           likes,
           dislikes,
         }
@@ -41,11 +41,11 @@ const fragments = graphql`
 const connectionConfig = {
   direction: 'forward',
   query: graphql`
-    query songsContainerForwardQuery(
+    query liveStreamsContainerForwardQuery(
       $count: Int!
       $cursor: String
     ) {
-      ...songsContainer,
+      ...liveStreamsContainer,
     }
   `,
   getVariables: (_, { count, cursor }) => ({
@@ -54,42 +54,44 @@ const connectionConfig = {
   }),
 };
 
-// TODO: load more songs when new songs scroll into view
+// TODO: load more live streams when new live streams scroll into view
 const handlers = {
   loadMore: ({ relay }) => () => relay.loadMore(audiosToLoad),
 };
 
 const createProps = ({ relay, data }) => ({
   hasMore: relay.hasMore(),
-  songs: data.songs.edges.map(x => x.node),
+  liveStreams: data.liveStreams.edges.map(x => x.node),
 });
 
 class InitializePlaylist extends React.Component {
   componentDidMount() {
     this.props.setPlaylist('FooterPlaylist', this.getPlaylist());
   }
-  getPlaylist = () => this.props.songs.map(song => ({
-    id: song.audioId,
-    title: song.name,
-    artist: song.artist,
+  getPlaylist = () => this.props.liveStreams.map(liveStream => ({
+    id: liveStream.audioId,
+    title: liveStream.name,
     sources: {
-      mp3: `${window.location.origin}/song/stream?id=${song.audioId}`,
+      mp3: liveStream.liveStreamUrl,
     },
-    poster: song.coverImageUrl,
-    free: song.free,
+    poster: liveStream.coverImageUrl,
   }))
   render() {
-    return <Songs {...this.props} />;
+    return <LiveStreams {...this.props} />;
   }
 }
 
+InitializePlaylist.defaultProps = {
+  playlist: [],
+};
+
 InitializePlaylist.propTypes = {
   setPlaylist: PropTypes.func.isRequired,
-  songs: PropTypes.arrayOf(
+  liveStreams: PropTypes.arrayOf(
     PropTypes.shape({
       audioId: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
-      artist: PropTypes.string,
+      liveStreamUrl: PropTypes.string,
       coverImageUrl: PropTypes.string.isRequired,
       free: PropTypes.bool,
     }),
@@ -105,13 +107,13 @@ const enhance = compose(
   withProps(createProps),
 );
 
-const SongsContainer = enhance(InitializePlaylist);
+const LiveStreamsContainer = enhance(InitializePlaylist);
 
 export const routeConfig = {
-  Component: SongsContainer,
+  Component: LiveStreamsContainer,
   query,
-  render: ({ props }) => props && <SongsContainer data={props} />,
+  render: ({ props }) => props && <LiveStreamsContainer data={props} />,
   prepareVariables: () => ({ count: audiosToLoad }),
 };
 
-export default SongsContainer;
+export default LiveStreamsContainer;
