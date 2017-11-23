@@ -23,16 +23,6 @@ const Songs = ({ songs, loadMore, hasMore }) => (
             artist={song.artist}
             likes={song.likes}
             dislikes={song.dislikes}
-            initialPlaylist={{
-              id: song.audioId,
-              title: song.name,
-              artist: song.artist,
-              sources: {
-                mp3: `${window.location.origin}/song/stream?id=${song.id}`,
-              },
-              poster: song.coverImageUrl,
-              free: song.free,
-            }}
           />
         ))}
       </InfiniteScrollGrid>

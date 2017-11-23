@@ -15,10 +15,6 @@ class Play extends React.Component {
   playOnClick = () => {
     const jPlaylistId = 'FooterPlaylist';
 
-    if (this.props.playlist.length === 0) {
-      this.props.setPlaylist('FooterPlaylist', this.props.playlist);
-    }
-
     if (this.props.paused || !this.props.isCurrent) {
       const index = this.props.playlist.findIndex(x => x.id === this.props.id);
 
@@ -48,7 +44,6 @@ Play.defaultProps = {
 
 Play.propTypes = {
   children: PropTypes.node.isRequired,
-  setPlaylist: PropTypes.func.isRequired,
   play: PropTypes.func.isRequired,
   pause: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,

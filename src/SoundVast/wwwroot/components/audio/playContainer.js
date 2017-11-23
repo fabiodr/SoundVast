@@ -11,7 +11,6 @@ const mapStateToProps = ({ jPlayers, jPlaylists }, { id }) => ({
 });
 
 export default connect(mapStateToProps, {
-  setPlaylist: actions.setPlaylist,
   play: actions.play,
   pause: jPlayerActions.pause,
 })(Play);
