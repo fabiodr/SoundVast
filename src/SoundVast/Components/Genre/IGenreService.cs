@@ -8,7 +8,7 @@ namespace SoundVast.Components.Genre
 {
     public interface IGenreService
     {
-       // ICollection<Genre> GetGenresInCategory(string category);
+        void UpdateCoverImages();
         ICollection<Models.Genre> GetGenres();
     }
 }

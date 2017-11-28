@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-import { compose, withPropsOnChange, setPropTypes, defaultProps } from 'recompose';
-import genreTypeNames from '../../../genre/genreTypeNames';
 
 import Select from '../select/select';
 
@@ -33,19 +31,4 @@ GenreField.propTypes = {
   id: PropTypes.string.isRequired,
 };
 
-const enhance = compose(
-  defaultProps({
-    type: null,
-  }),
-  setPropTypes({
-    type: PropTypes.oneOf(Object.keys(genreTypeNames).map(key => genreTypeNames[key])),
-  }),
-  withPropsOnChange(
-    ['type', 'genres'],
-    ({ type, genres }) => ({
-      genres: type !== null ? genres.filter(genre => genre.type === type) : genres,
-    }),
-  ),
-);
-
-export default enhance(GenreField);
+export default GenreField;

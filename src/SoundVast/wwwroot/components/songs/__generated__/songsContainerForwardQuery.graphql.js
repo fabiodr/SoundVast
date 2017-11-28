@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 8288691a172ea3cab9c737258b7ff6c6
+ * @relayHash 06f2650f113ce735d400b2158be9be34
  */
 
 /* eslint-disable */
@@ -17,12 +17,13 @@ export type songsContainerForwardQueryResponse = {| |};
 query songsContainerForwardQuery(
   $count: Int!
   $cursor: String
+  $genre: String
 ) {
   ...songsContainer
 }
 
 fragment songsContainer on Query {
-  songs(first: $count, after: $cursor) {
+  songs(first: $count, after: $cursor, genre: $genre) {
     edges {
       node {
         __typename
@@ -58,6 +59,12 @@ const batch /*: ConcreteBatch*/ = {
         "name": "cursor",
         "type": "String",
         "defaultValue": null
+      },
+      {
+        "kind": "LocalArgument",
+        "name": "genre",
+        "type": "String",
+        "defaultValue": null
       }
     ],
     "kind": "Fragment",
@@ -89,6 +96,12 @@ const batch /*: ConcreteBatch*/ = {
         "name": "cursor",
         "type": "String",
         "defaultValue": null
+      },
+      {
+        "kind": "LocalArgument",
+        "name": "genre",
+        "type": "String",
+        "defaultValue": null
       }
     ],
     "kind": "Root",
@@ -110,6 +123,12 @@ const batch /*: ConcreteBatch*/ = {
             "name": "first",
             "variableName": "count",
             "type": "Int"
+          },
+          {
+            "kind": "Variable",
+            "name": "genre",
+            "variableName": "genre",
+            "type": "String"
           }
         ],
         "concreteType": "SongPayloadConnection",
@@ -244,16 +263,24 @@ const batch /*: ConcreteBatch*/ = {
             "name": "first",
             "variableName": "count",
             "type": "Int"
+          },
+          {
+            "kind": "Variable",
+            "name": "genre",
+            "variableName": "genre",
+            "type": "String"
           }
         ],
         "handle": "connection",
         "name": "songs",
         "key": "songsContainer_songs",
-        "filters": null
+        "filters": [
+          "genre"
+        ]
       }
     ]
   },
-  "text": "query songsContainerForwardQuery(\n  $count: Int!\n  $cursor: String\n) {\n  ...songsContainer\n}\n\nfragment songsContainer on Query {\n  songs(first: $count, after: $cursor) {\n    edges {\n      node {\n        __typename\n        audioId\n        name\n        coverImageUrl\n        artist\n        likes\n        dislikes\n        id\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+  "text": "query songsContainerForwardQuery(\n  $count: Int!\n  $cursor: String\n  $genre: String\n) {\n  ...songsContainer\n}\n\nfragment songsContainer on Query {\n  songs(first: $count, after: $cursor, genre: $genre) {\n    edges {\n      node {\n        __typename\n        audioId\n        name\n        coverImageUrl\n        artist\n        likes\n        dislikes\n        id\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
 };
 
 module.exports = batch;

@@ -3,8 +3,6 @@ import shortid from 'shortid';
 
 import trimFileExtension from '../shared/utilities/trimFileExtension';
 
-const coverImagePlaceholderPath = '../../images/logo/icon/SV_Icon.svg';
-
 export const uploadSong = (id, file) => dispatch =>
   fetch.fetchProgress('/upload/uploadSong', {
     progress: (e) => {
@@ -36,12 +34,12 @@ export const uploadCoverImage = (id, file) => dispatch =>
     }));
 
 const setCoverImagePlaceholder = id => dispatch =>
-  fetch.get(coverImagePlaceholderPath, { response: 'blob' })
-    .then((blob) => {
-      const file = new File([blob], 'SoundVast', { type: blob.type });
-
-      return dispatch(uploadCoverImage(id, file));
-    });
+  fetch.get('/upload/getPlaceholderImage')
+    .then(json => dispatch({
+      type: 'UPDATE_COVER_IMAGE',
+      id,
+      imagePath: json.imagePath,
+    }));
 
 const readMediaTags = blob =>
   new Promise((resolve, reject) => jsmediatags.read(blob, {
@@ -66,7 +64,7 @@ const readMediaTags = blob =>
       });
     },
     onError: (error) => {
-      console.log(error); // eslint-disable-line no-console
+      console.error(error); // eslint-disable-line no-console
 
       reject(error);
     },

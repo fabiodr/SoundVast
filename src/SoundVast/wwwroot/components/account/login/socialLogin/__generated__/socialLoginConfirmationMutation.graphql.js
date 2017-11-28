@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 377dfd68f375c4a610a46489e4835aaa
+ * @relayHash ca3dc535f7f212f5ddb8f702a3359fed
  */
 
 /* eslint-disable */
@@ -12,7 +12,7 @@ import type {ConcreteBatch} from 'relay-runtime';
 export type socialLoginConfirmationMutationVariables = {|
   input: {
     clientMutationId?: ?string;
-    email: string;
+    userName: string;
   };
 |};
 export type socialLoginConfirmationMutationResponse = {|

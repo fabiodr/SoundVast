@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-import { showTextPopup } from '../../../popup/actions';
+import { showPopup } from '../../../popup/actions';
 
 /** @deprecated  in favour of dispatching showErrorPopup directly */
 export default dispatch => (error) => {
@@ -10,5 +10,5 @@ export default dispatch => (error) => {
     throw error;
   }
 
-  return dispatch(showTextPopup('An error occured. Please try refreshing the page.'));
+  return dispatch(showPopup('An error occured. Please try refreshing the page.'));
 };

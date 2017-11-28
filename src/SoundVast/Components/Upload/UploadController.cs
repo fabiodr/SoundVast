@@ -55,6 +55,16 @@ namespace SoundVast.Components.Upload
             return Ok();
         }
 
+        public IActionResult GetPlaceholderImage()
+        {
+            var imageBlob = _cloudStorage.GetBlob(CloudStorageType.Image, "Desert.jpg");
+
+            return Ok(new
+            {
+                imagePath = imageBlob.CloudBlockBlob.Uri.AbsoluteUri
+            });
+        }
+
         [HttpPost]
         public async Task<IActionResult> UploadCoverImage(IFormFile file)
         {

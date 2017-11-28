@@ -21,7 +21,7 @@ namespace SoundVast.Components.Account
 
             Field<IdGraphType>("Id");
             Field(x => x.UserName);
-            Field(x => x.Email, true);
+            Field(x => x.Email);
         }
     }
 }

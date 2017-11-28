@@ -1,19 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Popup = ({ text, popupClass }) => (
-  <div className={popupClass}>
-    {text}
-  </div>
-);
+import styles from './popup.less';
 
-Popup.defaultProps = {
-  text: null,
-};
+class Popup extends React.Component {
+  componentDidMount() {
+    setTimeout(() => this.props.hidePopup(this.props.index), 6000);
+  }
+  render() {
+    return (
+      <div className={styles.popup}>
+        {this.props.text}
+      </div>
+    );
+  }
+}
 
 Popup.propTypes = {
-  text: PropTypes.node,
-  popupClass: PropTypes.string.isRequired,
+  index: PropTypes.number.isRequired,
+  text: PropTypes.string.isRequired,
+  hidePopup: PropTypes.func.isRequired,
 };
 
 export default Popup;

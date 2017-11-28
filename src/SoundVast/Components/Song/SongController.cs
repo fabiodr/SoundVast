@@ -25,19 +25,6 @@ namespace SoundVast.Components.Song
         }
 
         [HttpGet]
-        public IActionResult GetSongs(int current, int amount)
-        {
-            var songs = _songService.GetAudios(current, amount);
-            var hasMore = _songService.GetAudios(current + amount, amount).Any();
-
-            return Ok(new
-            {
-                songs,
-                hasMore
-            });
-        }
-
-        [HttpGet]
         public Stream Stream(int id)
         {
             var song = _songService.GetAudio(id);

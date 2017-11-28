@@ -1,8 +1,5 @@
 import { graphql } from 'react-relay';
-import { createMutation } from 'relay-compose';
-
-import { hideModal } from '../../shared/modal/actions';
-import { showLoginPopup } from '../actions';
+import { createMutation } from 'relay-modern-hoc';
 
 const mutation = graphql`
   mutation loginMutation(
@@ -17,7 +14,7 @@ const mutation = graphql`
   }
 `;
 
-export default ({ username, password, rememberMe }, dispatch) => {
+export default ({ username, password, rememberMe }) => {
   const variables = {
     input: {
       username,
@@ -41,8 +38,5 @@ export default ({ username, password, rememberMe }, dispatch) => {
         root.setLinkedRecord(user, 'user');
       }
     },
-  ).then(() => {
-    dispatch(hideModal());
-    dispatch(showLoginPopup());
-  });
+  );
 };

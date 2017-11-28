@@ -13,7 +13,11 @@ namespace SoundVast
     {
         public static void Main(string[] args)
         {
-            BuildWebHost(args).SeedData().Run();
+            var webHost = BuildWebHost(args).SeedData();
+
+            webHost.Wait();
+
+            webHost.Result.Run();
         }
 
         public static IWebHost BuildWebHost(string[] args) =>

@@ -1,1 +1,1 @@
-export default path => path.replace(/\.[^/.]+$/, '');
+export default (path = '') => path.replace(/\.[^/.]+$/, '');

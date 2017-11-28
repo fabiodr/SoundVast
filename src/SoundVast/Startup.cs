@@ -27,9 +27,11 @@ using System.Text.RegularExpressions;
 using Autofac;
 using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
+using Autofac.Features.ResolveAnything;
 using GraphQL;
 using GraphQL.Relay.Types;
 using GraphQL.Types;
+using Hangfire;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Facebook;
 using Microsoft.AspNetCore.Authentication.Google;
@@ -37,6 +39,7 @@ using Microsoft.AspNetCore.Authentication.Twitter;
 using Newtonsoft.Json;
 using SoundVast.Components.Audio;
 using SoundVast.Components.Audio.Models;
+using SoundVast.Components.Genre;
 using SoundVast.Components.Genre.Models;
 using SoundVast.Components.GraphQl;
 using SoundVast.Components.LiveStream.Models;
@@ -54,8 +57,6 @@ namespace SoundVast
         {
             _configuration = configuration;
             loggerFactory.CreateLogger<Startup>();
-
-            JobScheduler.Start();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -63,6 +64,7 @@ namespace SoundVast
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
+            services.AddHangfire(x => x.UseSqlServerStorage(_configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
                 {
@@ -101,14 +103,17 @@ namespace SoundVast
                 {
                     o.AppId = _configuration["OAuth:Facebook:Id"];
                     o.AppSecret = _configuration["OAuth:Facebook:Secret"];
+                    o.Scope.Add("email");
                 }).AddTwitter(o =>
                 {
                     o.ConsumerKey = _configuration["OAuth:Twitter:Id"];
                     o.ConsumerSecret = _configuration["OAuth:Twitter:Secret"];
+                    o.RetrieveUserDetails = true;
                 }).AddGoogle(o =>
                 {
                     o.ClientId = _configuration["OAuth:Google:Id"];
                     o.ClientSecret = _configuration["OAuth:Google:Secret"];
+                    o.Scope.Add("email");
                 });
 
             var builder = RegisterServices();
@@ -141,11 +146,13 @@ namespace SoundVast
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            app.UseHangfireServer();
+            app.UseHangfireDashboard();
             app.UseStaticFiles();
             app.UseAuthentication();
             app.UseSession();
-         //   app.UseWebSockets();
-          //  app.UseGraphQLEndPoint<AppSchema>("/graphql");
+            //   app.UseWebSockets();
+            //  app.UseGraphQLEndPoint<AppSchema>("/graphql");
 
             app.UseMvc(routes =>
             {
@@ -155,8 +162,8 @@ namespace SoundVast
                 );
 
                 routes.MapRoute(
-                    "externalLoginConfirmation",
-                    "Account/externalLoginConfirmation"
+                    "externalLoginCallback",
+                    "Account/externalLoginCallback/{returnUrl}"
                 );
 
                 routes.MapSpaFallbackRoute(

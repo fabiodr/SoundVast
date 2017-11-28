@@ -19,7 +19,7 @@ namespace SoundVast.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class MusicGenres {
@@ -97,7 +97,7 @@ namespace SoundVast.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dance&amp;EDM.
+        ///   Looks up a localized string similar to Dance &amp; EDM.
         /// </summary>
         internal static string DanceAndEDM {
             get {
@@ -255,15 +255,6 @@ namespace SoundVast.Properties {
         internal static string Reggae {
             get {
                 return ResourceManager.GetString("Reggae", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Reggaeton.
-        /// </summary>
-        internal static string Reggaeton {
-            get {
-                return ResourceManager.GetString("Reggaeton", resourceCulture);
             }
         }
         

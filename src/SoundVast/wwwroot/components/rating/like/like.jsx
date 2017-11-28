@@ -1,27 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import LikeIcon from '../../../images/ratingControls/like.svg';
+import LikeIcon from '../../icons/like';
+import styles from './like.less';
 
-const Like = ({ onClick, likes, width, height }) => (
-  <div>
-    <LikeIcon width={width} height={height} onClick={onClick}>{likes}</LikeIcon>
-    <div className="likes">
-      {likes}
-    </div>
-  </div>
+const Like = ({ className, onClick }) => (
+  <span className={className} role="button" tabIndex={0} onClick={onClick}>
+    <LikeIcon className={styles.likeIcon} />
+  </span>
 );
 
 Like.defaultProps = {
-  width: 14,
-  height: 14,
+  className: null,
 };
 
 Like.propTypes = {
-  likes: PropTypes.number.isRequired,
+  className: PropTypes.string,
   onClick: PropTypes.func.isRequired,
-  width: PropTypes.number,
-  height: PropTypes.number,
 };
 
 export default Like;

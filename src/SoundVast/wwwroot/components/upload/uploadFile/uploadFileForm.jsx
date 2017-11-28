@@ -4,45 +4,49 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { Field } from 'redux-form';
 
 import BasicInfo from '../common/basicInfo/basicInfo';
-import genreTypeNames from '../../genre/genreTypeNames';
+import genreTypeNames from '../../shared/utilities/genreTypeNames';
 import Input from '../../shared/fields/input/input';
 import NameField from '../../shared/fields/nameField/nameField';
 import GenreField from '../../shared/fields/genreField/genreFieldContainer';
 import ValidationErrors from '../../shared/validation/validationErrors';
-import SpinnerSubmit from '../../shared/form/spinnerSubmit/spinnerSubmitContainer';
 import CancelButton from '../common/cancelButton/cancelButton';
+import SaveButton from '../common/saveButton/saveButton';
 
-const Form = ({ errors: error, ...props }) => (
-  <form onSubmit={props.handleSubmit} action="">
-    <ValidationErrors errors={props.errors} />
+const Form = ({
+  handleSubmit,
+  errors,
+  id,
+  form,
+  removeMusicForm,
+  genres,
+}) => (
+  <form onSubmit={handleSubmit} action="">
+    <ValidationErrors errors={errors} />
 
     <Tabs>
       <TabList>
         <Tab>Basic info</Tab>
       </TabList>
       <TabPanel>
-        <BasicInfo id={props.id}>
-          <NameField id={props.id} />
+        <BasicInfo id={id}>
+          <NameField id={id} />
 
-          <label htmlFor={`artist_${props.id}`}>Artist
-            <Field name="artist" id={`artist_${props.id}`} component={Input} />
+          <label htmlFor={`artist_${id}`}>Artist
+            <Field name="artist" id={`artist_${id}`} component={Input} />
           </label>
 
-          <GenreField id={props.id} type={genreTypeNames.music} />
+          <GenreField id={id} type={genreTypeNames.music} genres={genres} />
         </BasicInfo>
       </TabPanel>
     </Tabs>
 
-    <SpinnerSubmit formName={props.form}>
-      Save
-    </SpinnerSubmit>
-    <CancelButton remove={props.removeMusicForm} />
+    <SaveButton formName={form} />
+    <CancelButton remove={removeMusicForm} />
   </form>
 );
 
 Form.defaultProps = {
   errors: [],
-  isSubmitting: false,
 };
 
 Form.propTypes = {
@@ -50,7 +54,7 @@ Form.propTypes = {
   form: PropTypes.string.isRequired,
   removeMusicForm: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  isSubmitting: PropTypes.bool,
+  genres: PropTypes.arrayOf(PropTypes.object).isRequired,
   errors: PropTypes.arrayOf(PropTypes.string.isRequired),
 };
 

@@ -1,30 +1,31 @@
 import React from 'react';
 import makeRouteConfig from 'found/lib/makeRouteConfig';
 import Route from 'found/lib/Route';
-import Redirect from 'found/lib/Redirect';
 
-import SocialLoginConfirmation from '../../account/login/socialLogin/socialLoginConfirmation';
-import ResetPassword from '../../account/resetPassword/resetPasswordContainer';
-import { routeConfig as confirmedEmailSuccessRouteConfig } from '../../account/confirmedEmailSuccess/confirmedEmailSuccessContainer';
 import Profile from '../../user/profile/userProfileContainer';
-import Upload, { query as uploadQuery } from '../../upload/upload';
-import { routeConfig as songsContainerRouteConfig } from '../../songs/songsContainer';
-import { routeConfig as primaryLayoutContainerRouteConfig } from '../../layouts/primaryLayout/primaryLayoutContainer';
 import Error from '../../error/error';
+import { routeConfig as uploadRouteConfig } from '../../upload/uploadContainer';
+import { routeConfig as socialLoginCallbackRouteConfig } from '../../account/login/socialLogin//socialLoginCallbackContainer';
+import { routeConfig as confirmEmailRouteConfig } from '../../account/confirmEmail/confirmEmailContainer';
+import { routeConfig as resetPasswordRouteConfig } from '../../account/resetPassword/resetPasswordContainer';
+import { routeConfig as songsRouteConfig } from '../../songs/songsContainer';
+import { routeConfig as radiosRouteConfig } from '../../radios/radiosContainer';
+import { routeConfig as primaryLayoutRouteConfig } from '../../layouts/primaryLayout/primaryLayoutContainer';
+import { routeConfig as genresRouteConfig } from '../../genres/genresContainer';
 
 export default makeRouteConfig(
-  <Route path="/">
-    <Route {...primaryLayoutContainerRouteConfig}>
-      <Route {...songsContainerRouteConfig} />
-      <Route path="songs" {...songsContainerRouteConfig} />
-      <Route path="account">
-        <Route path="externalLoginConfirmation" Component={SocialLoginConfirmation} />
-        <Route path="resetPassword" Component={ResetPassword} />
-        <Redirect from="successfullyConfirmedEmail" {...confirmedEmailSuccessRouteConfig} />
-      </Route>
-      <Route path="upload" Component={Upload} query={uploadQuery} />
-      <Route path="profile" Component={Profile} />
-      <Route path="error" Component={Error} />
+  <Route path="/" {...primaryLayoutRouteConfig}>
+    <Route {...songsRouteConfig} />
+    <Route path="songs/:genre?" {...songsRouteConfig} />
+    <Route path="radios/:genre?" {...radiosRouteConfig} />
+    <Route path="upload" {...uploadRouteConfig} />
+    <Route path="profile" Component={Profile} />
+    <Route path="genres/:type" {...genresRouteConfig} />
+    <Route path="error" Component={Error} />
+    <Route path="account">
+      <Route path="externalLoginCallback/:returnUrl" {...socialLoginCallbackRouteConfig} />
+      <Route path="resetPassword" {...resetPasswordRouteConfig} />
+      <Route path="confirmEmail/:userId/:token" {...confirmEmailRouteConfig} />
     </Route>
   </Route>,
 );

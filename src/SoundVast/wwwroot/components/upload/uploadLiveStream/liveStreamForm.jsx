@@ -3,35 +3,37 @@ import PropTypes from 'prop-types';
 
 import LiveStreamInformation from './liveStreamInformation';
 import ValidationErrors from '../../shared/validation/validationErrors';
-import AntiForgeryToken from '../../shared/form/antiForgeryToken/antiForgeryToken';
-import SpinnerSubmit from '../../shared/form/spinnerSubmit/spinnerSubmitContainer';
 import CancelButton from '../common/cancelButton/cancelButton';
+import SaveButton from '../common/saveButton/saveButton';
 
-const Form = ({ errors: error, ...props }) => (
-  <form onSubmit={props.handleSubmit} action="">
-    <AntiForgeryToken form={props.form} />
-    <ValidationErrors errors={props.errors} />
+const Form = ({
+  handleSubmit,
+  errors,
+  id,
+  genres,
+  form,
+  removeLiveStreamForm,
+}) => (
+  <form onSubmit={handleSubmit} action="">
+    <ValidationErrors errors={errors} />
 
-    <LiveStreamInformation id={props.id} />
+    <LiveStreamInformation id={id} genres={genres} />
 
-    <SpinnerSubmit formName={props.form}>
-      Save
-    </SpinnerSubmit>
-    <CancelButton remove={props.removeLiveStreamForm} />
+    <SaveButton formName={form} />
+    <CancelButton remove={removeLiveStreamForm} />
   </form>
 );
 
 Form.defaultProps = {
   errors: [],
-  isSubmitting: false,
 };
 
 Form.propTypes = {
+  genres: PropTypes.arrayOf(PropTypes.object).isRequired,
   id: PropTypes.string.isRequired,
   form: PropTypes.string.isRequired,
   removeLiveStreamForm: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  isSubmitting: PropTypes.bool,
   errors: PropTypes.arrayOf(PropTypes.string.isRequired),
 };
 

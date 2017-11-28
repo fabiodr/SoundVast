@@ -2,32 +2,29 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import styles from './song.less';
-import Like from '../../rating/like/likeContainer';
-import Dislike from '../../rating/dislike/dislikeContainer';
+import Play from '../../audio/playContainer';
+import CoverImage from '../../audio/coverImage';
+import Rating from '../../rating/rating';
+import Name from '../../audio/name';
 
-const Song = ({ likes, dislikes, name, artist, audioId }) => (
+const Song = ({ coverImageUrl, likes, dislikes, name, artist, audioId }) => (
   <div>
-    <Like audioId={audioId} likes={likes} />
-    <Dislike audioId={audioId} dislikes={dislikes} />
-    <figcaption className={styles.name}>{name}</figcaption>
-    <figcaption className={styles.artist}>{artist}</figcaption>
+    <Play id={audioId}>
+      <CoverImage coverImageUrl={coverImageUrl} />
+    </Play>
+    <Name name={name} />
+    <div className={styles.artist}>{artist}</div>
+    <Rating audioId={audioId} likes={likes} dislikes={dislikes} />
   </div>
 );
 
-Song.defaultProps = {
-  audioId: null,
-  name: null,
-  artist: null,
-  likes: null,
-  dislikes: null,
-};
-
 Song.propTypes = {
-  audioId: PropTypes.number,
-  dislikes: PropTypes.number,
-  likes: PropTypes.number,
-  name: PropTypes.string,
-  artist: PropTypes.string,
+  coverImageUrl: PropTypes.string.isRequired,
+  audioId: PropTypes.number.isRequired,
+  dislikes: PropTypes.number.isRequired,
+  likes: PropTypes.number.isRequired,
+  name: PropTypes.string.isRequired,
+  artist: PropTypes.string.isRequired,
 };
 
 export default Song;

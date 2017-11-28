@@ -1,0 +1,30 @@
+.currentlyPlayed {
+    opacity: 1;
+}
+
+.playIcon {
+    opacity: 0;
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    transition: opacity 300ms;
+}
+
+.pauseIcon {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+}
+
+.play {
+    position: relative;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.play:hover [data-role="hover"] {
+    visibility: visible;
+    opacity: 1;
+}

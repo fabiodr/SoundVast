@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import SpinnerButton from '../../loaders/spinnerButton';
+import SpinnerButton from '../../button/spinnerButton';
 
 const mapStateToProps = ({ form }, { formName }) => ({
   isLoading: form[formName].submitting,

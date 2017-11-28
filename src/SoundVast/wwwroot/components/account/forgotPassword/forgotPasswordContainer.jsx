@@ -1,27 +1,33 @@
-import { reduxForm } from 'redux-form';
-import { compose } from 'recompose';
+import { reduxForm, SubmissionError } from 'redux-form';
+import { compose, withHandlers } from 'recompose';
 import { connect } from 'react-redux';
 
 import ForgotPassword from './forgotPassword';
-import { submit } from './actions';
+import generateResetPasswordTokenMutation from './generateResetPasswordTokenMutation';
 import accountValidation from '../validation';
+import { showPasswordResetSentPopup } from '../actions';
+import { hideModal } from '../../shared/modal/actions';
 
-const mapDispatchToProps = dispatch => ({
-  onSubmit: (values) => {
-    const formData = new FormData();
+const handlers = {
+  onSubmit: ({ dispatch }) => input =>
+    generateResetPasswordTokenMutation(input, dispatch)
+      .then(() => {
+        dispatch(showPasswordResetSentPopup());
+        dispatch(hideModal());
+      }).catch((error) => {
+        throw new SubmissionError(error);
+      }),
+};
 
-    Object.keys(values).forEach((key) => {
-      formData.append(key, values[key]);
-    });
-
-    return dispatch(submit(formData));
-  },
-});
-
-export default compose(
-  connect(null, mapDispatchToProps),
+const enhance = compose(
+  connect(),
+  withHandlers(handlers),
   reduxForm({
     form: 'forgotPassword',
     validate: accountValidation,
   }),
-)(ForgotPassword);
+);
+
+const ForgotPasswordContainer = enhance(ForgotPassword);
+
+export default ForgotPasswordContainer;

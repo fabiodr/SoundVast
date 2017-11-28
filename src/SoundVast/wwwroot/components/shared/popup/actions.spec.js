@@ -17,7 +17,7 @@ describe('popupActions', () => {
   it('should show text popup', () => {
     const text = 'Successfully logged in!';
 
-    store.dispatch(actions.showTextPopup(text));
+    store.dispatch(actions.showPopup(text));
 
     expect(calledActions).toEqual([
       {

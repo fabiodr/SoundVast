@@ -1,15 +1,19 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { compose, withHandlers, withProps } from 'recompose';
 import { graphql } from 'react-relay';
-import { paginationContainer } from 'relay-compose-test';
+import { paginationContainer } from 'relay-modern-hoc';
+import { actions } from 'react-jplaylist';
 
 import Songs from './songs';
+import { audiosToLoad } from '../audio/utilities';
 
-const songsToLoad = 30;
 const query = graphql`
   query songsContainerQuery(
     $count: Int!
     $cursor: String
+    $genre: String
   ) {
     ...songsContainer
   }
@@ -18,17 +22,18 @@ const query = graphql`
 const fragments = graphql`
   fragment songsContainer on Query {
     songs(
-      first: $count,
-      after: $cursor,
+      first: $count
+      after: $cursor
+      genre: $genre
     ) @connection(key: "songsContainer_songs") {
       edges {
         node {
-          audioId,
-          name,
-          coverImageUrl,
-          artist,
-          likes,
-          dislikes,
+          audioId
+          name
+          coverImageUrl
+          artist
+          likes
+          dislikes
         }
       }
     }
@@ -41,8 +46,9 @@ const connectionConfig = {
     query songsContainerForwardQuery(
       $count: Int!
       $cursor: String
+      $genre: String
     ) {
-      ...songsContainer,
+      ...songsContainer
     }
   `,
   getVariables: (_, { count, cursor }) => ({
@@ -51,18 +57,9 @@ const connectionConfig = {
   }),
 };
 
+// TODO: load more songs when new songs scroll into view
 const handlers = {
-  // getPlaylist: props => () => props.songs.map(song => ({
-  //   id: song.id,
-  //   title: song.name,
-  //   artist: song.artist,
-  //   sources: {
-  //     mp3: `${window.location.origin}/song/stream?id=${song.id}`,
-  //   },
-  //   poster: song.coverImageUrl,
-  //   free: song.free,
-  // })),
-  loadMore: ({ relay }) => () => relay.loadMore(songsToLoad),
+  loadMore: ({ relay }) => () => relay.loadMore(audiosToLoad),
 };
 
 const createProps = ({ relay, data }) => ({
@@ -70,19 +67,54 @@ const createProps = ({ relay, data }) => ({
   songs: data.songs.edges.map(x => x.node),
 });
 
+class InitializePlaylist extends React.Component {
+  componentDidMount() {
+    this.props.setPlaylist('FooterPlaylist', this.getPlaylist());
+  }
+  getPlaylist = () => this.props.songs.map(song => ({
+    id: song.audioId,
+    title: song.name,
+    artist: song.artist,
+    sources: {
+      mp3: `${window.location.origin}/song/stream?id=${song.audioId}`,
+    },
+    poster: song.coverImageUrl,
+    free: song.free,
+  }))
+  render() {
+    return <Songs {...this.props} />;
+  }
+}
+
+InitializePlaylist.propTypes = {
+  setPlaylist: PropTypes.func.isRequired,
+  songs: PropTypes.arrayOf(
+    PropTypes.shape({
+      audioId: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+      artist: PropTypes.string,
+      coverImageUrl: PropTypes.string.isRequired,
+      free: PropTypes.bool,
+    }),
+  ).isRequired,
+};
+
 const enhance = compose(
+  connect(null, {
+    setPlaylist: actions.setPlaylist,
+  }),
   paginationContainer(fragments, connectionConfig),
   withHandlers(handlers),
   withProps(createProps),
 );
 
-const SongsContainer = enhance(Songs);
+const SongsContainer = enhance(InitializePlaylist);
 
 export const routeConfig = {
   Component: SongsContainer,
   query,
   render: ({ props }) => props && <SongsContainer data={props} />,
-  prepareVariables: () => ({ count: songsToLoad }),
+  prepareVariables: ({ genre }) => ({ count: audiosToLoad, genre }),
 };
 
 export default SongsContainer;

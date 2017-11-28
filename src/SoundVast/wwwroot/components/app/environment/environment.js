@@ -4,7 +4,7 @@ import {
   RecordSource,
   Store,
 } from 'relay-runtime';
-import { setEnviroment } from 'relay-compose';
+import { setEnviroment } from 'relay-modern-hoc';
 
 const network = Network.create((operation, variables) =>
   fetch('/graphql', {
@@ -20,7 +20,7 @@ const network = Network.create((operation, variables) =>
   }).then(response => response.json())
     .then((json) => {
       // https://github.com/facebook/relay/issues/1816
-      if (operation.query.operation === 'mutation' && json.errors) {
+      if (json.errors) {
         return Promise.reject(json.errors);
       }
 

@@ -5,12 +5,18 @@ import { compose, withHandlers } from 'recompose';
 import Register from './register';
 import accountValidation from '../validation';
 import registerMutation from './registerMutation';
+import { showRegisteredEmailSentPopup } from '../actions';
+import { hideModal } from '../../shared/modal/actions';
 
 const handlers = {
   onSubmit: ({ dispatch }) => input =>
-    registerMutation(input, dispatch).catch((error) => {
-      throw new SubmissionError(error);
-    }),
+    registerMutation(input, dispatch)
+      .then(() => {
+        dispatch(showRegisteredEmailSentPopup());
+        dispatch(hideModal());
+      }).catch((error) => {
+        throw new SubmissionError(error);
+      }),
 };
 
 export default compose(

@@ -10,7 +10,7 @@ namespace SoundVast.Components.Audio
 {
     public interface IAudioService<T> where T : Models.Audio
     {
-        ICollection<T> GetAudios();
+        ICollection<T> GetAudios(string genreName);
         ICollection<T> GetAudios(int current, int amount);
         T GetAudio(int id);
         ICollection<Rating.Models.Rating> GetAudioRatings(int id);

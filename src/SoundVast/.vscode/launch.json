@@ -2,20 +2,20 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "request": "launch",
-      "type": "node",
       "name": "Debug Unit Tests",
-      "protocol": "inspector",
-      "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
-      "args": [
-        "wwwroot/components/**/*.spec.{js,jsx}",
-        "--opts",
-        "./mocha.opts"
+      "type": "node",
+      "request": "launch",
+      "runtimeArgs": [
+        "--inspect-brk",
+        "${workspaceRoot}/node_modules/jest/bin/jest.js",
+        "--runInBand"
       ],
       "cwd": "${workspaceRoot}",
-      "runtimeExecutable": null,
+      "runtimeExecutable": "/Program Files/Nodejs/node",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
       "env": {
-        "BABEL_ENV": "test"
+        "NODE_ENV": "test"
       }
     }
   ]

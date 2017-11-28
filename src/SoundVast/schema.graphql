@@ -1,10 +1,10 @@
 # source: http://localhost:8080/graphql
-# timestamp: Sun Nov 12 2017 22:46:24 GMT+0100 (W. Europe Standard Time)
+# timestamp: Tue Nov 28 2017 23:55:50 GMT+0100 (W. Europe Standard Time)
 
 type ApplicationUser {
   id: ID
   userName: String!
-  email: String
+  email: String!
 }
 
 interface Audio {
@@ -34,21 +34,49 @@ scalar Date
 
 scalar Decimal
 
+type ExternalLoginCallbackPayload {
+  # The existing logged in user
+  user: ApplicationUser
+
+  # The current login provider, i.e facebook, twitter, google etc
+  loginProvider: String
+
+  # The new users user name
+  userName: String
+}
+
 input ExternalLoginConfirmationInput {
   clientMutationId: String
-  email: String!
+  userName: String!
 }
 
 type ExternalLoginConfirmationPayload {
   clientMutationId: String
 }
 
+input GenerateResetPasswordTokenInput {
+  clientMutationId: String
+  email: String!
+}
+
+type GenerateResetPasswordTokenPayload {
+  clientMutationId: String
+  user: ApplicationUser
+  passwordResetToken: String
+}
+
 type Genre {
   id: ID
   name: String!
 
-  # The type of category the genre belongs to, e.g. Music, Radio etc
+  # The type of audio that this genre belongs to, e.g. Music, Radio etc
   type: String!
+
+  # The cover image url for this genre
+  coverImageUrl: String!
+
+  # The audios that belong to this genre
+  audios: [Audio]
 }
 
 type LiveStream implements Node, Audio {
@@ -138,6 +166,8 @@ type Mutation {
   externalLoginConfirmation(input: ExternalLoginConfirmationInput!): ExternalLoginConfirmationPayload
   logout: LogoutPayload
   sendEmail(input: SendEmailInput!): SendEmailPayload
+  generateResetPasswordToken(input: GenerateResetPasswordTokenInput!): GenerateResetPasswordTokenPayload
+  resetPassword(input: ResetPasswordInput!): ResetPasswordPayload
 }
 
 interface Node {
@@ -166,13 +196,19 @@ type Query {
     # The global Id of the object
     id: ID!
   ): Node
-  song(id: String): Song
+  song(
+    # The id of the song
+    id: String!
+  ): Song
   songs(
     # Only look at connected edges with cursors greater than the value of `after`.
     after: String
 
     # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
     first: Int
+
+    # The genre that the song belongs to
+    genre: String
   ): SongPayloadConnection
   liveStreams(
     # Only look at connected edges with cursors greater than the value of `after`.
@@ -180,9 +216,20 @@ type Query {
 
     # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
     first: Int
+
+    # The genre that the live stream belongs to
+    genre: String
   ): LiveStreamPayloadConnection
   genres: [Genre]
   user: ApplicationUser
+  externalLoginCallback: ExternalLoginCallbackPayload
+  confirmEmail(
+    # The id of the user
+    userId: String!
+
+    # The unique code to verify the email
+    token: String!
+  ): Boolean
   loginProviders: [LoginProvider]
 }
 
@@ -221,6 +268,17 @@ type RegisterPayload {
   clientMutationId: String
   user: ApplicationUser
   emailConfirmationToken: String
+}
+
+input ResetPasswordInput {
+  clientMutationId: String
+  password: String!
+  userId: String!
+  token: String!
+}
+
+type ResetPasswordPayload {
+  clientMutationId: String
 }
 
 input SaveLiveStreamInput {

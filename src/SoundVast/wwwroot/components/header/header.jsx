@@ -2,12 +2,13 @@ import React from 'react';
 import { Link } from 'found';
 import PropTypes from 'prop-types';
 
-import soundVastLogo from '../../images/soundvast-nav-logo.png';
+import SoundVastLogo from '../icons/logo';
 import styles from './header.less';
 import AuthorizedList from './authorizedList/authorizedListContainer';
 import UnAuthorizedList from './unAuthorizedList/unAuthorizedListContainer';
 import AdminList from './adminList/adminListContainer';
 import LinkDropdown from '../shared/dropDown/dropDownContainer';
+import Popups from '../shared/popup/popupsContainer';
 
 const Header = ({ user }) => (
   <header className={styles.header}>
@@ -15,20 +16,21 @@ const Header = ({ user }) => (
       <ul>
         <li>
           <Link to="/" className={styles.logoLink}>
-            <img src={soundVastLogo} alt="SoundVast" />
+            <SoundVastLogo className={styles.logo} />
           </Link>
         </li>
         <li>
           <Link to="/songs">Songs</Link>
         </li>
         <li>
-          <Link to="/radio">Radio</Link>
+          <Link to="/radios">Radios</Link>
         </li>
         <li>
           <Link to="/upload">Upload</Link>
         </li>
       </ul>
       <ul>
+        <Popups />
         <AuthorizedList user={user} />
         <UnAuthorizedList user={user} />
         <li>
@@ -55,10 +57,14 @@ const Header = ({ user }) => (
   </header>
 );
 
+Header.defaultProps = {
+  user: null,
+};
+
 Header.propTypes = {
   user: PropTypes.shape({
     username: PropTypes.string,
-  }).isRequired,
+  }),
 };
 
 export default Header;

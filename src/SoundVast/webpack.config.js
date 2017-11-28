@@ -100,15 +100,8 @@ module.exports = {
         }),
       },
       {
-        test: /\.(jpe?g|png|gif)$/,
+        test: /\.(jpe?g|png|gif|svg)$/,
         loader: 'file-loader?name=[path][name].[ext]',
-      },
-      {
-        test: /\.svg$/,
-        loader: 'svg-react-loader',
-        query: {
-          classIdPrefix: '[name]-[hash:8]__',
-        },
       },
     ],
   },
@@ -118,9 +111,5 @@ module.exports = {
       '.js',
       '.jsx',
     ],
-    alias: {
-      // https://github.com/chromakode/react-html-email/issues/30
-      'react/lib/DOMProperty': 'react-dom/lib/DOMProperty',
-    },
   },
 };

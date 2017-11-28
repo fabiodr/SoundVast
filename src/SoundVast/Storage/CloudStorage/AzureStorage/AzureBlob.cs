@@ -63,6 +63,18 @@ namespace SoundVast.Storage.CloudStorage.AzureStorage
             stream.Close();
         }
 
+        public async Task UploadFromFileAsync(string path, string contentType)
+        {
+            CloudBlockBlob.Properties.ContentType = contentType;
+
+            await CloudBlockBlob.UploadFromFileAsync(path);
+        }
+
+        public async Task DownloadToStreamAsync(Stream target)
+        {
+            await CloudBlockBlob.DownloadToStreamAsync(target);
+        }
+
         public async Task DownloadRangeToStreamAsync(Stream target, long? offset, long? length)
         {
             await CloudBlockBlob.DownloadRangeToStreamAsync(target, offset, length);

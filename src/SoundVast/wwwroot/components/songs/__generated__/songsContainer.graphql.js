@@ -36,6 +36,11 @@ const fragment /*: ConcreteFragment*/ = {
       "kind": "RootArgument",
       "name": "cursor",
       "type": "String"
+    },
+    {
+      "kind": "RootArgument",
+      "name": "genre",
+      "type": "String"
     }
   ],
   "kind": "Fragment",
@@ -56,7 +61,14 @@ const fragment /*: ConcreteFragment*/ = {
     {
       "kind": "LinkedField",
       "alias": "songs",
-      "args": null,
+      "args": [
+        {
+          "kind": "Variable",
+          "name": "genre",
+          "variableName": "genre",
+          "type": "String"
+        }
+      ],
       "concreteType": "SongPayloadConnection",
       "name": "__songsContainer_songs_connection",
       "plural": false,
