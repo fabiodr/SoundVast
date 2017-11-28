@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Globalization;
 using System.Collections;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -14,17 +15,26 @@ using SoundVast.Components.Genre.Models;
 using SoundVast.Components.Quote.Models;
 using SoundVast.CustomHelpers;
 using SoundVast.Properties;
+using SoundVast.Storage.CloudStorage;
 
 namespace SoundVast.Data
 {
     public static class Seeder
     {
-        public static IWebHost SeedData(this IWebHost webHost)
+        private const string PlaceholderImageName = "SoundVast";
+
+        private static IHostingEnvironment _hostingEnvironment;
+        private static ICloudStorage _cloudStorage;
+
+        public static async Task<IWebHost> SeedData(this IWebHost webHost)
         {
             using (var scope = webHost.Services.GetService<IServiceScopeFactory>().CreateScope())
             {
                 using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
                 {
+                    _hostingEnvironment = scope.ServiceProvider.GetRequiredService<IHostingEnvironment>();
+                    _cloudStorage = scope.ServiceProvider.GetRequiredService<ICloudStorage>();
+
                     context.Database.Migrate();
 
                     var musicGenres = MusicGenres.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
@@ -32,6 +42,7 @@ namespace SoundVast.Data
                     //var radioStationCategoryResources = LiveStreamCategories.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
                     //var placeHolderImage = new ImageFileModel("Placeholder.jpg");
 
+                    await SeedImages();
                     SeedGenres(context, musicGenres, GenreName.Music);
                     SeedGenres(context, liveStreamGenres, GenreName.LiveStream);
 
@@ -63,12 +74,23 @@ namespace SoundVast.Data
         //    context.Set<T>().AddRange(categories.Where(category => !context.Set<T>().Any(x => x.Name == category.Name)));
         //}
 
+        private static async Task SeedImages()
+        {
+            var placeholderImageBlob = _cloudStorage.GetBlob(CloudStorageType.Image, PlaceholderImageName);
+            var path = Path.Combine(_hostingEnvironment.WebRootPath, "images/logo/icon/SV_Icon.svg");
+
+            await placeholderImageBlob.UploadFromFileAsync(path, "image/svg+xml");
+        }
+
         public static void SeedGenres(ApplicationDbContext context, DictionaryEntry[] genreResources, string genreType)
         {
+            var placeholderImageBlob = _cloudStorage.GetBlob(CloudStorageType.Image, PlaceholderImageName);
+
             var genres = genreResources.Select(x => new Genre
             {
                 Name = (string)x.Value,
-                Type = genreType
+                Type = genreType,
+                CoverImageUrl = placeholderImageBlob.CloudBlockBlob.Uri.AbsoluteUri
             });
     
             context.Set<Genre>().AddRange(genres.Where(genre => !context.Set<Genre>()

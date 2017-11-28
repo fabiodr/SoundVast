@@ -1,4 +1,4 @@
 export default {
-  music: 'Music',
-  liveStream: 'LiveStream',
+  music: 'music',
+  liveStream: 'livestream',
 };

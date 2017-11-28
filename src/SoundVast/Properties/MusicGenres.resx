@@ -130,7 +130,7 @@
     <value>Country</value>
   </data>
   <data name="DanceAndEDM" xml:space="preserve">
-    <value>Dance&amp;EDM</value>
+    <value>Dance &amp; EDM</value>
   </data>
   <data name="Dancehall" xml:space="preserve">
     <value>Dancehall</value>
@@ -182,9 +182,6 @@
   </data>
   <data name="Reggae" xml:space="preserve">
     <value>Reggae</value>
-  </data>
-  <data name="Reggaeton" xml:space="preserve">
-    <value>Reggaeton</value>
   </data>
   <data name="Rock" xml:space="preserve">
     <value>Rock</value>

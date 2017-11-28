@@ -37,13 +37,25 @@ namespace SoundVast.Components.GraphQl
 
             Connection<SongPayload>()
                 .Name("songs")
-                .Resolve(c => GraphQL.Relay.Types.Connection.ToConnection(songService.GetAudios(), c));
+                .Argument<StringGraphType>("genre", "The genre that the song belongs to")
+                .Resolve(c =>
+                {
+                    var genre = c.GetArgument<string>("genre");
+
+                    return GraphQL.Relay.Types.Connection.ToConnection(songService.GetAudios(genre), c);
+                });
 
             Connection<LiveStreamPayload>()
                 .Name("liveStreams")
-                .Resolve(c => GraphQL.Relay.Types.Connection.ToConnection(liveStreamService.GetAudios(), c));
+                .Argument<StringGraphType>("genre", "The genre that the live stream belongs to")
+                .Resolve(c =>
+                {
+                    var genre = c.GetArgument<string>("genre");
 
-            Field<ListGraphType<GenreType>>("genres",
+                    return GraphQL.Relay.Types.Connection.ToConnection(liveStreamService.GetAudios(genre), c);
+                });
+
+            Field<ListGraphType<GenrePayload>>("genres",
                 resolve: c => genreService.GetGenres());
 
             Field<AccountPayload>()

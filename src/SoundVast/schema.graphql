@@ -1,3 +1,6 @@
+# source: http://localhost:8080/graphql
+# timestamp: Tue Nov 28 2017 23:55:50 GMT+0100 (W. Europe Standard Time)
+
 type ApplicationUser {
   id: ID
   userName: String!
@@ -66,8 +69,14 @@ type Genre {
   id: ID
   name: String!
 
-  # The type of category the genre belongs to, e.g. Music, Radio etc
+  # The type of audio that this genre belongs to, e.g. Music, Radio etc
   type: String!
+
+  # The cover image url for this genre
+  coverImageUrl: String!
+
+  # The audios that belong to this genre
+  audios: [Audio]
 }
 
 type LiveStream implements Node, Audio {
@@ -197,6 +206,9 @@ type Query {
 
     # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
     first: Int
+
+    # The genre that the song belongs to
+    genre: String
   ): SongPayloadConnection
   liveStreams(
     # Only look at connected edges with cursors greater than the value of `after`.
@@ -204,6 +216,9 @@ type Query {
 
     # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
     first: Int
+
+    # The genre that the live stream belongs to
+    genre: String
   ): LiveStreamPayloadConnection
   genres: [Genre]
   user: ApplicationUser

@@ -32,25 +32,25 @@ namespace SoundVastTests.Components.Song
             _songController = new SongController(_mockSongService.Object, _mockCloudStorage.Object);
         }
 
-        [Test]
-        public void GetSongs()
-        {
-            var songs = new List<SoundVast.Components.Song.Models.Song>
-            {
-                new SoundVast.Components.Song.Models.Song(),
-                new SoundVast.Components.Song.Models.Song()
-            };
+        //[Test]
+        //public void GetSongs()
+        //{
+        //    var songs = new List<SoundVast.Components.Song.Models.Song>
+        //    {
+        //        new SoundVast.Components.Song.Models.Song(),
+        //        new SoundVast.Components.Song.Models.Song()
+        //    };
 
-            _mockSongService.Setup(x => x.GetAudios(It.IsAny<int>(), It.IsAny<int>())).Returns(songs);
+        //    _mockSongService.Setup(x => x.GetAudios(It.IsAny<int>(), It.IsAny<int>())).Returns(songs);
 
-            var result = (OkObjectResult)_songController.GetSongs(0, 30);
+        //    var result = (OkObjectResult)_songController.GetSongs(0, 30);
 
-            result.Value.ShouldBeEquivalentTo(new
-            {
-                songs,
-                hasMore = true
-            });
-        }
+        //    result.Value.ShouldBeEquivalentTo(new
+        //    {
+        //        songs,
+        //        hasMore = true
+        //    });
+        //}
 
         [Test]
         public void Stream()

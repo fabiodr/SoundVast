@@ -8,9 +8,9 @@ using SoundVast.Components.Song.Models;
 
 namespace SoundVast.Components.User
 {
-    public class UserType : ObjectGraphType<ApplicationUser>
+    public class UserPayload : ObjectGraphType<ApplicationUser>
     {
-        public UserType()
+        public UserPayload()
         {
             Name = "User";
 

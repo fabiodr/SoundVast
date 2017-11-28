@@ -28,8 +28,12 @@ namespace SoundVast.Components.Audio
             _validationProvider = validationProvider;
         }
 
-        public ICollection<T> GetAudios()
+        public virtual ICollection<T> GetAudios(string genreName)
         {
+            if (genreName != null)
+            {
+                return _repository.GetAll().Where(x => x.Genre.Name == genreName).BuildAudio();
+            }
             return _repository.GetAll().BuildAudio();
         }
 

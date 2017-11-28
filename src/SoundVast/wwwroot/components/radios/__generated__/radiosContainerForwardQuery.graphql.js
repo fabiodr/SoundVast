@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash f2252ac77130d097f2ac87b2e35688ca
+ * @relayHash fc699fd6c58a7b8020613cf370ca250b
  */
 
 /* eslint-disable */
@@ -9,20 +9,21 @@
 
 /*::
 import type {ConcreteBatch} from 'relay-runtime';
-export type liveStreamsContainerQueryResponse = {| |};
+export type radiosContainerForwardQueryResponse = {| |};
 */
 
 
 /*
-query liveStreamsContainerQuery(
+query radiosContainerForwardQuery(
   $count: Int!
   $cursor: String
+  $genre: String
 ) {
-  ...liveStreamsContainer
+  ...radiosContainer
 }
 
-fragment liveStreamsContainer on Query {
-  liveStreams(first: $count, after: $cursor) {
+fragment radiosContainer on Query {
+  liveStreams(first: $count, after: $cursor, genre: $genre) {
     edges {
       node {
         __typename
@@ -58,15 +59,21 @@ const batch /*: ConcreteBatch*/ = {
         "name": "cursor",
         "type": "String",
         "defaultValue": null
+      },
+      {
+        "kind": "LocalArgument",
+        "name": "genre",
+        "type": "String",
+        "defaultValue": null
       }
     ],
     "kind": "Fragment",
     "metadata": null,
-    "name": "liveStreamsContainerQuery",
+    "name": "radiosContainerForwardQuery",
     "selections": [
       {
         "kind": "FragmentSpread",
-        "name": "liveStreamsContainer",
+        "name": "radiosContainer",
         "args": null
       }
     ],
@@ -75,7 +82,7 @@ const batch /*: ConcreteBatch*/ = {
   "id": null,
   "kind": "Batch",
   "metadata": {},
-  "name": "liveStreamsContainerQuery",
+  "name": "radiosContainerForwardQuery",
   "query": {
     "argumentDefinitions": [
       {
@@ -89,10 +96,16 @@ const batch /*: ConcreteBatch*/ = {
         "name": "cursor",
         "type": "String",
         "defaultValue": null
+      },
+      {
+        "kind": "LocalArgument",
+        "name": "genre",
+        "type": "String",
+        "defaultValue": null
       }
     ],
     "kind": "Root",
-    "name": "liveStreamsContainerQuery",
+    "name": "radiosContainerForwardQuery",
     "operation": "query",
     "selections": [
       {
@@ -110,6 +123,12 @@ const batch /*: ConcreteBatch*/ = {
             "name": "first",
             "variableName": "count",
             "type": "Int"
+          },
+          {
+            "kind": "Variable",
+            "name": "genre",
+            "variableName": "genre",
+            "type": "String"
           }
         ],
         "concreteType": "LiveStreamPayloadConnection",
@@ -244,16 +263,24 @@ const batch /*: ConcreteBatch*/ = {
             "name": "first",
             "variableName": "count",
             "type": "Int"
+          },
+          {
+            "kind": "Variable",
+            "name": "genre",
+            "variableName": "genre",
+            "type": "String"
           }
         ],
         "handle": "connection",
         "name": "liveStreams",
-        "key": "liveStreamsContainer_liveStreams",
-        "filters": null
+        "key": "radiosContainer_liveStreams",
+        "filters": [
+          "genre"
+        ]
       }
     ]
   },
-  "text": "query liveStreamsContainerQuery(\n  $count: Int!\n  $cursor: String\n) {\n  ...liveStreamsContainer\n}\n\nfragment liveStreamsContainer on Query {\n  liveStreams(first: $count, after: $cursor) {\n    edges {\n      node {\n        __typename\n        audioId\n        name\n        coverImageUrl\n        liveStreamUrl\n        likes\n        dislikes\n        id\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+  "text": "query radiosContainerForwardQuery(\n  $count: Int!\n  $cursor: String\n  $genre: String\n) {\n  ...radiosContainer\n}\n\nfragment radiosContainer on Query {\n  liveStreams(first: $count, after: $cursor, genre: $genre) {\n    edges {\n      node {\n        __typename\n        audioId\n        name\n        coverImageUrl\n        liveStreamUrl\n        likes\n        dislikes\n        id\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
 };
 
 module.exports = batch;

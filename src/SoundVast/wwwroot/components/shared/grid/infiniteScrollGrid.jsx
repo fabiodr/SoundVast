@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import InfiniteScroll from 'react-infinite-scroller';
 
-import styles from './infiniteScrollGrid.less';
+import styles from './grid.less';
+import GridContent from './gridContent';
 
 const InfiniteScrollGrid = ({ loadMore, hasMore, children, ...props }) => (
   <InfiniteScroll
@@ -10,10 +11,12 @@ const InfiniteScrollGrid = ({ loadMore, hasMore, children, ...props }) => (
     loadMore={loadMore}
     hasMore={hasMore}
     loader={<div>Loading ...</div>}
-    className={styles.infiniteScrollGrid}
+    className={styles.grid}
     {...props}
   >
-    {children}
+    <GridContent>
+      {children}
+    </GridContent>
   </InfiniteScroll>
 );
 

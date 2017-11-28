@@ -13,6 +13,10 @@ namespace SoundVast.Components.Genre.Models
         public string Name { get; set; }
         [Required]
         public string Type { get; set; }
+        [Required]
+        public string CoverImageUrl { get; set; }
+        [Required]
+        public virtual ICollection<Audio.Models.Audio> Audios { get; set; }
         //public virtual ImageFileModel ImageFile { get; }
         //public virtual CategoryModel Category { get; set; }
         //public virtual ICollection<AudioGenreModel> Audios { get; set; }

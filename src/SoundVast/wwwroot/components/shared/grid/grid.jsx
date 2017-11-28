@@ -2,10 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import styles from './grid.less';
+import GridContent from './gridContent';
 
 const Grid = ({ children }) => (
   <div className={styles.grid}>
-    {children}
+    <GridContent>
+      {children}
+    </GridContent>
   </div>
 );
 

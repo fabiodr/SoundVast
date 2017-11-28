@@ -2,37 +2,35 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import SoundVastTitle from '../shared/title/soundVastTitle';
 
-import Song from './song/song';
+import Radio from './radio';
 import InfiniteScrollGrid from '../shared/grid/infiniteScrollGrid';
 
-const Songs = ({ songs, loadMore, hasMore }) => (
-  <SoundVastTitle title="Songs">
+const Radios = ({ radios, loadMore, hasMore }) => (
+  <SoundVastTitle title="Radios">
     <InfiniteScrollGrid
       initialLoad={false}
       loadMore={loadMore}
       hasMore={hasMore}
     >
-      {songs.map(song => (
-        <Song
-          key={song.audioId}
-          audioId={song.audioId}
-          coverImageUrl={song.coverImageUrl}
-          name={song.name}
-          artist={song.artist}
-          likes={song.likes}
-          dislikes={song.dislikes}
+      {radios.map(radio => (
+        <Radio
+          key={radio.audioId}
+          audioId={radio.audioId}
+          coverImageUrl={radio.coverImageUrl}
+          name={radio.name}
+          likes={radio.likes}
+          dislikes={radio.dislikes}
         />
       ))}
     </InfiniteScrollGrid>
   </SoundVastTitle>
 );
 
-Songs.propTypes = {
-  songs: PropTypes.arrayOf(
+Radios.propTypes = {
+  radios: PropTypes.arrayOf(
     PropTypes.shape({
       audioId: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
-      artist: PropTypes.string,
       coverImageUrl: PropTypes.string.isRequired,
       likes: PropTypes.number.isRequired,
       dislikes: PropTypes.number.isRequired,
@@ -42,4 +40,4 @@ Songs.propTypes = {
   hasMore: PropTypes.bool.isRequired,
 };
 
-export default Songs;
+export default Radios;

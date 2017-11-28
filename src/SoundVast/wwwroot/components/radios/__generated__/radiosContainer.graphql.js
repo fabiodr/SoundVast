@@ -8,7 +8,7 @@
 
 /*::
 import type {ConcreteFragment} from 'relay-runtime';
-export type liveStreamsContainer = {|
+export type radiosContainer = {|
   +liveStreams: ?{|
     +edges: ?$ReadOnlyArray<?{|
       +node: ?{|
@@ -36,6 +36,11 @@ const fragment /*: ConcreteFragment*/ = {
       "kind": "RootArgument",
       "name": "cursor",
       "type": "String"
+    },
+    {
+      "kind": "RootArgument",
+      "name": "genre",
+      "type": "String"
     }
   ],
   "kind": "Fragment",
@@ -51,14 +56,21 @@ const fragment /*: ConcreteFragment*/ = {
       }
     ]
   },
-  "name": "liveStreamsContainer",
+  "name": "radiosContainer",
   "selections": [
     {
       "kind": "LinkedField",
       "alias": "liveStreams",
-      "args": null,
+      "args": [
+        {
+          "kind": "Variable",
+          "name": "genre",
+          "variableName": "genre",
+          "type": "String"
+        }
+      ],
       "concreteType": "LiveStreamPayloadConnection",
-      "name": "__liveStreamsContainer_liveStreams_connection",
+      "name": "__radiosContainer_liveStreams_connection",
       "plural": false,
       "selections": [
         {

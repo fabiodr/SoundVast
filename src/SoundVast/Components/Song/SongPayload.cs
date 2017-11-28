@@ -25,8 +25,8 @@ namespace SoundVast.Components.Song
             Field(x => x.Artist, true);
             Field(x => x.Likes);
             Field(x => x.Dislikes);
-            Field<UserType>("user", "The user who uploaded the song");
-            Field<GenreType>("genre", "The genre the song belongs to");
+            Field<UserPayload>("user", "The user who uploaded the song");
+            Field<GenrePayload>("genre", "The genre the song belongs to");
             Field<ListGraphType<RatingPayload>>("ratings", "The ratings that have been applied by users to this song");
 
             Interface<AudioInterface>();
