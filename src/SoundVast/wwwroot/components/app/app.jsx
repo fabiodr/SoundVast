@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { Resolver } from 'found-relay';
 import 'react-jplaylist/src/less/skins/sleek.less';
 import 'react-jplaylist/src/less/controls/iconControls.less';
+import 'react-select/dist/react-select.css';
 
 import '../shared/fetch/fetch';
 import './app.less';

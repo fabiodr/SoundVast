@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import styles from './song.less';
-import Play from '../../audio/playContainer';
-import CoverImage from '../../audio/coverImage';
-import Rating from '../../rating/rating';
-import Name from '../../audio/name';
+import Play from '../audio/playContainer';
+import CoverImage from '../audio/coverImage';
+import Rating from '../rating/rating';
+import Name from '../audio/name';
 
 const Song = ({ coverImageUrl, likes, dislikes, name, artist, audioId }) => (
   <div>
