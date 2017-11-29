@@ -2,28 +2,33 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import SoundVastTitle from '../shared/title/soundVastTitle';
 
-import Song from './song/song';
+import Song from './song';
 import InfiniteScrollGrid from '../shared/grid/infiniteScrollGrid';
+import Filters from '../audio/filtersContainer';
+import genreTypeNames from '../shared/utilities/genreTypeNames';
 
 const Songs = ({ songs, loadMore, hasMore }) => (
   <SoundVastTitle title="Songs">
-    <InfiniteScrollGrid
-      initialLoad={false}
-      loadMore={loadMore}
-      hasMore={hasMore}
-    >
-      {songs.map(song => (
-        <Song
-          key={song.audioId}
-          audioId={song.audioId}
-          coverImageUrl={song.coverImageUrl}
-          name={song.name}
-          artist={song.artist}
-          likes={song.likes}
-          dislikes={song.dislikes}
-        />
-      ))}
-    </InfiniteScrollGrid>
+    <div>
+      <Filters type={genreTypeNames.music} />
+      <InfiniteScrollGrid
+        initialLoad={false}
+        loadMore={loadMore}
+        hasMore={hasMore}
+      >
+        {songs.map(song => (
+          <Song
+            key={song.audioId}
+            audioId={song.audioId}
+            coverImageUrl={song.coverImageUrl}
+            name={song.name}
+            artist={song.artist}
+            likes={song.likes}
+            dislikes={song.dislikes}
+          />
+        ))}
+      </InfiniteScrollGrid>
+    </div>
   </SoundVastTitle>
 );
 

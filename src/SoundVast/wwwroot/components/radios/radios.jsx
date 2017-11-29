@@ -4,25 +4,30 @@ import SoundVastTitle from '../shared/title/soundVastTitle';
 
 import Radio from './radio';
 import InfiniteScrollGrid from '../shared/grid/infiniteScrollGrid';
+import Filters from '../audio/filtersContainer';
+import genreTypeNames from '../shared/utilities/genreTypeNames';
 
 const Radios = ({ radios, loadMore, hasMore }) => (
   <SoundVastTitle title="Radios">
-    <InfiniteScrollGrid
-      initialLoad={false}
-      loadMore={loadMore}
-      hasMore={hasMore}
-    >
-      {radios.map(radio => (
-        <Radio
-          key={radio.audioId}
-          audioId={radio.audioId}
-          coverImageUrl={radio.coverImageUrl}
-          name={radio.name}
-          likes={radio.likes}
-          dislikes={radio.dislikes}
-        />
-      ))}
-    </InfiniteScrollGrid>
+    <div>
+      <Filters type={genreTypeNames.liveStream} />
+      <InfiniteScrollGrid
+        initialLoad={false}
+        loadMore={loadMore}
+        hasMore={hasMore}
+      >
+        {radios.map(radio => (
+          <Radio
+            key={radio.audioId}
+            audioId={radio.audioId}
+            coverImageUrl={radio.coverImageUrl}
+            name={radio.name}
+            likes={radio.likes}
+            dislikes={radio.dislikes}
+          />
+        ))}
+      </InfiniteScrollGrid>
+    </div>
   </SoundVastTitle>
 );
 
