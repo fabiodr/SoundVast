@@ -1,5 +1,5 @@
 # source: http://localhost:8080/graphql
-# timestamp: Tue Nov 28 2017 23:55:50 GMT+0100 (W. Europe Standard Time)
+# timestamp: Sat Dec 02 2017 00:47:46 GMT+0100 (W. Europe Standard Time)
 
 type ApplicationUser {
   id: ID
@@ -52,6 +52,21 @@ input ExternalLoginConfirmationInput {
 
 type ExternalLoginConfirmationPayload {
   clientMutationId: String
+}
+
+# Provides filtering
+input FilterInput {
+  # Filter by date added
+  newest: Boolean
+
+  # Filter by likes for the number of days specified
+  topRatedDays: Int
+
+  # Filter by comments for the number of days specified
+  mostCommentedDays: Int
+
+  # Filter by plays for the number of days specified
+  mostPlayedDays: Int
 }
 
 input GenerateResetPasswordTokenInput {
@@ -209,6 +224,9 @@ type Query {
 
     # The genre that the song belongs to
     genre: String
+
+    # The filters to apply to the songs
+    filter: FilterInput
   ): SongPayloadConnection
   liveStreams(
     # Only look at connected edges with cursors greater than the value of `after`.
@@ -219,6 +237,9 @@ type Query {
 
     # The genre that the live stream belongs to
     genre: String
+
+    # The filters to apply to the songs
+    filter: FilterInput
   ): LiveStreamPayloadConnection
   genres: [Genre]
   user: ApplicationUser

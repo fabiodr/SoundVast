@@ -12,9 +12,10 @@ using System;
 namespace SoundVast.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20171201220851_uploadDate")]
+    partial class uploadDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -144,8 +145,6 @@ namespace SoundVast.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired();
-
-                    b.Property<DateTimeOffset>("UploadDate");
 
                     b.Property<string>("UserId")
                         .IsRequired();

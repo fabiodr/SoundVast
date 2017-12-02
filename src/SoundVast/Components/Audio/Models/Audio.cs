@@ -13,6 +13,11 @@ namespace SoundVast.Components.Audio.Models
 {
     public abstract class Audio
     {
+        protected Audio()
+        {
+            UploadDate = DateTime.UtcNow;
+        }
+
         [Required]
         public int Id { get; set; }
         //public static int PageSize { get; } = 50;
@@ -21,9 +26,8 @@ namespace SoundVast.Components.Audio.Models
         public string Name { get; set; }
         [Required]
         public string CoverImageUrl { get; set; }
-        //  public int CommentCount { get; private set; }
-        //  public int UniqueViews { get; private set; }
-        //   public DateTimeOffset UploadDate { get; private set; }
+        [Required]
+        public DateTimeOffset UploadDate { get; set; }
         [Required]
         public string UserId { get; set; }
         public ApplicationUser User { get; set; }

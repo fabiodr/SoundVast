@@ -41,6 +41,11 @@ const fragment /*: ConcreteFragment*/ = {
       "kind": "RootArgument",
       "name": "genre",
       "type": "String"
+    },
+    {
+      "kind": "RootArgument",
+      "name": "filter",
+      "type": "FilterInput"
     }
   ],
   "kind": "Fragment",
@@ -62,6 +67,12 @@ const fragment /*: ConcreteFragment*/ = {
       "kind": "LinkedField",
       "alias": "songs",
       "args": [
+        {
+          "kind": "Variable",
+          "name": "filter",
+          "variableName": "filter",
+          "type": "FilterInput"
+        },
         {
           "kind": "Variable",
           "name": "genre",

@@ -13,6 +13,7 @@ using SoundVast.Components.User;
 using SoundVast.CustomHelpers;
 using SoundVast.Repository;
 using SoundVast.Storage.CloudStorage;
+using SoundVast.Utilities;
 using SoundVast.Validation;
 
 namespace SoundVast.Components.Audio
@@ -28,13 +29,31 @@ namespace SoundVast.Components.Audio
             _validationProvider = validationProvider;
         }
 
-        public virtual ICollection<T> GetAudios(string genreName)
+        public virtual ICollection<T> GetAudios(string genreName, Filter filter)
         {
+            var audios = _repository.GetAll().BuildAudio().AsQueryable();
+
             if (genreName != null)
             {
-                return _repository.GetAll().Where(x => x.Genre.Name == genreName).BuildAudio();
+                audios = audios.Where(x => x.Genre.Name == genreName);
             }
-            return _repository.GetAll().BuildAudio();
+
+            if (filter != null)
+            {
+                Func<T, int, bool> dateFromFilter = (x, days) => DateTime.UtcNow.AddDays(-days) < x.UploadDate;
+
+                if (filter.TopRatedDays.HasValue)
+                {
+                    audios = audios.Where(x => dateFromFilter(x, filter.TopRatedDays.Value)).OrderByDescending(x => x.Likes);
+                }
+
+                if (filter.Newest)
+                {
+                    audios = audios.OrderByDescending(x => x.UploadDate);
+                }
+            }
+
+            return audios.ToList();
         }
 
         public ICollection<T> GetAudios(int current, int amount)

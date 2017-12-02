@@ -5,23 +5,44 @@ import Select from 'react-select';
 
 import styles from './filters.less';
 
-const Filters = ({ type, onChange }) => (
+const options = [
+  { value: 100000, label: 'All Time' },
+  { value: 365, label: 'Yearly' },
+  { value: 30, label: '30 days' },
+  { value: 7, label: 'Weekly' },
+  { value: 1, label: '24 hours' },
+];
+
+const Filters = ({ type, filter }) => (
   <div className={styles.filters}>
     <Link to={`/genres/${type}`}>Genres</Link>
     <div>
+      <div role="button" tabIndex={0} onClick={() => filter('newest', true)}>
+        Newest
+      </div>
       <Select
         className={styles.select}
         searchable={false}
         simpleValue
         placeholder="Top Rated"
-        onChange={onChange}
-        options={[
-          { value: 'allTime', label: 'All Time' },
-          { value: 'yearly', label: 'Yearly' },
-          { value: '30Days', label: '30 days' },
-          { value: 'weekly', label: 'Weekly' },
-          { value: '24Hours', label: '24 hours' },
-        ]}
+        onChange={value => filter('topRatedDays', value)}
+        options={options}
+      />
+      <Select
+        className={styles.select}
+        searchable={false}
+        simpleValue
+        placeholder="Most Commented"
+        onChange={value => filter('mostCommentedDays', value)}
+        options={options}
+      />
+      <Select
+        className={styles.select}
+        searchable={false}
+        simpleValue
+        placeholder="Most Played"
+        onChange={value => filter('mostPlayedDays', value)}
+        options={options}
       />
     </div>
   </div>
@@ -29,7 +50,7 @@ const Filters = ({ type, onChange }) => (
 
 Filters.propTypes = {
   type: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
+  filter: PropTypes.func.isRequired,
 };
 
 export default Filters;

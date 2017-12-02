@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using SoundVast.Components.Audio.Models;
@@ -10,7 +11,7 @@ namespace SoundVast.Components.Audio
 {
     public interface IAudioService<T> where T : Models.Audio
     {
-        ICollection<T> GetAudios(string genreName);
+        ICollection<T> GetAudios(string genreName, Filter filter);
         ICollection<T> GetAudios(int current, int amount);
         T GetAudio(int id);
         ICollection<Rating.Models.Rating> GetAudioRatings(int id);

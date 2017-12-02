@@ -16,7 +16,7 @@ import { routeConfig as genresRouteConfig } from '../../genres/genresContainer';
 export default makeRouteConfig(
   <Route path="/" {...primaryLayoutRouteConfig}>
     <Route {...songsRouteConfig} />
-    <Route path="songs/:genre?" {...songsRouteConfig} />
+    <Route path="songs" {...songsRouteConfig} />
     <Route path="radios/:genre?" {...radiosRouteConfig} />
     <Route path="upload" {...uploadRouteConfig} />
     <Route path="profile" Component={Profile} />

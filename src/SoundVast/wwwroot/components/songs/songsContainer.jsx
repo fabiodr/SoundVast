@@ -14,6 +14,7 @@ const query = graphql`
     $count: Int!
     $cursor: String
     $genre: String
+    $filter: FilterInput
   ) {
     ...songsContainer
   }
@@ -25,6 +26,7 @@ const fragments = graphql`
       first: $count
       after: $cursor
       genre: $genre
+      filter: $filter
     ) @connection(key: "songsContainer_songs") {
       edges {
         node {
@@ -47,6 +49,7 @@ const connectionConfig = {
       $count: Int!
       $cursor: String
       $genre: String
+      $filter: FilterInput
     ) {
       ...songsContainer
     }
@@ -114,7 +117,16 @@ export const routeConfig = {
   Component: SongsContainer,
   query,
   render: ({ props }) => props && <SongsContainer data={props} />,
-  prepareVariables: ({ genre }) => ({ count: audiosToLoad, genre }),
+  prepareVariables: ({ genre }, { location }) => ({
+    count: audiosToLoad,
+    genre,
+    filter: {
+      newest: location.query.newest,
+      topRatedDays: location.query.topRatedDays,
+      mostCommentedDays: location.query.mostCommentedDays,
+      mostPlayedDays: location.query.mostPlayedDays,
+    },
+  }),
 };
 
 export default SongsContainer;

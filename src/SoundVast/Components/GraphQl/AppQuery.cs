@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using SoundVast.Components.Account;
+using SoundVast.Components.Audio;
 using SoundVast.Components.Genre;
 using SoundVast.Components.LiveStream;
 using SoundVast.Components.Song;
@@ -38,21 +39,25 @@ namespace SoundVast.Components.GraphQl
             Connection<SongPayload>()
                 .Name("songs")
                 .Argument<StringGraphType>("genre", "The genre that the song belongs to")
+                .Argument<FilterInput>("filter", "The filters to apply to the songs")
                 .Resolve(c =>
                 {
                     var genre = c.GetArgument<string>("genre");
+                    var filter = c.GetArgument<Filter>("filter");
 
-                    return GraphQL.Relay.Types.Connection.ToConnection(songService.GetAudios(genre), c);
+                    return GraphQL.Relay.Types.Connection.ToConnection(songService.GetAudios(genre, filter), c);
                 });
 
             Connection<LiveStreamPayload>()
                 .Name("liveStreams")
                 .Argument<StringGraphType>("genre", "The genre that the live stream belongs to")
+                .Argument<FilterInput>("filter", "The filters to apply to the songs")
                 .Resolve(c =>
                 {
                     var genre = c.GetArgument<string>("genre");
+                    var filter = c.GetArgument<Filter>("filter");
 
-                    return GraphQL.Relay.Types.Connection.ToConnection(liveStreamService.GetAudios(genre), c);
+                    return GraphQL.Relay.Types.Connection.ToConnection(liveStreamService.GetAudios(genre, filter), c);
                 });
 
             Field<ListGraphType<GenrePayload>>("genres",

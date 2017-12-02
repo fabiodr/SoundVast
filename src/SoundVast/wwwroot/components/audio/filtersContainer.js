@@ -4,10 +4,12 @@ import { withRouter } from 'found';
 import filters from './filters';
 
 const handlers = {
-  onChange: ({ router, match }) => (value) => {
+  filter: ({ router, match }) => (filter, value) => {
     router.push({
       pathname: match.location.pathname,
-      query: { topRated: value },
+      query: {
+        [filter]: value,
+      },
     });
   },
 };

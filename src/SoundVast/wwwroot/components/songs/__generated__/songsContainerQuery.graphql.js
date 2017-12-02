@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 65ba9f01481ce5a362eb38039206673c
+ * @relayHash 5dffb235c4da4b6adb04b7721349a0a9
  */
 
 /* eslint-disable */
@@ -18,12 +18,13 @@ query songsContainerQuery(
   $count: Int!
   $cursor: String
   $genre: String
+  $filter: FilterInput
 ) {
   ...songsContainer
 }
 
 fragment songsContainer on Query {
-  songs(first: $count, after: $cursor, genre: $genre) {
+  songs(first: $count, after: $cursor, genre: $genre, filter: $filter) {
     edges {
       node {
         __typename
@@ -65,6 +66,12 @@ const batch /*: ConcreteBatch*/ = {
         "name": "genre",
         "type": "String",
         "defaultValue": null
+      },
+      {
+        "kind": "LocalArgument",
+        "name": "filter",
+        "type": "FilterInput",
+        "defaultValue": null
       }
     ],
     "kind": "Fragment",
@@ -102,6 +109,12 @@ const batch /*: ConcreteBatch*/ = {
         "name": "genre",
         "type": "String",
         "defaultValue": null
+      },
+      {
+        "kind": "LocalArgument",
+        "name": "filter",
+        "type": "FilterInput",
+        "defaultValue": null
       }
     ],
     "kind": "Root",
@@ -117,6 +130,12 @@ const batch /*: ConcreteBatch*/ = {
             "name": "after",
             "variableName": "cursor",
             "type": "String"
+          },
+          {
+            "kind": "Variable",
+            "name": "filter",
+            "variableName": "filter",
+            "type": "FilterInput"
           },
           {
             "kind": "Variable",
@@ -260,6 +279,12 @@ const batch /*: ConcreteBatch*/ = {
           },
           {
             "kind": "Variable",
+            "name": "filter",
+            "variableName": "filter",
+            "type": "FilterInput"
+          },
+          {
+            "kind": "Variable",
             "name": "first",
             "variableName": "count",
             "type": "Int"
@@ -275,12 +300,13 @@ const batch /*: ConcreteBatch*/ = {
         "name": "songs",
         "key": "songsContainer_songs",
         "filters": [
-          "genre"
+          "genre",
+          "filter"
         ]
       }
     ]
   },
-  "text": "query songsContainerQuery(\n  $count: Int!\n  $cursor: String\n  $genre: String\n) {\n  ...songsContainer\n}\n\nfragment songsContainer on Query {\n  songs(first: $count, after: $cursor, genre: $genre) {\n    edges {\n      node {\n        __typename\n        audioId\n        name\n        coverImageUrl\n        artist\n        likes\n        dislikes\n        id\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+  "text": "query songsContainerQuery(\n  $count: Int!\n  $cursor: String\n  $genre: String\n  $filter: FilterInput\n) {\n  ...songsContainer\n}\n\nfragment songsContainer on Query {\n  songs(first: $count, after: $cursor, genre: $genre, filter: $filter) {\n    edges {\n      node {\n        __typename\n        audioId\n        name\n        coverImageUrl\n        artist\n        likes\n        dislikes\n        id\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
 };
 
 module.exports = batch;

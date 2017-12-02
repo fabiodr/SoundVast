@@ -11,7 +11,7 @@ namespace SoundVast.Utilities
         Today = 1,
         Weekly = 7,
         Monthly = 30,
-        [Display(Name = @"All Time")]
+        Yearly = 365,
         AllTime
     }
 }

@@ -10,7 +10,7 @@ namespace SoundVast.Components.Quote
     public interface IQuoteService
     {
         QuoteModel GetQuote(int id);
-        QuoteModel GetRandomQuote();
+      //  QuoteModel GetRandomQuote();
     }
 
     public class QuoteService : IQuoteService
@@ -29,15 +29,15 @@ namespace SoundVast.Components.Quote
             return _repository.Get(id);
         }
 
-        public QuoteModel GetRandomQuote()
-        {
-            var quotes = _repository.GetAll();
+        //public QuoteModel GetRandomQuote()
+        //{
+        //    var quotes = _repository.GetAll();
 
-            var random = new Random();
-            var randomNumber = random.Next(0, quotes.Count());
-            var quote = quotes.WithOrdering(new OrderingOption<QuoteModel, int>(x => x.Id)).Single(x => x.Id == randomNumber);
+        //    var random = new Random();
+        //    var randomNumber = random.Next(0, quotes.Count());
+        //    var quote = quotes.WithOrdering(new OrderingOption<QuoteModel, int>(x => x.Id)).Single(x => x.Id == randomNumber);
 
-            return quote;
-        }
+        //    return quote;
+        //}
     }
 }
