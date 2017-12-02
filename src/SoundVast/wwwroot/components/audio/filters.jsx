@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'found';
 import Select from 'react-select';
 
 import styles from './filters.less';
@@ -13,43 +12,39 @@ const options = [
   { value: 1, label: '24 hours' },
 ];
 
-const Filters = ({ type, filter }) => (
+const Filters = ({ filter }) => (
   <div className={styles.filters}>
-    <Link to={`/genres/${type}`}>Genres</Link>
-    <div>
-      <div role="button" tabIndex={0} onClick={() => filter('newest', true)}>
-        Newest
-      </div>
-      <Select
-        className={styles.select}
-        searchable={false}
-        simpleValue
-        placeholder="Top Rated"
-        onChange={value => filter('topRatedDays', value)}
-        options={options}
-      />
-      <Select
-        className={styles.select}
-        searchable={false}
-        simpleValue
-        placeholder="Most Commented"
-        onChange={value => filter('mostCommentedDays', value)}
-        options={options}
-      />
-      <Select
-        className={styles.select}
-        searchable={false}
-        simpleValue
-        placeholder="Most Played"
-        onChange={value => filter('mostPlayedDays', value)}
-        options={options}
-      />
+    <div role="button" tabIndex={0} onClick={() => filter('newest', true)}>
+      Newest
     </div>
+    <Select
+      className={styles.select}
+      searchable={false}
+      simpleValue
+      placeholder="Top Rated"
+      onChange={value => filter('topRatedDays', value)}
+      options={options}
+    />
+    <Select
+      className={styles.select}
+      searchable={false}
+      simpleValue
+      placeholder="Most Commented"
+      onChange={value => filter('mostCommentedDays', value)}
+      options={options}
+    />
+    <Select
+      className={styles.select}
+      searchable={false}
+      simpleValue
+      placeholder="Most Played"
+      onChange={value => filter('mostPlayedDays', value)}
+      options={options}
+    />
   </div>
 );
 
 Filters.propTypes = {
-  type: PropTypes.string.isRequired,
   filter: PropTypes.func.isRequired,
 };
 

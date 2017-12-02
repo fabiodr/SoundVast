@@ -4,13 +4,13 @@ import SoundVastTitle from '../shared/title/soundVastTitle';
 
 import Radio from './radio';
 import InfiniteScrollGrid from '../shared/grid/infiniteScrollGrid';
-import Filters from '../audio/filtersContainer';
+import AudioHeader from '../audio/audioHeader';
 import genreTypeNames from '../shared/utilities/genreTypeNames';
 
 const Radios = ({ radios, loadMore, hasMore }) => (
   <SoundVastTitle title="Radios">
     <div>
-      <Filters type={genreTypeNames.liveStream} />
+      <AudioHeader type={genreTypeNames.liveStream} />
       <InfiniteScrollGrid
         initialLoad={false}
         loadMore={loadMore}

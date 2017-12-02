@@ -4,13 +4,13 @@ import SoundVastTitle from '../shared/title/soundVastTitle';
 
 import Song from './song';
 import InfiniteScrollGrid from '../shared/grid/infiniteScrollGrid';
-import Filters from '../audio/filtersContainer';
+import AudioHeader from '../audio/audioHeader';
 import genreTypeNames from '../shared/utilities/genreTypeNames';
 
 const Songs = ({ songs, loadMore, hasMore }) => (
   <SoundVastTitle title="Songs">
     <div>
-      <Filters type={genreTypeNames.music} />
+      <AudioHeader type={genreTypeNames.music} />
       <InfiniteScrollGrid
         initialLoad={false}
         loadMore={loadMore}
