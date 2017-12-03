@@ -32,22 +32,22 @@ namespace SoundVastTests.Controllers
     //    [Fact]
     //    public void DeleteEditsInsteadWhenRepliesNotEmpty()
     //    {
-    //        _service.Setup(x => x.GetCommentForDelete(It.IsAny<int>())).Returns(new CommentModel("BodyText")
+    //        _service.Setup(x => x.GetCommentForDelete(It.IsAny<int>())).Returns(new Comment("BodyText")
     //        {
-    //            Replies = new List<CommentModel>() { new CommentModel("Reply1") }
+    //            Replies = new List<Comment>() { new Comment("Reply1") }
     //        });
 
     //        _commentController.Delete(It.IsAny<int>());
 
-    //        _service.Verify(x => x.Edit(It.IsAny<CommentModel>(), "[Deleted]", null), Times.Once);
+    //        _service.Verify(x => x.Edit(It.IsAny<Comment>(), "[Deleted]", null), Times.Once);
     //    }
 
     //    [Fact]
     //    public void DeleteWithRepliesReturnsReplyPartial()
     //    {
-    //        _service.Setup(x => x.GetCommentForDelete(It.IsAny<int>())).Returns(new CommentModel("BodyText")
+    //        _service.Setup(x => x.GetCommentForDelete(It.IsAny<int>())).Returns(new Comment("BodyText")
     //        {
-    //            Replies = new List<CommentModel>() { new CommentModel("Reply1") }
+    //            Replies = new List<Comment>() { new Comment("Reply1") }
     //        });
 
     //        var result = _commentController.Delete(It.IsAny<int>());
@@ -60,9 +60,9 @@ namespace SoundVastTests.Controllers
     //    [Fact]
     //    public void DeleteReturnsEmptyPartial()
     //    {
-    //        var comment = new CommentModel("BodyText")
+    //        var comment = new Comment("BodyText")
     //        {
-    //            Replies = Enumerable.Empty<CommentModel>().ToList()
+    //            Replies = Enumerable.Empty<Comment>().ToList()
     //        };
 
     //        _service.Setup(x => x.GetCommentForDelete(It.IsAny<int>())).Returns(comment);
@@ -75,16 +75,16 @@ namespace SoundVastTests.Controllers
     //    [Fact]
     //    public void DeletesWhenNoReplies()
     //    {
-    //        var comment = new CommentModel("BodyText")
+    //        var comment = new Comment("BodyText")
     //        {
-    //            Replies = Enumerable.Empty<CommentModel>().ToList()
+    //            Replies = Enumerable.Empty<Comment>().ToList()
     //        };
 
     //        _service.Setup(x => x.GetCommentForDelete(It.IsAny<int>())).Returns(comment);
 
     //        _commentController.Delete(It.IsAny<int>());
 
-    //        _service.Verify(x => x.Delete(It.IsAny<CommentModel>()), Times.Once);
+    //        _service.Verify(x => x.Delete(It.IsAny<Comment>()), Times.Once);
     //    }
     //}
 }

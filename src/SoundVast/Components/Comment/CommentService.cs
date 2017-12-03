@@ -1,143 +1,117 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using SoundVast.QueryOptions;
-//using SoundVast.Repository;
-//using Microsoft.EntityFrameworkCore;
-//using SoundVast.Components.Comment.Models;
-//using SoundVast.Components.Rating;
-//using SoundVast.Components.User;
-//using SoundVast.CustomHelpers;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using SoundVast.QueryOptions;
+using SoundVast.Repository;
+using Microsoft.EntityFrameworkCore;
+using SoundVast.Components.Comment.Models;
+using SoundVast.Components.Rating;
+using SoundVast.Components.User;
+using SoundVast.CustomHelpers;
+using SoundVast.Validation;
 
-//namespace SoundVast.Components.Comment
-//{
-//    public interface ICommentService
-//    {
-//        CommentModel GetComment(int id);
-//        CommentModel GetCommentForRating(int id);
-//        CommentModel GetCommentForDelete(int id);
-//        CommentModel GetOriginalComment(int id);
-//        ICollection<CommentModel> GetCommentsForAudio(int audioId, int pageNumber, int commentsPerPage);
-//        ICollection<CommentModel> GetSortedCommentsForAudio<TKey>(int audioId, int pageNumber, OrderingOption<CommentModel, TKey> orderingOption);
-//        ICollection<CommentModel> GetReplies(int id);
-//        bool Add(CommentModel comment);
-//        bool Edit(CommentModel comment, string body, ApplicationUser user);
-//        bool Delete(CommentModel comment);
-//    }
+namespace SoundVast.Components.Comment
+{
+    public class CommentService : ICommentService
+    {
+        private readonly IValidationProvider _validationProvider;
+        private readonly IRepository<Models.Comment> _repository;
 
-//    public class CommentService : ICommentService
-//    {
-//        private readonly IValidationDictionary _validationDictionary;
-//        private readonly IRepository<CommentModel> _repository;
+        public CommentService(IValidationProvider validationProvider, IRepository<Models.Comment> repository)
+        {
+            _validationProvider = validationProvider;
+            _repository = repository;
+        }
 
-//        public CommentService(IValidationDictionary validationDictionary, IRepository<CommentModel> repository)
-//        {
-//            _validationDictionary = validationDictionary;
-//            _repository = repository;
-//        }
+        //public CommentModel GetComment(int id)
+        //{
+        //    return _repository.Get(id);
+        //}
 
-//        private bool Validate(CommentModel comment)
-//        {
-//            return _validationDictionary.IsValid;
-//        }
+        //public Comment GetCommentForRating(int id)
+        //{
+        //    return _repository.GetAll()
+        //        .Include(x => x.CommentRatingJoins)
+        //        .ThenInclude(x => x.CommentRating)
+        //        .Include(x => x.User)
+        //        .Include(x => x.RatingCount)
+        //        .SingleOrDefault(x => x.Id == id);
+        //}
 
-//        public CommentModel GetComment(int id)
-//        {
-//            return _repository.Get(id);
-//        }
+        //public Comment GetCommentForDelete(int id)
+        //{
+        //    return _repository.GetAll()
+        //        .Include(x => x.Audio)
+        //        .Include(x => x.Replies)
+        //        .Include(x => x.User)
+        //        .SingleOrDefault(x => x.Id == id);
+        //}
 
-//        public CommentModel GetCommentForRating(int id)
-//        {
-//            return _repository.GetAll()
-//                .Include(x => x.CommentRatingJoins)
-//                .ThenInclude(x => x.CommentRating)
-//                .Include(x => x.User)
-//                .Include(x => x.RatingCount)
-//                .SingleOrDefault(x => x.Id == id);
-//        }
+        //public Comment GetOriginalComment(int id)
+        //{
+        //    return _repository.GetAll()
+        //        .Include(x => x.Replies)
+        //        .Include(x => x.Audio)
+        //        .SingleOrDefault(x => x.Id == id);
+        //}
 
-//        public CommentModel GetCommentForDelete(int id)
-//        {
-//            return _repository.GetAll()
-//                .Include(x => x.Audio)
-//                .Include(x => x.Replies)
-//                .Include(x => x.User)
-//                .SingleOrDefault(x => x.Id == id);
-//        }
+        //public ICollection<Comment> GetCommentsForAudio(int audioId, int pageNumber, int commentsPerPage)
+        //{
+        //    var startIndex = (pageNumber - 1) * commentsPerPage;
+        //    return _repository.GetAll().ToList();
+        //    //     return _repository.GetAll().ForAudio(audioId).Where(x => x.OriginalComment == null).Skip(startIndex).Take(commentsPerPage).ToList();
+        //}
 
-//        public CommentModel GetOriginalComment(int id)
-//        {
-//            return _repository.GetAll()
-//                .Include(x => x.Replies)
-//                .Include(x => x.Audio)
-//                .SingleOrDefault(x => x.Id == id);
-//        }
+        //public ICollection<Comment> GetSortedCommentsForAudio<TKey>(int audioId, int pageNumber, OrderingOption<Comment, TKey> orderingOption)
+        //{
+        //    var startIndex = (pageNumber - 1) * Comment.CommentsPerPage;
+        //    var comments = _repository.GetAll().Include(x => x.User).Include(x => x.Replies).ForAudio(audioId)
+        //        .Where(x => x.OriginalComment == null).WithOrdering(orderingOption);
 
-//        public ICollection<CommentModel> GetCommentsForAudio(int audioId, int pageNumber, int commentsPerPage)
-//        {
-//            var startIndex = (pageNumber - 1) * commentsPerPage;
-//            return _repository.GetAll().ToList();
-//            //     return _repository.GetAll().ForAudio(audioId).Where(x => x.OriginalComment == null).Skip(startIndex).Take(commentsPerPage).ToList();
-//        }
+        //    foreach (var comment in comments)
+        //    {
+        //        comment.Replies = comment.Replies.Take(Comment.RepliesToLoadInitially).ToList();
+        //    }
 
-//        public ICollection<CommentModel> GetSortedCommentsForAudio<TKey>(int audioId, int pageNumber, OrderingOption<CommentModel, TKey> orderingOption)
-//        {
-//            var startIndex = (pageNumber - 1) * CommentModel.CommentsPerPage;
-//            var comments = _repository.GetAll().Include(x => x.User).Include(x => x.Replies).ForAudio(audioId)
-//                .Where(x => x.OriginalComment == null).WithOrdering(orderingOption);
+        //    return comments.Skip(startIndex).Take(Comment.CommentsPerPage).ToList();
+        //}
 
-//            foreach (var comment in comments)
-//            {
-//                comment.Replies = comment.Replies.Take(CommentModel.RepliesToLoadInitially).ToList();
-//            }
+        public ICollection<Models.Comment> TopLevelComments(int audioId)
+        {
+            return _repository.GetAll().Where(x => x.IsTopLevelComment).ToList();
+        }
 
-//            return comments.Skip(startIndex).Take(CommentModel.CommentsPerPage).ToList();
-//        }
+        public ICollection<Models.Comment> GetReplies(int id)
+        {
+            return _repository.GetAll().Where(x => x.Id == id).SelectMany(x => x.Replies).OrderBy(x => x.Date).ToList();
+        }
 
-//        public ICollection<CommentModel> GetReplies(int id)
-//        {
-//            return _repository.GetAll().Where(x => x.Id == id).SelectMany(x => x.Replies).WithOrdering(new OrderingOption<CommentModel, DateTime>(x => x.Date))
-//                .Skip(CommentModel.RepliesToLoadInitially).ToList();
-//        }
+        public void Add(Models.Comment comment)
+        {
+            _validationProvider.Validate(comment);
 
-//        private static void ModifyComment(CommentModel comment, RatingValue value)
-//        {
-//            //comment.Audio.ModifyComment(value);
-//        }
+            if (!_validationProvider.HasErrors)
+            {
+                _repository.Add(comment);
+            }
+        }
 
-//        public bool Add(CommentModel comment)
-//        {
-//            if (!Validate(comment))
-//                return false;
+        public void Edit(Models.Comment existingComment, string body)
+        {
+            if (!_validationProvider.HasErrors)
+            {
+                existingComment.Body = body;
 
-//            ModifyComment(comment, RatingValue.Increment);
-//            _repository.Add(comment);
+                _repository.Save();
+            }
+        }
 
-//            return true;
-//        }
-
-//        public bool Edit(CommentModel comment, string body, ApplicationUser user)
-//        {
-//            comment.Body = body;
-
-//            comment.UserId = null;
-//            if (!Validate(comment))
-//                return false;
-
-//            _repository.Save();
-
-//            return true;
-//        }
-
-//        public bool Delete(CommentModel comment)
-//        {
-//            if (!Validate(comment))
-//                return false;
-
-//            ModifyComment(comment, RatingValue.Decrement);
-//            _repository.Remove(comment);
-
-//            return true;
-//        }
-//    }
-//}
+        public void Delete(Models.Comment existingComment)
+        {
+            if (!_validationProvider.HasErrors)
+            {
+                _repository.Remove(existingComment);
+            }
+        }
+    }
+}

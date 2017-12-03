@@ -8,6 +8,6 @@
 //{
 //    public class CommentReportModel : ReportModel
 //    {
-//        public virtual CommentModel Comment { get; set; }
+//        public virtual Comment Comment { get; set; }
 //    }
 //}

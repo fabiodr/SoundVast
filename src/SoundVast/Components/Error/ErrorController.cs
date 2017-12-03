@@ -20,7 +20,7 @@ namespace SoundVast.Components.Error
 
         //public IActionResult BadGateway()
         //{
-        //    var quoteViewModel = Mapper.Map<QuoteModel, QuoteViewModel>(_quoteService.GetRandomQuote());
+        //    var quoteViewModel = Mapper.Map<Quote, QuoteViewModel>(_quoteService.GetRandomQuote());
 
         //    Response.StatusCode = (int)HttpStatusCode.BadGateway;
 
@@ -38,7 +38,7 @@ namespace SoundVast.Components.Error
 
         //public IActionResult GatewayTimeout()
         //{
-        //    var quoteViewModel = Mapper.Map<QuoteModel, QuoteViewModel>(_quoteService.GetRandomQuote());
+        //    var quoteViewModel = Mapper.Map<Quote, QuoteViewModel>(_quoteService.GetRandomQuote());
 
         //    Response.StatusCode = (int)HttpStatusCode.GatewayTimeout;
 
@@ -47,7 +47,7 @@ namespace SoundVast.Components.Error
 
         //public IActionResult Gone()
         //{
-        //    var quoteViewModel = Mapper.Map<QuoteModel, QuoteViewModel>(_quoteService.GetRandomQuote());
+        //    var quoteViewModel = Mapper.Map<Quote, QuoteViewModel>(_quoteService.GetRandomQuote());
 
         //    Response.StatusCode = (int)HttpStatusCode.Gone;
 
@@ -56,7 +56,7 @@ namespace SoundVast.Components.Error
 
         //public IActionResult InternalServerError()
         //{
-        //    var quoteViewModel = Mapper.Map<QuoteModel, QuoteViewModel>(_quoteService.GetRandomQuote());
+        //    var quoteViewModel = Mapper.Map<Quote, QuoteViewModel>(_quoteService.GetRandomQuote());
 
         //    Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
@@ -74,7 +74,7 @@ namespace SoundVast.Components.Error
 
         //public IActionResult RequestTimeout()
         //{
-        //    var quoteViewModel = Mapper.Map<QuoteModel, QuoteViewModel>(_quoteService.GetRandomQuote());
+        //    var quoteViewModel = Mapper.Map<Quote, QuoteViewModel>(_quoteService.GetRandomQuote());
 
         //    Response.StatusCode = (int)HttpStatusCode.RequestTimeout;
 
@@ -83,7 +83,7 @@ namespace SoundVast.Components.Error
 
         //public IActionResult ServiceUnavailable()
         //{
-        //    var quoteViewModel = Mapper.Map<QuoteModel, QuoteViewModel>(_quoteService.GetRandomQuote());
+        //    var quoteViewModel = Mapper.Map<Quote, QuoteViewModel>(_quoteService.GetRandomQuote());
 
         //    Response.StatusCode = (int)HttpStatusCode.ServiceUnavailable;
 

@@ -6801,6 +6801,10 @@ react-dropzone@^3.13.3:
     attr-accept "^1.0.3"
     prop-types "^15.5.7"
 
+react-fluid-textarea@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/react-fluid-textarea/-/react-fluid-textarea-0.0.1.tgz#409f0faacca3f9e2439be42ca988e6f8fd10f5d1"
+
 react-html-email@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/react-html-email/-/react-html-email-3.0.0.tgz#a5a51b78271a33daf9b14638e9e4c5df93f691aa"

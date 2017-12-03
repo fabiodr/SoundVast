@@ -9,7 +9,7 @@ import Input from '../../shared/fields/input/input';
 import NameField from '../../shared/fields/nameField/nameField';
 import GenreField from '../../shared/fields/genreField/genreFieldContainer';
 import ValidationErrors from '../../shared/validation/validationErrors';
-import CancelButton from '../common/cancelButton/cancelButton';
+import CancelButton from '../../shared/button/cancelButton';
 import SaveButton from '../common/saveButton/saveButton';
 
 const Form = ({
@@ -41,7 +41,7 @@ const Form = ({
     </Tabs>
 
     <SaveButton formName={form} />
-    <CancelButton remove={removeMusicForm} />
+    <CancelButton onClick={removeMusicForm} />
   </form>
 );
 

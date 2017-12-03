@@ -43,10 +43,11 @@ namespace SoundVast.Data
                     //var placeHolderImage = new ImageFileModel("Placeholder.jpg");
 
                     await SeedImages();
+
                     SeedGenres(context, musicGenres, GenreName.Music);
                     SeedGenres(context, liveStreamGenres, GenreName.LiveStream);
+                    SeedQuotes(context);
 
-                    //   InitializeQuotes(context);
                     //   InitializeCategories<FileStreamCategoryModel>(context, fileStreamCategoryResources, placeHolderImage);
                     //   InitializeCategories<LiveStreamCategoryModel>(context, radioStationCategoryResources, placeHolderImage);
                     //InitializeIdentityForEf(context);
@@ -61,7 +62,7 @@ namespace SoundVast.Data
         //private static void InitializeQuotes(ApplicationDbContext context)
         //{
         //    var quoteResources = Quotes.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
-        //    var quotes = quoteResources.Select(x => new QuoteModel { Quotation = (string)x.Value });
+        //    var quotes = quoteResources.Select(x => new Quote { Quotation = (string)x.Value });
 
         //    context.Quotes.AddRange(quotes.Where(quote => !context.Quotes.Any(x => x.Quotation == quote.Quotation)));
         //}
@@ -73,6 +74,14 @@ namespace SoundVast.Data
 
         //    context.Set<T>().AddRange(categories.Where(category => !context.Set<T>().Any(x => x.Name == category.Name)));
         //}
+
+        public static void SeedQuotes(ApplicationDbContext context)
+        {
+            var quoteResources = Quotes.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
+            var quotes = quoteResources.Select(x => new Quote { Quotation = (string)x.Value });
+
+            context.Quotes.AddRange(quotes.Where(quote => !context.Quotes.Any(x => x.Quotation == quote.Quotation)));
+        }
 
         private static async Task SeedImages()
         {

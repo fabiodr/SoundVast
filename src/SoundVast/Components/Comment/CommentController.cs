@@ -43,7 +43,7 @@ namespace SoundVast.Components.Comment
     //    [AllowAnonymous]
     //    public PartialViewResult Newest(int audioId, bool sortDescending, int pageNumber = 1)
     //    {
-    //        var comments = _commentService.GetSortedCommentsForAudio(audioId, pageNumber, new OrderingOption<CommentModel, DateTime>(x => x.Date, sortDescending));
+    //        var comments = _commentService.GetSortedCommentsForAudio(audioId, pageNumber, new OrderingOption<Comment, DateTime>(x => x.Date, sortDescending));
 
     //        var commentViewModels = Mapper.Map<IEnumerable<CommentViewModel>>(comments);
 
@@ -98,11 +98,11 @@ namespace SoundVast.Components.Comment
     //    [AllowAnonymous]
     //    public IActionResult InfiniteScroll(int audioId, int pageNumber)
     //    {
-    //        var comments = Mapper.Map<ICollection<CommentViewModel>>(_commentService.GetCommentsForAudio(audioId, pageNumber, CommentModel.CommentsPerPage));
+    //        var comments = Mapper.Map<ICollection<CommentViewModel>>(_commentService.GetCommentsForAudio(audioId, pageNumber, Comment.CommentsPerPage));
 
     //        var jsonModel = new CommentInfiniteScrollViewModel
     //        {
-    //            NoMoreData = comments.Count < CommentModel.CommentsPerPage,
+    //            NoMoreData = comments.Count < Comment.CommentsPerPage,
     //            HtmlString = RenderPartialViewToString("_Comments", comments)
     //        };
     //        return Json(jsonModel);
@@ -141,7 +141,7 @@ namespace SoundVast.Components.Comment
     //        //ToDo: Notify the original user about the reply
     //        var originalUser = originalComment.User;
 
-    //        var reply = new CommentModel(replyCommentViewModel.Body)
+    //        var reply = new Comment(replyCommentViewModel.Body)
     //        {
     //            Audio = originalComment.Audio,
     //            OriginalComment = originalComment,
@@ -185,7 +185,7 @@ namespace SoundVast.Components.Comment
     //    {
     //        var user = await _userManager.GetUserAsync(HttpContext.User);
 
-    //        var comment = new CommentModel(createCommentViewModel.Body)
+    //        var comment = new Comment(createCommentViewModel.Body)
     //        {
     //            Audio = _audioService.GetAudio(createCommentViewModel.AudioId),
     //            User = user,

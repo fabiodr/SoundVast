@@ -41,7 +41,7 @@ namespace SoundVast.Components.Audio.Models
      //   public virtual CategoryModel Category { get; set; }
      //   public virtual RatingCountModel Rating { get; set; } = new RatingCountModel();
      //   public virtual ICollection<AudioGenreModel> Genres { get; set; }
-     //   public virtual ICollection<CommentModel> Comments { get; set; }
+     //   public virtual ICollection<Comment> Comments { get; set; }
      //   public virtual ICollection<AudioRatingJoinModel> AudioRatingJoins { get; set; }
 
         //public Audio(string userId)

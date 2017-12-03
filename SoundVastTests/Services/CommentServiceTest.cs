@@ -4,25 +4,25 @@ namespace SoundVastTests.Services
 {
     //public class CommentServiceTest
     //{
-    //    private readonly Mock<IRepository<CommentModel>> _mockRepository;
+    //    private readonly Mock<IRepository<Comment>> _mockRepository;
     //    private readonly ICommentService _service;
 
     //    public CommentServiceTest()
     //    {
     //        var modelState = new ModelStateDictionary();
-    //        _mockRepository = new Mock<IRepository<CommentModel>>();
+    //        _mockRepository = new Mock<IRepository<Comment>>();
     //        _service = new CommentService(new ModelStateWrapper(modelState), _mockRepository.Object);
     //    }
 
     //    [Fact]
     //    public void Add()
     //    {
-    //        var comment = new CommentModel("BodyText")
+    //        var comment = new Comment("BodyText")
     //        {
     //            Audio = new Audio()
     //        };
 
-    //        _mockRepository.Setup(x => x.Add(It.IsAny<CommentModel>()));
+    //        _mockRepository.Setup(x => x.Add(It.IsAny<Comment>()));
 
     //        var result = _service.Add(comment);
 
@@ -32,7 +32,7 @@ namespace SoundVastTests.Services
     //    [Fact]
     //    public void CommentCountIncrementedOnAdd()
     //    {
-    //        var comment = new CommentModel("BodyText")
+    //        var comment = new Comment("BodyText")
     //        {
     //            Audio = new Audio()
     //        };
@@ -47,7 +47,7 @@ namespace SoundVastTests.Services
     //    [Fact]
     //    public void Edit()
     //    {
-    //        var comment = new CommentModel("BodyText");
+    //        var comment = new Comment("BodyText");
     //        var user = new ApplicationUser()
     //        {
     //            Email = "test123@gmail.com",
@@ -63,12 +63,12 @@ namespace SoundVastTests.Services
     //    [Fact]
     //    public void Delete()
     //    {
-    //        var comment = new CommentModel("BodyText")
+    //        var comment = new Comment("BodyText")
     //        {
     //            Audio = new Audio()
     //        };
 
-    //        _mockRepository.Setup(x => x.Remove(It.IsAny<CommentModel>()));
+    //        _mockRepository.Setup(x => x.Remove(It.IsAny<Comment>()));
 
     //        _service.Delete(comment);
 
@@ -78,7 +78,7 @@ namespace SoundVastTests.Services
     //    [Fact]
     //    public void CommentCountDecrementedOnDelete()
     //    {
-    //        var comment = new CommentModel("BodyText")
+    //        var comment = new Comment("BodyText")
     //        {
     //            Audio = new Audio()
     //        };

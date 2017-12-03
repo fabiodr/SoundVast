@@ -5,14 +5,19 @@ import Account from '../../account/account';
 import Header from '../../header/header';
 import FooterPlaylist from '../../footerPlaylist/footerPlaylistContainer';
 import Content from '../../content/content';
+import SideBar from '../../sideBar/sideBar';
+import styles from './primaryLayout.less';
 
 const PrimaryLayout = ({ children, user, loginProviders }) => (
   <div>
     <Account loginProviders={loginProviders} />
     <Header user={user} />
-    <Content>
-      {children}
-    </Content>
+    <div className={styles.main}>
+      <Content>
+        {children}
+      </Content>
+      <SideBar />
+    </div>
     <FooterPlaylist />
   </div>
 );

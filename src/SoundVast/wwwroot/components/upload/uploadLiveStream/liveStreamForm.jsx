@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import LiveStreamInformation from './liveStreamInformation';
 import ValidationErrors from '../../shared/validation/validationErrors';
-import CancelButton from '../common/cancelButton/cancelButton';
+import CancelButton from '../../shared/button/cancelButton';
 import SaveButton from '../common/saveButton/saveButton';
 
 const Form = ({
@@ -20,7 +20,7 @@ const Form = ({
     <LiveStreamInformation id={id} genres={genres} />
 
     <SaveButton formName={form} />
-    <CancelButton remove={removeLiveStreamForm} />
+    <CancelButton onClick={removeLiveStreamForm} />
   </form>
 );
 

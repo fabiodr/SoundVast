@@ -5,25 +5,22 @@ import createRender from 'found/lib/createRender';
 
 import ValidationErrors from '../../shared/validation/validationErrors';
 
-const RenderError = ({ error }) => {
-  const status = parseInt(error.status, 10);
-
+const RenderError = ({ error, router }) => {
   if (error.data) {
     return <ValidationErrors errors={error.data} />;
   }
 
-  switch (status) {
-    case 404:
-      return 'Not found';
-    default:
-      return 'Error';
-  }
+  router.replace(`/error/${error.status}`);
+
+  return null;
 };
 
 RenderError.propTypes = {
   error: PropTypes.shape({
     status: PropTypes.number.isRequired,
   }).isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  router: PropTypes.object.isRequired,
 };
 
 export default createConnectedRouter({

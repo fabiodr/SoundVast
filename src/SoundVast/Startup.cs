@@ -43,6 +43,7 @@ using SoundVast.Components.Genre;
 using SoundVast.Components.Genre.Models;
 using SoundVast.Components.GraphQl;
 using SoundVast.Components.LiveStream.Models;
+using SoundVast.Components.Quote.Models;
 using SoundVast.Components.Song.Models;
 using SoundVast.Components.Upload;
 using SoundVast.Validation;
@@ -64,7 +65,7 @@ namespace SoundVast
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
-            services.AddHangfire(x => x.UseSqlServerStorage(_configuration.GetConnectionString("DefaultConnection")));
+         //   services.AddHangfire(x => x.UseSqlServerStorage(_configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
                 {
@@ -146,8 +147,8 @@ namespace SoundVast
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseHangfireServer();
-            app.UseHangfireDashboard();
+         //   app.UseHangfireServer();
+         //   app.UseHangfireDashboard();
             app.UseStaticFiles();
             app.UseAuthentication();
             app.UseSession();
@@ -227,6 +228,7 @@ namespace SoundVast
             builder.RegisterType<Repository<Song, ApplicationDbContext>>().As<IRepository<Song>>();
             builder.RegisterType<Repository<LiveStream, ApplicationDbContext>>().As<IRepository<LiveStream>>();
             builder.RegisterType<Repository<Genre, ApplicationDbContext>>().As<IRepository<Genre>>();
+            builder.RegisterType<Repository<Quote, ApplicationDbContext>>().As<IRepository<Quote>>();
 
             return builder;
         }

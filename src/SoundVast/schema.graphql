@@ -1,5 +1,5 @@
 # source: http://localhost:8080/graphql
-# timestamp: Sat Dec 02 2017 00:47:46 GMT+0100 (W. Europe Standard Time)
+# timestamp: Sat Dec 02 2017 18:35:25 GMT+0100 (W. Europe Standard Time)
 
 type ApplicationUser {
   id: ID
@@ -215,6 +215,7 @@ type Query {
     # The id of the song
     id: String!
   ): Song
+  quote: Quote
   songs(
     # Only look at connected edges with cursors greater than the value of `after`.
     after: String
@@ -252,6 +253,15 @@ type Query {
     token: String!
   ): Boolean
   loginProviders: [LoginProvider]
+}
+
+type Quote implements Node {
+  # The Id of the Quote
+  quoteId: Int!
+
+  # The Global Id of the Quote
+  id: ID!
+  quotation: String!
 }
 
 input RateAudioInput {

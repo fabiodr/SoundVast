@@ -8,7 +8,7 @@
 //    public class CommentRatingJoinModel
 //    {
 //        public int CommentId { get; set; }
-//        public virtual CommentModel Comment { get; set; }
+//        public virtual Comment Comment { get; set; }
 
 //        public int CommentRatingId { get; set; }
 //        public virtual CommentRatingModel CommentRating { get; set; }
