@@ -1,5 +1,5 @@
 # source: http://localhost:8080/graphql
-# timestamp: Sat Dec 02 2017 18:35:25 GMT+0100 (W. Europe Standard Time)
+# timestamp: Mon Dec 04 2017 00:05:08 GMT+0100 (W. Europe Standard Time)
 
 type ApplicationUser {
   id: ID
@@ -25,6 +25,71 @@ interface Audio {
 
   # The ratings that have been applied by users to this audio
   ratings: [Rating]
+
+  # The comments for the audio
+  comments(
+    # Only look at connected edges with cursors greater than the value of `after`.
+    after: String
+
+    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
+    first: Int
+  ): CommentPayloadConnection
+}
+
+type Comment implements Node {
+  # The Id of the Comment
+  commentId: Int!
+
+  # The Global Id of the Comment
+  id: ID!
+  date: Date!
+  likes: Int!
+  dislikes: Int!
+
+  # The body of the comment
+  body: String!
+
+  # The user who added the comment
+  user: User!
+
+  # The audio that the comment was added to
+  audio: Audio!
+
+  # The original comment that this comment was a reply to
+  originalComment: Comment
+}
+
+# A connection from an object to a list of objects of type `CommentPayload`.
+type CommentPayloadConnection {
+  # A count of the total number of objects in this connection, ignoring
+  # pagination. This allows a client to fetch the first five objects by passing
+  # "5" as the argument to `first`, then fetch the total count so it could display
+  # "5 of 83", for example. In cases where we employ infinite scrolling or don't
+  # have an exact count of entries, this field will return `null`.
+  totalCount: Int
+
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # Information to aid in pagination.
+  edges: [CommentPayloadEdge]
+
+  # A list of all of the objects returned in the connection. This is a convenience
+  # field provided for quickly exploring the API; rather than querying for "{
+  # edges { node } }" when no edge data is needed, this field can be used instead.
+  # Note that when clients like Relay need to fetch the "cursor" field on the edge
+  # to enable efficient pagination, this shortcut cannot be used, and the full "{
+  # edges { node } } " version should be used instead.
+  items: [Comment]
+}
+
+# An edge in a connection from an object to another object of type `CommentPayload`.
+type CommentPayloadEdge {
+  # A cursor for use in pagination
+  cursor: String!
+
+  # The item at the end of the edge
+  node: Comment
 }
 
 # The `Date` scalar type represents a timestamp provided in UTC. `Date` expects
@@ -116,6 +181,15 @@ type LiveStream implements Node, Audio {
 
   # The ratings that have been applied by users to this live stream
   ratings: [Rating]
+
+  # The comments for the live stream
+  comments(
+    # Only look at connected edges with cursors greater than the value of `after`.
+    after: String
+
+    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
+    first: Int
+  ): CommentPayloadConnection
 }
 
 # A connection from an object to a list of objects of type `LiveStreamPayload`.
@@ -183,6 +257,7 @@ type Mutation {
   sendEmail(input: SendEmailInput!): SendEmailPayload
   generateResetPasswordToken(input: GenerateResetPasswordTokenInput!): GenerateResetPasswordTokenPayload
   resetPassword(input: ResetPasswordInput!): ResetPasswordPayload
+  comment(input: SaveCommentInput!): SaveCommentPayload
 }
 
 interface Node {
@@ -312,6 +387,18 @@ type ResetPasswordPayload {
   clientMutationId: String
 }
 
+input SaveCommentInput {
+  clientMutationId: String
+  body: String!
+  audioId: Int!
+  originalCommentId: Int
+}
+
+type SaveCommentPayload {
+  clientMutationId: String
+  comment: Comment
+}
+
 input SaveLiveStreamInput {
   clientMutationId: String
   name: String!
@@ -371,6 +458,15 @@ type Song implements Node, Audio {
 
   # The ratings that have been applied by users to this song
   ratings: [Rating]
+
+  # The comments for the song
+  comments(
+    # Only look at connected edges with cursors greater than the value of `after`.
+    after: String
+
+    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
+    first: Int
+  ): CommentPayloadConnection
 }
 
 # A connection from an object to a list of objects of type `SongPayload`.

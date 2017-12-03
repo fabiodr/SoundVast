@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GraphQL.Relay.Types;
 using SoundVast.Components.Audio;
+using SoundVast.Components.Comment;
 using SoundVast.Components.Genre;
 using SoundVast.Components.Rating;
 using SoundVast.Components.Song.Models;
@@ -14,7 +15,7 @@ namespace SoundVast.Components.LiveStream
 {
     public class LiveStreamPayload : NodeGraphType<Models.LiveStream>
     {
-        public LiveStreamPayload()
+        public LiveStreamPayload(ICommentService commentService)
         {
             Name = nameof(Models.LiveStream);
 
@@ -27,6 +28,15 @@ namespace SoundVast.Components.LiveStream
             Field<UserPayload>("user", "The user who uploaded the live stream");
             Field<GenrePayload>("genre", "The genre the live stream belongs to");
             Field<ListGraphType<RatingPayload>>("ratings", "The ratings that have been applied by users to this live stream");
+            Connection<CommentPayload>()
+                .Name("comments")
+                .Description("The comments for the live stream")
+                .Resolve(c =>
+                {
+                    var audioId = c.Source.Id;
+
+                    return GraphQL.Relay.Types.Connection.ToConnection(commentService.TopLevelComments(audioId), c);
+                });
 
             Interface<AudioInterface>();
         }

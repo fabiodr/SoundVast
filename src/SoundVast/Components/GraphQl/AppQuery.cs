@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using SoundVast.Components.Account;
 using SoundVast.Components.Audio;
+using SoundVast.Components.Comment;
 using SoundVast.Components.Genre;
 using SoundVast.Components.LiveStream;
 using SoundVast.Components.Quote;

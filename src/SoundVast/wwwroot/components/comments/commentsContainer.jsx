@@ -1,17 +1,14 @@
-// import { fragment } from 'relay-modern-hoc';
-// import { graphql } from 'react-relay';
-// import { compose } from 'recompose';
+import { compose } from 'recompose';
+import { connect } from 'react-redux';
 
-// import Comments from './comments';
+import Comments from './comments';
 
-// const fragments = graphql`
-//   fragment commentsContainer_comments on Comment {
+const mapStateToProps = ({ jPlayers }) => ({
+  comments: jPlayers.FooterPlaylist.media.comments,
+});
 
-//   }
-// `;
+const enhance = compose(
+  connect(mapStateToProps),
+);
 
-// const enhance = compose(
-//   fragment(fragments),
-// );
-
-// export default enhance(Comments);
+export default enhance(Comments);

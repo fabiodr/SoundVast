@@ -55,13 +55,6 @@ namespace SoundVast.Components.Comment
         //        .SingleOrDefault(x => x.Id == id);
         //}
 
-        //public ICollection<Comment> GetCommentsForAudio(int audioId, int pageNumber, int commentsPerPage)
-        //{
-        //    var startIndex = (pageNumber - 1) * commentsPerPage;
-        //    return _repository.GetAll().ToList();
-        //    //     return _repository.GetAll().ForAudio(audioId).Where(x => x.OriginalComment == null).Skip(startIndex).Take(commentsPerPage).ToList();
-        //}
-
         //public ICollection<Comment> GetSortedCommentsForAudio<TKey>(int audioId, int pageNumber, OrderingOption<Comment, TKey> orderingOption)
         //{
         //    var startIndex = (pageNumber - 1) * Comment.CommentsPerPage;
@@ -78,7 +71,7 @@ namespace SoundVast.Components.Comment
 
         public ICollection<Models.Comment> TopLevelComments(int audioId)
         {
-            return _repository.GetAll().Where(x => x.IsTopLevelComment).ToList();
+            return _repository.GetAll().BuildComment().Where(x => x.IsTopLevelComment).ToList();
         }
 
         public ICollection<Models.Comment> GetReplies(int id)

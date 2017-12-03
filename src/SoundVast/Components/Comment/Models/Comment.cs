@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using SoundVast.Components.Rating.Models;
@@ -15,7 +16,6 @@ namespace SoundVast.Components.Comment.Models
         [Required]
         public DateTime Date { get; set; }
         public int? RatingId { get; set; }
-        public virtual Rating.Models.Rating Rating { get; set; }
         [Required]
         public int AudioId { get; set; }
         public virtual Audio.Models.Audio Audio { get; set; }
@@ -24,7 +24,10 @@ namespace SoundVast.Components.Comment.Models
         public int? OriginalCommentId { get; set; }
         public virtual Comment OriginalComment { get; set; }
         public virtual ICollection<Comment> Replies { get; set; }
+        public virtual ICollection<Rating.Models.Rating> Ratings { get; set; }
         public bool IsTopLevelComment => OriginalCommentId == null;
+        public int Likes => Ratings.Count(x => x.Liked);
+        public int Dislikes => Ratings.Count(x => !x.Liked);
         //public virtual ICollection<CommentRatingJoinModel> CommentRatingJoins { get; set; }
         //public virtual ICollection<CommentReportModel> Reports { get; set; }
 

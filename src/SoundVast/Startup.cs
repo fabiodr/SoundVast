@@ -39,6 +39,7 @@ using Microsoft.AspNetCore.Authentication.Twitter;
 using Newtonsoft.Json;
 using SoundVast.Components.Audio;
 using SoundVast.Components.Audio.Models;
+using SoundVast.Components.Comment.Models;
 using SoundVast.Components.Genre;
 using SoundVast.Components.Genre.Models;
 using SoundVast.Components.GraphQl;
@@ -190,9 +191,13 @@ namespace SoundVast
 
                 return type =>
                 {
-                    var valType = typeof(Validator<>).MakeGenericType(type.BaseType);
+                    var genericType = typeof(Validator<>);
+                    var baseValType = genericType.MakeGenericType(type.BaseType);
+                    var valType = genericType.MakeGenericType(type);
 
-                    return (IValidator)context.Resolve(valType);
+                    var service = context.ResolveOptional(valType) ?? context.ResolveOptional(baseValType);
+
+                    return (IValidator) service;
                 };
             });
 
@@ -211,6 +216,7 @@ namespace SoundVast
                 });
             });
 
+            builder.RegisterAssemblyTypes(assembly).AsClosedTypesOf(typeof(NodeGraphType<>));
             builder.RegisterAssemblyTypes(assembly).AsClosedTypesOf(typeof(Validator<>));
             builder.RegisterAssemblyTypes(assembly).AsClosedTypesOf(typeof(MutationPayloadGraphType<,>));
             builder.RegisterAssemblyTypes(assembly).Where(x => x.Name.EndsWith("Service")).AsImplementedInterfaces();
@@ -229,6 +235,7 @@ namespace SoundVast
             builder.RegisterType<Repository<LiveStream, ApplicationDbContext>>().As<IRepository<LiveStream>>();
             builder.RegisterType<Repository<Genre, ApplicationDbContext>>().As<IRepository<Genre>>();
             builder.RegisterType<Repository<Quote, ApplicationDbContext>>().As<IRepository<Quote>>();
+            builder.RegisterType<Repository<Comment, ApplicationDbContext>>().As<IRepository<Comment>>();
 
             return builder;
         }

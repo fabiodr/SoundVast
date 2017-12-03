@@ -36,6 +36,23 @@ const fragments = graphql`
           artist
           likes
           dislikes
+          comments(
+            first: $count
+            after: $cursor
+          ) {
+            edges {
+              node {
+                commentId,
+                body
+                date,
+                likes,
+                dislikes,
+                user {
+                  userName
+                }
+              }
+            }
+          }
         }
       }
     }
@@ -70,7 +87,7 @@ const createProps = ({ relay, data }) => ({
   songs: data.songs.edges.map(x => x.node),
 });
 
-class InitializePlaylist extends React.Component {
+class InitializeSongs extends React.Component {
   componentDidMount() {
     this.props.setPlaylist('FooterPlaylist', this.getPlaylist());
   }
@@ -83,13 +100,17 @@ class InitializePlaylist extends React.Component {
     },
     poster: song.coverImageUrl,
     free: song.free,
+    comments: song.comments.edges.map(x => ({
+      ...x.node,
+      date: new Date(x.node.date).toLocaleDateString(),
+    })),
   }))
   render() {
     return <Songs {...this.props} />;
   }
 }
 
-InitializePlaylist.propTypes = {
+InitializeSongs.propTypes = {
   setPlaylist: PropTypes.func.isRequired,
   songs: PropTypes.arrayOf(
     PropTypes.shape({
@@ -111,7 +132,7 @@ const enhance = compose(
   withProps(createProps),
 );
 
-const SongsContainer = enhance(InitializePlaylist);
+const SongsContainer = enhance(InitializeSongs);
 
 export const routeConfig = {
   Component: SongsContainer,

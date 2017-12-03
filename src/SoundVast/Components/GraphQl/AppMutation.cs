@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SoundVast.Components.Account;
 using SoundVast.Components.Audio;
+using SoundVast.Components.Comment;
 using SoundVast.Components.Email;
 using SoundVast.Components.LiveStream;
 using SoundVast.Components.Rating;
@@ -39,6 +40,7 @@ namespace SoundVast.Components.GraphQl
             Mutation<SendEmailInput, SendEmailPayload>("sendEmail");
             Mutation<GenerateResetPasswordTokenInput, GenerateResetPasswordTokenPayload>("generateResetPasswordToken");
             Mutation<ResetPasswordInput, ResetPasswordPayload>("resetPassword");
+            Mutation<SaveCommentInput, SaveCommentPayload>("comment");
         }
     }
 }

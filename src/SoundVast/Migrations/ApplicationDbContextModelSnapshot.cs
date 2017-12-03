@@ -185,8 +185,6 @@ namespace SoundVast.Migrations
 
                     b.HasIndex("OriginalCommentId");
 
-                    b.HasIndex("RatingId");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("Comments");
@@ -231,6 +229,8 @@ namespace SoundVast.Migrations
 
                     b.Property<int?>("AudioId");
 
+                    b.Property<int?>("CommentId");
+
                     b.Property<bool>("Liked");
 
                     b.Property<string>("UserId");
@@ -238,6 +238,8 @@ namespace SoundVast.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AudioId");
+
+                    b.HasIndex("CommentId");
 
                     b.HasIndex("UserId");
 
@@ -377,17 +379,13 @@ namespace SoundVast.Migrations
             modelBuilder.Entity("SoundVast.Components.Comment.Models.Comment", b =>
                 {
                     b.HasOne("SoundVast.Components.Audio.Models.Audio", "Audio")
-                        .WithMany()
+                        .WithMany("Comments")
                         .HasForeignKey("AudioId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("SoundVast.Components.Comment.Models.Comment", "OriginalComment")
                         .WithMany("Replies")
                         .HasForeignKey("OriginalCommentId");
-
-                    b.HasOne("SoundVast.Components.Rating.Models.Rating", "Rating")
-                        .WithMany()
-                        .HasForeignKey("RatingId");
 
                     b.HasOne("SoundVast.Components.User.ApplicationUser", "User")
                         .WithMany()
@@ -400,6 +398,10 @@ namespace SoundVast.Migrations
                         .WithMany("Ratings")
                         .HasForeignKey("AudioId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("SoundVast.Components.Comment.Models.Comment")
+                        .WithMany("Ratings")
+                        .HasForeignKey("CommentId");
 
                     b.HasOne("SoundVast.Components.User.ApplicationUser", "User")
                         .WithMany()

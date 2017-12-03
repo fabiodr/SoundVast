@@ -18,6 +18,20 @@ export type songsContainer = {|
         +artist: ?string;
         +likes: number;
         +dislikes: number;
+        +comments: ?{|
+          +edges: ?$ReadOnlyArray<?{|
+            +node: ?{|
+              +commentId: number;
+              +body: string;
+              +date: any;
+              +likes: number;
+              +dislikes: number;
+              +user: {|
+                +userName: string;
+              |};
+            |};
+          |}>;
+        |};
       |};
     |}>;
   |};
@@ -140,6 +154,105 @@ const fragment /*: ConcreteFragment*/ = {
                   "alias": null,
                   "args": null,
                   "name": "dislikes",
+                  "storageKey": null
+                },
+                {
+                  "kind": "LinkedField",
+                  "alias": null,
+                  "args": [
+                    {
+                      "kind": "Variable",
+                      "name": "after",
+                      "variableName": "cursor",
+                      "type": "String"
+                    },
+                    {
+                      "kind": "Variable",
+                      "name": "first",
+                      "variableName": "count",
+                      "type": "Int"
+                    }
+                  ],
+                  "concreteType": "CommentPayloadConnection",
+                  "name": "comments",
+                  "plural": false,
+                  "selections": [
+                    {
+                      "kind": "LinkedField",
+                      "alias": null,
+                      "args": null,
+                      "concreteType": "CommentPayloadEdge",
+                      "name": "edges",
+                      "plural": true,
+                      "selections": [
+                        {
+                          "kind": "LinkedField",
+                          "alias": null,
+                          "args": null,
+                          "concreteType": "Comment",
+                          "name": "node",
+                          "plural": false,
+                          "selections": [
+                            {
+                              "kind": "ScalarField",
+                              "alias": null,
+                              "args": null,
+                              "name": "commentId",
+                              "storageKey": null
+                            },
+                            {
+                              "kind": "ScalarField",
+                              "alias": null,
+                              "args": null,
+                              "name": "body",
+                              "storageKey": null
+                            },
+                            {
+                              "kind": "ScalarField",
+                              "alias": null,
+                              "args": null,
+                              "name": "date",
+                              "storageKey": null
+                            },
+                            {
+                              "kind": "ScalarField",
+                              "alias": null,
+                              "args": null,
+                              "name": "likes",
+                              "storageKey": null
+                            },
+                            {
+                              "kind": "ScalarField",
+                              "alias": null,
+                              "args": null,
+                              "name": "dislikes",
+                              "storageKey": null
+                            },
+                            {
+                              "kind": "LinkedField",
+                              "alias": null,
+                              "args": null,
+                              "concreteType": "User",
+                              "name": "user",
+                              "plural": false,
+                              "selections": [
+                                {
+                                  "kind": "ScalarField",
+                                  "alias": null,
+                                  "args": null,
+                                  "name": "userName",
+                                  "storageKey": null
+                                }
+                              ],
+                              "storageKey": null
+                            }
+                          ],
+                          "storageKey": null
+                        }
+                      ],
+                      "storageKey": null
+                    }
+                  ],
                   "storageKey": null
                 },
                 {
