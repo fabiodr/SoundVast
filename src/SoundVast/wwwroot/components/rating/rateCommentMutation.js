@@ -2,12 +2,12 @@ import { graphql } from 'react-relay';
 import { createMutation } from 'relay-modern-hoc';
 
 const mutation = graphql`
-  mutation rateAudioMutation(
+  mutation rateCommentMutation(
     $input: RateInput!
   ) {
-    rateAudio(input: $input) {
+    rateComment(input: $input) {
       rating {
-        audio {
+        comment {
           likes
           dislikes
         }

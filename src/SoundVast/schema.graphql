@@ -1,5 +1,5 @@
 # source: http://localhost:8080/graphql
-# timestamp: Mon Dec 04 2017 00:05:08 GMT+0100 (W. Europe Standard Time)
+# timestamp: Mon Dec 04 2017 22:33:22 GMT+0100 (W. Europe Standard Time)
 
 type ApplicationUser {
   id: ID
@@ -42,6 +42,8 @@ type Comment implements Node {
 
   # The Global Id of the Comment
   id: ID!
+
+  # The date when the comment was made
   date: Date!
   likes: Int!
   dislikes: Int!
@@ -249,7 +251,8 @@ type LogoutPayload {
 type Mutation {
   saveSong(input: SaveSongInput!): SaveSongPayload
   saveLiveStream(input: SaveLiveStreamInput!): SaveLiveStreamPayload
-  rateAudio(input: RateAudioInput!): RateAudioPayload
+  rateAudio(input: RateInput!): RateAudioPayload
+  rateComment(input: RateInput!): RateAudioPayload
   register(input: RegisterInput!): RegisterPayload
   login(input: LoginInput!): LoginPayload
   externalLoginConfirmation(input: ExternalLoginConfirmationInput!): ExternalLoginConfirmationPayload
@@ -339,15 +342,15 @@ type Quote implements Node {
   quotation: String!
 }
 
-input RateAudioInput {
-  clientMutationId: String
-  audioId: Int!
-  liked: Boolean!
-}
-
 type RateAudioPayload {
   clientMutationId: String
   rating: Rating
+}
+
+input RateInput {
+  clientMutationId: String
+  id: Int!
+  liked: Boolean!
 }
 
 type Rating {
@@ -361,6 +364,9 @@ type Rating {
 
   # The audio that was rated by the user
   audio: Audio
+
+  # The comment that was rated by the user
+  comment: Comment
 }
 
 input RegisterInput {

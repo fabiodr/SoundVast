@@ -10,7 +10,7 @@ using SoundVast.Data;
 
 namespace SoundVast.Repository
 {
-    public interface IRepository<T> : IDisposable where T : class
+    public interface IRepository<T> : IDisposable
     {
         IQueryable<T> GetAll();
         T Get(int id);

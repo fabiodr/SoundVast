@@ -45,6 +45,7 @@ using SoundVast.Components.Genre.Models;
 using SoundVast.Components.GraphQl;
 using SoundVast.Components.LiveStream.Models;
 using SoundVast.Components.Quote.Models;
+using SoundVast.Components.Rating;
 using SoundVast.Components.Song.Models;
 using SoundVast.Components.Upload;
 using SoundVast.Validation;
@@ -230,6 +231,8 @@ namespace SoundVast
             builder.RegisterType<AuthMessageSender>().As<ISmsSender>();
             builder.RegisterType<AzureBlob>().As<ICloudBlob>();
             builder.RegisterType<AudioService<Audio>>().AsImplementedInterfaces();
+            builder.RegisterType<RatingService<Audio>>().AsImplementedInterfaces();
+            builder.RegisterType<RatingService<Comment>>().AsImplementedInterfaces();
             builder.RegisterType<Repository<Audio, ApplicationDbContext>>().As<IRepository<Audio>>();
             builder.RegisterType<Repository<Song, ApplicationDbContext>>().As<IRepository<Song>>();
             builder.RegisterType<Repository<LiveStream, ApplicationDbContext>>().As<IRepository<LiveStream>>();

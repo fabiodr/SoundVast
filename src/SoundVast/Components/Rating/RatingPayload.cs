@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using GraphQL.Relay.Types;
 using GraphQL.Types;
 using SoundVast.Components.Audio;
+using SoundVast.Components.Comment;
 using SoundVast.Components.User;
 
 namespace SoundVast.Components.Rating
@@ -19,6 +20,7 @@ namespace SoundVast.Components.Rating
             Field(x => x.Liked).Description("Whether the user has liked the audio or not");
             Field<UserPayload>("user", "The user that rated the audio");
             Field<AudioInterface>("audio", "The audio that was rated by the user");
+            Field<CommentPayload>("comment", "The comment that was rated by the user");
         }
     }
 }

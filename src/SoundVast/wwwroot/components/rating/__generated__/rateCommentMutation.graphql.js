@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 4485cd3dd4efa0635bfbf49221055fbb
+ * @relayHash 46bc57e23d9b807496cb668446fdf9ae
  */
 
 /* eslint-disable */
@@ -9,17 +9,17 @@
 
 /*::
 import type {ConcreteBatch} from 'relay-runtime';
-export type rateAudioMutationVariables = {|
+export type rateCommentMutationVariables = {|
   input: {
     clientMutationId?: ?string;
     id: number;
     liked: boolean;
   };
 |};
-export type rateAudioMutationResponse = {|
-  +rateAudio: ?{|
+export type rateCommentMutationResponse = {|
+  +rateComment: ?{|
     +rating: ?{|
-      +audio: ?{|
+      +comment: ?{|
         +likes: number;
         +dislikes: number;
       |};
@@ -30,13 +30,12 @@ export type rateAudioMutationResponse = {|
 
 
 /*
-mutation rateAudioMutation(
+mutation rateCommentMutation(
   $input: RateInput!
 ) {
-  rateAudio(input: $input) {
+  rateComment(input: $input) {
     rating {
-      audio {
-        __typename
+      comment {
         likes
         dislikes
         id
@@ -59,7 +58,7 @@ const batch /*: ConcreteBatch*/ = {
     ],
     "kind": "Fragment",
     "metadata": null,
-    "name": "rateAudioMutation",
+    "name": "rateCommentMutation",
     "selections": [
       {
         "kind": "LinkedField",
@@ -73,7 +72,7 @@ const batch /*: ConcreteBatch*/ = {
           }
         ],
         "concreteType": "RateAudioPayload",
-        "name": "rateAudio",
+        "name": "rateComment",
         "plural": false,
         "selections": [
           {
@@ -88,8 +87,8 @@ const batch /*: ConcreteBatch*/ = {
                 "kind": "LinkedField",
                 "alias": null,
                 "args": null,
-                "concreteType": null,
-                "name": "audio",
+                "concreteType": "Comment",
+                "name": "comment",
                 "plural": false,
                 "selections": [
                   {
@@ -121,7 +120,7 @@ const batch /*: ConcreteBatch*/ = {
   "id": null,
   "kind": "Batch",
   "metadata": {},
-  "name": "rateAudioMutation",
+  "name": "rateCommentMutation",
   "query": {
     "argumentDefinitions": [
       {
@@ -132,7 +131,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ],
     "kind": "Root",
-    "name": "rateAudioMutation",
+    "name": "rateCommentMutation",
     "operation": "mutation",
     "selections": [
       {
@@ -147,7 +146,7 @@ const batch /*: ConcreteBatch*/ = {
           }
         ],
         "concreteType": "RateAudioPayload",
-        "name": "rateAudio",
+        "name": "rateComment",
         "plural": false,
         "selections": [
           {
@@ -162,17 +161,10 @@ const batch /*: ConcreteBatch*/ = {
                 "kind": "LinkedField",
                 "alias": null,
                 "args": null,
-                "concreteType": null,
-                "name": "audio",
+                "concreteType": "Comment",
+                "name": "comment",
                 "plural": false,
                 "selections": [
-                  {
-                    "kind": "ScalarField",
-                    "alias": null,
-                    "args": null,
-                    "name": "__typename",
-                    "storageKey": null
-                  },
                   {
                     "kind": "ScalarField",
                     "alias": null,
@@ -212,7 +204,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "mutation rateAudioMutation(\n  $input: RateInput!\n) {\n  rateAudio(input: $input) {\n    rating {\n      audio {\n        __typename\n        likes\n        dislikes\n        id\n      }\n      id\n    }\n  }\n}\n"
+  "text": "mutation rateCommentMutation(\n  $input: RateInput!\n) {\n  rateComment(input: $input) {\n    rating {\n      comment {\n        likes\n        dislikes\n        id\n      }\n      id\n    }\n  }\n}\n"
 };
 
 module.exports = batch;

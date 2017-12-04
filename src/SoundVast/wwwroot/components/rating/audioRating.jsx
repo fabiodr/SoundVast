@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import styles from './rating.less';
-import Like from './like/likeContainer';
-import Dislike from './dislike/dislikeContainer';
+import styles from './audioRating.less';
 import PercentageNumber from '../shared/numbers/percentageNumber';
 import getPercentage from '../shared/utilities/getPercentage';
 
@@ -21,20 +19,19 @@ const ratingColours = (likes, dislikes) => {
   return styles.bad;
 };
 
-const Rating = ({ likes, dislikes, audioId }) => {
+const Rating = ({ likes, dislikes, children }) => {
   const ratingPercentClass = ratingColours(likes, dislikes);
 
   return (
     <div className={styles.rating}>
       <PercentageNumber className={ratingPercentClass} firstValue={likes} secondValue={dislikes} />
-      <Like className={styles.like} audioId={audioId} />
-      <Dislike className={styles.dislike} audioId={audioId} />
+      {children}
     </div>
   );
 };
 
 Rating.propTypes = {
-  audioId: PropTypes.number.isRequired,
+  children: PropTypes.node.isRequired,
   dislikes: PropTypes.number.isRequired,
   likes: PropTypes.number.isRequired,
 };

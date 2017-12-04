@@ -7,13 +7,13 @@ using GraphQL.Types;
 
 namespace SoundVast.Components.Rating
 {
-    public class RateAudioInput : MutationInputGraphType
+    public class RateInput : MutationInputGraphType
     {
-        public RateAudioInput()
+        public RateInput()
         {
-            Name = nameof(RateAudioInput);
+            Name = nameof(RateInput);
 
-            Field<NonNullGraphType<IntGraphType>>("AudioId");
+            Field<NonNullGraphType<IntGraphType>>("Id");
             Field<NonNullGraphType<BooleanGraphType>>("Liked");
         }
     }

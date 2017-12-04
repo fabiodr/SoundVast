@@ -4,7 +4,9 @@ import PropTypes from 'prop-types';
 import styles from './song.less';
 import Play from '../audio/playContainer';
 import CoverImage from '../audio/coverImage';
-import Rating from '../rating/rating';
+import Rating from '../rating/audioRating';
+import Like from '../rating/like/likeAudioContainer';
+import Dislike from '../rating/dislike/dislikeAudioContainer';
 import Name from '../audio/name';
 
 const Song = ({ coverImageUrl, likes, dislikes, name, artist, audioId }) => (
@@ -14,7 +16,10 @@ const Song = ({ coverImageUrl, likes, dislikes, name, artist, audioId }) => (
     </Play>
     <Name name={name} />
     <div className={styles.artist}>{artist}</div>
-    <Rating audioId={audioId} likes={likes} dislikes={dislikes} />
+    <Rating likes={likes} dislikes={dislikes}>
+      <Like audioId={audioId} />
+      <Dislike audioId={audioId} />
+    </Rating>
   </div>
 );
 

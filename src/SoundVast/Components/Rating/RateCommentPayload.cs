@@ -12,11 +12,11 @@ using SoundVast.Components.User;
 
 namespace SoundVast.Components.Rating
 {
-    public class RateAudioPayload : MutationPayloadGraphType
+    public class RateCommentPayload : MutationPayloadGraphType
     {
-        private readonly IRatingService<Audio.Models.Audio> _ratingService;
+        private readonly IRatingService<Comment.Models.Comment> _ratingService;
 
-        public RateAudioPayload(IRatingService<Audio.Models.Audio> ratingService)
+        public RateCommentPayload(IRatingService<Comment.Models.Comment> ratingService)
         {
             _ratingService = ratingService;
 

@@ -2,12 +2,13 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using SoundVast.Components.Rating;
 using SoundVast.Components.Rating.Models;
 using SoundVast.Components.User;
 
 namespace SoundVast.Components.Comment.Models
 {
-    public class Comment
+    public class Comment : IRatable
     {
         [Required]
         public int Id { get; set; }

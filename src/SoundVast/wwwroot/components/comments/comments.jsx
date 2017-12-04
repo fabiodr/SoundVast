@@ -9,8 +9,11 @@ const Comments = ({ comments }) => (
     {comments.map(comment => (
       <Comment
         key={comment.commentId}
+        id={comment.commentId}
         body={comment.body}
         date={comment.date}
+        likes={comment.likes}
+        dislikes={comment.dislikes}
         userName={comment.user.userName}
       />
     ))}
@@ -27,6 +30,8 @@ Comments.propTypes = {
       commentId: PropTypes.number.isRequired,
       body: PropTypes.string.isRequired,
       date: PropTypes.string.isRequired,
+      dislikes: PropTypes.number.isRequired,
+      likes: PropTypes.number.isRequired,
       user: PropTypes.shape({
         userName: PropTypes.string.isRequired,
       }).isRequired,

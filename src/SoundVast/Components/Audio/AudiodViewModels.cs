@@ -11,13 +11,7 @@ using SoundVast.CustomHelpers;
 
 namespace SoundVast.Components.Audio
 {
-    public interface IRatable
-    {
-        int Likes { get; set; }
-        int Dislikes { get; set; }
-    }
-
-    public class AudiosViewModel : IRatable
+    public class AudiosViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -28,7 +22,7 @@ namespace SoundVast.Components.Audio
         public int Dislikes { get; set; }
     }
 
-    public class AudioViewModel : IRatable
+    public class AudioViewModel 
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -112,7 +106,7 @@ namespace SoundVast.Components.Audio
     //    public string AdditionalDetails { get; set; }
     //}
 
-    public class EditAudioViewModel : IRatable
+    public class EditAudioViewModel
     {
         public int Id { get; set; }
         [Required]

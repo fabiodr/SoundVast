@@ -11,7 +11,7 @@ using SoundVast.Components.User;
 
 namespace SoundVast.Components.Audio.Models
 {
-    public abstract class Audio
+    public abstract class Audio : IRatable
     {
         protected Audio()
         {

@@ -17,5 +17,7 @@ namespace SoundVast.Components.Rating.Models
         public virtual ApplicationUser User { get; set; }
         public int? AudioId { get; set; }
         public virtual Audio.Models.Audio Audio { get; set; }
+        public int? CommentId { get; set; }
+        public virtual Comment.Models.Comment Comment { get; set; }
     }
 }
