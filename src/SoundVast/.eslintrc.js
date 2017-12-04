@@ -18,6 +18,7 @@ module.exports = {
   rules: {
     'react/wrap-multilines': 'off',
     'react/require-extension': 'off',
+    'relay/graphql-syntax': 'error',
   },
   overrides: [
     {
