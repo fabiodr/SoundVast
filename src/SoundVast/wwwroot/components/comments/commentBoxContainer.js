@@ -1,5 +1,6 @@
 import { reduxForm } from 'redux-form';
-import { compose, withHandlers } from 'recompose';
+import PropTypes from 'prop-types';
+import { compose, withHandlers, defaultProps, setPropTypes } from 'recompose';
 import { connect } from 'react-redux';
 
 import CommentBox from './commentBox';
@@ -10,13 +11,21 @@ const mapStateToProps = ({ jPlayers }) => ({
 });
 
 const handlers = {
-  onSubmit: ({ audioId }) => input => commentMutation(input, audioId),
+  onSubmit: ({ audioId, originalCommentId }) => (input) => {
+    commentMutation(input, audioId, originalCommentId);
+  },
+};
+
+const propTypes = {
+  originalCommentId: PropTypes.number,
 };
 
 export default compose(
-  connect(mapStateToProps),
-  withHandlers(handlers),
-  reduxForm({
+  setPropTypes(propTypes),
+  defaultProps({
     form: 'commentBox',
   }),
+  connect(mapStateToProps),
+  withHandlers(handlers),
+  reduxForm(),
 )(CommentBox);

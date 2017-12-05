@@ -13,11 +13,12 @@ const mutation = graphql`
   }
 `;
 
-export default ({ body }, audioId) => {
+export default ({ body }, audioId, originalCommentId) => {
   const variables = {
     input: {
       body,
       audioId,
+      originalCommentId,
     },
   };
 

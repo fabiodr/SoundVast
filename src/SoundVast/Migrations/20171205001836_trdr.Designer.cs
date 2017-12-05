@@ -12,8 +12,8 @@ using System;
 namespace SoundVast.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20171203225726_tds")]
-    partial class tds
+    [Migration("20171205001836_trdr")]
+    partial class trdr
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -186,8 +186,6 @@ namespace SoundVast.Migrations
 
                     b.HasIndex("OriginalCommentId");
 
-                    b.HasIndex("RatingId");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("Comments");
@@ -232,6 +230,8 @@ namespace SoundVast.Migrations
 
                     b.Property<int?>("AudioId");
 
+                    b.Property<int?>("CommentId");
+
                     b.Property<bool>("Liked");
 
                     b.Property<string>("UserId");
@@ -239,6 +239,8 @@ namespace SoundVast.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AudioId");
+
+                    b.HasIndex("CommentId");
 
                     b.HasIndex("UserId");
 
@@ -386,10 +388,6 @@ namespace SoundVast.Migrations
                         .WithMany("Replies")
                         .HasForeignKey("OriginalCommentId");
 
-                    b.HasOne("SoundVast.Components.Rating.Models.Rating", "Rating")
-                        .WithMany()
-                        .HasForeignKey("RatingId");
-
                     b.HasOne("SoundVast.Components.User.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
@@ -400,6 +398,11 @@ namespace SoundVast.Migrations
                     b.HasOne("SoundVast.Components.Audio.Models.Audio", "Audio")
                         .WithMany("Ratings")
                         .HasForeignKey("AudioId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("SoundVast.Components.Comment.Models.Comment", "Comment")
+                        .WithMany("Ratings")
+                        .HasForeignKey("CommentId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("SoundVast.Components.User.ApplicationUser", "User")

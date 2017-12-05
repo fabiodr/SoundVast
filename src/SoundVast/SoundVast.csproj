@@ -413,6 +413,7 @@
   <ItemGroup>
     <Folder Include="Components\Form\" />
     <Folder Include="Components\User\Profile\" />
+    <Folder Include="Migrations\" />
     <Folder Include="wwwroot\components\app\__generated__\" />
   </ItemGroup>
 

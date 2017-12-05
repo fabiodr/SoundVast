@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace SoundVast.Migrations
 {
-    public partial class df : Migration
+    public partial class trdr : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -215,33 +215,6 @@ namespace SoundVast.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Ratings",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    AudioId = table.Column<int>(type: "int", nullable: true),
-                    Liked = table.Column<bool>(type: "bit", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Ratings", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Ratings_Audios_AudioId",
-                        column: x => x.AudioId,
-                        principalTable: "Audios",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Ratings_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Comments",
                 columns: table => new
                 {
@@ -270,13 +243,41 @@ namespace SoundVast.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Comments_Ratings_RatingId",
-                        column: x => x.RatingId,
-                        principalTable: "Ratings",
+                        name: "FK_Comments_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Ratings",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    AudioId = table.Column<int>(type: "int", nullable: true),
+                    CommentId = table.Column<int>(type: "int", nullable: true),
+                    Liked = table.Column<bool>(type: "bit", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ratings", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Comments_AspNetUsers_UserId",
+                        name: "FK_Ratings_Audios_AudioId",
+                        column: x => x.AudioId,
+                        principalTable: "Audios",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Ratings_Comments_CommentId",
+                        column: x => x.CommentId,
+                        principalTable: "Comments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Ratings_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -343,11 +344,6 @@ namespace SoundVast.Migrations
                 column: "OriginalCommentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comments_RatingId",
-                table: "Comments",
-                column: "RatingId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Comments_UserId",
                 table: "Comments",
                 column: "UserId");
@@ -356,6 +352,11 @@ namespace SoundVast.Migrations
                 name: "IX_Ratings_AudioId",
                 table: "Ratings",
                 column: "AudioId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Ratings_CommentId",
+                table: "Ratings",
+                column: "CommentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Ratings_UserId",
@@ -381,16 +382,16 @@ namespace SoundVast.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Comments");
+                name: "Quotes");
 
             migrationBuilder.DropTable(
-                name: "Quotes");
+                name: "Ratings");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Ratings");
+                name: "Comments");
 
             migrationBuilder.DropTable(
                 name: "Audios");

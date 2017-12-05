@@ -23,38 +23,6 @@ namespace SoundVast.Components.Comment
             _repository = repository;
         }
 
-        //public CommentModel GetComment(int id)
-        //{
-        //    return _repository.Get(id);
-        //}
-
-        //public Comment GetCommentForRating(int id)
-        //{
-        //    return _repository.GetAll()
-        //        .Include(x => x.CommentRatingJoins)
-        //        .ThenInclude(x => x.CommentRating)
-        //        .Include(x => x.User)
-        //        .Include(x => x.RatingCount)
-        //        .SingleOrDefault(x => x.Id == id);
-        //}
-
-        //public Comment GetCommentForDelete(int id)
-        //{
-        //    return _repository.GetAll()
-        //        .Include(x => x.Audio)
-        //        .Include(x => x.Replies)
-        //        .Include(x => x.User)
-        //        .SingleOrDefault(x => x.Id == id);
-        //}
-
-        //public Comment GetOriginalComment(int id)
-        //{
-        //    return _repository.GetAll()
-        //        .Include(x => x.Replies)
-        //        .Include(x => x.Audio)
-        //        .SingleOrDefault(x => x.Id == id);
-        //}
-
         //public ICollection<Comment> GetSortedCommentsForAudio<TKey>(int audioId, int pageNumber, OrderingOption<Comment, TKey> orderingOption)
         //{
         //    var startIndex = (pageNumber - 1) * Comment.CommentsPerPage;

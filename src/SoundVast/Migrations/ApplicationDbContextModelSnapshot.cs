@@ -401,7 +401,8 @@ namespace SoundVast.Migrations
 
                     b.HasOne("SoundVast.Components.Comment.Models.Comment", "Comment")
                         .WithMany("Ratings")
-                        .HasForeignKey("CommentId");
+                        .HasForeignKey("CommentId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("SoundVast.Components.User.ApplicationUser", "User")
                         .WithMany()
