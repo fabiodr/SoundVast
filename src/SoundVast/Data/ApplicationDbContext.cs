@@ -41,14 +41,21 @@ namespace SoundVast.Data
         {
         }
 
+        public override int SaveChanges()
+        {
+          //  Ratings.RemoveRange(Ratings.Where(x => x.CommentId == null || x.AudioId == null));
+
+            return base.SaveChanges();
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Song>();
             modelBuilder.Entity<LiveStream>();
-            modelBuilder.Entity<Audio>().HasMany(x => x.Ratings).WithOne(x => x.Audio).OnDelete(DeleteBehavior.Cascade);
-            modelBuilder.Entity<Comment>().HasMany(x => x.Ratings).WithOne(x => x.Comment).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Audio>().HasMany(x => x.Ratings).WithOne(x => x.Audio);
+            modelBuilder.Entity<Comment>().HasMany(x => x.Ratings).WithOne(x => x.Comment);
             //modelBuilder.Entity<AudioGenreModel>().HasKey(x => new { x.AudioId, x.GenreId });
             //modelBuilder.Entity<FileStreamModel>().HasMany(x => x.Links).WithOne().OnDelete(DeleteBehavior.Cascade);
             //modelBuilder.Entity<CommentRatingJoinModel>().HasKey(x => new { x.CommentId, x.CommentRatingId });

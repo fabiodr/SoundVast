@@ -12,8 +12,8 @@ using System;
 namespace SoundVast.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20171205001836_trdr")]
-    partial class trdr
+    [Migration("20171206221812_ewwe")]
+    partial class ewwe
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -397,13 +397,11 @@ namespace SoundVast.Migrations
                 {
                     b.HasOne("SoundVast.Components.Audio.Models.Audio", "Audio")
                         .WithMany("Ratings")
-                        .HasForeignKey("AudioId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("AudioId");
 
                     b.HasOne("SoundVast.Components.Comment.Models.Comment", "Comment")
                         .WithMany("Ratings")
-                        .HasForeignKey("CommentId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("CommentId");
 
                     b.HasOne("SoundVast.Components.User.ApplicationUser", "User")
                         .WithMany()
