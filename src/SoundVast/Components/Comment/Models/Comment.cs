@@ -27,6 +27,7 @@ namespace SoundVast.Components.Comment.Models
         public virtual ICollection<Comment> Replies { get; set; }
         public virtual ICollection<Rating.Models.Rating> Ratings { get; set; }
         public bool IsTopLevelComment => OriginalCommentId == null;
+        public int RepliesCount => Replies.Count;
         public int Likes => Ratings.Count(x => x.Liked);
         public int Dislikes => Ratings.Count(x => !x.Liked);
         //public virtual ICollection<CommentRatingJoinModel> CommentRatingJoins { get; set; }

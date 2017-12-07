@@ -6,6 +6,9 @@ import Song from './song';
 import InfiniteScrollGrid from '../shared/grid/infiniteScrollGrid';
 import AudioHeader from '../audio/audioHeader';
 import genreTypeNames from '../shared/utilities/genreTypeNames';
+import CommentBox from '../comments/commentBoxContainer';
+import Comments from '../comments/commentsContainer';
+
 
 const Songs = ({ songs, loadMore, hasMore }) => (
   <SoundVastTitle title="Songs">
@@ -17,15 +20,18 @@ const Songs = ({ songs, loadMore, hasMore }) => (
         hasMore={hasMore}
       >
         {songs.map(song => (
-          <Song
-            key={song.audioId}
-            audioId={song.audioId}
-            coverImageUrl={song.coverImageUrl}
-            name={song.name}
-            artist={song.artist}
-            likes={song.likes}
-            dislikes={song.dislikes}
-          />
+          <div key={song.audioId} >
+            <Song
+              audioId={song.audioId}
+              coverImageUrl={song.coverImageUrl}
+              name={song.name}
+              artist={song.artist}
+              likes={song.likes}
+              dislikes={song.dislikes}
+            />
+            <CommentBox />
+            <Comments data={song} />
+          </div>
         ))}
       </InfiniteScrollGrid>
     </div>
@@ -41,6 +47,7 @@ Songs.propTypes = {
       coverImageUrl: PropTypes.string.isRequired,
       likes: PropTypes.number.isRequired,
       dislikes: PropTypes.number.isRequired,
+      comments: PropTypes.object,
     }),
   ).isRequired,
   loadMore: PropTypes.func.isRequired,

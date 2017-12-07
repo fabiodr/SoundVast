@@ -15,6 +15,7 @@ const query = graphql`
     $cursor: String
     $genre: String
     $filter: FilterInput
+    $getReplies: Boolean
   ) {
     ...songsContainer
   }
@@ -36,23 +37,7 @@ const fragments = graphql`
           artist
           likes
           dislikes
-          comments(
-            first: $count
-            after: $cursor
-          ) {
-            edges {
-              node {
-                commentId,
-                body
-                date,
-                likes,
-                dislikes,
-                user {
-                  userName
-                }
-              }
-            }
-          }
+          ...commentsContainer
         }
       }
     }
@@ -100,10 +85,6 @@ class InitializeSongs extends React.Component {
     },
     poster: song.coverImageUrl,
     free: song.free,
-    comments: song.comments.edges.map(x => ({
-      ...x.node,
-      date: new Date(x.node.date).toLocaleDateString(),
-    })),
   }))
   render() {
     return <Songs {...this.props} />;
@@ -119,6 +100,7 @@ InitializeSongs.propTypes = {
       artist: PropTypes.string,
       coverImageUrl: PropTypes.string.isRequired,
       free: PropTypes.bool,
+      comments: PropTypes.object,
     }),
   ).isRequired,
 };

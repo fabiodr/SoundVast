@@ -30,6 +30,7 @@ namespace SoundVast.Components.LiveStream
             Field<ListGraphType<RatingPayload>>("ratings", "The ratings that have been applied by users to this live stream");
             Connection<CommentPayload>()
                 .Name("comments")
+                .Argument<BooleanGraphType>("getReplies", "Get the replies instead")
                 .Description("The comments for the live stream")
                 .Resolve(c =>
                 {

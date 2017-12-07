@@ -33,7 +33,7 @@ namespace SoundVast.Components.Comment
                 UserId = user.Id,
                 Body = body,
                 AudioId = audioId,
-                OriginalCommentId = originalCommentId,
+                OriginalCommentId = originalCommentId
             };
 
             _commentService.Add(comment);

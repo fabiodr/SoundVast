@@ -1,5 +1,5 @@
 # source: http://localhost:8080/graphql
-# timestamp: Mon Dec 04 2017 22:33:22 GMT+0100 (W. Europe Standard Time)
+# timestamp: Thu Dec 07 2017 01:35:30 GMT+0100 (W. Europe Standard Time)
 
 type ApplicationUser {
   id: ID
@@ -33,6 +33,9 @@ interface Audio {
 
     # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
     first: Int
+
+    # Get the replies instead
+    getReplies: Boolean
   ): CommentPayloadConnection
 }
 
@@ -47,6 +50,7 @@ type Comment implements Node {
   date: Date!
   likes: Int!
   dislikes: Int!
+  repliesCount: Int!
 
   # The body of the comment
   body: String!
@@ -191,6 +195,9 @@ type LiveStream implements Node, Audio {
 
     # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
     first: Int
+
+    # Get the replies instead
+    getReplies: Boolean
   ): CommentPayloadConnection
 }
 
@@ -472,6 +479,9 @@ type Song implements Node, Audio {
 
     # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
     first: Int
+
+    # Get the replies instead
+    getReplies: Boolean
   ): CommentPayloadConnection
 }
 

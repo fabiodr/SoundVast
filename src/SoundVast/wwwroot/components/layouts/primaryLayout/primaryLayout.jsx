@@ -16,7 +16,7 @@ const PrimaryLayout = ({ children, user, loginProviders }) => (
       <Content>
         {children}
       </Content>
-      <SideBar />
+      {/* <SideBar /> */}
     </div>
     <FooterPlaylist />
   </div>

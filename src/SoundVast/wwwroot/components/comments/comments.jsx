@@ -4,39 +4,47 @@ import PropTypes from 'prop-types';
 import Comment from './comment';
 import styles from './comments.less';
 
-const Comments = ({ comments }) => (
+const Comments = ({ data, showReplies }) => (
   <div className={styles.comments}>
-    {comments.map(comment => (
+    {data.comments.edges.map(({ node }) => (
       <Comment
-        key={comment.commentId}
-        id={comment.commentId}
-        body={comment.body}
-        date={comment.date}
-        likes={comment.likes}
-        dislikes={comment.dislikes}
-        userName={comment.user.userName}
+        key={node.commentId}
+        id={node.commentId}
+        body={node.body}
+        date={new Date(node.date).toLocaleDateString()}
+        likes={node.likes}
+        dislikes={node.dislikes}
+        userName={node.user.userName}
+        repliesCount={node.repliesCount}
+        isTopLevelComment={!node.originalComment}
+        showReplies={showReplies}
       />
     ))}
   </div>
 );
 
-Comments.defaultProps = {
-  comments: [],
-};
-
 Comments.propTypes = {
-  comments: PropTypes.arrayOf(
-    PropTypes.shape({
-      commentId: PropTypes.number.isRequired,
-      body: PropTypes.string.isRequired,
-      date: PropTypes.string.isRequired,
-      dislikes: PropTypes.number.isRequired,
-      likes: PropTypes.number.isRequired,
-      user: PropTypes.shape({
-        userName: PropTypes.string.isRequired,
-      }).isRequired,
+  data: PropTypes.shape({
+    comments: PropTypes.shape({
+      edges: PropTypes.arrayOf(
+        PropTypes.shape({
+          node: PropTypes.shape({
+            commentId: PropTypes.number.isRequired,
+            body: PropTypes.string.isRequired,
+            date: PropTypes.string.isRequired,
+            dislikes: PropTypes.number.isRequired,
+            likes: PropTypes.number.isRequired,
+            repliesCount: PropTypes.number.isRequired,
+            originalComment: PropTypes.object,
+            user: PropTypes.shape({
+              userName: PropTypes.string.isRequired,
+            }).isRequired,
+          }),
+        }),
+      ),
     }),
-  ),
+  }).isRequired,
+  showReplies: PropTypes.func.isRequired,
 };
 
 export default Comments;

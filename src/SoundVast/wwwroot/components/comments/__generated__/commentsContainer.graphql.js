@@ -8,16 +8,22 @@
 
 /*::
 import type {ConcreteFragment} from 'relay-runtime';
-export type songsContainer = {|
-  +songs: ?{|
+export type commentsContainer = {|
+  +comments: ?{|
     +edges: ?$ReadOnlyArray<?{|
       +node: ?{|
-        +audioId: number;
-        +name: string;
-        +coverImageUrl: string;
-        +artist: ?string;
+        +commentId: number;
+        +body: string;
+        +date: any;
         +likes: number;
         +dislikes: number;
+        +repliesCount: number;
+        +originalComment: ?{|
+          +id: string;
+        |};
+        +user: {|
+          +userName: string;
+        |};
       |};
     |}>;
   |};
@@ -39,13 +45,8 @@ const fragment /*: ConcreteFragment*/ = {
     },
     {
       "kind": "RootArgument",
-      "name": "genre",
-      "type": "String"
-    },
-    {
-      "kind": "RootArgument",
-      "name": "filter",
-      "type": "FilterInput"
+      "name": "getReplies",
+      "type": "Boolean"
     }
   ],
   "kind": "Fragment",
@@ -56,39 +57,33 @@ const fragment /*: ConcreteFragment*/ = {
         "cursor": "cursor",
         "direction": "forward",
         "path": [
-          "songs"
+          "comments"
         ]
       }
     ]
   },
-  "name": "songsContainer",
+  "name": "commentsContainer",
   "selections": [
     {
       "kind": "LinkedField",
-      "alias": "songs",
+      "alias": "comments",
       "args": [
         {
           "kind": "Variable",
-          "name": "filter",
-          "variableName": "filter",
-          "type": "FilterInput"
-        },
-        {
-          "kind": "Variable",
-          "name": "genre",
-          "variableName": "genre",
-          "type": "String"
+          "name": "getReplies",
+          "variableName": "getReplies",
+          "type": "Boolean"
         }
       ],
-      "concreteType": "SongPayloadConnection",
-      "name": "__songsContainer_songs_connection",
+      "concreteType": "CommentPayloadConnection",
+      "name": "__commentsContainer_comments_connection",
       "plural": false,
       "selections": [
         {
           "kind": "LinkedField",
           "alias": null,
           "args": null,
-          "concreteType": "SongPayloadEdge",
+          "concreteType": "CommentPayloadEdge",
           "name": "edges",
           "plural": true,
           "selections": [
@@ -96,7 +91,7 @@ const fragment /*: ConcreteFragment*/ = {
               "kind": "LinkedField",
               "alias": null,
               "args": null,
-              "concreteType": "Song",
+              "concreteType": "Comment",
               "name": "node",
               "plural": false,
               "selections": [
@@ -104,28 +99,21 @@ const fragment /*: ConcreteFragment*/ = {
                   "kind": "ScalarField",
                   "alias": null,
                   "args": null,
-                  "name": "audioId",
+                  "name": "commentId",
                   "storageKey": null
                 },
                 {
                   "kind": "ScalarField",
                   "alias": null,
                   "args": null,
-                  "name": "name",
+                  "name": "body",
                   "storageKey": null
                 },
                 {
                   "kind": "ScalarField",
                   "alias": null,
                   "args": null,
-                  "name": "coverImageUrl",
-                  "storageKey": null
-                },
-                {
-                  "kind": "ScalarField",
-                  "alias": null,
-                  "args": null,
-                  "name": "artist",
+                  "name": "date",
                   "storageKey": null
                 },
                 {
@@ -143,9 +131,47 @@ const fragment /*: ConcreteFragment*/ = {
                   "storageKey": null
                 },
                 {
-                  "kind": "FragmentSpread",
-                  "name": "commentsContainer",
-                  "args": null
+                  "kind": "ScalarField",
+                  "alias": null,
+                  "args": null,
+                  "name": "repliesCount",
+                  "storageKey": null
+                },
+                {
+                  "kind": "LinkedField",
+                  "alias": null,
+                  "args": null,
+                  "concreteType": "Comment",
+                  "name": "originalComment",
+                  "plural": false,
+                  "selections": [
+                    {
+                      "kind": "ScalarField",
+                      "alias": null,
+                      "args": null,
+                      "name": "id",
+                      "storageKey": null
+                    }
+                  ],
+                  "storageKey": null
+                },
+                {
+                  "kind": "LinkedField",
+                  "alias": null,
+                  "args": null,
+                  "concreteType": "User",
+                  "name": "user",
+                  "plural": false,
+                  "selections": [
+                    {
+                      "kind": "ScalarField",
+                      "alias": null,
+                      "args": null,
+                      "name": "userName",
+                      "storageKey": null
+                    }
+                  ],
+                  "storageKey": null
                 },
                 {
                   "kind": "ScalarField",
@@ -196,7 +222,7 @@ const fragment /*: ConcreteFragment*/ = {
       "storageKey": null
     }
   ],
-  "type": "Query"
+  "type": "Audio"
 };
 
 module.exports = fragment;

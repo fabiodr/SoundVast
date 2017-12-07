@@ -53,6 +53,15 @@ namespace SoundVast.Components.Comment
 
             if (!_validationProvider.HasErrors)
             {
+                if (comment.OriginalCommentId.HasValue)
+                {
+                    var originalComment = _repository.GetAll()
+                        .Include(x => x.Replies)
+                        .Single(x => x.Id == comment.OriginalCommentId.Value);
+
+                    originalComment.Replies.Add(comment);
+                }
+
                 _repository.Add(comment);
             }
         }

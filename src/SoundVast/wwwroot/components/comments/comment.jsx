@@ -6,6 +6,8 @@ import Like from '../rating/like/likeCommentContainer';
 import Dislike from '../rating/dislike/dislikeCommentContainer';
 import Rating from '../rating/audioRating';
 import CommentBox from './commentBoxContainer';
+import FormattedNumberText from '../shared/numbers/formattedNumberText';
+import Button from '../shared/button/button';
 
 const Comments = ({
   userName,
@@ -17,6 +19,9 @@ const Comments = ({
   reply,
   cancel,
   showReplyBox,
+  repliesCount,
+  isTopLevelComment,
+  showReplies,
 }) => (
   <div>
     <div>
@@ -33,6 +38,11 @@ const Comments = ({
         reply
       </div>
     )}
+    {repliesCount && isTopLevelComment ? (
+      <Button onClick={showReplies}>
+        Show <FormattedNumberText number={repliesCount} singularText="reply" pluralText="replies" />
+      </Button>
+    ) : null}
   </div>
 );
 
@@ -46,6 +56,9 @@ Comments.propTypes = {
   reply: PropTypes.func.isRequired,
   cancel: PropTypes.func.isRequired,
   showReplyBox: PropTypes.bool.isRequired,
+  repliesCount: PropTypes.number.isRequired,
+  isTopLevelComment: PropTypes.bool.isRequired,
+  showReplies: PropTypes.func.isRequired,
 };
 
 const stateHandlers = {
