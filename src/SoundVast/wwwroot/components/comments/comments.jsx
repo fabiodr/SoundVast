@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Comment from './comment';
 import styles from './comments.less';
 
-const Comments = ({ data, showReplies }) => (
+const Comments = ({ data, setReplies }) => (
   <div className={styles.comments}>
     {data.comments.edges.map(({ node }) => (
       <Comment
@@ -17,7 +17,7 @@ const Comments = ({ data, showReplies }) => (
         userName={node.user.userName}
         repliesCount={node.repliesCount}
         isTopLevelComment={!node.originalComment}
-        showReplies={showReplies}
+        setReplies={setReplies}
       />
     ))}
   </div>
@@ -44,7 +44,7 @@ Comments.propTypes = {
       ),
     }),
   }).isRequired,
-  showReplies: PropTypes.func.isRequired,
+  setReplies: PropTypes.func.isRequired,
 };
 
 export default Comments;

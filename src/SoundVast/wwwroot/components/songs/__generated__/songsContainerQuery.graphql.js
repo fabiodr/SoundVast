@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 8e8ef3b0af79c873f3aca36810d18246
+ * @relayHash 94ccdb6a9a2c0c06a1f3da2c0bd73069
  */
 
 /* eslint-disable */
@@ -19,7 +19,7 @@ query songsContainerQuery(
   $cursor: String
   $genre: String
   $filter: FilterInput
-  $getReplies: Boolean
+  $originalCommentId: Int
 ) {
   ...songsContainer
 }
@@ -27,18 +27,13 @@ query songsContainerQuery(
 fragment songsContainer on Query {
   songs(first: $count, after: $cursor, genre: $genre, filter: $filter) {
     edges {
+      cursor
       node {
         __typename
         audioId
-        name
-        coverImageUrl
-        artist
-        likes
-        dislikes
-        ...commentsContainer
+        ...songContainer_song
         id
       }
-      cursor
     }
     pageInfo {
       endCursor
@@ -47,8 +42,19 @@ fragment songsContainer on Query {
   }
 }
 
+fragment songContainer_song on Song {
+  audioId
+  name
+  coverImageUrl
+  artist
+  likes
+  dislikes
+  ...commentsContainer
+}
+
 fragment commentsContainer on Audio {
-  comments(first: $count, after: $cursor, getReplies: $getReplies) {
+  audioId
+  comments(first: $count, after: $cursor, originalCommentId: $originalCommentId) {
     edges {
       node {
         __typename
@@ -106,8 +112,8 @@ const batch /*: ConcreteBatch*/ = {
       },
       {
         "kind": "LocalArgument",
-        "name": "getReplies",
-        "type": "Boolean",
+        "name": "originalCommentId",
+        "type": "Int",
         "defaultValue": null
       }
     ],
@@ -155,8 +161,8 @@ const batch /*: ConcreteBatch*/ = {
       },
       {
         "kind": "LocalArgument",
-        "name": "getReplies",
-        "type": "Boolean",
+        "name": "originalCommentId",
+        "type": "Int",
         "defaultValue": null
       }
     ],
@@ -205,6 +211,13 @@ const batch /*: ConcreteBatch*/ = {
             "name": "edges",
             "plural": true,
             "selections": [
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "cursor",
+                "storageKey": null
+              },
               {
                 "kind": "LinkedField",
                 "alias": null,
@@ -280,9 +293,9 @@ const batch /*: ConcreteBatch*/ = {
                       },
                       {
                         "kind": "Variable",
-                        "name": "getReplies",
-                        "variableName": "getReplies",
-                        "type": "Boolean"
+                        "name": "originalCommentId",
+                        "variableName": "originalCommentId",
+                        "type": "Int"
                       }
                     ],
                     "concreteType": "CommentPayloadConnection",
@@ -463,16 +476,16 @@ const batch /*: ConcreteBatch*/ = {
                       },
                       {
                         "kind": "Variable",
-                        "name": "getReplies",
-                        "variableName": "getReplies",
-                        "type": "Boolean"
+                        "name": "originalCommentId",
+                        "variableName": "originalCommentId",
+                        "type": "Int"
                       }
                     ],
                     "handle": "connection",
                     "name": "comments",
                     "key": "commentsContainer_comments",
                     "filters": [
-                      "getReplies"
+                      "originalCommentId"
                     ]
                   },
                   {
@@ -483,13 +496,6 @@ const batch /*: ConcreteBatch*/ = {
                     "storageKey": null
                   }
                 ],
-                "storageKey": null
-              },
-              {
-                "kind": "ScalarField",
-                "alias": null,
-                "args": null,
-                "name": "cursor",
                 "storageKey": null
               }
             ],
@@ -562,7 +568,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query songsContainerQuery(\n  $count: Int!\n  $cursor: String\n  $genre: String\n  $filter: FilterInput\n  $getReplies: Boolean\n) {\n  ...songsContainer\n}\n\nfragment songsContainer on Query {\n  songs(first: $count, after: $cursor, genre: $genre, filter: $filter) {\n    edges {\n      node {\n        __typename\n        audioId\n        name\n        coverImageUrl\n        artist\n        likes\n        dislikes\n        ...commentsContainer\n        id\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment commentsContainer on Audio {\n  comments(first: $count, after: $cursor, getReplies: $getReplies) {\n    edges {\n      node {\n        __typename\n        commentId\n        body\n        date\n        likes\n        dislikes\n        repliesCount\n        originalComment {\n          id\n        }\n        user {\n          userName\n          id\n        }\n        id\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+  "text": "query songsContainerQuery(\n  $count: Int!\n  $cursor: String\n  $genre: String\n  $filter: FilterInput\n  $originalCommentId: Int\n) {\n  ...songsContainer\n}\n\nfragment songsContainer on Query {\n  songs(first: $count, after: $cursor, genre: $genre, filter: $filter) {\n    edges {\n      cursor\n      node {\n        __typename\n        audioId\n        ...songContainer_song\n        id\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment songContainer_song on Song {\n  audioId\n  name\n  coverImageUrl\n  artist\n  likes\n  dislikes\n  ...commentsContainer\n}\n\nfragment commentsContainer on Audio {\n  audioId\n  comments(first: $count, after: $cursor, originalCommentId: $originalCommentId) {\n    edges {\n      node {\n        __typename\n        commentId\n        body\n        date\n        likes\n        dislikes\n        repliesCount\n        originalComment {\n          id\n        }\n        user {\n          userName\n          id\n        }\n        id\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
 };
 
 module.exports = batch;

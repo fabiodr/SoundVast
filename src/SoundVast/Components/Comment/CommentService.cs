@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using SoundVast.QueryOptions;
@@ -39,12 +40,18 @@ namespace SoundVast.Components.Comment
 
         public ICollection<Models.Comment> TopLevelComments(int audioId)
         {
-            return _repository.GetAll().BuildComment().Where(x => x.IsTopLevelComment).ToList();
+            return _repository.GetAll().BuildComment().Where(x => x.AudioId == audioId && x.IsTopLevelComment).ToList();
         }
 
-        public ICollection<Models.Comment> GetReplies(int id)
+
+        public ICollection<Models.Comment> Replies(int id)
         {
-            return _repository.GetAll().Where(x => x.Id == id).SelectMany(x => x.Replies).OrderBy(x => x.Date).ToList();
+            var comment = _repository.GetAll().Single(x => x.Id == id);
+            var allReplies = new List<Models.Comment>();
+
+            Models.Comment.GetAllReplies(comment, allReplies);
+            
+            return allReplies;
         }
 
         public void Add(Models.Comment comment)

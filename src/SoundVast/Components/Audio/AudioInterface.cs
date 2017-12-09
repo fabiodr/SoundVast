@@ -28,7 +28,7 @@ namespace SoundVast.Components.Audio
             Field<ListGraphType<RatingPayload>>("ratings", "The ratings that have been applied by users to this audio");
             Connection<CommentPayload>()
                 .Name("comments")
-                .Argument<BooleanGraphType>("getReplies", "Get the replies instead")
+                .Argument<IntGraphType>("originalCommentId", "Get the replies for the original comment instead")
                 .Description("The comments for the audio");
         }
     }

@@ -6,10 +6,11 @@ import Comments from './comments';
 
 const fragments = graphql`
   fragment commentsContainer on Audio {
+    audioId,
     comments(
       first: $count
       after: $cursor
-      getReplies: $getReplies
+      originalCommentId: $originalCommentId
     ) @connection(key: "commentsContainer_comments") {
       edges {
         node {
@@ -31,16 +32,36 @@ const fragments = graphql`
   }
 `;
 
+const connectionConfig = {
+  direction: 'forward',
+  query: graphql`
+    query commentsContainerForwardQuery(
+      $id: Int!
+      $count: Int!
+      $cursor: String
+      $originalCommentId: Int
+    ) {
+      song(id: $id) {
+        ...commentsContainer
+      }
+    }
+  `,
+  getVariables: (props, { count, cursor }) => ({
+    count,
+    cursor,
+    id: props.data.audioId,
+  }),
+};
+
 const handlers = {
-  showReplies: ({ relay }) => () => {debugger
-    // eslint-disable-next-line no-console
-    relay.refetchConnection(10, error => console.error(error), {
-      getReplies: true,
+  setReplies: ({ relay }) => (id) => {
+    relay.refetchConnection(30, null, {
+      originalCommentId: id,
     });
   },
 };
 
 export default compose(
-  paginationContainer(fragments),
+  paginationContainer(fragments, connectionConfig),
   withHandlers(handlers),
 )(Comments);

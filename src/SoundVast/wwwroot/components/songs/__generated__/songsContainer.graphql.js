@@ -11,13 +11,9 @@ import type {ConcreteFragment} from 'relay-runtime';
 export type songsContainer = {|
   +songs: ?{|
     +edges: ?$ReadOnlyArray<?{|
+      +cursor: string;
       +node: ?{|
         +audioId: number;
-        +name: string;
-        +coverImageUrl: string;
-        +artist: ?string;
-        +likes: number;
-        +dislikes: number;
       |};
     |}>;
   |};
@@ -93,6 +89,13 @@ const fragment /*: ConcreteFragment*/ = {
           "plural": true,
           "selections": [
             {
+              "kind": "ScalarField",
+              "alias": null,
+              "args": null,
+              "name": "cursor",
+              "storageKey": null
+            },
+            {
               "kind": "LinkedField",
               "alias": null,
               "args": null,
@@ -108,43 +111,8 @@ const fragment /*: ConcreteFragment*/ = {
                   "storageKey": null
                 },
                 {
-                  "kind": "ScalarField",
-                  "alias": null,
-                  "args": null,
-                  "name": "name",
-                  "storageKey": null
-                },
-                {
-                  "kind": "ScalarField",
-                  "alias": null,
-                  "args": null,
-                  "name": "coverImageUrl",
-                  "storageKey": null
-                },
-                {
-                  "kind": "ScalarField",
-                  "alias": null,
-                  "args": null,
-                  "name": "artist",
-                  "storageKey": null
-                },
-                {
-                  "kind": "ScalarField",
-                  "alias": null,
-                  "args": null,
-                  "name": "likes",
-                  "storageKey": null
-                },
-                {
-                  "kind": "ScalarField",
-                  "alias": null,
-                  "args": null,
-                  "name": "dislikes",
-                  "storageKey": null
-                },
-                {
                   "kind": "FragmentSpread",
-                  "name": "commentsContainer",
+                  "name": "songContainer_song",
                   "args": null
                 },
                 {
@@ -155,13 +123,6 @@ const fragment /*: ConcreteFragment*/ = {
                   "storageKey": null
                 }
               ],
-              "storageKey": null
-            },
-            {
-              "kind": "ScalarField",
-              "alias": null,
-              "args": null,
-              "name": "cursor",
               "storageKey": null
             }
           ],

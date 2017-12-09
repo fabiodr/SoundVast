@@ -2,15 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import SoundVastTitle from '../shared/title/soundVastTitle';
 
-import Song from './song';
+import Song from './songContainer';
 import InfiniteScrollGrid from '../shared/grid/infiniteScrollGrid';
 import AudioHeader from '../audio/audioHeader';
 import genreTypeNames from '../shared/utilities/genreTypeNames';
-import CommentBox from '../comments/commentBoxContainer';
-import Comments from '../comments/commentsContainer';
 
-
-const Songs = ({ songs, loadMore, hasMore }) => (
+const Songs = ({ data, loadMore, hasMore }) => (
   <SoundVastTitle title="Songs">
     <div>
       <AudioHeader type={genreTypeNames.music} />
@@ -19,37 +16,24 @@ const Songs = ({ songs, loadMore, hasMore }) => (
         loadMore={loadMore}
         hasMore={hasMore}
       >
-        {songs.map(song => (
-          <div key={song.audioId} >
-            <Song
-              audioId={song.audioId}
-              coverImageUrl={song.coverImageUrl}
-              name={song.name}
-              artist={song.artist}
-              likes={song.likes}
-              dislikes={song.dislikes}
-            />
-            <CommentBox />
-            <Comments data={song} />
-          </div>
-        ))}
+        {data.songs.edges.map(({ node }) => <Song key={node.audioId} song={node} /> )}
       </InfiniteScrollGrid>
     </div>
   </SoundVastTitle>
 );
 
 Songs.propTypes = {
-  songs: PropTypes.arrayOf(
-    PropTypes.shape({
-      audioId: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      artist: PropTypes.string,
-      coverImageUrl: PropTypes.string.isRequired,
-      likes: PropTypes.number.isRequired,
-      dislikes: PropTypes.number.isRequired,
-      comments: PropTypes.object,
+  data: PropTypes.shape({
+    songs: PropTypes.shape({
+      edges: PropTypes.arrayOf(
+        PropTypes.shape({
+          node: PropTypes.shape({
+            audioId: PropTypes.number.isRequired,
+          }),
+        }),
+      ),
     }),
-  ).isRequired,
+  }).isRequired,
   loadMore: PropTypes.func.isRequired,
   hasMore: PropTypes.bool.isRequired,
 };

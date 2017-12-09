@@ -9,6 +9,7 @@
 /*::
 import type {ConcreteFragment} from 'relay-runtime';
 export type commentsContainer = {|
+  +audioId: number;
   +comments: ?{|
     +edges: ?$ReadOnlyArray<?{|
       +node: ?{|
@@ -45,8 +46,8 @@ const fragment /*: ConcreteFragment*/ = {
     },
     {
       "kind": "RootArgument",
-      "name": "getReplies",
-      "type": "Boolean"
+      "name": "originalCommentId",
+      "type": "Int"
     }
   ],
   "kind": "Fragment",
@@ -65,14 +66,21 @@ const fragment /*: ConcreteFragment*/ = {
   "name": "commentsContainer",
   "selections": [
     {
+      "kind": "ScalarField",
+      "alias": null,
+      "args": null,
+      "name": "audioId",
+      "storageKey": null
+    },
+    {
       "kind": "LinkedField",
       "alias": "comments",
       "args": [
         {
           "kind": "Variable",
-          "name": "getReplies",
-          "variableName": "getReplies",
-          "type": "Boolean"
+          "name": "originalCommentId",
+          "variableName": "originalCommentId",
+          "type": "Int"
         }
       ],
       "concreteType": "CommentPayloadConnection",

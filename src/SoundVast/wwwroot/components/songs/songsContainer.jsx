@@ -15,7 +15,7 @@ const query = graphql`
     $cursor: String
     $genre: String
     $filter: FilterInput
-    $getReplies: Boolean
+    $originalCommentId: Int
   ) {
     ...songsContainer
   }
@@ -30,14 +30,10 @@ const fragments = graphql`
       filter: $filter
     ) @connection(key: "songsContainer_songs") {
       edges {
+        cursor
         node {
           audioId
-          name
-          coverImageUrl
-          artist
-          likes
-          dislikes
-          ...commentsContainer
+          ...songContainer_song
         }
       }
     }
@@ -56,6 +52,10 @@ const connectionConfig = {
       ...songsContainer
     }
   `,
+  getFragmentVariables: (prevVars, totalCount) => ({
+    ...prevVars,
+    count: totalCount,
+  }),
   getVariables: (_, { count, cursor }) => ({
     count,
     cursor,
@@ -69,41 +69,40 @@ const handlers = {
 
 const createProps = ({ relay, data }) => ({
   hasMore: relay.hasMore(),
-  songs: data.songs.edges.map(x => x.node),
+ // songs: data.songs.edges.map(x => x.node),
 });
 
-class InitializeSongs extends React.Component {
-  componentDidMount() {
-    this.props.setPlaylist('FooterPlaylist', this.getPlaylist());
-  }
-  getPlaylist = () => this.props.songs.map(song => ({
-    id: song.audioId,
-    title: song.name,
-    artist: song.artist,
-    sources: {
-      mp3: `${window.location.origin}/song/stream?id=${song.audioId}`,
-    },
-    poster: song.coverImageUrl,
-    free: song.free,
-  }))
-  render() {
-    return <Songs {...this.props} />;
-  }
-}
+// class InitializeSongs extends React.Component {
+//   componentDidMount() {
+//     this.props.setPlaylist('FooterPlaylist', this.getPlaylist());
+//   }
+//   getPlaylist = () => this.props.songs.map(song => ({
+//     id: song.audioId,
+//     title: song.name,
+//     artist: song.artist,
+//     sources: {
+//       mp3: `${window.location.origin}/song/stream?id=${song.audioId}`,
+//     },
+//     poster: song.coverImageUrl,
+//     free: song.free,
+//   }))
+//   render() {
+//     return <Songs {...this.props} />;
+//   }
+// }
 
-InitializeSongs.propTypes = {
-  setPlaylist: PropTypes.func.isRequired,
-  songs: PropTypes.arrayOf(
-    PropTypes.shape({
-      audioId: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      artist: PropTypes.string,
-      coverImageUrl: PropTypes.string.isRequired,
-      free: PropTypes.bool,
-      comments: PropTypes.object,
-    }),
-  ).isRequired,
-};
+// InitializeSongs.propTypes = {
+//   setPlaylist: PropTypes.func.isRequired,
+//   songs: PropTypes.arrayOf(
+//     PropTypes.shape({
+//       audioId: PropTypes.number.isRequired,
+//       name: PropTypes.string.isRequired,
+//       artist: PropTypes.string,
+//       coverImageUrl: PropTypes.string.isRequired,
+//       free: PropTypes.bool,
+//     }),
+//   ).isRequired,
+// };
 
 const enhance = compose(
   connect(null, {
@@ -114,7 +113,9 @@ const enhance = compose(
   withProps(createProps),
 );
 
-const SongsContainer = enhance(InitializeSongs);
+// const SongsContainer = enhance(InitializeSongs);
+
+const SongsContainer = enhance(Songs);
 
 export const routeConfig = {
   Component: SongsContainer,

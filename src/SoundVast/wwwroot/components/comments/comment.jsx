@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { compose, withStateHandlers } from 'recompose';
+import { compose, withStateHandlers, setPropTypes } from 'recompose';
 
 import Like from '../rating/like/likeCommentContainer';
 import Dislike from '../rating/dislike/dislikeCommentContainer';
@@ -21,30 +21,44 @@ const Comments = ({
   showReplyBox,
   repliesCount,
   isTopLevelComment,
-  showReplies,
-}) => (
-  <div>
-    <div>
-      <span>{userName}</span>
-      <span>{date}</span>
-    </div>
-    <div>{body}</div>
-    <Rating likes={likes} dislikes={dislikes}>
-      <Like commentId={id} />
-      <Dislike commentId={id} />
-    </Rating>
-    {showReplyBox ? <CommentBox form="replyBox" cancelOnClick={cancel} originalCommentId={id} /> : (
-      <div role="button" tabIndex={0} onClick={reply}>
-        reply
-      </div>
-    )}
-    {repliesCount && isTopLevelComment ? (
-      <Button onClick={showReplies}>
+  showRepliesButton,
+  showRepliesOnClick,
+  hideRepliesOnClick,
+}) => {
+  let repliesButton;
+
+  if (isTopLevelComment && repliesCount) {
+    repliesButton = showRepliesButton ? (
+      <Button onClick={showRepliesOnClick}>
         Show <FormattedNumberText number={repliesCount} singularText="reply" pluralText="replies" />
       </Button>
-    ) : null}
-  </div>
-);
+    ) : (
+      <Button onClick={hideRepliesOnClick}>
+        Hide <FormattedNumberText number={repliesCount} singularText="reply" pluralText="replies" />
+      </Button>
+    );
+  }
+
+  return (
+    <div>
+      <div>
+        <span>{userName}</span>
+        <span>{date}</span>
+      </div>
+      <div>{body}</div>
+      <Rating likes={likes} dislikes={dislikes}>
+        <Like commentId={id} />
+        <Dislike commentId={id} />
+      </Rating>
+      {showReplyBox ? <CommentBox form="replyBox" cancelOnClick={cancel} originalCommentId={id} /> : (
+        <div role="button" tabIndex={0} onClick={reply}>
+          reply
+        </div>
+      )}
+      {repliesButton}
+    </div>
+  );
+};
 
 Comments.propTypes = {
   userName: PropTypes.string.isRequired,
@@ -57,11 +71,27 @@ Comments.propTypes = {
   cancel: PropTypes.func.isRequired,
   showReplyBox: PropTypes.bool.isRequired,
   repliesCount: PropTypes.number.isRequired,
+  showRepliesOnClick: PropTypes.func.isRequired,
+  hideRepliesOnClick: PropTypes.func.isRequired,
+  showRepliesButton: PropTypes.bool.isRequired,
   isTopLevelComment: PropTypes.bool.isRequired,
-  showReplies: PropTypes.func.isRequired,
 };
 
 const stateHandlers = {
+  showRepliesOnClick: (state, props) => () => {
+    props.setReplies(props.id);
+
+    return {
+      showRepliesButton: !state.showRepliesButton,
+    };
+  },
+  hideRepliesOnClick: (state, props) => () => {
+    props.setReplies();
+
+    return {
+      showRepliesButton: !state.showRepliesButton,
+    };
+  },
   reply: () => () => ({
     showReplyBox: true,
   }),
@@ -71,7 +101,11 @@ const stateHandlers = {
 };
 
 export default compose(
+  setPropTypes({
+    setReplies: PropTypes.func.isRequired,
+  }),
   withStateHandlers({
     showReplyBox: false,
+    showRepliesButton: true,
   }, stateHandlers),
 )(Comments);
