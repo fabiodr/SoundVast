@@ -1,6 +1,6 @@
 import { compose, withProps, defaultProps, setPropTypes } from 'recompose';
 import PropTypes from 'prop-types';
-import { fragment } from 'relay-modern-hoc';
+import { fragmentContainer } from 'recompose-relay-modern';
 import { graphql } from 'react-relay';
 
 import GenreField from './genreField';
@@ -15,7 +15,7 @@ const fragments = graphql`
 `;
 
 const enhance = compose(
-  fragment(fragments),
+  fragmentContainer(fragments),
   defaultProps({
     type: null,
   }),

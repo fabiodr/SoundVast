@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using GraphQL;
 using GraphQL.Relay.Types;
 using GraphQL.Types.Relay.DataObjects;
+using SoundVast.Components.Account;
 using SoundVast.Components.Audio;
 using SoundVast.Components.Comment;
 using SoundVast.Components.Genre;
@@ -28,7 +29,7 @@ namespace SoundVast.Components.Song
             Field(x => x.Artist, true);
             Field(x => x.Likes);
             Field(x => x.Dislikes);
-            Field<UserPayload>("user", "The user who uploaded the song");
+            Field<AccountPayload>("user", "The user who uploaded the song");
             Field<GenrePayload>("genre", "The genre the song belongs to");
             Field<ListGraphType<RatingPayload>>("ratings", "The ratings that have been applied by users to this song");
             Connection<CommentPayload>()

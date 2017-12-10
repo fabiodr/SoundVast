@@ -1,7 +1,7 @@
 import React from 'react';
 import { compose, withProps, flattenProp } from 'recompose';
 import { graphql } from 'react-relay';
-import { fragment } from 'relay-modern-hoc';
+import { fragmentContainer } from 'recompose-relay-modern';
 
 import ErrorPage from './errorPage';
 
@@ -29,7 +29,7 @@ const fragments = graphql`
 `;
 
 const enhance = compose(
-  fragment(fragments),
+  fragmentContainer(fragments),
   flattenProp('quote'),
   withProps(createProps),
 );

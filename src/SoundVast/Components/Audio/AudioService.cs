@@ -29,7 +29,7 @@ namespace SoundVast.Components.Audio
             _validationProvider = validationProvider;
         }
 
-        public virtual ICollection<T> GetAudios(string genreName, Filter filter)
+        public virtual IEnumerable<T> GetAudios(string genreName, Filter filter)
         {
             var audios = _repository.GetAll().BuildAudio().AsQueryable();
 
@@ -38,22 +38,33 @@ namespace SoundVast.Components.Audio
                 audios = audios.Where(x => x.Genre.Name == genreName);
             }
 
-            if (filter != null)
+            Func<T, int, bool> dateFromFilter = (x, days) =>
             {
-                Func<T, int, bool> dateFromFilter = (x, days) => DateTime.UtcNow.AddDays(-days) < x.UploadDate;
+                return DateTime.UtcNow.AddDays(-days) < x.UploadDate;
+            };
 
-                if (filter.TopRatedDays.HasValue)
-                {
-                    audios = audios.Where(x => dateFromFilter(x, filter.TopRatedDays.Value)).OrderByDescending(x => x.Likes);
-                }
-
-                if (filter.Newest)
-                {
-                    audios = audios.OrderByDescending(x => x.UploadDate);
-                }
+            if (filter.TopRatedDays.HasValue)
+            {
+                audios = audios.Where(x => dateFromFilter(x, filter.TopRatedDays.Value));
+                audios = audios.OrderByDescending(x => x.Likes);
             }
 
-            return audios.ToList();
+            if (filter.Newest)
+            {
+                audios = audios.OrderByDescending(x => x.UploadDate);
+            }
+
+            return audios;
+        }
+
+        public IEnumerable<T> GetAudiosForUser(string userId)
+        {
+            return _repository.GetAll().BuildAudio().Where(x => x.UserId == userId);
+        }
+
+        public IEnumerable<T> GetUserLikedAudios(string userId)
+        {
+            return _repository.GetAll().BuildAudio().Where(x => x.Ratings.Any(z => z.Liked && z.UserId == userId));
         }
 
         public ICollection<T> GetAudios(int current, int amount)

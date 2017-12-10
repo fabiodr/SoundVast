@@ -1,6 +1,6 @@
 import { compose } from 'recompose';
 import { graphql } from 'react-relay';
-import { refetchContainer } from 'relay-modern-hoc';
+import { refetchContainer } from 'recompose-relay-modern';
 
 import Song from './song';
 

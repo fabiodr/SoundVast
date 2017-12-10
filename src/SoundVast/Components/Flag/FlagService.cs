@@ -1,18 +1,18 @@
 ﻿//using System.Collections.Generic;
 //using SoundVast.Repository;
 //using System.Linq;
-//using SoundVast.Components.Report.Models;
+//using SoundVast.Components.Flag.Models;
 
-//namespace SoundVast.Components.Report
+//namespace SoundVast.Components.Flag
 //{
-//    public interface IReportService<T> where T : ReportModel
+//    public interface IReportService<T> where T : Flag
 //    {
 //        ICollection<T> GetReports();
 //        T GetReport(int id);
 //        bool Add(T report);
 //    }
 
-//    public class ReportService<T> : IReportService<T> where T : ReportModel
+//    public class ReportService<T> : IReportService<T> where T : Flag
 //    {
 //        private readonly IValidationDictionary _validationDictionary;
 //        private readonly IRepository<T> _repository;

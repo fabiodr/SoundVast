@@ -12,16 +12,11 @@ namespace SoundVast.Components.User
 {
     public class UserService : IUserService
     {
-        private readonly IRepository<Song.Models.Song> _repository;
+        private readonly IRepository<ApplicationUser> _repository;
 
-        public UserService(IRepository<Song.Models.Song> repository)
+        public UserService(IRepository<ApplicationUser> repository)
         {
             _repository = repository;
-        }
-
-        public ICollection<Song.Models.Song> GetUploadsForUser(string userId)
-        {
-            return _repository.GetAll().Where(x => x.UserId == userId).ToList();
         }
     }
 }

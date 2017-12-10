@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SoundVast.Components.Account;
 using SoundVast.Components.Comment;
 using SoundVast.Components.Genre;
 using SoundVast.Components.Rating;
@@ -23,7 +24,7 @@ namespace SoundVast.Components.Audio
             Field(x => x.CoverImageUrl).Description("The poster image for the audio");
             Field(x => x.Likes);
             Field(x => x.Dislikes);
-            Field<UserPayload>("user", "The user who uploaded the audio");
+            Field<AccountPayload>("user", "The user who uploaded the audio");
             Field<GenrePayload>("genre", "The genre the audio belongs to");
             Field<ListGraphType<RatingPayload>>("ratings", "The ratings that have been applied by users to this audio");
             Connection<CommentPayload>()

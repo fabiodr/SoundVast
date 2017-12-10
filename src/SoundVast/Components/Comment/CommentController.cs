@@ -57,13 +57,13 @@ namespace SoundVast.Components.Comment
     //        return ViewComponent("TopRated", new { audioId, sortDescending, pageNumber });
     //    }
 
-    //    public PartialViewResult Report(int id)
+    //    public PartialViewResult Flag(int id)
     //    {
     //        return PartialView("_Report", new ReportCommentViewModel { Id = id });
     //    }
 
     //    [HttpPost]
-    //    public void Report(ReportCommentViewModel reportCommentViewModel)
+    //    public void Flag(ReportCommentViewModel reportCommentViewModel)
     //    {
     //        var report = new CommentReportModel
     //        {

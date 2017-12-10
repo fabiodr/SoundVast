@@ -4,7 +4,7 @@ import {
   RecordSource,
   Store,
 } from 'relay-runtime';
-import { setEnviroment } from 'relay-modern-hoc';
+import { setEnviroment } from 'recompose-relay-modern';
 
 const network = Network.create((operation, variables) =>
   fetch('/graphql', {

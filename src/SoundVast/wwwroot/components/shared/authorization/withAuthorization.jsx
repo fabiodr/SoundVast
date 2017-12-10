@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { graphql } from 'react-relay';
 import { compose, lifecycle, withProps, renameProp, branch, renderNothing, renderComponent, flattenProp } from 'recompose';
-import { fragment } from 'relay-modern-hoc';
+import { fragmentContainer } from 'recompose-relay-modern';
 
 import { showModal } from '../modal/actions';
 
@@ -13,7 +13,7 @@ const fragments = graphql`
 
 const withAuthorization = BaseComponent => compose(
   connect(),
-  fragment(fragments),
+  fragmentContainer(fragments),
   flattenProp('user'),
   renameProp('userName', 'isLoggedIn'),
   lifecycle({

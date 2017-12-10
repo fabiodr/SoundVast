@@ -19,6 +19,10 @@ const PrimaryLayoutContainer = PrimaryLayout;
 export const routeConfig = {
   Component: PrimaryLayoutContainer,
   query,
+  prepareVariables: (variables, { location }) => ({
+    ...variables,
+    __loggedInUserName: location.state && location.state.loggedInUserName,
+  }),
 };
 
 export default PrimaryLayoutContainer;

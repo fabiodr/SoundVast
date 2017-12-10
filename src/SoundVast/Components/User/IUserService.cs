@@ -9,6 +9,5 @@ namespace SoundVast.Components.User
 {
     public interface IUserService
     {
-        ICollection<Song.Models.Song> GetUploadsForUser(string userId);
     }
 }

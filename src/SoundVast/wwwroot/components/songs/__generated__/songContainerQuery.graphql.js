@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 1cb5d38d5c2cbb931c5a8fb71d7b8008
+ * @relayHash 0f0b0f4cf34473542c12b88f7aef6109
  */
 
 /* eslint-disable */
@@ -333,7 +333,7 @@ const batch /*: ConcreteBatch*/ = {
                         "kind": "LinkedField",
                         "alias": null,
                         "args": null,
-                        "concreteType": "User",
+                        "concreteType": "ApplicationUser",
                         "name": "user",
                         "plural": false,
                         "selections": [

@@ -16,7 +16,7 @@ const Songs = ({ data, loadMore, hasMore }) => (
         loadMore={loadMore}
         hasMore={hasMore}
       >
-        {data.songs.edges.map(({ node }) => <Song key={node.audioId} song={node} /> )}
+        {data.songs.edges.map(({ node }) => <Song key={node.audioId} song={node} />)}
       </InfiniteScrollGrid>
     </div>
   </SoundVastTitle>

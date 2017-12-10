@@ -167,7 +167,7 @@ const fragment /*: ConcreteFragment*/ = {
                   "kind": "LinkedField",
                   "alias": null,
                   "args": null,
-                  "concreteType": "User",
+                  "concreteType": "ApplicationUser",
                   "name": "user",
                   "plural": false,
                   "selections": [

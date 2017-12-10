@@ -4,7 +4,6 @@ import { graphql } from 'react-relay';
 import { RedirectException } from 'found';
 
 import withRouteValidation from '../../../app/routing/withRouteValidation';
-import { showLoginPopup } from '../../actions';
 import SocialLoginConfrimationContainer from './socialLoginConfirmationContainer';
 
 const query = graphql`
@@ -23,9 +22,10 @@ const render = (route) => {
   if (route.props) {
     // User already has an account that is logged in
     if (route.props.externalLoginCallback.user) {
-      route.props.context.store.dispatch(showLoginPopup());
-
-      throw new RedirectException(route.props.params.returnUrl);
+      throw new RedirectException({
+        pathname: route.props.params.returnUrl,
+        state: { loggedInUserName: route.props.externalLoginCallback.user.userName },
+      });
     } else {
       // associate the users account
       return (

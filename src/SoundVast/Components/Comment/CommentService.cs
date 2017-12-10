@@ -38,13 +38,12 @@ namespace SoundVast.Components.Comment
         //    return comments.Skip(startIndex).Take(Comment.CommentsPerPage).ToList();
         //}
 
-        public ICollection<Models.Comment> TopLevelComments(int audioId)
+        public IEnumerable<Models.Comment> TopLevelComments(int audioId)
         {
-            return _repository.GetAll().BuildComment().Where(x => x.AudioId == audioId && x.IsTopLevelComment).ToList();
+            return _repository.GetAll().Where(x => x.AudioId == audioId && x.IsTopLevelComment).AsQueryable().BuildComment().ToList();
         }
 
-
-        public ICollection<Models.Comment> Replies(int id)
+        public IEnumerable<Models.Comment> Replies(int id)
         {
             var comment = _repository.GetAll().Single(x => x.Id == id);
             var allReplies = new List<Models.Comment>();

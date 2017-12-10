@@ -1,6 +1,6 @@
 import { compose, branch, renderComponent } from 'recompose';
 import { reduxForm } from 'redux-form';
-import { fragment } from 'relay-modern-hoc';
+import { fragmentContainer } from 'recompose-relay-modern';
 import { graphql } from 'react-relay';
 
 import SocialLogins from './socialLogins';
@@ -14,7 +14,7 @@ const fragments = graphql`
 `;
 
 export default compose(
-  fragment(fragments),
+  fragmentContainer(fragments),
   branch(
     ({ loginProviders }) => loginProviders === null,
     renderComponent(SocialLoginsErrorMessage),

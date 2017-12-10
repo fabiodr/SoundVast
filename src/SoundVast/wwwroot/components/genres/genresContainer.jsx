@@ -1,7 +1,7 @@
 import React from 'react';
 import { graphql } from 'react-relay';
 import { compose, withProps } from 'recompose';
-import { fragment } from 'relay-modern-hoc';
+import { fragmentContainer } from 'recompose-relay-modern';
 
 import Genres from './genres';
 import genreTypeNames from '../shared/utilities/genreTypeNames';
@@ -24,7 +24,7 @@ const fragments = graphql`
 `;
 
 const enhance = compose(
-  fragment(fragments),
+  fragmentContainer(fragments),
   withProps(({ type }) => {
     if (type === genreTypeNames.liveStream) {
       return {

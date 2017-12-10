@@ -2,7 +2,7 @@ import React from 'react';
 import makeRouteConfig from 'found/lib/makeRouteConfig';
 import Route from 'found/lib/Route';
 
-import Profile from '../../user/profile/userProfileContainer';
+import { routeConfig as profileRouteConfig } from '../../profile/userProfileContainer';
 import { routeConfig as errorPageRouteConfig } from '../../errorPage/errorPageContainer';
 import { routeConfig as uploadRouteConfig } from '../../upload/uploadContainer';
 import { routeConfig as socialLoginCallbackRouteConfig } from '../../account/login/socialLogin//socialLoginCallbackContainer';
@@ -19,7 +19,7 @@ export default makeRouteConfig(
     <Route path="songs/:genre?" {...songsRouteConfig} />
     <Route path="radios/:genre?" {...radiosRouteConfig} />
     <Route path="upload" {...uploadRouteConfig} />
-    <Route path="profile" Component={Profile} />
+    <Route path="profile" {...profileRouteConfig} />
     <Route path="genres/:type" {...genresRouteConfig} />
     <Route path="error/:status" {...errorPageRouteConfig} />
     <Route path="account">

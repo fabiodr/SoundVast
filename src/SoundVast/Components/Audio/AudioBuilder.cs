@@ -8,13 +8,13 @@ namespace SoundVast.Components.Audio
 {
     public static class AudioBuilder
     {
-        public static ICollection<T> BuildAudio<T>(this IQueryable<T> query) where T : Models.Audio
+        public static IQueryable<T> BuildAudio<T>(this IQueryable<T> query) where T : Models.Audio
         {
             return query
                 .Include(x => x.Genre)
                 .Include(x => x.User)
                 .Include(x => x.Comments)
-                .Include(x => x.Ratings).ToList();
+                .Include(x => x.Ratings);
         }
     }
 }

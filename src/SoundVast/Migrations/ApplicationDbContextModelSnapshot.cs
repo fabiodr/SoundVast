@@ -190,6 +190,28 @@ namespace SoundVast.Migrations
                     b.ToTable("Comments");
                 });
 
+            modelBuilder.Entity("SoundVast.Components.Flag.Models.Flag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("AdditionalDetails");
+
+                    b.Property<int?>("AudioId");
+
+                    b.Property<int?>("CommentId");
+
+                    b.Property<string>("Reason");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AudioId");
+
+                    b.HasIndex("CommentId");
+
+                    b.ToTable("Flags");
+                });
+
             modelBuilder.Entity("SoundVast.Components.Genre.Models.Genre", b =>
                 {
                     b.Property<int>("Id")
@@ -390,6 +412,17 @@ namespace SoundVast.Migrations
                     b.HasOne("SoundVast.Components.User.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("SoundVast.Components.Flag.Models.Flag", b =>
+                {
+                    b.HasOne("SoundVast.Components.Audio.Models.Audio", "Audio")
+                        .WithMany()
+                        .HasForeignKey("AudioId");
+
+                    b.HasOne("SoundVast.Components.Comment.Models.Comment", "Comment")
+                        .WithMany()
+                        .HasForeignKey("CommentId");
                 });
 
             modelBuilder.Entity("SoundVast.Components.Rating.Models.Rating", b =>

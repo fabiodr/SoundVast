@@ -18,17 +18,17 @@ namespace SoundVast.Components.User.Profile
             _userManager = userManager;
         }
 
-        [HttpGet]
+        //[HttpGet]
 
-        public IActionResult GetUserUploads()
-        {
-            var userId = _userManager.GetUserId(User);
-            var userAudios = _userService.GetUploadsForUser(userId);
+        //public IActionResult GetUserUploads()
+        //{
+        //    var userId = _userManager.GetUserId(User);
+        //  //  var userAudios = _userService.GetUploadsForUser(userId);
 
-            return Ok(new
-            {
-                userAudios
-            });
-        }
+        //    return Ok(new
+        //    {
+        //        userAudios
+        //    });
+        //}
     }
 }

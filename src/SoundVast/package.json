@@ -158,11 +158,11 @@
     "react-select": "^1.1.0",
     "react-tabs": "^2.1.0",
     "recompose": "^0.26.0",
+    "recompose-relay-modern": "^1.0.2",
     "redux": "^3.7.2",
     "redux-form": "^7.1.2",
     "redux-thunk": "^2.2.0",
     "relay-compiler": "^1.4.1",
-    "relay-modern-hoc": "^0.0.2",
     "relay-runtime": "^1.4.1",
     "shortid": "^2.2.8"
   }

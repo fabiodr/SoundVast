@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose, withHandlers, withProps } from 'recompose';
 import { graphql } from 'react-relay';
-import { paginationContainer } from 'relay-modern-hoc';
+import { paginationContainer } from 'recompose-relay-modern';
 import { actions } from 'react-jplaylist';
 
 import Songs from './songs';
@@ -48,14 +48,11 @@ const connectionConfig = {
       $cursor: String
       $genre: String
       $filter: FilterInput
+      $originalCommentId: Int
     ) {
       ...songsContainer
     }
   `,
-  getFragmentVariables: (prevVars, totalCount) => ({
-    ...prevVars,
-    count: totalCount,
-  }),
   getVariables: (_, { count, cursor }) => ({
     count,
     cursor,

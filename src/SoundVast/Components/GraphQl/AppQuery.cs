@@ -47,7 +47,7 @@ namespace SoundVast.Components.GraphQl
                 .Argument<StringGraphType>("genre", "The genre that the song belongs to")
                 .Argument<FilterInput>("filter", "The filters to apply to the songs")
                 .Resolve(c =>
-                {
+                {                    
                     var genre = c.GetArgument<string>("genre");
                     var filter = c.GetArgument<Filter>("filter");
 

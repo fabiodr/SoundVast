@@ -35,7 +35,7 @@ namespace SoundVast.Components.Audio.Models
         public virtual Genre.Models.Genre Genre { get; set; }
         public int Likes => Ratings.Count(x => x.Liked);
         public int Dislikes => Ratings.Count(x => !x.Liked);
-        public virtual ICollection<Rating.Models.Rating> Ratings { get; set; }
+        public virtual ICollection<Rating.Models.Rating> Ratings { get; set; } = new List<Rating.Models.Rating>();
         public virtual ICollection<Comment.Models.Comment> Comments { get; set; }
         //   public virtual ApplicationUser User { get; set; }
         //   public virtual ImageFileModel ImageFile { get; set; }

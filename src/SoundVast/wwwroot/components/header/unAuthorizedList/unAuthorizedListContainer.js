@@ -1,6 +1,6 @@
 import { compose, branch, renderNothing, flattenProp } from 'recompose';
 import { graphql } from 'react-relay';
-import { fragment } from 'relay-modern-hoc';
+import { fragmentContainer } from 'recompose-relay-modern';
 
 import UnAuthorizedList from './unAuthorizedList';
 
@@ -11,7 +11,7 @@ const fragments = graphql`
 `;
 
 const enhance = compose(
-  fragment(fragments),
+  fragmentContainer(fragments),
   flattenProp('user'),
   branch(
     ({ userName }) => userName,

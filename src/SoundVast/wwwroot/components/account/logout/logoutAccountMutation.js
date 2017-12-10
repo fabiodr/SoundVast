@@ -1,5 +1,5 @@
 import { graphql } from 'react-relay';
-import { createMutation } from 'relay-modern-hoc';
+import { createMutation } from 'recompose-relay-modern';
 
 const mutation = graphql`
   mutation logoutAccountMutation {

@@ -21,7 +21,7 @@ namespace SoundVast.Components.Audio
     //    where TAudio : Audio, new()
     //    where TCategory : CategoryModel, new()
     //    where TGenre : Genre, new()
-    //    where TReport : ReportModel, new()
+    //    where TReport : Flag, new()
     //{
     //    private readonly IAudioService<TAudio> _audioService;
     //    private readonly ICategoryService<TCategory> _categoryService;

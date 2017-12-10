@@ -34,25 +34,25 @@ namespace SoundVastTests.Components.User.Profile
             _profileController = new ProfileController(_mockUserService.Object, _mockUserManager.Object);
         }
 
-        [Test]
-        public void GetsUserUploads()
-        {
-            const string userId = "DORPE-12354-DSADD";
-            var userAudios = new List<SoundVast.Components.Song.Models.Song>
-            {
-                new SoundVast.Components.Song.Models.Song(),
-                new SoundVast.Components.Song.Models.Song()
-            };
+        //[Test]
+        //public void GetsUserUploads()
+        //{
+        //    const string userId = "DORPE-12354-DSADD";
+        //    var userAudios = new List<SoundVast.Components.Song.Models.Song>
+        //    {
+        //        new SoundVast.Components.Song.Models.Song(),
+        //        new SoundVast.Components.Song.Models.Song()
+        //    };
 
-            _mockUserManager.Setup(x => x.GetUserId(It.IsAny<ClaimsPrincipal>())).Returns(userId);
-            _mockUserService.Setup(x => x.GetUploadsForUser(userId)).Returns(userAudios);
+        //    _mockUserManager.Setup(x => x.GetUserId(It.IsAny<ClaimsPrincipal>())).Returns(userId);
+        //    _mockUserService.Setup(x => x.GetUploadsForUser(userId)).Returns(userAudios);
 
-            var result = (OkObjectResult)_profileController.GetUserUploads();
+        //    var result = (OkObjectResult)_profileController.GetUserUploads();
 
-            result.Value.ShouldBeEquivalentTo(new
-            {
-                userAudios
-            });
-        }
+        //    result.Value.ShouldBeEquivalentTo(new
+        //    {
+        //        userAudios
+        //    });
+        //}
     }
 }

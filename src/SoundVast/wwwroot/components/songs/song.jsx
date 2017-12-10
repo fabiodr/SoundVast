@@ -10,6 +10,7 @@ import Dislike from '../rating/dislike/dislikeAudioContainer';
 import Name from '../audio/name';
 import CommentBox from '../comments/commentBoxContainer';
 import Comments from '../comments/commentsContainer';
+import Flag from '../flag/flag';
 
 const Song = ({ song }) => (
   <div>
@@ -22,6 +23,7 @@ const Song = ({ song }) => (
       <Like audioId={song.audioId} />
       <Dislike audioId={song.audioId} />
     </Rating>
+    <Flag />
     {/* <CommentBox /> */}
     <Comments data={song} />
   </div>

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GraphQL.Relay.Types;
+using SoundVast.Components.Account;
 using SoundVast.Components.Audio;
 using SoundVast.Components.Comment;
 using SoundVast.Components.Genre;
@@ -25,7 +26,7 @@ namespace SoundVast.Components.LiveStream
             Field(x => x.LiveStreamUrl);
             Field(x => x.Likes);
             Field(x => x.Dislikes);
-            Field<UserPayload>("user", "The user who uploaded the live stream");
+            Field<AccountPayload>("user", "The user who uploaded the live stream");
             Field<GenrePayload>("genre", "The genre the live stream belongs to");
             Field<ListGraphType<RatingPayload>>("ratings", "The ratings that have been applied by users to this live stream");
             Connection<CommentPayload>()

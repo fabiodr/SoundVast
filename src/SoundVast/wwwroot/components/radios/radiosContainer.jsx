@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose, withHandlers, withProps } from 'recompose';
 import { graphql } from 'react-relay';
-import { paginationContainer } from 'relay-modern-hoc';
+import { paginationContainer } from 'recompose-relay-modern';
 import { actions } from 'react-jplaylist';
 
 import Radios from './radios';

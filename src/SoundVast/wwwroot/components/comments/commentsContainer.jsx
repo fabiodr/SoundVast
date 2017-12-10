@@ -1,6 +1,6 @@
 import { compose, withHandlers } from 'recompose';
 import { graphql } from 'react-relay';
-import { paginationContainer } from 'relay-modern-hoc';
+import { paginationContainer } from 'recompose-relay-modern';
 
 import Comments from './comments';
 

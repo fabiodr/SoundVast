@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using SoundVast.Components;
 using SoundVast.Components.Audio.Models;
 using SoundVast.Components.Comment.Models;
+using SoundVast.Components.Flag.Models;
 using SoundVast.Components.Genre.Models;
 using SoundVast.Components.LiveStream.Models;
 using SoundVast.Components.Quote.Models;
@@ -26,9 +27,9 @@ namespace SoundVast.Data
         //public DbSet<CategoryModel> Categories { get; set; }
         //public DbSet<FileStreamGenreModel> FileStreamGenres { get; set; }
         //public DbSet<LiveStreamGenreModel> LiveStreamGenres { get; set; }
-       // public DbSet<FileStreamCategoryModel> FileStreamCategories { get; set; }
+        // public DbSet<FileStreamCategoryModel> FileStreamCategories { get; set; }
         //public DbSet<LiveStreamCategoryModel> LiveStreamCategories { get; set; }
-       // public DbSet<ReportModel> Reports { get; set; }
+        public DbSet<Flag> Flags { get; set; }
         public DbSet<Quote> Quotes { get; set; }
         public DbSet<Comment> Comments { get; set; }
        // public DbSet<FileModel> Files { get; set; }
@@ -43,7 +44,7 @@ namespace SoundVast.Data
 
         public override int SaveChanges()
         {
-          //  Ratings.RemoveRange(Ratings.Where(x => x.CommentId == null || x.AudioId == null));
+            Ratings.RemoveRange(Ratings.Where(x => x.CommentId == null || x.AudioId == null));
 
             return base.SaveChanges();
         }
