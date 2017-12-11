@@ -1,15 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Link = ({ children, modalId, showModal, ...props }) => (
-  <a tabIndex={0} role="link" onClick={() => showModal(modalId)} {...props}>
+const Link = ({ children, onClick }) => (
+  <a tabIndex={0} role="link" onClick={onClick}>
     {children}
   </a>
 );
 
 Link.propTypes = {
-  modalId: PropTypes.string.isRequired,
-  showModal: PropTypes.func.isRequired,
+  onClick: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
 };
 

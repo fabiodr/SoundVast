@@ -17,6 +17,7 @@ using SoundVast.Components.Account;
 using SoundVast.Components.Audio;
 using SoundVast.Components.Comment;
 using SoundVast.Components.Email;
+using SoundVast.Components.Flag;
 using SoundVast.Components.LiveStream;
 using SoundVast.Components.Rating;
 using SoundVast.Components.Upload;
@@ -37,11 +38,13 @@ namespace SoundVast.Components.GraphQl
             Mutation<RegisterInput, RegisterPayload>("register");
             Mutation<LoginInput, LoginPayload>("login");
             Mutation<ExternalLoginConfirmationInput, ExternalLoginConfirmationPayload>("externalLoginConfirmation");
-            Field<LogoutPayload>("logout", resolve: c => ((LogoutPayload)c.ReturnType).MutateAndGetPayload(null, c));
+            Field<LogoutPayload>("logout", resolve: c => ((LogoutPayload)c.ReturnType).MutateAndGetPayload(null, c)).AddPermission(AuthorizedPermission);
             Mutation<SendEmailInput, SendEmailPayload>("sendEmail");
             Mutation<GenerateResetPasswordTokenInput, GenerateResetPasswordTokenPayload>("generateResetPasswordToken");
             Mutation<ResetPasswordInput, ResetPasswordPayload>("resetPassword");
-            Mutation<SaveCommentInput, SaveCommentPayload>("comment");
+            Mutation<SaveCommentInput, SaveCommentPayload>("comment").AddPermission(AuthorizedPermission);
+            Mutation<FlagAudioInput, FlagObjectPayload>("flagAudio").AddPermission(AuthorizedPermission);
+            Mutation<FlagCommentInput, FlagObjectPayload>("flagComment").AddPermission(AuthorizedPermission);
         }
     }
 }

@@ -40,6 +40,7 @@ using Newtonsoft.Json;
 using SoundVast.Components.Audio;
 using SoundVast.Components.Audio.Models;
 using SoundVast.Components.Comment.Models;
+using SoundVast.Components.Flag.Models;
 using SoundVast.Components.Genre;
 using SoundVast.Components.Genre.Models;
 using SoundVast.Components.GraphQl;
@@ -240,6 +241,7 @@ namespace SoundVast
             builder.RegisterType<Repository<Genre, ApplicationDbContext>>().As<IRepository<Genre>>();
             builder.RegisterType<Repository<Quote, ApplicationDbContext>>().As<IRepository<Quote>>();
             builder.RegisterType<Repository<Comment, ApplicationDbContext>>().As<IRepository<Comment>>();
+            builder.RegisterType<Repository<Flag, ApplicationDbContext>>().As<IRepository<Flag>>();
 
             return builder;
         }

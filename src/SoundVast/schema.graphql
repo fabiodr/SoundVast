@@ -1,5 +1,5 @@
 # source: http://localhost:8080/graphql
-# timestamp: Sun Dec 10 2017 17:03:54 GMT+0100 (W. Europe Standard Time)
+# timestamp: Mon Dec 11 2017 21:48:16 GMT+0100 (W. Europe Standard Time)
 
 type ApplicationUser {
   id: ID
@@ -147,6 +147,45 @@ input FilterInput {
   mostPlayedDays: Int
 }
 
+type Flag implements Node {
+  # The Id of the Flag
+  flagId: Int!
+
+  # The Global Id of the Flag
+  id: ID!
+
+  # Any additional details for why the user flagged
+  additionalDetails: String!
+
+  # The reason why the user flagged
+  reason: String!
+
+  # The audio that the user flagged
+  audio: Audio
+
+  # The comment that the user flagged
+  comment: Comment
+}
+
+input FlagAudioInput {
+  clientMutationId: String
+  audioId: Int!
+  reason: String!
+  additionalDetails: String
+}
+
+input FlagCommentInput {
+  clientMutationId: String
+  commentId: Int!
+  reason: String!
+  additionalDetails: String
+}
+
+type FlagObjectPayload {
+  clientMutationId: String
+  flag: Flag
+}
+
 input GenerateResetPasswordTokenInput {
   clientMutationId: String
   email: String!
@@ -275,6 +314,8 @@ type Mutation {
   generateResetPasswordToken(input: GenerateResetPasswordTokenInput!): GenerateResetPasswordTokenPayload
   resetPassword(input: ResetPasswordInput!): ResetPasswordPayload
   comment(input: SaveCommentInput!): SaveCommentPayload
+  flagAudio(input: FlagAudioInput!): FlagObjectPayload
+  flagComment(input: FlagCommentInput!): FlagObjectPayload
 }
 
 interface Node {

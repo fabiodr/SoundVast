@@ -3,6 +3,7 @@ export default (state = {}, action) => {
     case 'SHOW_MODAL':
       return {
         ...state,
+        ...action.variables,
         currentModal: action.id,
       };
     case 'HIDE_MODAL':

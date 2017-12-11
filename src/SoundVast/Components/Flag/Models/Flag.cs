@@ -11,7 +11,9 @@ namespace SoundVast.Components.Flag.Models
         public int Id { get; set; }
         public string Reason { get; set; }
         public string AdditionalDetails { get; set; }
+        public int? AudioId { get; set; }
         public virtual Audio.Models.Audio Audio { get; set; }
+        public int? CommentId { get; set; }
         public virtual Comment.Models.Comment Comment { get; set; }
     }
 }

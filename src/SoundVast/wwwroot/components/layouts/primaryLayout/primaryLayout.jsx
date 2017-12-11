@@ -7,6 +7,7 @@ import FooterPlaylist from '../../footerPlaylist/footerPlaylistContainer';
 import Content from '../../content/content';
 import SideBar from '../../sideBar/sideBar';
 import styles from './primaryLayout.less';
+import FlagAudioModal from '../../flag/flagAudioModalContainer';
 
 const PrimaryLayout = ({ children, user, loginProviders }) => (
   <div>
@@ -18,6 +19,7 @@ const PrimaryLayout = ({ children, user, loginProviders }) => (
       </Content>
       {/* <SideBar /> */}
     </div>
+    <FlagAudioModal />
     <FooterPlaylist />
   </div>
 );
