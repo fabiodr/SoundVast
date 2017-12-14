@@ -8,6 +8,7 @@ import Content from '../../content/content';
 import SideBar from '../../sideBar/sideBar';
 import styles from './primaryLayout.less';
 import FlagAudioModal from '../../flag/flagAudioModalContainer';
+import FlagCommentModal from '../../flag/flagCommentModalContainer';
 
 const PrimaryLayout = ({ children, user, loginProviders }) => (
   <div>
@@ -19,7 +20,8 @@ const PrimaryLayout = ({ children, user, loginProviders }) => (
       </Content>
       {/* <SideBar /> */}
     </div>
-    <FlagAudioModal />
+    <FlagAudioModal isAuthorized={user !== null} />
+    <FlagCommentModal isAuthorized={user !== null} />
     <FooterPlaylist />
   </div>
 );

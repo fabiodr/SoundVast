@@ -22,8 +22,8 @@ const Login = ({ error: errors, handleSubmit, loginProviders }) => (
         <Field name="password" component={Input} type="password" placeholder="Password" />
       </FormGroup>
 
-      <label className={styles.rememberMe} htmlFor={'rememberMe'}>Remember login?
-        <Field name="rememberMe" id={'rememberMe'} component={Input} type="checkbox" />
+      <label className={styles.rememberMe} htmlFor="rememberMe">Remember login?
+        <Field name="rememberMe" id="rememberMe" component={Input} type="checkbox" />
       </label>
 
       <div className={styles.forgotPasswordLink}>

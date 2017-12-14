@@ -1,16 +1,33 @@
 import { connect } from 'react-redux';
-import classNames from 'classnames';
+import { compose, setPropTypes } from 'recompose';
+import PropTypes from 'prop-types';
 
-import styles from './modal.less';
 import Modal from './modal';
-import { hideModal } from './actions';
+import { hideModal, showModal } from './actions';
 
 const mapStateToProps = ({ modal }, { id }) => ({
-  modalContainerClass: classNames({
-    [styles.hide]: modal.currentModal !== id,
-  }),
+  isCurrentModal: modal.currentModal === id,
 });
 
-export default connect(mapStateToProps, {
-  hideModal,
-})(Modal);
+const mergeProps = (stateProps, dispatchProps, ownProps) => {
+  if ((ownProps.authRequired && !ownProps.isAuthorized) && stateProps.isCurrentModal) {
+    dispatchProps.showModal('login');
+  }
+
+  return {
+    ...ownProps,
+    ...stateProps,
+    ...dispatchProps,
+  };
+};
+
+export default compose(
+  setPropTypes({
+    id: PropTypes.string.isRequired,
+    isAuthorized: PropTypes.bool,
+  }),
+  connect(mapStateToProps, {
+    hideModal,
+    showModal,
+  }, mergeProps),
+)(Modal);

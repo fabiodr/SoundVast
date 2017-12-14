@@ -10,7 +10,7 @@ import Textarea from '../shared/fields/textarea/textarea';
 
 const CommentBox = ({ handleSubmit, form, cancelOnClick }) => (
   <form className={styles.commentBox} onSubmit={handleSubmit} action="">
-    <Field name="body" component={Textarea} />
+    <Field name="body" component={Textarea} placeholder="Add your comment..." />
 
     <SpinnerSubmit formName={form}>Comment</SpinnerSubmit>
     <CancelButton onClick={cancelOnClick} />

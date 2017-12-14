@@ -8,6 +8,7 @@ import Rating from '../rating/audioRating';
 import CommentBox from './commentBoxContainer';
 import FormattedNumberText from '../shared/numbers/formattedNumberText';
 import Button from '../shared/button/button';
+import Flag from '../flag/flag';
 
 const Comments = ({
   userName,
@@ -50,6 +51,7 @@ const Comments = ({
         <Like commentId={id} />
         <Dislike commentId={id} />
       </Rating>
+      <Flag modalId="flagComment" id={id} />
       {showReplyBox ? <CommentBox form="replyBox" cancelOnClick={cancel} originalCommentId={id} /> : (
         <div role="button" tabIndex={0} onClick={reply}>
           reply

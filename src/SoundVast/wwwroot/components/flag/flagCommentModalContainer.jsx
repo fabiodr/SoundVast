@@ -3,18 +3,18 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose, withHandlers, setPropTypes } from 'recompose';
 
-import FlagAudioModal from './flagAudioModal';
+import FlagCommentModal from './flagCommentModal';
 import { hideModal } from '../shared/modal/actions';
-import flagAudioMutation from './flagAudioMutation';
+import flagCommentMutation from './flagCommentMutation';
 import { showFlaggedPopup } from './actions';
 
 const mapStateToProps = ({ modal }) => ({
-  audioId: modal.id,
+  commentId: modal.id,
 });
 
 const handlers = {
-  onSubmit: ({ dispatch, audioId }) => input =>
-    flagAudioMutation(input, audioId)
+  onSubmit: ({ dispatch, commentId }) => input =>
+    flagCommentMutation(input, commentId)
       .then(() => {
         dispatch(showFlaggedPopup());
         dispatch(hideModal());
@@ -31,7 +31,7 @@ const handlers = {
 export default compose(
   connect(mapStateToProps),
   setPropTypes({
-    audioId: PropTypes.number,
+    commentId: PropTypes.number,
   }),
   withHandlers(handlers),
-)(FlagAudioModal);
+)(FlagCommentModal);
