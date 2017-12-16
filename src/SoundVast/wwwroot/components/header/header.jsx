@@ -3,10 +3,11 @@ import { Link } from 'found';
 import PropTypes from 'prop-types';
 
 import SoundVastLogo from '../icons/logo';
+import MenuIcon from '../icons/menu';
 import styles from './header.less';
 import AuthorizedList from './authorizedList/authorizedListContainer';
 import UnAuthorizedList from './unAuthorizedList/unAuthorizedListContainer';
-import AdminList from './adminList/adminListContainer';
+import AdminList from './adminList/adminList';
 import LinkDropdown from '../shared/dropDown/dropDownContainer';
 import Popups from '../shared/popup/popupsContainer';
 
@@ -34,19 +35,10 @@ const Header = ({ user }) => (
         <AuthorizedList user={user} />
         <UnAuthorizedList user={user} />
         <li>
-          <LinkDropdown title={<i className="fa fa-bars" />}>
+          <LinkDropdown title={<MenuIcon className={styles.menuIcon} />}>
             <ul>
               <li>
-                <Link to="/content/aboutuUs">About us</Link>
-              </li>
-              <li>
-                <Link to="/content/privacy">Privacy</Link>
-              </li>
-              <li>
-                <Link to="/content/copyright">Copyright</Link>
-              </li>
-              <li>
-                <Link to="/content/termsOfUse">Terms of Use</Link>
+                <Link to="/legal">Legal</Link>
               </li>
               <AdminList />
             </ul>

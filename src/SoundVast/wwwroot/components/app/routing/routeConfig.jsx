@@ -12,6 +12,7 @@ import { routeConfig as songsRouteConfig } from '../../songs/songsContainer';
 import { routeConfig as radiosRouteConfig } from '../../radios/radiosContainer';
 import { routeConfig as primaryLayoutRouteConfig } from '../../layouts/primaryLayout/primaryLayoutContainer';
 import { routeConfig as genresRouteConfig } from '../../genres/genresContainer';
+import { routeConfig as legalRouteConfig } from '../../legal/legalContainer';
 
 export default makeRouteConfig(
   <Route path="/" {...primaryLayoutRouteConfig}>
@@ -27,5 +28,6 @@ export default makeRouteConfig(
       <Route path="resetPassword" {...resetPasswordRouteConfig} />
       <Route path="confirmEmail/:userId/:token" {...confirmEmailRouteConfig} />
     </Route>
+    <Route path="legal" {...legalRouteConfig} />
   </Route>,
 );

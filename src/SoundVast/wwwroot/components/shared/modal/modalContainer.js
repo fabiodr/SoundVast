@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { compose, setPropTypes } from 'recompose';
+import { compose, setPropTypes, branch, renderNothing } from 'recompose';
 import PropTypes from 'prop-types';
 
 import Modal from './modal';
@@ -30,4 +30,8 @@ export default compose(
     hideModal,
     showModal,
   }, mergeProps),
+  branch(
+    props => !props.isCurrentModal,
+    renderNothing,
+  ),
 )(Modal);
