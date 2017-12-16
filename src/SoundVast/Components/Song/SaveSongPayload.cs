@@ -6,6 +6,7 @@ using GraphQL;
 using GraphQL.Relay.Types;
 using GraphQL.Types;
 using SoundVast.Components.GraphQl;
+using SoundVast.Components.User;
 
 namespace SoundVast.Components.Song
 {
@@ -19,7 +20,10 @@ namespace SoundVast.Components.Song
 
             Name = nameof(SaveSongPayload);
            
-            Field<SongPayload>("song");
+            Field<NonNullGraphType<SongPayload>>("song");
+            Field<NonNullGraphType<IntGraphType>>("contributionPoints",
+                "The amount of contribution points the user earns from uploading a song",
+                resolve: c => (int)Contribution.Upload);
         }
 
         public override object MutateAndGetPayload(MutationInputs inputs, ResolveFieldContext<object> context)

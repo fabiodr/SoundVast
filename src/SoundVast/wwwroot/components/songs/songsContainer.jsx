@@ -53,7 +53,8 @@ const connectionConfig = {
       ...songsContainer
     }
   `,
-  getVariables: (_, { count, cursor }) => ({
+  getVariables: (_, { count, cursor }, variables) => ({
+    ...variables,
     count,
     cursor,
   }),

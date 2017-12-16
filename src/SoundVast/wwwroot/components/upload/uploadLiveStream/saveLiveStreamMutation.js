@@ -5,8 +5,11 @@ const mutation = graphql`
   mutation saveLiveStreamMutation($input: SaveLiveStreamInput!) {
     saveLiveStream(input: $input) {
       liveStream {
-        audioId
+        user {
+          contributionScore
+        }
       }
+      contributionPoints
     }
   }
 `;

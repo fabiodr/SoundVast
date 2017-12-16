@@ -6,6 +6,7 @@ using GraphQL;
 using GraphQL.Relay.Types;
 using GraphQL.Types;
 using SoundVast.Components.GraphQl;
+using SoundVast.Components.User;
 
 namespace SoundVast.Components.LiveStream
 {
@@ -19,7 +20,10 @@ namespace SoundVast.Components.LiveStream
 
             Name = nameof(SaveLiveStreamPayload);
 
-            Field<LiveStreamPayload>("liveStream");
+            Field<NonNullGraphType<LiveStreamPayload>>("liveStream");
+            Field<NonNullGraphType<IntGraphType>>("contributionPoints",
+                "The amount of contribution points the user earns from adding a live stream",
+                resolve: c => (int)Contribution.Upload);
         }
 
         public override object MutateAndGetPayload(MutationInputs inputs, ResolveFieldContext<object> context)

@@ -89,6 +89,10 @@ namespace SoundVast.Components.Audio
             if (!_validationProvider.HasErrors)
             {
                 _repository.Add(model);
+
+                model.User.ContributionScore += (int)Contribution.Upload;
+
+                _repository.Save();
             }
         }
     }

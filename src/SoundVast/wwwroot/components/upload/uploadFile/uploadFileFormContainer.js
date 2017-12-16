@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import UploadFileForm from './uploadFileForm';
 import { removeMusicForm } from '../actions';
+import { showAddedContributionPoints } from '../../account/actions';
 import uploadValidation from '../validation';
 import saveSongMutation from './saveSongMutation';
 
@@ -14,10 +15,14 @@ const mapStateToProps = ({ upload }, { index, id }) => ({
 
 const mapDispatchToProps = (dispatch, { index }) => ({
   removeMusicForm: () => dispatch(removeMusicForm(index)),
+  showAddedContributionPoints: newPoints => dispatch(showAddedContributionPoints(newPoints)),
 });
 
 const handlers = {
-  onSubmit: () => saveSongMutation,
+  onSubmit: props => input => saveSongMutation(input)
+    .then(({ saveSong }) => {
+      props.showAddedContributionPoints(saveSong.contributionPoints);
+    }),
 };
 
 const createProps = ({ title, artist, imagePath }) => ({

@@ -6,6 +6,7 @@ import LiveStreamForm from './liveStreamForm';
 import uploadValidation from '../validation';
 import saveLiveStreamMutation from './saveLiveStreamMutation';
 import { removeLiveStreamForm } from '../actions';
+import { showAddedContributionPoints } from '../../account/actions';
 
 const mapStateToProps = ({ upload }, { id }) => ({
   coverImage: upload.coverImages[id],
@@ -13,10 +14,14 @@ const mapStateToProps = ({ upload }, { id }) => ({
 
 const mapDispatchToProps = (dispatch, { index }) => ({
   removeLiveStreamForm: () => dispatch(removeLiveStreamForm(index)),
+  showAddedContributionPoints: newPoints => dispatch(showAddedContributionPoints(newPoints)),
 });
 
 const handlers = {
-  onSubmit: () => saveLiveStreamMutation,
+  onSubmit: props => input => saveLiveStreamMutation(input)
+    .then(({ saveLiveStream }) => {
+      props.showAddedContributionPoints(saveLiveStream.contributionPoints);
+    }),
 };
 
 const createProps = ({ imagePath }) => ({

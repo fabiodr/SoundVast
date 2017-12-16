@@ -46,7 +46,8 @@ const connectionConfig = {
       }
     }
   `,
-  getVariables: (props, { count, cursor }) => ({
+  getVariables: (props, { count, cursor }, variables) => ({
+    ...variables,
     count,
     cursor,
     id: props.data.audioId,

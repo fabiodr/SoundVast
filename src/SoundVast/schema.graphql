@@ -1,11 +1,14 @@
 # source: http://localhost:8080/graphql
-# timestamp: Mon Dec 11 2017 21:48:16 GMT+0100 (W. Europe Standard Time)
+# timestamp: Sat Dec 16 2017 20:22:12 GMT+0100 (W. Europe Standard Time)
 
 type ApplicationUser {
   id: ID
   userName: String!
   email: String!
   emailConfirmed: Boolean!
+
+  # The score that the user has earned from contributing
+  contributionScore: Int!
 
   # The songs that the user has uploaded
   uploads: [Song]
@@ -470,7 +473,10 @@ input SaveLiveStreamInput {
 
 type SaveLiveStreamPayload {
   clientMutationId: String
-  liveStream: LiveStream
+  liveStream: LiveStream!
+
+  # The amount of contribution points the user earns from adding a live stream
+  contributionPoints: Int!
 }
 
 input SaveSongInput {
@@ -483,7 +489,10 @@ input SaveSongInput {
 
 type SaveSongPayload {
   clientMutationId: String
-  song: Song
+  song: Song!
+
+  # The amount of contribution points the user earns from uploading a song
+  contributionPoints: Int!
 }
 
 input SendEmailInput {

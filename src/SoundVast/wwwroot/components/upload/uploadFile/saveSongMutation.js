@@ -5,8 +5,11 @@ const mutation = graphql`
   mutation saveSongMutation($input: SaveSongInput!) {
     saveSong(input: $input) {
       song {
-        audioId
+        user {
+          contributionScore
+        }
       }
+      contributionPoints
     }
   }
 `;

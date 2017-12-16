@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash afdd0c48f3a1af4d2694aed0500551b7
+ * @relayHash 2e62902a967dbb36c055138b26def0e2
  */
 
 /* eslint-disable */
@@ -20,9 +20,12 @@ export type saveSongMutationVariables = {|
 |};
 export type saveSongMutationResponse = {|
   +saveSong: ?{|
-    +song: ?{|
-      +audioId: number;
+    +song: {|
+      +user: ?{|
+        +contributionScore: number;
+      |};
     |};
+    +contributionPoints: number;
   |};
 |};
 */
@@ -34,9 +37,13 @@ mutation saveSongMutation(
 ) {
   saveSong(input: $input) {
     song {
-      audioId
+      user {
+        contributionScore
+        id
+      }
       id
     }
+    contributionPoints
   }
 }
 */
@@ -79,13 +86,31 @@ const batch /*: ConcreteBatch*/ = {
             "plural": false,
             "selections": [
               {
-                "kind": "ScalarField",
+                "kind": "LinkedField",
                 "alias": null,
                 "args": null,
-                "name": "audioId",
+                "concreteType": "ApplicationUser",
+                "name": "user",
+                "plural": false,
+                "selections": [
+                  {
+                    "kind": "ScalarField",
+                    "alias": null,
+                    "args": null,
+                    "name": "contributionScore",
+                    "storageKey": null
+                  }
+                ],
                 "storageKey": null
               }
             ],
+            "storageKey": null
+          },
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "args": null,
+            "name": "contributionPoints",
             "storageKey": null
           }
         ],
@@ -135,10 +160,28 @@ const batch /*: ConcreteBatch*/ = {
             "plural": false,
             "selections": [
               {
-                "kind": "ScalarField",
+                "kind": "LinkedField",
                 "alias": null,
                 "args": null,
-                "name": "audioId",
+                "concreteType": "ApplicationUser",
+                "name": "user",
+                "plural": false,
+                "selections": [
+                  {
+                    "kind": "ScalarField",
+                    "alias": null,
+                    "args": null,
+                    "name": "contributionScore",
+                    "storageKey": null
+                  },
+                  {
+                    "kind": "ScalarField",
+                    "alias": null,
+                    "args": null,
+                    "name": "id",
+                    "storageKey": null
+                  }
+                ],
                 "storageKey": null
               },
               {
@@ -150,13 +193,20 @@ const batch /*: ConcreteBatch*/ = {
               }
             ],
             "storageKey": null
+          },
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "args": null,
+            "name": "contributionPoints",
+            "storageKey": null
           }
         ],
         "storageKey": null
       }
     ]
   },
-  "text": "mutation saveSongMutation(\n  $input: SaveSongInput!\n) {\n  saveSong(input: $input) {\n    song {\n      audioId\n      id\n    }\n  }\n}\n"
+  "text": "mutation saveSongMutation(\n  $input: SaveSongInput!\n) {\n  saveSong(input: $input) {\n    song {\n      user {\n        contributionScore\n        id\n      }\n      id\n    }\n    contributionPoints\n  }\n}\n"
 };
 
 module.exports = batch;

@@ -7,6 +7,7 @@ import AuthorizedList from './authorizedList';
 const fragments = graphql`
   fragment authorizedListContainer_user on ApplicationUser {
     userName
+    contributionScore
   }
 `;
 

@@ -24,6 +24,7 @@ namespace SoundVast.Components.Account
             Field(x => x.UserName);
             Field(x => x.Email);
             Field(x => x.EmailConfirmed);
+            Field(x => x.ContributionScore).Description("The score that the user has earned from contributing");
             Field<ListGraphType<SongPayload>>("uploads", "The songs that the user has uploaded",
                 resolve: c => songService.GetAudiosForUser(c.Source.Id));
             Field<ListGraphType<SongPayload>>("likedSongs", "The songs that the user has liked",
