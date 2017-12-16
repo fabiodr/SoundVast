@@ -27,6 +27,7 @@ namespace SoundVast.Components.Song
             Field(x => x.Name);
             Field(x => x.CoverImageUrl).Description("The poster image for the song");
             Field(x => x.Artist, true);
+            Field(x => x.Free);
             Field(x => x.Likes);
             Field(x => x.Dislikes);
             Field<AccountPayload>("user", "The user who uploaded the song");

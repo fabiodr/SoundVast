@@ -51,14 +51,12 @@ const connectionConfig = {
       ...radiosContainer
     }
   `,
-  getVariables: (_, { count, cursor }, variables) => ({
-    ...variables,
+  getVariables: (_, { count, cursor }) => ({
     count,
     cursor,
   }),
 };
 
-// TODO: load more live streams when new live streams scroll into view
 const handlers = {
   loadMore: ({ relay }) => () => relay.loadMore(audiosToLoad),
 };

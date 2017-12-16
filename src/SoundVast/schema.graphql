@@ -1,5 +1,5 @@
 # source: http://localhost:8080/graphql
-# timestamp: Sat Dec 16 2017 20:22:12 GMT+0100 (W. Europe Standard Time)
+# timestamp: Sat Dec 16 2017 23:20:56 GMT+0100 (W. Europe Standard Time)
 
 type ApplicationUser {
   id: ID
@@ -483,6 +483,7 @@ input SaveSongInput {
   clientMutationId: String
   name: String!
   artist: String
+  free: Boolean
   coverImageUrl: String!
   genreId: Int
 }
@@ -517,6 +518,7 @@ type Song implements Node, Audio {
   # The poster image for the song
   coverImageUrl: String!
   artist: String
+  free: Boolean!
   likes: Int!
   dislikes: Int!
 

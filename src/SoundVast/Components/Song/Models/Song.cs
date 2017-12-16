@@ -10,5 +10,6 @@ namespace SoundVast.Components.Song.Models
     public class Song : Audio.Models.Audio
     {
         public string Artist { get; set; }
+        public bool Free { get; set; } = false;
     }
 }

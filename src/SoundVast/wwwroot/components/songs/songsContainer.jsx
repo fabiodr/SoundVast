@@ -1,7 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { compose, withHandlers, withProps } from 'recompose';
+import { compose, withHandlers, withProps, lifecycle } from 'recompose';
 import { graphql } from 'react-relay';
 import { paginationContainer } from 'recompose-relay-modern';
 import { actions } from 'react-jplaylist';
@@ -33,6 +32,10 @@ const fragments = graphql`
         cursor
         node {
           audioId
+          name
+          artist
+          coverImageUrl
+          free
           ...songContainer_song
         }
       }
@@ -53,54 +56,30 @@ const connectionConfig = {
       ...songsContainer
     }
   `,
-  getVariables: (_, { count, cursor }, variables) => ({
-    ...variables,
+  getVariables: (_, { count, cursor }, fragmentVariables) => ({
     count,
     cursor,
+    filter: fragmentVariables.filter,
   }),
 };
 
-// TODO: load more songs when new songs scroll into view
 const handlers = {
   loadMore: ({ relay }) => () => relay.loadMore(audiosToLoad),
 };
 
 const createProps = ({ relay, data }) => ({
   hasMore: relay.hasMore(),
- // songs: data.songs.edges.map(x => x.node),
+  mappedPlaylist: data.songs.edges.map(({ node }) => ({
+    id: node.audioId,
+    title: node.name,
+    artist: node.artist,
+    sources: {
+      mp3: `${window.location.origin}/song/stream?id=${node.audioId}`,
+    },
+    poster: node.coverImageUrl,
+    free: node.free,
+  })),
 });
-
-// class InitializeSongs extends React.Component {
-//   componentDidMount() {
-//     this.props.setPlaylist('FooterPlaylist', this.getPlaylist());
-//   }
-//   getPlaylist = () => this.props.songs.map(song => ({
-//     id: song.audioId,
-//     title: song.name,
-//     artist: song.artist,
-//     sources: {
-//       mp3: `${window.location.origin}/song/stream?id=${song.audioId}`,
-//     },
-//     poster: song.coverImageUrl,
-//     free: song.free,
-//   }))
-//   render() {
-//     return <Songs {...this.props} />;
-//   }
-// }
-
-// InitializeSongs.propTypes = {
-//   setPlaylist: PropTypes.func.isRequired,
-//   songs: PropTypes.arrayOf(
-//     PropTypes.shape({
-//       audioId: PropTypes.number.isRequired,
-//       name: PropTypes.string.isRequired,
-//       artist: PropTypes.string,
-//       coverImageUrl: PropTypes.string.isRequired,
-//       free: PropTypes.bool,
-//     }),
-//   ).isRequired,
-// };
 
 const enhance = compose(
   connect(null, {
@@ -109,9 +88,15 @@ const enhance = compose(
   paginationContainer(fragments, connectionConfig),
   withHandlers(handlers),
   withProps(createProps),
+  lifecycle({
+    componentDidMount() {
+      this.props.setPlaylist('FooterPlaylist', this.props.mappedPlaylist);
+    },
+    componentWillReceiveProps(nextProps) {
+      this.props.setPlaylist('FooterPlaylist', nextProps.mappedPlaylist);
+    },
+  }),
 );
-
-// const SongsContainer = enhance(InitializeSongs);
 
 const SongsContainer = enhance(Songs);
 

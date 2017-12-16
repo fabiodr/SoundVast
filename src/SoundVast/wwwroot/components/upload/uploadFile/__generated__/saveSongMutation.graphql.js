@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 2e62902a967dbb36c055138b26def0e2
+ * @relayHash 6531292463d45c623f86ee393d21d5bb
  */
 
 /* eslint-disable */
@@ -14,6 +14,7 @@ export type saveSongMutationVariables = {|
     clientMutationId?: ?string;
     name: string;
     artist?: ?string;
+    free?: ?boolean;
     coverImageUrl: string;
     genreId?: ?number;
   };

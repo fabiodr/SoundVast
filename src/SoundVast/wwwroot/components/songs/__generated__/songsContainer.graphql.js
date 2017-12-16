@@ -14,6 +14,10 @@ export type songsContainer = {|
       +cursor: string;
       +node: ?{|
         +audioId: number;
+        +name: string;
+        +artist: ?string;
+        +coverImageUrl: string;
+        +free: boolean;
       |};
     |}>;
   |};
@@ -108,6 +112,34 @@ const fragment /*: ConcreteFragment*/ = {
                   "alias": null,
                   "args": null,
                   "name": "audioId",
+                  "storageKey": null
+                },
+                {
+                  "kind": "ScalarField",
+                  "alias": null,
+                  "args": null,
+                  "name": "name",
+                  "storageKey": null
+                },
+                {
+                  "kind": "ScalarField",
+                  "alias": null,
+                  "args": null,
+                  "name": "artist",
+                  "storageKey": null
+                },
+                {
+                  "kind": "ScalarField",
+                  "alias": null,
+                  "args": null,
+                  "name": "coverImageUrl",
+                  "storageKey": null
+                },
+                {
+                  "kind": "ScalarField",
+                  "alias": null,
+                  "args": null,
+                  "name": "free",
                   "storageKey": null
                 },
                 {
