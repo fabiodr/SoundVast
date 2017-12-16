@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 83618488bc1f125b9f3a3d6730d6c472
+ * @relayHash df918301c82d3049aaeb5db4baf8b740
  */
 
 /* eslint-disable */
@@ -75,8 +75,8 @@ fragment commentsContainer on Audio {
       cursor
     }
     pageInfo {
-      endCursor
       hasNextPage
+      endCursor
     }
   }
 }
@@ -399,14 +399,14 @@ const batch /*: ConcreteBatch*/ = {
                             "kind": "ScalarField",
                             "alias": null,
                             "args": null,
-                            "name": "endCursor",
+                            "name": "hasNextPage",
                             "storageKey": null
                           },
                           {
                             "kind": "ScalarField",
                             "alias": null,
                             "args": null,
-                            "name": "hasNextPage",
+                            "name": "endCursor",
                             "storageKey": null
                           }
                         ],
@@ -678,14 +678,14 @@ const batch /*: ConcreteBatch*/ = {
                             "kind": "ScalarField",
                             "alias": null,
                             "args": null,
-                            "name": "endCursor",
+                            "name": "hasNextPage",
                             "storageKey": null
                           },
                           {
                             "kind": "ScalarField",
                             "alias": null,
                             "args": null,
-                            "name": "hasNextPage",
+                            "name": "endCursor",
                             "storageKey": null
                           }
                         ],
@@ -741,7 +741,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query userProfileContainerQuery(\n  $count: Int!\n  $cursor: String\n  $originalCommentId: Int\n) {\n  user {\n    ...userProfileContainer_user\n    id\n  }\n}\n\nfragment userProfileContainer_user on ApplicationUser {\n  userName\n  uploads {\n    audioId\n    ...songContainer_song\n    id\n  }\n  likedSongs {\n    audioId\n    ...songContainer_song\n    id\n  }\n}\n\nfragment songContainer_song on Song {\n  audioId\n  name\n  coverImageUrl\n  artist\n  likes\n  dislikes\n  ...commentsContainer\n}\n\nfragment commentsContainer on Audio {\n  audioId\n  comments(first: $count, after: $cursor, originalCommentId: $originalCommentId) {\n    edges {\n      node {\n        __typename\n        commentId\n        body\n        date\n        likes\n        dislikes\n        repliesCount\n        originalComment {\n          id\n        }\n        user {\n          userName\n          id\n        }\n        id\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+  "text": "query userProfileContainerQuery(\n  $count: Int!\n  $cursor: String\n  $originalCommentId: Int\n) {\n  user {\n    ...userProfileContainer_user\n    id\n  }\n}\n\nfragment userProfileContainer_user on ApplicationUser {\n  userName\n  uploads {\n    audioId\n    ...songContainer_song\n    id\n  }\n  likedSongs {\n    audioId\n    ...songContainer_song\n    id\n  }\n}\n\nfragment songContainer_song on Song {\n  audioId\n  name\n  coverImageUrl\n  artist\n  likes\n  dislikes\n  ...commentsContainer\n}\n\nfragment commentsContainer on Audio {\n  audioId\n  comments(first: $count, after: $cursor, originalCommentId: $originalCommentId) {\n    edges {\n      node {\n        __typename\n        commentId\n        body\n        date\n        likes\n        dislikes\n        repliesCount\n        originalComment {\n          id\n        }\n        user {\n          userName\n          id\n        }\n        id\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n"
 };
 
 module.exports = batch;

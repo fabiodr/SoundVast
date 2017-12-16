@@ -1,31 +1,43 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import InfiniteScroll from 'react-infinite-scroller';
 
 import Comment from './comment';
 import styles from './comments.less';
+import Loader from '../shared/loaders/loader';
 
-const Comments = ({ data, setReplies }) => (
+const Comments = ({ data, setReplies, loadMore }) => (
   <div className={styles.comments}>
-    {data.comments.edges.map(({ node }) => (
-      <Comment
-        key={node.commentId}
-        id={node.commentId}
-        body={node.body}
-        date={new Date(node.date).toLocaleDateString()}
-        likes={node.likes}
-        dislikes={node.dislikes}
-        userName={node.user.userName}
-        repliesCount={node.repliesCount}
-        isTopLevelComment={!node.originalComment}
-        setReplies={setReplies}
-      />
-    ))}
+    <InfiniteScroll
+      loadMore={loadMore}
+      hasMore={data.comments.pageInfo.hasNextPage}
+      loader={<Loader />}
+      initialLoad={false}
+    >
+      {data.comments.edges.map(({ node }) => (
+        <Comment
+          key={node.commentId}
+          id={node.commentId}
+          body={node.body}
+          date={new Date(node.date).toLocaleDateString()}
+          likes={node.likes}
+          dislikes={node.dislikes}
+          userName={node.user.userName}
+          repliesCount={node.repliesCount}
+          isTopLevelComment={!node.originalComment}
+          setReplies={setReplies}
+        />
+      ))}
+    </InfiniteScroll>
   </div>
 );
 
 Comments.propTypes = {
   data: PropTypes.shape({
     comments: PropTypes.shape({
+      pageInfo: PropTypes.shape({
+        hasNextPage: PropTypes.bool.isRequired,
+      }).isRequired,
       edges: PropTypes.arrayOf(
         PropTypes.shape({
           node: PropTypes.shape({
@@ -45,6 +57,7 @@ Comments.propTypes = {
     }),
   }).isRequired,
   setReplies: PropTypes.func.isRequired,
+  loadMore: PropTypes.func.isRequired,
 };
 
 export default Comments;

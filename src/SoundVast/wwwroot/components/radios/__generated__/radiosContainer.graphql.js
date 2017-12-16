@@ -20,6 +20,9 @@ export type radiosContainer = {|
         +dislikes: number;
       |};
     |}>;
+    +pageInfo: {|
+      +hasNextPage: boolean;
+    |};
   |};
 |};
 */
@@ -163,14 +166,14 @@ const fragment /*: ConcreteFragment*/ = {
               "kind": "ScalarField",
               "alias": null,
               "args": null,
-              "name": "endCursor",
+              "name": "hasNextPage",
               "storageKey": null
             },
             {
               "kind": "ScalarField",
               "alias": null,
               "args": null,
-              "name": "hasNextPage",
+              "name": "endCursor",
               "storageKey": null
             }
           ],

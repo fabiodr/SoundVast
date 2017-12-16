@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 0b28bddd78836ec947221a62c055f4a9
+ * @relayHash e39835711f91af0e5dec6ed59d5acd60
  */
 
 /* eslint-disable */
@@ -38,8 +38,8 @@ fragment radiosContainer on Query {
       cursor
     }
     pageInfo {
-      endCursor
       hasNextPage
+      endCursor
     }
   }
 }
@@ -232,14 +232,14 @@ const batch /*: ConcreteBatch*/ = {
                 "kind": "ScalarField",
                 "alias": null,
                 "args": null,
-                "name": "endCursor",
+                "name": "hasNextPage",
                 "storageKey": null
               },
               {
                 "kind": "ScalarField",
                 "alias": null,
                 "args": null,
-                "name": "hasNextPage",
+                "name": "endCursor",
                 "storageKey": null
               }
             ],
@@ -280,7 +280,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query radiosContainerQuery(\n  $count: Int!\n  $cursor: String\n  $genre: String\n) {\n  ...radiosContainer\n}\n\nfragment radiosContainer on Query {\n  liveStreams(first: $count, after: $cursor, genre: $genre) {\n    edges {\n      node {\n        __typename\n        audioId\n        name\n        coverImageUrl\n        liveStreamUrl\n        likes\n        dislikes\n        id\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+  "text": "query radiosContainerQuery(\n  $count: Int!\n  $cursor: String\n  $genre: String\n) {\n  ...radiosContainer\n}\n\nfragment radiosContainer on Query {\n  liveStreams(first: $count, after: $cursor, genre: $genre) {\n    edges {\n      node {\n        __typename\n        audioId\n        name\n        coverImageUrl\n        liveStreamUrl\n        likes\n        dislikes\n        id\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n"
 };
 
 module.exports = batch;

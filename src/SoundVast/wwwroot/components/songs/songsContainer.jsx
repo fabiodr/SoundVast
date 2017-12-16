@@ -6,7 +6,7 @@ import { paginationContainer } from 'recompose-relay-modern';
 import { actions } from 'react-jplaylist';
 
 import Songs from './songs';
-import { audiosToLoad } from '../audio/utilities';
+import { audiosToLoad } from '../shared/utilities/itemsToLoad';
 
 const query = graphql`
   query songsContainerQuery(
@@ -39,6 +39,9 @@ const fragments = graphql`
           ...songContainer_song
         }
       }
+      pageInfo {
+        hasNextPage
+      }
     }
   }
 `;
@@ -67,8 +70,7 @@ const handlers = {
   loadMore: ({ relay }) => () => relay.loadMore(audiosToLoad),
 };
 
-const createProps = ({ relay, data }) => ({
-  hasMore: relay.hasMore(),
+const createProps = ({ data }) => ({
   mappedPlaylist: data.songs.edges.map(({ node }) => ({
     id: node.audioId,
     title: node.name,

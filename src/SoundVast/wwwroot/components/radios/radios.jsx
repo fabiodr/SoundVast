@@ -1,48 +1,48 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import SoundVastTitle from '../shared/title/soundVastTitle';
+import InfiniteScroll from 'react-infinite-scroller';
 
+import SoundVastTitle from '../shared/title/soundVastTitle';
 import Radio from './radio';
-import InfiniteScrollGrid from '../shared/grid/infiniteScrollGrid';
+import Grid from '../shared/grid/grid';
 import AudioHeader from '../audio/audioHeader';
 import genreTypeNames from '../shared/utilities/genreTypeNames';
+import Loader from '../shared/loaders/loader';
 
-const Radios = ({ radios, loadMore, hasMore }) => (
+const Radios = ({ data, loadMore }) => (
   <SoundVastTitle title="Radios">
     <div>
       <AudioHeader type={genreTypeNames.liveStream} />
-      <InfiniteScrollGrid
-        initialLoad={false}
+      <InfiniteScroll
         loadMore={loadMore}
-        hasMore={hasMore}
+        hasMore={data.radios.pageInfo.hasNextPage}
+        loader={<Loader />}
+        initialLoad={false}
       >
-        {radios.map(radio => (
-          <Radio
-            key={radio.audioId}
-            audioId={radio.audioId}
-            coverImageUrl={radio.coverImageUrl}
-            name={radio.name}
-            likes={radio.likes}
-            dislikes={radio.dislikes}
-          />
-        ))}
-      </InfiniteScrollGrid>
+        <Grid>
+          {data.radios.edges.map(({ node }) => <Radio key={node.audioId} radio={node} />)}
+        </Grid>
+      </InfiniteScroll>
     </div>
   </SoundVastTitle>
 );
 
 Radios.propTypes = {
-  radios: PropTypes.arrayOf(
-    PropTypes.shape({
-      audioId: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      coverImageUrl: PropTypes.string.isRequired,
-      likes: PropTypes.number.isRequired,
-      dislikes: PropTypes.number.isRequired,
+  data: PropTypes.shape({
+    radios: PropTypes.shape({
+      pageInfo: PropTypes.shape({
+        hasNextPage: PropTypes.bool.isRequired,
+      }).isRequired,
+      edges: PropTypes.arrayOf(
+        PropTypes.shape({
+          node: PropTypes.shape({
+            audioId: PropTypes.number.isRequired,
+          }),
+        }),
+      ),
     }),
-  ).isRequired,
+  }).isRequired,
   loadMore: PropTypes.func.isRequired,
-  hasMore: PropTypes.bool.isRequired,
 };
 
 export default Radios;

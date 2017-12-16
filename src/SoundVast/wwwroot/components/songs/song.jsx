@@ -24,7 +24,7 @@ const Song = ({ song }) => (
       <Dislike audioId={song.audioId} />
     </Rating>
     <Flag modalId="flagAudio" id={song.audioId} />
-    {/* <CommentBox /> */}
+    <CommentBox />
     <Comments data={song} />
   </div>
 );

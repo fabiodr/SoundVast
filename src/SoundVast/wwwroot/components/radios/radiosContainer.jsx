@@ -7,7 +7,7 @@ import { paginationContainer } from 'recompose-relay-modern';
 import { actions } from 'react-jplaylist';
 
 import Radios from './radios';
-import { audiosToLoad } from '../audio/utilities';
+import { audiosToLoad } from '../shared/utilities/itemsToLoad';
 
 const query = graphql`
   query radiosContainerQuery(
@@ -36,6 +36,9 @@ const fragments = graphql`
           dislikes
         }
       }
+      pageInfo {
+        hasNextPage
+      }
     }
   }
 `;
@@ -61,8 +64,7 @@ const handlers = {
   loadMore: ({ relay }) => () => relay.loadMore(audiosToLoad),
 };
 
-const createProps = ({ relay, data }) => ({
-  hasMore: relay.hasMore(),
+const createProps = ({ data }) => ({
   radios: data.liveStreams.edges.map(x => x.node),
 });
 

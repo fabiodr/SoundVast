@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 765c76f021f2e7572b9aed1f6bbdc50b
+ * @relayHash 237c210133ffe84e4ad83246bb03c6cc
  */
 
 /* eslint-disable */
@@ -52,8 +52,8 @@ fragment commentsContainer on Audio {
       cursor
     }
     pageInfo {
-      endCursor
       hasNextPage
+      endCursor
     }
   }
 }
@@ -341,14 +341,14 @@ const batch /*: ConcreteBatch*/ = {
                     "kind": "ScalarField",
                     "alias": null,
                     "args": null,
-                    "name": "endCursor",
+                    "name": "hasNextPage",
                     "storageKey": null
                   },
                   {
                     "kind": "ScalarField",
                     "alias": null,
                     "args": null,
-                    "name": "hasNextPage",
+                    "name": "endCursor",
                     "storageKey": null
                   }
                 ],
@@ -399,7 +399,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query commentsContainerForwardQuery(\n  $id: Int!\n  $count: Int!\n  $cursor: String\n  $originalCommentId: Int\n) {\n  song(id: $id) {\n    ...commentsContainer\n    id\n  }\n}\n\nfragment commentsContainer on Audio {\n  audioId\n  comments(first: $count, after: $cursor, originalCommentId: $originalCommentId) {\n    edges {\n      node {\n        __typename\n        commentId\n        body\n        date\n        likes\n        dislikes\n        repliesCount\n        originalComment {\n          id\n        }\n        user {\n          userName\n          id\n        }\n        id\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+  "text": "query commentsContainerForwardQuery(\n  $id: Int!\n  $count: Int!\n  $cursor: String\n  $originalCommentId: Int\n) {\n  song(id: $id) {\n    ...commentsContainer\n    id\n  }\n}\n\nfragment commentsContainer on Audio {\n  audioId\n  comments(first: $count, after: $cursor, originalCommentId: $originalCommentId) {\n    edges {\n      node {\n        __typename\n        commentId\n        body\n        date\n        likes\n        dislikes\n        repliesCount\n        originalComment {\n          id\n        }\n        user {\n          userName\n          id\n        }\n        id\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n"
 };
 
 module.exports = batch;

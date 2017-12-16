@@ -1,23 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import SoundVastTitle from '../shared/title/soundVastTitle';
+import InfiniteScroll from 'react-infinite-scroller';
 
+import SoundVastTitle from '../shared/title/soundVastTitle';
 import Song from './songContainer';
-import InfiniteScrollGrid from '../shared/grid/infiniteScrollGrid';
+import Grid from '../shared/grid/grid';
 import AudioHeader from '../audio/audioHeader';
 import genreTypeNames from '../shared/utilities/genreTypeNames';
+import Loader from '../shared/loaders/loader';
 
-const Songs = ({ data, loadMore, hasMore }) => (
+const Songs = ({ data, loadMore }) => (
   <SoundVastTitle title="Songs">
     <div>
       <AudioHeader type={genreTypeNames.music} />
-      <InfiniteScrollGrid
-        initialLoad={false}
+      <InfiniteScroll
         loadMore={loadMore}
-        hasMore={hasMore}
+        hasMore={data.songs.pageInfo.hasNextPage}
+        loader={<Loader />}
+        initialLoad={false}
       >
-        {data.songs.edges.map(({ node }) => <Song key={node.audioId} song={node} />)}
-      </InfiniteScrollGrid>
+        <Grid>
+          {data.songs.edges.map(({ node }) => <Song key={node.audioId} song={node} />)}
+        </Grid>
+      </InfiniteScroll>
     </div>
   </SoundVastTitle>
 );
@@ -25,6 +30,9 @@ const Songs = ({ data, loadMore, hasMore }) => (
 Songs.propTypes = {
   data: PropTypes.shape({
     songs: PropTypes.shape({
+      pageInfo: PropTypes.shape({
+        hasNextPage: PropTypes.bool.isRequired,
+      }).isRequired,
       edges: PropTypes.arrayOf(
         PropTypes.shape({
           node: PropTypes.shape({
@@ -35,7 +43,6 @@ Songs.propTypes = {
     }),
   }).isRequired,
   loadMore: PropTypes.func.isRequired,
-  hasMore: PropTypes.bool.isRequired,
 };
 
 export default Songs;

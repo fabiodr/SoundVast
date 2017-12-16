@@ -1,8 +1,9 @@
-import { compose, withHandlers } from 'recompose';
+import { compose, withHandlers, withProps } from 'recompose';
 import { graphql } from 'react-relay';
 import { paginationContainer } from 'recompose-relay-modern';
 
 import Comments from './comments';
+import { commentsToLoad } from '../shared/utilities/itemsToLoad';
 
 const fragments = graphql`
   fragment commentsContainer on Audio {
@@ -27,6 +28,9 @@ const fragments = graphql`
             userName
           }
         }
+      }
+      pageInfo {
+        hasNextPage
       }
     }
   }
@@ -55,10 +59,11 @@ const connectionConfig = {
 
 const handlers = {
   setReplies: ({ relay }) => (id) => {
-    relay.refetchConnection(30, null, {
+    relay.refetchConnection(commentsToLoad, null, {
       originalCommentId: id,
     });
   },
+  loadMore: ({ relay }) => () => relay.loadMore(commentsToLoad),
 };
 
 export default compose(
