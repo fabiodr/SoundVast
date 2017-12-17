@@ -19,6 +19,7 @@ module.exports = {
     'react/wrap-multilines': 'off',
     'react/require-extension': 'off',
     'relay/graphql-syntax': 'error',
+    'react/forbid-prop-types': 'off',
   },
   overrides: [
     {

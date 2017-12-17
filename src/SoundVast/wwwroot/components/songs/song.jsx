@@ -8,11 +8,10 @@ import Rating from '../rating/audioRating';
 import Like from '../rating/like/likeAudioContainer';
 import Dislike from '../rating/dislike/dislikeAudioContainer';
 import Name from '../audio/name';
-import CommentBox from '../comments/commentBoxContainer';
-import Comments from '../comments/commentsContainer';
 import Flag from '../flag/flag';
+import SideBar from '../audio/sideBar';
 
-const Song = ({ song }) => (
+const Song = ({ song, isOnCurrentSong }) => (
   <div>
     <Play id={song.audioId}>
       <CoverImage coverImageUrl={song.coverImageUrl} />
@@ -24,12 +23,12 @@ const Song = ({ song }) => (
       <Dislike audioId={song.audioId} />
     </Rating>
     <Flag modalId="flagAudio" id={song.audioId} />
-    <CommentBox />
-    <Comments data={song} />
+    { isOnCurrentSong ? <SideBar data={song} /> : null }
   </div>
 );
 
 Song.propTypes = {
+  isOnCurrentSong: PropTypes.bool.isRequired,
   song: PropTypes.shape({
     coverImageUrl: PropTypes.string.isRequired,
     audioId: PropTypes.number.isRequired,

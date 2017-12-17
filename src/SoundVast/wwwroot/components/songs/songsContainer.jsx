@@ -71,7 +71,7 @@ const handlers = {
 };
 
 const createProps = ({ data }) => ({
-  mappedPlaylist: data.songs.edges.map(({ node }) => ({
+  footerPlaylist: data.songs.edges.map(({ node }) => ({
     id: node.audioId,
     title: node.name,
     artist: node.artist,
@@ -92,10 +92,10 @@ const enhance = compose(
   withProps(createProps),
   lifecycle({
     componentDidMount() {
-      this.props.setPlaylist('FooterPlaylist', this.props.mappedPlaylist);
+      this.props.setPlaylist('FooterPlaylist', this.props.footerPlaylist);
     },
     componentWillReceiveProps(nextProps) {
-      this.props.setPlaylist('FooterPlaylist', nextProps.mappedPlaylist);
+      this.props.setPlaylist('FooterPlaylist', nextProps.footerPlaylist);
     },
   }),
 );

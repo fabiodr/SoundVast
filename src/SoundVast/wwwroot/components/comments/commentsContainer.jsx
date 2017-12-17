@@ -1,4 +1,4 @@
-import { compose, withHandlers, withProps } from 'recompose';
+import { compose, withHandlers } from 'recompose';
 import { graphql } from 'react-relay';
 import { paginationContainer } from 'recompose-relay-modern';
 

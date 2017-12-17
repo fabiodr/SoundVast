@@ -5,7 +5,6 @@ import Account from '../../account/account';
 import Header from '../../header/header';
 import FooterPlaylist from '../../footerPlaylist/footerPlaylistContainer';
 import Content from '../../content/content';
-import SideBar from '../../sideBar/sideBar';
 import styles from './primaryLayout.less';
 import FlagAudioModal from '../../flag/flagAudioModalContainer';
 import FlagCommentModal from '../../flag/flagCommentModalContainer';
@@ -14,11 +13,10 @@ const PrimaryLayout = ({ children, user, loginProviders }) => (
   <div>
     <Account loginProviders={loginProviders} />
     <Header user={user} />
-    <div className={styles.main}>
+    <div className={styles.main} id="main">
       <Content>
         {children}
       </Content>
-      {/* <SideBar /> */}
     </div>
     <FlagAudioModal isAuthorized={user !== null} />
     <FlagCommentModal isAuthorized={user !== null} />
