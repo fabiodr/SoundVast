@@ -12,11 +12,15 @@ const NameField = ({ id, label }) => (
 
 NameField.defaultProps = {
   label: 'Name',
+  id: 0,
 };
 
 NameField.propTypes = {
   label: PropTypes.string,
-  id: PropTypes.string.isRequired,
+  id: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
 };
 
 export default NameField;

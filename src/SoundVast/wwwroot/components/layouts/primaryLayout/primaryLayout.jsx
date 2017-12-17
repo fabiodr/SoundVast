@@ -8,21 +8,27 @@ import Content from '../../content/content';
 import styles from './primaryLayout.less';
 import FlagAudioModal from '../../flag/flagAudioModalContainer';
 import FlagCommentModal from '../../flag/flagCommentModalContainer';
+import EditSongModal from '../../edit/editSongModalContainer';
 
-const PrimaryLayout = ({ children, user, loginProviders }) => (
-  <div>
-    <Account loginProviders={loginProviders} />
-    <Header user={user} />
-    <div className={styles.main} id="main">
-      <Content>
-        {children}
-      </Content>
+const PrimaryLayout = ({ children, user, loginProviders }) => {
+  const isAuthorized = user !== null;
+
+  return (
+    <div>
+      <Account loginProviders={loginProviders} />
+      <Header user={user} />
+      <div className={styles.main} id="main">
+        <Content>
+          {children}
+        </Content>
+      </div>
+      <FlagAudioModal isAuthorized={isAuthorized} />
+      <FlagCommentModal isAuthorized={isAuthorized} />
+      <EditSongModal isAuthorized={isAuthorized} />
+      <FooterPlaylist />
     </div>
-    <FlagAudioModal isAuthorized={user !== null} />
-    <FlagCommentModal isAuthorized={user !== null} />
-    <FooterPlaylist />
-  </div>
-);
+  );
+};
 
 PrimaryLayout.defaultProps = {
   children: null,

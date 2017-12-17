@@ -95,5 +95,26 @@ namespace SoundVast.Components.Audio
                 _repository.Save();
             }
         }
+
+        public virtual bool Edit(int existingAudioId, T newModel)
+        {
+            _validationProvider.Validate(newModel);
+
+            if (!_validationProvider.HasErrors)
+            {
+                var audio = _repository.Get(existingAudioId);
+
+                audio.CoverImageUrl = newModel.CoverImageUrl;
+                audio.Name = newModel.Name;
+                audio.GenreId = newModel.GenreId;
+                audio.UserId = newModel.UserId;
+
+                _repository.Save();
+
+                return true;
+            }
+
+            return false;
+        }
     }
 }

@@ -1,5 +1,5 @@
 # source: http://localhost:8080/graphql
-# timestamp: Sat Dec 16 2017 23:20:56 GMT+0100 (W. Europe Standard Time)
+# timestamp: Sun Dec 17 2017 23:38:26 GMT+0100 (W. Europe Standard Time)
 
 type ApplicationUser {
   id: ID
@@ -114,6 +114,21 @@ type CommentPayloadEdge {
 scalar Date
 
 scalar Decimal
+
+input EditSongInput {
+  clientMutationId: String
+  songId: Int!
+  name: String!
+  artist: String
+  free: Boolean!
+  coverImageUrl: String!
+  genreId: Int
+}
+
+type EditSongPayload {
+  clientMutationId: String
+  song: Song!
+}
 
 type ExternalLoginCallbackPayload {
   # The existing logged in user
@@ -319,6 +334,7 @@ type Mutation {
   comment(input: SaveCommentInput!): SaveCommentPayload
   flagAudio(input: FlagAudioInput!): FlagObjectPayload
   flagComment(input: FlagCommentInput!): FlagObjectPayload
+  editSong(input: EditSongInput!): EditSongPayload
 }
 
 interface Node {
