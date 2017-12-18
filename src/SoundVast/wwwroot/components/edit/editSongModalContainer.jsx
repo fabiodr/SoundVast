@@ -1,16 +1,12 @@
 import { SubmissionError } from 'redux-form';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { compose, withHandlers, setPropTypes } from 'recompose';
+import { graphql } from 'react-relay';
+import { compose, withHandlers, withProps } from 'recompose';
+import { fragmentContainer } from 'recompose-relay-modern';
 
 import EditSongModal from './editSongModal';
-import { hideModal } from '../shared/modal/actions';
+import { showModal, hideModal } from '../shared/modal/actions';
 import editSongMutation from './editSongMutation';
 import { showEditPopup } from './actions';
-
-const mapStateToProps = ({ modal }) => ({
-  songId: modal.id,
-});
 
 const handlers = {
   onSubmit: ({ dispatch, songId }) => input =>
@@ -23,10 +19,65 @@ const handlers = {
       }),
 };
 
-export default compose(
-  connect(mapStateToProps),
-  setPropTypes({
-    songId: PropTypes.number,
-  }),
+const fragments = graphql`
+  fragment editSongModalContainer_song on Song {
+    name
+    coverImageUrl
+    artist
+  }
+`;
+
+const query = graphql`
+  query editSongModalContainerQuery(
+    $songId: Int!
+  ) {
+    user {
+      id
+    }
+    song(id: $songId) {
+      ...editSongModalContainer_song
+    }
+  }
+`;
+
+const createProps = ({ user }) => ({
+  isAuthorized: user !== null,
+});
+
+const enhance = compose(
+  fragmentContainer(fragments),
   withHandlers(handlers),
-)(EditSongModal);
+  withProps(createProps),
+);
+
+const EditSongModalContainer = enhance(EditSongModal);
+
+export const routeConfig = {
+  getComponent: ({ context }) => {
+    const state = context.store.getState();
+
+    if (state.modal.id) {
+      return EditSongModalContainer;
+    }
+
+    return null;
+  },
+  getQuery: ({ context }) => {
+    const state = context.store.getState();
+
+    if (state.modal.id) {
+      return query;
+    }
+
+    return null;
+  },
+  prepareVariables: (_, { context }) => {
+    const state = context.store.getState();
+
+    return {
+      songId: state.modal.id,
+    };
+  },
+};
+
+export default EditSongModalContainer;

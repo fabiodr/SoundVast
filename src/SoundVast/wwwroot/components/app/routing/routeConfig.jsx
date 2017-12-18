@@ -13,21 +13,27 @@ import { routeConfig as radiosRouteConfig } from '../../radios/radiosContainer';
 import { routeConfig as primaryLayoutRouteConfig } from '../../layouts/primaryLayout/primaryLayoutContainer';
 import { routeConfig as genresRouteConfig } from '../../genres/genresContainer';
 import { routeConfig as legalRouteConfig } from '../../legal/legalContainer';
+import { routeConfig as editSongModalRouteConfig } from '../../edit/editSongModalContainer';
 
 export default makeRouteConfig(
   <Route path="/" {...primaryLayoutRouteConfig}>
-    <Route {...songsRouteConfig} />
-    <Route path="songs/:genre?" {...songsRouteConfig} />
-    <Route path="radios/:genre?" {...radiosRouteConfig} />
-    <Route path="upload" {...uploadRouteConfig} />
-    <Route path="profile" {...profileRouteConfig} />
-    <Route path="genres/:type" {...genresRouteConfig} />
-    <Route path="error/:status" {...errorPageRouteConfig} />
-    <Route path="account">
-      <Route path="externalLoginCallback/:returnUrl" {...socialLoginCallbackRouteConfig} />
-      <Route path="resetPassword" {...resetPasswordRouteConfig} />
-      <Route path="confirmEmail/:userId/:token" {...confirmEmailRouteConfig} />
-    </Route>
-    <Route path="legal" {...legalRouteConfig} />
+    {{
+      editSongModal: <Route {...editSongModalRouteConfig} />,
+      children: [
+        <Route {...songsRouteConfig} />,
+        <Route path="songs/:genre?" {...songsRouteConfig} />,
+        <Route path="radios/:genre?" {...radiosRouteConfig} />,
+        <Route path="upload" {...uploadRouteConfig} />,
+        <Route path="profile" {...profileRouteConfig} />,
+        <Route path="genres/:type" {...genresRouteConfig} />,
+        <Route path="error/:status" {...errorPageRouteConfig} />,
+        <Route path="account">,
+          <Route path="externalLoginCallback/:returnUrl" {...socialLoginCallbackRouteConfig} />,
+          <Route path="resetPassword" {...resetPasswordRouteConfig} />,
+          <Route path="confirmEmail/:userId/:token" {...confirmEmailRouteConfig} />,
+        </Route>,
+        <Route path="legal" {...legalRouteConfig} />,
+      ],
+    }}
   </Route>,
 );

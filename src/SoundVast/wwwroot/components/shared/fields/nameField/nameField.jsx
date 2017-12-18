@@ -4,9 +4,9 @@ import { Field } from 'redux-form';
 
 import Input from '../input/input';
 
-const NameField = ({ id, label }) => (
+const NameField = ({ id, label, ...props }) => (
   <label htmlFor={`name_${id}`}>{label} *
-    <Field name="name" id={`name_${id}`} component={Input} />
+    <Field name="name" id={`name_${id}`} component={Input} {...props} />
   </label>
 );
 
