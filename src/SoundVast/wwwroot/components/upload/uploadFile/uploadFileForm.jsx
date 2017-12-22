@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import { Field } from 'redux-form';
 
 import BasicInfo from '../common/basicInfo/basicInfo';
 import genreTypeNames from '../../shared/utilities/genreTypeNames';
-import Input from '../../shared/fields/input/input';
 import NameField from '../../shared/fields/nameField/nameField';
+import ArtistField from '../../shared/fields/artistField/artistField';
 import GenreField from '../../shared/fields/genreField/genreFieldContainer';
 import ValidationErrors from '../../shared/validation/validationErrors';
 import CancelButton from '../../shared/button/cancelButton';
@@ -30,11 +29,7 @@ const Form = ({
       <TabPanel>
         <BasicInfo id={id}>
           <NameField id={id} />
-
-          <label htmlFor={`artist_${id}`}>Artist
-            <Field name="artist" id={`artist_${id}`} component={Input} />
-          </label>
-
+          <ArtistField id={id} />
           <GenreField id={id} type={genreTypeNames.music} genres={genres} />
         </BasicInfo>
       </TabPanel>

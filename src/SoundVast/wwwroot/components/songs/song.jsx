@@ -9,7 +9,7 @@ import Like from '../rating/like/likeAudioContainer';
 import Dislike from '../rating/dislike/dislikeAudioContainer';
 import Name from '../audio/name';
 import Flag from '../flag/flag';
-import Edit from '../edit/editContainer';
+import Edit from '../edit/edit';
 import SideBar from '../audio/sideBar';
 
 const Song = ({ song, isOnCurrentSong }) => (
@@ -23,7 +23,7 @@ const Song = ({ song, isOnCurrentSong }) => (
       <Like audioId={song.audioId} />
       <Dislike audioId={song.audioId} />
     </Rating>
-    <Edit audioId={song.audioId} />
+    <Edit modalId="editSong" id={song.audioId} />
     <Flag modalId="flagAudio" id={song.audioId} />
     { isOnCurrentSong ? <SideBar data={song} /> : null }
   </div>

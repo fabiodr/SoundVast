@@ -19,6 +19,7 @@ const GenreField = ({ id, genres, label }) => (
 
 GenreField.defaultProps = {
   label: 'Genre',
+  id: 0,
 };
 
 GenreField.propTypes = {
@@ -28,7 +29,10 @@ GenreField.propTypes = {
     type: PropTypes.string.isRequired,
   })).isRequired,
   label: PropTypes.string,
-  id: PropTypes.string.isRequired,
+  id: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
 };
 
 export default GenreField;

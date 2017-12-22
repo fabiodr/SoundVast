@@ -1,23 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'found';
 
+import ModalLink from '../shared/modal/modalLinkContainer';
 import EditIcon from '../icons/edit';
 import styles from './edit.less';
 
-const Edit = ({ onClick }) => (
-  <Link
-    to="/"
-    tabIndex={0}
-    role="button"
-    onClick={onClick}
-  >
+const Edit = ({ modalId, id }) => (
+  <ModalLink modalId={modalId} variables={{ id }}>
     <EditIcon className={styles.editIcon} />
-  </Link>
+  </ModalLink>
 );
 
 Edit.propTypes = {
-  onClick: PropTypes.func.isRequired,
+  modalId: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired,
 };
 
 export default Edit;

@@ -1,5 +1,5 @@
 # source: http://localhost:8080/graphql
-# timestamp: Sun Dec 17 2017 23:38:26 GMT+0100 (W. Europe Standard Time)
+# timestamp: Wed Dec 20 2017 00:31:02 GMT+0100 (W. Europe Standard Time)
 
 type ApplicationUser {
   id: ID
@@ -365,7 +365,7 @@ type Query {
   ): Node
   song(
     # The id of the song
-    id: Int!
+    id: Int
   ): Song
   quote: Quote
   songs(

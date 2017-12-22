@@ -7267,10 +7267,6 @@ relay-debugger-react-native-runtime@0.0.10:
   version "0.0.10"
   resolved "https://registry.yarnpkg.com/relay-debugger-react-native-runtime/-/relay-debugger-react-native-runtime-0.0.10.tgz#0ef36012a1fba928962205514b46f635c652f235"
 
-relay-modern-hoc@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/relay-modern-hoc/-/relay-modern-hoc-0.0.2.tgz#a854ffc1d06118887bb947492dca572e467bef04"
-
 relay-runtime@1.4.1, relay-runtime@^1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/relay-runtime/-/relay-runtime-1.4.1.tgz#f88dcd0a422700a04563f291f570e4ce368e36d0"
