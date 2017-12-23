@@ -26,7 +26,7 @@ EditSongModal.propTypes = {
   initialValues: PropTypes.shape({
     name: PropTypes.string.isRequired,
     artist: PropTypes.string,
-    genre: PropTypes.string.isRequired,
+    genreId: PropTypes.string.isRequired,
   }).isRequired,
   previewUrl: PropTypes.string.isRequired,
   onSubmit: PropTypes.func.isRequired,

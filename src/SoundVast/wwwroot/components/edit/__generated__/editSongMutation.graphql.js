@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 3e2ba140da5df8243cb7d55f4c26502c
+ * @relayHash 8e413537526402c09cd649474d852dc1
  */
 
 /* eslint-disable */
@@ -23,7 +23,10 @@ export type editSongMutationVariables = {|
 export type editSongMutationResponse = {|
   +editSong: ?{|
     +song: {|
-      +id: string;
+      +audioId: number;
+      +name: string;
+      +artist: ?string;
+      +coverImageUrl: string;
     |};
   |};
 |};
@@ -36,6 +39,10 @@ mutation editSongMutation(
 ) {
   editSong(input: $input) {
     song {
+      audioId
+      name
+      artist
+      coverImageUrl
       id
     }
   }
@@ -83,7 +90,28 @@ const batch /*: ConcreteBatch*/ = {
                 "kind": "ScalarField",
                 "alias": null,
                 "args": null,
-                "name": "id",
+                "name": "audioId",
+                "storageKey": null
+              },
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "name",
+                "storageKey": null
+              },
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "artist",
+                "storageKey": null
+              },
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "coverImageUrl",
                 "storageKey": null
               }
             ],
@@ -139,6 +167,34 @@ const batch /*: ConcreteBatch*/ = {
                 "kind": "ScalarField",
                 "alias": null,
                 "args": null,
+                "name": "audioId",
+                "storageKey": null
+              },
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "name",
+                "storageKey": null
+              },
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "artist",
+                "storageKey": null
+              },
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "coverImageUrl",
+                "storageKey": null
+              },
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
                 "name": "id",
                 "storageKey": null
               }
@@ -150,7 +206,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "mutation editSongMutation(\n  $input: EditSongInput!\n) {\n  editSong(input: $input) {\n    song {\n      id\n    }\n  }\n}\n"
+  "text": "mutation editSongMutation(\n  $input: EditSongInput!\n) {\n  editSong(input: $input) {\n    song {\n      audioId\n      name\n      artist\n      coverImageUrl\n      id\n    }\n  }\n}\n"
 };
 
 module.exports = batch;

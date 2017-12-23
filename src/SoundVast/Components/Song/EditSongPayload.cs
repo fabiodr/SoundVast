@@ -32,17 +32,17 @@ namespace SoundVast.Components.Song
             var free = inputs.Get<bool>("free");
             var genreId = inputs.Get<int>("genreId");
             var user = context.UserContext.As<Context>().CurrentUser;
-            var song = new Models.Song
+            var newModel = new Models.Song
             {
                 CoverImageUrl = coverImageUrl,
                 Name = name,
                 Artist = artist,
                 Free = free,
                 GenreId = genreId,
-                UserId = user.Id,
+                UserId = user.Id
             };
 
-            _songService.Edit(songId, song);
+            var song = _songService.Edit(songId, newModel);
 
             return new
             {

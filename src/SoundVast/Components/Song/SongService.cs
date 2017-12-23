@@ -23,21 +23,16 @@ namespace SoundVast.Components.Song
             _repository = repository;
         }
 
-        public override bool Edit(int existingAudioId, Models.Song newModel)
+        public override Models.Song Edit(int existingAudioId, Models.Song newModel)
         {
-            var succeeded = base.Edit(existingAudioId, newModel);
+            var song = base.Edit(existingAudioId, newModel);
 
-            if (succeeded)
-            {
-                var audio = _repository.Get(existingAudioId);
+            song.Artist = newModel.Artist;
+            song.Free = newModel.Free;
 
-                audio.Artist = newModel.Artist;
-                audio.Free = newModel.Free;
+            _repository.Save();
 
-                _repository.Save();
-            }
-
-            return succeeded;
+            return song;
         }
     }
 }

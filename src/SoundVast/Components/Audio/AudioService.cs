@@ -100,7 +100,7 @@ namespace SoundVast.Components.Audio
             }
         }
 
-        public virtual bool Edit(int existingAudioId, T newModel)
+        public virtual T Edit(int existingAudioId, T newModel)
         {
             _validationProvider.Validate(newModel);
 
@@ -115,10 +115,10 @@ namespace SoundVast.Components.Audio
 
                 _repository.Save();
 
-                return true;
+                return audio;
             }
 
-            return false;
+            return null;
         }
     }
 }
