@@ -1,10 +1,10 @@
 import expect from 'expect';
 
-import uploadValidation from './validation';
+import audioValidation from './audioValidation';
 
-describe('uploadValidation', () => {
+describe('audioValidation', () => {
   it('should return no errors if every field is valid', () => {
-    const errors = uploadValidation({
+    const errors = audioValidation({
       name: 'bubble.mp3',
     });
 
@@ -12,7 +12,7 @@ describe('uploadValidation', () => {
   });
 
   it('should have an error if name is blank', () => {
-    const errors = uploadValidation({});
+    const errors = audioValidation({});
 
     expect(errors.name).toExist();
   });

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import UploadFileForm from './uploadFileForm';
 import { removeMusicForm } from '../actions';
 import { showAddedContributionPoints } from '../../account/actions';
-import uploadValidation from '../validation';
+import audioValidation from '../../shared/validation/audioValidation';
 import saveSongMutation from './saveSongMutation';
 
 const mapStateToProps = ({ upload }, { index, id }) => ({
@@ -40,7 +40,7 @@ export default compose(
   flattenProp('audioFile'),
   withProps(createProps),
   reduxForm({
-    validate: uploadValidation,
+    validate: audioValidation,
     enableReinitialize: true,
   }),
 )(UploadFileForm);

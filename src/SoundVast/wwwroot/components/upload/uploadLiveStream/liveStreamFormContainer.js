@@ -3,7 +3,7 @@ import { compose, withHandlers, flattenProp, withProps } from 'recompose';
 import { connect } from 'react-redux';
 
 import LiveStreamForm from './liveStreamForm';
-import uploadValidation from '../validation';
+import audioValidation from '../../shared/validation/audioValidation';
 import saveLiveStreamMutation from './saveLiveStreamMutation';
 import { removeLiveStreamForm } from '../actions';
 import { showAddedContributionPoints } from '../../account/actions';
@@ -36,7 +36,7 @@ export default compose(
   flattenProp('coverImage'),
   withProps(createProps),
   reduxForm({
-    validate: uploadValidation,
+    validate: audioValidation,
     enableReinitialize: true,
   }),
 )(LiveStreamForm);

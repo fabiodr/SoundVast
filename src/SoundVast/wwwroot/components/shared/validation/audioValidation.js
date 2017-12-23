@@ -1,6 +1,6 @@
-import noWhiteSpace from '../shared/validation/noWhiteSpace';
+import noWhiteSpace from './noWhiteSpace';
 
-const validation = (values) => {
+const audioValidation = (values) => {
   const errors = {};
 
   if (!values.name || !noWhiteSpace(values.name)) {
@@ -14,4 +14,4 @@ const validation = (values) => {
   return errors;
 };
 
-export default validation;
+export default audioValidation;
