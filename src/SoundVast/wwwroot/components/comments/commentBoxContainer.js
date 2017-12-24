@@ -22,6 +22,7 @@ const propTypes = {
 
 const createProps = ({ currentAudioId }) => ({
   form: `commentBox_${currentAudioId}`,
+  destroyOnUnmount: false,
 });
 
 export default compose(

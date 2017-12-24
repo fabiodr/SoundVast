@@ -45,6 +45,7 @@ using SoundVast.Components.Genre;
 using SoundVast.Components.Genre.Models;
 using SoundVast.Components.GraphQl;
 using SoundVast.Components.LiveStream.Models;
+using SoundVast.Components.Playlist.Models;
 using SoundVast.Components.Quote.Models;
 using SoundVast.Components.Rating;
 using SoundVast.Components.Song.Models;
@@ -242,6 +243,7 @@ namespace SoundVast
             builder.RegisterType<Repository<Quote, ApplicationDbContext>>().As<IRepository<Quote>>();
             builder.RegisterType<Repository<Comment, ApplicationDbContext>>().As<IRepository<Comment>>();
             builder.RegisterType<Repository<Flag, ApplicationDbContext>>().As<IRepository<Flag>>();
+            builder.RegisterType<Repository<Playlist, ApplicationDbContext>>().As<IRepository<Playlist>>();
 
             return builder;
         }

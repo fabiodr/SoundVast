@@ -11,6 +11,7 @@ using SoundVast.Components.Comment.Models;
 using SoundVast.Components.Flag.Models;
 using SoundVast.Components.Genre.Models;
 using SoundVast.Components.LiveStream.Models;
+using SoundVast.Components.Playlist.Models;
 using SoundVast.Components.Quote.Models;
 using SoundVast.Components.Rating.Models;
 using SoundVast.Components.User;
@@ -24,6 +25,7 @@ namespace SoundVast.Data
         public DbSet<Rating> Ratings { get; set; }
         //public DbSet<LinkModel> Links { get; set; }
         public DbSet<Genre> Genres { get; set; }
+        public DbSet<Playlist> Playlists { get; set; }
         //public DbSet<CategoryModel> Categories { get; set; }
         //public DbSet<FileStreamGenreModel> FileStreamGenres { get; set; }
         //public DbSet<LiveStreamGenreModel> LiveStreamGenres { get; set; }

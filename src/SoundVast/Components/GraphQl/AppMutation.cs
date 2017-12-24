@@ -19,6 +19,7 @@ using SoundVast.Components.Comment;
 using SoundVast.Components.Email;
 using SoundVast.Components.Flag;
 using SoundVast.Components.LiveStream;
+using SoundVast.Components.Playlist;
 using SoundVast.Components.Rating;
 using SoundVast.Components.Upload;
 using SoundVast.Components.User;
@@ -46,6 +47,8 @@ namespace SoundVast.Components.GraphQl
             Mutation<FlagAudioInput, FlagObjectPayload>("flagAudio").AddPermission(AuthorizedPermission);
             Mutation<FlagCommentInput, FlagObjectPayload>("flagComment").AddPermission(AuthorizedPermission);
             Mutation<EditSongInput, EditSongPayload>("editSong").AddPermission(AuthorizedPermission);
+            Mutation<CreatePlaylistInput, CreatePlaylstPayload>("createPlaylist").AddPermission(AuthorizedPermission);
+            Mutation<AddSongToPlaylistInput, AddSongToPlaylistPayload>("addSongToPlaylist").AddPermission(AuthorizedPermission);
         }
     }
 }

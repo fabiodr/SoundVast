@@ -14,6 +14,7 @@ namespace SoundVast.Repository
     {
         IQueryable<T> GetAll();
         T Get(int id);
+        T Get(string id);
         IQueryable<T> Include(params Expression<Func<T, object>>[] paths);
         void LoadProperties(T entity);
         void Add(T item);
@@ -47,6 +48,11 @@ namespace SoundVast.Repository
         }
 
         public virtual T Get(int id)
+        {
+            return Context.Set<T>().Find(id);
+        }
+
+        public virtual T Get(string id)
         {
             return Context.Set<T>().Find(id);
         }

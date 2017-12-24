@@ -9,18 +9,18 @@ import AudioHeader from '../audio/audioHeader';
 import genreTypeNames from '../shared/utilities/genreTypeNames';
 import Loader from '../shared/loaders/loader';
 
-const Songs = ({ data, loadMore }) => (
+const Songs = ({ songs, loadMore }) => (
   <SoundVastTitle title="Songs">
     <div>
       <AudioHeader type={genreTypeNames.music} />
       <InfiniteScroll
         loadMore={loadMore}
-        hasMore={data.songs.pageInfo.hasNextPage}
+        hasMore={songs.pageInfo.hasNextPage}
         loader={<Loader />}
         initialLoad={false}
       >
         <Grid>
-          {data.songs.edges.map(({ node }) => <Song key={node.audioId} song={node} />)}
+          {songs.edges.map(({ node }) => <Song key={node.audioId} song={node} />)}
         </Grid>
       </InfiniteScroll>
     </div>
@@ -28,19 +28,17 @@ const Songs = ({ data, loadMore }) => (
 );
 
 Songs.propTypes = {
-  data: PropTypes.shape({
-    songs: PropTypes.shape({
-      pageInfo: PropTypes.shape({
-        hasNextPage: PropTypes.bool.isRequired,
-      }).isRequired,
-      edges: PropTypes.arrayOf(
-        PropTypes.shape({
-          node: PropTypes.shape({
-            audioId: PropTypes.number.isRequired,
-          }),
+  songs: PropTypes.shape({
+    pageInfo: PropTypes.shape({
+      hasNextPage: PropTypes.bool.isRequired,
+    }).isRequired,
+    edges: PropTypes.arrayOf(
+      PropTypes.shape({
+        node: PropTypes.shape({
+          audioId: PropTypes.number.isRequired,
         }),
-      ),
-    }),
+      }),
+    ),
   }).isRequired,
   loadMore: PropTypes.func.isRequired,
 };

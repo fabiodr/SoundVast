@@ -9,6 +9,7 @@ import styles from './primaryLayout.less';
 import FlagAudioModal from '../../flag/flagAudioModalContainer';
 import FlagCommentModal from '../../flag/flagCommentModalContainer';
 import EditSongModal from '../../edit/editSongModalContainer';
+import PlaylistModal from '../../playlist/playlistModalContainer';
 
 const PrimaryLayout = ({ children, user, loginProviders, ...props }) => {
   const isAuthorized = user !== null;
@@ -25,6 +26,7 @@ const PrimaryLayout = ({ children, user, loginProviders, ...props }) => {
       <FlagAudioModal isAuthorized={isAuthorized} />
       <FlagCommentModal isAuthorized={isAuthorized} />
       <EditSongModal data={props} />
+      <PlaylistModal isAuthorized={isAuthorized} />
       <FooterPlaylist />
     </div>
   );

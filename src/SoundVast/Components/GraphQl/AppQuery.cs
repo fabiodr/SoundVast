@@ -18,6 +18,7 @@ using SoundVast.Components.Audio;
 using SoundVast.Components.Comment;
 using SoundVast.Components.Genre;
 using SoundVast.Components.LiveStream;
+using SoundVast.Components.Playlist;
 using SoundVast.Components.Quote;
 using SoundVast.Components.Song;
 using SoundVast.Components.User;
@@ -29,17 +30,19 @@ namespace SoundVast.Components.GraphQl
     {
         public AppQuery(ISongService songService, ILiveStreamService liveStreamService, IValidationProvider validationProvider,
             IGenreService genreService, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager,
-            ILoggerFactory loggerFactory, IQuoteService quoteService)
+            ILoggerFactory loggerFactory, IQuoteService quoteService, IPlaylistService playlistService)
         {
             var logger = loggerFactory.CreateLogger<AppQuery>();
 
             Field<SongPayload>()
                 .Name("song")
                 .Argument<IntGraphType>("id", "The id of the song")
-                .Resolve(c =>
-                {
-                    return songService.GetAudio(c.GetArgument<int?>("id"));
-                });
+                .Resolve(c => songService.GetAudio(c.GetArgument<int?>("id")));
+
+            Field<PlaylistPayload>()
+                .Name("playlist")
+                .Argument<NonNullGraphType<IntGraphType>>("id", "The id of the playlist")
+                .Resolve(c => playlistService.GetPlaylist(c.GetArgument<int>("id")));
 
             Field<QuotePayload>()
                 .Name("quote")

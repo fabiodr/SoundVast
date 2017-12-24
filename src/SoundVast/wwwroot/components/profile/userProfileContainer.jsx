@@ -28,6 +28,7 @@ const fragments = graphql`
       audioId
       ...songContainer_song
     }
+    ...userPlaylistsContainer
   }
 `;
 

@@ -1,5 +1,15 @@
 # source: http://localhost:8080/graphql
-# timestamp: Wed Dec 20 2017 00:31:02 GMT+0100 (W. Europe Standard Time)
+# timestamp: Sun Dec 24 2017 23:03:59 GMT+0100 (W. Europe Standard Time)
+
+input AddSongToPlaylistInput {
+  clientMutationId: String
+  playlistId: Int!
+  songId: Int!
+}
+
+type AddSongToPlaylistPayload {
+  clientMutationId: String
+}
 
 type ApplicationUser {
   id: ID
@@ -9,6 +19,15 @@ type ApplicationUser {
 
   # The score that the user has earned from contributing
   contributionScore: Int!
+
+  # The playlists that the user has created.
+  playlists(
+    # Only look at connected edges with cursors greater than the value of `after`.
+    after: String
+
+    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
+    first: Int
+  ): PlaylistPayloadConnection
 
   # The songs that the user has uploaded
   uploads: [Song]
@@ -106,6 +125,19 @@ type CommentPayloadEdge {
 
   # The item at the end of the edge
   node: Comment
+}
+
+input CreatePlaylistInput {
+  clientMutationId: String
+  name: String!
+
+  # The id of the song to add to the playlist
+  songId: Int
+}
+
+type CreatePlaylstPayload {
+  clientMutationId: String
+  playlist: Playlist
 }
 
 # The `Date` scalar type represents a timestamp provided in UTC. `Date` expects
@@ -335,6 +367,8 @@ type Mutation {
   flagAudio(input: FlagAudioInput!): FlagObjectPayload
   flagComment(input: FlagCommentInput!): FlagObjectPayload
   editSong(input: EditSongInput!): EditSongPayload
+  createPlaylist(input: CreatePlaylistInput!): CreatePlaylstPayload
+  addSongToPlaylist(input: AddSongToPlaylistInput!): AddSongToPlaylistPayload
 }
 
 interface Node {
@@ -357,6 +391,65 @@ type PageInfo {
   endCursor: String
 }
 
+type Playlist implements Node {
+  # The Id of the Playlist
+  playlistId: Int!
+
+  # The Global Id of the Playlist
+  id: ID!
+
+  # The name that the user gave the playlist
+  name: String!
+
+  # The cover image url for the playlist. Set to the first song in it.
+  coverImageUrl: String
+
+  # The user who created the playlist
+  user: ApplicationUser!
+
+  # The songs in the playlist.
+  songPlaylists(
+    # Only look at connected edges with cursors greater than the value of `after`.
+    after: String
+
+    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
+    first: Int
+  ): SongPlaylistPayloadConnection
+}
+
+# A connection from an object to a list of objects of type `PlaylistPayload`.
+type PlaylistPayloadConnection {
+  # A count of the total number of objects in this connection, ignoring
+  # pagination. This allows a client to fetch the first five objects by passing
+  # "5" as the argument to `first`, then fetch the total count so it could display
+  # "5 of 83", for example. In cases where we employ infinite scrolling or don't
+  # have an exact count of entries, this field will return `null`.
+  totalCount: Int
+
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # Information to aid in pagination.
+  edges: [PlaylistPayloadEdge]
+
+  # A list of all of the objects returned in the connection. This is a convenience
+  # field provided for quickly exploring the API; rather than querying for "{
+  # edges { node } }" when no edge data is needed, this field can be used instead.
+  # Note that when clients like Relay need to fetch the "cursor" field on the edge
+  # to enable efficient pagination, this shortcut cannot be used, and the full "{
+  # edges { node } } " version should be used instead.
+  items: [Playlist]
+}
+
+# An edge in a connection from an object to another object of type `PlaylistPayload`.
+type PlaylistPayloadEdge {
+  # A cursor for use in pagination
+  cursor: String!
+
+  # The item at the end of the edge
+  node: Playlist
+}
+
 type Query {
   # Fetches an object given its global Id
   node(
@@ -367,6 +460,10 @@ type Query {
     # The id of the song
     id: Int
   ): Song
+  playlist(
+    # The id of the playlist
+    id: Int!
+  ): Playlist
   quote: Quote
   songs(
     # Only look at connected edges with cursors greater than the value of `after`.
@@ -591,4 +688,54 @@ type SongPayloadEdge {
 
   # The item at the end of the edge
   node: Song
+}
+
+type SongPlaylist implements Node {
+  # The Id of the SongPlaylist
+  songPlaylistId: Int!
+
+  # The Global Id of the SongPlaylist
+  id: ID!
+
+  # The playlist for this song
+  playlist: Playlist
+
+  # The song in this playlist
+  song: Song
+
+  # The user who created this playlist
+  user: ApplicationUser
+}
+
+# A connection from an object to a list of objects of type `SongPlaylistPayload`.
+type SongPlaylistPayloadConnection {
+  # A count of the total number of objects in this connection, ignoring
+  # pagination. This allows a client to fetch the first five objects by passing
+  # "5" as the argument to `first`, then fetch the total count so it could display
+  # "5 of 83", for example. In cases where we employ infinite scrolling or don't
+  # have an exact count of entries, this field will return `null`.
+  totalCount: Int
+
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # Information to aid in pagination.
+  edges: [SongPlaylistPayloadEdge]
+
+  # A list of all of the objects returned in the connection. This is a convenience
+  # field provided for quickly exploring the API; rather than querying for "{
+  # edges { node } }" when no edge data is needed, this field can be used instead.
+  # Note that when clients like Relay need to fetch the "cursor" field on the edge
+  # to enable efficient pagination, this shortcut cannot be used, and the full "{
+  # edges { node } } " version should be used instead.
+  items: [SongPlaylist]
+}
+
+# An edge in a connection from an object to another object of type `SongPlaylistPayload`.
+type SongPlaylistPayloadEdge {
+  # A cursor for use in pagination
+  cursor: String!
+
+  # The item at the end of the edge
+  node: SongPlaylist
 }

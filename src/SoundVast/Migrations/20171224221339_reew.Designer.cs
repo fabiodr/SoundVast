@@ -12,8 +12,8 @@ using System;
 namespace SoundVast.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20171206221812_ewwe")]
-    partial class ewwe
+    [Migration("20171224221339_reew")]
+    partial class reew
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -191,6 +191,28 @@ namespace SoundVast.Migrations
                     b.ToTable("Comments");
                 });
 
+            modelBuilder.Entity("SoundVast.Components.Flag.Models.Flag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("AdditionalDetails");
+
+                    b.Property<int?>("AudioId");
+
+                    b.Property<int?>("CommentId");
+
+                    b.Property<string>("Reason");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AudioId");
+
+                    b.HasIndex("CommentId");
+
+                    b.ToTable("Flags");
+                });
+
             modelBuilder.Entity("SoundVast.Components.Genre.Models.Genre", b =>
                 {
                     b.Property<int>("Id")
@@ -208,6 +230,46 @@ namespace SoundVast.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Genres");
+                });
+
+            modelBuilder.Entity("SoundVast.Components.Playlist.Models.Playlist", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.Property<string>("UserId")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Playlists");
+                });
+
+            modelBuilder.Entity("SoundVast.Components.Playlist.Models.SongPlaylist", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("PlaylistId");
+
+                    b.Property<int>("SongId");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlaylistId");
+
+                    b.HasIndex("SongId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("SongPlaylist");
                 });
 
             modelBuilder.Entity("SoundVast.Components.Quote.Models.Quote", b =>
@@ -256,6 +318,8 @@ namespace SoundVast.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
+
+                    b.Property<int>("ContributionScore");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256);
@@ -314,6 +378,8 @@ namespace SoundVast.Migrations
                     b.HasBaseType("SoundVast.Components.Audio.Models.Audio");
 
                     b.Property<string>("Artist");
+
+                    b.Property<bool>("Free");
 
                     b.ToTable("Song");
 
@@ -387,6 +453,41 @@ namespace SoundVast.Migrations
                     b.HasOne("SoundVast.Components.Comment.Models.Comment", "OriginalComment")
                         .WithMany("Replies")
                         .HasForeignKey("OriginalCommentId");
+
+                    b.HasOne("SoundVast.Components.User.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("SoundVast.Components.Flag.Models.Flag", b =>
+                {
+                    b.HasOne("SoundVast.Components.Audio.Models.Audio", "Audio")
+                        .WithMany()
+                        .HasForeignKey("AudioId");
+
+                    b.HasOne("SoundVast.Components.Comment.Models.Comment", "Comment")
+                        .WithMany()
+                        .HasForeignKey("CommentId");
+                });
+
+            modelBuilder.Entity("SoundVast.Components.Playlist.Models.Playlist", b =>
+                {
+                    b.HasOne("SoundVast.Components.User.ApplicationUser", "User")
+                        .WithMany("Playlists")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("SoundVast.Components.Playlist.Models.SongPlaylist", b =>
+                {
+                    b.HasOne("SoundVast.Components.Playlist.Models.Playlist", "Playlist")
+                        .WithMany("SongPlaylists")
+                        .HasForeignKey("PlaylistId");
+
+                    b.HasOne("SoundVast.Components.Song.Models.Song", "Song")
+                        .WithMany("SongPlaylists")
+                        .HasForeignKey("SongId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("SoundVast.Components.User.ApplicationUser", "User")
                         .WithMany()

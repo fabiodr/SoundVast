@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { compose, withHandlers, withProps, lifecycle } from 'recompose';
+import { compose, withHandlers, withProps, lifecycle, flattenProp } from 'recompose';
 import { graphql } from 'react-relay';
 import { paginationContainer } from 'recompose-relay-modern';
 import { actions } from 'react-jplaylist';
@@ -70,8 +70,8 @@ const handlers = {
   loadMore: ({ relay }) => () => relay.loadMore(audiosToLoad),
 };
 
-const createProps = ({ data }) => ({
-  footerPlaylist: data.songs.edges.map(({ node }) => ({
+const createProps = ({ songs }) => ({
+  footerPlaylist: songs.edges.map(({ node }) => ({
     id: node.audioId,
     title: node.name,
     artist: node.artist,
@@ -88,6 +88,7 @@ const enhance = compose(
     setPlaylist: actions.setPlaylist,
   }),
   paginationContainer(fragments, connectionConfig),
+  flattenProp('data'),
   withHandlers(handlers),
   withProps(createProps),
   lifecycle({

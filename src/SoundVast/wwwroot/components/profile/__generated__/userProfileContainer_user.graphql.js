@@ -78,6 +78,11 @@ const fragment /*: ConcreteFragment*/ = {
         }
       ],
       "storageKey": null
+    },
+    {
+      "kind": "FragmentSpread",
+      "name": "userPlaylistsContainer",
+      "args": null
     }
   ],
   "type": "ApplicationUser"
