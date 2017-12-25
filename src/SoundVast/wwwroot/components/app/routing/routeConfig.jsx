@@ -2,7 +2,10 @@ import React from 'react';
 import makeRouteConfig from 'found/lib/makeRouteConfig';
 import Route from 'found/lib/Route';
 
-import { routeConfig as profileRouteConfig } from '../../profile/userProfileContainer';
+import { routeConfig as userProfileRouteConfig } from '../../profile/userProfileContainer';
+import { routeConfig as userPlaylistsRouteConfig } from '../../profile/userPlaylistsContainer';
+import { routeConfig as userLikedAudiosRouteConfig } from '../../profile/userLikedAudiosContainer';
+import { routeConfig as userUploadsRouteConfig } from '../../profile/userUploadsContainer';
 import { routeConfig as errorPageRouteConfig } from '../../errorPage/errorPageContainer';
 import { routeConfig as uploadRouteConfig } from '../../upload/uploadContainer';
 import { routeConfig as socialLoginCallbackRouteConfig } from '../../account/login/socialLogin//socialLoginCallbackContainer';
@@ -20,7 +23,12 @@ export default makeRouteConfig(
     <Route path="songs/:genre?" {...songsRouteConfig} />
     <Route path="radios/:genre?" {...radiosRouteConfig} />
     <Route path="upload" {...uploadRouteConfig} />
-    <Route path="profile" {...profileRouteConfig} />
+    <Route path="profile" {...userProfileRouteConfig}>
+      <Route {...userPlaylistsRouteConfig} />
+      <Route path="playlists" {...userPlaylistsRouteConfig} />
+      <Route path="liked" {...userLikedAudiosRouteConfig} />
+      <Route path="uploads" {...userUploadsRouteConfig} />
+    </Route>
     <Route path="genres/:type" {...genresRouteConfig} />
     <Route path="error/:status" {...errorPageRouteConfig} />
     <Route path="account">

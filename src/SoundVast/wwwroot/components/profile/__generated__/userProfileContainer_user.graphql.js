@@ -10,12 +10,6 @@
 import type {ConcreteFragment} from 'relay-runtime';
 export type userProfileContainer_user = {|
   +userName: string;
-  +uploads: ?$ReadOnlyArray<?{|
-    +audioId: number;
-  |}>;
-  +likedSongs: ?$ReadOnlyArray<?{|
-    +audioId: number;
-  |}>;
 |};
 */
 
@@ -32,57 +26,6 @@ const fragment /*: ConcreteFragment*/ = {
       "args": null,
       "name": "userName",
       "storageKey": null
-    },
-    {
-      "kind": "LinkedField",
-      "alias": null,
-      "args": null,
-      "concreteType": "Song",
-      "name": "uploads",
-      "plural": true,
-      "selections": [
-        {
-          "kind": "ScalarField",
-          "alias": null,
-          "args": null,
-          "name": "audioId",
-          "storageKey": null
-        },
-        {
-          "kind": "FragmentSpread",
-          "name": "songContainer_song",
-          "args": null
-        }
-      ],
-      "storageKey": null
-    },
-    {
-      "kind": "LinkedField",
-      "alias": null,
-      "args": null,
-      "concreteType": "Song",
-      "name": "likedSongs",
-      "plural": true,
-      "selections": [
-        {
-          "kind": "ScalarField",
-          "alias": null,
-          "args": null,
-          "name": "audioId",
-          "storageKey": null
-        },
-        {
-          "kind": "FragmentSpread",
-          "name": "songContainer_song",
-          "args": null
-        }
-      ],
-      "storageKey": null
-    },
-    {
-      "kind": "FragmentSpread",
-      "name": "userPlaylistsContainer",
-      "args": null
     }
   ],
   "type": "ApplicationUser"

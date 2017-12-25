@@ -9,6 +9,7 @@ import playlistValidation from './playlistValidation';
 import createPlaylistMutation from './createPlaylistMutation';
 import { showCreatedPlaylistPopup } from './actions';
 import { playlistsToLoad } from '../shared/utilities/itemsToLoad';
+import { hideModal } from '../shared/modal/actions';
 
 const mapStateToProps = ({ modal }) => ({
   songId: modal.songId,
@@ -55,6 +56,7 @@ const connectionConfig = {
 };
 
 const handlers = {
+  yourPlaylistsOnClick: ({ dispatch }) => () => dispatch(hideModal()),
   loadMore: ({ relay }) => () => relay.loadMore(playlistsToLoad),
   onSubmit: ({ dispatch, songId }) => input =>
     createPlaylistMutation(input, songId)

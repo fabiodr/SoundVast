@@ -15,7 +15,7 @@ const UserPlaylists = ({ playlists, loadMore }) => (
   >
     <Grid>
       {playlists.edges.map(({ node }) =>
-        <UserPlaylist key={node.name} name={node.name} playlistId={node.playlistId} data={node} />)}
+        <UserPlaylist key={node.playlistId} name={node.name} id={node.playlistId} data={node} />)}
     </Grid>
   </InfiniteScroll>
 );

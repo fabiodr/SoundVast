@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash e4564cc90a06aaa2f70b7b1dc5707a29
+ * @relayHash f75aeae5c69e74f0661c6d9d39f54dd7
  */
 
 /* eslint-disable */
@@ -9,14 +9,14 @@
 
 /*::
 import type {ConcreteBatch} from 'relay-runtime';
-export type userPlaylistsContainerForwardQueryResponse = {|
+export type userPlaylistsContainerQueryResponse = {|
   +user: ?{| |};
 |};
 */
 
 
 /*
-query userPlaylistsContainerForwardQuery(
+query userPlaylistsContainerQuery(
   $count: Int!
   $cursor: String
   $originalCommentId: Int
@@ -132,7 +132,7 @@ const batch /*: ConcreteBatch*/ = {
     ],
     "kind": "Fragment",
     "metadata": null,
-    "name": "userPlaylistsContainerForwardQuery",
+    "name": "userPlaylistsContainerQuery",
     "selections": [
       {
         "kind": "LinkedField",
@@ -156,7 +156,7 @@ const batch /*: ConcreteBatch*/ = {
   "id": null,
   "kind": "Batch",
   "metadata": {},
-  "name": "userPlaylistsContainerForwardQuery",
+  "name": "userPlaylistsContainerQuery",
   "query": {
     "argumentDefinitions": [
       {
@@ -179,7 +179,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ],
     "kind": "Root",
-    "name": "userPlaylistsContainerForwardQuery",
+    "name": "userPlaylistsContainerQuery",
     "operation": "query",
     "selections": [
       {
@@ -717,7 +717,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query userPlaylistsContainerForwardQuery(\n  $count: Int!\n  $cursor: String\n  $originalCommentId: Int\n) {\n  user {\n    ...userPlaylistsContainer\n    id\n  }\n}\n\nfragment userPlaylistsContainer on ApplicationUser {\n  playlists(first: $count, after: $cursor) {\n    edges {\n      cursor\n      node {\n        __typename\n        playlistId\n        name\n        ...userPlaylistContainer\n        id\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n\nfragment userPlaylistContainer on Playlist {\n  songPlaylists(first: $count, after: $cursor) {\n    edges {\n      cursor\n      node {\n        __typename\n        song {\n          audioId\n          ...songContainer_song\n          id\n        }\n        id\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n\nfragment songContainer_song on Song {\n  audioId\n  name\n  coverImageUrl\n  artist\n  likes\n  dislikes\n  ...commentsContainer\n}\n\nfragment commentsContainer on Audio {\n  audioId\n  comments(first: $count, after: $cursor, originalCommentId: $originalCommentId) {\n    edges {\n      node {\n        __typename\n        commentId\n        body\n        date\n        likes\n        dislikes\n        repliesCount\n        originalComment {\n          id\n        }\n        user {\n          userName\n          id\n        }\n        id\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n"
+  "text": "query userPlaylistsContainerQuery(\n  $count: Int!\n  $cursor: String\n  $originalCommentId: Int\n) {\n  user {\n    ...userPlaylistsContainer\n    id\n  }\n}\n\nfragment userPlaylistsContainer on ApplicationUser {\n  playlists(first: $count, after: $cursor) {\n    edges {\n      cursor\n      node {\n        __typename\n        playlistId\n        name\n        ...userPlaylistContainer\n        id\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n\nfragment userPlaylistContainer on Playlist {\n  songPlaylists(first: $count, after: $cursor) {\n    edges {\n      cursor\n      node {\n        __typename\n        song {\n          audioId\n          ...songContainer_song\n          id\n        }\n        id\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n\nfragment songContainer_song on Song {\n  audioId\n  name\n  coverImageUrl\n  artist\n  likes\n  dislikes\n  ...commentsContainer\n}\n\nfragment commentsContainer on Audio {\n  audioId\n  comments(first: $count, after: $cursor, originalCommentId: $originalCommentId) {\n    edges {\n      node {\n        __typename\n        commentId\n        body\n        date\n        likes\n        dislikes\n        repliesCount\n        originalComment {\n          id\n        }\n        user {\n          userName\n          id\n        }\n        id\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n"
 };
 
 module.exports = batch;

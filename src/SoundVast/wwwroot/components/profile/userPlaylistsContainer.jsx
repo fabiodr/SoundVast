@@ -1,3 +1,4 @@
+import React from 'react';
 import { compose, flattenProp, withHandlers } from 'recompose';
 import { graphql } from 'react-relay';
 import { paginationContainer } from 'recompose-relay-modern';
@@ -26,12 +27,25 @@ const fragments = graphql`
   }
 `;
 
+const query = graphql`
+  query userPlaylistsContainerQuery(
+    $count: Int!
+    $cursor: String
+    $originalCommentId: Int
+  ) {
+    user {
+      ...userPlaylistsContainer
+    }
+  }
+`;
+
 const connectionConfig = {
   direction: 'forward',
   query: graphql`
     query userPlaylistsContainerForwardQuery (
       $count: Int!
       $cursor: String
+      $originalCommentId: Int
     ) {
       user {
         ...userPlaylistsContainer
@@ -48,9 +62,19 @@ const handlers = {
   loadMore: ({ relay }) => () => relay.loadMore(playlistsToLoad),
 };
 
-export default compose(
+const UserPlaylistsContainer = compose(
   paginationContainer(fragments, connectionConfig),
   flattenProp('data'),
   withHandlers(handlers),
 )(UserPlaylists);
 
+export const routeConfig = {
+  Component: UserPlaylistsContainer,
+  query,
+  render: ({ props }) => props && <UserPlaylistsContainer data={props.user} />,
+  prepareVariables: () => ({
+    count: playlistsToLoad,
+  }),
+};
+
+export default UserPlaylistsContainer;

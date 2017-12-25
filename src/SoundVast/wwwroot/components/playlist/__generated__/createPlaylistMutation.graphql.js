@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 7f8d502131807cce031d7e09cb16429f
+ * @relayHash 59b49e23984f6304d8cfda52e0269fc0
  */
 
 /* eslint-disable */
@@ -19,7 +19,9 @@ export type createPlaylistMutationVariables = {|
 export type createPlaylistMutationResponse = {|
   +createPlaylist: ?{|
     +playlist: ?{|
-      +id: string;
+      +playlistId: number;
+      +name: string;
+      +coverImageUrl: ?string;
     |};
   |};
 |};
@@ -32,6 +34,9 @@ mutation createPlaylistMutation(
 ) {
   createPlaylist(input: $input) {
     playlist {
+      playlistId
+      name
+      coverImageUrl
       id
     }
   }
@@ -79,7 +84,21 @@ const batch /*: ConcreteBatch*/ = {
                 "kind": "ScalarField",
                 "alias": null,
                 "args": null,
-                "name": "id",
+                "name": "playlistId",
+                "storageKey": null
+              },
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "name",
+                "storageKey": null
+              },
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "coverImageUrl",
                 "storageKey": null
               }
             ],
@@ -135,6 +154,27 @@ const batch /*: ConcreteBatch*/ = {
                 "kind": "ScalarField",
                 "alias": null,
                 "args": null,
+                "name": "playlistId",
+                "storageKey": null
+              },
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "name",
+                "storageKey": null
+              },
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "coverImageUrl",
+                "storageKey": null
+              },
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
                 "name": "id",
                 "storageKey": null
               }
@@ -146,7 +186,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "mutation createPlaylistMutation(\n  $input: CreatePlaylistInput!\n) {\n  createPlaylist(input: $input) {\n    playlist {\n      id\n    }\n  }\n}\n"
+  "text": "mutation createPlaylistMutation(\n  $input: CreatePlaylistInput!\n) {\n  createPlaylist(input: $input) {\n    playlist {\n      playlistId\n      name\n      coverImageUrl\n      id\n    }\n  }\n}\n"
 };
 
 module.exports = batch;
