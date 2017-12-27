@@ -56,8 +56,9 @@ namespace SoundVast.Components.GraphQl
                 {                    
                     var genre = c.GetArgument<string>("genre");
                     var filter = c.GetArgument<Filter>("filter");
+                    var songs = songService.GetAudios(genre, filter);
 
-                    return GraphQL.Relay.Types.Connection.ToConnection(songService.GetAudios(genre, filter), c);
+                    return GraphQL.Relay.Types.Connection.ToConnection(songs, c);
                 });
 
             Connection<LiveStreamPayload>()

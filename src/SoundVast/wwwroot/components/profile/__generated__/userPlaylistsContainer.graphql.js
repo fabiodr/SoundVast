@@ -15,6 +15,18 @@ export type userPlaylistsContainer = {|
       +node: ?{|
         +playlistId: number;
         +name: string;
+        +coverImageUrl: ?string;
+        +songPlaylists: ?{|
+          +items: ?$ReadOnlyArray<?{|
+            +song: ?{|
+              +audioId: number;
+              +name: string;
+              +artist: ?string;
+              +coverImageUrl: string;
+              +free: boolean;
+            |};
+          |}>;
+        |};
       |};
     |}>;
     +pageInfo: {|
@@ -99,9 +111,92 @@ const fragment /*: ConcreteFragment*/ = {
                   "storageKey": null
                 },
                 {
-                  "kind": "FragmentSpread",
-                  "name": "userPlaylistContainer",
-                  "args": null
+                  "kind": "ScalarField",
+                  "alias": null,
+                  "args": null,
+                  "name": "coverImageUrl",
+                  "storageKey": null
+                },
+                {
+                  "kind": "LinkedField",
+                  "alias": null,
+                  "args": [
+                    {
+                      "kind": "Variable",
+                      "name": "after",
+                      "variableName": "cursor",
+                      "type": "String"
+                    },
+                    {
+                      "kind": "Variable",
+                      "name": "first",
+                      "variableName": "count",
+                      "type": "Int"
+                    }
+                  ],
+                  "concreteType": "SongPlaylistPayloadConnection",
+                  "name": "songPlaylists",
+                  "plural": false,
+                  "selections": [
+                    {
+                      "kind": "LinkedField",
+                      "alias": null,
+                      "args": null,
+                      "concreteType": "SongPlaylist",
+                      "name": "items",
+                      "plural": true,
+                      "selections": [
+                        {
+                          "kind": "LinkedField",
+                          "alias": null,
+                          "args": null,
+                          "concreteType": "Song",
+                          "name": "song",
+                          "plural": false,
+                          "selections": [
+                            {
+                              "kind": "ScalarField",
+                              "alias": null,
+                              "args": null,
+                              "name": "audioId",
+                              "storageKey": null
+                            },
+                            {
+                              "kind": "ScalarField",
+                              "alias": null,
+                              "args": null,
+                              "name": "name",
+                              "storageKey": null
+                            },
+                            {
+                              "kind": "ScalarField",
+                              "alias": null,
+                              "args": null,
+                              "name": "artist",
+                              "storageKey": null
+                            },
+                            {
+                              "kind": "ScalarField",
+                              "alias": null,
+                              "args": null,
+                              "name": "coverImageUrl",
+                              "storageKey": null
+                            },
+                            {
+                              "kind": "ScalarField",
+                              "alias": null,
+                              "args": null,
+                              "name": "free",
+                              "storageKey": null
+                            }
+                          ],
+                          "storageKey": null
+                        }
+                      ],
+                      "storageKey": null
+                    }
+                  ],
+                  "storageKey": null
                 },
                 {
                   "kind": "ScalarField",

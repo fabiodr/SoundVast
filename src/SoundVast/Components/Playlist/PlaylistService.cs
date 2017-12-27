@@ -22,9 +22,7 @@ namespace SoundVast.Components.Playlist
 
         public void AddToPlaylist(SongPlaylist songPlaylist)
         {
-            var playlist = _repository.Get(songPlaylist.PlaylistId.Value);
-
-            playlist.SongPlaylists.Add(songPlaylist);
+            songPlaylist.Playlist.SongPlaylists.Add(songPlaylist);
 
             _repository.Save();
         }

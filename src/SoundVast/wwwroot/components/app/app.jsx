@@ -5,6 +5,7 @@ import { Resolver } from 'found-relay';
 import 'react-jplaylist/src/less/skins/sleek.less';
 import 'react-jplaylist/src/less/controls/iconControls.less';
 import 'react-select/dist/react-select.css';
+import 'rc-slider/assets/index.css';
 
 import '../shared/fetch/fetch';
 import './app.less';

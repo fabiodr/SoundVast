@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 5832b777c3b82ceceac079cb9db91c12
+ * @relayHash 33a281b5aec6e095ff53cae871017059
  */
 
 /* eslint-disable */
@@ -9,30 +9,23 @@
 
 /*::
 import type {ConcreteBatch} from 'relay-runtime';
-export type flagAudioMutationVariables = {|
-  input: {
-    clientMutationId?: ?string;
-    audioId: number;
-    reason: string;
-    additionalDetails?: ?string;
-  };
-|};
-export type flagAudioMutationResponse = {|
-  +flagAudio: ?{|
-    +flag: ?{|
-      +id: string;
-    |};
+export type filtersContainerQueryResponse = {|
+  +songs: ?{|
+    +items: ?$ReadOnlyArray<?{|
+      +uploadDate: ?any;
+    |}>;
   |};
 |};
 */
 
 
 /*
-mutation flagAudioMutation(
-  $input: FlagAudioInput!
+query filtersContainerQuery(
+  $count: Int!
 ) {
-  flagAudio(input: $input) {
-    flag {
+  songs(first: $count) {
+    items {
+      uploadDate
       id
     }
   }
@@ -44,14 +37,14 @@ const batch /*: ConcreteBatch*/ = {
     "argumentDefinitions": [
       {
         "kind": "LocalArgument",
-        "name": "input",
-        "type": "FlagAudioInput!",
+        "name": "count",
+        "type": "Int!",
         "defaultValue": null
       }
     ],
     "kind": "Fragment",
     "metadata": null,
-    "name": "flagAudioMutation",
+    "name": "filtersContainerQuery",
     "selections": [
       {
         "kind": "LinkedField",
@@ -59,28 +52,28 @@ const batch /*: ConcreteBatch*/ = {
         "args": [
           {
             "kind": "Variable",
-            "name": "input",
-            "variableName": "input",
-            "type": "FlagAudioInput!"
+            "name": "first",
+            "variableName": "count",
+            "type": "Int"
           }
         ],
-        "concreteType": "FlagObjectPayload",
-        "name": "flagAudio",
+        "concreteType": "SongPayloadConnection",
+        "name": "songs",
         "plural": false,
         "selections": [
           {
             "kind": "LinkedField",
             "alias": null,
             "args": null,
-            "concreteType": "Flag",
-            "name": "flag",
-            "plural": false,
+            "concreteType": "Song",
+            "name": "items",
+            "plural": true,
             "selections": [
               {
                 "kind": "ScalarField",
                 "alias": null,
                 "args": null,
-                "name": "id",
+                "name": "uploadDate",
                 "storageKey": null
               }
             ],
@@ -90,24 +83,24 @@ const batch /*: ConcreteBatch*/ = {
         "storageKey": null
       }
     ],
-    "type": "Mutation"
+    "type": "Query"
   },
   "id": null,
   "kind": "Batch",
   "metadata": {},
-  "name": "flagAudioMutation",
+  "name": "filtersContainerQuery",
   "query": {
     "argumentDefinitions": [
       {
         "kind": "LocalArgument",
-        "name": "input",
-        "type": "FlagAudioInput!",
+        "name": "count",
+        "type": "Int!",
         "defaultValue": null
       }
     ],
     "kind": "Root",
-    "name": "flagAudioMutation",
-    "operation": "mutation",
+    "name": "filtersContainerQuery",
+    "operation": "query",
     "selections": [
       {
         "kind": "LinkedField",
@@ -115,23 +108,30 @@ const batch /*: ConcreteBatch*/ = {
         "args": [
           {
             "kind": "Variable",
-            "name": "input",
-            "variableName": "input",
-            "type": "FlagAudioInput!"
+            "name": "first",
+            "variableName": "count",
+            "type": "Int"
           }
         ],
-        "concreteType": "FlagObjectPayload",
-        "name": "flagAudio",
+        "concreteType": "SongPayloadConnection",
+        "name": "songs",
         "plural": false,
         "selections": [
           {
             "kind": "LinkedField",
             "alias": null,
             "args": null,
-            "concreteType": "Flag",
-            "name": "flag",
-            "plural": false,
+            "concreteType": "Song",
+            "name": "items",
+            "plural": true,
             "selections": [
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "uploadDate",
+                "storageKey": null
+              },
               {
                 "kind": "ScalarField",
                 "alias": null,
@@ -147,7 +147,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "mutation flagAudioMutation(\n  $input: FlagAudioInput!\n) {\n  flagAudio(input: $input) {\n    flag {\n      id\n    }\n  }\n}\n"
+  "text": "query filtersContainerQuery(\n  $count: Int!\n) {\n  songs(first: $count) {\n    items {\n      uploadDate\n      id\n    }\n  }\n}\n"
 };
 
 module.exports = batch;

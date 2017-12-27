@@ -5,6 +5,7 @@ import { graphql } from 'react-relay';
 import { paginationContainer } from 'recompose-relay-modern';
 import { actions } from 'react-jplaylist';
 
+import convertFromSong from '../footerPlaylist/convertFromSong';
 import Songs from './songs';
 import { audiosToLoad } from '../shared/utilities/itemsToLoad';
 
@@ -71,16 +72,7 @@ const handlers = {
 };
 
 const createProps = ({ songs }) => ({
-  footerPlaylist: songs.edges.map(({ node }) => ({
-    id: node.audioId,
-    title: node.name,
-    artist: node.artist,
-    sources: {
-      mp3: `${window.location.origin}/song/stream?id=${node.audioId}`,
-    },
-    poster: node.coverImageUrl,
-    free: node.free,
-  })),
+  footerPlaylist: songs.edges.map(({ node }) => convertFromSong(node)),
 });
 
 const enhance = compose(

@@ -38,20 +38,20 @@ namespace SoundVast.Components.Audio
                 audios = audios.Where(x => x.Genre.Name == genreName);
             }
 
-            Func<T, int, bool> dateFromFilter = (x, days) =>
+            if (filter != null)
             {
-                return DateTime.UtcNow.AddDays(-days) < x.UploadDate;
-            };
+                if (filter.TopRatedDays.HasValue)
+                {
+                    Func<T, int, bool> dateFromFilter = (x, days) => DateTime.UtcNow.AddDays(-days) < x.UploadDate;
 
-            if (filter.TopRatedDays.HasValue)
-            {
-                audios = audios.Where(x => dateFromFilter(x, filter.TopRatedDays.Value));
-                audios = audios.OrderByDescending(x => x.Likes);
-            }
+                    audios = audios.Where(x => dateFromFilter(x, filter.TopRatedDays.Value));
+                    audios = audios.OrderByDescending(x => x.Likes);
+                }
 
-            if (filter.Newest)
-            {
-                audios = audios.OrderByDescending(x => x.UploadDate);
+                if (filter.Newest)
+                {
+                    audios = audios.OrderByDescending(x => x.UploadDate);
+                }
             }
 
             return audios;

@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 939c8d34897fbfa4c1fc44df4a2e1af3
+ * @relayHash a6a1ccdbedbafd0dfdde66ae71766346
  */
 
 /* eslint-disable */
@@ -9,14 +9,15 @@
 
 /*::
 import type {ConcreteBatch} from 'relay-runtime';
-export type createPlaylistMutationVariables = {|
+export type addSongToPlaylistMutationVariables = {|
   input: {
     clientMutationId?: ?string;
-    name: string;
+    playlistId: number;
+    songId: number;
   };
 |};
-export type createPlaylistMutationResponse = {|
-  +createPlaylist: ?{|
+export type addSongToPlaylistMutationResponse = {|
+  +addSongToPlaylist: ?{|
     +playlist: ?{|
       +playlistId: number;
       +name: string;
@@ -28,10 +29,10 @@ export type createPlaylistMutationResponse = {|
 
 
 /*
-mutation createPlaylistMutation(
-  $input: CreatePlaylistInput!
+mutation addSongToPlaylistMutation(
+  $input: AddSongToPlaylistInput!
 ) {
-  createPlaylist(input: $input) {
+  addSongToPlaylist(input: $input) {
     playlist {
       playlistId
       name
@@ -48,13 +49,13 @@ const batch /*: ConcreteBatch*/ = {
       {
         "kind": "LocalArgument",
         "name": "input",
-        "type": "CreatePlaylistInput!",
+        "type": "AddSongToPlaylistInput!",
         "defaultValue": null
       }
     ],
     "kind": "Fragment",
     "metadata": null,
-    "name": "createPlaylistMutation",
+    "name": "addSongToPlaylistMutation",
     "selections": [
       {
         "kind": "LinkedField",
@@ -64,11 +65,11 @@ const batch /*: ConcreteBatch*/ = {
             "kind": "Variable",
             "name": "input",
             "variableName": "input",
-            "type": "CreatePlaylistInput!"
+            "type": "AddSongToPlaylistInput!"
           }
         ],
-        "concreteType": "CreatePlaylstPayload",
-        "name": "createPlaylist",
+        "concreteType": "AddSongToPlaylistPayload",
+        "name": "addSongToPlaylist",
         "plural": false,
         "selections": [
           {
@@ -112,18 +113,18 @@ const batch /*: ConcreteBatch*/ = {
   "id": null,
   "kind": "Batch",
   "metadata": {},
-  "name": "createPlaylistMutation",
+  "name": "addSongToPlaylistMutation",
   "query": {
     "argumentDefinitions": [
       {
         "kind": "LocalArgument",
         "name": "input",
-        "type": "CreatePlaylistInput!",
+        "type": "AddSongToPlaylistInput!",
         "defaultValue": null
       }
     ],
     "kind": "Root",
-    "name": "createPlaylistMutation",
+    "name": "addSongToPlaylistMutation",
     "operation": "mutation",
     "selections": [
       {
@@ -134,11 +135,11 @@ const batch /*: ConcreteBatch*/ = {
             "kind": "Variable",
             "name": "input",
             "variableName": "input",
-            "type": "CreatePlaylistInput!"
+            "type": "AddSongToPlaylistInput!"
           }
         ],
-        "concreteType": "CreatePlaylstPayload",
-        "name": "createPlaylist",
+        "concreteType": "AddSongToPlaylistPayload",
+        "name": "addSongToPlaylist",
         "plural": false,
         "selections": [
           {
@@ -185,7 +186,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "mutation createPlaylistMutation(\n  $input: CreatePlaylistInput!\n) {\n  createPlaylist(input: $input) {\n    playlist {\n      playlistId\n      name\n      coverImageUrl\n      id\n    }\n  }\n}\n"
+  "text": "mutation addSongToPlaylistMutation(\n  $input: AddSongToPlaylistInput!\n) {\n  addSongToPlaylist(input: $input) {\n    playlist {\n      playlistId\n      name\n      coverImageUrl\n      id\n    }\n  }\n}\n"
 };
 
 module.exports = batch;

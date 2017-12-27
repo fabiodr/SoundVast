@@ -10,8 +10,8 @@ const Profile = ({ userName, children }) => (
       <h3>{userName} profile</h3>
 
       <Link to="/profile/playlists">Playlists</Link>
-      <Link to="/profile/liked">Uploads</Link>
       <Link to="/profile/uploads">Liked Audios</Link>
+      <Link to="/profile/liked">Uploads</Link>
 
       {children}
     </div>

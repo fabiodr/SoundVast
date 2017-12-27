@@ -1,56 +1,44 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import AirbnbPropTypes from 'airbnb-prop-types';
 
 import PauseIcon from '../icons/pause';
 import PlayIcon from '../icons/play';
 import styles from './play.less';
+import CoverImage from '../audio/coverImage';
 
 class Play extends React.Component {
+  constructor() {
+    super();
+
+    this.state = {};
+  }
   componentWillReceiveProps(nextProps) {
     if (!nextProps.paused) {
       this.setState({ hasPlayed: true });
     }
   }
-  playOnClick = () => {
-    const jPlaylistId = 'FooterPlaylist';
-
-    if (this.props.paused || !this.props.isCurrent) {
-      const index = this.props.playlist.findIndex(x => x.id === this.props.id);
-
-      this.props.play(jPlaylistId, index);
-    } else {
-      this.props.pause(jPlaylistId);
-    }
-  }
   render() {
-    const className = classNames(styles.playIcon, {
-      [styles.currentlyPlayed]: this.props.isCurrent && this.props.hasPlayed,
+    const className = classNames({
+      [styles.currentlyPlayed]: this.props.isCurrent && this.state.hasPlayed,
     });
 
     return (
-      <button onClick={this.playOnClick} className={styles.play}>
+      <div role="button" tabIndex={0} onClick={this.props.onClick} className={classNames(className, styles.play)}>
         {this.props.children}
-        {(this.props.paused || !this.props.isCurrent) ? <PlayIcon className={className} data-role="hover" />
+        {(this.props.paused || !this.props.isCurrent) ? <PlayIcon className={styles.playIcon} data-role="hover" />
           : <PauseIcon className={styles.pauseIcon} data-role="hover" /> }
-      </button>
+      </div>
     );
   }
 }
 
-Play.defaultProps = {
-  hasPlayed: false,
-};
-
 Play.propTypes = {
-  children: PropTypes.node.isRequired,
-  play: PropTypes.func.isRequired,
-  pause: PropTypes.func.isRequired,
-  id: PropTypes.number.isRequired,
-  playlist: PropTypes.arrayOf(PropTypes.object).isRequired,
+  children: AirbnbPropTypes.elementType(CoverImage).isRequired,
+  onClick: PropTypes.func.isRequired,
   isCurrent: PropTypes.bool.isRequired,
   paused: PropTypes.bool.isRequired,
-  hasPlayed: PropTypes.bool,
 };
 
 

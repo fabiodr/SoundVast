@@ -16,12 +16,10 @@ namespace SoundVast.Components.Playlist
     public class CreatePlaylstPayload : MutationPayloadGraphType
     {
         private readonly IPlaylistService _playlistService;
-        private readonly ISongService _songService;
 
-        public CreatePlaylstPayload(IPlaylistService playlistService, ISongService songService)
+        public CreatePlaylstPayload(IPlaylistService playlistService)
         {
             _playlistService = playlistService;
-            _songService = songService;
 
             Name = nameof(CreatePlaylstPayload);
 
@@ -31,8 +29,6 @@ namespace SoundVast.Components.Playlist
         public override object MutateAndGetPayload(MutationInputs inputs, ResolveFieldContext<object> context)
         {
             var name = inputs.Get<string>("name");
-            var songId = inputs.Get<int>("songId");
-            var song = _songService.GetAudio(songId);
             var user = context.UserContext.As<Context>().CurrentUser;
 
             var playlist = new Models.Playlist
@@ -40,13 +36,6 @@ namespace SoundVast.Components.Playlist
                 Name = name,
                 User = user,
             };
-
-            playlist.SongPlaylists.Add(new SongPlaylist
-            {
-                Song = song,
-                User = user,
-                Playlist = playlist
-            });
 
             _playlistService.Add(playlist);
 

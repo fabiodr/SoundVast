@@ -57,7 +57,7 @@ namespace SoundVast.Components.Upload
 
         public IActionResult GetPlaceholderImage()
         {
-            var imageBlob = _cloudStorage.GetBlob(CloudStorageType.Image, "Desert.jpg");
+            var imageBlob = _cloudStorage.GetBlob(CloudStorageType.Image, "SoundVast");
 
             return Ok(new
             {

@@ -2,6 +2,7 @@ import React from 'react';
 import { compose, flattenProp, withHandlers } from 'recompose';
 import { graphql } from 'react-relay';
 import { paginationContainer } from 'recompose-relay-modern';
+import { connect } from 'react-redux';
 
 import UserPlaylists from './userPlaylists';
 import { playlistsToLoad } from '../shared/utilities/itemsToLoad';
@@ -17,7 +18,21 @@ const fragments = graphql`
         node {
           playlistId
           name
-          ...userPlaylistContainer
+          coverImageUrl
+          songPlaylists (
+            first: $count
+            after: $cursor
+          ) {
+            items {
+              song {
+                audioId
+                name
+                artist
+                coverImageUrl
+                free
+              }
+            }
+          }
         }
       }
       pageInfo {
@@ -31,7 +46,6 @@ const query = graphql`
   query userPlaylistsContainerQuery(
     $count: Int!
     $cursor: String
-    $originalCommentId: Int
   ) {
     user {
       ...userPlaylistsContainer
@@ -45,7 +59,6 @@ const connectionConfig = {
     query userPlaylistsContainerForwardQuery (
       $count: Int!
       $cursor: String
-      $originalCommentId: Int
     ) {
       user {
         ...userPlaylistsContainer
@@ -63,6 +76,7 @@ const handlers = {
 };
 
 const UserPlaylistsContainer = compose(
+  connect(),
   paginationContainer(fragments, connectionConfig),
   flattenProp('data'),
   withHandlers(handlers),

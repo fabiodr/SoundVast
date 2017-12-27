@@ -16,12 +16,9 @@ const mutation = graphql`
   }
 `;
 
-export default (input, songId) => {
+export default (input) => {
   const variables = {
-    input: {
-      ...input,
-      songId,
-    },
+    input,
   };
 
   return createMutation(
@@ -43,5 +40,6 @@ export default (input, songId) => {
       const edge = ConnectionHandler.createEdge(store, connection, playlist, 'PlaylistPayloadEdge');
 
       ConnectionHandler.insertEdgeAfter(connection, edge);
-    });
+    },
+  );
 };

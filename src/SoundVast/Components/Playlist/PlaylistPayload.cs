@@ -13,12 +13,13 @@ using SoundVast.Components.Rating;
 using SoundVast.Components.Song;
 using SoundVast.Components.Song.Models;
 using SoundVast.Components.User;
+using SoundVast.Storage.CloudStorage;
 
 namespace SoundVast.Components.Playlist
 {
     public class PlaylistPayload : NodeGraphType<Models.Playlist>
     {
-        public PlaylistPayload()
+        public PlaylistPayload(ICloudStorage cloudStorage)
         {
             Name = nameof(Playlist);
 
@@ -26,7 +27,14 @@ namespace SoundVast.Components.Playlist
             Field(x => x.Name).Description("The name that the user gave the playlist");
             Field<StringGraphType>("coverImageUrl",
                 "The cover image url for the playlist. Set to the first song in it.",
-                resolve: c => c.Source.SongPlaylists.Select(x => x.Song.CoverImageUrl).FirstOrDefault());
+                resolve: c =>
+                {
+                    if (c.Source.SongPlaylists.Count == 0)
+                    {
+                        return cloudStorage.GetBlob(CloudStorageType.Image, "SoundVast").CloudBlockBlob.Uri.AbsoluteUri;
+                    }
+                    return c.Source.SongPlaylists.Select(x => x.Song.CoverImageUrl).FirstOrDefault();
+                });
             Field<NonNullGraphType<AccountPayload>>("user", "The user who created the playlist");
             Connection<SongPlaylistPayload>().Name("songPlaylists").Description("The songs in the playlist.")
                 .Resolve(c => GraphQL.Relay.Types.Connection.ToConnection(c.Source.SongPlaylists, c));

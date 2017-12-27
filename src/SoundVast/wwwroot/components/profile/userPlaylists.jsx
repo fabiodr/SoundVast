@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import InfiniteScroll from 'react-infinite-scroller';
 
-import UserPlaylist from './userPlaylistContainer';
+import Playlist from '../playlist/playlist';
 import Loader from '../shared/loaders/loader';
 import Grid from '../shared/grid/grid';
 
@@ -14,8 +14,15 @@ const UserPlaylists = ({ playlists, loadMore }) => (
     initialLoad={false}
   >
     <Grid>
-      {playlists.edges.map(({ node }) =>
-        <UserPlaylist key={node.playlistId} name={node.name} id={node.playlistId} data={node} />)}
+      {playlists.edges.map(({ node }) => (
+        <Playlist
+          key={node.playlistId}
+          id={node.playlistId}
+          name={node.name}
+          coverImageUrl={node.coverImageUrl}
+          playlists={playlists}
+        />
+      ))}
     </Grid>
   </InfiniteScroll>
 );
@@ -25,6 +32,7 @@ UserPlaylists.defaultProps = {
     edges: [],
     pageInfo: {},
   },
+  currentPlaylistId: null,
 };
 
 UserPlaylists.propTypes = {
@@ -36,6 +44,7 @@ UserPlaylists.propTypes = {
       node: PropTypes.shape({
         name: PropTypes.string.isRequired,
         playlistId: PropTypes.number.isRequired,
+        coverImageUrl: PropTypes.string,
       }),
     })),
   }),

@@ -8,7 +8,7 @@ import ValidationErrors from '../shared/validation/validationErrors';
 import SpinnerSubmit from '../shared/form/spinnerSubmit/spinnerSubmitContainer';
 import NameField from '../shared/fields/nameField/nameField';
 import Loader from '../shared/loaders/loader';
-import ExistingPlaylist from './existingPlaylist';
+import CoverImage from '../audio/coverImage';
 import Grid from '../shared/grid/grid';
 import styles from './playlistModal.less';
 
@@ -20,6 +20,7 @@ const PlaylistModal = ({
   playlists,
   loadMore,
   yourPlaylistsOnClick,
+  onPlaylistClick,
 }) => (
   <Modal authRequired title="Playlist." id="playlist" isAuthorized={isAuthorized}>
     <form onSubmit={handleSubmit} action="">
@@ -39,16 +40,17 @@ const PlaylistModal = ({
             initialLoad={false}
           >
             <Grid
-              className={styles.existingPlaylistGrid}
-              cellClassName={styles.existingPlaylistCell}
+              className={styles.playlistGrid}
+              cellClassName={styles.playlistCell}
             >
               {playlists.edges.map(({ node }) => (
-                <ExistingPlaylist
-                  key={node.playlistId}
-                  name={node.name}
-                  coverImageUrl={node.coverImageUrl}
-                />),
-              )}
+                <div key={node.playlistId}>
+                  {node.name}
+                  <div role="button" tabIndex={0} onClick={() => onPlaylistClick(node.playlistId)}>
+                    <CoverImage coverImageUrl={node.coverImageUrl} />
+                  </div>
+                </div>
+              ))}
             </Grid>
           </InfiniteScroll>
         </div>
@@ -64,6 +66,7 @@ PlaylistModal.defaultProps = {
 
 PlaylistModal.propTypes = {
   yourPlaylistsOnClick: PropTypes.func.isRequired,
+  onPlaylistClick: PropTypes.func.isRequired,
   isAuthorized: PropTypes.bool.isRequired,
   form: PropTypes.string.isRequired,
   handleSubmit: PropTypes.func.isRequired,

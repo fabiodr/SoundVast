@@ -1,51 +1,61 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Select from 'react-select';
+import { Range, createSliderWithTooltip } from 'rc-slider';
 
 import styles from './filters.less';
+import Button from '../shared/button/button';
+import FilterText from './filterText';
 
-const options = [
-  { value: 100000, label: 'All Time' },
-  { value: 365, label: 'Yearly' },
-  { value: 30, label: '30 days' },
-  { value: 7, label: 'Weekly' },
-  { value: 1, label: '24 hours' },
-];
+const TooltipRange = createSliderWithTooltip(Range);
 
-const Filters = ({ filter }) => (
-  <div className={styles.filters}>
-    <div role="button" tabIndex={0} onClick={() => filter('newest', true)}>
-      Newest
+const Filters = ({
+  filter,
+  filterMax,
+  topRated,
+  mostCommented,
+  mostPlayed,
+  onAfterChange,
+  from,
+  to,
+}) => (
+  <div>
+    <div className={styles.filterToggles}>
+      <Button onClick={() => filter('newest', true)}>Newest</Button>
+      <Button onClick={() => filter('topRated', [from, to])}>Top Rated</Button>
+      <Button onClick={() => filter('mostCommented', [from, to])}>Most Commented</Button>
+      <Button onClick={() => filter('mostPlayed', [from, to])}>Most Played</Button>
+      <TooltipRange
+        className={styles.rangeFilter}
+        defaultValue={[from, to]}
+        max={20}
+        step={1}
+        onAfterChange={onAfterChange}
+      />
     </div>
-    <Select
-      className={styles.select}
-      searchable={false}
-      simpleValue
-      placeholder="Top Rated"
-      onChange={value => filter('topRatedDays', value)}
-      options={options}
-    />
-    <Select
-      className={styles.select}
-      searchable={false}
-      simpleValue
-      placeholder="Most Commented"
-      onChange={value => filter('mostCommentedDays', value)}
-      options={options}
-    />
-    <Select
-      className={styles.select}
-      searchable={false}
-      simpleValue
-      placeholder="Most Played"
-      onChange={value => filter('mostPlayedDays', value)}
-      options={options}
-    />
+    <FilterText filter={topRated} label="Top Rated" from={from} to={to} />
+    <FilterText filter={mostCommented} label="Most Commented" from={from} to={to} />
+    <FilterText filter={mostPlayed} label="Most Played" from={from} to={to} />
   </div>
 );
 
+Filters.defaultProps = {
+  from: 0,
+  to: 7,
+  filterMax: 0,
+  topRated: false,
+  mostCommented: false,
+  mostPlayed: false,
+};
+
 Filters.propTypes = {
+  from: PropTypes.number,
+  to: PropTypes.number,
   filter: PropTypes.func.isRequired,
+  filterMax: PropTypes.number,
+  topRated: PropTypes.bool,
+  mostCommented: PropTypes.bool,
+  mostPlayed: PropTypes.bool,
+  onAfterChange: PropTypes.func.isRequired,
 };
 
 export default Filters;

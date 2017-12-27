@@ -7,6 +7,7 @@ import { reduxForm, SubmissionError } from 'redux-form';
 import PlaylistModal from './playlistModal';
 import playlistValidation from './playlistValidation';
 import createPlaylistMutation from './createPlaylistMutation';
+import addSongToPlaylistMutation from './addSongToPlaylistMutation';
 import { showCreatedPlaylistPopup } from './actions';
 import { playlistsToLoad } from '../shared/utilities/itemsToLoad';
 import { hideModal } from '../shared/modal/actions';
@@ -58,9 +59,11 @@ const connectionConfig = {
 const handlers = {
   yourPlaylistsOnClick: ({ dispatch }) => () => dispatch(hideModal()),
   loadMore: ({ relay }) => () => relay.loadMore(playlistsToLoad),
+  onPlaylistClick: ({ songId }) => playlistId => addSongToPlaylistMutation({ songId, playlistId }),
   onSubmit: ({ dispatch, songId }) => input =>
-    createPlaylistMutation(input, songId)
-      .then(() => {
+    createPlaylistMutation(input)
+      .then(({ createPlaylist }) => {
+        addSongToPlaylistMutation(({ songId, playlistId: createPlaylist.playlist.playlistId }));
         dispatch(showCreatedPlaylistPopup(input.name));
       }).catch((error) => {
         throw new SubmissionError(error);

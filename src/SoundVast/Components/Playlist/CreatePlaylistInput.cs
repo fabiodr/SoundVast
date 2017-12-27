@@ -14,7 +14,6 @@ namespace SoundVast.Components.Playlist
             Name = nameof(CreatePlaylistInput);
            
             Field<NonNullGraphType<StringGraphType>>("Name");
-            Field<IntGraphType>("SongId", "The id of the song to add to the playlist");
         }
     }
 }

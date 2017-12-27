@@ -1,5 +1,5 @@
 # source: http://localhost:8080/graphql
-# timestamp: Sun Dec 24 2017 23:03:59 GMT+0100 (W. Europe Standard Time)
+# timestamp: Tue Dec 26 2017 23:04:26 GMT+0100 (W. Europe Standard Time)
 
 input AddSongToPlaylistInput {
   clientMutationId: String
@@ -9,6 +9,7 @@ input AddSongToPlaylistInput {
 
 type AddSongToPlaylistPayload {
   clientMutationId: String
+  playlist: Playlist
 }
 
 type ApplicationUser {
@@ -45,6 +46,9 @@ interface Audio {
   coverImageUrl: String!
   likes: Int!
   dislikes: Int!
+
+  # The upload date of the audio
+  uploadDate: Date
 
   # The user who uploaded the audio
   user: ApplicationUser
@@ -130,9 +134,6 @@ type CommentPayloadEdge {
 input CreatePlaylistInput {
   clientMutationId: String
   name: String!
-
-  # The id of the song to add to the playlist
-  songId: Int
 }
 
 type CreatePlaylstPayload {
@@ -274,6 +275,9 @@ type LiveStream implements Node, Audio {
   liveStreamUrl: String!
   likes: Int!
   dislikes: Int!
+
+  # The upload date of the live stream
+  uploadDate: Date
 
   # The user who uploaded the live stream
   user: ApplicationUser
@@ -634,6 +638,9 @@ type Song implements Node, Audio {
   free: Boolean!
   likes: Int!
   dislikes: Int!
+
+  # The upload date of the song
+  uploadDate: Date
 
   # The user who uploaded the song
   user: ApplicationUser
