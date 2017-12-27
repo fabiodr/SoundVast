@@ -24,13 +24,18 @@ const Filters = ({
       <Button onClick={() => filter('topRated', [from, to])}>Top Rated</Button>
       <Button onClick={() => filter('mostCommented', [from, to])}>Most Commented</Button>
       <Button onClick={() => filter('mostPlayed', [from, to])}>Most Played</Button>
-      <TooltipRange
-        className={styles.rangeFilter}
-        defaultValue={[from, to]}
-        max={20}
-        step={1}
-        onAfterChange={onAfterChange}
-      />
+      { (topRated || mostCommented || mostPlayed) &&
+      (<div>
+        <TooltipRange
+          className={styles.rangeFilter}
+          defaultValue={[from, to]}
+          max={20}
+          step={1}
+          onAfterChange={onAfterChange}
+        />
+        <div className={styles.rangeFilterLabel}>({from} - {to})</div>
+      </div>)
+      }
     </div>
     <FilterText filter={topRated} label="Top Rated" from={from} to={to} />
     <FilterText filter={mostCommented} label="Most Commented" from={from} to={to} />

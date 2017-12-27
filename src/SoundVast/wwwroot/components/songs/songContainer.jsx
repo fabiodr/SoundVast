@@ -19,6 +19,7 @@ const fragments = graphql`
     name
     coverImageUrl
     artist
+    playCount
     likes
     dislikes
     ...commentsContainer

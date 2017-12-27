@@ -161,6 +161,7 @@
     "react-tabs": "^2.1.0",
     "recompose": "^0.26.0",
     "recompose-relay-modern": "^1.0.2",
+    "reduce-reducers": "^0.1.2",
     "redux": "^3.7.2",
     "redux-form": "^7.1.2",
     "redux-thunk": "^2.2.0",

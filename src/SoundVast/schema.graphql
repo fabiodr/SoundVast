@@ -1,5 +1,5 @@
 # source: http://localhost:8080/graphql
-# timestamp: Tue Dec 26 2017 23:04:26 GMT+0100 (W. Europe Standard Time)
+# timestamp: Wed Dec 27 2017 17:56:11 GMT+0100 (W. Europe Standard Time)
 
 input AddSongToPlaylistInput {
   clientMutationId: String
@@ -46,6 +46,7 @@ interface Audio {
   coverImageUrl: String!
   likes: Int!
   dislikes: Int!
+  playCount: Int!
 
   # The upload date of the audio
   uploadDate: Date
@@ -96,6 +97,16 @@ type Comment implements Node {
 
   # The original comment that this comment was a reply to
   originalComment: Comment
+}
+
+input CommentFilterInput {
+  mostCommented: Boolean
+
+  # The days since to start filtering from
+  from: Int
+
+  # The days since to start filter to
+  to: Int
 }
 
 # A connection from an object to a list of objects of type `CommentPayload`.
@@ -188,14 +199,14 @@ input FilterInput {
   # Filter by date added
   newest: Boolean
 
-  # Filter by likes for the number of days specified
-  topRatedDays: Int
+  # Filter by likes
+  ratingFilter: RatingFilterInput
 
-  # Filter by comments for the number of days specified
-  mostCommentedDays: Int
+  # Filter by comments
+  commentFilter: CommentFilterInput
 
-  # Filter by plays for the number of days specified
-  mostPlayedDays: Int
+  # Filter by plays
+  playedFilter: PlayedFilterInput
 }
 
 type Flag implements Node {
@@ -275,6 +286,7 @@ type LiveStream implements Node, Audio {
   liveStreamUrl: String!
   likes: Int!
   dislikes: Int!
+  playCount: Int!
 
   # The upload date of the live stream
   uploadDate: Date
@@ -356,6 +368,7 @@ type LogoutPayload {
 }
 
 type Mutation {
+  updatePlayCount(input: UpdatePlayCountInput!): UpdatePlayCountPayload
   saveSong(input: SaveSongInput!): SaveSongPayload
   saveLiveStream(input: SaveLiveStreamInput!): SaveLiveStreamPayload
   rateAudio(input: RateInput!): RateAudioPayload
@@ -393,6 +406,16 @@ type PageInfo {
 
   # When paginating forwards, the cursor to continue.
   endCursor: String
+}
+
+input PlayedFilterInput {
+  mostPlayed: Boolean
+
+  # The days since to start filtering from
+  from: Int
+
+  # The days since to start filter to
+  to: Int
 }
 
 type Playlist implements Node {
@@ -544,6 +567,19 @@ type Rating {
   comment: Comment
 }
 
+input RatingFilterInput {
+  topRated: Boolean
+
+  # The minimum number of ratings that need to have been applied for this filter to have any effect
+  minimumNumberOfRatingsThreshold: Int
+
+  # The days since to start filtering from
+  from: Int
+
+  # The days since to start filter to
+  to: Int
+}
+
 input RegisterInput {
   clientMutationId: String
   username: String!
@@ -638,6 +674,7 @@ type Song implements Node, Audio {
   free: Boolean!
   likes: Int!
   dislikes: Int!
+  playCount: Int!
 
   # The upload date of the song
   uploadDate: Date
@@ -745,4 +782,14 @@ type SongPlaylistPayloadEdge {
 
   # The item at the end of the edge
   node: SongPlaylist
+}
+
+input UpdatePlayCountInput {
+  clientMutationId: String
+  audioId: Int!
+}
+
+type UpdatePlayCountPayload {
+  clientMutationId: String
+  audio: Audio!
 }

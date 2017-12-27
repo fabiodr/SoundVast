@@ -8,8 +8,8 @@ namespace SoundVast.Components.Audio
     public class Filter
     {
         public bool Newest { get; set; }
-        public int? TopRatedDays { get; set; }
-        public int? MostCommentedDays { get; set; }
-        public int? MostPlayedDays { get; set; }
+        public RatingFilter RatingFilter { get; set; }
+        public CommentFilter CommentFilter { get; set; }
+        public PlayedFilter PlayedFilter { get; set; }
     }
 }

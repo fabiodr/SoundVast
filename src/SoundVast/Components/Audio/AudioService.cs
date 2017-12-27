@@ -40,12 +40,29 @@ namespace SoundVast.Components.Audio
 
             if (filter != null)
             {
-                if (filter.TopRatedDays.HasValue)
+                IQueryable<T> FromDateFilter(IDateFilter dateFilter)
                 {
-                    Func<T, int, bool> dateFromFilter = (x, days) => DateTime.UtcNow.AddDays(-days) < x.UploadDate;
+                    var fromDateTime = DateTime.UtcNow.AddDays(-dateFilter.From);
+                    var toDateTime = DateTime.UtcNow.AddDays(-dateFilter.To);
 
-                    audios = audios.Where(x => dateFromFilter(x, filter.TopRatedDays.Value));
-                    audios = audios.OrderByDescending(x => x.Likes);
+                    return audios.Where(x => x.UploadDate < fromDateTime && x.UploadDate > toDateTime);
+                }
+
+                if (filter.RatingFilter.TopRated)
+                {
+                    audios = FromDateFilter(filter.RatingFilter)
+                        .Where(x => x.Ratings.Count >= filter.RatingFilter.MinimumNumberOfRatingsThreshold)
+                        .OrderByDescending(x => x.Likes);
+                }
+
+                if (filter.CommentFilter.MostCommented)
+                {
+                    audios = FromDateFilter(filter.CommentFilter).OrderByDescending(x => x.Comments.Count);
+                }
+
+                if (filter.PlayedFilter.MostPlayed)
+                {
+                    audios = FromDateFilter(filter.PlayedFilter).OrderByDescending(x => x.PlayCount);
                 }
 
                 if (filter.Newest)
@@ -119,6 +136,17 @@ namespace SoundVast.Components.Audio
             }
 
             return null;
+        }
+
+        public T UpdatePlayCount(int audioId)
+        {
+            var audio = _repository.Get(audioId);
+
+            audio.PlayCount++;
+
+            _repository.Save();
+
+            return audio;
         }
     }
 }

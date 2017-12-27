@@ -30,6 +30,7 @@ namespace SoundVast.Components.Song
             Field(x => x.Free);
             Field(x => x.Likes);
             Field(x => x.Dislikes);
+            Field(x => x.PlayCount);
             Field<DateGraphType>("uploadDate", "The upload date of the song");
             Field<AccountPayload>("user", "The user who uploaded the song");
             Field<GenrePayload>("genre", "The genre the song belongs to");

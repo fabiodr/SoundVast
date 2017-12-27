@@ -19,5 +19,6 @@ namespace SoundVast.Components.Audio
         ICollection<Rating.Models.Rating> GetAudioRatings(int id);
         void Add(T model);
         T Edit(int existingAudioId, T newModel);
+        T UpdatePlayCount(int audioId);
     }
 }

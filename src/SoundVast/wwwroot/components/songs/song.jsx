@@ -7,6 +7,7 @@ import CoverImage from '../audio/coverImage';
 import Rating from '../rating/audioRating';
 import Like from '../rating/like/likeAudioContainer';
 import Dislike from '../rating/dislike/dislikeAudioContainer';
+import PlayCount from '../audio/playCount';
 import Name from '../audio/name';
 import Flag from '../flag/flag';
 import Edit from '../edit/edit';
@@ -19,6 +20,7 @@ const Song = ({ song, isOnCurrentSong }) => (
       <CoverImage coverImageUrl={song.coverImageUrl} />
     </Play>
     <Name name={name} />
+    <PlayCount playCount={song.playCount} />
     <div className={styles.artist}>{song.artist}</div>
     <Rating likes={song.likes} dislikes={song.dislikes}>
       <Like audioId={song.audioId} />
@@ -39,6 +41,7 @@ Song.propTypes = {
     dislikes: PropTypes.number.isRequired,
     likes: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
+    playCount: PropTypes.number.isRequired,
     artist: PropTypes.string.isRequired,
   }).isRequired,
 };

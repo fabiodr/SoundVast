@@ -15,9 +15,9 @@ namespace SoundVast.Components.Audio
             Description = "Provides filtering";
 
             Field<BooleanGraphType>("Newest", "Filter by date added");
-            Field<IntGraphType>("TopRatedDays", "Filter by likes for the number of days specified");
-            Field<IntGraphType>("MostCommentedDays", "Filter by comments for the number of days specified");
-            Field<IntGraphType>("MostPlayedDays", "Filter by plays for the number of days specified");
+            Field<RatingFilterInput>("RatingFilter", "Filter by likes");
+            Field<CommentFilterInput>("CommentFilter", "Filter by comments");
+            Field<PlayedFilterInput>("PlayedFilter", "Filter by plays");
         }
     }
 }

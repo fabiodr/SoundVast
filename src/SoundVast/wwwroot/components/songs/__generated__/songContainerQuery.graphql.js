@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 291ae79008f345e39a74992ea45fdd0b
+ * @relayHash 994880e2640e6d9d369bf9275b8f0279
  */
 
 /* eslint-disable */
@@ -32,6 +32,7 @@ fragment songContainer_song_1G22uz on Song {
   name
   coverImageUrl
   artist
+  playCount
   likes
   dislikes
   ...commentsContainer
@@ -203,6 +204,13 @@ const batch /*: ConcreteBatch*/ = {
             "alias": null,
             "args": null,
             "name": "artist",
+            "storageKey": null
+          },
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "args": null,
+            "name": "playCount",
             "storageKey": null
           },
           {
@@ -444,7 +452,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query songContainerQuery(\n  $id: Int!\n  $count: Int!\n  $cursor: String\n) {\n  song(id: $id) {\n    ...songContainer_song_1G22uz\n    id\n  }\n}\n\nfragment songContainer_song_1G22uz on Song {\n  audioId\n  name\n  coverImageUrl\n  artist\n  likes\n  dislikes\n  ...commentsContainer\n}\n\nfragment commentsContainer on Audio {\n  audioId\n  comments(first: $count, after: $cursor, originalCommentId: $originalCommentId) {\n    edges {\n      node {\n        __typename\n        commentId\n        body\n        date\n        likes\n        dislikes\n        repliesCount\n        originalComment {\n          id\n        }\n        user {\n          userName\n          id\n        }\n        id\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n"
+  "text": "query songContainerQuery(\n  $id: Int!\n  $count: Int!\n  $cursor: String\n) {\n  song(id: $id) {\n    ...songContainer_song_1G22uz\n    id\n  }\n}\n\nfragment songContainer_song_1G22uz on Song {\n  audioId\n  name\n  coverImageUrl\n  artist\n  playCount\n  likes\n  dislikes\n  ...commentsContainer\n}\n\nfragment commentsContainer on Audio {\n  audioId\n  comments(first: $count, after: $cursor, originalCommentId: $originalCommentId) {\n    edges {\n      node {\n        __typename\n        commentId\n        body\n        date\n        likes\n        dislikes\n        repliesCount\n        originalComment {\n          id\n        }\n        user {\n          userName\n          id\n        }\n        id\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n"
 };
 
 module.exports = batch;
