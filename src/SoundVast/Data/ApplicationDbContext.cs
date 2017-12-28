@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using SoundVast.Components;
 using SoundVast.Components.Audio.Models;
 using SoundVast.Components.Comment.Models;
+using SoundVast.Components.Edit.Models;
 using SoundVast.Components.Flag.Models;
 using SoundVast.Components.Genre.Models;
 using SoundVast.Components.LiveStream.Models;
@@ -21,23 +22,14 @@ namespace SoundVast.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        //public DbSet<RatingCountModel> Rating { get; set; }
         public DbSet<Rating> Ratings { get; set; }
-        //public DbSet<LinkModel> Links { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Playlist> Playlists { get; set; }
-        //public DbSet<CategoryModel> Categories { get; set; }
-        //public DbSet<FileStreamGenreModel> FileStreamGenres { get; set; }
-        //public DbSet<LiveStreamGenreModel> LiveStreamGenres { get; set; }
-        // public DbSet<FileStreamCategoryModel> FileStreamCategories { get; set; }
-        //public DbSet<LiveStreamCategoryModel> LiveStreamCategories { get; set; }
         public DbSet<Flag> Flags { get; set; }
         public DbSet<Quote> Quotes { get; set; }
         public DbSet<Comment> Comments { get; set; }
-       // public DbSet<FileModel> Files { get; set; }
-       // public DbSet<AudioGenreModel> AudioGenres { get; set; }
         public DbSet<Audio> Audios { get; set; }
-       // public DbSet<LiveStream> LiveStreams { get; set; }
+        public DbSet<AudioPendingEdit> AudiosPendingEdit { get; set; }
 
         public ApplicationDbContext(DbContextOptions options)
             : base(options)
@@ -57,16 +49,10 @@ namespace SoundVast.Data
 
             modelBuilder.Entity<Song>();
             modelBuilder.Entity<LiveStream>();
+            modelBuilder.Entity<SongPendingEdit>();
+            modelBuilder.Entity<LiveStreamPendingEdit>();
             modelBuilder.Entity<Audio>().HasMany(x => x.Ratings).WithOne(x => x.Audio);
             modelBuilder.Entity<Comment>().HasMany(x => x.Ratings).WithOne(x => x.Comment);
-            //modelBuilder.Entity<AudioGenreModel>().HasKey(x => new { x.AudioId, x.GenreId });
-            //modelBuilder.Entity<FileStreamModel>().HasMany(x => x.Links).WithOne().OnDelete(DeleteBehavior.Cascade);
-            //modelBuilder.Entity<CommentRatingJoinModel>().HasKey(x => new { x.CommentId, x.CommentRatingId });
-            //modelBuilder.Entity<Comment>().HasMany(x => x.Reports).WithOne(x => x.Comment).OnDelete(DeleteBehavior.Cascade);
-            //modelBuilder.Entity<Comment>().HasMany(x => x.Replies).WithOne(x => x.OriginalComment);
-            //modelBuilder.Entity<AudioRatingJoinModel>().HasKey(x => new { x.AudioId, x.AudioRatingId });
-
-            //  modelBuilder.Entity<Comment>().HasOptional(x => x.User);
         }
     }
 }

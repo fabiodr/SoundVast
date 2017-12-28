@@ -13,12 +13,8 @@ namespace SoundVast.Components.Song
         {
             Name = nameof(EditSongInput);
 
-            Field<NonNullGraphType<IntGraphType>>("SongId");
-            Field<NonNullGraphType<StringGraphType>>("Name");
-            Field<StringGraphType>("Artist");
-            Field<NonNullGraphType<BooleanGraphType>>("Free");
-            Field<NonNullGraphType<StringGraphType>>("CoverImageUrl");
-            Field<IntGraphType>("GenreId");
+            Field<NonNullGraphType<IntGraphType>>("PendingSongId");
+            Field<NonNullGraphType<BooleanGraphType>>("EditAccepted");
         }
     }
 }

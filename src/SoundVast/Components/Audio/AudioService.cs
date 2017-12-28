@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -31,7 +32,7 @@ namespace SoundVast.Components.Audio
 
         public virtual IEnumerable<T> GetAudios(string genreName, Filter filter)
         {
-            var audios = _repository.GetAll().BuildAudio().AsQueryable();
+            var audios = _repository.GetAll().BuildAudio();
 
             if (genreName != null)
             {
@@ -50,24 +51,24 @@ namespace SoundVast.Components.Audio
 
                 if (filter.RatingFilter.TopRated)
                 {
-                    audios = FromDateFilter(filter.RatingFilter)
-                        .Where(x => x.Ratings.Count >= filter.RatingFilter.MinimumNumberOfRatingsThreshold)
-                        .OrderByDescending(x => x.Likes);
+                    var ratedAudios = audios.Where(x => x.Ratings.Count >= filter.RatingFilter.MinimumNumberOfRatingsThreshold).ToList();
+
+                    return ratedAudios.OrderByDescending(x => x.Likes);
                 }
 
                 if (filter.CommentFilter.MostCommented)
                 {
-                    audios = FromDateFilter(filter.CommentFilter).OrderByDescending(x => x.Comments.Count);
+                    return FromDateFilter(filter.CommentFilter).OrderByDescending(x => x.Comments.Count);
                 }
 
                 if (filter.PlayedFilter.MostPlayed)
                 {
-                    audios = FromDateFilter(filter.PlayedFilter).OrderByDescending(x => x.PlayCount);
+                    return FromDateFilter(filter.PlayedFilter).OrderByDescending(x => x.PlayCount);
                 }
 
                 if (filter.Newest)
                 {
-                    audios = audios.OrderByDescending(x => x.UploadDate);
+                    return audios.OrderByDescending(x => x.UploadDate);
                 }
             }
 
@@ -112,8 +113,6 @@ namespace SoundVast.Components.Audio
                 _repository.Add(model);
 
                 model.User.ContributionScore += (int)Contribution.Upload;
-
-                _repository.Save();
             }
         }
 

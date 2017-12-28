@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 8e413537526402c09cd649474d852dc1
+ * @relayHash e4bde66d28706fa658bbbad548b17a1a
  */
 
 /* eslint-disable */
@@ -12,12 +12,8 @@ import type {ConcreteBatch} from 'relay-runtime';
 export type editSongMutationVariables = {|
   input: {
     clientMutationId?: ?string;
-    songId: number;
-    name: string;
-    artist?: ?string;
-    free: boolean;
-    coverImageUrl: string;
-    genreId?: ?number;
+    pendingSongId: number;
+    editAccepted: boolean;
   };
 |};
 export type editSongMutationResponse = {|

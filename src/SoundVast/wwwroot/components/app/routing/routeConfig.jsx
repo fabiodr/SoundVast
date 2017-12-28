@@ -15,6 +15,7 @@ import { routeConfig as songsRouteConfig } from '../../songs/songsContainer';
 import { routeConfig as radiosRouteConfig } from '../../radios/radiosContainer';
 import { routeConfig as primaryLayoutRouteConfig } from '../../layouts/primaryLayout/primaryLayoutContainer';
 import { routeConfig as genresRouteConfig } from '../../genres/genresContainer';
+import { routeConfig as songPendingEditContainer } from '../../edit/songPendingEditContainer';
 import { routeConfig as legalRouteConfig } from '../../legal/legalContainer';
 
 export default makeRouteConfig(
@@ -22,6 +23,7 @@ export default makeRouteConfig(
     <Route {...songsRouteConfig} />
     <Route path="songs/:genre?" {...songsRouteConfig} />
     <Route path="radios/:genre?" {...radiosRouteConfig} />
+    <Route path="reviewSongs" {...songPendingEditContainer} />
     <Route path="upload" {...uploadRouteConfig} />
     <Route path="profile" {...userProfileRouteConfig}>
       <Route {...userPlaylistsRouteConfig} />

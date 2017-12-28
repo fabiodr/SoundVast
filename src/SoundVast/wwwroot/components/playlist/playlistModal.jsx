@@ -61,7 +61,7 @@ const PlaylistModal = ({
 
 PlaylistModal.defaultProps = {
   error: [],
-  playlists: null,
+  playlists: {},
 };
 
 PlaylistModal.propTypes = {
@@ -72,6 +72,7 @@ PlaylistModal.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   error: PropTypes.arrayOf(PropTypes.string.isRequired),
   playlists: PropTypes.shape({
+    totalCount: PropTypes.number,
     pageInfo: PropTypes.shape({
       hasNextPage: PropTypes.bool,
     }),

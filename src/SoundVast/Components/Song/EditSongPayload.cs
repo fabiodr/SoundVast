@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using GraphQL;
 using GraphQL.Relay.Types;
 using GraphQL.Types;
+using SoundVast.Components.Edit;
 using SoundVast.Components.GraphQl;
 using SoundVast.Components.User;
 
@@ -13,10 +14,12 @@ namespace SoundVast.Components.Song
     public class EditSongPayload : MutationPayloadGraphType
     {
         private readonly ISongService _songService;
+        private readonly ISongPendingEditService _songPendingEditService;
 
-        public EditSongPayload(ISongService songService)
+        public EditSongPayload(ISongService songService, ISongPendingEditService songPendingEditService)
         {
             _songService = songService;
+            _songPendingEditService = songPendingEditService;
 
             Name = nameof(EditSongPayload);
            
@@ -25,24 +28,30 @@ namespace SoundVast.Components.Song
 
         public override object MutateAndGetPayload(MutationInputs inputs, ResolveFieldContext<object> context)
         {
-            var songId = inputs.Get<int>("songId");
-            var coverImageUrl = inputs.Get<string>("coverImageUrl");
-            var name = inputs.Get<string>("name");
-            var artist = inputs.Get<string>("artist");
-            var free = inputs.Get<bool>("free");
-            var genreId = inputs.Get<int>("genreId");
-            var user = context.UserContext.As<Context>().CurrentUser;
-            var newModel = new Models.Song
-            {
-                CoverImageUrl = coverImageUrl,
-                Name = name,
-                Artist = artist,
-                Free = free,
-                GenreId = genreId,
-                UserId = user.Id
-            };
+            var pendingSongId = inputs.Get<int>("pendingSongId");
+            var editAccepted = inputs.Get<bool>("editAccepted");
+            var songPendingEdit = _songPendingEditService.Get(pendingSongId);
+            Models.Song song = null;
 
-            var song = _songService.Edit(songId, newModel);
+            if (editAccepted)
+            {
+                var newModel = new Models.Song
+                {
+                    CoverImageUrl = songPendingEdit.CoverImageUrl,
+                    Name = songPendingEdit.Name,
+                    Artist = songPendingEdit.Artist,
+                    Free = songPendingEdit.Free,
+                    GenreId = songPendingEdit.GenreId,
+                };
+
+                newModel.Contributors.Add(songPendingEdit.Contributor);
+
+                song = _songService.Edit(songPendingEdit.AudioId, newModel);
+            }
+            else
+            {
+                _songPendingEditService.Delete(songPendingEdit);
+            }
 
             return new
             {

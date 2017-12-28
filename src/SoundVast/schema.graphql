@@ -1,5 +1,5 @@
 # source: http://localhost:8080/graphql
-# timestamp: Wed Dec 27 2017 17:56:11 GMT+0100 (W. Europe Standard Time)
+# timestamp: Thu Dec 28 2017 17:51:30 GMT+0100 (W. Europe Standard Time)
 
 input AddSongToPlaylistInput {
   clientMutationId: String
@@ -71,6 +71,24 @@ interface Audio {
     # Get the replies for the original comment instead
     originalCommentId: Int
   ): CommentPayloadConnection
+}
+
+interface AudioPendingEdit {
+  id: ID
+  audioPendingEditId: Int!
+  name: String!
+
+  # The poster image for the audio
+  coverImageUrl: String!
+
+  # The user who requested the edit
+  contributor: ApplicationUser
+
+  # The genre the audio belongs to
+  genre: Genre
+
+  # The original audio that this edit is modifying
+  audio: Audio
 }
 
 type Comment implements Node {
@@ -161,12 +179,8 @@ scalar Decimal
 
 input EditSongInput {
   clientMutationId: String
-  songId: Int!
-  name: String!
-  artist: String
-  free: Boolean!
-  coverImageUrl: String!
-  genreId: Int
+  pendingSongId: Int!
+  editAccepted: Boolean!
 }
 
 type EditSongPayload {
@@ -346,6 +360,61 @@ type LiveStreamPayloadEdge {
   node: LiveStream
 }
 
+type LiveStreamPendingEdit implements Node, AudioPendingEdit {
+  # The Id of the LiveStreamPendingEdit
+  audioPendingEditId: Int!
+
+  # The Global Id of the LiveStreamPendingEdit
+  id: ID!
+  name: String!
+
+  # The poster image for the live stream
+  coverImageUrl: String!
+  liveStreamUrl: String!
+
+  # The user who requested the edit
+  contributor: ApplicationUser
+
+  # The genre the song belongs to
+  genre: Genre
+
+  # The original live stream that this edit is modifying
+  audio: LiveStream
+}
+
+# A connection from an object to a list of objects of type `LiveStreamPendingEditPayload`.
+type LiveStreamPendingEditPayloadConnection {
+  # A count of the total number of objects in this connection, ignoring
+  # pagination. This allows a client to fetch the first five objects by passing
+  # "5" as the argument to `first`, then fetch the total count so it could display
+  # "5 of 83", for example. In cases where we employ infinite scrolling or don't
+  # have an exact count of entries, this field will return `null`.
+  totalCount: Int
+
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # Information to aid in pagination.
+  edges: [LiveStreamPendingEditPayloadEdge]
+
+  # A list of all of the objects returned in the connection. This is a convenience
+  # field provided for quickly exploring the API; rather than querying for "{
+  # edges { node } }" when no edge data is needed, this field can be used instead.
+  # Note that when clients like Relay need to fetch the "cursor" field on the edge
+  # to enable efficient pagination, this shortcut cannot be used, and the full "{
+  # edges { node } } " version should be used instead.
+  items: [LiveStreamPendingEdit]
+}
+
+# An edge in a connection from an object to another object of type `LiveStreamPendingEditPayload`.
+type LiveStreamPendingEditPayloadEdge {
+  # A cursor for use in pagination
+  cursor: String!
+
+  # The item at the end of the edge
+  node: LiveStreamPendingEdit
+}
+
 input LoginInput {
   clientMutationId: String
   username: String!
@@ -383,6 +452,7 @@ type Mutation {
   comment(input: SaveCommentInput!): SaveCommentPayload
   flagAudio(input: FlagAudioInput!): FlagObjectPayload
   flagComment(input: FlagCommentInput!): FlagObjectPayload
+  requestSongEdit(input: RequestEditSongInput!): RequestEditSongPayload
   editSong(input: EditSongInput!): EditSongPayload
   createPlaylist(input: CreatePlaylistInput!): CreatePlaylstPayload
   addSongToPlaylist(input: AddSongToPlaylistInput!): AddSongToPlaylistPayload
@@ -518,6 +588,20 @@ type Query {
     # The filters to apply to the songs
     filter: FilterInput
   ): LiveStreamPayloadConnection
+  songsPendingEdit(
+    # Only look at connected edges with cursors greater than the value of `after`.
+    after: String
+
+    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
+    first: Int
+  ): SongPendingEditPayloadConnection
+  liveStreamsPendingEdit(
+    # Only look at connected edges with cursors greater than the value of `after`.
+    after: String
+
+    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
+    first: Int
+  ): LiveStreamPendingEditPayloadConnection
   genres: [Genre]
   user: ApplicationUser
   externalLoginCallback: ExternalLoginCallbackPayload
@@ -591,6 +675,20 @@ type RegisterPayload {
   clientMutationId: String
   user: ApplicationUser
   emailConfirmationToken: String
+}
+
+input RequestEditSongInput {
+  clientMutationId: String
+  songId: Int!
+  name: String!
+  artist: String
+  free: Boolean!
+  coverImageUrl: String!
+  genreId: Int
+}
+
+type RequestEditSongPayload {
+  clientMutationId: String
 }
 
 input ResetPasswordInput {
@@ -732,6 +830,62 @@ type SongPayloadEdge {
 
   # The item at the end of the edge
   node: Song
+}
+
+type SongPendingEdit implements Node, AudioPendingEdit {
+  # The Id of the SongPendingEdit
+  audioPendingEditId: Int!
+
+  # The Global Id of the SongPendingEdit
+  id: ID!
+  name: String!
+
+  # The poster image for the song
+  coverImageUrl: String!
+  artist: String
+  free: Boolean!
+
+  # The user who requested the edit
+  contributor: ApplicationUser
+
+  # The genre the song belongs to
+  genre: Genre
+
+  # The original song that this edit is modifying
+  audio: Song
+}
+
+# A connection from an object to a list of objects of type `SongPendingEditPayload`.
+type SongPendingEditPayloadConnection {
+  # A count of the total number of objects in this connection, ignoring
+  # pagination. This allows a client to fetch the first five objects by passing
+  # "5" as the argument to `first`, then fetch the total count so it could display
+  # "5 of 83", for example. In cases where we employ infinite scrolling or don't
+  # have an exact count of entries, this field will return `null`.
+  totalCount: Int
+
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # Information to aid in pagination.
+  edges: [SongPendingEditPayloadEdge]
+
+  # A list of all of the objects returned in the connection. This is a convenience
+  # field provided for quickly exploring the API; rather than querying for "{
+  # edges { node } }" when no edge data is needed, this field can be used instead.
+  # Note that when clients like Relay need to fetch the "cursor" field on the edge
+  # to enable efficient pagination, this shortcut cannot be used, and the full "{
+  # edges { node } } " version should be used instead.
+  items: [SongPendingEdit]
+}
+
+# An edge in a connection from an object to another object of type `SongPendingEditPayload`.
+type SongPendingEditPayloadEdge {
+  # A cursor for use in pagination
+  cursor: String!
+
+  # The item at the end of the edge
+  node: SongPendingEdit
 }
 
 type SongPlaylist implements Node {

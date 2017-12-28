@@ -107,7 +107,7 @@ export const routeConfig = {
       newest: location.query.newest,
       ratingFilter: {
         topRated: normalizeBoolean(location.query.topRated),
-        minimumNumberOfRatingsThreshold: 100,
+        minimumNumberOfRatingsThreshold: 0,
         from: location.query.from,
         to: location.query.to,
       },

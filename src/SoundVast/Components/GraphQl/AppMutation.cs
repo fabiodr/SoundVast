@@ -16,6 +16,7 @@ using Newtonsoft.Json.Linq;
 using SoundVast.Components.Account;
 using SoundVast.Components.Audio;
 using SoundVast.Components.Comment;
+using SoundVast.Components.Edit;
 using SoundVast.Components.Email;
 using SoundVast.Components.Flag;
 using SoundVast.Components.LiveStream;
@@ -47,6 +48,7 @@ namespace SoundVast.Components.GraphQl
             Mutation<SaveCommentInput, SaveCommentPayload>("comment").AddPermission(AuthorizedPermission);
             Mutation<FlagAudioInput, FlagObjectPayload>("flagAudio").AddPermission(AuthorizedPermission);
             Mutation<FlagCommentInput, FlagObjectPayload>("flagComment").AddPermission(AuthorizedPermission);
+            Mutation<RequestEditSongInput, RequestEditSongPayload>("requestSongEdit").AddPermission(AuthorizedPermission);
             Mutation<EditSongInput, EditSongPayload>("editSong").AddPermission(AuthorizedPermission);
             Mutation<CreatePlaylistInput, CreatePlaylstPayload>("createPlaylist").AddPermission(AuthorizedPermission);
             Mutation<AddSongToPlaylistInput, AddSongToPlaylistPayload>("addSongToPlaylist").AddPermission(AuthorizedPermission);

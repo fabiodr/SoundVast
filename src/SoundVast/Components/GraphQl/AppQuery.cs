@@ -16,6 +16,7 @@ using Microsoft.Extensions.Logging;
 using SoundVast.Components.Account;
 using SoundVast.Components.Audio;
 using SoundVast.Components.Comment;
+using SoundVast.Components.Edit;
 using SoundVast.Components.Genre;
 using SoundVast.Components.LiveStream;
 using SoundVast.Components.Playlist;
@@ -30,7 +31,8 @@ namespace SoundVast.Components.GraphQl
     {
         public AppQuery(ISongService songService, ILiveStreamService liveStreamService, IValidationProvider validationProvider,
             IGenreService genreService, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager,
-            ILoggerFactory loggerFactory, IQuoteService quoteService, IPlaylistService playlistService)
+            ILoggerFactory loggerFactory, IQuoteService quoteService, IPlaylistService playlistService,
+            ISongPendingEditService songPendingEditService, ILiveStreamPendingEditService liveStreamPendingEditService)
         {
             var logger = loggerFactory.CreateLogger<AppQuery>();
 
@@ -72,6 +74,14 @@ namespace SoundVast.Components.GraphQl
 
                     return GraphQL.Relay.Types.Connection.ToConnection(liveStreamService.GetAudios(genre, filter), c);
                 });
+
+            Connection<SongPendingEditPayload>()
+                .Name("songsPendingEdit")
+                .Resolve(c => GraphQL.Relay.Types.Connection.ToConnection(songPendingEditService.GetAudiosPendingEdit(), c));
+
+            Connection<LiveStreamPendingEditPayload>()
+                .Name("liveStreamsPendingEdit")
+                .Resolve(c => GraphQL.Relay.Types.Connection.ToConnection(liveStreamPendingEditService.GetAudiosPendingEdit(), c));
 
             Field<ListGraphType<GenrePayload>>("genres",
                 resolve: c => genreService.GetGenres());

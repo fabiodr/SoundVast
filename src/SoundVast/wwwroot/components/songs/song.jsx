@@ -19,7 +19,7 @@ const Song = ({ song, isOnCurrentSong }) => (
     <Play id={song.audioId}>
       <CoverImage coverImageUrl={song.coverImageUrl} />
     </Play>
-    <Name name={name} />
+    <Name name={song.name} />
     <PlayCount playCount={song.playCount} />
     <div className={styles.artist}>{song.artist}</div>
     <Rating likes={song.likes} dislikes={song.dislikes}>

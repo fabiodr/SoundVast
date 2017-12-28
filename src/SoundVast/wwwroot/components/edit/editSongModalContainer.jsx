@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 import EditSongModal from './editSongModal';
 import { hideModal } from '../shared/modal/actions';
-import editSongMutation from './editSongMutation';
+import requestSongEditMutation from './requestSongEditMutation';
 import { showEditPopup } from './actions';
 
 const mapStateToProps = ({ modal }) => ({
@@ -15,7 +15,7 @@ const mapStateToProps = ({ modal }) => ({
 
 const handlers = {
   onSubmit: ({ dispatch, songId }) => input =>
-    editSongMutation(input, songId)
+    requestSongEditMutation(input, songId)
       .then(() => {
         dispatch(showEditPopup());
         dispatch(hideModal());

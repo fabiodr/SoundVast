@@ -7,9 +7,9 @@ import MenuIcon from '../icons/menu';
 import styles from './header.less';
 import AuthorizedList from './authorizedList/authorizedListContainer';
 import UnAuthorizedList from './unAuthorizedList/unAuthorizedListContainer';
-import AdminList from './adminList/adminList';
 import LinkDropdown from '../shared/dropDown/dropDownContainer';
 import Popups from '../shared/popup/popupsContainer';
+import EditIcon from '../icons/edit';
 
 const Header = ({ user }) => (
   <header className={styles.header}>
@@ -31,6 +31,9 @@ const Header = ({ user }) => (
         </li>
       </ul>
       <ul>
+        <Link to="/reviewSongs">
+          <EditIcon className={styles.editIcon} />
+        </Link>
         <Popups />
         <AuthorizedList user={user} />
         <UnAuthorizedList user={user} />
@@ -40,7 +43,6 @@ const Header = ({ user }) => (
               <li>
                 <Link to="/legal">Legal</Link>
               </li>
-              <AdminList />
             </ul>
           </LinkDropdown>
         </li>

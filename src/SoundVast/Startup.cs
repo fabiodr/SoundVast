@@ -40,6 +40,7 @@ using Newtonsoft.Json;
 using SoundVast.Components.Audio;
 using SoundVast.Components.Audio.Models;
 using SoundVast.Components.Comment.Models;
+using SoundVast.Components.Edit.Models;
 using SoundVast.Components.Flag.Models;
 using SoundVast.Components.Genre;
 using SoundVast.Components.Genre.Models;
@@ -244,6 +245,9 @@ namespace SoundVast
             builder.RegisterType<Repository<Comment, ApplicationDbContext>>().As<IRepository<Comment>>();
             builder.RegisterType<Repository<Flag, ApplicationDbContext>>().As<IRepository<Flag>>();
             builder.RegisterType<Repository<Playlist, ApplicationDbContext>>().As<IRepository<Playlist>>();
+            builder.RegisterType<Repository<AudioPendingEdit, ApplicationDbContext>>().As<IRepository<AudioPendingEdit>>();
+            builder.RegisterType<Repository<SongPendingEdit, ApplicationDbContext>>().As<IRepository<SongPendingEdit>>();
+            builder.RegisterType<Repository<LiveStreamPendingEdit, ApplicationDbContext>>().As<IRepository<LiveStreamPendingEdit>>();
 
             return builder;
         }
