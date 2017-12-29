@@ -14,7 +14,8 @@ import { routeConfig as resetPasswordRouteConfig } from '../../account/resetPass
 import { routeConfig as songsRouteConfig } from '../../songs/songsContainer';
 import { routeConfig as radiosRouteConfig } from '../../radios/radiosContainer';
 import { routeConfig as primaryLayoutRouteConfig } from '../../layouts/primaryLayout/primaryLayoutContainer';
-import { routeConfig as genresRouteConfig } from '../../genres/genresContainer';
+import { routeConfig as songGenresRouteConfig } from '../../genres/songGenresContainer';
+import { routeConfig as radioGenresRouteConfig } from '../../genres/radioGenresContainer';
 import { routeConfig as songPendingEditContainer } from '../../edit/songPendingEditContainer';
 import { routeConfig as legalRouteConfig } from '../../legal/legalContainer';
 
@@ -31,7 +32,8 @@ export default makeRouteConfig(
       <Route path="liked" {...userLikedAudiosRouteConfig} />
       <Route path="uploads" {...userUploadsRouteConfig} />
     </Route>
-    <Route path="genres/:type" {...genresRouteConfig} />
+    <Route path="genres/songs" {...songGenresRouteConfig} />
+    <Route path="genres/radios" {...radioGenresRouteConfig} />
     <Route path="error/:status" {...errorPageRouteConfig} />
     <Route path="account">
       <Route path="externalLoginCallback/:returnUrl" {...socialLoginCallbackRouteConfig} />

@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash f17c8235612cbf1188a32be4dca1e41b
+ * @relayHash ab1e879acededab08c957e1a268f090c
  */
 
 /* eslint-disable */
@@ -24,8 +24,8 @@ fragment editSongModalContainer on Query {
   user {
     id
   }
-  genres {
-    ...genreFieldContainer_genres
+  songGenres {
+    ...songGenresFieldContainer_genres
     id
   }
   song(id: $songId) {
@@ -40,10 +40,9 @@ fragment editSongModalContainer on Query {
   }
 }
 
-fragment genreFieldContainer_genres on Genre {
+fragment songGenresFieldContainer_genres on Genre {
   id
   name
-  type
 }
 */
 
@@ -108,8 +107,8 @@ const batch /*: ConcreteBatch*/ = {
         "kind": "LinkedField",
         "alias": null,
         "args": null,
-        "concreteType": "Genre",
-        "name": "genres",
+        "concreteType": "SongGenre",
+        "name": "songGenres",
         "plural": true,
         "selections": [
           {
@@ -120,24 +119,11 @@ const batch /*: ConcreteBatch*/ = {
             "storageKey": null
           },
           {
-            "kind": "InlineFragment",
-            "type": "Genre",
-            "selections": [
-              {
-                "kind": "ScalarField",
-                "alias": null,
-                "args": null,
-                "name": "name",
-                "storageKey": null
-              },
-              {
-                "kind": "ScalarField",
-                "alias": null,
-                "args": null,
-                "name": "type",
-                "storageKey": null
-              }
-            ]
+            "kind": "ScalarField",
+            "alias": null,
+            "args": null,
+            "name": "name",
+            "storageKey": null
           }
         ],
         "storageKey": null
@@ -189,7 +175,7 @@ const batch /*: ConcreteBatch*/ = {
             "kind": "LinkedField",
             "alias": null,
             "args": null,
-            "concreteType": "Genre",
+            "concreteType": "SongGenre",
             "name": "genre",
             "plural": false,
             "selections": [
@@ -215,7 +201,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query editSongModalContainerQuery(\n  $songId: Int\n) {\n  ...editSongModalContainer\n}\n\nfragment editSongModalContainer on Query {\n  user {\n    id\n  }\n  genres {\n    ...genreFieldContainer_genres\n    id\n  }\n  song(id: $songId) {\n    name\n    coverImageUrl\n    artist\n    free\n    genre {\n      id\n    }\n    id\n  }\n}\n\nfragment genreFieldContainer_genres on Genre {\n  id\n  name\n  type\n}\n"
+  "text": "query editSongModalContainerQuery(\n  $songId: Int\n) {\n  ...editSongModalContainer\n}\n\nfragment editSongModalContainer on Query {\n  user {\n    id\n  }\n  songGenres {\n    ...songGenresFieldContainer_genres\n    id\n  }\n  song(id: $songId) {\n    name\n    coverImageUrl\n    artist\n    free\n    genre {\n      id\n    }\n    id\n  }\n}\n\nfragment songGenresFieldContainer_genres on Genre {\n  id\n  name\n}\n"
 };
 
 module.exports = batch;

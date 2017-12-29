@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import Grid from '../shared/grid/grid';
 import Genre from './genre';
 
-const Genres = ({ genres, type, typeUrl }) => (
+const Genres = ({ genres, typeUrl }) => (
   <Grid>
-    {genres.filter(x => x.type.toLowerCase() === type.toLowerCase()).map(genre => (
+    {genres.map(genre => (
       <Genre
         key={genre.id}
         name={genre.name}
@@ -25,7 +25,6 @@ Genres.propTypes = {
       coverImageUrl: PropTypes.string.isRequired,
     }),
   ).isRequired,
-  type: PropTypes.string.isRequired,
   typeUrl: PropTypes.string.isRequired,
 };
 

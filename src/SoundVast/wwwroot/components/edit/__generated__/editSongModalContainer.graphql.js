@@ -12,7 +12,7 @@ export type editSongModalContainer = {|
   +user: ?{|
     +id: ?string;
   |};
-  +genres: ?$ReadOnlyArray<?{| |}>;
+  +songGenres: ?$ReadOnlyArray<?{| |}>;
   +song: ?{|
     +name: string;
     +coverImageUrl: string;
@@ -60,13 +60,13 @@ const fragment /*: ConcreteFragment*/ = {
       "kind": "LinkedField",
       "alias": null,
       "args": null,
-      "concreteType": "Genre",
-      "name": "genres",
+      "concreteType": "SongGenre",
+      "name": "songGenres",
       "plural": true,
       "selections": [
         {
           "kind": "FragmentSpread",
-          "name": "genreFieldContainer_genres",
+          "name": "songGenresFieldContainer_genres",
           "args": null
         }
       ],
@@ -119,7 +119,7 @@ const fragment /*: ConcreteFragment*/ = {
           "kind": "LinkedField",
           "alias": null,
           "args": null,
-          "concreteType": "Genre",
+          "concreteType": "SongGenre",
           "name": "genre",
           "plural": false,
           "selections": [

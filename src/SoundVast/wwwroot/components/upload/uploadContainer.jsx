@@ -14,8 +14,11 @@ const lifecycleFunctions = {
 
 const query = graphql`
   query uploadContainerQuery {
-    genres {
-      ...genreFieldContainer_genres
+    songGenres {
+      ...songGenresFieldContainer_genres
+    }
+    liveStreamGenres {
+      ...radioGenresFieldContainer_genres
     }
     user {
       ...withAuthorization_user

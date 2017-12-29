@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SoundVast.Components.Genre.Models;
 
 namespace SoundVast.Components.Genre
 {
-    public static class GenreName
+    public interface ISongGenreService : IGenreService<SongGenre>
     {
-        public static string Music = "Music";
-        public static string LiveStream = "LiveStream";
     }
 }

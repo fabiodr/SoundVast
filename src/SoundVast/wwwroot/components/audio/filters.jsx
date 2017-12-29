@@ -18,7 +18,7 @@ const Filters = ({
   from,
   to,
 }) => (
-  <div>
+  <div className={styles.filters}>
     <div className={styles.filterToggles}>
       <Button onClick={() => filter('newest', true)}>Newest</Button>
       <Button onClick={() => filter('topRated', [from, to])}>Top Rated</Button>

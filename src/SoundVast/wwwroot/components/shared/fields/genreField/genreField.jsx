@@ -26,7 +26,6 @@ GenreField.propTypes = {
   genres: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
   })).isRequired,
   label: PropTypes.string,
   id: PropTypes.oneOfType([

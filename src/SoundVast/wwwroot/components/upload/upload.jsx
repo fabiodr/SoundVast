@@ -6,7 +6,7 @@ import styles from './upload.less';
 import AudioDropzone from './uploadFile/audioDropzoneContainer';
 import UploadLiveStream from './uploadLiveStream/uploadLiveStreamContainer';
 
-const Upload = ({ genres }) => (
+const Upload = ({ songGenres, liveStreamGenres }) => (
   <div className={styles.upload}>
     <h3>Upload</h3>
 
@@ -17,14 +17,15 @@ const Upload = ({ genres }) => (
       </TabList>
       <br />
 
-      <TabPanel><AudioDropzone genres={genres} /></TabPanel>
-      <TabPanel><UploadLiveStream genres={genres} /></TabPanel>
+      <TabPanel><AudioDropzone genres={songGenres} /></TabPanel>
+      <TabPanel><UploadLiveStream genres={liveStreamGenres} /></TabPanel>
     </Tabs>
   </div>
 );
 
 Upload.propTypes = {
-  genres: PropTypes.arrayOf(PropTypes.object).isRequired,
+  songGenres: PropTypes.arrayOf(PropTypes.object).isRequired,
+  liveStreamGenres: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default Upload;

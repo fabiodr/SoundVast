@@ -159,7 +159,7 @@ const fragment /*: ConcreteFragment*/ = {
                   "kind": "LinkedField",
                   "alias": null,
                   "args": null,
-                  "concreteType": "Genre",
+                  "concreteType": "SongGenre",
                   "name": "genre",
                   "plural": false,
                   "selections": [
@@ -213,7 +213,7 @@ const fragment /*: ConcreteFragment*/ = {
                       "kind": "LinkedField",
                       "alias": null,
                       "args": null,
-                      "concreteType": "Genre",
+                      "concreteType": "SongGenre",
                       "name": "genre",
                       "plural": false,
                       "selections": [

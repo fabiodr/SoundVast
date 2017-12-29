@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 8a1e4892aa15d848e44b3eb1fa15884e
+ * @relayHash 371b3840e4169f69f1fe44bb3e6736c6
  */
 
 /* eslint-disable */
@@ -49,8 +49,8 @@ fragment editSongModalContainer on Query {
   user {
     id
   }
-  genres {
-    ...genreFieldContainer_genres
+  songGenres {
+    ...songGenresFieldContainer_genres
     id
   }
   song(id: $songId) {
@@ -65,10 +65,9 @@ fragment editSongModalContainer on Query {
   }
 }
 
-fragment genreFieldContainer_genres on Genre {
+fragment songGenresFieldContainer_genres on Genre {
   id
   name
-  type
 }
 */
 
@@ -215,8 +214,8 @@ const batch /*: ConcreteBatch*/ = {
         "kind": "LinkedField",
         "alias": null,
         "args": null,
-        "concreteType": "Genre",
-        "name": "genres",
+        "concreteType": "SongGenre",
+        "name": "songGenres",
         "plural": true,
         "selections": [
           {
@@ -227,24 +226,11 @@ const batch /*: ConcreteBatch*/ = {
             "storageKey": null
           },
           {
-            "kind": "InlineFragment",
-            "type": "Genre",
-            "selections": [
-              {
-                "kind": "ScalarField",
-                "alias": null,
-                "args": null,
-                "name": "name",
-                "storageKey": null
-              },
-              {
-                "kind": "ScalarField",
-                "alias": null,
-                "args": null,
-                "name": "type",
-                "storageKey": null
-              }
-            ]
+            "kind": "ScalarField",
+            "alias": null,
+            "args": null,
+            "name": "name",
+            "storageKey": null
           }
         ],
         "storageKey": null
@@ -296,7 +282,7 @@ const batch /*: ConcreteBatch*/ = {
             "kind": "LinkedField",
             "alias": null,
             "args": null,
-            "concreteType": "Genre",
+            "concreteType": "SongGenre",
             "name": "genre",
             "plural": false,
             "selections": [
@@ -322,7 +308,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query primaryLayoutContainerQuery(\n  $songId: Int\n) {\n  user {\n    ...authorizedListContainer_user\n    ...unAuthorizedListContainer_user\n    id\n  }\n  loginProviders {\n    ...socialLoginsContainer_loginProviders\n  }\n  ...editSongModalContainer\n}\n\nfragment authorizedListContainer_user on ApplicationUser {\n  userName\n  contributionScore\n}\n\nfragment unAuthorizedListContainer_user on ApplicationUser {\n  userName\n}\n\nfragment socialLoginsContainer_loginProviders on LoginProvider {\n  name\n  displayName\n}\n\nfragment editSongModalContainer on Query {\n  user {\n    id\n  }\n  genres {\n    ...genreFieldContainer_genres\n    id\n  }\n  song(id: $songId) {\n    name\n    coverImageUrl\n    artist\n    free\n    genre {\n      id\n    }\n    id\n  }\n}\n\nfragment genreFieldContainer_genres on Genre {\n  id\n  name\n  type\n}\n"
+  "text": "query primaryLayoutContainerQuery(\n  $songId: Int\n) {\n  user {\n    ...authorizedListContainer_user\n    ...unAuthorizedListContainer_user\n    id\n  }\n  loginProviders {\n    ...socialLoginsContainer_loginProviders\n  }\n  ...editSongModalContainer\n}\n\nfragment authorizedListContainer_user on ApplicationUser {\n  userName\n  contributionScore\n}\n\nfragment unAuthorizedListContainer_user on ApplicationUser {\n  userName\n}\n\nfragment socialLoginsContainer_loginProviders on LoginProvider {\n  name\n  displayName\n}\n\nfragment editSongModalContainer on Query {\n  user {\n    id\n  }\n  songGenres {\n    ...songGenresFieldContainer_genres\n    id\n  }\n  song(id: $songId) {\n    name\n    coverImageUrl\n    artist\n    free\n    genre {\n      id\n    }\n    id\n  }\n}\n\nfragment songGenresFieldContainer_genres on Genre {\n  id\n  name\n}\n"
 };
 
 module.exports = batch;

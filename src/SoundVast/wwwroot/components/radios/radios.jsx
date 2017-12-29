@@ -5,14 +5,11 @@ import InfiniteScroll from 'react-infinite-scroller';
 import SoundVastTitle from '../shared/title/soundVastTitle';
 import Radio from './radio';
 import Grid from '../shared/grid/grid';
-import AudioHeader from '../audio/audioHeader';
-import genreTypeNames from '../shared/utilities/genreTypeNames';
 import Loader from '../shared/loaders/loader';
 
 const Radios = ({ data, loadMore }) => (
   <SoundVastTitle title="Radios">
     <div>
-      <AudioHeader type={genreTypeNames.liveStream} />
       <InfiniteScroll
         loadMore={loadMore}
         hasMore={data.radios.pageInfo.hasNextPage}

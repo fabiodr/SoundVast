@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using SoundVast.Components;
+using SoundVast.Components.Album.Models;
+using SoundVast.Components.Artist.Models;
 using SoundVast.Components.Audio.Models;
 using SoundVast.Components.Comment.Models;
 using SoundVast.Components.Edit.Models;
@@ -23,13 +25,14 @@ namespace SoundVast.Data
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Rating> Ratings { get; set; }
-        public DbSet<Genre> Genres { get; set; }
         public DbSet<Playlist> Playlists { get; set; }
         public DbSet<Flag> Flags { get; set; }
         public DbSet<Quote> Quotes { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Audio> Audios { get; set; }
         public DbSet<AudioPendingEdit> AudiosPendingEdit { get; set; }
+        public DbSet<Album> Albums { get; set; }
+        public DbSet<Artist> Artists { get; set; }
 
         public ApplicationDbContext(DbContextOptions options)
             : base(options)
@@ -51,6 +54,8 @@ namespace SoundVast.Data
             modelBuilder.Entity<LiveStream>();
             modelBuilder.Entity<SongPendingEdit>();
             modelBuilder.Entity<LiveStreamPendingEdit>();
+            modelBuilder.Entity<SongGenre>();
+            modelBuilder.Entity<LiveStreamGenre>();
             modelBuilder.Entity<Audio>().HasMany(x => x.Ratings).WithOne(x => x.Audio);
             modelBuilder.Entity<Comment>().HasMany(x => x.Ratings).WithOne(x => x.Comment);
         }

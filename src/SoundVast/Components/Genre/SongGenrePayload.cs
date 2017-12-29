@@ -5,21 +5,24 @@ using System.Linq;
 using System.Threading.Tasks;
 using SoundVast.Components.Audio;
 using SoundVast.Components.Genre;
+using SoundVast.Components.Genre.Models;
+using SoundVast.Components.Song;
 using SoundVast.Components.Song.Models;
 
 namespace SoundVast.Components.Genre
 {
-    public class GenrePayload : ObjectGraphType<Models.Genre>
+    public class SongGenrePayload : ObjectGraphType<SongGenre>
     {
-        public GenrePayload()
+        public SongGenrePayload()
         {
-            Name = nameof(Models.Genre);
+            Name = nameof(SongGenre);
 
             Field<IdGraphType>("id");
             Field(x => x.Name);
-            Field(x => x.Type).Description("The type of audio that this genre belongs to, e.g. Music, Radio etc");
             Field(x => x.CoverImageUrl).Description("The cover image url for this genre");
-            Field<ListGraphType<AudioInterface>>("audios", "The audios that belong to this genre");
+            Connection<SongPayload>().Name("songs").Description("The songs that belong to this genre");
+
+            Interface<GenreInterface>();
         }
     }
 }

@@ -4,10 +4,9 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { Field } from 'redux-form';
 
 import BasicInfo from '../common/basicInfo/basicInfo';
-import genreTypeNames from '../../shared/utilities/genreTypeNames';
 import Input from '../../shared/fields/input/input';
 import NameField from '../../shared/fields/nameField/nameField';
-import GenreField from '../../shared/fields/genreField/genreFieldContainer';
+import RadioGenresField from '../../shared/fields/genreField/radioGenresFieldContainer';
 
 const LiveStreamInformation = ({ id, genres }) => (
   <Tabs>
@@ -22,7 +21,7 @@ const LiveStreamInformation = ({ id, genres }) => (
           <Field name="liveStreamUrl" id={`liveStreamUrl_${id}`} component={Input} />
         </label>
 
-        <GenreField id={id} type={genreTypeNames.liveStream} genres={genres} />
+        <RadioGenresField id={id} genres={genres} />
       </BasicInfo>
     </TabPanel>
   </Tabs>

@@ -31,7 +31,7 @@ namespace SoundVast.Components.Edit
             Field(x => x.Artist, true);
             Field(x => x.Free);
             Field<AccountPayload>("contributor", "The user who requested the edit");
-            Field<GenrePayload>("genre", "The genre the song belongs to");
+            Field<SongGenrePayload>("genre", "The genre the song belongs to");
             Field<SongPayload>("audio", "The original song that this edit is modifying");
 
             Interface<AudioPendingEditInterface>();

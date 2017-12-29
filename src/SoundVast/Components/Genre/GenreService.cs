@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web;
 using Microsoft.EntityFrameworkCore;
 using SoundVast.Components.Audio;
@@ -9,11 +10,11 @@ using SoundVast.Components.Genre.Models;
 
 namespace SoundVast.Components.Genre
 {
-    public class GenreService : IGenreService
+    public class GenreService<T> : IGenreService<T> where T : Models.Genre
     {
-        private readonly IRepository<Models.Genre> _repository;
+        private readonly IRepository<T> _repository;
 
-        public GenreService(IRepository<Models.Genre> repository)
+        public GenreService(IRepository<T> repository)
         {
             _repository = repository;
         }
@@ -35,9 +36,9 @@ namespace SoundVast.Components.Genre
             _repository.Save();
         }
 
-        public ICollection<Models.Genre> GetGenres()
+        public IEnumerable<T> GetGenres()
         {
-            return _repository.GetAll().Include(x => x.Audios).ToList();
+            return _repository.GetAll().Include(x => x.Audios);
         }
     }
 }

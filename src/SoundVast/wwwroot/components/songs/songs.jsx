@@ -5,21 +5,23 @@ import InfiniteScroll from 'react-infinite-scroller';
 import SoundVastTitle from '../shared/title/soundVastTitle';
 import Song from './songContainer';
 import Grid from '../shared/grid/grid';
-import AudioHeader from '../audio/audioHeader';
-import genreTypeNames from '../shared/utilities/genreTypeNames';
+import SongsHeader from './songsHeader';
 import Loader from '../shared/loaders/loader';
+import styles from './songs.less';
+import Filters from '../audio/filtersContainer';
 
 const Songs = ({ songs, loadMore }) => (
   <SoundVastTitle title="Songs">
     <div>
-      <AudioHeader type={genreTypeNames.music} />
+      <SongsHeader />
+      <Filters />
       <InfiniteScroll
         loadMore={loadMore}
         hasMore={songs.pageInfo.hasNextPage}
         loader={<Loader />}
         initialLoad={false}
       >
-        <Grid>
+        <Grid className={styles.grid}>
           {songs.edges.map(({ node }) => <Song key={node.audioId} song={node} />)}
         </Grid>
       </InfiniteScroll>

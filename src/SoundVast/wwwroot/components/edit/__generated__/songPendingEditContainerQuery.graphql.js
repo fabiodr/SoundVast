@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 2dfe4b9ce34db1b12ac5a780640b723c
+ * @relayHash ad1ce00f90e9ce20ff8cd7ffe0e3ef17
  */
 
 /* eslint-disable */
@@ -228,7 +228,7 @@ const batch /*: ConcreteBatch*/ = {
                     "kind": "LinkedField",
                     "alias": null,
                     "args": null,
-                    "concreteType": "Genre",
+                    "concreteType": "SongGenre",
                     "name": "genre",
                     "plural": false,
                     "selections": [
@@ -289,7 +289,7 @@ const batch /*: ConcreteBatch*/ = {
                         "kind": "LinkedField",
                         "alias": null,
                         "args": null,
-                        "concreteType": "Genre",
+                        "concreteType": "SongGenre",
                         "name": "genre",
                         "plural": false,
                         "selections": [

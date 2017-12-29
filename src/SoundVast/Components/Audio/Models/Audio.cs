@@ -29,7 +29,7 @@ namespace SoundVast.Components.Audio.Models
         public string UserId { get; set; }
         public ApplicationUser User { get; set; }
         public int? GenreId { get; set; }
-        public virtual Genre.Models.Genre Genre { get; set; }
+        public Genre.Models.Genre Genre { get; set; }
         public int Likes => Ratings.Count(x => x.Liked);
         public int Dislikes => Ratings.Count(x => !x.Liked);
         public int PlayCount { get; set; }
