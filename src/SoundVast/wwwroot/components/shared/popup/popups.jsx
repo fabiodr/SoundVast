@@ -5,16 +5,18 @@ import Popup from './popup';
 import styles from './popups.less';
 
 const Popups = ({ popups, hidePopup }) => (
-  <div className={styles.popups}>
-    {popups.map((popup, index) => (
-      <Popup
-        key={popup.id}
-        index={index}
-        text={popup.text}
-        hidePopup={hidePopup}
-      />
-    ))}
-  </div>
+  popups.length > 0 ? (
+    <div className={styles.popups}>
+      {popups.map((popup, index) => (
+        <Popup
+          key={popup.id}
+          index={index}
+          text={popup.text}
+          hidePopup={hidePopup}
+        />
+      ))}
+    </div>)
+    : null
 );
 
 Popups.propTypes = {

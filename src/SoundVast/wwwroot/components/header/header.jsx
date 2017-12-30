@@ -9,31 +9,32 @@ import AuthorizedList from './authorizedList/authorizedListContainer';
 import UnAuthorizedList from './unAuthorizedList/unAuthorizedListContainer';
 import LinkDropdown from '../shared/dropDown/dropDownContainer';
 import Popups from '../shared/popup/popupsContainer';
-import EditIcon from '../icons/edit';
+import ReviewIcon from '../icons/review';
+import LinkButton from '../shared/button/linkButton';
 
 const Header = ({ user }) => (
   <header className={styles.header}>
     <nav>
       <ul>
         <li>
-          <Link to="/" className={styles.logoLink}>
-            <SoundVastLogo className={styles.logo} />
-          </Link>
+          <LinkButton to="/" styleName="secondary" className={styles.logoLink}>
+            <SoundVastLogo className={styles.logoIcon} />
+          </LinkButton>
         </li>
         <li>
-          <Link to="/songs">Songs</Link>
+          <LinkButton to="/songs" styleName="secondary">Songs</LinkButton>
         </li>
         <li>
-          <Link to="/radios">Radios</Link>
+          <LinkButton to="/radios" styleName="secondary">Radios</LinkButton>
         </li>
         <li>
-          <Link to="/upload">Upload</Link>
+          <LinkButton to="/upload" styleName="secondary">Upload</LinkButton>
         </li>
       </ul>
       <ul>
-        <Link to="/reviewSongs">
-          <EditIcon className={styles.editIcon} />
-        </Link>
+        <LinkButton to="/review" styleName="secondary" className={styles.review}>
+          <ReviewIcon className={styles.reviewIcon} />
+        </LinkButton>
         <Popups />
         <AuthorizedList user={user} />
         <UnAuthorizedList user={user} />

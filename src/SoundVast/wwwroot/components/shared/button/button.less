@@ -1,13 +1,28 @@
+@import '../../styles/colors';
+
 .button {
-    padding: 10px 20px;
-    border-bottom: 1px solid #2b53ac;
-    color: #436ebf;
-    letter-spacing: 0.1em;
-    background-color:#fff;
+    outline: none;
+    cursor: pointer;
+    border: none;
 }
 
-.button:hover {
-    background-color: #e8e8e8;
+.primary {
+    border-bottom: 1px solid @secondary;
+}
+
+.secondary {
+    font-weight: bold;
+}
+
+.primary, .secondary {
+    padding: 10px 20px;
+    color: @primary;
+    letter-spacing: 0.1em;
+    background-color: @grey3;
+}
+
+.primary:hover, .secondary:hover {
+    background-color: @grey2;
     transition: background-color 0.5s ease;
     border-radius: 1px;
 }

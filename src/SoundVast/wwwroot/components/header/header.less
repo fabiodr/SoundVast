@@ -1,7 +1,7 @@
 ﻿@import '../styles/colors';
 
 .header {
-  background-color: white;
+  background-color: @grey1;
   top: 0;
   width: 100%;
   display: flex;
@@ -18,38 +18,39 @@
       display: flex;
       align-items: center;
 
-      > li > a:not(.logoLink), button {
-        padding: 20px 10px;
+      > li {
+        margin-left: 2px;
+        margin-right: 2px;
+        height: 100%;
       }
-    }
 
-    > ul:nth-child(2) {
-      margin-left: auto;
-    }
-      
-    a, button {
-      background-color: initial;
-      font-weight: bold;
-    }
-
-    a:hover, button:hover {
-      background-color: #cccccc;
-      text-decoration: none;
+      > li > a, > a {
+        display: flex;
+        align-items: center;
+        height: 100%;
+        box-sizing: border-box;
+      }
     }
   }
 }
 
-.logo {
+.logoLink {
+  padding: 5px 10px;
+}
+
+.logoIcon {
   width: 306px;
   height: 53px;
 }
 
-.logoLink {
-  display: inline-block;
-  margin-right: 20px;
+.menuIcon, .reviewIcon {
+  width: 24px;
+  height: 24px;
+  fill: @grey4;
 }
 
-.menuIcon, .editIcon {
-  width: 14px;
-  height: 14px;
+a:hover {
+  .reviewIcon {
+    fill: @grey5;
+  }
 }

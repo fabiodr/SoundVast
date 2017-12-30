@@ -1,5 +1,4 @@
-@primaryColour: #157bf8;
-@secondaryColour: #55acee;
+@import '../styles/colors';
 
 body {
     font-family: Futura, "Helvetica Neue", Helvetica, sans-serif;
@@ -7,23 +6,12 @@ body {
 }
 
 a {
-    color: @primaryColour;
+    color: @primary;
     cursor: pointer;
     text-decoration: none;
-}
-
-a:focus {
-    color: @secondaryColour;
 }
 
 ul {
     list-style-type: none;
     padding: 0;
-}
-
-button {
-    background-color: transparent;
-    border: none;
-    outline: none;
-    cursor: pointer;
 }
