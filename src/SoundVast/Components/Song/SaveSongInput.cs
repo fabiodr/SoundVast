@@ -14,7 +14,10 @@ namespace SoundVast.Components.Song
             Name = nameof(SaveSongInput);
            
             Field<NonNullGraphType<StringGraphType>>("Name");
-            Field<StringGraphType>("Artist");
+            Field<ListGraphType<StringGraphType>>("Artists");
+            Field<ListGraphType<IntGraphType>>("ArtistIds", "The existing artists ids");
+            Field<StringGraphType>("Album");
+            Field<IntGraphType>("AlbumId", "The existing albums id");
             Field<BooleanGraphType>("Free");
             Field<NonNullGraphType<StringGraphType>>("CoverImageUrl");
             Field<IntGraphType>("GenreId");

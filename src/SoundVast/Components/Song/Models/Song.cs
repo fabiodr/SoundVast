@@ -12,8 +12,9 @@ namespace SoundVast.Components.Song.Models
 {
     public class Song : Audio.Models.Audio
     {
-        public string Artist { get; set; }
         public bool Free { get; set; } = false;
+        public int AlbumId { get; set; }
+        public virtual Album.Models.Album Album { get; set; }
         public virtual ICollection<SongPlaylist> SongPlaylists { get; set; }
         public virtual ICollection<ArtistSong> ArtistSongs { get; set; }
     }

@@ -57,11 +57,11 @@ namespace SoundVast.Components.Upload
 
         public IActionResult GetPlaceholderImage()
         {
-            var imageBlob = _cloudStorage.GetBlob(CloudStorageType.Image, "SoundVast");
+            var placeholderImage = _cloudStorage.GetBlob(CloudStorageType.Image, "SoundVast");
 
             return Ok(new
             {
-                imagePath = imageBlob.CloudBlockBlob.Uri.AbsoluteUri
+                imagePath = placeholderImage.CloudBlockBlob.Uri.AbsoluteUri
             });
         }
 

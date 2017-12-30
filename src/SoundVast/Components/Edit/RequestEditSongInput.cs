@@ -15,7 +15,10 @@ namespace SoundVast.Components.Edit
 
             Field<NonNullGraphType<IntGraphType>>("SongId");
             Field<NonNullGraphType<StringGraphType>>("Name");
-            Field<StringGraphType>("Artist");
+            Field<ListGraphType<StringGraphType>>("Artists");
+            Field<ListGraphType<IntGraphType>>("ArtistIds", "The existing artists ids");
+            Field<StringGraphType>("Album");
+            Field<IntGraphType>("AlbumId", "The existing albums id");
             Field<NonNullGraphType<BooleanGraphType>>("Free");
             Field<NonNullGraphType<StringGraphType>>("CoverImageUrl");
             Field<IntGraphType>("GenreId");

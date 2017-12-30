@@ -39,7 +39,7 @@ namespace SoundVast.Components.Song
                 {
                     CoverImageUrl = songPendingEdit.CoverImageUrl,
                     Name = songPendingEdit.Name,
-                    Artist = songPendingEdit.Artist,
+                    ArtistSongs = songPendingEdit.ArtistSongs,
                     Free = songPendingEdit.Free,
                     GenreId = songPendingEdit.GenreId,
                 };

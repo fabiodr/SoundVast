@@ -27,7 +27,7 @@ namespace SoundVast.Components.Song
         {
             var song = base.Edit(existingAudioId, newModel);
 
-            song.Artist = newModel.Artist;
+            song.ArtistSongs = newModel.ArtistSongs;
             song.Free = newModel.Free;
 
             _repository.Save();

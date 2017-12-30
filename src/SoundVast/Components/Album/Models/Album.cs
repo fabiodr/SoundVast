@@ -16,6 +16,7 @@ namespace SoundVast.Components.Album.Models
         public string Name { get; set; }
         [Required]
         public string CoverImageUrl { get; set; }
+        public virtual ICollection<Song.Models.Song> Songs { get; set; } = new List<Song.Models.Song>();
         public virtual ICollection<ArtistAlbum> ArtistAlbums { get; set; } = new List<ArtistAlbum>();
         public virtual ICollection<AlbumGenre> AlbumGenres { get; set; } = new List<AlbumGenre>();
     }

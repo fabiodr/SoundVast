@@ -14,11 +14,12 @@ const mutation = graphql`
   }
 `;
 
-export default ({ name, artist, imagePath, genreId }) => {
+export default ({ name, artist, album, imagePath, genreId }) => {
   const variables = {
     input: {
       coverImageUrl: imagePath,
       name,
+      album,
       artist,
       genreId,
     },

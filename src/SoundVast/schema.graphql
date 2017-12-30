@@ -1,5 +1,5 @@
 # source: http://localhost:8080/graphql
-# timestamp: Fri Dec 29 2017 20:09:43 GMT+0100 (W. Europe Standard Time)
+# timestamp: Sat Dec 30 2017 02:02:54 GMT+0100 (W. Europe Standard Time)
 
 input AddSongToPlaylistInput {
   clientMutationId: String
@@ -35,6 +35,16 @@ type ApplicationUser {
 
   # The songs that the user has liked
   likedSongs: [Song]
+}
+
+type Artist implements Node {
+  # The Id of the Artist
+  artistId: Int!
+
+  # The Global Id of the Artist
+  id: ID!
+  name: String!
+  coverImageUrl: String!
 }
 
 interface Audio {
@@ -693,7 +703,14 @@ input RequestEditSongInput {
   clientMutationId: String
   songId: Int!
   name: String!
-  artist: String
+  artists: [String]
+
+  # The existing artists ids
+  artistIds: [Int]
+  album: String
+
+  # The existing albums id
+  albumId: Int
   free: Boolean!
   coverImageUrl: String!
   genreId: Int
@@ -745,7 +762,14 @@ type SaveLiveStreamPayload {
 input SaveSongInput {
   clientMutationId: String
   name: String!
-  artist: String
+  artists: [String]
+
+  # The existing artists ids
+  artistIds: [Int]
+  album: String
+
+  # The existing albums id
+  albumId: Int
   free: Boolean
   coverImageUrl: String!
   genreId: Int
@@ -780,7 +804,7 @@ type Song implements Node, Audio {
 
   # The poster image for the song
   coverImageUrl: String!
-  artist: String
+  artists: [Artist]
   free: Boolean!
   likes: Int!
   dislikes: Int!
@@ -871,7 +895,7 @@ type SongPendingEdit implements Node, AudioPendingEdit {
 
   # The poster image for the song
   coverImageUrl: String!
-  artist: String
+  artists: [Artist]
   free: Boolean!
 
   # The user who requested the edit

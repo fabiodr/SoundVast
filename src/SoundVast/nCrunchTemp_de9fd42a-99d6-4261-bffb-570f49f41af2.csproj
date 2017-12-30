@@ -1,5 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-
+﻿<Project DefaultTargets="Build;NCrunchOutputDataQuery" Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <PreserveCompilationContext>true</PreserveCompilationContext>
@@ -8,16 +7,13 @@
     <PackageId>SoundVast</PackageId>
     <UserSecretsId>aspnet-SoundVast-3ec4d738-ff3f-4379-9b2d-6ff6e59dee40</UserSecretsId>
   </PropertyGroup>
-
   <ItemGroup>
     <Compile Remove="Components\Audio\AudioViewModels.cs" />
   </ItemGroup>
-
   <ItemGroup>
     <Content Include=".vscode\launch.json" />
     <Content Include="Components\Form\FormController.cs" />
   </ItemGroup>
-
   <ItemGroup>
     <None Include=".exe\ffmpeg.exe" />
     <None Include="App.config" />
@@ -386,7 +382,6 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Autofac" Version="4.6.2" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.2.0" />
@@ -398,25 +393,21 @@
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
   </ItemGroup>
-
   <Target Name="PrepublishScript" BeforeTargets="PrepareForPublish">
     <Exec Command="bower install" />
     <Exec Command="dotnet bundle" />
   </Target>
-
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.0" />
     <DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="2.0.0" />
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
   </ItemGroup>
-
   <ItemGroup>
     <Folder Include="Components\Form\" />
     <Folder Include="Components\User\Profile\" />
     <Folder Include="Migrations\" />
     <Folder Include="wwwroot\components\app\__generated__\" />
   </ItemGroup>
-
   <ItemGroup>
     <Compile Update="Properties\LiveStreamGenres.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -429,7 +420,6 @@
       <DependentUpon>MusicGenres.resx</DependentUpon>
     </Compile>
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Update="Properties\LiveStreamGenres.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -440,5 +430,62 @@
       <LastGenOutput>MusicGenres.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-
+  <Target Name="AssignProjectConfiguration" DependsOnTargets="">
+  </Target>
+  <Target Name="ResolveTestReferences" DependsOnTargets="">
+  </Target>
+  <Target Name="NCrunchOutputDataQuery" DependsOnTargets="_SplitProjectReferencesByFileExistence;ResolveKeySource;$(ResolveReferencesDependsOn)">
+    <Message Text="#d2bf255feef54f83b22896175d970fbf=$(Configuration)" />
+    <Message Text="#22bbef494db64ef4ad9ed84f81da2488=$(TargetFrameworkVersion)" />
+    <Message Text="#d10d33ec7d004cd5bb2bb2a8a693f95d=$(TargetFramework)" />
+    <Message Text="#30ea669cc6644d298b85c47990364317=$(AssemblyName)" />
+    <Message Text="#0d64d40d0fe94ab180a033dc0f0e4fac=$(DefaultItemExcludes)" />
+    <Message Text="#41ab6db2b29d4270ab0c2783735fc98a=$(DefaultItemExcludesInProjectFolder)" />
+    <Message Text="#6e038a060059402aac744d0e911daefb=$(EnableDefaultItems)" />
+    <Message Text="#7bc0885c1f734904a91ecccc7006d18a=$(OutputPath)" />
+    <Message Text="#e571cf82791b456580dd681eb04353eb=$(OutDir)" />
+    <Message Text="#04a06664684547cc900a1826ffeb2755=$(KeyOriginatorFile)" />
+    <Message Text="#51b96456318746dea962e97e2c4b87cc=$(SignAssembly)" />
+    <Message Text="#6ec4f745fe8e40f4a32de8fe0d49a34c=$(CodeContractsReferenceAssembly)" />
+    <Message Text="#c8426142620746f0bf9a8f73a3596d8e=$(PlatformTarget)" />
+    <Message Text="#ce132d5444ad451aa4bee41264875c17=$(MvcBuildViews)" />
+    <Message Text="#2a7b6800a2af4567a3c94e127d1feb28=$(NuGetToolsPath)" />
+    <Message Text="#847f10173252499a88e2dc6801012995=$(StyleCopEnabled)" />
+    <Message Text="#784ce81feaf34dd2becb6fa43c1af8b9=$(Language)" />
+    <Message Text="#8acf48cffcbc46438b0c241b63b1bda3=$(OtherFlags)" />
+    <Message Text="#6547221f26ba4711bc773109863c8502=$(PreBuildEvent)" />
+    <Message Text="#238aeea5f7d74fab98ca8775e48f58db=$(PostBuildEvent)" />
+    <Message Text="#c7f47894a47b4c90a17d3fc222390ab1=$(LinkedServerProject)" />
+    <Message Text="#17a69aecf3ee4c26bd5b9c3dc6000e10=$(ResolveAssemblyReferencesStateFile)" />
+    <Message Text="#fe52a41a559345c991339664d6def78b=$(CodeAnalysisRuleSet)" />
+    <Message Text="#a3203d070f3e45409265ad229bf7bfaa=$(SDKReferenceDirectoryRoot)" />
+    <Message Text="#2ff156d80cc74013b262f7043f88dd76=$(__IntermediateAppConfig)" />
+    <Message Text="#a5893bc901e1437a82fc17e78636c99f=$(PrepareForBuildDependsOn)" />
+    <Message Text="#e1c8b74e01a8497082531e97d1e12ae0=$(CustomAfterMicrosoftCommonTargets)" />
+    <Message Text="#73021fc2f06d4344bd851149d31bfee2=$(ProjectAssetsFile)" />
+    <Message Text="#_ResolveComReferenceCache=;@(_ResolveComReferenceCache)" />
+    <Message Text="#Shadow=;@(Shadow)" />
+    <Message Text="#Fakes=;@(Fakes)" />
+    <Message Text="#AppxManifest=;@(AppxManifest)" />
+    <Message Text="#ReferencePath=;@(ReferencePath)" />
+    <Message Text="#ReferenceDependencyPaths=;@(ReferenceDependencyPaths)" />
+    <Message Text="#ComReferenceWrappers=;@(ComReferenceWrappers)" />
+    <Message Text="#ProjectReference=;@(ProjectReference)" />
+    <Message Text="#None=;@(None)" Condition="'%(None.Generator)'!=''" />
+    <Message Text="#Compile.ClCompile=;@(Compile);@(ClCompile)" />
+    <Message Text="#Content=;@(Content)" />
+    <Message Text="#None.EmbeddedResource.VSCTCompile.Page.ApplicationDefinition.Resource.ClInclude.ResourceCompile.Library.$ApplicationIcon.$Win32Resource.$ApplicationManifest.$KeyOriginatorFile.EntityDeploy.XamlAppdef.CodeAnalysisDictionary.$CodeAnalysisRuleSet.$ManifestKeyFile.SplashScreen.BaseApplicationManifest.Midl.ServiceDefinition.ServiceConfiguration.BlendEmbeddedFont.TypeScriptCompile.AndroidResource.InterfaceDefinition.BundleResource.ITunesArtwork.PRIResource.Image.FsYacc.FsLex.Analyzer.AdditionalFiles.Map.XLang.Pipeline.Schema=;@(None);@(EmbeddedResource);@(VSCTCompile);@(Page);@(ApplicationDefinition);@(Resource);@(ClInclude);@(ResourceCompile);@(Library);$(ApplicationIcon);$(Win32Resource);$(ApplicationManifest);$(KeyOriginatorFile);@(EntityDeploy);@(XamlAppdef);@(CodeAnalysisDictionary);$(CodeAnalysisRuleSet);$(ManifestKeyFile);@(SplashScreen);@(BaseApplicationManifest);@(Midl);@(ServiceDefinition);@(ServiceConfiguration);@(BlendEmbeddedFont);@(TypeScriptCompile);@(AndroidResource);@(InterfaceDefinition);@(BundleResource);@(ITunesArtwork);@(PRIResource);@(Image);@(FsYacc);@(FsLex);@(Analyzer);@(AdditionalFiles);@(Map);@(XLang);@(Pipeline);@(Schema)" />
+    <Message Text="#LinkedFiles=;@(Compile->'%(Link)')" />
+    <Message Text="#ReferencePathAliases=@(ReferencePath)|%(ReferencePath.Aliases)" Condition="'%(ReferencePath.Aliases)'!=''" />
+    <Message Text="#ReferencePathEmbedInteropTypes=@(ReferencePath)|%(ReferencePath.EmbedInteropTypes)" Condition="'%(ReferencePath.EmbedInteropTypes)'!=''" />
+    <Message Text="#ReferencePathPrivate=@(ReferencePath)|%(ReferencePath.Private)" Condition="'%(ReferencePath.Private)'!=''" />
+    <Message Text="#ReferencePathIsIgnoredNCrunchTestFrameworkReference=@(ReferencePath)|%(ReferencePath.IsIgnoredNCrunchTestFrameworkReference)" Condition="'%(ReferencePath.IsIgnoredNCrunchTestFrameworkReference)'!=''" />
+    <Message Text="#ProjectReferenceAliases=@(ProjectReference)|%(ProjectReference.Aliases)" Condition="'%(ProjectReference.Aliases)'!=''" />
+    <Message Text="#ProjectReferenceEmbedInteropTypes=@(ProjectReference)|%(ProjectReference.EmbedInteropTypes)" Condition="'%(ProjectReference.EmbedInteropTypes)'!=''" />
+    <Message Text="#ProjectReferencePrivate=@(ProjectReference)|%(ProjectReference.Private)" Condition="'%(ProjectReference.Private)'!=''" />
+    <Message Text="#ProjectReferenceIsIgnoredNCrunchTestFrameworkReference=@(ProjectReference)|%(ProjectReference.IsIgnoredNCrunchTestFrameworkReference)" Condition="'%(ProjectReference.IsIgnoredNCrunchTestFrameworkReference)'!=''" />
+    <Message Text="#4961a2ec6a854723a814c1f47139baaf=$(TargetFramework)" />
+    <Message Text="#3adb728fca8a46fc9c2de01d2d25b6a0=$(TargetFramework)" />
+    <Message Text="#4d4715e02097410094a1d3a89e7bf8ab=$(ImplicitFrameworkDefine)" />
+  </Target>
 </Project>

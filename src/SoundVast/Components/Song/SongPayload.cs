@@ -7,6 +7,7 @@ using GraphQL;
 using GraphQL.Relay.Types;
 using GraphQL.Types.Relay.DataObjects;
 using SoundVast.Components.Account;
+using SoundVast.Components.Artist;
 using SoundVast.Components.Audio;
 using SoundVast.Components.Comment;
 using SoundVast.Components.Genre;
@@ -26,7 +27,7 @@ namespace SoundVast.Components.Song
             Id("audioId", x => x.Id);
             Field(x => x.Name);
             Field(x => x.CoverImageUrl).Description("The poster image for the song");
-            Field(x => x.Artist, true);
+            Field<ListGraphType<ArtistPayload>>("artists");
             Field(x => x.Free);
             Field(x => x.Likes);
             Field(x => x.Dislikes);

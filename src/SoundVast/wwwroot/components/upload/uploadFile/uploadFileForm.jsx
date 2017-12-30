@@ -5,6 +5,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import BasicInfo from '../common/basicInfo/basicInfo';
 import NameField from '../../shared/fields/nameField/nameField';
 import ArtistField from '../../shared/fields/artistField/artistField';
+import AlbumField from '../../shared/fields/albumField/albumField';
 import SongGenresField from '../../shared/fields/genreField/songGenresFieldContainer';
 import ValidationErrors from '../../shared/validation/validationErrors';
 import CancelButton from '../../shared/button/cancelButton';
@@ -29,6 +30,7 @@ const Form = ({
         <BasicInfo id={id}>
           <NameField id={id} />
           <ArtistField id={id} />
+          <AlbumField id={id} />
           <SongGenresField id={id} genres={genres} />
         </BasicInfo>
       </TabPanel>

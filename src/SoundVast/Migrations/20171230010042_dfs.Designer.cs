@@ -12,8 +12,8 @@ using System;
 namespace SoundVast.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20171229175748_dsfdfs")]
-    partial class dsfdfs
+    [Migration("20171230010042_dfs")]
+    partial class dfs
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -225,11 +225,15 @@ namespace SoundVast.Migrations
 
                     b.Property<int>("SongId");
 
+                    b.Property<int?>("SongPendingEditId");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ArtistId");
 
                     b.HasIndex("SongId");
+
+                    b.HasIndex("SongPendingEditId");
 
                     b.ToTable("ArtistSong");
                 });
@@ -520,9 +524,11 @@ namespace SoundVast.Migrations
                 {
                     b.HasBaseType("SoundVast.Components.Audio.Models.Audio");
 
-                    b.Property<string>("Artist");
+                    b.Property<int>("AlbumId");
 
                     b.Property<bool>("Free");
+
+                    b.HasIndex("AlbumId");
 
                     b.ToTable("Song");
 
@@ -544,9 +550,11 @@ namespace SoundVast.Migrations
                 {
                     b.HasBaseType("SoundVast.Components.Edit.Models.AudioPendingEdit");
 
-                    b.Property<string>("Artist");
+                    b.Property<int?>("AlbumId");
 
                     b.Property<bool>("Free");
+
+                    b.HasIndex("AlbumId");
 
                     b.ToTable("SongPendingEdit");
 
@@ -668,6 +676,10 @@ namespace SoundVast.Migrations
                         .WithMany("ArtistSongs")
                         .HasForeignKey("SongId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("SoundVast.Components.Edit.Models.SongPendingEdit")
+                        .WithMany("ArtistSongs")
+                        .HasForeignKey("SongPendingEditId");
                 });
 
             modelBuilder.Entity("SoundVast.Components.Audio.Models.Audio", b =>
@@ -769,6 +781,21 @@ namespace SoundVast.Migrations
                     b.HasOne("SoundVast.Components.Audio.Models.Audio")
                         .WithMany("Contributors")
                         .HasForeignKey("AudioId");
+                });
+
+            modelBuilder.Entity("SoundVast.Components.Song.Models.Song", b =>
+                {
+                    b.HasOne("SoundVast.Components.Album.Models.Album", "Album")
+                        .WithMany("Songs")
+                        .HasForeignKey("AlbumId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("SoundVast.Components.Edit.Models.SongPendingEdit", b =>
+                {
+                    b.HasOne("SoundVast.Components.Album.Models.Album", "Album")
+                        .WithMany()
+                        .HasForeignKey("AlbumId");
                 });
 #pragma warning restore 612, 618
         }

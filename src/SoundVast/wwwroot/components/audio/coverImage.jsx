@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import styles from './CoverImage.less';
+import styles from './coverImage.less';
 
 const CoverImage = ({ coverImageUrl }) => (
   <img alt="" src={coverImageUrl} className={styles.coverImage} />
