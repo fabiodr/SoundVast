@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash d518f8f4f7b25af7eb446ebbd90948a6
+ * @relayHash faaa7554f26385746d927b94863d841b
  */
 
 /* eslint-disable */
@@ -14,7 +14,10 @@ export type requestSongEditMutationVariables = {|
     clientMutationId?: ?string;
     songId: number;
     name: string;
-    artist?: ?string;
+    artists?: ?$ReadOnlyArray<?string>;
+    artistIds?: ?$ReadOnlyArray<?number>;
+    album?: ?string;
+    albumId?: ?number;
     free: boolean;
     coverImageUrl: string;
     genreId?: ?number;

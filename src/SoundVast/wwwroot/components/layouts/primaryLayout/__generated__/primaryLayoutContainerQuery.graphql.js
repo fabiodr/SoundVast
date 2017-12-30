@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 371b3840e4169f69f1fe44bb3e6736c6
+ * @relayHash 35713da247b45713626c582ee2fbf136
  */
 
 /* eslint-disable */
@@ -56,7 +56,6 @@ fragment editSongModalContainer on Query {
   song(id: $songId) {
     name
     coverImageUrl
-    artist
     free
     genre {
       id
@@ -268,13 +267,6 @@ const batch /*: ConcreteBatch*/ = {
             "kind": "ScalarField",
             "alias": null,
             "args": null,
-            "name": "artist",
-            "storageKey": null
-          },
-          {
-            "kind": "ScalarField",
-            "alias": null,
-            "args": null,
             "name": "free",
             "storageKey": null
           },
@@ -308,7 +300,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query primaryLayoutContainerQuery(\n  $songId: Int\n) {\n  user {\n    ...authorizedListContainer_user\n    ...unAuthorizedListContainer_user\n    id\n  }\n  loginProviders {\n    ...socialLoginsContainer_loginProviders\n  }\n  ...editSongModalContainer\n}\n\nfragment authorizedListContainer_user on ApplicationUser {\n  userName\n  contributionScore\n}\n\nfragment unAuthorizedListContainer_user on ApplicationUser {\n  userName\n}\n\nfragment socialLoginsContainer_loginProviders on LoginProvider {\n  name\n  displayName\n}\n\nfragment editSongModalContainer on Query {\n  user {\n    id\n  }\n  songGenres {\n    ...songGenresFieldContainer_genres\n    id\n  }\n  song(id: $songId) {\n    name\n    coverImageUrl\n    artist\n    free\n    genre {\n      id\n    }\n    id\n  }\n}\n\nfragment songGenresFieldContainer_genres on Genre {\n  id\n  name\n}\n"
+  "text": "query primaryLayoutContainerQuery(\n  $songId: Int\n) {\n  user {\n    ...authorizedListContainer_user\n    ...unAuthorizedListContainer_user\n    id\n  }\n  loginProviders {\n    ...socialLoginsContainer_loginProviders\n  }\n  ...editSongModalContainer\n}\n\nfragment authorizedListContainer_user on ApplicationUser {\n  userName\n  contributionScore\n}\n\nfragment unAuthorizedListContainer_user on ApplicationUser {\n  userName\n}\n\nfragment socialLoginsContainer_loginProviders on LoginProvider {\n  name\n  displayName\n}\n\nfragment editSongModalContainer on Query {\n  user {\n    id\n  }\n  songGenres {\n    ...songGenresFieldContainer_genres\n    id\n  }\n  song(id: $songId) {\n    name\n    coverImageUrl\n    free\n    genre {\n      id\n    }\n    id\n  }\n}\n\nfragment songGenresFieldContainer_genres on Genre {\n  id\n  name\n}\n"
 };
 
 module.exports = batch;

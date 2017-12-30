@@ -1,7 +1,9 @@
+import convertArtistsToString from './convertArtistsToString';
+
 export default song => ({
   id: song.audioId,
   title: song.name,
-  artist: song.artist,
+  artist: convertArtistsToString(song.artists),
   sources: {
     mp3: `${window.location.origin}/song/stream?id=${song.audioId}`,
   },

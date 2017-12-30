@@ -41,7 +41,6 @@ const fragments = graphql`
     song(id: $songId) {
       name
       coverImageUrl
-      artist
       free
       genre {
         id
@@ -62,7 +61,6 @@ const createProps = ({ user, song, previewUrl }) => ({
   isAuthorized: !!user,
   initialValues: {
     name: song.name,
-    artist: song.artist,
     imagePath: song.coverImageUrl,
     genreId: song.genre.id,
     free: song.free,

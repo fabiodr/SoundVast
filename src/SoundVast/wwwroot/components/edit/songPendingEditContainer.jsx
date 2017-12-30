@@ -25,7 +25,6 @@ const fragments = graphql`
         node {
           audioPendingEditId
           name
-          artist
           coverImageUrl
           free
           contributor {
@@ -36,7 +35,6 @@ const fragments = graphql`
           }
           audio {
             name
-            artist
             coverImageUrl
             free
             genre {

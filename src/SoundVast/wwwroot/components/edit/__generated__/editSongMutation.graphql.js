@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash e4bde66d28706fa658bbbad548b17a1a
+ * @relayHash d1ff459222efef1b61675ed475cb7334
  */
 
 /* eslint-disable */
@@ -21,7 +21,6 @@ export type editSongMutationResponse = {|
     +song: {|
       +audioId: number;
       +name: string;
-      +artist: ?string;
       +coverImageUrl: string;
     |};
   |};
@@ -37,7 +36,6 @@ mutation editSongMutation(
     song {
       audioId
       name
-      artist
       coverImageUrl
       id
     }
@@ -94,13 +92,6 @@ const batch /*: ConcreteBatch*/ = {
                 "alias": null,
                 "args": null,
                 "name": "name",
-                "storageKey": null
-              },
-              {
-                "kind": "ScalarField",
-                "alias": null,
-                "args": null,
-                "name": "artist",
                 "storageKey": null
               },
               {
@@ -177,13 +168,6 @@ const batch /*: ConcreteBatch*/ = {
                 "kind": "ScalarField",
                 "alias": null,
                 "args": null,
-                "name": "artist",
-                "storageKey": null
-              },
-              {
-                "kind": "ScalarField",
-                "alias": null,
-                "args": null,
                 "name": "coverImageUrl",
                 "storageKey": null
               },
@@ -202,7 +186,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "mutation editSongMutation(\n  $input: EditSongInput!\n) {\n  editSong(input: $input) {\n    song {\n      audioId\n      name\n      artist\n      coverImageUrl\n      id\n    }\n  }\n}\n"
+  "text": "mutation editSongMutation(\n  $input: EditSongInput!\n) {\n  editSong(input: $input) {\n    song {\n      audioId\n      name\n      coverImageUrl\n      id\n    }\n  }\n}\n"
 };
 
 module.exports = batch;

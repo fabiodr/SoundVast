@@ -12,7 +12,9 @@ export type songContainer_song = {|
   +audioId: number;
   +name: string;
   +coverImageUrl: string;
-  +artist: ?string;
+  +artists: ?$ReadOnlyArray<?{|
+    +name: string;
+  |}>;
   +playCount: number;
   +likes: number;
   +dislikes: number;
@@ -61,10 +63,21 @@ const fragment /*: ConcreteFragment*/ = {
       "storageKey": null
     },
     {
-      "kind": "ScalarField",
+      "kind": "LinkedField",
       "alias": null,
       "args": null,
-      "name": "artist",
+      "concreteType": "Artist",
+      "name": "artists",
+      "plural": true,
+      "selections": [
+        {
+          "kind": "ScalarField",
+          "alias": null,
+          "args": null,
+          "name": "name",
+          "storageKey": null
+        }
+      ],
       "storageKey": null
     },
     {

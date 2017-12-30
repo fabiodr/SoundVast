@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 994880e2640e6d9d369bf9275b8f0279
+ * @relayHash 73b9f0406924a2e450247c03ed459898
  */
 
 /* eslint-disable */
@@ -31,7 +31,10 @@ fragment songContainer_song_1G22uz on Song {
   audioId
   name
   coverImageUrl
-  artist
+  artists {
+    name
+    id
+  }
   playCount
   likes
   dislikes
@@ -200,10 +203,28 @@ const batch /*: ConcreteBatch*/ = {
             "storageKey": null
           },
           {
-            "kind": "ScalarField",
+            "kind": "LinkedField",
             "alias": null,
             "args": null,
-            "name": "artist",
+            "concreteType": "Artist",
+            "name": "artists",
+            "plural": true,
+            "selections": [
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "name",
+                "storageKey": null
+              },
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "id",
+                "storageKey": null
+              }
+            ],
             "storageKey": null
           },
           {
@@ -452,7 +473,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query songContainerQuery(\n  $id: Int!\n  $count: Int!\n  $cursor: String\n) {\n  song(id: $id) {\n    ...songContainer_song_1G22uz\n    id\n  }\n}\n\nfragment songContainer_song_1G22uz on Song {\n  audioId\n  name\n  coverImageUrl\n  artist\n  playCount\n  likes\n  dislikes\n  ...commentsContainer\n}\n\nfragment commentsContainer on Audio {\n  audioId\n  comments(first: $count, after: $cursor, originalCommentId: $originalCommentId) {\n    edges {\n      node {\n        __typename\n        commentId\n        body\n        date\n        likes\n        dislikes\n        repliesCount\n        originalComment {\n          id\n        }\n        user {\n          userName\n          id\n        }\n        id\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n"
+  "text": "query songContainerQuery(\n  $id: Int!\n  $count: Int!\n  $cursor: String\n) {\n  song(id: $id) {\n    ...songContainer_song_1G22uz\n    id\n  }\n}\n\nfragment songContainer_song_1G22uz on Song {\n  audioId\n  name\n  coverImageUrl\n  artists {\n    name\n    id\n  }\n  playCount\n  likes\n  dislikes\n  ...commentsContainer\n}\n\nfragment commentsContainer on Audio {\n  audioId\n  comments(first: $count, after: $cursor, originalCommentId: $originalCommentId) {\n    edges {\n      node {\n        __typename\n        commentId\n        body\n        date\n        likes\n        dislikes\n        repliesCount\n        originalComment {\n          id\n        }\n        user {\n          userName\n          id\n        }\n        id\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n"
 };
 
 module.exports = batch;

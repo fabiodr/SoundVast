@@ -5,7 +5,7 @@ import { graphql } from 'react-relay';
 import { paginationContainer } from 'recompose-relay-modern';
 import { actions } from 'react-jplaylist';
 
-import convertFromSong from '../footerPlaylist/convertFromSong';
+import convertSongToMedia from '../shared/utilities/convertSongToMedia';
 import Songs from './songs';
 import { audiosToLoad } from '../shared/utilities/itemsToLoad';
 import normalizeBoolean from '../shared/utilities/normalizeBoolean';
@@ -35,7 +35,9 @@ const fragments = graphql`
         node {
           audioId
           name
-          artist
+          artists {
+            name
+          }
           coverImageUrl
           free
           ...songContainer_song
@@ -73,7 +75,7 @@ const handlers = {
 };
 
 const createProps = ({ songs }) => ({
-  footerPlaylist: songs.edges.map(({ node }) => convertFromSong(node)),
+  footerPlaylist: songs.edges.map(({ node }) => convertSongToMedia(node)),
 });
 
 const enhance = compose(

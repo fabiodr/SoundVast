@@ -36,7 +36,7 @@ namespace SoundVast.Components.Song
             var coverImageUrl = inputs.Get<string>("coverImageUrl");
             var name = inputs.Get<string>("name");
             var artists = inputs.Get<IEnumerable<string>>("artists");
-            var artistsId = inputs.Get<IEnumerable<int>>("artistsId");
+            var artistsId = inputs.Get<IEnumerable<int>>("artistIds");
             var album = inputs.Get<string>("album");
             var albumId = inputs.Get<int>("albumId");
             var free = inputs.Get<bool>("free");

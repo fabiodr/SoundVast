@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash b56d34a0c3dc452718f4a9b2e076c383
+ * @relayHash 7cedc7c1cd257107261964ccbe15dee1
  */
 
 /* eslint-disable */
@@ -32,7 +32,10 @@ fragment songsContainer on Query {
         __typename
         audioId
         name
-        artist
+        artists {
+          name
+          id
+        }
         coverImageUrl
         free
         ...songContainer_song
@@ -50,7 +53,10 @@ fragment songContainer_song on Song {
   audioId
   name
   coverImageUrl
-  artist
+  artists {
+    name
+    id
+  }
   playCount
   likes
   dislikes
@@ -246,10 +252,28 @@ const batch /*: ConcreteBatch*/ = {
                     "storageKey": null
                   },
                   {
-                    "kind": "ScalarField",
+                    "kind": "LinkedField",
                     "alias": null,
                     "args": null,
-                    "name": "artist",
+                    "concreteType": "Artist",
+                    "name": "artists",
+                    "plural": true,
+                    "selections": [
+                      {
+                        "kind": "ScalarField",
+                        "alias": null,
+                        "args": null,
+                        "name": "name",
+                        "storageKey": null
+                      },
+                      {
+                        "kind": "ScalarField",
+                        "alias": null,
+                        "args": null,
+                        "name": "id",
+                        "storageKey": null
+                      }
+                    ],
                     "storageKey": null
                   },
                   {
@@ -587,7 +611,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query songsContainerForwardQuery(\n  $count: Int!\n  $cursor: String\n  $genre: String\n  $filter: FilterInput\n  $originalCommentId: Int\n) {\n  ...songsContainer\n}\n\nfragment songsContainer on Query {\n  songs(first: $count, after: $cursor, genre: $genre, filter: $filter) {\n    edges {\n      cursor\n      node {\n        __typename\n        audioId\n        name\n        artist\n        coverImageUrl\n        free\n        ...songContainer_song\n        id\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n\nfragment songContainer_song on Song {\n  audioId\n  name\n  coverImageUrl\n  artist\n  playCount\n  likes\n  dislikes\n  ...commentsContainer\n}\n\nfragment commentsContainer on Audio {\n  audioId\n  comments(first: $count, after: $cursor, originalCommentId: $originalCommentId) {\n    edges {\n      node {\n        __typename\n        commentId\n        body\n        date\n        likes\n        dislikes\n        repliesCount\n        originalComment {\n          id\n        }\n        user {\n          userName\n          id\n        }\n        id\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n"
+  "text": "query songsContainerForwardQuery(\n  $count: Int!\n  $cursor: String\n  $genre: String\n  $filter: FilterInput\n  $originalCommentId: Int\n) {\n  ...songsContainer\n}\n\nfragment songsContainer on Query {\n  songs(first: $count, after: $cursor, genre: $genre, filter: $filter) {\n    edges {\n      cursor\n      node {\n        __typename\n        audioId\n        name\n        artists {\n          name\n          id\n        }\n        coverImageUrl\n        free\n        ...songContainer_song\n        id\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n\nfragment songContainer_song on Song {\n  audioId\n  name\n  coverImageUrl\n  artists {\n    name\n    id\n  }\n  playCount\n  likes\n  dislikes\n  ...commentsContainer\n}\n\nfragment commentsContainer on Audio {\n  audioId\n  comments(first: $count, after: $cursor, originalCommentId: $originalCommentId) {\n    edges {\n      node {\n        __typename\n        commentId\n        body\n        date\n        likes\n        dislikes\n        repliesCount\n        originalComment {\n          id\n        }\n        user {\n          userName\n          id\n        }\n        id\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n"
 };
 
 module.exports = batch;

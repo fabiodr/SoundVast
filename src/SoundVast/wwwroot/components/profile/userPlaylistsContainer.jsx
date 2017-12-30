@@ -27,7 +27,9 @@ const fragments = graphql`
               song {
                 audioId
                 name
-                artist
+                artists {
+                  name
+                }
                 coverImageUrl
                 free
               }

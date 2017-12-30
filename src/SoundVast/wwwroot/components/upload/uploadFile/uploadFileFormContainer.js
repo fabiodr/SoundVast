@@ -25,10 +25,11 @@ const handlers = {
     }),
 };
 
-const createProps = ({ title, artist, imagePath }) => ({
+const createProps = ({ title, artist, album, imagePath }) => ({
   initialValues: {
     name: title,
-    artist,
+    album: { label: album, value: album },
+    artists: [{ label: artist, value: artist }],
     imagePath,
   },
 });

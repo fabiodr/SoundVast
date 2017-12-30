@@ -6,7 +6,7 @@ import { actions as jPlayerActions } from 'react-jplayer';
 
 import { setCurrentPlaylist } from './actions';
 import Play from '../audio/play';
-import convertFromSong from '../footerPlaylist/convertFromSong';
+import convertSongToMedia from '../shared/utilities/convertSongToMedia';
 
 const mapStateToProps = ({ jPlayers, jPlaylists, playlist }, { id }) => ({
   paused: jPlayers.FooterPlaylist.paused,
@@ -26,7 +26,9 @@ const propTypes = {
               coverImageUrl: PropTypes.string.isRequired,
               audioId: PropTypes.number.isRequired,
               name: PropTypes.string.isRequired,
-              artist: PropTypes.string,
+              artists: PropTypes.arrayOf([
+                PropTypes.string.isRequired,
+              ]),
               free: PropTypes.bool.isRequired,
             }),
           })),
@@ -41,7 +43,7 @@ const handlers = {
     if (paused || !isCurrent) {
       const playlist = playlists.edges.find(x => x.node.playlistId === id);
       const footerPlaylist = playlist.node.songPlaylists.items.map(({ song }) =>
-        convertFromSong(song));
+        convertSongToMedia(song));
 
       dispatch(actions.setPlaylist('FooterPlaylist', footerPlaylist));
       dispatch(actions.play('FooterPlaylist'));

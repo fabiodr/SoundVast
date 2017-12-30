@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash ad1ce00f90e9ce20ff8cd7ffe0e3ef17
+ * @relayHash 8261231a5f625fe011ed2a10e67820d7
  */
 
 /* eslint-disable */
@@ -29,7 +29,6 @@ fragment songPendingEditContainer on Query {
         __typename
         audioPendingEditId
         name
-        artist
         coverImageUrl
         free
         contributor {
@@ -42,7 +41,6 @@ fragment songPendingEditContainer on Query {
         }
         audio {
           name
-          artist
           coverImageUrl
           free
           genre {
@@ -182,13 +180,6 @@ const batch /*: ConcreteBatch*/ = {
                     "kind": "ScalarField",
                     "alias": null,
                     "args": null,
-                    "name": "artist",
-                    "storageKey": null
-                  },
-                  {
-                    "kind": "ScalarField",
-                    "alias": null,
-                    "args": null,
                     "name": "coverImageUrl",
                     "storageKey": null
                   },
@@ -262,13 +253,6 @@ const batch /*: ConcreteBatch*/ = {
                         "alias": null,
                         "args": null,
                         "name": "name",
-                        "storageKey": null
-                      },
-                      {
-                        "kind": "ScalarField",
-                        "alias": null,
-                        "args": null,
-                        "name": "artist",
                         "storageKey": null
                       },
                       {
@@ -385,7 +369,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query songPendingEditContainerQuery(\n  $count: Int!\n  $cursor: String\n) {\n  ...songPendingEditContainer\n}\n\nfragment songPendingEditContainer on Query {\n  songsPendingEdit(first: $count, after: $cursor) {\n    edges {\n      cursor\n      node {\n        __typename\n        audioPendingEditId\n        name\n        artist\n        coverImageUrl\n        free\n        contributor {\n          userName\n          id\n        }\n        genre {\n          name\n          id\n        }\n        audio {\n          name\n          artist\n          coverImageUrl\n          free\n          genre {\n            name\n            id\n          }\n          id\n        }\n        id\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n"
+  "text": "query songPendingEditContainerQuery(\n  $count: Int!\n  $cursor: String\n) {\n  ...songPendingEditContainer\n}\n\nfragment songPendingEditContainer on Query {\n  songsPendingEdit(first: $count, after: $cursor) {\n    edges {\n      cursor\n      node {\n        __typename\n        audioPendingEditId\n        name\n        coverImageUrl\n        free\n        contributor {\n          userName\n          id\n        }\n        genre {\n          name\n          id\n        }\n        audio {\n          name\n          coverImageUrl\n          free\n          genre {\n            name\n            id\n          }\n          id\n        }\n        id\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n"
 };
 
 module.exports = batch;

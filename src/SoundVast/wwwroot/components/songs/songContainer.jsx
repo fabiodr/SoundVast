@@ -18,7 +18,9 @@ const fragments = graphql`
     audioId
     name
     coverImageUrl
-    artist
+    artists {
+      name
+    }
     playCount
     likes
     dislikes

@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import styles from './song.less';
 import Play from '../audio/playContainer';
 import CoverImage from '../audio/coverImage';
 import Rating from '../rating/audioRating';
@@ -9,6 +8,7 @@ import Like from '../rating/like/likeAudioContainer';
 import Dislike from '../rating/dislike/dislikeAudioContainer';
 import PlayCount from '../audio/playCount';
 import Name from '../audio/name';
+import Artists from '../audio/artists';
 import Flag from '../flag/flag';
 import Edit from '../edit/edit';
 import AddToPlaylist from '../playlist/addToPlaylistContainer';
@@ -21,7 +21,7 @@ const Song = ({ song, isOnCurrentSong }) => (
     </Play>
     <Name name={song.name} />
     <PlayCount playCount={song.playCount} />
-    <div className={styles.artist}>{song.artist}</div>
+    <Artists artists={song.artists} />
     <Rating likes={song.likes} dislikes={song.dislikes}>
       <Like audioId={song.audioId} />
       <Dislike audioId={song.audioId} />
@@ -42,7 +42,9 @@ Song.propTypes = {
     likes: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
     playCount: PropTypes.number.isRequired,
-    artist: PropTypes.string.isRequired,
+    artists: PropTypes.arrayOf([
+      PropTypes.string.isRequired,
+    ]),
   }).isRequired,
 };
 

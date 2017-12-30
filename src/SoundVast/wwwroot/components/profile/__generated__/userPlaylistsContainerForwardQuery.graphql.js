@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 346f41ebcedddba9cf87c8e5b3b9731e
+ * @relayHash c3310d061c793f53a072c5f8880abe07
  */
 
 /* eslint-disable */
@@ -40,7 +40,10 @@ fragment userPlaylistsContainer on ApplicationUser {
             song {
               audioId
               name
-              artist
+              artists {
+                name
+                id
+              }
               coverImageUrl
               free
               id
@@ -253,10 +256,28 @@ const batch /*: ConcreteBatch*/ = {
                                     "storageKey": null
                                   },
                                   {
-                                    "kind": "ScalarField",
+                                    "kind": "LinkedField",
                                     "alias": null,
                                     "args": null,
-                                    "name": "artist",
+                                    "concreteType": "Artist",
+                                    "name": "artists",
+                                    "plural": true,
+                                    "selections": [
+                                      {
+                                        "kind": "ScalarField",
+                                        "alias": null,
+                                        "args": null,
+                                        "name": "name",
+                                        "storageKey": null
+                                      },
+                                      {
+                                        "kind": "ScalarField",
+                                        "alias": null,
+                                        "args": null,
+                                        "name": "id",
+                                        "storageKey": null
+                                      }
+                                    ],
                                     "storageKey": null
                                   },
                                   {
@@ -371,7 +392,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query userPlaylistsContainerForwardQuery(\n  $count: Int!\n  $cursor: String\n) {\n  user {\n    ...userPlaylistsContainer\n    id\n  }\n}\n\nfragment userPlaylistsContainer on ApplicationUser {\n  playlists(first: $count, after: $cursor) {\n    edges {\n      cursor\n      node {\n        __typename\n        playlistId\n        name\n        coverImageUrl\n        songPlaylists(first: $count, after: $cursor) {\n          items {\n            song {\n              audioId\n              name\n              artist\n              coverImageUrl\n              free\n              id\n            }\n            id\n          }\n        }\n        id\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n"
+  "text": "query userPlaylistsContainerForwardQuery(\n  $count: Int!\n  $cursor: String\n) {\n  user {\n    ...userPlaylistsContainer\n    id\n  }\n}\n\nfragment userPlaylistsContainer on ApplicationUser {\n  playlists(first: $count, after: $cursor) {\n    edges {\n      cursor\n      node {\n        __typename\n        playlistId\n        name\n        coverImageUrl\n        songPlaylists(first: $count, after: $cursor) {\n          items {\n            song {\n              audioId\n              name\n              artists {\n                name\n                id\n              }\n              coverImageUrl\n              free\n              id\n            }\n            id\n          }\n        }\n        id\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n"
 };
 
 module.exports = batch;

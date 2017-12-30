@@ -11,12 +11,10 @@ const SongPendingEdit = ({ songsPendingEdit }) => (
         <div key={node.audioPendingEditId}>
           <div>
             {node.name}
-            {node.artist}
             <CoverImage coverImageUrl={node.coverImageUrl} />
           </div>
           <div>
             {node.audio.name}
-            {node.audio.artist}
             <CoverImage coverImageUrl={node.audio.coverImageUrl} />
           </div>
         </div>

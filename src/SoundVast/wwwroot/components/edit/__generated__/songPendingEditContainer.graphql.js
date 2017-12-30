@@ -15,7 +15,6 @@ export type songPendingEditContainer = {|
       +node: ?{|
         +audioPendingEditId: number;
         +name: string;
-        +artist: ?string;
         +coverImageUrl: string;
         +free: boolean;
         +contributor: ?{|
@@ -26,7 +25,6 @@ export type songPendingEditContainer = {|
         |};
         +audio: ?{|
           +name: string;
-          +artist: ?string;
           +coverImageUrl: string;
           +free: boolean;
           +genre: ?{|
@@ -120,13 +118,6 @@ const fragment /*: ConcreteFragment*/ = {
                   "kind": "ScalarField",
                   "alias": null,
                   "args": null,
-                  "name": "artist",
-                  "storageKey": null
-                },
-                {
-                  "kind": "ScalarField",
-                  "alias": null,
-                  "args": null,
                   "name": "coverImageUrl",
                   "storageKey": null
                 },
@@ -186,13 +177,6 @@ const fragment /*: ConcreteFragment*/ = {
                       "alias": null,
                       "args": null,
                       "name": "name",
-                      "storageKey": null
-                    },
-                    {
-                      "kind": "ScalarField",
-                      "alias": null,
-                      "args": null,
-                      "name": "artist",
                       "storageKey": null
                     },
                     {

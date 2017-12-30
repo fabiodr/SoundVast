@@ -16,7 +16,6 @@ export type editSongModalContainer = {|
   +song: ?{|
     +name: string;
     +coverImageUrl: string;
-    +artist: ?string;
     +free: boolean;
     +genre: ?{|
       +id: ?string;
@@ -99,13 +98,6 @@ const fragment /*: ConcreteFragment*/ = {
           "alias": null,
           "args": null,
           "name": "coverImageUrl",
-          "storageKey": null
-        },
-        {
-          "kind": "ScalarField",
-          "alias": null,
-          "args": null,
-          "name": "artist",
           "storageKey": null
         },
         {

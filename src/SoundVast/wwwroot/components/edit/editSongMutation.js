@@ -9,7 +9,6 @@ const mutation = graphql`
       song {
         audioId
         name
-        artist
         coverImageUrl
       }
     }
