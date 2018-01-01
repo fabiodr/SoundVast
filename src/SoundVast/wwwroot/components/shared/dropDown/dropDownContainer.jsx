@@ -1,5 +1,15 @@
-import { withState } from 'recompose';
+import { compose, withStateHandlers } from 'recompose';
 
-import LinkDropdown from './dropDown';
+import Dropdown from './dropdown';
 
-export default withState('isDropdownVisible', 'setDropdownVisibility', false)(LinkDropdown);
+const stateHandlers = {
+  setDropdownVisibility: () => visibile => ({
+    isDropdownVisible: visibile,
+  }),
+};
+
+export default compose(
+  withStateHandlers({
+    isDropdownVisible: false,
+  }, stateHandlers),
+)(Dropdown);

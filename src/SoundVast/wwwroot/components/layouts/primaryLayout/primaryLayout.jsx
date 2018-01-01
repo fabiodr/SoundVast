@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Account from '../../account/account';
-import Header from '../../header/header';
+import Header from '../../header/headerContainer';
 import FooterPlaylist from '../../footerPlaylist/footerPlaylistContainer';
 import Content from '../../content/content';
 import styles from './primaryLayout.less';

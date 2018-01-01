@@ -1,26 +1,47 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 
-import styles from './dropDown.less';
+import styles from './dropdown.less';
 
-const LinkDropdown = ({ children, title, setDropdownVisibility, isDropdownVisible }) => (
-  <div className={styles.linkDropdown}>
-    <button onClick={() => setDropdownVisibility(!isDropdownVisible)}>
-      <span>{title}</span>
-    </button>
+const Dropdown = ({
+  children,
+  className,
+  setDropdownVisibility,
+  isDropdownVisible,
+  titleCallback,
+}) => (
+  <div
+    onBlur={() => setDropdownVisibility(false)}
+    className={classnames(styles.dropdown, className)}
+  >
+    {titleCallback(() => setDropdownVisibility(!isDropdownVisible))}
     {isDropdownVisible ?
-      <ul>
+      <div
+        role="button"
+        tabIndex={0}
+        onMouseDown={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+        }}
+        onClick={() => setDropdownVisibility(false)}
+      >
         {children}
-      </ul>
+      </div>
       : null}
   </div>
 );
 
-LinkDropdown.propTypes = {
-  children: PropTypes.node.isRequired,
-  title: PropTypes.node.isRequired,
-  setDropdownVisibility: PropTypes.func.isRequired,
-  isDropdownVisible: PropTypes.bool.isRequired,
+Dropdown.defaultProps = {
+  className: null,
 };
 
-export default LinkDropdown;
+Dropdown.propTypes = {
+  className: PropTypes.string,
+  children: PropTypes.node.isRequired,
+  setDropdownVisibility: PropTypes.func.isRequired,
+  isDropdownVisible: PropTypes.bool.isRequired,
+  titleCallback: PropTypes.func.isRequired,
+};
+
+export default Dropdown;

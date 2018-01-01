@@ -1,5 +1,5 @@
 # source: http://localhost:8080/graphql
-# timestamp: Sat Dec 30 2017 02:02:54 GMT+0100 (W. Europe Standard Time)
+# timestamp: Sun Dec 31 2017 17:12:29 GMT+0100 (W. Europe Standard Time)
 
 input AddSongToPlaylistInput {
   clientMutationId: String
@@ -45,6 +45,14 @@ type Artist implements Node {
   id: ID!
   name: String!
   coverImageUrl: String!
+}
+
+input ArtistInput {
+  # The existing artist id
+  id: Int
+
+  # The name of the new artist
+  artist: String
 }
 
 interface Audio {
@@ -762,10 +770,7 @@ type SaveLiveStreamPayload {
 input SaveSongInput {
   clientMutationId: String
   name: String!
-  artists: [String]
-
-  # The existing artists ids
-  artistIds: [Int]
+  artists: [ArtistInput]
   album: String
 
   # The existing albums id

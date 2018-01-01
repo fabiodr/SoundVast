@@ -17,7 +17,9 @@ import { routeConfig as primaryLayoutRouteConfig } from '../../layouts/primaryLa
 import { routeConfig as songGenresRouteConfig } from '../../genres/songGenresContainer';
 import { routeConfig as radioGenresRouteConfig } from '../../genres/radioGenresContainer';
 import { routeConfig as songPendingEditContainer } from '../../edit/songPendingEditContainer';
-import { routeConfig as legalRouteConfig } from '../../legal/legalContainer';
+import { routeConfig as copyrightRouteConfig } from '../../legal/copyrightContainer';
+import { routeConfig as termsAndConditionsRouteConfig } from '../../legal/termsAndConditionsContainer';
+import { routeConfig as privacyPolicyRouteConfig } from '../../legal/privacyPolicyContainer';
 
 export default makeRouteConfig(
   <Route path="/" {...primaryLayoutRouteConfig}>
@@ -40,6 +42,8 @@ export default makeRouteConfig(
       <Route path="resetPassword" {...resetPasswordRouteConfig} />
       <Route path="confirmEmail/:userId/:token" {...confirmEmailRouteConfig} />
     </Route>
-    <Route path="legal" {...legalRouteConfig} />
+    <Route path="copyright" {...copyrightRouteConfig} />
+    <Route path="termsAndConditions" {...termsAndConditionsRouteConfig} />
+    <Route path="privacyPolicy" {...privacyPolicyRouteConfig} />
   </Route>,
 );

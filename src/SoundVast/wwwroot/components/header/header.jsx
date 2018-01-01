@@ -1,53 +1,65 @@
 import React from 'react';
-import { Link } from 'found';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 
 import SoundVastLogo from '../icons/logo';
 import MenuIcon from '../icons/menu';
 import styles from './header.less';
-import AuthorizedList from './authorizedList/authorizedListContainer';
+import UserButton from './userButton/userButtonContainer';
 import UnAuthorizedList from './unAuthorizedList/unAuthorizedListContainer';
-import LinkDropdown from '../shared/dropDown/dropDownContainer';
+import Dropdown from '../shared/dropdown/dropdownContainer';
 import Popups from '../shared/popup/popupsContainer';
 import ReviewIcon from '../icons/review';
 import LinkButton from '../shared/button/linkButton';
+import Button from '../shared/button/button';
+import Search from './search/searchContainer';
 
-const Header = ({ user }) => (
-  <header className={styles.header}>
+const Header = ({ user, searchOnFocus, searchOnBlur, searchExpanded }) => (
+  <header className={classnames(styles.header)}>
     <nav>
-      <ul>
-        <li>
-          <LinkButton to="/" styleName="secondary" className={styles.logoLink}>
-            <SoundVastLogo className={styles.logoIcon} />
-          </LinkButton>
-        </li>
-        <li>
-          <LinkButton to="/songs" styleName="secondary">Songs</LinkButton>
-        </li>
-        <li>
-          <LinkButton to="/radios" styleName="secondary">Radios</LinkButton>
-        </li>
-        <li>
-          <LinkButton to="/upload" styleName="secondary">Upload</LinkButton>
-        </li>
-      </ul>
-      <ul>
-        <LinkButton to="/review" styleName="secondary" className={styles.review}>
-          <ReviewIcon className={styles.reviewIcon} />
-        </LinkButton>
-        <Popups />
-        <AuthorizedList user={user} />
-        <UnAuthorizedList user={user} />
-        <li>
-          <LinkDropdown title={<MenuIcon className={styles.menuIcon} />}>
-            <ul>
-              <li>
-                <Link to="/legal">Legal</Link>
-              </li>
-            </ul>
-          </LinkDropdown>
-        </li>
-      </ul>
+      <LinkButton
+        to="/"
+        styleName="secondary"
+        className={classnames(styles.navButton, styles.logoLink)}
+      >
+        <SoundVastLogo className={styles.logoIcon} />
+      </LinkButton>
+      <LinkButton to="/songs" styleName="secondary" className={styles.navButton}>Songs</LinkButton>
+      <LinkButton to="/radios" styleName="secondary" className={styles.navButton}>Radios</LinkButton>
+      <LinkButton to="/upload" styleName="secondary" className={styles.navButton}>Upload</LinkButton>
+      <Search
+        searchExpanded={searchExpanded}
+        searchOnFocus={searchOnFocus}
+        searchOnBlur={searchOnBlur}
+        className={styles.search}
+      />
+      <UserButton user={user} className={styles.navButton} />
+      <UnAuthorizedList user={user} className={styles.navButton} />
+      <Popups />
+      <LinkButton
+        to="/review"
+        styleName="secondary"
+        className={styles.navButton}
+        title="Review uploads. Help improve the site. Earn points."
+      >
+        <ReviewIcon className={styles.reviewIcon} />
+      </LinkButton>
+      <Dropdown
+        titleCallback={onClick => (
+          <Button className={styles.extraDropdownTitle} styleName="secondary" onClick={onClick}>
+            <MenuIcon className={styles.menuIcon} />
+          </Button>
+        )}
+        className={classnames(styles.navButton, styles.extraDropdown)}
+      >
+        <ul>
+          <li>
+            <LinkButton styleName="secondary" to="/copyright">Copyright</LinkButton>
+            <LinkButton styleName="secondary" to="/termsAndConditions">Terms/Conditions</LinkButton>
+            <LinkButton styleName="secondary" to="/privacyPolicy">Privacy</LinkButton>
+          </li>
+        </ul>
+      </Dropdown>
     </nav>
   </header>
 );
@@ -60,6 +72,9 @@ Header.propTypes = {
   user: PropTypes.shape({
     username: PropTypes.string,
   }),
+  searchOnFocus: PropTypes.func.isRequired,
+  searchOnBlur: PropTypes.func.isRequired,
+  searchExpanded: PropTypes.bool.isRequired,
 };
 
 export default Header;

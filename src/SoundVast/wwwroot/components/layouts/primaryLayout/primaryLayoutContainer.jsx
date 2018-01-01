@@ -7,7 +7,7 @@ const query = graphql`
     $songId: Int
   ) {
     user {
-      ...authorizedListContainer_user,
+      ...userButtonContainer_user,
       ...unAuthorizedListContainer_user,
     }
     loginProviders {

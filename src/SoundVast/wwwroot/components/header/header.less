@@ -12,26 +12,19 @@
     width: 60%;
     display: flex;
 
-    > ul {
-      margin: 0;
-      padding: 0;
+    > a {
       display: flex;
       align-items: center;
-
-      > li {
-        margin-left: 2px;
-        margin-right: 2px;
-        height: 100%;
-      }
-
-      > li > a, > a {
-        display: flex;
-        align-items: center;
-        height: 100%;
-        box-sizing: border-box;
-      }
+      height: 100%;
+      box-sizing: border-box;
     }
   }
+}
+
+.navButton {
+  margin-left: 2px;
+  margin-right: 2px;
+  height: 100%;
 }
 
 .logoLink {
@@ -39,8 +32,8 @@
 }
 
 .logoIcon {
-  width: 306px;
-  height: 53px;
+  width: 200px;
+  height: 43px;
 }
 
 .menuIcon, .reviewIcon {
@@ -49,8 +42,25 @@
   fill: @grey4;
 }
 
-a:hover {
-  .reviewIcon {
+a:hover, button:hover {
+  .reviewIcon, .menuIcon {
     fill: @grey5;
   }
+}
+
+.extraDropdown {
+  li {
+    > a {
+      border-bottom: solid 1px @grey2;
+    }
+  }
+}
+
+.extraDropdownTitle {
+  height: 100%;
+}
+
+.search {
+  margin-left: 10px;
+  margin-right: 40px;
 }

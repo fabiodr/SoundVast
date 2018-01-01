@@ -20,7 +20,7 @@ export default ({ name, artists, album, imagePath, genreId }) => {
       coverImageUrl: imagePath,
       name,
       album: album.value,
-      artists: artists.map(artist => artist.value),
+      artists: artists.map(artist => ({ artist: artist.value })),
       genreId,
     },
   };

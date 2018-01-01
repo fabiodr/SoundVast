@@ -8,7 +8,7 @@
 
 /*::
 import type {ConcreteFragment} from 'relay-runtime';
-export type authorizedListContainer_user = {|
+export type userButtonContainer_user = {|
   +userName: string;
   +contributionScore: number;
 |};
@@ -19,7 +19,7 @@ const fragment /*: ConcreteFragment*/ = {
   "argumentDefinitions": [],
   "kind": "Fragment",
   "metadata": null,
-  "name": "authorizedListContainer_user",
+  "name": "userButtonContainer_user",
   "selections": [
     {
       "kind": "ScalarField",

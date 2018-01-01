@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 39218554b2e175def5fb03985667b0d6
+ * @relayHash 0d7c4ea7e72f759469406bc089641d19
  */
 
 /* eslint-disable */
@@ -13,8 +13,10 @@ export type saveSongMutationVariables = {|
   input: {
     clientMutationId?: ?string;
     name: string;
-    artists?: ?$ReadOnlyArray<?string>;
-    artistIds?: ?$ReadOnlyArray<?number>;
+    artists?: ?$ReadOnlyArray<?{
+      id?: ?number;
+      artist?: ?string;
+    }>;
     album?: ?string;
     albumId?: ?number;
     free?: ?boolean;

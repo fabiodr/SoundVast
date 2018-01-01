@@ -6,6 +6,8 @@ using GraphQL;
 using GraphQL.Relay.Types;
 using GraphQL.Types;
 using SoundVast.Components.Album;
+using SoundVast.Components.Album.Models;
+using SoundVast.Components.Artist;
 using SoundVast.Components.Artist.Models;
 using SoundVast.Components.GraphQl;
 using SoundVast.Components.User;
@@ -35,8 +37,8 @@ namespace SoundVast.Components.Song
         {
             var coverImageUrl = inputs.Get<string>("coverImageUrl");
             var name = inputs.Get<string>("name");
-            var artists = inputs.Get<IEnumerable<string>>("artists");
-            var artistsId = inputs.Get<IEnumerable<int>>("artistIds");
+            var e = inputs.Get("artists", new object[0]);
+            var artists = e.Cast<dynamic>();
             var album = inputs.Get<string>("album");
             var albumId = inputs.Get<int>("albumId");
             var free = inputs.Get<bool>("free");
@@ -61,36 +63,39 @@ namespace SoundVast.Components.Song
                     Name = album,
                     CoverImageUrl = placeholderImage.CloudBlockBlob.Uri.AbsoluteUri
                 };
-            }
 
-            foreach (var artistId in artistsId)
-            {
-                song.ArtistSongs.Add(new ArtistSong
-                {
-                    Song = song,
-                    ArtistId = artistId
-                });
+                song.Album.AlbumGenres.Add(new AlbumGenre { SongGenreId = genreId });
             }
 
             foreach (var artist in artists)
             {
-                var artistModel = new Artist.Models.Artist
-                {
-                    Name = artist,
-                    CoverImageUrl = placeholderImage.CloudBlockBlob.Uri.AbsoluteUri
-                };
+                Artist.Models.Artist artistModel;
 
-                artistModel.ArtistGenres.Add(new ArtistGenre
+                if (artist.Artist != null)
                 {
-                    Artist = artistModel,
-                    SongGenreId = genreId
-                });
+                    artistModel = new Artist.Models.Artist
+                    {
+                        Name = artist.Artist,
+                        CoverImageUrl = placeholderImage.CloudBlockBlob.Uri.AbsoluteUri
+                    };
+                } else if (artist.Id.HasValue)
+                {
+                    artistModel = new Artist.Models.Artist
+                    {
+                        Id = artist.Id.Value
+                    };
+                }
+                else
+                {
+                    throw new Exception("An artist id or name must be supplied");
+                }
 
-                song.ArtistSongs.Add(new ArtistSong
+                artistModel.ArtistGenres.Add(new ArtistGenre { SongGenreId = genreId });
+
+                if (album != null)
                 {
-                    Song = song,
-                    Artist = artistModel
-                });
+                    artistModel.ArtistAlbums.Add(new ArtistAlbum { Album = song.Album });
+                }
             }
 
             _songService.Add(song);

@@ -2,10 +2,10 @@ import { graphql } from 'react-relay';
 import { compose, flattenProp, branch, renderNothing } from 'recompose';
 import { fragmentContainer } from 'recompose-relay-modern';
 
-import AuthorizedList from './authorizedList';
+import UserButton from './userButton';
 
 const fragments = graphql`
-  fragment authorizedListContainer_user on ApplicationUser {
+  fragment userButtonContainer_user on ApplicationUser {
     userName
     contributionScore
   }
@@ -20,6 +20,6 @@ const enhance = compose(
   ),
 );
 
-const AuthorizedListContainer = enhance(AuthorizedList);
+const UserButtonContainer = enhance(UserButton);
 
-export default AuthorizedListContainer;
+export default UserButtonContainer;
