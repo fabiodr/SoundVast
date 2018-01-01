@@ -38,7 +38,6 @@ namespace SoundVast.Components.LiveStream
                 CoverImageUrl = coverImageUrl,
                 Name = name,
                 LiveStreamUrl = liveStreamUrl,
-                GenreId = genreId,
                 UserId = user.Id
             };
 

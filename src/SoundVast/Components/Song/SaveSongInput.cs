@@ -20,7 +20,7 @@ namespace SoundVast.Components.Song
             Field<IntGraphType>("AlbumId", "The existing albums id");
             Field<BooleanGraphType>("Free");
             Field<NonNullGraphType<StringGraphType>>("CoverImageUrl");
-            Field<IntGraphType>("GenreId");
+            Field<ListGraphType<IntGraphType>>("GenreIds");
         }
     }
 }

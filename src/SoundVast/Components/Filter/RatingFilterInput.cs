@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using GraphQL.Builders;
 using GraphQL.Types;
 
-namespace SoundVast.Components.Audio
+namespace SoundVast.Components.Filter
 {
     public class RatingFilterInput : InputObjectGraphType
     {

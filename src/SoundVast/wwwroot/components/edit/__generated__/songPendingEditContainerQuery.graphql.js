@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 8261231a5f625fe011ed2a10e67820d7
+ * @relayHash 5c1955a6e0c24ea97e18fa75dc5f2e2a
  */
 
 /* eslint-disable */
@@ -35,18 +35,10 @@ fragment songPendingEditContainer on Query {
           userName
           id
         }
-        genre {
-          name
-          id
-        }
         audio {
           name
           coverImageUrl
           free
-          genre {
-            name
-            id
-          }
           id
         }
         id
@@ -219,31 +211,6 @@ const batch /*: ConcreteBatch*/ = {
                     "kind": "LinkedField",
                     "alias": null,
                     "args": null,
-                    "concreteType": "SongGenre",
-                    "name": "genre",
-                    "plural": false,
-                    "selections": [
-                      {
-                        "kind": "ScalarField",
-                        "alias": null,
-                        "args": null,
-                        "name": "name",
-                        "storageKey": null
-                      },
-                      {
-                        "kind": "ScalarField",
-                        "alias": null,
-                        "args": null,
-                        "name": "id",
-                        "storageKey": null
-                      }
-                    ],
-                    "storageKey": null
-                  },
-                  {
-                    "kind": "LinkedField",
-                    "alias": null,
-                    "args": null,
                     "concreteType": "Song",
                     "name": "audio",
                     "plural": false,
@@ -267,31 +234,6 @@ const batch /*: ConcreteBatch*/ = {
                         "alias": null,
                         "args": null,
                         "name": "free",
-                        "storageKey": null
-                      },
-                      {
-                        "kind": "LinkedField",
-                        "alias": null,
-                        "args": null,
-                        "concreteType": "SongGenre",
-                        "name": "genre",
-                        "plural": false,
-                        "selections": [
-                          {
-                            "kind": "ScalarField",
-                            "alias": null,
-                            "args": null,
-                            "name": "name",
-                            "storageKey": null
-                          },
-                          {
-                            "kind": "ScalarField",
-                            "alias": null,
-                            "args": null,
-                            "name": "id",
-                            "storageKey": null
-                          }
-                        ],
                         "storageKey": null
                       },
                       {
@@ -369,7 +311,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query songPendingEditContainerQuery(\n  $count: Int!\n  $cursor: String\n) {\n  ...songPendingEditContainer\n}\n\nfragment songPendingEditContainer on Query {\n  songsPendingEdit(first: $count, after: $cursor) {\n    edges {\n      cursor\n      node {\n        __typename\n        audioPendingEditId\n        name\n        coverImageUrl\n        free\n        contributor {\n          userName\n          id\n        }\n        genre {\n          name\n          id\n        }\n        audio {\n          name\n          coverImageUrl\n          free\n          genre {\n            name\n            id\n          }\n          id\n        }\n        id\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n"
+  "text": "query songPendingEditContainerQuery(\n  $count: Int!\n  $cursor: String\n) {\n  ...songPendingEditContainer\n}\n\nfragment songPendingEditContainer on Query {\n  songsPendingEdit(first: $count, after: $cursor) {\n    edges {\n      cursor\n      node {\n        __typename\n        audioPendingEditId\n        name\n        coverImageUrl\n        free\n        contributor {\n          userName\n          id\n        }\n        audio {\n          name\n          coverImageUrl\n          free\n          id\n        }\n        id\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n"
 };
 
 module.exports = batch;

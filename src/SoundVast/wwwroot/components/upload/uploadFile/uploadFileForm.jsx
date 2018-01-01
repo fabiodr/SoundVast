@@ -6,7 +6,7 @@ import BasicInfo from '../common/basicInfo/basicInfo';
 import NameField from '../../shared/fields/nameField/nameField';
 import ArtistsField from '../../shared/fields/artistsField/artistsField';
 import AlbumField from '../../shared/fields/albumField/albumField';
-import SongGenresField from '../../shared/fields/genreField/songGenresFieldContainer';
+import SongGenresField from '../../shared/fields/genresField/songGenresFieldContainer';
 import ValidationErrors from '../../shared/validation/validationErrors';
 import CancelButton from '../../shared/button/cancelButton';
 import SaveButton from '../common/saveButton/saveButton';

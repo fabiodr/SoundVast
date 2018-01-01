@@ -25,6 +25,8 @@ const Header = ({ user, searchOnFocus, searchOnBlur, searchExpanded }) => (
         <SoundVastLogo className={styles.logoIcon} />
       </LinkButton>
       <LinkButton to="/songs" styleName="secondary" className={styles.navButton}>Songs</LinkButton>
+      <LinkButton to="/artists" styleName="secondary" className={styles.navButton}>Artists</LinkButton>
+      <LinkButton to="/albums" styleName="secondary" className={styles.navButton}>Albums</LinkButton>
       <LinkButton to="/radios" styleName="secondary" className={styles.navButton}>Radios</LinkButton>
       <LinkButton to="/upload" styleName="secondary" className={styles.navButton}>Upload</LinkButton>
       <Search

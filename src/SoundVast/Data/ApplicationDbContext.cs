@@ -31,8 +31,6 @@ namespace SoundVast.Data
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Audio> Audios { get; set; }
         public DbSet<AudioPendingEdit> AudiosPendingEdit { get; set; }
-        public DbSet<Album> Albums { get; set; }
-        public DbSet<Artist> Artists { get; set; }
 
         public ApplicationDbContext(DbContextOptions options)
             : base(options)
@@ -52,6 +50,8 @@ namespace SoundVast.Data
 
             modelBuilder.Entity<Song>();
             modelBuilder.Entity<LiveStream>();
+            modelBuilder.Entity<Artist>();
+            modelBuilder.Entity<Album>();
             modelBuilder.Entity<SongPendingEdit>();
             modelBuilder.Entity<LiveStreamPendingEdit>();
             modelBuilder.Entity<SongGenre>();

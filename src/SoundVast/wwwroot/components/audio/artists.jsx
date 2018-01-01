@@ -17,9 +17,11 @@ Artists.defaultProps = {
 };
 
 Artists.propTypes = {
-  artists: PropTypes.arrayOf([
-    PropTypes.string.isRequired,
-  ]),
+  artists: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+    }),
+  ),
 };
 
 export default Artists;

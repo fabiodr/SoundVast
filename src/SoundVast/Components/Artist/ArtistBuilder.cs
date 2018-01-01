@@ -11,7 +11,7 @@ namespace SoundVast.Components.Artist
         public static IQueryable<T> BuildArtist<T>(this IQueryable<T> query) where T : Models.Artist
         {
             return query
-                .Include(x => x.ArtistGenres)
+                .Include(x => x.ArtistSongGenres)
                 .Include(x => x.ArtistAlbums)
                 .Include(x => x.ArtistSongs);
         }

@@ -8,17 +8,17 @@ const ArtistsValue = ({
 }) => (
   <div className="Select-value">
     <span className="Select-value-label">
-      {convertArtistsToString(values.map(value => value.label))}
+      {convertArtistsToString(values.map(value => ({ name: value.label })))}
     </span>
   </div>
 );
 
 ArtistsValue.propTypes = {
-  values: PropTypes.arrayOf([
+  values: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string.isRequired,
     }),
-  ]).isRequired,
+  ).isRequired,
 };
 
 export default ArtistsValue;

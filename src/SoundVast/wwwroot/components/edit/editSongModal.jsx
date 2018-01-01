@@ -5,7 +5,7 @@ import EditModal from './editModalContainer';
 import NameField from '../shared/fields/nameField/nameField';
 import ArtistsField from '../shared/fields/artistsField/artistsField';
 import FreeField from '../shared/fields/freeField/freeField';
-import SongGenresField from '../shared/fields/genreField/songGenresFieldContainer';
+import SongGenresField from '../shared/fields/genresField/songGenresFieldContainer';
 import ImageDropzone from '../shared/imageDropzone/imageDropzone';
 import PreviewImage from '../shared/previewImage/previewImage';
 

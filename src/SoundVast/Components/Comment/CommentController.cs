@@ -43,7 +43,7 @@ namespace SoundVast.Components.Comment
     //    [AllowAnonymous]
     //    public PartialViewResult Newest(int audioId, bool sortDescending, int pageNumber = 1)
     //    {
-    //        var comments = _commentService.GetSortedCommentsForAudio(audioId, pageNumber, new OrderingOption<Comment, DateTime>(x => x.Date, sortDescending));
+    //        var comments = _commentService.GetSortedCommentsForAudio(audioId, pageNumber, new OrderingOption<Comment, DateTime>(x => x.DateAdded, sortDescending));
 
     //        var commentViewModels = Mapper.Map<IEnumerable<CommentViewModel>>(comments);
 

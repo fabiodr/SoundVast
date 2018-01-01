@@ -14,14 +14,14 @@ const mutation = graphql`
   }
 `;
 
-export default ({ name, artists, album, imagePath, genreId }) => {
+export default ({ name, artists, album, imagePath, genres }) => {
   const variables = {
     input: {
       coverImageUrl: imagePath,
       name,
       album: album.value,
       artists: artists.map(artist => ({ artist: artist.value })),
-      genreId,
+      genreIds: genres.map(genre => genre.value),
     },
   };
 

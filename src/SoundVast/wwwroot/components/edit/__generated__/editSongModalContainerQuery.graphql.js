@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash fad1de6e6bec259bb653b813679363bc
+ * @relayHash c3385468086fd359176635ca6663465d
  */
 
 /* eslint-disable */
@@ -32,7 +32,7 @@ fragment editSongModalContainer on Query {
     name
     coverImageUrl
     free
-    genre {
+    genres {
       id
     }
     id
@@ -168,8 +168,8 @@ const batch /*: ConcreteBatch*/ = {
             "alias": null,
             "args": null,
             "concreteType": "SongGenre",
-            "name": "genre",
-            "plural": false,
+            "name": "genres",
+            "plural": true,
             "selections": [
               {
                 "kind": "ScalarField",
@@ -193,7 +193,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query editSongModalContainerQuery(\n  $songId: Int\n) {\n  ...editSongModalContainer\n}\n\nfragment editSongModalContainer on Query {\n  user {\n    id\n  }\n  songGenres {\n    ...songGenresFieldContainer_genres\n    id\n  }\n  song(id: $songId) {\n    name\n    coverImageUrl\n    free\n    genre {\n      id\n    }\n    id\n  }\n}\n\nfragment songGenresFieldContainer_genres on Genre {\n  id\n  name\n}\n"
+  "text": "query editSongModalContainerQuery(\n  $songId: Int\n) {\n  ...editSongModalContainer\n}\n\nfragment editSongModalContainer on Query {\n  user {\n    id\n  }\n  songGenres {\n    ...songGenresFieldContainer_genres\n    id\n  }\n  song(id: $songId) {\n    name\n    coverImageUrl\n    free\n    genres {\n      id\n    }\n    id\n  }\n}\n\nfragment songGenresFieldContainer_genres on Genre {\n  id\n  name\n}\n"
 };
 
 module.exports = batch;

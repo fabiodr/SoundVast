@@ -4,20 +4,16 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using SoundVast.Components.Artist.Models;
+using SoundVast.Components.Filter;
 using SoundVast.Components.Genre.Models;
+using SoundVast.Components.Rating;
 
 namespace SoundVast.Components.Album.Models
 {
-    public class Album
+    public class Album : Audio.Models.Audio
     {
-        [Required]
-        public int Id { get; set; }
-        [Required]
-        public string Name { get; set; }
-        [Required]
-        public string CoverImageUrl { get; set; }
         public virtual ICollection<Song.Models.Song> Songs { get; set; } = new List<Song.Models.Song>();
         public virtual ICollection<ArtistAlbum> ArtistAlbums { get; set; } = new List<ArtistAlbum>();
-        public virtual ICollection<AlbumGenre> AlbumGenres { get; set; } = new List<AlbumGenre>();
+        public virtual ICollection<AlbumSongGenre> AlbumGenres { get; set; } = new List<AlbumSongGenre>();
     }
 }

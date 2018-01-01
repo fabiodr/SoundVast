@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 33a281b5aec6e095ff53cae871017059
+ * @relayHash cad1b225c2466109b5231d170b7157c7
  */
 
 /* eslint-disable */
@@ -12,7 +12,7 @@ import type {ConcreteBatch} from 'relay-runtime';
 export type filtersContainerQueryResponse = {|
   +songs: ?{|
     +items: ?$ReadOnlyArray<?{|
-      +uploadDate: ?any;
+      +dateAdded: ?any;
     |}>;
   |};
 |};
@@ -25,7 +25,7 @@ query filtersContainerQuery(
 ) {
   songs(first: $count) {
     items {
-      uploadDate
+      dateAdded
       id
     }
   }
@@ -73,7 +73,7 @@ const batch /*: ConcreteBatch*/ = {
                 "kind": "ScalarField",
                 "alias": null,
                 "args": null,
-                "name": "uploadDate",
+                "name": "dateAdded",
                 "storageKey": null
               }
             ],
@@ -129,7 +129,7 @@ const batch /*: ConcreteBatch*/ = {
                 "kind": "ScalarField",
                 "alias": null,
                 "args": null,
-                "name": "uploadDate",
+                "name": "dateAdded",
                 "storageKey": null
               },
               {
@@ -147,7 +147,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query filtersContainerQuery(\n  $count: Int!\n) {\n  songs(first: $count) {\n    items {\n      uploadDate\n      id\n    }\n  }\n}\n"
+  "text": "query filtersContainerQuery(\n  $count: Int!\n) {\n  songs(first: $count) {\n    items {\n      dateAdded\n      id\n    }\n  }\n}\n"
 };
 
 module.exports = batch;

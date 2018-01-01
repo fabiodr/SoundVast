@@ -11,7 +11,7 @@ namespace SoundVast.Components.Upload.File.ViewModels
         public string Lyrics { get; set; }
         public string Album { get; set; }
 
-        [Display(Name = @"Release Date")]
+        [Display(Name = @"Release DateAdded")]
         [DisplayFormat(ConvertEmptyStringToNull = true, DataFormatString = "{0:dd'/'MMMM'/'yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? ReleaseDate { get; set; }
     }

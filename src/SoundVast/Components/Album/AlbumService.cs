@@ -1,24 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SoundVast.Components.Audio;
 using SoundVast.Components.Quote.Models;
 using SoundVast.QueryOptions;
 using SoundVast.Repository;
+using SoundVast.Validation;
 
 namespace SoundVast.Components.Album
 {
-    public class AlbumService : IAlbumService
+    public class AlbumService : AudioService<Models.Album>, IAlbumService
     {
         private readonly IRepository<Models.Album> _repository;
 
-        public AlbumService(IRepository<Models.Album> repository)
+        public AlbumService(IRepository<Models.Album> repository, IValidationProvider validationProvider) : 
+            base(repository, validationProvider)
         {
             _repository = repository;
         }
 
-        public IEnumerable<Models.Album> GetAlbums()
+        public override IEnumerable<Models.Album> GetAudios(string genreName, Filter.Filter filter)
         {
-            return _repository.GetAll().BuildAlbum();
+            var albums = base.GetAudios(genreName, filter).AsQueryable().BuildAlbum();
+
+            return albums;
         }
     }
 }

@@ -32,7 +32,7 @@ namespace SoundVast.Components.Audio
         public int Likes { get; set; }
         public int Dislikes { get; set; }
 
-        [Display(Name = @"Upload Date")]
+        [Display(Name = @"Upload DateAdded")]
         [DisplayFormat(ConvertEmptyStringToNull = true, DataFormatString = "{0:dd'/'MMMM'/'yyyy}")]
         public DateTimeOffset UploadDate { get; set; }
     }

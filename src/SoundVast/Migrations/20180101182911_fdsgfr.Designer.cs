@@ -12,8 +12,8 @@ using System;
 namespace SoundVast.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20171230010042_dfs")]
-    partial class dfs
+    [Migration("20180101182911_fdsgfr")]
+    partial class fdsgfr
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -130,22 +130,6 @@ namespace SoundVast.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("SoundVast.Components.Album.Models.Album", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("CoverImageUrl")
-                        .IsRequired();
-
-                    b.Property<string>("Name")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Albums");
-                });
-
             modelBuilder.Entity("SoundVast.Components.Album.Models.AlbumGenre", b =>
                 {
                     b.Property<int>("Id")
@@ -164,22 +148,6 @@ namespace SoundVast.Migrations
                     b.ToTable("AlbumGenre");
                 });
 
-            modelBuilder.Entity("SoundVast.Components.Artist.Models.Artist", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("CoverImageUrl")
-                        .IsRequired();
-
-                    b.Property<string>("Name")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Artists");
-                });
-
             modelBuilder.Entity("SoundVast.Components.Artist.Models.ArtistAlbum", b =>
                 {
                     b.Property<int>("Id")
@@ -187,7 +155,7 @@ namespace SoundVast.Migrations
 
                     b.Property<int>("AlbumId");
 
-                    b.Property<int>("ArtistId");
+                    b.Property<int?>("ArtistId");
 
                     b.HasKey("Id");
 
@@ -198,7 +166,7 @@ namespace SoundVast.Migrations
                     b.ToTable("ArtistAlbum");
                 });
 
-            modelBuilder.Entity("SoundVast.Components.Artist.Models.ArtistGenre", b =>
+            modelBuilder.Entity("SoundVast.Components.Artist.Models.ArtistSongGenre", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -213,7 +181,7 @@ namespace SoundVast.Migrations
 
                     b.HasIndex("SongGenreId");
 
-                    b.ToTable("ArtistGenre");
+                    b.ToTable("ArtistSongGenre");
                 });
 
             modelBuilder.Entity("SoundVast.Components.Artist.Models.ArtistSong", b =>
@@ -223,7 +191,7 @@ namespace SoundVast.Migrations
 
                     b.Property<int>("ArtistId");
 
-                    b.Property<int>("SongId");
+                    b.Property<int?>("SongId");
 
                     b.Property<int?>("SongPendingEditId");
 
@@ -246,6 +214,8 @@ namespace SoundVast.Migrations
                     b.Property<string>("CoverImageUrl")
                         .IsRequired();
 
+                    b.Property<DateTimeOffset>("DateAdded");
+
                     b.Property<string>("Discriminator")
                         .IsRequired();
 
@@ -255,8 +225,6 @@ namespace SoundVast.Migrations
                         .IsRequired();
 
                     b.Property<int>("PlayCount");
-
-                    b.Property<DateTimeOffset>("UploadDate");
 
                     b.Property<string>("UserId");
 
@@ -281,7 +249,7 @@ namespace SoundVast.Migrations
                     b.Property<string>("Body")
                         .IsRequired();
 
-                    b.Property<DateTime>("Date");
+                    b.Property<DateTimeOffset>("DateAdded");
 
                     b.Property<int?>("OriginalCommentId");
 
@@ -509,6 +477,26 @@ namespace SoundVast.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("SoundVast.Components.Album.Models.Album", b =>
+                {
+                    b.HasBaseType("SoundVast.Components.Audio.Models.Audio");
+
+
+                    b.ToTable("Album");
+
+                    b.HasDiscriminator().HasValue("Album");
+                });
+
+            modelBuilder.Entity("SoundVast.Components.Artist.Models.Artist", b =>
+                {
+                    b.HasBaseType("SoundVast.Components.Audio.Models.Audio");
+
+
+                    b.ToTable("Artist");
+
+                    b.HasDiscriminator().HasValue("Artist");
+                });
+
             modelBuilder.Entity("SoundVast.Components.LiveStream.Models.LiveStream", b =>
                 {
                     b.HasBaseType("SoundVast.Components.Audio.Models.Audio");
@@ -524,7 +512,7 @@ namespace SoundVast.Migrations
                 {
                     b.HasBaseType("SoundVast.Components.Audio.Models.Audio");
 
-                    b.Property<int>("AlbumId");
+                    b.Property<int?>("AlbumId");
 
                     b.Property<bool>("Free");
 
@@ -648,11 +636,10 @@ namespace SoundVast.Migrations
 
                     b.HasOne("SoundVast.Components.Artist.Models.Artist", "Artist")
                         .WithMany("ArtistAlbums")
-                        .HasForeignKey("ArtistId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ArtistId");
                 });
 
-            modelBuilder.Entity("SoundVast.Components.Artist.Models.ArtistGenre", b =>
+            modelBuilder.Entity("SoundVast.Components.Artist.Models.ArtistSongGenre", b =>
                 {
                     b.HasOne("SoundVast.Components.Artist.Models.Artist", "Artist")
                         .WithMany("ArtistGenres")
@@ -674,8 +661,7 @@ namespace SoundVast.Migrations
 
                     b.HasOne("SoundVast.Components.Song.Models.Song", "Song")
                         .WithMany("ArtistSongs")
-                        .HasForeignKey("SongId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("SongId");
 
                     b.HasOne("SoundVast.Components.Edit.Models.SongPendingEdit")
                         .WithMany("ArtistSongs")
@@ -787,8 +773,7 @@ namespace SoundVast.Migrations
                 {
                     b.HasOne("SoundVast.Components.Album.Models.Album", "Album")
                         .WithMany("Songs")
-                        .HasForeignKey("AlbumId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("AlbumId");
                 });
 
             modelBuilder.Entity("SoundVast.Components.Edit.Models.SongPendingEdit", b =>

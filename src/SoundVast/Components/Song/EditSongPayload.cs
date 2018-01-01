@@ -41,7 +41,6 @@ namespace SoundVast.Components.Song
                     Name = songPendingEdit.Name,
                     ArtistSongs = songPendingEdit.ArtistSongs,
                     Free = songPendingEdit.Free,
-                    GenreId = songPendingEdit.GenreId,
                 };
 
                 newModel.Contributors.Add(songPendingEdit.Contributor);

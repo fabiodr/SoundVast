@@ -30,16 +30,10 @@ const fragments = graphql`
           contributor {
             userName
           }
-          genre {
-            name
-          }
           audio {
             name
             coverImageUrl
             free
-            genre {
-              name
-            }
           }
         }
       }

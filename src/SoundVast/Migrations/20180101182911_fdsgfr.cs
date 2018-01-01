@@ -5,38 +5,10 @@ using System.Collections.Generic;
 
 namespace SoundVast.Migrations
 {
-    public partial class dfs : Migration
+    public partial class fdsgfr : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Albums",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    CoverImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Albums", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Artists",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    CoverImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Artists", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -80,32 +52,6 @@ namespace SoundVast.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ArtistAlbum",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    AlbumId = table.Column<int>(type: "int", nullable: false),
-                    ArtistId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ArtistAlbum", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ArtistAlbum_Albums_AlbumId",
-                        column: x => x.AlbumId,
-                        principalTable: "Albums",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ArtistAlbum_Artists_ArtistId",
-                        column: x => x.ArtistId,
-                        principalTable: "Artists",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -127,55 +73,64 @@ namespace SoundVast.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AlbumGenre",
+                name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    AlbumId = table.Column<int>(type: "int", nullable: false),
-                    SongGenreId = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AlbumGenre", x => x.Id);
+                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
                     table.ForeignKey(
-                        name: "FK_AlbumGenre_Albums_AlbumId",
-                        column: x => x.AlbumId,
-                        principalTable: "Albums",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AlbumGenre_Genre_SongGenreId",
-                        column: x => x.SongGenreId,
-                        principalTable: "Genre",
+                        name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ArtistGenre",
+                name: "AspNetUserClaims",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ArtistId = table.Column<int>(type: "int", nullable: false),
-                    SongGenreId = table.Column<int>(type: "int", nullable: false)
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ArtistGenre", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ArtistGenre_Artists_ArtistId",
-                        column: x => x.ArtistId,
-                        principalTable: "Artists",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ArtistGenre_Genre_SongGenreId",
-                        column: x => x.SongGenreId,
-                        principalTable: "Genre",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                    table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserLogins",
+                columns: table => new
+                {
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserTokens",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
                 });
 
             migrationBuilder.CreateTable(
@@ -185,11 +140,11 @@ namespace SoundVast.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     CoverImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DateAdded = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     GenreId = table.Column<int>(type: "int", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PlayCount = table.Column<int>(type: "int", nullable: false),
-                    UploadDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     LiveStreamUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AlbumId = table.Column<int>(type: "int", nullable: true),
@@ -205,9 +160,87 @@ namespace SoundVast.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Audios_Albums_AlbumId",
+                        name: "FK_Audios_Audios_AlbumId",
                         column: x => x.AlbumId,
-                        principalTable: "Albums",
+                        principalTable: "Audios",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AlbumGenre",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    AlbumId = table.Column<int>(type: "int", nullable: false),
+                    SongGenreId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AlbumGenre", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AlbumGenre_Audios_AlbumId",
+                        column: x => x.AlbumId,
+                        principalTable: "Audios",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AlbumGenre_Genre_SongGenreId",
+                        column: x => x.SongGenreId,
+                        principalTable: "Genre",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ArtistAlbum",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    AlbumId = table.Column<int>(type: "int", nullable: false),
+                    ArtistId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ArtistAlbum", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ArtistAlbum_Audios_AlbumId",
+                        column: x => x.AlbumId,
+                        principalTable: "Audios",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ArtistAlbum_Audios_ArtistId",
+                        column: x => x.ArtistId,
+                        principalTable: "Audios",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ArtistGenre",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ArtistId = table.Column<int>(type: "int", nullable: false),
+                    SongGenreId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ArtistGenre", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ArtistGenre_Audios_ArtistId",
+                        column: x => x.ArtistId,
+                        principalTable: "Audios",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ArtistGenre_Genre_SongGenreId",
+                        column: x => x.SongGenreId,
+                        principalTable: "Genre",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -243,91 +276,6 @@ namespace SoundVast.Migrations
                         principalTable: "Audios",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUserClaims",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetUserClaims_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUserLogins",
-                columns: table => new
-                {
-                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
-                    table.ForeignKey(
-                        name: "FK_AspNetUserLogins_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUserRoles",
-                columns: table => new
-                {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
-                    table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "AspNetRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUserTokens",
-                columns: table => new
-                {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
-                    table.ForeignKey(
-                        name: "FK_AspNetUserTokens_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -368,9 +316,9 @@ namespace SoundVast.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_AudiosPendingEdit_Albums_AlbumId",
+                        name: "FK_AudiosPendingEdit_Audios_AlbumId",
                         column: x => x.AlbumId,
-                        principalTable: "Albums",
+                        principalTable: "Audios",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -383,7 +331,7 @@ namespace SoundVast.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     AudioId = table.Column<int>(type: "int", nullable: false),
                     Body = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateAdded = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     OriginalCommentId = table.Column<int>(type: "int", nullable: true),
                     RatingId = table.Column<int>(type: "int", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
@@ -438,16 +386,16 @@ namespace SoundVast.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     ArtistId = table.Column<int>(type: "int", nullable: false),
-                    SongId = table.Column<int>(type: "int", nullable: false),
+                    SongId = table.Column<int>(type: "int", nullable: true),
                     SongPendingEditId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ArtistSong", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ArtistSong_Artists_ArtistId",
+                        name: "FK_ArtistSong_Audios_ArtistId",
                         column: x => x.ArtistId,
-                        principalTable: "Artists",
+                        principalTable: "Audios",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -455,7 +403,7 @@ namespace SoundVast.Migrations
                         column: x => x.SongId,
                         principalTable: "Audios",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ArtistSong_AudiosPendingEdit_SongPendingEditId",
                         column: x => x.SongPendingEditId,
@@ -744,6 +692,38 @@ namespace SoundVast.Migrations
                 column: "UserId");
 
             migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUserRoles_AspNetUsers_UserId",
+                table: "AspNetUserRoles",
+                column: "UserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUserClaims_AspNetUsers_UserId",
+                table: "AspNetUserClaims",
+                column: "UserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUserLogins_AspNetUsers_UserId",
+                table: "AspNetUserLogins",
+                column: "UserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUserTokens_AspNetUsers_UserId",
+                table: "AspNetUserTokens",
+                column: "UserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
                 name: "FK_Audios_AspNetUsers_UserId",
                 table: "Audios",
                 column: "UserId",
@@ -754,14 +734,6 @@ namespace SoundVast.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Audios_Albums_AlbumId",
-                table: "Audios");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Audios_Genre_GenreId",
-                table: "Audios");
-
             migrationBuilder.DropForeignKey(
                 name: "FK_AspNetUsers_Audios_AudioId",
                 table: "AspNetUsers");
@@ -806,9 +778,6 @@ namespace SoundVast.Migrations
                 name: "SongPlaylist");
 
             migrationBuilder.DropTable(
-                name: "Artists");
-
-            migrationBuilder.DropTable(
                 name: "AudiosPendingEdit");
 
             migrationBuilder.DropTable(
@@ -821,13 +790,10 @@ namespace SoundVast.Migrations
                 name: "Playlists");
 
             migrationBuilder.DropTable(
-                name: "Albums");
+                name: "Audios");
 
             migrationBuilder.DropTable(
                 name: "Genre");
-
-            migrationBuilder.DropTable(
-                name: "Audios");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

@@ -20,16 +20,10 @@ export type songPendingEditContainer = {|
         +contributor: ?{|
           +userName: string;
         |};
-        +genre: ?{|
-          +name: string;
-        |};
         +audio: ?{|
           +name: string;
           +coverImageUrl: string;
           +free: boolean;
-          +genre: ?{|
-            +name: string;
-          |};
         |};
       |};
     |}>;
@@ -150,24 +144,6 @@ const fragment /*: ConcreteFragment*/ = {
                   "kind": "LinkedField",
                   "alias": null,
                   "args": null,
-                  "concreteType": "SongGenre",
-                  "name": "genre",
-                  "plural": false,
-                  "selections": [
-                    {
-                      "kind": "ScalarField",
-                      "alias": null,
-                      "args": null,
-                      "name": "name",
-                      "storageKey": null
-                    }
-                  ],
-                  "storageKey": null
-                },
-                {
-                  "kind": "LinkedField",
-                  "alias": null,
-                  "args": null,
                   "concreteType": "Song",
                   "name": "audio",
                   "plural": false,
@@ -191,24 +167,6 @@ const fragment /*: ConcreteFragment*/ = {
                       "alias": null,
                       "args": null,
                       "name": "free",
-                      "storageKey": null
-                    },
-                    {
-                      "kind": "LinkedField",
-                      "alias": null,
-                      "args": null,
-                      "concreteType": "SongGenre",
-                      "name": "genre",
-                      "plural": false,
-                      "selections": [
-                        {
-                          "kind": "ScalarField",
-                          "alias": null,
-                          "args": null,
-                          "name": "name",
-                          "storageKey": null
-                        }
-                      ],
                       "storageKey": null
                     }
                   ],

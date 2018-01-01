@@ -77,7 +77,7 @@ namespace SoundVast.Components.Edit
                     CoverImageUrl = placeholderImage.CloudBlockBlob.Uri.AbsoluteUri
                 };
 
-                artistModel.ArtistGenres.Add(new ArtistGenre
+                artistModel.ArtistSongGenres.Add(new ArtistSongGenre
                 {
                     Artist = artistModel,
                     SongGenreId = genreId

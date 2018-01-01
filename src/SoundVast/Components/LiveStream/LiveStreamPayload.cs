@@ -27,9 +27,9 @@ namespace SoundVast.Components.LiveStream
             Field(x => x.Likes);
             Field(x => x.Dislikes);
             Field(x => x.PlayCount);
-            Field<DateGraphType>("uploadDate", "The upload date of the live stream");
+            Field<DateGraphType>("dateAdded", "The date the user added the live stream");
             Field<AccountPayload>("user", "The user who uploaded the live stream");
-            Field<LiveStreamGenrePayload>("genre", "The genre the live stream belongs to");
+            Field<ListGraphType<LiveStreamGenrePayload>>("genres", "The genre the live stream belongs to");
             Field<ListGraphType<RatingPayload>>("ratings", "The ratings that have been applied by users to this live stream");
             Connection<CommentPayload>()
                 .Name("comments")

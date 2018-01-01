@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SoundVast.Components.Audio
+namespace SoundVast.Components.Filter
 {
-    public class RatingFilter : IDateFilter
+    public class PlayedFilter : IDateFilter
     {
-        public bool TopRated { get; set; }
-        public int MinimumNumberOfRatingsThreshold { get; set; }
+        public bool MostPlayed { get; set; }
         public int From { get; set; }
         public int To { get; set; }
     }

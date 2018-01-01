@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SoundVast.Components.Audio;
 
 namespace SoundVast.Components.Album
 {
-    public interface IAlbumService
+    public interface IAlbumService : IAudioService<Models.Album>
     {
-        IEnumerable<Models.Album> GetAlbums();
     }
 }

@@ -6,7 +6,7 @@ import { Field } from 'redux-form';
 import BasicInfo from '../common/basicInfo/basicInfo';
 import Input from '../../shared/fields/input/input';
 import NameField from '../../shared/fields/nameField/nameField';
-import RadioGenresField from '../../shared/fields/genreField/radioGenresFieldContainer';
+import RadioGenresField from '../../shared/fields/genresField/radioGenresFieldContainer';
 
 const LiveStreamInformation = ({ id, genres }) => (
   <Tabs>

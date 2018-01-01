@@ -42,9 +42,11 @@ Song.propTypes = {
     likes: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
     playCount: PropTypes.number.isRequired,
-    artists: PropTypes.arrayOf([
-      PropTypes.string.isRequired,
-    ]),
+    artists: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string.isRequired,
+      }),
+    ),
   }).isRequired,
 };
 

@@ -12,6 +12,7 @@ import { routeConfig as socialLoginCallbackRouteConfig } from '../../account/log
 import { routeConfig as confirmEmailRouteConfig } from '../../account/confirmEmail/confirmEmailContainer';
 import { routeConfig as resetPasswordRouteConfig } from '../../account/resetPassword/resetPasswordContainer';
 import { routeConfig as songsRouteConfig } from '../../songs/songsContainer';
+import { routeConfig as artistsRouteConfig } from '../../artists/artistsContainer';
 import { routeConfig as radiosRouteConfig } from '../../radios/radiosContainer';
 import { routeConfig as primaryLayoutRouteConfig } from '../../layouts/primaryLayout/primaryLayoutContainer';
 import { routeConfig as songGenresRouteConfig } from '../../genres/songGenresContainer';
@@ -25,6 +26,7 @@ export default makeRouteConfig(
   <Route path="/" {...primaryLayoutRouteConfig}>
     <Route {...songsRouteConfig} />
     <Route path="songs/:genre?" {...songsRouteConfig} />
+    <Route path="artists" {...artistsRouteConfig} />
     <Route path="radios/:genre?" {...radiosRouteConfig} />
     <Route path="review" {...songPendingEditContainer} />
     <Route path="upload" {...uploadRouteConfig} />

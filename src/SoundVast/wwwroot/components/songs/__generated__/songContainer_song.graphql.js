@@ -23,20 +23,7 @@ export type songContainer_song = {|
 
 
 const fragment /*: ConcreteFragment*/ = {
-  "argumentDefinitions": [
-    {
-      "kind": "LocalArgument",
-      "name": "count",
-      "type": "Int",
-      "defaultValue": 20
-    },
-    {
-      "kind": "LocalArgument",
-      "name": "cursor",
-      "type": "String",
-      "defaultValue": null
-    }
-  ],
+  "argumentDefinitions": [],
   "kind": "Fragment",
   "metadata": null,
   "name": "songContainer_song",

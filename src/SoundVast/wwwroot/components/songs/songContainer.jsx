@@ -1,6 +1,6 @@
 import { compose } from 'recompose';
 import { graphql } from 'react-relay';
-import { refetchContainer } from 'recompose-relay-modern';
+import { fragmentContainer } from 'recompose-relay-modern';
 import { connect } from 'react-redux';
 
 import Song from './song';
@@ -10,11 +10,7 @@ const mapStateToProps = ({ jPlayers }, { song }) => ({
 });
 
 const fragments = graphql`
-  fragment songContainer_song on Song
-  @argumentDefinitions(
-    count: { type: "Int", defaultValue: 20 }
-    cursor: { type: "String", defaultValue: null }
-  ) {
+  fragment songContainer_song on Song {
     audioId
     name
     coverImageUrl
@@ -28,19 +24,7 @@ const fragments = graphql`
   }
 `;
 
-const query = graphql`
-  query songContainerQuery(
-    $id: Int!
-    $count: Int!
-    $cursor: String
-  ) {
-    song(id: $id) {
-      ...songContainer_song @arguments(count: $count, cursor: $cursor)
-    }
-  }
-`;
-
 export default compose(
-  refetchContainer(fragments, query),
+  fragmentContainer(fragments),
   connect(mapStateToProps),
 )(Song);

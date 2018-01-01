@@ -16,7 +16,7 @@ namespace SoundVast.Components.FileStream.ViewModels
         public string Lyrics { get; set; }
         public string ImagePath { get; set; }
 
-        [Display(Name = @"Release Date")]
+        [Display(Name = @"Release DateAdded")]
         [DisplayFormat(ConvertEmptyStringToNull = true, DataFormatString = "{0:dd'/'MMMM'/'yyyy}")]
         public DateTime? ReleaseDate { get; set; }
 

@@ -10,7 +10,7 @@ namespace SoundVast.Components.Artist.Models
     {
         [Required]
         public int Id { get; set; }
-        public int ArtistId { get; set; }
+        public int? ArtistId { get; set; }
         public virtual Artist Artist { get; set; }
         public int AlbumId { get; set; }
         public virtual Album.Models.Album Album { get; set; }

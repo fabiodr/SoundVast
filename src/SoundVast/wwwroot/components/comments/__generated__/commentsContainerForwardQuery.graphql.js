@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 2a34c86b8f74fb7c864c1f746e358c53
+ * @relayHash 2210263d6c2999f89907db5cbe6f35b6
  */
 
 /* eslint-disable */
@@ -36,7 +36,7 @@ fragment commentsContainer on Audio {
         __typename
         commentId
         body
-        date
+        dateAdded
         likes
         dislikes
         repliesCount
@@ -242,7 +242,7 @@ const batch /*: ConcreteBatch*/ = {
                         "kind": "ScalarField",
                         "alias": null,
                         "args": null,
-                        "name": "date",
+                        "name": "dateAdded",
                         "storageKey": null
                       },
                       {
@@ -399,7 +399,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query commentsContainerForwardQuery(\n  $id: Int!\n  $count: Int!\n  $cursor: String\n  $originalCommentId: Int\n) {\n  song(id: $id) {\n    ...commentsContainer\n    id\n  }\n}\n\nfragment commentsContainer on Audio {\n  audioId\n  comments(first: $count, after: $cursor, originalCommentId: $originalCommentId) {\n    edges {\n      node {\n        __typename\n        commentId\n        body\n        date\n        likes\n        dislikes\n        repliesCount\n        originalComment {\n          id\n        }\n        user {\n          userName\n          id\n        }\n        id\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n"
+  "text": "query commentsContainerForwardQuery(\n  $id: Int!\n  $count: Int!\n  $cursor: String\n  $originalCommentId: Int\n) {\n  song(id: $id) {\n    ...commentsContainer\n    id\n  }\n}\n\nfragment commentsContainer on Audio {\n  audioId\n  comments(first: $count, after: $cursor, originalCommentId: $originalCommentId) {\n    edges {\n      node {\n        __typename\n        commentId\n        body\n        dateAdded\n        likes\n        dislikes\n        repliesCount\n        originalComment {\n          id\n        }\n        user {\n          userName\n          id\n        }\n        id\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n"
 };
 
 module.exports = batch;

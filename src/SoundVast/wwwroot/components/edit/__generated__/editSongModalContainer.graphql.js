@@ -17,9 +17,9 @@ export type editSongModalContainer = {|
     +name: string;
     +coverImageUrl: string;
     +free: boolean;
-    +genre: ?{|
+    +genres: ?$ReadOnlyArray<?{|
       +id: ?string;
-    |};
+    |}>;
   |};
 |};
 */
@@ -112,8 +112,8 @@ const fragment /*: ConcreteFragment*/ = {
           "alias": null,
           "args": null,
           "concreteType": "SongGenre",
-          "name": "genre",
-          "plural": false,
+          "name": "genres",
+          "plural": true,
           "selections": [
             {
               "kind": "ScalarField",

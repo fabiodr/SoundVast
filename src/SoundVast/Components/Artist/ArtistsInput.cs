@@ -16,5 +16,7 @@ namespace SoundVast.Components.Artist
             Field<IntGraphType>("id", "The existing artist id");
             Field<StringGraphType>("Artist", "The name of the new artist");
         }
+        public int? Id { get; set; }
+        public string Artist { get; set; }
     }
 }

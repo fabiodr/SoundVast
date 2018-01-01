@@ -42,7 +42,7 @@ const fragments = graphql`
       name
       coverImageUrl
       free
-      genre {
+      genres {
         id
       }
     }

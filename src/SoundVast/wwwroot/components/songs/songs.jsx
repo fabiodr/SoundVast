@@ -7,7 +7,6 @@ import Song from './songContainer';
 import Grid from '../shared/grid/grid';
 import SongsHeader from './songsHeader';
 import Loader from '../shared/loaders/loader';
-import styles from './songs.less';
 import Filters from '../audio/filtersContainer';
 
 const Songs = ({ songs, loadMore }) => (
@@ -21,7 +20,7 @@ const Songs = ({ songs, loadMore }) => (
         loader={<Loader />}
         initialLoad={false}
       >
-        <Grid className={styles.grid}>
+        <Grid>
           {songs.edges.map(({ node }) => <Song key={node.audioId} song={node} />)}
         </Grid>
       </InfiniteScroll>

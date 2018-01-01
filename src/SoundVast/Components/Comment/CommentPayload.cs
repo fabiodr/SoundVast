@@ -21,11 +21,11 @@ namespace SoundVast.Components.Comment
             Name = nameof(Models.Comment);
 
             Id(x => x.Id);
-            Field(x => x.Date).Description("The date when the comment was made");
             Field(x => x.Likes);
             Field(x => x.Dislikes);
             Field(x => x.RepliesCount);
             Field(x => x.Body).Description("The body of the comment");
+            Field<DateGraphType>("dateAdded", "The date when the comment was made");
             Field<NonNullGraphType<AccountPayload>>("user", "The user who added the comment");
             Field<NonNullGraphType<AudioInterface>>("audio", "The audio that the comment was added to");
             Field<CommentPayload>("originalComment", "The original comment that this comment was a reply to");

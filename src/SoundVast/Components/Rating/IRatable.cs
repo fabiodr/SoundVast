@@ -10,7 +10,7 @@ namespace SoundVast.Components.Rating
         int Id { get; set; }
         int Likes { get; }
         int Dislikes { get; }
-        string UserId { get; set; }
+        DateTimeOffset DateAdded { get; set; }
         ICollection<Models.Rating> Ratings { get; set; }
     }
 }

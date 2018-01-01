@@ -15,7 +15,7 @@ export type commentsContainer = {|
       +node: ?{|
         +commentId: number;
         +body: string;
-        +date: any;
+        +dateAdded: ?any;
         +likes: number;
         +dislikes: number;
         +repliesCount: number;
@@ -124,7 +124,7 @@ const fragment /*: ConcreteFragment*/ = {
                   "kind": "ScalarField",
                   "alias": null,
                   "args": null,
-                  "name": "date",
+                  "name": "dateAdded",
                   "storageKey": null
                 },
                 {

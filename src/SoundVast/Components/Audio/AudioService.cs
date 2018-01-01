@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 using ByteSizeLib;
 using Microsoft.EntityFrameworkCore;
 using SoundVast.Components.Audio.Models;
+using SoundVast.Components.Filter;
 using SoundVast.Components.Genre.Models;
+using SoundVast.Components.Rating;
 using SoundVast.Components.Rating.Models;
 using SoundVast.Components.Upload;
 using SoundVast.Components.User;
@@ -30,47 +32,19 @@ namespace SoundVast.Components.Audio
             _validationProvider = validationProvider;
         }
 
-        public virtual IEnumerable<T> GetAudios(string genreName, Filter filter)
+        public virtual IEnumerable<T> GetAudios(string genreName, Filter.Filter filter)
         {
             var audios = _repository.GetAll().BuildAudio();
 
             if (genreName != null)
             {
-                audios = audios.Where(x => x.Genre.Name == genreName);
+                audios = audios.Where(x => x.AudioGenres.Any(z => z.Genre.Name == genreName));
             }
 
-            if (filter != null)
-            {
-                IQueryable<T> FromDateFilter(IDateFilter dateFilter)
-                {
-                    var fromDateTime = DateTime.UtcNow.AddDays(-dateFilter.From);
-                    var toDateTime = DateTime.UtcNow.AddDays(-dateFilter.To);
-
-                    return audios.Where(x => x.UploadDate < fromDateTime && x.UploadDate > toDateTime);
-                }
-
-                if (filter.RatingFilter.TopRated)
-                {
-                    var ratedAudios = audios.Where(x => x.Ratings.Count >= filter.RatingFilter.MinimumNumberOfRatingsThreshold).ToList();
-
-                    return ratedAudios.OrderByDescending(x => x.Likes);
-                }
-
-                if (filter.CommentFilter.MostCommented)
-                {
-                    return FromDateFilter(filter.CommentFilter).OrderByDescending(x => x.Comments.Count);
-                }
-
-                if (filter.PlayedFilter.MostPlayed)
-                {
-                    return FromDateFilter(filter.PlayedFilter).OrderByDescending(x => x.PlayCount);
-                }
-
-                if (filter.Newest)
-                {
-                    return audios.OrderByDescending(x => x.UploadDate);
-                }
-            }
+            audios = audios.TopRated(filter);
+            audios = audios.MostCommented(filter);
+            audios = audios.MostPlayed(filter);
+            audios = audios.Newest(filter);
 
             return audios;
         }
@@ -126,7 +100,6 @@ namespace SoundVast.Components.Audio
 
                 audio.CoverImageUrl = newModel.CoverImageUrl;
                 audio.Name = newModel.Name;
-                audio.GenreId = newModel.GenreId;
                 audio.UserId = newModel.UserId;
 
                 _repository.Save();

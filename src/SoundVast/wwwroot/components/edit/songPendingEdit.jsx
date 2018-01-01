@@ -33,9 +33,6 @@ SongPendingEdit.propTypes = {
           artist: PropTypes.string,
           coverImageUrl: PropTypes.string.isRequired,
           free: PropTypes.bool.isRequired,
-          genre: PropTypes.shape({
-            name: PropTypes.string.isRequired,
-          }).isRequired,
           contributor: PropTypes.shape({
             userName: PropTypes.string.isRequired,
           }),
@@ -44,9 +41,6 @@ SongPendingEdit.propTypes = {
             artist: PropTypes.string,
             coverImageUrl: PropTypes.string.isRequired,
             free: PropTypes.bool.isRequired,
-            genre: PropTypes.shape({
-              name: PropTypes.string.isRequired,
-            }).isRequired,
           }),
         }),
       }),

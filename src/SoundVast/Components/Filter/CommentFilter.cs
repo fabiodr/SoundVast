@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SoundVast.Components.Audio;
 
-namespace SoundVast.Components.Audio
+namespace SoundVast.Components.Filter
 {
-    public class PlayedFilter : IDateFilter
+    public class CommentFilter : IDateFilter
     {
-        public bool MostPlayed { get; set; }
+        public bool MostCommented { get; set; }
         public int From { get; set; }
         public int To { get; set; }
     }

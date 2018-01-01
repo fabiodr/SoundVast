@@ -27,14 +27,14 @@ namespace SoundVast.Components.Song
             Id("audioId", x => x.Id);
             Field(x => x.Name);
             Field(x => x.CoverImageUrl).Description("The poster image for the song");
-            Field<ListGraphType<ArtistPayload>>("artists");
+            Field<ListGraphType<ArtistPayload>>("artists", resolve: c => c.Source.ArtistSongs.Select(x => x.Artist));
             Field(x => x.Free);
             Field(x => x.Likes);
             Field(x => x.Dislikes);
             Field(x => x.PlayCount);
-            Field<DateGraphType>("uploadDate", "The upload date of the song");
+            Field<DateGraphType>("dateAdded", "The date the user added the song");
             Field<AccountPayload>("user", "The user who uploaded the song");
-            Field<SongGenrePayload>("genre", "The genre the song belongs to");
+            Field<ListGraphType<SongGenrePayload>>("genres", "The genre the song belongs to");
             Field<ListGraphType<RatingPayload>>("ratings", "The ratings that have been applied by users to this song");
             Connection<CommentPayload>()
                 .Name("comments")

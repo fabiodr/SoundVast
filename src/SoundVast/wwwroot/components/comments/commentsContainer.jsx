@@ -17,7 +17,7 @@ const fragments = graphql`
         node {
           commentId
           body
-          date
+          dateAdded
           likes
           dislikes
           repliesCount

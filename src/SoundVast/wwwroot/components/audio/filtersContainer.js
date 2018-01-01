@@ -42,7 +42,7 @@ const createProps = ({ match, songs }) => ({
   from: match.location.query.from && parseInt(match.location.query.from, 10),
   to: match.location.query.to && parseInt(match.location.query.to, 10),
   filterMax: songs.items.map((item) => {
-    const days = daysBetween(item.uploadDate, Date.now());
+    const days = daysBetween(item.dateAdded, Date.now());
 
     return Math.round(days * 1e0) / 1e0;
   }).shift(),
@@ -57,7 +57,7 @@ export default compose(
         first: $count
       ) {
         items {
-          uploadDate
+          dateAdded
         }
       }
     }

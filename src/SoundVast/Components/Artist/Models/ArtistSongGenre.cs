@@ -7,7 +7,7 @@ using SoundVast.Components.Genre.Models;
 
 namespace SoundVast.Components.Artist.Models
 {
-    public class ArtistGenre
+    public class ArtistSongGenre
     {
         [Required]
         public int Id { get; set; }

@@ -25,7 +25,7 @@ namespace SoundVast.Components.Genre
 
             foreach (var genre in genres)
             {
-                var coverImageUrl = genre.Audios.Select(x => x.CoverImageUrl).FirstOrDefault();
+                var coverImageUrl = genre.AudioGenres.Select(x => x.Audio.CoverImageUrl).FirstOrDefault();
 
                 if (coverImageUrl != null)
                 {
@@ -38,7 +38,7 @@ namespace SoundVast.Components.Genre
 
         public IEnumerable<T> GetGenres()
         {
-            return _repository.GetAll().Include(x => x.Audios);
+            return _repository.GetAll().Include(x => x.AudioGenres).ThenInclude(x => x.Genre);
         }
     }
 }

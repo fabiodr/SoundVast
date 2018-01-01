@@ -15,7 +15,7 @@ namespace SoundVast.Components.Comment.Models
         [Required]
         public string Body { get; set; }
         [Required]
-        public DateTime Date { get; set; }
+        public DateTimeOffset DateAdded { get; set; }
         public int? RatingId { get; set; }
         [Required]
         public int AudioId { get; set; }
@@ -47,7 +47,7 @@ namespace SoundVast.Components.Comment.Models
 
         public Comment()
         {
-            Date = DateTime.UtcNow;
+            DateAdded = DateTime.UtcNow;
         }
 
         public static void GetAllReplies(Comment comment, List<Comment> allReplies)

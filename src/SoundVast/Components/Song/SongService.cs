@@ -23,6 +23,13 @@ namespace SoundVast.Components.Song
             _repository = repository;
         }
 
+        public override IEnumerable<Models.Song> GetAudios(string genreName, Filter.Filter filter)
+        {
+            var songs = base.GetAudios(genreName, filter).AsQueryable().BuildSong();
+
+            return songs;
+        }
+
         public override Models.Song Edit(int existingAudioId, Models.Song newModel)
         {
             var song = base.Edit(existingAudioId, newModel);

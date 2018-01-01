@@ -1,5 +1,5 @@
 # source: http://localhost:8080/graphql
-# timestamp: Sun Dec 31 2017 17:12:29 GMT+0100 (W. Europe Standard Time)
+# timestamp: Mon Jan 01 2018 22:56:56 GMT+0100 (W. Europe Standard Time)
 
 input AddSongToPlaylistInput {
   clientMutationId: String
@@ -10,6 +10,94 @@ input AddSongToPlaylistInput {
 type AddSongToPlaylistPayload {
   clientMutationId: String
   playlist: Playlist
+}
+
+type Album implements Node, Audio {
+  # The Id of the Album
+  audioId: Int!
+
+  # The Global Id of the Album
+  id: ID!
+  name: String!
+
+  # The poster image for the album
+  coverImageUrl: String!
+  likes: Int!
+  dislikes: Int!
+  playCount: Int!
+  songs(
+    # Only look at connected edges with cursors greater than the value of `after`.
+    after: String
+
+    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
+    first: Int
+  ): SongPayloadConnection
+
+  # The artists who worked on this album
+  artists(
+    # Only look at connected edges with cursors greater than the value of `after`.
+    after: String
+
+    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
+    first: Int
+  ): ArtistPayloadConnection
+
+  # The date the user added the album
+  dateAdded: Date
+
+  # The user who added the album
+  user: ApplicationUser
+
+  # The genres the album belongs to
+  genres: [SongGenre]
+
+  # The ratings that have been applied by users to this album
+  ratings: [Rating]
+
+  # The comments for the album
+  comments(
+    # Only look at connected edges with cursors greater than the value of `after`.
+    after: String
+
+    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
+    first: Int
+
+    # Get the replies for the original comment instead
+    originalCommentId: Int
+  ): CommentPayloadConnection
+}
+
+# A connection from an object to a list of objects of type `AlbumPayload`.
+type AlbumPayloadConnection {
+  # A count of the total number of objects in this connection, ignoring
+  # pagination. This allows a client to fetch the first five objects by passing
+  # "5" as the argument to `first`, then fetch the total count so it could display
+  # "5 of 83", for example. In cases where we employ infinite scrolling or don't
+  # have an exact count of entries, this field will return `null`.
+  totalCount: Int
+
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # Information to aid in pagination.
+  edges: [AlbumPayloadEdge]
+
+  # A list of all of the objects returned in the connection. This is a convenience
+  # field provided for quickly exploring the API; rather than querying for "{
+  # edges { node } }" when no edge data is needed, this field can be used instead.
+  # Note that when clients like Relay need to fetch the "cursor" field on the edge
+  # to enable efficient pagination, this shortcut cannot be used, and the full "{
+  # edges { node } } " version should be used instead.
+  items: [Album]
+}
+
+# An edge in a connection from an object to another object of type `AlbumPayload`.
+type AlbumPayloadEdge {
+  # A cursor for use in pagination
+  cursor: String!
+
+  # The item at the end of the edge
+  node: Album
 }
 
 type ApplicationUser {
@@ -37,14 +125,57 @@ type ApplicationUser {
   likedSongs: [Song]
 }
 
-type Artist implements Node {
+type Artist implements Node, Audio {
   # The Id of the Artist
-  artistId: Int!
+  audioId: Int!
 
   # The Global Id of the Artist
   id: ID!
   name: String!
+
+  # The poster image for the artist
   coverImageUrl: String!
+  likes: Int!
+  dislikes: Int!
+  playCount: Int!
+  songs(
+    # Only look at connected edges with cursors greater than the value of `after`.
+    after: String
+
+    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
+    first: Int
+  ): SongPayloadConnection
+  albums(
+    # Only look at connected edges with cursors greater than the value of `after`.
+    after: String
+
+    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
+    first: Int
+  ): AlbumPayloadConnection
+
+  # The date the user added the artist
+  dateAdded: Date
+
+  # The user who added the artist
+  user: ApplicationUser
+
+  # The genres the artist belongs to
+  genres: [SongGenre]
+
+  # The ratings that have been applied by users to this artist
+  ratings: [Rating]
+
+  # The comments for the artist
+  comments(
+    # Only look at connected edges with cursors greater than the value of `after`.
+    after: String
+
+    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
+    first: Int
+
+    # Get the replies for the original comment instead
+    originalCommentId: Int
+  ): CommentPayloadConnection
 }
 
 input ArtistInput {
@@ -53,6 +184,39 @@ input ArtistInput {
 
   # The name of the new artist
   artist: String
+}
+
+# A connection from an object to a list of objects of type `ArtistPayload`.
+type ArtistPayloadConnection {
+  # A count of the total number of objects in this connection, ignoring
+  # pagination. This allows a client to fetch the first five objects by passing
+  # "5" as the argument to `first`, then fetch the total count so it could display
+  # "5 of 83", for example. In cases where we employ infinite scrolling or don't
+  # have an exact count of entries, this field will return `null`.
+  totalCount: Int
+
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # Information to aid in pagination.
+  edges: [ArtistPayloadEdge]
+
+  # A list of all of the objects returned in the connection. This is a convenience
+  # field provided for quickly exploring the API; rather than querying for "{
+  # edges { node } }" when no edge data is needed, this field can be used instead.
+  # Note that when clients like Relay need to fetch the "cursor" field on the edge
+  # to enable efficient pagination, this shortcut cannot be used, and the full "{
+  # edges { node } } " version should be used instead.
+  items: [Artist]
+}
+
+# An edge in a connection from an object to another object of type `ArtistPayload`.
+type ArtistPayloadEdge {
+  # A cursor for use in pagination
+  cursor: String!
+
+  # The item at the end of the edge
+  node: Artist
 }
 
 interface Audio {
@@ -66,14 +230,14 @@ interface Audio {
   dislikes: Int!
   playCount: Int!
 
-  # The upload date of the audio
-  uploadDate: Date
+  # The date the user added the audio
+  dateAdded: Date
 
   # The user who uploaded the audio
   user: ApplicationUser
 
-  # The genre the audio belongs to
-  genre: Genre
+  # The genres the audio belongs to
+  genres: [Genre]
 
   # The ratings that have been applied by users to this audio
   ratings: [Rating]
@@ -115,15 +279,15 @@ type Comment implements Node {
 
   # The Global Id of the Comment
   id: ID!
-
-  # The date when the comment was made
-  date: Date!
   likes: Int!
   dislikes: Int!
   repliesCount: Int!
 
   # The body of the comment
   body: String!
+
+  # The date when the comment was made
+  dateAdded: Date
 
   # The user who added the comment
   user: ApplicationUser!
@@ -314,14 +478,14 @@ type LiveStream implements Node, Audio {
   dislikes: Int!
   playCount: Int!
 
-  # The upload date of the live stream
-  uploadDate: Date
+  # The date the user added the live stream
+  dateAdded: Date
 
   # The user who uploaded the live stream
   user: ApplicationUser
 
   # The genre the live stream belongs to
-  genre: LiveStreamGenre
+  genres: [LiveStreamGenre]
 
   # The ratings that have been applied by users to this live stream
   ratings: [Rating]
@@ -604,6 +768,32 @@ type Query {
     # The filters to apply to the songs
     filter: FilterInput
   ): SongPayloadConnection
+  artists(
+    # Only look at connected edges with cursors greater than the value of `after`.
+    after: String
+
+    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
+    first: Int
+
+    # The genre that the artist belongs to
+    genre: String
+
+    # The filters to apply to the artists
+    filter: FilterInput
+  ): ArtistPayloadConnection
+  albums(
+    # Only look at connected edges with cursors greater than the value of `after`.
+    after: String
+
+    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
+    first: Int
+
+    # The genre that the album belongs to
+    genre: String
+
+    # The filters to apply to the albums
+    filter: FilterInput
+  ): AlbumPayloadConnection
   liveStreams(
     # Only look at connected edges with cursors greater than the value of `after`.
     after: String
@@ -614,7 +804,7 @@ type Query {
     # The genre that the live stream belongs to
     genre: String
 
-    # The filters to apply to the songs
+    # The filters to apply to the live streams
     filter: FilterInput
   ): LiveStreamPayloadConnection
   songsPendingEdit(
@@ -777,7 +967,7 @@ input SaveSongInput {
   albumId: Int
   free: Boolean
   coverImageUrl: String!
-  genreId: Int
+  genreIds: [Int]
 }
 
 type SaveSongPayload {
@@ -815,14 +1005,14 @@ type Song implements Node, Audio {
   dislikes: Int!
   playCount: Int!
 
-  # The upload date of the song
-  uploadDate: Date
+  # The date the user added the song
+  dateAdded: Date
 
   # The user who uploaded the song
   user: ApplicationUser
 
   # The genre the song belongs to
-  genre: SongGenre
+  genres: [SongGenre]
 
   # The ratings that have been applied by users to this song
   ratings: [Rating]

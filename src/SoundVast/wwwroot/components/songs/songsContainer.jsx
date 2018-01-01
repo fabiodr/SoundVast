@@ -8,7 +8,7 @@ import { actions } from 'react-jplaylist';
 import convertSongToMedia from '../shared/utilities/convertSongToMedia';
 import Songs from './songs';
 import { audiosToLoad } from '../shared/utilities/itemsToLoad';
-import normalizeBoolean from '../shared/utilities/normalizeBoolean';
+import getFilterVariables from '../shared/utilities/getFilterVariables';
 
 const query = graphql`
   query songsContainerQuery(
@@ -105,25 +105,7 @@ export const routeConfig = {
   prepareVariables: ({ genre }, { location }) => ({
     count: audiosToLoad,
     genre,
-    filter: {
-      newest: location.query.newest,
-      ratingFilter: {
-        topRated: normalizeBoolean(location.query.topRated),
-        minimumNumberOfRatingsThreshold: 0,
-        from: location.query.from,
-        to: location.query.to,
-      },
-      commentFilter: {
-        mostCommented: normalizeBoolean(location.query.mostCommented),
-        from: location.query.from,
-        to: location.query.to,
-      },
-      playedFilter: {
-        mostPlayed: normalizeBoolean(location.query.mostPlayed),
-        from: location.query.from,
-        to: location.query.to,
-      },
-    },
+    filter: getFilterVariables(location),
   }),
 };
 

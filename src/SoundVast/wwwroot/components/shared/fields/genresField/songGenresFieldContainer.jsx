@@ -2,7 +2,7 @@ import { compose } from 'recompose';
 import { fragmentContainer } from 'recompose-relay-modern';
 import { graphql } from 'react-relay';
 
-import GenreField from './genreField';
+import GenresField from './genresField';
 
 const fragments = graphql`
   fragment songGenresFieldContainer_genres on Genre @relay(plural: true) {
@@ -15,4 +15,4 @@ const enhance = compose(
   fragmentContainer(fragments),
 );
 
-export default enhance(GenreField);
+export default enhance(GenresField);

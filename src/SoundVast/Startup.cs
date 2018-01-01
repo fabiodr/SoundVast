@@ -37,6 +37,8 @@ using Microsoft.AspNetCore.Authentication.Facebook;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.Twitter;
 using Newtonsoft.Json;
+using SoundVast.Components.Album.Models;
+using SoundVast.Components.Artist.Models;
 using SoundVast.Components.Audio;
 using SoundVast.Components.Audio.Models;
 using SoundVast.Components.Comment.Models;
@@ -240,6 +242,8 @@ namespace SoundVast
             builder.RegisterType<Repository<Audio, ApplicationDbContext>>().As<IRepository<Audio>>();
             builder.RegisterType<Repository<Song, ApplicationDbContext>>().As<IRepository<Song>>();
             builder.RegisterType<Repository<LiveStream, ApplicationDbContext>>().As<IRepository<LiveStream>>();
+            builder.RegisterType<Repository<Artist, ApplicationDbContext>>().As<IRepository<Artist>>();
+            builder.RegisterType<Repository<Album, ApplicationDbContext>>().As<IRepository<Album>>();
             builder.RegisterType<Repository<Genre, ApplicationDbContext>>().As<IRepository<Genre>>();
             builder.RegisterType<Repository<SongGenre, ApplicationDbContext>>().As<IRepository<SongGenre>>();
             builder.RegisterType<Repository<LiveStreamGenre, ApplicationDbContext>>().As<IRepository<LiveStreamGenre>>();
