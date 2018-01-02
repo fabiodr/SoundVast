@@ -51,44 +51,44 @@ namespace SoundVast.Components.Edit
                 AlbumId = albumId
             };
 
-            if (album != null)
-            {
-                songPendingEdit.Album = new Album.Models.Album
-                {
-                    Name = album,
-                    CoverImageUrl = placeholderImage.CloudBlockBlob.Uri.AbsoluteUri
-                };
-            }
+            //if (album != null)
+            //{
+            //    songPendingEdit.Album = new Album.Models.Album
+            //    {
+            //        Name = album,
+            //        CoverImageUrl = placeholderImage.CloudBlockBlob.Uri.AbsoluteUri
+            //    };
+            //}
 
-            foreach (var artistId in artistsId)
-            {
-                songPendingEdit.ArtistSongs.Add(new ArtistSong
-                {
-                    SongId = songId,
-                    ArtistId = artistId
-                });
-            }
+            //foreach (var artistId in artistsId)
+            //{
+            //    songPendingEdit.ArtistSongs.Add(new ArtistSong
+            //    {
+            //        SongId = songId,
+            //        ArtistId = artistId
+            //    });
+            //}
 
-            foreach (var artist in artists)
-            {
-                var artistModel = new Artist.Models.Artist
-                {
-                    Name = artist,
-                    CoverImageUrl = placeholderImage.CloudBlockBlob.Uri.AbsoluteUri
-                };
+            //foreach (var artist in artists)
+            //{
+            //    var artistModel = new Artist.Models.Artist
+            //    {
+            //        Name = artist,
+            //        CoverImageUrl = placeholderImage.CloudBlockBlob.Uri.AbsoluteUri
+            //    };
 
-                artistModel.ArtistSongGenres.Add(new ArtistSongGenre
-                {
-                    Artist = artistModel,
-                    SongGenreId = genreId
-                });
+            //    artistModel.ArtistSongGenres.Add(new ArtistSongGenre
+            //    {
+            //        Artist = artistModel,
+            //        SongGenreId = genreId
+            //    });
 
-                songPendingEdit.ArtistSongs.Add(new ArtistSong
-                {
-                    SongId = songId,
-                    Artist = artistModel
-                });
-            }
+            //    songPendingEdit.ArtistSongs.Add(new ArtistSong
+            //    {
+            //        SongId = songId,
+            //        Artist = artistModel
+            //    });
+            //}
 
             _songPendingEditService.Add(songPendingEdit);
 

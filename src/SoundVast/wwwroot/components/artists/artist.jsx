@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Play from '../audio/playContainer';
+import Play from '../playlist/playContainer';
 import CoverImage from '../audio/coverImage';
 import Rating from '../rating/audioRating';
 import Like from '../rating/like/likeAudioContainer';
@@ -11,9 +11,9 @@ import Name from '../audio/name';
 import Artists from '../audio/artists';
 import AddToPlaylist from '../playlist/addToPlaylistContainer';
 
-const Artist = ({ artist }) => (
+const Artist = ({ artist, getCurrentPlaylist }) => (
   <div>
-    <Play id={artist.audioId}>
+    <Play id={artist.audioId} getCurrentPlaylist={getCurrentPlaylist}>
       <CoverImage coverImageUrl={artist.coverImageUrl} />
     </Play>
     <Name name={artist.name} />
@@ -36,6 +36,7 @@ Artist.propTypes = {
     name: PropTypes.string.isRequired,
     playCount: PropTypes.number.isRequired,
   }).isRequired,
+  getCurrentPlaylist: PropTypes.func.isRequired,
 };
 
 export default Artist;

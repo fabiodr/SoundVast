@@ -17,6 +17,7 @@ import { routeConfig as radiosRouteConfig } from '../../radios/radiosContainer';
 import { routeConfig as primaryLayoutRouteConfig } from '../../layouts/primaryLayout/primaryLayoutContainer';
 import { routeConfig as songGenresRouteConfig } from '../../genres/songGenresContainer';
 import { routeConfig as radioGenresRouteConfig } from '../../genres/radioGenresContainer';
+import { routeConfig as artistGenresRouteConfig } from '../../genres/artistGenresContainer';
 import { routeConfig as songPendingEditContainer } from '../../edit/songPendingEditContainer';
 import { routeConfig as copyrightRouteConfig } from '../../legal/copyrightContainer';
 import { routeConfig as termsAndConditionsRouteConfig } from '../../legal/termsAndConditionsContainer';
@@ -26,7 +27,7 @@ export default makeRouteConfig(
   <Route path="/" {...primaryLayoutRouteConfig}>
     <Route {...songsRouteConfig} />
     <Route path="songs/:genre?" {...songsRouteConfig} />
-    <Route path="artists" {...artistsRouteConfig} />
+    <Route path="artists/:genre?" {...artistsRouteConfig} />
     <Route path="radios/:genre?" {...radiosRouteConfig} />
     <Route path="review" {...songPendingEditContainer} />
     <Route path="upload" {...uploadRouteConfig} />
@@ -38,6 +39,7 @@ export default makeRouteConfig(
     </Route>
     <Route path="genres/songs" {...songGenresRouteConfig} />
     <Route path="genres/radios" {...radioGenresRouteConfig} />
+    <Route path="genres/artists" {...artistGenresRouteConfig} />
     <Route path="error/:status" {...errorPageRouteConfig} />
     <Route path="account">
       <Route path="externalLoginCallback/:returnUrl" {...socialLoginCallbackRouteConfig} />

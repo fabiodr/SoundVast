@@ -36,8 +36,8 @@ namespace SoundVast.Components.Playlist
                     return c.Source.SongPlaylists.Select(x => x.Song.CoverImageUrl).FirstOrDefault();
                 });
             Field<NonNullGraphType<AccountPayload>>("user", "The user who created the playlist");
-            Connection<SongPlaylistPayload>().Name("songPlaylists").Description("The songs in the playlist.")
-                .Resolve(c => GraphQL.Relay.Types.Connection.ToConnection(c.Source.SongPlaylists, c));
+            Connection<SongPayload>().Name("songs").Description("The songs in the playlist.")
+                .Resolve(c => GraphQL.Relay.Types.Connection.ToConnection(c.Source.SongPlaylists.Select(x => x.Song), c));
         }
 
         public override Models.Playlist GetById(string id)

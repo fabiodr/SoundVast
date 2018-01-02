@@ -1,24 +1,39 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ReactDOM from 'react-dom';
 
 import CommentBox from '../comments/commentBoxContainer';
 import Comments from '../comments/commentsContainer';
 import styles from './sideBar.less';
 
-const SideBar = ({ data }) => (
-  ReactDOM.createPortal(
+const SideBar = ({ audioData, currentAudioId }) => {
+  const newAudioId = currentAudioId || audioData.edges[0].node.audioId;
+  const currentAudioEdge = audioData.edges.find(({ node }) => node.audioId === newAudioId);
+
+  return (
     <div className={styles.sideBar}>
       <div>
-        <CommentBox />
-        <Comments data={data} />
+        <CommentBox currentAudioId={newAudioId} />
+        <Comments data={currentAudioEdge.node} />
       </div>
     </div>
-    , document.getElementById('main'))
-);
+  );
+};
+
+SideBar.defaultProps = {
+  currentAudioId: null,
+};
 
 SideBar.propTypes = {
-  data: PropTypes.object.isRequired,
+  audioData: PropTypes.shape({
+    edges: PropTypes.arrayOf(
+      PropTypes.shape({
+        node: PropTypes.shape({
+          audioId: PropTypes.number.isRequired,
+        }),
+      }),
+    ),
+  }).isRequired,
+  currentAudioId: PropTypes.number,
 };
 
 export default SideBar;

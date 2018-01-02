@@ -16,17 +16,15 @@ export type userPlaylistsContainer = {|
         +playlistId: number;
         +name: string;
         +coverImageUrl: ?string;
-        +songPlaylists: ?{|
+        +songs: ?{|
           +items: ?$ReadOnlyArray<?{|
-            +song: ?{|
-              +audioId: number;
+            +audioId: number;
+            +name: string;
+            +artists: ?$ReadOnlyArray<?{|
               +name: string;
-              +artists: ?$ReadOnlyArray<?{|
-                +name: string;
-              |}>;
-              +coverImageUrl: string;
-              +free: boolean;
-            |};
+            |}>;
+            +coverImageUrl: string;
+            +free: boolean;
           |}>;
         |};
       |};
@@ -122,87 +120,63 @@ const fragment /*: ConcreteFragment*/ = {
                 {
                   "kind": "LinkedField",
                   "alias": null,
-                  "args": [
-                    {
-                      "kind": "Variable",
-                      "name": "after",
-                      "variableName": "cursor",
-                      "type": "String"
-                    },
-                    {
-                      "kind": "Variable",
-                      "name": "first",
-                      "variableName": "count",
-                      "type": "Int"
-                    }
-                  ],
-                  "concreteType": "SongPlaylistPayloadConnection",
-                  "name": "songPlaylists",
+                  "args": null,
+                  "concreteType": "SongPayloadConnection",
+                  "name": "songs",
                   "plural": false,
                   "selections": [
                     {
                       "kind": "LinkedField",
                       "alias": null,
                       "args": null,
-                      "concreteType": "SongPlaylist",
+                      "concreteType": "Song",
                       "name": "items",
                       "plural": true,
                       "selections": [
                         {
+                          "kind": "ScalarField",
+                          "alias": null,
+                          "args": null,
+                          "name": "audioId",
+                          "storageKey": null
+                        },
+                        {
+                          "kind": "ScalarField",
+                          "alias": null,
+                          "args": null,
+                          "name": "name",
+                          "storageKey": null
+                        },
+                        {
                           "kind": "LinkedField",
                           "alias": null,
                           "args": null,
-                          "concreteType": "Song",
-                          "name": "song",
-                          "plural": false,
+                          "concreteType": "Artist",
+                          "name": "artists",
+                          "plural": true,
                           "selections": [
-                            {
-                              "kind": "ScalarField",
-                              "alias": null,
-                              "args": null,
-                              "name": "audioId",
-                              "storageKey": null
-                            },
                             {
                               "kind": "ScalarField",
                               "alias": null,
                               "args": null,
                               "name": "name",
                               "storageKey": null
-                            },
-                            {
-                              "kind": "LinkedField",
-                              "alias": null,
-                              "args": null,
-                              "concreteType": "Artist",
-                              "name": "artists",
-                              "plural": true,
-                              "selections": [
-                                {
-                                  "kind": "ScalarField",
-                                  "alias": null,
-                                  "args": null,
-                                  "name": "name",
-                                  "storageKey": null
-                                }
-                              ],
-                              "storageKey": null
-                            },
-                            {
-                              "kind": "ScalarField",
-                              "alias": null,
-                              "args": null,
-                              "name": "coverImageUrl",
-                              "storageKey": null
-                            },
-                            {
-                              "kind": "ScalarField",
-                              "alias": null,
-                              "args": null,
-                              "name": "free",
-                              "storageKey": null
                             }
                           ],
+                          "storageKey": null
+                        },
+                        {
+                          "kind": "ScalarField",
+                          "alias": null,
+                          "args": null,
+                          "name": "coverImageUrl",
+                          "storageKey": null
+                        },
+                        {
+                          "kind": "ScalarField",
+                          "alias": null,
+                          "args": null,
+                          "name": "free",
                           "storageKey": null
                         }
                       ],

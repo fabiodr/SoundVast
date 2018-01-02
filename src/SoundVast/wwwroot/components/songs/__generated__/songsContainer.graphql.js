@@ -164,6 +164,11 @@ const fragment /*: ConcreteFragment*/ = {
                   "args": null
                 },
                 {
+                  "kind": "FragmentSpread",
+                  "name": "commentsContainer",
+                  "args": null
+                },
+                {
                   "kind": "ScalarField",
                   "alias": null,
                   "args": null,

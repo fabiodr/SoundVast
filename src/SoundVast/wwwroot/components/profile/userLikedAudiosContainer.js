@@ -6,11 +6,7 @@ import UserLikedSongs from './userLikedSongs';
 import { audiosToLoad } from '../shared/utilities/itemsToLoad';
 
 const query = graphql`
-  query userLikedAudiosContainerQuery(
-    $count: Int!
-    $cursor: String
-    $originalCommentId: Int
-  ) {
+  query userLikedAudiosContainerQuery {
     user {
       ...userLikedAudiosContainer_user,
     }

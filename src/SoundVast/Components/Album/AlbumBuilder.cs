@@ -11,7 +11,6 @@ namespace SoundVast.Components.Album
         public static IQueryable<T> BuildAlbum<T>(this IQueryable<T> query) where T : Models.Album
         {
             return query
-                .Include(x => x.AlbumGenres)
                 .Include(x => x.ArtistAlbums)
                 .Include(x => x.Songs);
         }

@@ -6,17 +6,17 @@ import { actions as jPlayerActions } from 'react-jplayer';
 
 import Play from './play';
 
-const mapStateToProps = ({ jPlayers, jPlaylists }, { id }) => ({
+const mapStateToProps = ({ jPlayers }, { id }) => ({
   paused: jPlayers.FooterPlaylist.paused,
   isCurrent: jPlayers.FooterPlaylist.media.id === id,
-  playlist: jPlaylists.FooterPlaylist.playlist,
 });
 
 const handlers = {
-  onClick: ({ dispatch, isCurrent, paused, playlist, id }) => () => {
+  onClick: ({ dispatch, isCurrent, paused, footerPlaylist, id }) => () => {
     if (paused || !isCurrent) {
-      const index = playlist.findIndex(x => x.id === id);
+      const index = footerPlaylist.findIndex(x => x.id === id);
 
+      dispatch(actions.setPlaylist('FooterPlaylist', footerPlaylist));
       dispatch(actions.play('FooterPlaylist', index));
     } else {
       dispatch(jPlayerActions.pause('FooterPlaylist'));
@@ -26,6 +26,16 @@ const handlers = {
 
 const propTypes = {
   id: PropTypes.number.isRequired,
+  footerPlaylist: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      title: PropTypes.string.isRequired,
+      artist: PropTypes.string,
+      sources: PropTypes.object.isRequired,
+      poster: PropTypes.string.isRequired,
+      free: PropTypes.bool.isRequired,
+    }),
+  ).isRequired,
 };
 
 export default compose(

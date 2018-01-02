@@ -12,9 +12,10 @@ using System;
 namespace SoundVast.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180102133642_ew")]
+    partial class ew
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -127,6 +128,24 @@ namespace SoundVast.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("SoundVast.Components.Album.Models.AlbumSongGenre", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("AlbumId");
+
+                    b.Property<int>("SongGenreId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AlbumId");
+
+                    b.HasIndex("SongGenreId");
+
+                    b.ToTable("AlbumSongGenre");
                 });
 
             modelBuilder.Entity("SoundVast.Components.Artist.Models.ArtistAlbum", b =>
@@ -588,6 +607,19 @@ namespace SoundVast.Migrations
                     b.HasOne("SoundVast.Components.User.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("SoundVast.Components.Album.Models.AlbumSongGenre", b =>
+                {
+                    b.HasOne("SoundVast.Components.Album.Models.Album", "Album")
+                        .WithMany("AlbumGenres")
+                        .HasForeignKey("AlbumId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("SoundVast.Components.Genre.Models.SongGenre", "SongGenre")
+                        .WithMany("AlbumSongGenres")
+                        .HasForeignKey("SongGenreId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

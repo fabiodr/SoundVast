@@ -1,11 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { compose, withHandlers, withProps, lifecycle, flattenProp } from 'recompose';
+import { compose, withHandlers, flattenProp } from 'recompose';
 import { graphql } from 'react-relay';
 import { paginationContainer } from 'recompose-relay-modern';
 import { actions } from 'react-jplaylist';
 
-import convertSongToMedia from '../shared/utilities/convertSongToMedia';
 import Songs from './songs';
 import { audiosToLoad } from '../shared/utilities/itemsToLoad';
 import getFilterVariables from '../shared/utilities/getFilterVariables';
@@ -41,6 +40,7 @@ const fragments = graphql`
           coverImageUrl
           free
           ...songContainer_song
+          ...commentsContainer
         }
       }
       pageInfo {
@@ -74,10 +74,6 @@ const handlers = {
   loadMore: ({ relay }) => () => relay.loadMore(audiosToLoad),
 };
 
-const createProps = ({ songs }) => ({
-  footerPlaylist: songs.edges.map(({ node }) => convertSongToMedia(node)),
-});
-
 const enhance = compose(
   connect(null, {
     setPlaylist: actions.setPlaylist,
@@ -85,15 +81,6 @@ const enhance = compose(
   paginationContainer(fragments, connectionConfig),
   flattenProp('data'),
   withHandlers(handlers),
-  withProps(createProps),
-  lifecycle({
-    componentDidMount() {
-      this.props.setPlaylist('FooterPlaylist', this.props.footerPlaylist);
-    },
-    componentWillReceiveProps(nextProps) {
-      this.props.setPlaylist('FooterPlaylist', nextProps.footerPlaylist);
-    },
-  }),
 );
 
 const SongsContainer = enhance(Songs);

@@ -29,8 +29,12 @@ namespace SoundVast.Components.Artist
             Field(x => x.Likes);
             Field(x => x.Dislikes);
             Field(x => x.PlayCount);
-            Connection<SongPayload>().Name("songs").Resolve(c => c.Source.ArtistSongs.Select(x => x.Song));
-            Connection<AlbumPayload>().Name("albums").Resolve(c => c.Source.ArtistAlbums.Select(x => x.Album));
+            Connection<SongPayload>()
+                .Name("songs")
+                .Resolve(c => GraphQL.Relay.Types.Connection.ToConnection(c.Source.ArtistSongs.Select(x => x.Song), c));
+            Connection<AlbumPayload>()
+                .Name("albums")
+                .Resolve(c => GraphQL.Relay.Types.Connection.ToConnection(c.Source.ArtistAlbums.Select(x => x.Album), c));
             Field<DateGraphType>("dateAdded", "The date the user added the artist");
             Field<AccountPayload>("user", "The user who added the artist");
             Field<ListGraphType<SongGenrePayload>>("genres", "The genres the artist belongs to");

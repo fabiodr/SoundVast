@@ -1,5 +1,5 @@
 # source: http://localhost:8080/graphql
-# timestamp: Mon Jan 01 2018 22:56:56 GMT+0100 (W. Europe Standard Time)
+# timestamp: Tue Jan 02 2018 19:21:46 GMT+0100 (W. Europe Standard Time)
 
 input AddSongToPlaylistInput {
   clientMutationId: String
@@ -698,13 +698,13 @@ type Playlist implements Node {
   user: ApplicationUser!
 
   # The songs in the playlist.
-  songPlaylists(
+  songs(
     # Only look at connected edges with cursors greater than the value of `after`.
     after: String
 
     # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
     first: Int
-  ): SongPlaylistPayloadConnection
+  ): SongPayloadConnection
 }
 
 # A connection from an object to a list of objects of type `PlaylistPayload`.
@@ -1134,56 +1134,6 @@ type SongPendingEditPayloadEdge {
 
   # The item at the end of the edge
   node: SongPendingEdit
-}
-
-type SongPlaylist implements Node {
-  # The Id of the SongPlaylist
-  songPlaylistId: Int!
-
-  # The Global Id of the SongPlaylist
-  id: ID!
-
-  # The playlist for this song
-  playlist: Playlist
-
-  # The song in this playlist
-  song: Song
-
-  # The user who created this playlist
-  user: ApplicationUser
-}
-
-# A connection from an object to a list of objects of type `SongPlaylistPayload`.
-type SongPlaylistPayloadConnection {
-  # A count of the total number of objects in this connection, ignoring
-  # pagination. This allows a client to fetch the first five objects by passing
-  # "5" as the argument to `first`, then fetch the total count so it could display
-  # "5 of 83", for example. In cases where we employ infinite scrolling or don't
-  # have an exact count of entries, this field will return `null`.
-  totalCount: Int
-
-  # Information to aid in pagination.
-  pageInfo: PageInfo!
-
-  # Information to aid in pagination.
-  edges: [SongPlaylistPayloadEdge]
-
-  # A list of all of the objects returned in the connection. This is a convenience
-  # field provided for quickly exploring the API; rather than querying for "{
-  # edges { node } }" when no edge data is needed, this field can be used instead.
-  # Note that when clients like Relay need to fetch the "cursor" field on the edge
-  # to enable efficient pagination, this shortcut cannot be used, and the full "{
-  # edges { node } } " version should be used instead.
-  items: [SongPlaylist]
-}
-
-# An edge in a connection from an object to another object of type `SongPlaylistPayload`.
-type SongPlaylistPayloadEdge {
-  # A cursor for use in pagination
-  cursor: String!
-
-  # The item at the end of the edge
-  node: SongPlaylist
 }
 
 input UpdatePlayCountInput {

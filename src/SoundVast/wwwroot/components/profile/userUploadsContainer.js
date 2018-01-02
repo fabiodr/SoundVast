@@ -6,11 +6,7 @@ import UserUploads from './userUploads';
 import { audiosToLoad } from '../shared/utilities/itemsToLoad';
 
 const query = graphql`
-  query userUploadsContainerQuery(
-    $count: Int!
-    $cursor: String
-    $originalCommentId: Int
-  ) {
+  query userUploadsContainerQuery {
     user {
       ...userUploadsContainer_user,
     }

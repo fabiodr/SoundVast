@@ -12,6 +12,5 @@ namespace SoundVast.Components.Artist.Models
     {
         public virtual ICollection<ArtistSong> ArtistSongs { get; set; } = new List<ArtistSong>();
         public virtual ICollection<ArtistAlbum> ArtistAlbums { get; set; } = new List<ArtistAlbum>();
-        public virtual ICollection<ArtistSongGenre> ArtistSongGenres { get; set; } = new List<ArtistSongGenre>();
     }
 }

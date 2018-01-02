@@ -87,11 +87,6 @@ const fragment /*: ConcreteFragment*/ = {
       "args": null,
       "name": "dislikes",
       "storageKey": null
-    },
-    {
-      "kind": "FragmentSpread",
-      "name": "commentsContainer",
-      "args": null
     }
   ],
   "type": "Song"

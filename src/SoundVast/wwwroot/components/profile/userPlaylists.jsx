@@ -6,7 +6,7 @@ import Playlist from '../playlist/playlist';
 import Loader from '../shared/loaders/loader';
 import Grid from '../shared/grid/grid';
 
-const UserPlaylists = ({ playlists, loadMore }) => (
+const UserPlaylists = ({ playlists, loadMore, getCurrentPlaylist }) => (
   <InfiniteScroll
     loadMore={loadMore}
     hasMore={playlists.pageInfo.hasNextPage}
@@ -20,7 +20,7 @@ const UserPlaylists = ({ playlists, loadMore }) => (
           id={node.playlistId}
           name={node.name}
           coverImageUrl={node.coverImageUrl}
-          playlists={playlists}
+          getCurrentPlaylist={getCurrentPlaylist}
         />
       ))}
     </Grid>
@@ -49,6 +49,7 @@ UserPlaylists.propTypes = {
     })),
   }),
   loadMore: PropTypes.func.isRequired,
+  getCurrentPlaylist: PropTypes.func.isRequired,
 };
 
 export default UserPlaylists;

@@ -70,7 +70,7 @@ namespace SoundVast.Components.Song
 
                 foreach (var genreId in genreIds)
                 {
-                    song.Album.AlbumGenres.Add(new AlbumSongGenre { SongGenreId = genreId });
+                    song.Album.AudioGenres.Add(new AudioGenre { GenreId = genreId });
                 }
             }
 
@@ -100,7 +100,7 @@ namespace SoundVast.Components.Song
 
                 foreach (var genreId in genreIds)
                 {
-                    artistModel.ArtistSongGenres.Add(new ArtistSongGenre { SongGenreId = genreId });
+                   artistModel.AudioGenres.Add(new AudioGenre { GenreId = genreId });
                 }
 
                 if (album != null)

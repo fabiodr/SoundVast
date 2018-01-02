@@ -7,10 +7,12 @@ import Artist from './artistContainer';
 import Grid from '../shared/grid/grid';
 import Loader from '../shared/loaders/loader';
 import Filters from '../audio/filtersContainer';
+import AudiosHeader from '../audio/audiosHeader';
 
-const Songs = ({ artists, loadMore }) => (
+const Artists = ({ artists, loadMore, getCurrentPlaylist }) => (
   <SoundVastTitle title="Artists">
     <div>
+      <AudiosHeader typeUrl="artists" />
       <Filters />
       <InfiniteScroll
         loadMore={loadMore}
@@ -19,14 +21,20 @@ const Songs = ({ artists, loadMore }) => (
         initialLoad={false}
       >
         <Grid>
-          {artists.edges.map(({ node }) => <Artist key={node.audioId} artist={node} />)}
+          {artists.edges.map(({ node }) => (
+            <Artist
+              key={node.audioId}
+              artist={node}
+              getCurrentPlaylist={getCurrentPlaylist}
+            />
+          ))}
         </Grid>
       </InfiniteScroll>
     </div>
   </SoundVastTitle>
 );
 
-Songs.propTypes = {
+Artists.propTypes = {
   artists: PropTypes.shape({
     pageInfo: PropTypes.shape({
       hasNextPage: PropTypes.bool.isRequired,
@@ -40,6 +48,7 @@ Songs.propTypes = {
     ),
   }).isRequired,
   loadMore: PropTypes.func.isRequired,
+  getCurrentPlaylist: PropTypes.func.isRequired,
 };
 
-export default Songs;
+export default Artists;

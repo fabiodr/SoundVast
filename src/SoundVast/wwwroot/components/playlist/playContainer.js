@@ -6,7 +6,6 @@ import { actions as jPlayerActions } from 'react-jplayer';
 
 import { setCurrentPlaylist } from './actions';
 import Play from '../audio/play';
-import convertSongToMedia from '../shared/utilities/convertSongToMedia';
 
 const mapStateToProps = ({ jPlayers, jPlaylists, playlist }, { id }) => ({
   paused: jPlayers.FooterPlaylist.paused,
@@ -16,34 +15,13 @@ const mapStateToProps = ({ jPlayers, jPlaylists, playlist }, { id }) => ({
 
 const propTypes = {
   id: PropTypes.number.isRequired,
-  playlists: PropTypes.shape({
-    edges: PropTypes.arrayOf(PropTypes.shape({
-      node: PropTypes.shape({
-        playlistId: PropTypes.number.isRequired,
-        songPlaylists: PropTypes.shape({
-          items: PropTypes.arrayOf(PropTypes.shape({
-            song: PropTypes.shape({
-              coverImageUrl: PropTypes.string.isRequired,
-              audioId: PropTypes.number.isRequired,
-              name: PropTypes.string.isRequired,
-              artists: PropTypes.arrayOf([
-                PropTypes.string.isRequired,
-              ]),
-              free: PropTypes.bool.isRequired,
-            }),
-          })),
-        }),
-      }),
-    })),
-  }).isRequired,
+  getCurrentPlaylist: PropTypes.func.isRequired,
 };
 
 const handlers = {
-  onClick: ({ dispatch, id, playlists, isCurrent, paused }) => () => {
+  onClick: ({ dispatch, id, getCurrentPlaylist, isCurrent, paused }) => () => {
     if (paused || !isCurrent) {
-      const playlist = playlists.edges.find(x => x.node.playlistId === id);
-      const footerPlaylist = playlist.node.songPlaylists.items.map(({ song }) =>
-        convertSongToMedia(song));
+      const footerPlaylist = getCurrentPlaylist(id);
 
       dispatch(actions.setPlaylist('FooterPlaylist', footerPlaylist));
       dispatch(actions.play('FooterPlaylist'));

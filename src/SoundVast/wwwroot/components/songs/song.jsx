@@ -12,11 +12,10 @@ import Artists from '../audio/artists';
 import Flag from '../flag/flag';
 import Edit from '../edit/edit';
 import AddToPlaylist from '../playlist/addToPlaylistContainer';
-import SideBar from '../audio/sideBar';
 
-const Song = ({ song, isOnCurrentSong }) => (
+const Song = ({ song, footerPlaylist }) => (
   <div>
-    <Play id={song.audioId}>
+    <Play id={song.audioId} footerPlaylist={footerPlaylist}>
       <CoverImage coverImageUrl={song.coverImageUrl} />
     </Play>
     <Name name={song.name} />
@@ -29,12 +28,10 @@ const Song = ({ song, isOnCurrentSong }) => (
     <AddToPlaylist songId={song.audioId} />
     <Edit modalId="editSong" id={song.audioId} />
     <Flag modalId="flagAudio" id={song.audioId} />
-    { isOnCurrentSong ? <SideBar data={song} /> : null }
   </div>
 );
 
 Song.propTypes = {
-  isOnCurrentSong: PropTypes.bool.isRequired,
   song: PropTypes.shape({
     coverImageUrl: PropTypes.string.isRequired,
     audioId: PropTypes.number.isRequired,
@@ -48,6 +45,16 @@ Song.propTypes = {
       }),
     ),
   }).isRequired,
+  footerPlaylist: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      title: PropTypes.string.isRequired,
+      artist: PropTypes.string,
+      sources: PropTypes.object.isRequired,
+      poster: PropTypes.string.isRequired,
+      free: PropTypes.bool.isRequired,
+    }),
+  ).isRequired,
 };
 
 export default Song;

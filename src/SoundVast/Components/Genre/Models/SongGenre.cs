@@ -10,7 +10,5 @@ namespace SoundVast.Components.Genre.Models
 {
     public class SongGenre : Genre
     {
-        public virtual ICollection<ArtistSongGenre> ArtistSongGenres { get; set; }
-        public virtual ICollection<AlbumSongGenre> AlbumSongGenres { get; set; }
     }
 }

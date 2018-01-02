@@ -12,7 +12,7 @@ import Flag from '../flag/flag';
 
 const Comments = ({
   userName,
-  date,
+  dateAdded,
   body,
   id,
   likes,
@@ -44,7 +44,7 @@ const Comments = ({
     <div>
       <div>
         <span>{userName}</span>
-        <span>{date}</span>
+        <span>{dateAdded}</span>
       </div>
       <div>{body}</div>
       <Rating likes={likes} dislikes={dislikes}>
@@ -64,7 +64,7 @@ const Comments = ({
 
 Comments.propTypes = {
   userName: PropTypes.string.isRequired,
-  date: PropTypes.string.isRequired,
+  dateAdded: PropTypes.string.isRequired,
   body: PropTypes.string.isRequired,
   dislikes: PropTypes.number.isRequired,
   likes: PropTypes.number.isRequired,

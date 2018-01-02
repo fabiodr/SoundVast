@@ -19,7 +19,7 @@ const Comments = ({ data, setReplies, loadMore }) => (
           key={node.commentId}
           id={node.commentId}
           body={node.body}
-          date={new Date(node.date).toLocaleDateString()}
+          dateAdded={new Date(node.dateAdded).toLocaleDateString()}
           likes={node.likes}
           dislikes={node.dislikes}
           userName={node.user.userName}
@@ -43,7 +43,7 @@ Comments.propTypes = {
           node: PropTypes.shape({
             commentId: PropTypes.number.isRequired,
             body: PropTypes.string.isRequired,
-            date: PropTypes.string.isRequired,
+            dateAdded: PropTypes.string.isRequired,
             dislikes: PropTypes.number.isRequired,
             likes: PropTypes.number.isRequired,
             repliesCount: PropTypes.number.isRequired,

@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash c3310d061c793f53a072c5f8880abe07
+ * @relayHash 1298fc973bc926b8fcdc7b0999de2158
  */
 
 /* eslint-disable */
@@ -35,19 +35,16 @@ fragment userPlaylistsContainer on ApplicationUser {
         playlistId
         name
         coverImageUrl
-        songPlaylists(first: $count, after: $cursor) {
+        songs {
           items {
-            song {
-              audioId
+            audioId
+            name
+            artists {
               name
-              artists {
-                name
-                id
-              }
-              coverImageUrl
-              free
               id
             }
+            coverImageUrl
+            free
             id
           }
         }
@@ -207,91 +204,46 @@ const batch /*: ConcreteBatch*/ = {
                       {
                         "kind": "LinkedField",
                         "alias": null,
-                        "args": [
-                          {
-                            "kind": "Variable",
-                            "name": "after",
-                            "variableName": "cursor",
-                            "type": "String"
-                          },
-                          {
-                            "kind": "Variable",
-                            "name": "first",
-                            "variableName": "count",
-                            "type": "Int"
-                          }
-                        ],
-                        "concreteType": "SongPlaylistPayloadConnection",
-                        "name": "songPlaylists",
+                        "args": null,
+                        "concreteType": "SongPayloadConnection",
+                        "name": "songs",
                         "plural": false,
                         "selections": [
                           {
                             "kind": "LinkedField",
                             "alias": null,
                             "args": null,
-                            "concreteType": "SongPlaylist",
+                            "concreteType": "Song",
                             "name": "items",
                             "plural": true,
                             "selections": [
                               {
+                                "kind": "ScalarField",
+                                "alias": null,
+                                "args": null,
+                                "name": "audioId",
+                                "storageKey": null
+                              },
+                              {
+                                "kind": "ScalarField",
+                                "alias": null,
+                                "args": null,
+                                "name": "name",
+                                "storageKey": null
+                              },
+                              {
                                 "kind": "LinkedField",
                                 "alias": null,
                                 "args": null,
-                                "concreteType": "Song",
-                                "name": "song",
-                                "plural": false,
+                                "concreteType": "Artist",
+                                "name": "artists",
+                                "plural": true,
                                 "selections": [
                                   {
                                     "kind": "ScalarField",
                                     "alias": null,
                                     "args": null,
-                                    "name": "audioId",
-                                    "storageKey": null
-                                  },
-                                  {
-                                    "kind": "ScalarField",
-                                    "alias": null,
-                                    "args": null,
                                     "name": "name",
-                                    "storageKey": null
-                                  },
-                                  {
-                                    "kind": "LinkedField",
-                                    "alias": null,
-                                    "args": null,
-                                    "concreteType": "Artist",
-                                    "name": "artists",
-                                    "plural": true,
-                                    "selections": [
-                                      {
-                                        "kind": "ScalarField",
-                                        "alias": null,
-                                        "args": null,
-                                        "name": "name",
-                                        "storageKey": null
-                                      },
-                                      {
-                                        "kind": "ScalarField",
-                                        "alias": null,
-                                        "args": null,
-                                        "name": "id",
-                                        "storageKey": null
-                                      }
-                                    ],
-                                    "storageKey": null
-                                  },
-                                  {
-                                    "kind": "ScalarField",
-                                    "alias": null,
-                                    "args": null,
-                                    "name": "coverImageUrl",
-                                    "storageKey": null
-                                  },
-                                  {
-                                    "kind": "ScalarField",
-                                    "alias": null,
-                                    "args": null,
-                                    "name": "free",
                                     "storageKey": null
                                   },
                                   {
@@ -302,6 +254,20 @@ const batch /*: ConcreteBatch*/ = {
                                     "storageKey": null
                                   }
                                 ],
+                                "storageKey": null
+                              },
+                              {
+                                "kind": "ScalarField",
+                                "alias": null,
+                                "args": null,
+                                "name": "coverImageUrl",
+                                "storageKey": null
+                              },
+                              {
+                                "kind": "ScalarField",
+                                "alias": null,
+                                "args": null,
+                                "name": "free",
                                 "storageKey": null
                               },
                               {
@@ -392,7 +358,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query userPlaylistsContainerForwardQuery(\n  $count: Int!\n  $cursor: String\n) {\n  user {\n    ...userPlaylistsContainer\n    id\n  }\n}\n\nfragment userPlaylistsContainer on ApplicationUser {\n  playlists(first: $count, after: $cursor) {\n    edges {\n      cursor\n      node {\n        __typename\n        playlistId\n        name\n        coverImageUrl\n        songPlaylists(first: $count, after: $cursor) {\n          items {\n            song {\n              audioId\n              name\n              artists {\n                name\n                id\n              }\n              coverImageUrl\n              free\n              id\n            }\n            id\n          }\n        }\n        id\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n"
+  "text": "query userPlaylistsContainerForwardQuery(\n  $count: Int!\n  $cursor: String\n) {\n  user {\n    ...userPlaylistsContainer\n    id\n  }\n}\n\nfragment userPlaylistsContainer on ApplicationUser {\n  playlists(first: $count, after: $cursor) {\n    edges {\n      cursor\n      node {\n        __typename\n        playlistId\n        name\n        coverImageUrl\n        songs {\n          items {\n            audioId\n            name\n            artists {\n              name\n              id\n            }\n            coverImageUrl\n            free\n            id\n          }\n        }\n        id\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n"
 };
 
 module.exports = batch;

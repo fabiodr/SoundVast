@@ -18,7 +18,7 @@ const PrimaryLayout = ({ children, user, loginProviders, ...props }) => {
     <div>
       <Account loginProviders={loginProviders} />
       <Header user={user} />
-      <div className={styles.main} id="main">
+      <div className={styles.main}>
         <Content>
           {children}
         </Content>
