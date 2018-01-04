@@ -29,9 +29,16 @@ const fragments = graphql`
       genre: $genre
       filter: $filter
     ) @connection(key: "songsContainer_songs") {
+      items {
+        artists {
+          name
+        }
+        ...sideBarContainer_audios
+      }
       edges {
         cursor
         node {
+          id
           audioId
           name
           artists {
@@ -40,7 +47,6 @@ const fragments = graphql`
           coverImageUrl
           free
           ...songContainer_song
-          ...commentsContainer
         }
       }
       pageInfo {

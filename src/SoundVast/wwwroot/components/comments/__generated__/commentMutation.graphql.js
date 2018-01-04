@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash f7db6e6c9a2b6a7340efafb0871b59f4
+ * @relayHash 1a7316907942c766e6d10a7fb3deb3ba
  */
 
 /* eslint-disable */
@@ -19,9 +19,7 @@ export type commentMutationVariables = {|
 |};
 export type commentMutationResponse = {|
   +comment: ?{|
-    +comment: ?{|
-      +id: string;
-    |};
+    +comment: ?{| |};
   |};
 |};
 */
@@ -33,8 +31,25 @@ mutation commentMutation(
 ) {
   comment(input: $input) {
     comment {
+      ...commentContainer_comment
       id
     }
+  }
+}
+
+fragment commentContainer_comment on Comment {
+  commentId
+  body
+  dateAdded
+  likes
+  dislikes
+  repliesCount
+  originalComment {
+    id
+  }
+  user {
+    userName
+    id
   }
 }
 */
@@ -77,11 +92,9 @@ const batch /*: ConcreteBatch*/ = {
             "plural": false,
             "selections": [
               {
-                "kind": "ScalarField",
-                "alias": null,
-                "args": null,
-                "name": "id",
-                "storageKey": null
+                "kind": "FragmentSpread",
+                "name": "commentContainer_comment",
+                "args": null
               }
             ],
             "storageKey": null
@@ -136,6 +149,91 @@ const batch /*: ConcreteBatch*/ = {
                 "kind": "ScalarField",
                 "alias": null,
                 "args": null,
+                "name": "commentId",
+                "storageKey": null
+              },
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "body",
+                "storageKey": null
+              },
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "dateAdded",
+                "storageKey": null
+              },
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "likes",
+                "storageKey": null
+              },
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "dislikes",
+                "storageKey": null
+              },
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "repliesCount",
+                "storageKey": null
+              },
+              {
+                "kind": "LinkedField",
+                "alias": null,
+                "args": null,
+                "concreteType": "Comment",
+                "name": "originalComment",
+                "plural": false,
+                "selections": [
+                  {
+                    "kind": "ScalarField",
+                    "alias": null,
+                    "args": null,
+                    "name": "id",
+                    "storageKey": null
+                  }
+                ],
+                "storageKey": null
+              },
+              {
+                "kind": "LinkedField",
+                "alias": null,
+                "args": null,
+                "concreteType": "ApplicationUser",
+                "name": "user",
+                "plural": false,
+                "selections": [
+                  {
+                    "kind": "ScalarField",
+                    "alias": null,
+                    "args": null,
+                    "name": "userName",
+                    "storageKey": null
+                  },
+                  {
+                    "kind": "ScalarField",
+                    "alias": null,
+                    "args": null,
+                    "name": "id",
+                    "storageKey": null
+                  }
+                ],
+                "storageKey": null
+              },
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
                 "name": "id",
                 "storageKey": null
               }
@@ -147,7 +245,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "mutation commentMutation(\n  $input: SaveCommentInput!\n) {\n  comment(input: $input) {\n    comment {\n      id\n    }\n  }\n}\n"
+  "text": "mutation commentMutation(\n  $input: SaveCommentInput!\n) {\n  comment(input: $input) {\n    comment {\n      ...commentContainer_comment\n      id\n    }\n  }\n}\n\nfragment commentContainer_comment on Comment {\n  commentId\n  body\n  dateAdded\n  likes\n  dislikes\n  repliesCount\n  originalComment {\n    id\n  }\n  user {\n    userName\n    id\n  }\n}\n"
 };
 
 module.exports = batch;

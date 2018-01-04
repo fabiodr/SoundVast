@@ -11,6 +11,7 @@ import Filters from '../audio/filtersContainer';
 import convertSongToMedia from '../shared/utilities/convertSongToMedia';
 import SideBar from '../audio/sideBarContainer';
 import styles from './songs.less';
+import Artists from '../audio/artists';
 
 const Songs = ({ songs, loadMore }) => {
   const footerPlaylist = songs.edges.map(({ node }) => convertSongToMedia(node));
@@ -31,7 +32,9 @@ const Songs = ({ songs, loadMore }) => {
             {songs.edges.map(({ node }) =>
               <Song key={node.audioId} footerPlaylist={footerPlaylist} song={node} />)}
           </Grid>
-          <SideBar audioData={songs} />
+          <SideBar audios={songs.items}>
+            {audioIndex => <Artists artists={songs.items[audioIndex].artists} />}
+          </SideBar>
         </InfiniteScroll>
       </div>
     </SoundVastTitle>
@@ -44,6 +47,15 @@ Songs.defaultProps = {
 
 Songs.propTypes = {
   songs: PropTypes.shape({
+    items: PropTypes.arrayOf(
+      PropTypes.shape({
+        artists: PropTypes.arrayOf(
+          PropTypes.shape({
+            name: PropTypes.string.isRequired,
+          }).isRequired,
+        ),
+      }).isRequired,
+    ).isRequired,
     pageInfo: PropTypes.shape({
       hasNextPage: PropTypes.bool.isRequired,
     }).isRequired,

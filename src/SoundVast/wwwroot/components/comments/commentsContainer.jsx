@@ -1,4 +1,4 @@
-import { compose, withHandlers } from 'recompose';
+import { compose, withHandlers, flattenProp } from 'recompose';
 import { graphql } from 'react-relay';
 import { paginationContainer } from 'recompose-relay-modern';
 
@@ -6,7 +6,7 @@ import Comments from './comments';
 import { commentsToLoad } from '../shared/utilities/itemsToLoad';
 
 const fragments = graphql`
-  fragment commentsContainer on Audio {
+  fragment commentsContainer_audio on Audio {
     audioId,
     comments(
       first: $count
@@ -16,17 +16,7 @@ const fragments = graphql`
       edges {
         node {
           commentId
-          body
-          dateAdded
-          likes
-          dislikes
-          repliesCount
-          originalComment {
-            id
-          }
-          user {
-            userName
-          }
+          ...commentContainer_comment
         }
       }
       pageInfo {
@@ -46,7 +36,7 @@ const connectionConfig = {
       $originalCommentId: Int
     ) {
       song(id: $id) {
-        ...commentsContainer
+        ...commentsContainer_audio
       }
     }
   `,
@@ -68,5 +58,6 @@ const handlers = {
 
 export default compose(
   paginationContainer(fragments, connectionConfig),
+  flattenProp('audio'),
   withHandlers(handlers),
 )(Comments);

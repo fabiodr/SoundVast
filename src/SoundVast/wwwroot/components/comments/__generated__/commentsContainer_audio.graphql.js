@@ -8,23 +8,12 @@
 
 /*::
 import type {ConcreteFragment} from 'relay-runtime';
-export type commentsContainer = {|
+export type commentsContainer_audio = {|
   +audioId: number;
   +comments: ?{|
     +edges: ?$ReadOnlyArray<?{|
       +node: ?{|
         +commentId: number;
-        +body: string;
-        +dateAdded: ?any;
-        +likes: number;
-        +dislikes: number;
-        +repliesCount: number;
-        +originalComment: ?{|
-          +id: string;
-        |};
-        +user: {|
-          +userName: string;
-        |};
       |};
     |}>;
     +pageInfo: {|
@@ -66,7 +55,7 @@ const fragment /*: ConcreteFragment*/ = {
       }
     ]
   },
-  "name": "commentsContainer",
+  "name": "commentsContainer_audio",
   "selections": [
     {
       "kind": "ScalarField",
@@ -114,75 +103,9 @@ const fragment /*: ConcreteFragment*/ = {
                   "storageKey": null
                 },
                 {
-                  "kind": "ScalarField",
-                  "alias": null,
-                  "args": null,
-                  "name": "body",
-                  "storageKey": null
-                },
-                {
-                  "kind": "ScalarField",
-                  "alias": null,
-                  "args": null,
-                  "name": "dateAdded",
-                  "storageKey": null
-                },
-                {
-                  "kind": "ScalarField",
-                  "alias": null,
-                  "args": null,
-                  "name": "likes",
-                  "storageKey": null
-                },
-                {
-                  "kind": "ScalarField",
-                  "alias": null,
-                  "args": null,
-                  "name": "dislikes",
-                  "storageKey": null
-                },
-                {
-                  "kind": "ScalarField",
-                  "alias": null,
-                  "args": null,
-                  "name": "repliesCount",
-                  "storageKey": null
-                },
-                {
-                  "kind": "LinkedField",
-                  "alias": null,
-                  "args": null,
-                  "concreteType": "Comment",
-                  "name": "originalComment",
-                  "plural": false,
-                  "selections": [
-                    {
-                      "kind": "ScalarField",
-                      "alias": null,
-                      "args": null,
-                      "name": "id",
-                      "storageKey": null
-                    }
-                  ],
-                  "storageKey": null
-                },
-                {
-                  "kind": "LinkedField",
-                  "alias": null,
-                  "args": null,
-                  "concreteType": "ApplicationUser",
-                  "name": "user",
-                  "plural": false,
-                  "selections": [
-                    {
-                      "kind": "ScalarField",
-                      "alias": null,
-                      "args": null,
-                      "name": "userName",
-                      "storageKey": null
-                    }
-                  ],
-                  "storageKey": null
+                  "kind": "FragmentSpread",
+                  "name": "commentContainer_comment",
+                  "args": null
                 },
                 {
                   "kind": "ScalarField",

@@ -10,11 +10,11 @@ import FormattedNumberText from '../shared/numbers/formattedNumberText';
 import Button from '../shared/button/button';
 import Flag from '../flag/flag';
 
-const Comments = ({
-  userName,
+const Comment = ({
+  user,
   dateAdded,
   body,
-  id,
+  commentId,
   likes,
   dislikes,
   reply,
@@ -43,16 +43,16 @@ const Comments = ({
   return (
     <div>
       <div>
-        <span>{userName}</span>
+        <span>{user.userName}</span>
         <span>{dateAdded}</span>
       </div>
       <div>{body}</div>
       <Rating likes={likes} dislikes={dislikes}>
-        <Like commentId={id} />
-        <Dislike commentId={id} />
+        <Like commentId={commentId} />
+        <Dislike commentId={commentId} />
       </Rating>
-      <Flag modalId="flagComment" id={id} />
-      {showReplyBox ? <CommentBox form="replyBox" cancelOnClick={cancel} originalCommentId={id} /> : (
+      <Flag modalId="flagComment" id={commentId} />
+      {showReplyBox ? <CommentBox form="replyBox" cancelOnClick={cancel} originalCommentId={commentId} /> : (
         <div role="button" tabIndex={0} onClick={reply}>
           reply
         </div>
@@ -62,13 +62,15 @@ const Comments = ({
   );
 };
 
-Comments.propTypes = {
-  userName: PropTypes.string.isRequired,
+Comment.propTypes = {
+  user: PropTypes.shape({
+    userName: PropTypes.string.isRequired,
+  }).isRequired,
   dateAdded: PropTypes.string.isRequired,
   body: PropTypes.string.isRequired,
   dislikes: PropTypes.number.isRequired,
   likes: PropTypes.number.isRequired,
-  id: PropTypes.number.isRequired,
+  commentId: PropTypes.number.isRequired,
   reply: PropTypes.func.isRequired,
   cancel: PropTypes.func.isRequired,
   showReplyBox: PropTypes.bool.isRequired,
@@ -110,4 +112,4 @@ export default compose(
     showReplyBox: false,
     showRepliesButton: true,
   }, stateHandlers),
-)(Comments);
+)(Comment);

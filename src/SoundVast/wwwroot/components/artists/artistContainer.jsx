@@ -12,7 +12,7 @@ const fragments = graphql`
     playCount
     likes
     dislikes
-    ...commentsContainer
+    ...commentsContainer_audio
   }
 `;
 

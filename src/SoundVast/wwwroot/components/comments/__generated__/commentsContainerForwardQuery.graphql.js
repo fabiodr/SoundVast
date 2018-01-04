@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 2210263d6c2999f89907db5cbe6f35b6
+ * @relayHash a0490d60af295ae8d5a09837e8a44877
  */
 
 /* eslint-disable */
@@ -23,30 +23,19 @@ query commentsContainerForwardQuery(
   $originalCommentId: Int
 ) {
   song(id: $id) {
-    ...commentsContainer
+    ...commentsContainer_audio
     id
   }
 }
 
-fragment commentsContainer on Audio {
+fragment commentsContainer_audio on Audio {
   audioId
   comments(first: $count, after: $cursor, originalCommentId: $originalCommentId) {
     edges {
       node {
         __typename
         commentId
-        body
-        dateAdded
-        likes
-        dislikes
-        repliesCount
-        originalComment {
-          id
-        }
-        user {
-          userName
-          id
-        }
+        ...commentContainer_comment
         id
       }
       cursor
@@ -55,6 +44,22 @@ fragment commentsContainer on Audio {
       hasNextPage
       endCursor
     }
+  }
+}
+
+fragment commentContainer_comment on Comment {
+  commentId
+  body
+  dateAdded
+  likes
+  dislikes
+  repliesCount
+  originalComment {
+    id
+  }
+  user {
+    userName
+    id
   }
 }
 */
@@ -108,7 +113,7 @@ const batch /*: ConcreteBatch*/ = {
         "selections": [
           {
             "kind": "FragmentSpread",
-            "name": "commentsContainer",
+            "name": "commentsContainer_audio",
             "args": null
           }
         ],
@@ -399,7 +404,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query commentsContainerForwardQuery(\n  $id: Int!\n  $count: Int!\n  $cursor: String\n  $originalCommentId: Int\n) {\n  song(id: $id) {\n    ...commentsContainer\n    id\n  }\n}\n\nfragment commentsContainer on Audio {\n  audioId\n  comments(first: $count, after: $cursor, originalCommentId: $originalCommentId) {\n    edges {\n      node {\n        __typename\n        commentId\n        body\n        dateAdded\n        likes\n        dislikes\n        repliesCount\n        originalComment {\n          id\n        }\n        user {\n          userName\n          id\n        }\n        id\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n"
+  "text": "query commentsContainerForwardQuery(\n  $id: Int!\n  $count: Int!\n  $cursor: String\n  $originalCommentId: Int\n) {\n  song(id: $id) {\n    ...commentsContainer_audio\n    id\n  }\n}\n\nfragment commentsContainer_audio on Audio {\n  audioId\n  comments(first: $count, after: $cursor, originalCommentId: $originalCommentId) {\n    edges {\n      node {\n        __typename\n        commentId\n        ...commentContainer_comment\n        id\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n\nfragment commentContainer_comment on Comment {\n  commentId\n  body\n  dateAdded\n  likes\n  dislikes\n  repliesCount\n  originalComment {\n    id\n  }\n  user {\n    userName\n    id\n  }\n}\n"
 };
 
 module.exports = batch;

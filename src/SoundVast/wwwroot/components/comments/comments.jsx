@@ -2,29 +2,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import InfiniteScroll from 'react-infinite-scroller';
 
-import Comment from './comment';
+import Comment from './commentContainer';
 import styles from './comments.less';
 import Loader from '../shared/loaders/loader';
 
-const Comments = ({ data, setReplies, loadMore }) => (
+const Comments = ({ comments, setReplies, loadMore }) => (
   <div className={styles.comments}>
     <InfiniteScroll
       loadMore={loadMore}
-      hasMore={data.comments.pageInfo.hasNextPage}
+      hasMore={comments.pageInfo.hasNextPage}
       loader={<Loader />}
       initialLoad={false}
     >
-      {data.comments.edges.map(({ node }) => (
+      {comments.edges.map(({ node }) => (
         <Comment
           key={node.commentId}
-          id={node.commentId}
-          body={node.body}
-          dateAdded={new Date(node.dateAdded).toLocaleDateString()}
-          likes={node.likes}
-          dislikes={node.dislikes}
-          userName={node.user.userName}
-          repliesCount={node.repliesCount}
-          isTopLevelComment={!node.originalComment}
+          comment={node}
           setReplies={setReplies}
         />
       ))}
@@ -33,28 +26,17 @@ const Comments = ({ data, setReplies, loadMore }) => (
 );
 
 Comments.propTypes = {
-  data: PropTypes.shape({
-    comments: PropTypes.shape({
-      pageInfo: PropTypes.shape({
-        hasNextPage: PropTypes.bool.isRequired,
-      }).isRequired,
-      edges: PropTypes.arrayOf(
-        PropTypes.shape({
-          node: PropTypes.shape({
-            commentId: PropTypes.number.isRequired,
-            body: PropTypes.string.isRequired,
-            dateAdded: PropTypes.string.isRequired,
-            dislikes: PropTypes.number.isRequired,
-            likes: PropTypes.number.isRequired,
-            repliesCount: PropTypes.number.isRequired,
-            originalComment: PropTypes.object,
-            user: PropTypes.shape({
-              userName: PropTypes.string.isRequired,
-            }).isRequired,
-          }),
+  comments: PropTypes.shape({
+    pageInfo: PropTypes.shape({
+      hasNextPage: PropTypes.bool.isRequired,
+    }).isRequired,
+    edges: PropTypes.arrayOf(
+      PropTypes.shape({
+        node: PropTypes.shape({
+          commentId: PropTypes.number.isRequired,
         }),
-      ),
-    }),
+      }),
+    ),
   }).isRequired,
   setReplies: PropTypes.func.isRequired,
   loadMore: PropTypes.func.isRequired,
