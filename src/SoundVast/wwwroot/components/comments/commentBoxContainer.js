@@ -1,5 +1,6 @@
+import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
-import { compose, withHandlers, withProps } from 'recompose';
+import { compose, withHandlers, setPropTypes } from 'recompose';
 import { fragmentContainer } from 'recompose-relay-modern';
 import { graphql } from 'react-relay';
 
@@ -11,37 +12,22 @@ const fragments = graphql`
     id
     audioId
     name
-    comments(
-      first: $count
-      after: $cursor
-      originalCommentId: $originalCommentId
-    ) {
-      items {
-        commentId
-      }
-    }
   }
 `;
 
-const handlers = {
-  onSubmit: ({ audio }) => (input) => {
-    commentMutation(input, audio);
-  },
+const propTypes = {
+  originalCommentId: PropTypes.number,
 };
 
-// https://github.com/erikras/redux-form/issues/2886
-const createProps = ({ currentAudioId }) => {
-  const name = `commentBox_${currentAudioId}`;
-
-  return {
-    form: name,
-    key: name,
-  };
+const handlers = {
+  onSubmit: ({ audio, originalCommentId }) => (input) => {
+    commentMutation(input, audio, originalCommentId);
+  },
 };
 
 export default compose(
   fragmentContainer(fragments),
+  setPropTypes(propTypes),
   withHandlers(handlers),
-  withProps(createProps),
   reduxForm(),
 )(CommentBox);

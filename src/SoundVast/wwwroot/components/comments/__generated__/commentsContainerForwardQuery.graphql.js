@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash a0490d60af295ae8d5a09837e8a44877
+ * @relayHash b7470fc8bf12ac3771a00dbfd64999ba
  */
 
 /* eslint-disable */
@@ -29,7 +29,7 @@ query commentsContainerForwardQuery(
 }
 
 fragment commentsContainer_audio on Audio {
-  audioId
+  ...commentBoxContainer_audio
   comments(first: $count, after: $cursor, originalCommentId: $originalCommentId) {
     edges {
       node {
@@ -47,6 +47,12 @@ fragment commentsContainer_audio on Audio {
   }
 }
 
+fragment commentBoxContainer_audio on Audio {
+  id
+  audioId
+  name
+}
+
 fragment commentContainer_comment on Comment {
   commentId
   body
@@ -55,6 +61,7 @@ fragment commentContainer_comment on Comment {
   dislikes
   repliesCount
   originalComment {
+    commentId
     id
   }
   user {
@@ -176,7 +183,21 @@ const batch /*: ConcreteBatch*/ = {
             "kind": "ScalarField",
             "alias": null,
             "args": null,
+            "name": "id",
+            "storageKey": null
+          },
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "args": null,
             "name": "audioId",
+            "storageKey": null
+          },
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "args": null,
+            "name": "name",
             "storageKey": null
           },
           {
@@ -279,6 +300,13 @@ const batch /*: ConcreteBatch*/ = {
                         "name": "originalComment",
                         "plural": false,
                         "selections": [
+                          {
+                            "kind": "ScalarField",
+                            "alias": null,
+                            "args": null,
+                            "name": "commentId",
+                            "storageKey": null
+                          },
                           {
                             "kind": "ScalarField",
                             "alias": null,
@@ -391,20 +419,13 @@ const batch /*: ConcreteBatch*/ = {
             "filters": [
               "originalCommentId"
             ]
-          },
-          {
-            "kind": "ScalarField",
-            "alias": null,
-            "args": null,
-            "name": "id",
-            "storageKey": null
           }
         ],
         "storageKey": null
       }
     ]
   },
-  "text": "query commentsContainerForwardQuery(\n  $id: Int!\n  $count: Int!\n  $cursor: String\n  $originalCommentId: Int\n) {\n  song(id: $id) {\n    ...commentsContainer_audio\n    id\n  }\n}\n\nfragment commentsContainer_audio on Audio {\n  audioId\n  comments(first: $count, after: $cursor, originalCommentId: $originalCommentId) {\n    edges {\n      node {\n        __typename\n        commentId\n        ...commentContainer_comment\n        id\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n\nfragment commentContainer_comment on Comment {\n  commentId\n  body\n  dateAdded\n  likes\n  dislikes\n  repliesCount\n  originalComment {\n    id\n  }\n  user {\n    userName\n    id\n  }\n}\n"
+  "text": "query commentsContainerForwardQuery(\n  $id: Int!\n  $count: Int!\n  $cursor: String\n  $originalCommentId: Int\n) {\n  song(id: $id) {\n    ...commentsContainer_audio\n    id\n  }\n}\n\nfragment commentsContainer_audio on Audio {\n  ...commentBoxContainer_audio\n  comments(first: $count, after: $cursor, originalCommentId: $originalCommentId) {\n    edges {\n      node {\n        __typename\n        commentId\n        ...commentContainer_comment\n        id\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n\nfragment commentBoxContainer_audio on Audio {\n  id\n  audioId\n  name\n}\n\nfragment commentContainer_comment on Comment {\n  commentId\n  body\n  dateAdded\n  likes\n  dislikes\n  repliesCount\n  originalComment {\n    commentId\n    id\n  }\n  user {\n    userName\n    id\n  }\n}\n"
 };
 
 module.exports = batch;

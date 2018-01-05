@@ -13,11 +13,12 @@ const fragments = graphql`
     dislikes
     repliesCount
     originalComment {
-      id
+      commentId
     }
     user {
       userName
     }
+    ...repliesContainer
   }
 `;
 

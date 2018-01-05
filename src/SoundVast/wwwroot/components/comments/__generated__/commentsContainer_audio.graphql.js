@@ -9,7 +9,6 @@
 /*::
 import type {ConcreteFragment} from 'relay-runtime';
 export type commentsContainer_audio = {|
-  +audioId: number;
   +comments: ?{|
     +edges: ?$ReadOnlyArray<?{|
       +node: ?{|
@@ -58,11 +57,9 @@ const fragment /*: ConcreteFragment*/ = {
   "name": "commentsContainer_audio",
   "selections": [
     {
-      "kind": "ScalarField",
-      "alias": null,
-      "args": null,
-      "name": "audioId",
-      "storageKey": null
+      "kind": "FragmentSpread",
+      "name": "commentBoxContainer_audio",
+      "args": null
     },
     {
       "kind": "LinkedField",

@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 1a7316907942c766e6d10a7fb3deb3ba
+ * @relayHash 13834e2a77f3003587e02ddba4d49d1c
  */
 
 /* eslint-disable */
@@ -45,6 +45,7 @@ fragment commentContainer_comment on Comment {
   dislikes
   repliesCount
   originalComment {
+    commentId
     id
   }
   user {
@@ -199,6 +200,13 @@ const batch /*: ConcreteBatch*/ = {
                     "kind": "ScalarField",
                     "alias": null,
                     "args": null,
+                    "name": "commentId",
+                    "storageKey": null
+                  },
+                  {
+                    "kind": "ScalarField",
+                    "alias": null,
+                    "args": null,
                     "name": "id",
                     "storageKey": null
                   }
@@ -245,7 +253,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "mutation commentMutation(\n  $input: SaveCommentInput!\n) {\n  comment(input: $input) {\n    comment {\n      ...commentContainer_comment\n      id\n    }\n  }\n}\n\nfragment commentContainer_comment on Comment {\n  commentId\n  body\n  dateAdded\n  likes\n  dislikes\n  repliesCount\n  originalComment {\n    id\n  }\n  user {\n    userName\n    id\n  }\n}\n"
+  "text": "mutation commentMutation(\n  $input: SaveCommentInput!\n) {\n  comment(input: $input) {\n    comment {\n      ...commentContainer_comment\n      id\n    }\n  }\n}\n\nfragment commentContainer_comment on Comment {\n  commentId\n  body\n  dateAdded\n  likes\n  dislikes\n  repliesCount\n  originalComment {\n    commentId\n    id\n  }\n  user {\n    userName\n    id\n  }\n}\n"
 };
 
 module.exports = batch;

@@ -33,20 +33,7 @@ namespace SoundVast.Components.LiveStream
             Field<ListGraphType<RatingPayload>>("ratings", "The ratings that have been applied by users to this live stream");
             Connection<CommentPayload>()
                 .Name("comments")
-                .Argument<IntGraphType>("originalCommentId", "Get the replies for the original comment instead")
-                .Description("The comments for the live stream")
-                .Resolve(c =>
-                {
-                    var audioId = c.Source.Id;
-                    var originalCommentId = c.GetArgument<int?>("originalCommentId");
-
-                    if (originalCommentId.HasValue)
-                    {
-                        return GraphQL.Relay.Types.Connection.ToConnection(commentService.Replies(originalCommentId.Value), c);
-                    }
-
-                    return GraphQL.Relay.Types.Connection.ToConnection(commentService.TopLevelComments(audioId), c);
-                });
+                .Description("The top level comments for the live stream");
 
             Interface<AudioInterface>();
         }

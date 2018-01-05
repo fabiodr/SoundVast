@@ -41,20 +41,7 @@ namespace SoundVast.Components.Artist
             Field<ListGraphType<RatingPayload>>("ratings", "The ratings that have been applied by users to this artist");
             Connection<CommentPayload>()
                 .Name("comments")
-                .Argument<IntGraphType>("originalCommentId", "Get the replies for the original comment instead")
-                .Description("The comments for the artist")
-                .Resolve(c =>
-                {
-                    var comments = c.Source.Comments.Where(x => x.IsTopLevelComment);
-                    var originalCommentId = c.GetArgument<int?>("originalCommentId");
-
-                    if (originalCommentId.HasValue)
-                    {
-                        comments = comments.Concat(commentService.Replies(originalCommentId.Value)).ToList();
-                    }
-
-                    return GraphQL.Relay.Types.Connection.ToConnection(comments, c);
-                });
+                .Description("The top level comments for the artist");
 
             Interface<AudioInterface>();
         }

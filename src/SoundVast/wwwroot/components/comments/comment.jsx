@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose, withStateHandlers, setPropTypes } from 'recompose';
 
+import Replies from './repliesContainer';
 import Like from '../rating/like/likeCommentContainer';
 import Dislike from '../rating/dislike/dislikeCommentContainer';
 import Rating from '../rating/audioRating';
@@ -25,20 +26,22 @@ const Comment = ({
   showRepliesButton,
   showRepliesOnClick,
   hideRepliesOnClick,
+  audio,
+  replies,
 }) => {
   let repliesButton;
 
-  if (isTopLevelComment && repliesCount) {
-    repliesButton = showRepliesButton ? (
-      <Button onClick={showRepliesOnClick}>
-        Show <FormattedNumberText number={repliesCount} singularText="reply" pluralText="replies" />
-      </Button>
-    ) : (
-      <Button onClick={hideRepliesOnClick}>
-        Hide <FormattedNumberText number={repliesCount} singularText="reply" pluralText="replies" />
-      </Button>
-    );
-  }
+  // if (isTopLevelComment && repliesCount) {
+  //   repliesButton = showRepliesButton ? (
+  //     <Button onClick={showRepliesOnClick}>
+  //       Show <FormattedNumberText number={repliesCount} singularText="reply" pluralText="replies" />
+  //     </Button>
+  //   ) : (
+  //     <Button onClick={hideRepliesOnClick}>
+  //       Hide <FormattedNumberText number={repliesCount} singularText="reply" pluralText="replies" />
+  //     </Button>
+  //   );
+  // }
 
   return (
     <div>
@@ -52,12 +55,12 @@ const Comment = ({
         <Dislike commentId={commentId} />
       </Rating>
       <Flag modalId="flagComment" id={commentId} />
-      {showReplyBox ? <CommentBox form="replyBox" cancelOnClick={cancel} originalCommentId={commentId} /> : (
+      {showReplyBox ? <CommentBox form={`replyBox_${commentId}`} cancelOnClick={cancel} originalCommentId={commentId} audio={audio} /> : (
         <div role="button" tabIndex={0} onClick={reply}>
           reply
         </div>
       )}
-      {repliesButton}
+      {isTopLevelComment ? <Replies data={replies} /> : null}
     </div>
   );
 };
@@ -79,6 +82,8 @@ Comment.propTypes = {
   hideRepliesOnClick: PropTypes.func.isRequired,
   showRepliesButton: PropTypes.bool.isRequired,
   isTopLevelComment: PropTypes.bool.isRequired,
+  audio: PropTypes.object.isRequired,
+  replies: PropTypes.object.isRequired,
 };
 
 const stateHandlers = {

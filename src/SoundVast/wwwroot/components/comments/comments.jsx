@@ -6,19 +6,19 @@ import Comment from './commentContainer';
 import styles from './comments.less';
 import Loader from '../shared/loaders/loader';
 
-const Comments = ({ comments, setReplies, loadMore }) => (
+const Comments = ({ audio, loadMore }) => (
   <div className={styles.comments}>
     <InfiniteScroll
       loadMore={loadMore}
-      hasMore={comments.pageInfo.hasNextPage}
+      hasMore={audio.comments.pageInfo.hasNextPage}
       loader={<Loader />}
       initialLoad={false}
     >
-      {comments.edges.map(({ node }) => (
+      {audio.comments.edges.map(({ node }) => (
         <Comment
           key={node.commentId}
           comment={node}
-          setReplies={setReplies}
+          audio={audio}
         />
       ))}
     </InfiniteScroll>
@@ -26,19 +26,20 @@ const Comments = ({ comments, setReplies, loadMore }) => (
 );
 
 Comments.propTypes = {
-  comments: PropTypes.shape({
-    pageInfo: PropTypes.shape({
-      hasNextPage: PropTypes.bool.isRequired,
-    }).isRequired,
-    edges: PropTypes.arrayOf(
-      PropTypes.shape({
-        node: PropTypes.shape({
-          commentId: PropTypes.number.isRequired,
+  audio: PropTypes.shape({
+    comments: PropTypes.shape({
+      pageInfo: PropTypes.shape({
+        hasNextPage: PropTypes.bool.isRequired,
+      }).isRequired,
+      edges: PropTypes.arrayOf(
+        PropTypes.shape({
+          node: PropTypes.shape({
+            commentId: PropTypes.number.isRequired,
+          }),
         }),
-      }),
-    ),
+      ),
+    }),
   }).isRequired,
-  setReplies: PropTypes.func.isRequired,
   loadMore: PropTypes.func.isRequired,
 };
 

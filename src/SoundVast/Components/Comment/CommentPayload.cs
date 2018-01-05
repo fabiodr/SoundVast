@@ -23,12 +23,22 @@ namespace SoundVast.Components.Comment
             Id(x => x.Id);
             Field(x => x.Likes);
             Field(x => x.Dislikes);
-            Field(x => x.RepliesCount);
             Field(x => x.Body).Description("The body of the comment");
             Field<DateGraphType>("dateAdded", "The date when the comment was made");
             Field<NonNullGraphType<AccountPayload>>("user", "The user who added the comment");
             Field<NonNullGraphType<AudioInterface>>("audio", "The audio that the comment was added to");
-            Field<CommentPayload>("originalComment", "The original comment that this comment was a reply to");
+            Field<CommentPayload>("originalComment", "The original comment that this is a reply to");
+            Connection<CommentPayload>()
+                .Name("replies")
+                .Description("The reply tree for the top level comments")
+                .Resolve(c =>
+                {
+                    var topLevelReplies = new List<Models.Comment>();
+
+                    Models.Comment.GetTopLevelReplies(c.Source, topLevelReplies);
+
+                    return GraphQL.Relay.Types.Connection.ToConnection(topLevelReplies, c);
+                });
         }
 
         public override Models.Comment GetById(string id)

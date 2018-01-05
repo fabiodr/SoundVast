@@ -16,7 +16,8 @@ const SideBar = ({ audios, currentAudioId, children }) => {
       <Name name={audio.name} />
       {children(currentAudioIndex)}
       <div>
-        <CommentBox audio={audio} />
+        {/* https://github.com/erikras/redux-form/issues/2886 */}
+        <CommentBox audio={audio} form="commentBox" key="commentBox" />
         <Comments audio={audio} />
       </div>
     </div>

@@ -1,5 +1,5 @@
 # source: http://localhost:8080/graphql
-# timestamp: Tue Jan 02 2018 19:21:46 GMT+0100 (W. Europe Standard Time)
+# timestamp: Fri Jan 05 2018 01:08:40 GMT+0100 (W. Europe Standard Time)
 
 input AddSongToPlaylistInput {
   clientMutationId: String
@@ -54,16 +54,13 @@ type Album implements Node, Audio {
   # The ratings that have been applied by users to this album
   ratings: [Rating]
 
-  # The comments for the album
+  # The top level comments for the album
   comments(
     # Only look at connected edges with cursors greater than the value of `after`.
     after: String
 
     # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
     first: Int
-
-    # Get the replies for the original comment instead
-    originalCommentId: Int
   ): CommentPayloadConnection
 }
 
@@ -165,16 +162,13 @@ type Artist implements Node, Audio {
   # The ratings that have been applied by users to this artist
   ratings: [Rating]
 
-  # The comments for the artist
+  # The top level comments for the artist
   comments(
     # Only look at connected edges with cursors greater than the value of `after`.
     after: String
 
     # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
     first: Int
-
-    # Get the replies for the original comment instead
-    originalCommentId: Int
   ): CommentPayloadConnection
 }
 
@@ -242,16 +236,13 @@ interface Audio {
   # The ratings that have been applied by users to this audio
   ratings: [Rating]
 
-  # The comments for the audio
+  # The top level comments for the audio
   comments(
     # Only look at connected edges with cursors greater than the value of `after`.
     after: String
 
     # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
     first: Int
-
-    # Get the replies for the original comment instead
-    originalCommentId: Int
   ): CommentPayloadConnection
 }
 
@@ -281,7 +272,6 @@ type Comment implements Node {
   id: ID!
   likes: Int!
   dislikes: Int!
-  repliesCount: Int!
 
   # The body of the comment
   body: String!
@@ -295,8 +285,17 @@ type Comment implements Node {
   # The audio that the comment was added to
   audio: Audio!
 
-  # The original comment that this comment was a reply to
+  # The original comment that this is a reply to
   originalComment: Comment
+
+  # The reply tree for the top level comments
+  replies(
+    # Only look at connected edges with cursors greater than the value of `after`.
+    after: String
+
+    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
+    first: Int
+  ): CommentPayloadConnection
 }
 
 input CommentFilterInput {
@@ -490,16 +489,13 @@ type LiveStream implements Node, Audio {
   # The ratings that have been applied by users to this live stream
   ratings: [Rating]
 
-  # The comments for the live stream
+  # The top level comments for the live stream
   comments(
     # Only look at connected edges with cursors greater than the value of `after`.
     after: String
 
     # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
     first: Int
-
-    # Get the replies for the original comment instead
-    originalCommentId: Int
   ): CommentPayloadConnection
 }
 
@@ -1017,16 +1013,13 @@ type Song implements Node, Audio {
   # The ratings that have been applied by users to this song
   ratings: [Rating]
 
-  # The comments for the song
+  # The top level comments for the song
   comments(
     # Only look at connected edges with cursors greater than the value of `after`.
     after: String
 
     # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
     first: Int
-
-    # Get the replies for the original comment instead
-    originalCommentId: Int
   ): CommentPayloadConnection
 }
 

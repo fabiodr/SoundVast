@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 531911e896a8c533034deddced8248c5
+ * @relayHash 6d010b80217e085b9b6f276f69acc14a
  */
 
 /* eslint-disable */
@@ -81,16 +81,10 @@ fragment commentBoxContainer_audio on Audio {
   id
   audioId
   name
-  comments(first: $count, after: $cursor, originalCommentId: $originalCommentId) {
-    items {
-      commentId
-      id
-    }
-  }
 }
 
 fragment commentsContainer_audio on Audio {
-  audioId
+  ...commentBoxContainer_audio
   comments(first: $count, after: $cursor, originalCommentId: $originalCommentId) {
     edges {
       node {
@@ -116,6 +110,7 @@ fragment commentContainer_comment on Comment {
   dislikes
   repliesCount
   originalComment {
+    commentId
     id
   }
   user {
@@ -330,31 +325,6 @@ const batch /*: ConcreteBatch*/ = {
                     "kind": "LinkedField",
                     "alias": null,
                     "args": null,
-                    "concreteType": "Comment",
-                    "name": "items",
-                    "plural": true,
-                    "selections": [
-                      {
-                        "kind": "ScalarField",
-                        "alias": null,
-                        "args": null,
-                        "name": "commentId",
-                        "storageKey": null
-                      },
-                      {
-                        "kind": "ScalarField",
-                        "alias": null,
-                        "args": null,
-                        "name": "id",
-                        "storageKey": null
-                      }
-                    ],
-                    "storageKey": null
-                  },
-                  {
-                    "kind": "LinkedField",
-                    "alias": null,
-                    "args": null,
                     "concreteType": "CommentPayloadEdge",
                     "name": "edges",
                     "plural": true,
@@ -424,6 +394,13 @@ const batch /*: ConcreteBatch*/ = {
                             "name": "originalComment",
                             "plural": false,
                             "selections": [
+                              {
+                                "kind": "ScalarField",
+                                "alias": null,
+                                "args": null,
+                                "name": "commentId",
+                                "storageKey": null
+                              },
                               {
                                 "kind": "ScalarField",
                                 "alias": null,
@@ -724,7 +701,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query songsContainerForwardQuery(\n  $count: Int!\n  $cursor: String\n  $genre: String\n  $filter: FilterInput\n  $originalCommentId: Int\n) {\n  ...songsContainer\n}\n\nfragment songsContainer on Query {\n  songs(first: $count, after: $cursor, genre: $genre, filter: $filter) {\n    items {\n      artists {\n        name\n        id\n      }\n      ...sideBarContainer_audios\n      id\n    }\n    edges {\n      cursor\n      node {\n        __typename\n        id\n        audioId\n        name\n        artists {\n          name\n          id\n        }\n        coverImageUrl\n        free\n        ...songContainer_song\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n\nfragment sideBarContainer_audios on Audio {\n  audioId\n  name\n  ...commentBoxContainer_audio\n  ...commentsContainer_audio\n}\n\nfragment songContainer_song on Song {\n  audioId\n  name\n  coverImageUrl\n  artists {\n    name\n    id\n  }\n  playCount\n  likes\n  dislikes\n}\n\nfragment commentBoxContainer_audio on Audio {\n  id\n  audioId\n  name\n  comments(first: $count, after: $cursor, originalCommentId: $originalCommentId) {\n    items {\n      commentId\n      id\n    }\n  }\n}\n\nfragment commentsContainer_audio on Audio {\n  audioId\n  comments(first: $count, after: $cursor, originalCommentId: $originalCommentId) {\n    edges {\n      node {\n        __typename\n        commentId\n        ...commentContainer_comment\n        id\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n\nfragment commentContainer_comment on Comment {\n  commentId\n  body\n  dateAdded\n  likes\n  dislikes\n  repliesCount\n  originalComment {\n    id\n  }\n  user {\n    userName\n    id\n  }\n}\n"
+  "text": "query songsContainerForwardQuery(\n  $count: Int!\n  $cursor: String\n  $genre: String\n  $filter: FilterInput\n  $originalCommentId: Int\n) {\n  ...songsContainer\n}\n\nfragment songsContainer on Query {\n  songs(first: $count, after: $cursor, genre: $genre, filter: $filter) {\n    items {\n      artists {\n        name\n        id\n      }\n      ...sideBarContainer_audios\n      id\n    }\n    edges {\n      cursor\n      node {\n        __typename\n        id\n        audioId\n        name\n        artists {\n          name\n          id\n        }\n        coverImageUrl\n        free\n        ...songContainer_song\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n\nfragment sideBarContainer_audios on Audio {\n  audioId\n  name\n  ...commentBoxContainer_audio\n  ...commentsContainer_audio\n}\n\nfragment songContainer_song on Song {\n  audioId\n  name\n  coverImageUrl\n  artists {\n    name\n    id\n  }\n  playCount\n  likes\n  dislikes\n}\n\nfragment commentBoxContainer_audio on Audio {\n  id\n  audioId\n  name\n}\n\nfragment commentsContainer_audio on Audio {\n  ...commentBoxContainer_audio\n  comments(first: $count, after: $cursor, originalCommentId: $originalCommentId) {\n    edges {\n      node {\n        __typename\n        commentId\n        ...commentContainer_comment\n        id\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n\nfragment commentContainer_comment on Comment {\n  commentId\n  body\n  dateAdded\n  likes\n  dislikes\n  repliesCount\n  originalComment {\n    commentId\n    id\n  }\n  user {\n    userName\n    id\n  }\n}\n"
 };
 
 module.exports = batch;

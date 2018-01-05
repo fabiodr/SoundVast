@@ -30,12 +30,12 @@ const sharedUpdater = (store, audio, comment) => {
 
 let tempID = 0;
 
-export default ({ body }, audio) => {
+export default ({ body }, audio, originalCommentId) => {
   const variables = {
     input: {
       body,
       audioId: audio.audioId,
-      originalCommentId: audio.originalCommentId,
+      originalCommentId,
     },
   };
 
@@ -44,23 +44,26 @@ export default ({ body }, audio) => {
     variables,
     null,
     (store) => {
-      const root = store.getRoot();
-      const user = root.getLinkedRecord('user');
-      const id = `client:newComment:${tempID += 1}`;
-      const comment = store.create(id, 'Comment');
-      const maxCommentId = Math.max(...audio.comments.items.map(item => item.commentId), 1);
-      const commentId = maxCommentId + tempID;
-      const dateAdded = getFormattedDate(new Date());
+      // if (!body) return;
 
-      comment.setValue(commentId, 'commentId');
-      comment.setValue(body, 'body');
-      comment.setLinkedRecord(user, 'user');
-      comment.setValue(dateAdded, 'dateAdded');
-      comment.setValue(0, 'likes');
-      comment.setValue(0, 'dislikes');
-      comment.setValue(0, 'repliesCount');
+      // const root = store.getRoot();
+      // const user = root.getLinkedRecord('user');
+      // const originalComment = store.create(`originalComment_${tempID += 1}`, 'originalComment');
+      // const comment = store.create(`newComment_${tempID += 1}`, 'comment');
+      // const dateAdded = getFormattedDate(new Date());
 
-      sharedUpdater(store, audio, comment);
+      // originalComment.setValue(originalCommentId, 'commentId');
+
+      // comment.setValue(tempID * -1, 'commentId');
+      // comment.setValue(body, 'body');
+      // comment.setLinkedRecord(user, 'user');
+      // comment.setLinkedRecord(originalComment, 'originalComment');
+      // comment.setValue(dateAdded, 'dateAdded');
+      // comment.setValue(0, 'likes');
+      // comment.setValue(0, 'dislikes');
+      // comment.setValue(0, 'repliesCount');
+
+      // sharedUpdater(store, audio, comment);
     },
     (store) => {
       const commentRoot = store.getRootField('comment');

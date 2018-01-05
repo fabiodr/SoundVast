@@ -15,7 +15,6 @@ const query = graphql`
     $cursor: String
     $genre: String
     $filter: FilterInput
-    $originalCommentId: Int
   ) {
     ...songsContainer
   }
@@ -64,7 +63,6 @@ const connectionConfig = {
       $cursor: String
       $genre: String
       $filter: FilterInput
-      $originalCommentId: Int
     ) {
       ...songsContainer
     }
