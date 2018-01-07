@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash e1a3efd95b34b1f21d6b4b53f6ba8c14
+ * @relayHash c88111c71adf3976925e7e9e00a6b749
  */
 
 /* eslint-disable */
@@ -19,7 +19,6 @@ query artistsContainerForwardQuery(
   $cursor: String
   $genre: String
   $filter: FilterInput
-  $originalCommentId: Int
 ) {
   ...artistsContainer
 }
@@ -66,14 +65,17 @@ fragment artistContainer_artist on Artist {
 }
 
 fragment commentsContainer_audio on Audio {
+  id
   ...commentBoxContainer_audio
-  comments(first: $count, after: $cursor, originalCommentId: $originalCommentId) {
+  ...replyBoxContainer_audio
+  comments(first: $count, after: $cursor) {
     edges {
       node {
         __typename
         commentId
-        ...commentContainer_comment
         id
+        ...commentContainer_comment
+        ...repliesContainer_comment
       }
       cursor
     }
@@ -90,20 +92,42 @@ fragment commentBoxContainer_audio on Audio {
   name
 }
 
+fragment replyBoxContainer_audio on Audio {
+  id
+  audioId
+  name
+}
+
 fragment commentContainer_comment on Comment {
   commentId
   body
   dateAdded
   likes
   dislikes
-  repliesCount
-  originalComment {
-    commentId
-    id
-  }
   user {
     userName
     id
+  }
+}
+
+fragment repliesContainer_comment on Comment {
+  commentId
+  id
+  replies(first: 0, after: $cursor) {
+    totalCount
+    edges {
+      cursor
+      node {
+        __typename
+        commentId
+        ...commentContainer_comment
+        id
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
   }
 }
 */
@@ -133,12 +157,6 @@ const batch /*: ConcreteBatch*/ = {
         "kind": "LocalArgument",
         "name": "filter",
         "type": "FilterInput",
-        "defaultValue": null
-      },
-      {
-        "kind": "LocalArgument",
-        "name": "originalCommentId",
-        "type": "Int",
         "defaultValue": null
       }
     ],
@@ -182,12 +200,6 @@ const batch /*: ConcreteBatch*/ = {
         "kind": "LocalArgument",
         "name": "filter",
         "type": "FilterInput",
-        "defaultValue": null
-      },
-      {
-        "kind": "LocalArgument",
-        "name": "originalCommentId",
-        "type": "Int",
         "defaultValue": null
       }
     ],
@@ -404,12 +416,6 @@ const batch /*: ConcreteBatch*/ = {
                         "name": "first",
                         "variableName": "count",
                         "type": "Int"
-                      },
-                      {
-                        "kind": "Variable",
-                        "name": "originalCommentId",
-                        "variableName": "originalCommentId",
-                        "type": "Int"
                       }
                     ],
                     "concreteType": "CommentPayloadConnection",
@@ -450,6 +456,13 @@ const batch /*: ConcreteBatch*/ = {
                                 "kind": "ScalarField",
                                 "alias": null,
                                 "args": null,
+                                "name": "id",
+                                "storageKey": null
+                              },
+                              {
+                                "kind": "ScalarField",
+                                "alias": null,
+                                "args": null,
                                 "name": "body",
                                 "storageKey": null
                               },
@@ -472,38 +485,6 @@ const batch /*: ConcreteBatch*/ = {
                                 "alias": null,
                                 "args": null,
                                 "name": "dislikes",
-                                "storageKey": null
-                              },
-                              {
-                                "kind": "ScalarField",
-                                "alias": null,
-                                "args": null,
-                                "name": "repliesCount",
-                                "storageKey": null
-                              },
-                              {
-                                "kind": "LinkedField",
-                                "alias": null,
-                                "args": null,
-                                "concreteType": "Comment",
-                                "name": "originalComment",
-                                "plural": false,
-                                "selections": [
-                                  {
-                                    "kind": "ScalarField",
-                                    "alias": null,
-                                    "args": null,
-                                    "name": "commentId",
-                                    "storageKey": null
-                                  },
-                                  {
-                                    "kind": "ScalarField",
-                                    "alias": null,
-                                    "args": null,
-                                    "name": "id",
-                                    "storageKey": null
-                                  }
-                                ],
                                 "storageKey": null
                               },
                               {
@@ -532,11 +513,185 @@ const batch /*: ConcreteBatch*/ = {
                                 "storageKey": null
                               },
                               {
-                                "kind": "ScalarField",
+                                "kind": "LinkedField",
                                 "alias": null,
-                                "args": null,
-                                "name": "id",
+                                "args": [
+                                  {
+                                    "kind": "Variable",
+                                    "name": "after",
+                                    "variableName": "cursor",
+                                    "type": "String"
+                                  },
+                                  {
+                                    "kind": "Literal",
+                                    "name": "first",
+                                    "value": 0,
+                                    "type": "Int"
+                                  }
+                                ],
+                                "concreteType": "CommentPayloadConnection",
+                                "name": "replies",
+                                "plural": false,
+                                "selections": [
+                                  {
+                                    "kind": "ScalarField",
+                                    "alias": null,
+                                    "args": null,
+                                    "name": "totalCount",
+                                    "storageKey": null
+                                  },
+                                  {
+                                    "kind": "LinkedField",
+                                    "alias": null,
+                                    "args": null,
+                                    "concreteType": "CommentPayloadEdge",
+                                    "name": "edges",
+                                    "plural": true,
+                                    "selections": [
+                                      {
+                                        "kind": "ScalarField",
+                                        "alias": null,
+                                        "args": null,
+                                        "name": "cursor",
+                                        "storageKey": null
+                                      },
+                                      {
+                                        "kind": "LinkedField",
+                                        "alias": null,
+                                        "args": null,
+                                        "concreteType": "Comment",
+                                        "name": "node",
+                                        "plural": false,
+                                        "selections": [
+                                          {
+                                            "kind": "ScalarField",
+                                            "alias": null,
+                                            "args": null,
+                                            "name": "__typename",
+                                            "storageKey": null
+                                          },
+                                          {
+                                            "kind": "ScalarField",
+                                            "alias": null,
+                                            "args": null,
+                                            "name": "commentId",
+                                            "storageKey": null
+                                          },
+                                          {
+                                            "kind": "ScalarField",
+                                            "alias": null,
+                                            "args": null,
+                                            "name": "body",
+                                            "storageKey": null
+                                          },
+                                          {
+                                            "kind": "ScalarField",
+                                            "alias": null,
+                                            "args": null,
+                                            "name": "dateAdded",
+                                            "storageKey": null
+                                          },
+                                          {
+                                            "kind": "ScalarField",
+                                            "alias": null,
+                                            "args": null,
+                                            "name": "likes",
+                                            "storageKey": null
+                                          },
+                                          {
+                                            "kind": "ScalarField",
+                                            "alias": null,
+                                            "args": null,
+                                            "name": "dislikes",
+                                            "storageKey": null
+                                          },
+                                          {
+                                            "kind": "LinkedField",
+                                            "alias": null,
+                                            "args": null,
+                                            "concreteType": "ApplicationUser",
+                                            "name": "user",
+                                            "plural": false,
+                                            "selections": [
+                                              {
+                                                "kind": "ScalarField",
+                                                "alias": null,
+                                                "args": null,
+                                                "name": "userName",
+                                                "storageKey": null
+                                              },
+                                              {
+                                                "kind": "ScalarField",
+                                                "alias": null,
+                                                "args": null,
+                                                "name": "id",
+                                                "storageKey": null
+                                              }
+                                            ],
+                                            "storageKey": null
+                                          },
+                                          {
+                                            "kind": "ScalarField",
+                                            "alias": null,
+                                            "args": null,
+                                            "name": "id",
+                                            "storageKey": null
+                                          }
+                                        ],
+                                        "storageKey": null
+                                      }
+                                    ],
+                                    "storageKey": null
+                                  },
+                                  {
+                                    "kind": "LinkedField",
+                                    "alias": null,
+                                    "args": null,
+                                    "concreteType": "PageInfo",
+                                    "name": "pageInfo",
+                                    "plural": false,
+                                    "selections": [
+                                      {
+                                        "kind": "ScalarField",
+                                        "alias": null,
+                                        "args": null,
+                                        "name": "endCursor",
+                                        "storageKey": null
+                                      },
+                                      {
+                                        "kind": "ScalarField",
+                                        "alias": null,
+                                        "args": null,
+                                        "name": "hasNextPage",
+                                        "storageKey": null
+                                      }
+                                    ],
+                                    "storageKey": null
+                                  }
+                                ],
                                 "storageKey": null
+                              },
+                              {
+                                "kind": "LinkedHandle",
+                                "alias": null,
+                                "args": [
+                                  {
+                                    "kind": "Variable",
+                                    "name": "after",
+                                    "variableName": "cursor",
+                                    "type": "String"
+                                  },
+                                  {
+                                    "kind": "Literal",
+                                    "name": "first",
+                                    "value": 0,
+                                    "type": "Int"
+                                  }
+                                ],
+                                "handle": "connection",
+                                "name": "replies",
+                                "key": "repliesContainer_replies",
+                                "filters": null
                               }
                             ],
                             "storageKey": null
@@ -594,20 +749,12 @@ const batch /*: ConcreteBatch*/ = {
                         "name": "first",
                         "variableName": "count",
                         "type": "Int"
-                      },
-                      {
-                        "kind": "Variable",
-                        "name": "originalCommentId",
-                        "variableName": "originalCommentId",
-                        "type": "Int"
                       }
                     ],
                     "handle": "connection",
                     "name": "comments",
                     "key": "commentsContainer_comments",
-                    "filters": [
-                      "originalCommentId"
-                    ]
+                    "filters": null
                   }
                 ],
                 "storageKey": null
@@ -682,7 +829,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query artistsContainerForwardQuery(\n  $count: Int!\n  $cursor: String\n  $genre: String\n  $filter: FilterInput\n  $originalCommentId: Int\n) {\n  ...artistsContainer\n}\n\nfragment artistsContainer on Query {\n  artists(first: $count, after: $cursor, genre: $genre, filter: $filter) {\n    edges {\n      cursor\n      node {\n        __typename\n        audioId\n        songs {\n          items {\n            audioId\n            name\n            artists {\n              name\n              id\n            }\n            coverImageUrl\n            free\n            id\n          }\n        }\n        ...artistContainer_artist\n        id\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n\nfragment artistContainer_artist on Artist {\n  audioId\n  name\n  coverImageUrl\n  playCount\n  likes\n  dislikes\n  ...commentsContainer_audio\n}\n\nfragment commentsContainer_audio on Audio {\n  ...commentBoxContainer_audio\n  comments(first: $count, after: $cursor, originalCommentId: $originalCommentId) {\n    edges {\n      node {\n        __typename\n        commentId\n        ...commentContainer_comment\n        id\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n\nfragment commentBoxContainer_audio on Audio {\n  id\n  audioId\n  name\n}\n\nfragment commentContainer_comment on Comment {\n  commentId\n  body\n  dateAdded\n  likes\n  dislikes\n  repliesCount\n  originalComment {\n    commentId\n    id\n  }\n  user {\n    userName\n    id\n  }\n}\n"
+  "text": "query artistsContainerForwardQuery(\n  $count: Int!\n  $cursor: String\n  $genre: String\n  $filter: FilterInput\n) {\n  ...artistsContainer\n}\n\nfragment artistsContainer on Query {\n  artists(first: $count, after: $cursor, genre: $genre, filter: $filter) {\n    edges {\n      cursor\n      node {\n        __typename\n        audioId\n        songs {\n          items {\n            audioId\n            name\n            artists {\n              name\n              id\n            }\n            coverImageUrl\n            free\n            id\n          }\n        }\n        ...artistContainer_artist\n        id\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n\nfragment artistContainer_artist on Artist {\n  audioId\n  name\n  coverImageUrl\n  playCount\n  likes\n  dislikes\n  ...commentsContainer_audio\n}\n\nfragment commentsContainer_audio on Audio {\n  id\n  ...commentBoxContainer_audio\n  ...replyBoxContainer_audio\n  comments(first: $count, after: $cursor) {\n    edges {\n      node {\n        __typename\n        commentId\n        id\n        ...commentContainer_comment\n        ...repliesContainer_comment\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n\nfragment commentBoxContainer_audio on Audio {\n  id\n  audioId\n  name\n}\n\nfragment replyBoxContainer_audio on Audio {\n  id\n  audioId\n  name\n}\n\nfragment commentContainer_comment on Comment {\n  commentId\n  body\n  dateAdded\n  likes\n  dislikes\n  user {\n    userName\n    id\n  }\n}\n\nfragment repliesContainer_comment on Comment {\n  commentId\n  id\n  replies(first: 0, after: $cursor) {\n    totalCount\n    edges {\n      cursor\n      node {\n        __typename\n        commentId\n        ...commentContainer_comment\n        id\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
 };
 
 module.exports = batch;

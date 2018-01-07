@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 
 import LiveStreamInformation from './liveStreamInformation';
 import ValidationErrors from '../../shared/validation/validationErrors';
-import CancelButton from '../../shared/button/cancelButton';
-import SaveButton from '../common/saveButton/saveButton';
+import Button from '../../shared/button/button';
+import SpinnerSubmit from '../../shared/form/spinnerSubmit/spinnerSubmitContainer';
 
 const Form = ({
   handleSubmit,
@@ -19,8 +19,8 @@ const Form = ({
 
     <LiveStreamInformation id={id} genres={genres} />
 
-    <SaveButton formName={form} />
-    <CancelButton onClick={removeLiveStreamForm} />
+    <SpinnerSubmit formName={form}>Save</SpinnerSubmit>
+    <Button onClick={removeLiveStreamForm}>Cancel</Button>
   </form>
 );
 

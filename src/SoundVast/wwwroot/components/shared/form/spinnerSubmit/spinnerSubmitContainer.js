@@ -13,9 +13,11 @@ const propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-const propsMapper = props => ({
-  children: props.children,
-});
+const propsMapper = (props) => {
+  const { formName, isLoading, dispatch, ...newProps } = props;
+
+  return newProps;
+};
 
 export default compose(
   setPropTypes(propTypes),

@@ -6,8 +6,8 @@ import styles from './spinnerButton.less';
 import Button from '../button/button';
 import SpinnerIcon from '../../icons/spinner';
 
-const SpinnerButton = () => (
-  <Button>
+const SpinnerButton = ({ ...props }) => (
+  <Button {...props}>
     <SpinnerIcon className={styles.spinnerIcon} />
   </Button>
 );

@@ -7,7 +7,9 @@ import { commentsToLoad } from '../shared/utilities/itemsToLoad';
 
 const fragments = graphql`
   fragment commentsContainer_audio on Audio {
-    ...commentBoxContainer_audio,
+    id
+    ...commentBoxContainer_audio
+    ...replyBoxContainer_audio
     comments(
       first: $count
       after: $cursor
@@ -15,7 +17,9 @@ const fragments = graphql`
       edges {
         node {
           commentId
+          id
           ...commentContainer_comment
+          ...repliesContainer_comment
         }
       }
       pageInfo {
@@ -29,11 +33,11 @@ const connectionConfig = {
   direction: 'forward',
   query: graphql`
     query commentsContainerForwardQuery(
-      $id: Int!
+      $id: ID!
       $count: Int!
       $cursor: String
     ) {
-      song(id: $id) {
+      node(id: $id) {
         ...commentsContainer_audio
       }
     }
@@ -41,7 +45,7 @@ const connectionConfig = {
   getVariables: (props, { count, cursor }) => ({
     count,
     cursor,
-    id: props.data.audioId,
+    id: props.audio.id,
   }),
 };
 

@@ -31,20 +31,38 @@ namespace SoundVast.Components.Comment.Models
         public virtual Comment OriginalComment { get; set; }
         public virtual ICollection<Comment> Replies { get; set; } = new List<Comment>();
         public virtual ICollection<Rating.Models.Rating> Ratings { get; set; } = new List<Rating.Models.Rating>();
-        public bool IsTopLevelComment => OriginalCommentId == null;
+        public bool IsTopLevelComment => OriginalComment == null;
         public int Likes => Ratings.Count(x => x.Liked);
         public int Dislikes => Ratings.Count(x => !x.Liked);
-
-        public static void GetTopLevelReplies(Comment comment, List<Comment> topLevelReplies)
+        public Func<Comment, IEnumerable<Comment>> TopLevelReplies = comment =>
         {
-            if (!comment.IsTopLevelComment) throw new Exception("Can only get the replies on a top level comment");
+            var topLevelComment = GetTopLevelComment(comment);
 
+            return comment.MapToTopLevelReplies(topLevelComment);
+        };
+
+        private readonly ICollection<Comment> _topLevelReplies = new List<Comment>();
+
+        public static Comment GetTopLevelComment(Comment comment)
+        {
+            if (!comment.IsTopLevelComment)
+            {
+                comment = GetTopLevelComment(comment.OriginalComment);
+            }
+
+            return comment;
+        }
+
+        private IEnumerable<Comment> MapToTopLevelReplies(Comment comment)
+        {
             foreach (var reply in comment.Replies)
             {
-                topLevelReplies.Add(reply);
+                _topLevelReplies.Add(reply);
 
-                GetTopLevelReplies(reply, topLevelReplies);
+                MapToTopLevelReplies(reply);
             }
+
+            return _topLevelReplies;
         }
     }
 }

@@ -29,18 +29,26 @@ namespace SoundVast.Components.Album
             Field(x => x.Likes);
             Field(x => x.Dislikes);
             Field(x => x.PlayCount);
-            Connection<SongPayload>().Name("songs");
+            Connection<SongPayload>()
+                .Name("songs")
+                .Resolve(c => GraphQL.Relay.Types.Connection.ToConnection(c.Source.Songs, c));
             Connection<ArtistPayload>()
                 .Name("artists")
                 .Description("The artists who worked on this album")
                 .Resolve(c => c.Source.ArtistAlbums.Select(x => x.Artist));
             Field<DateGraphType>("dateAdded", "The date the user added the album");
             Field<AccountPayload>("user", "The user who added the album");
-            Field<ListGraphType<SongGenrePayload>>("genres", "The genres the album belongs to");
+            Field<ListGraphType<SongGenrePayload>>("genres", "The genres the album belongs to", resolve: c => c.Source.AudioGenres.Select(x => x.Genre));
             Field<ListGraphType<RatingPayload>>("ratings", "The ratings that have been applied by users to this album");
             Connection<CommentPayload>()
                 .Name("comments")
-                .Description("The top level comments for the album");
+                .Description("The top level comments for the album")
+                .Resolve(c =>
+                {
+                    var comments = c.Source.Comments.Where(x => x.IsTopLevelComment);
+
+                    return GraphQL.Relay.Types.Connection.ToConnection(comments, c);
+                });
 
             Interface<AudioInterface>();
         }

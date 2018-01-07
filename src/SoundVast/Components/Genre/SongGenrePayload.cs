@@ -20,7 +20,6 @@ namespace SoundVast.Components.Genre
             Field<IdGraphType>("id");
             Field(x => x.Name);
             Field(x => x.CoverImageUrl).Description("The cover image url for this genre");
-            Connection<SongPayload>().Name("songs").Description("The songs that belong to this genre");
 
             Interface<GenreInterface>();
         }

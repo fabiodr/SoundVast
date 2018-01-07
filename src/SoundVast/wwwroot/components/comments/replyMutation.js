@@ -5,38 +5,45 @@ import { ConnectionHandler } from 'relay-runtime';
 import getFormattedDate from '../shared/utilities/getFormattedDate';
 
 const mutation = graphql`
-  mutation commentMutation(
-    $cursor: String
+  mutation replyMutation(
     $input: SaveCommentInput!
   ) {
     comment(input: $input) {
       comment {
         ...commentContainer_comment
-        ...repliesContainer_comment
-      },
+        replies {
+          totalCount
+        }
+      }
     }
   }
 `;
 
-const sharedUpdater = (store, audio, comment) => {
-  const audioProxy = store.get(audio.id);
+const sharedUpdater = (store, rootComment, reply) => {
+  const commentProxy = store.get(rootComment.id);
   const connection = ConnectionHandler.getConnection(
-    audioProxy,
-    'commentsContainer_comments',
+    commentProxy,
+    'repliesContainer_replies',
   );
 
-  const edge = ConnectionHandler.createEdge(store, connection, comment, 'CommentPayloadEdge');
+  const replies = reply.getLinkedRecord('replies');
+  const repliesCount = replies.getValue('totalCount');
+
+  connection.setValue(repliesCount, 'totalCount');
+
+  const edge = ConnectionHandler.createEdge(store, connection, reply, 'CommentPayloadEdge');
 
   ConnectionHandler.insertEdgeAfter(connection, edge);
 };
 
 let tempID = 0;
 
-export default ({ body }, audio) => {
+export default ({ body }, audio, rootComment, comment) => {
   const variables = {
     input: {
       body,
       audioId: audio.audioId,
+      originalCommentId: comment.commentId,
     },
   };
 
@@ -49,12 +56,16 @@ export default ({ body }, audio) => {
 
       // const root = store.getRoot();
       // const user = root.getLinkedRecord('user');
+      // const originalComment = store.create(`originalComment_${tempID += 1}`, 'originalComment');
       // const comment = store.create(`newComment_${tempID += 1}`, 'comment');
       // const dateAdded = getFormattedDate(new Date());
+
+      // originalComment.setValue(originalCommentId, 'commentId');
 
       // comment.setValue(tempID * -1, 'commentId');
       // comment.setValue(body, 'body');
       // comment.setLinkedRecord(user, 'user');
+      // comment.setLinkedRecord(originalComment, 'originalComment');
       // comment.setValue(dateAdded, 'dateAdded');
       // comment.setValue(0, 'likes');
       // comment.setValue(0, 'dislikes');
@@ -63,10 +74,10 @@ export default ({ body }, audio) => {
       // sharedUpdater(store, audio, comment);
     },
     (store) => {
-      const commentRoot = store.getRootField('comment');
-      const comment = commentRoot.getLinkedRecord('comment');
+      const replyRoot = store.getRootField('comment');
+      const reply = replyRoot.getLinkedRecord('comment');
 
-      sharedUpdater(store, audio, comment);
+      sharedUpdater(store, rootComment, reply);
     },
   );
 };

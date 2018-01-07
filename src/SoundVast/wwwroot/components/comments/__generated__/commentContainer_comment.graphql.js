@@ -14,10 +14,6 @@ export type commentContainer_comment = {|
   +dateAdded: ?any;
   +likes: number;
   +dislikes: number;
-  +repliesCount: number;
-  +originalComment: ?{|
-    +commentId: number;
-  |};
   +user: {|
     +userName: string;
   |};
@@ -64,31 +60,6 @@ const fragment /*: ConcreteFragment*/ = {
       "alias": null,
       "args": null,
       "name": "dislikes",
-      "storageKey": null
-    },
-    {
-      "kind": "ScalarField",
-      "alias": null,
-      "args": null,
-      "name": "repliesCount",
-      "storageKey": null
-    },
-    {
-      "kind": "LinkedField",
-      "alias": null,
-      "args": null,
-      "concreteType": "Comment",
-      "name": "originalComment",
-      "plural": false,
-      "selections": [
-        {
-          "kind": "ScalarField",
-          "alias": null,
-          "args": null,
-          "name": "commentId",
-          "storageKey": null
-        }
-      ],
       "storageKey": null
     },
     {

@@ -2,8 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ResizableTextArea from 'react-fluid-textarea';
 
+import styles from './textarea.less';
+
 const Textarea = ({ input, placeholder }) => (
   <ResizableTextArea
+    className={styles.textArea}
     value={input.value}
     onChange={e => input.onChange(e.currentTarget.value)}
     placeholder={placeholder}

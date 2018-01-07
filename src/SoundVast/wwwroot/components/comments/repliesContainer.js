@@ -1,23 +1,31 @@
-import { compose, withHandlers, flattenProp, branch, renderNothing, withProps } from 'recompose';
+import { compose, flattenProp, withStateHandlers } from 'recompose';
 import { graphql } from 'react-relay';
 import { paginationContainer } from 'recompose-relay-modern';
 
-import Comments from './comments';
+import Replies from './replies';
 
 const fragments = graphql`
-  fragment repliesContainer on Comment
+  fragment repliesContainer_comment on Comment
   @argumentDefinitions(
-    count: { type: "Int", defaultValue: 3 }
+    count: { type: "Int", defaultValue: 0 }
   ) {
+    commentId
     id
     replies(
       first: $count
       after: $cursor
     ) @connection(key: "repliesContainer_replies") {
       totalCount
-      items {
-        commentId
-        ...commentContainer_comment
+      edges {
+        cursor
+        node {
+          commentId
+          ...commentContainer_comment
+        }
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
       }
     }
   }
@@ -31,33 +39,28 @@ const connectionConfig = {
       $count: Int!
       $cursor: String
     ) {
-      node(id: $nodeId) {
-        ...repliesContainer
+      node(id: $id) {
+        ...repliesContainer_comment @arguments(count: $count)
       }
     }
   `,
   getVariables: (props, { count, cursor }) => ({
     count,
     cursor,
-    id: props.id,
+    id: props.comment.id,
   }),
 };
 
-const handlers = {
-  loadAllReplies: ({ relay, replies }) => () => relay.loadMore(replies.totalCount),
-};
-
-const createProps = ({ replies }) => ({
-  showLoadRepliesButton: replies.totalCount !== replies.items.length,
-});
-
 export default compose(
   paginationContainer(fragments, connectionConfig),
-  flattenProp('data'),
-  withHandlers(handlers),
-  withProps(createProps),
-  branch(
-    ({ replies }) => replies.totalCount === 0,
-    renderNothing,
-  ),
-)(Comments);
+  flattenProp('comment'),
+  withStateHandlers({ showReplies: false }, {
+    toggleReplies: ({ showReplies }, { relay, replies }) => () => {
+      relay.refetchConnection(!showReplies ? replies.totalCount : 0);
+
+      return {
+        showReplies: !showReplies,
+      };
+    },
+  }),
+)(Replies);

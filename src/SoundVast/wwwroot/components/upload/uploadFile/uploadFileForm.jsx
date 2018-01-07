@@ -8,8 +8,8 @@ import ArtistsField from '../../shared/fields/artistsField/artistsField';
 import AlbumField from '../../shared/fields/albumField/albumField';
 import SongGenresField from '../../shared/fields/genresField/songGenresFieldContainer';
 import ValidationErrors from '../../shared/validation/validationErrors';
-import CancelButton from '../../shared/button/cancelButton';
-import SaveButton from '../common/saveButton/saveButton';
+import Button from '../../shared/button/button';
+import SpinnerSubmit from '../../shared/form/spinnerSubmit/spinnerSubmitContainer';
 
 const Form = ({
   handleSubmit,
@@ -36,8 +36,8 @@ const Form = ({
       </TabPanel>
     </Tabs>
 
-    <SaveButton formName={form} />
-    <CancelButton onClick={removeMusicForm} />
+    <SpinnerSubmit formName={form}>Save</SpinnerSubmit>
+    <Button onClick={removeMusicForm}>Cancel</Button>
   </form>
 );
 

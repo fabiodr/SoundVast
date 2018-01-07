@@ -1,44 +1,35 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-import { compose, withHandlers, setPropTypes, defaultProps } from 'recompose';
 
-import CancelButton from '../shared/button/cancelButton';
+import Button from '../shared/button/button';
 import SpinnerSubmit from '../shared/form/spinnerSubmit/spinnerSubmitContainer';
 import styles from './commentBox.less';
 import Textarea from '../shared/fields/textarea/textarea';
 
-const CommentBox = ({ handleSubmit, form, cancelOnClick }) => (
+const CommentBox = ({ handleSubmit, form, cancel, saveCommentText, bodyPlaceholder }) => (
   <form className={styles.commentBox} onSubmit={handleSubmit} action="">
-    <Field name="body" component={Textarea} placeholder="Add your comment..." />
+    <Field name="body" component={Textarea} placeholder={bodyPlaceholder} />
 
-    <SpinnerSubmit formName={form}>Comment</SpinnerSubmit>
-    <CancelButton onClick={cancelOnClick} />
+    <div className={styles.commentButtonContainer}>
+      <SpinnerSubmit formName={form} styleName="secondary">{saveCommentText}</SpinnerSubmit>
+      <Button onClick={cancel} styleName="secondary">Cancel</Button>
+    </div>
   </form>
 );
 
+CommentBox.defaultProps = {
+  cancel: null,
+  saveCommentText: 'Comment',
+  bodyPlaceholder: 'Add your comment...',
+};
+
 CommentBox.propTypes = {
+  saveCommentText: PropTypes.string,
+  bodyPlaceholder: PropTypes.string,
   handleSubmit: PropTypes.func.isRequired,
   form: PropTypes.string.isRequired,
-  cancelOnClick: PropTypes.func.isRequired,
+  cancel: PropTypes.func,
 };
 
-const propTypes = {
-  reset: PropTypes.func.isRequired,
-  cancelOnClick: PropTypes.func.isRequired,
-};
-
-const handlers = {
-  cancelOnClick: ({ reset, cancelOnClick }) => (...args) => {
-    reset();
-    cancelOnClick(...args);
-  },
-};
-
-export default compose(
-  setPropTypes(propTypes),
-  defaultProps({
-    cancelOnClick: Function.prototype,
-  }),
-  withHandlers(handlers),
-)(CommentBox);
+export default CommentBox;

@@ -20,10 +20,14 @@ namespace SoundVast.Components.Song
 {
     public class SongPayload : NodeGraphType<Models.Song>
     {
-        public SongPayload(ICommentService commentService)
-        {
-            Name = nameof(Models.Song);
+        private readonly ISongService _songService;
 
+        public SongPayload(ISongService songService)
+        {
+            _songService = songService;
+
+            Name = nameof(Models.Song);
+            
             Id("audioId", x => x.Id);
             Field(x => x.Name);
             Field(x => x.CoverImageUrl).Description("The poster image for the song");
@@ -34,18 +38,24 @@ namespace SoundVast.Components.Song
             Field(x => x.PlayCount);
             Field<DateGraphType>("dateAdded", "The date the user added the song");
             Field<AccountPayload>("user", "The user who uploaded the song");
-            Field<ListGraphType<SongGenrePayload>>("genres", "The genre the song belongs to");
+            Field<ListGraphType<SongGenrePayload>>("genres", "The genre the song belongs to", resolve: c => c.Source.AudioGenres.Select(x => x.Genre));
             Field<ListGraphType<RatingPayload>>("ratings", "The ratings that have been applied by users to this song");
             Connection<CommentPayload>()
                 .Name("comments")
-                .Description("The top level comments for the song");
+                .Description("The top level comments for the song")
+                .Resolve(c =>
+                {
+                    var comments = c.Source.Comments.Where(x => x.IsTopLevelComment);
+
+                    return GraphQL.Relay.Types.Connection.ToConnection(comments, c);
+                });
 
             Interface<AudioInterface>();
         }
 
         public override Models.Song GetById(string id)
         {
-            throw new NotImplementedException();
+            return _songService.GetAudio(int.Parse(id));
         }
     }
 }

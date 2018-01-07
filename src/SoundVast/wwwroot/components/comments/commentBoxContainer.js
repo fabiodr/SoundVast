@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
-import { compose, withHandlers, setPropTypes } from 'recompose';
+import { compose, withHandlers, setPropTypes, defaultProps } from 'recompose';
 import { fragmentContainer } from 'recompose-relay-modern';
 import { graphql } from 'react-relay';
 
@@ -15,19 +15,26 @@ const fragments = graphql`
   }
 `;
 
-const propTypes = {
-  originalCommentId: PropTypes.number,
-};
-
 const handlers = {
-  onSubmit: ({ audio, originalCommentId }) => (input) => {
-    commentMutation(input, audio, originalCommentId);
+  onSubmit: ({ audio }) => (input) => {
+    commentMutation(input, audio);
   },
 };
 
 export default compose(
+  defaultProps({
+    cancel: Function.prototype,
+  }),
+  setPropTypes({
+    cancel: PropTypes.func,
+  }),
   fragmentContainer(fragments),
-  setPropTypes(propTypes),
   withHandlers(handlers),
   reduxForm(),
+  withHandlers({
+    cancel: ({ reset, cancel }) => (...args) => {
+      reset();
+      cancel(...args);
+    },
+  }),
 )(CommentBox);

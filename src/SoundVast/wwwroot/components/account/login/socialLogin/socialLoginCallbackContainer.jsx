@@ -21,7 +21,7 @@ const query = graphql`
 const render = (route) => {
   if (route.props) {
     // User already has an account that is logged in
-    if (route.props.externalLoginCallback.user) {debugger;
+    if (route.props.externalLoginCallback.user) {
       throw new RedirectException({
         pathname: route.props.params.returnUrl,
         state: { loggedInUserName: route.props.externalLoginCallback.user.userName },

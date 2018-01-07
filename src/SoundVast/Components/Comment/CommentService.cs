@@ -38,6 +38,11 @@ namespace SoundVast.Components.Comment
         //    return comments.Skip(startIndex).Take(Comment.CommentsPerPage).ToList();
         //}
 
+        public Models.Comment Get(int id)
+        {
+            return _repository.GetAll().BuildComment().Single(x => x.Id == id);
+        }
+
         public void Add(Models.Comment comment)
         {
             _validationProvider.Validate(comment);
@@ -46,8 +51,7 @@ namespace SoundVast.Components.Comment
             {
                 if (comment.OriginalCommentId.HasValue)
                 {
-                    var originalComment = _repository.GetAll()
-                        .Include(x => x.Replies)
+                    var originalComment = _repository.GetAll().BuildComment()
                         .Single(x => x.Id == comment.OriginalCommentId.Value);
 
                     originalComment.Replies.Add(comment);

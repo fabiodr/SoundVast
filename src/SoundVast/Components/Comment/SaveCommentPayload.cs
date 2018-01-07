@@ -19,7 +19,7 @@ namespace SoundVast.Components.Comment
 
             Name = nameof(SaveCommentPayload);
            
-            Field<CommentPayload>("comment");
+            Field<NonNullGraphType<CommentPayload>>("comment");
         }
 
         public override object MutateAndGetPayload(MutationInputs inputs, ResolveFieldContext<object> context)

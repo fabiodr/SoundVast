@@ -1,5 +1,5 @@
 # source: http://localhost:8080/graphql
-# timestamp: Fri Jan 05 2018 01:08:40 GMT+0100 (W. Europe Standard Time)
+# timestamp: Sun Jan 07 2018 16:39:51 GMT+0100 (W. Europe Standard Time)
 
 input AddSongToPlaylistInput {
   clientMutationId: String
@@ -505,15 +505,6 @@ type LiveStreamGenre implements Genre {
 
   # The cover image url for this genre
   coverImageUrl: String!
-
-  # The live streams that belong to this genre
-  liveStreams(
-    # Only look at connected edges with cursors greater than the value of `after`.
-    after: String
-
-    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
-    first: Int
-  ): LiveStreamPayloadConnection
 }
 
 # A connection from an object to a list of objects of type `LiveStreamPayload`.
@@ -934,7 +925,7 @@ input SaveCommentInput {
 
 type SaveCommentPayload {
   clientMutationId: String
-  comment: Comment
+  comment: Comment!
 }
 
 input SaveLiveStreamInput {
@@ -1029,15 +1020,6 @@ type SongGenre implements Genre {
 
   # The cover image url for this genre
   coverImageUrl: String!
-
-  # The songs that belong to this genre
-  songs(
-    # Only look at connected edges with cursors greater than the value of `after`.
-    after: String
-
-    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
-    first: Int
-  ): SongPayloadConnection
 }
 
 # A connection from an object to a list of objects of type `SongPayload`.

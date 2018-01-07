@@ -8,16 +8,19 @@
 
 /*::
 import type {ConcreteFragment} from 'relay-runtime';
-export type commentsContainer_audio = {|
-  +id: ?string;
-  +comments: ?{|
+export type repliesContainer_comment = {|
+  +commentId: number;
+  +id: string;
+  +replies: ?{|
+    +totalCount: ?number;
     +edges: ?$ReadOnlyArray<?{|
+      +cursor: string;
       +node: ?{|
         +commentId: number;
-        +id: string;
       |};
     |}>;
     +pageInfo: {|
+      +endCursor: ?string;
       +hasNextPage: boolean;
     |};
   |};
@@ -28,9 +31,10 @@ export type commentsContainer_audio = {|
 const fragment /*: ConcreteFragment*/ = {
   "argumentDefinitions": [
     {
-      "kind": "RootArgument",
+      "kind": "LocalArgument",
       "name": "count",
-      "type": "Int"
+      "type": "Int",
+      "defaultValue": 0
     },
     {
       "kind": "RootArgument",
@@ -46,13 +50,20 @@ const fragment /*: ConcreteFragment*/ = {
         "cursor": "cursor",
         "direction": "forward",
         "path": [
-          "comments"
+          "replies"
         ]
       }
     ]
   },
-  "name": "commentsContainer_audio",
+  "name": "repliesContainer_comment",
   "selections": [
+    {
+      "kind": "ScalarField",
+      "alias": null,
+      "args": null,
+      "name": "commentId",
+      "storageKey": null
+    },
     {
       "kind": "ScalarField",
       "alias": null,
@@ -61,23 +72,20 @@ const fragment /*: ConcreteFragment*/ = {
       "storageKey": null
     },
     {
-      "kind": "FragmentSpread",
-      "name": "commentBoxContainer_audio",
-      "args": null
-    },
-    {
-      "kind": "FragmentSpread",
-      "name": "replyBoxContainer_audio",
-      "args": null
-    },
-    {
       "kind": "LinkedField",
-      "alias": "comments",
+      "alias": "replies",
       "args": null,
       "concreteType": "CommentPayloadConnection",
-      "name": "__commentsContainer_comments_connection",
+      "name": "__repliesContainer_replies_connection",
       "plural": false,
       "selections": [
+        {
+          "kind": "ScalarField",
+          "alias": null,
+          "args": null,
+          "name": "totalCount",
+          "storageKey": null
+        },
         {
           "kind": "LinkedField",
           "alias": null,
@@ -86,6 +94,13 @@ const fragment /*: ConcreteFragment*/ = {
           "name": "edges",
           "plural": true,
           "selections": [
+            {
+              "kind": "ScalarField",
+              "alias": null,
+              "args": null,
+              "name": "cursor",
+              "storageKey": null
+            },
             {
               "kind": "LinkedField",
               "alias": null,
@@ -102,20 +117,8 @@ const fragment /*: ConcreteFragment*/ = {
                   "storageKey": null
                 },
                 {
-                  "kind": "ScalarField",
-                  "alias": null,
-                  "args": null,
-                  "name": "id",
-                  "storageKey": null
-                },
-                {
                   "kind": "FragmentSpread",
                   "name": "commentContainer_comment",
-                  "args": null
-                },
-                {
-                  "kind": "FragmentSpread",
-                  "name": "repliesContainer_comment",
                   "args": null
                 },
                 {
@@ -126,13 +129,6 @@ const fragment /*: ConcreteFragment*/ = {
                   "storageKey": null
                 }
               ],
-              "storageKey": null
-            },
-            {
-              "kind": "ScalarField",
-              "alias": null,
-              "args": null,
-              "name": "cursor",
               "storageKey": null
             }
           ],
@@ -150,14 +146,14 @@ const fragment /*: ConcreteFragment*/ = {
               "kind": "ScalarField",
               "alias": null,
               "args": null,
-              "name": "hasNextPage",
+              "name": "endCursor",
               "storageKey": null
             },
             {
               "kind": "ScalarField",
               "alias": null,
               "args": null,
-              "name": "endCursor",
+              "name": "hasNextPage",
               "storageKey": null
             }
           ],
@@ -167,7 +163,7 @@ const fragment /*: ConcreteFragment*/ = {
       "storageKey": null
     }
   ],
-  "type": "Audio"
+  "type": "Comment"
 };
 
 module.exports = fragment;

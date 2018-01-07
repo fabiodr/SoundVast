@@ -3,6 +3,7 @@ import { fragmentContainer } from 'recompose-relay-modern';
 import { graphql } from 'react-relay';
 
 import Comment from './comment';
+import getTimeAgo from '../shared/utilities/getTimeAgo';
 
 const fragments = graphql`
   fragment commentContainer_comment on Comment {
@@ -11,20 +12,14 @@ const fragments = graphql`
     dateAdded
     likes
     dislikes
-    repliesCount
-    originalComment {
-      commentId
-    }
     user {
       userName
     }
-    ...repliesContainer
   }
 `;
 
-const createProps = ({ dateAdded, originalComment }) => ({
-  dateAdded: new Date(dateAdded).toLocaleDateString(),
-  isTopLevelComment: !originalComment,
+const createProps = ({ dateAdded }) => ({
+  dateAdded: getTimeAgo(new Date(dateAdded)),
 });
 
 export default compose(

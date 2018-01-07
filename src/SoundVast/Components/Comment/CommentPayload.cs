@@ -16,8 +16,12 @@ namespace SoundVast.Components.Comment
 {
     public class CommentPayload : NodeGraphType<Models.Comment>
     {
-        public CommentPayload()
+        private readonly ICommentService _commentService;
+
+        public CommentPayload(ICommentService commentService)
         {
+            _commentService = commentService;
+
             Name = nameof(Models.Comment);
 
             Id(x => x.Id);
@@ -33,9 +37,7 @@ namespace SoundVast.Components.Comment
                 .Description("The reply tree for the top level comments")
                 .Resolve(c =>
                 {
-                    var topLevelReplies = new List<Models.Comment>();
-
-                    Models.Comment.GetTopLevelReplies(c.Source, topLevelReplies);
+                    var topLevelReplies = c.Source.TopLevelReplies(c.Source);
 
                     return GraphQL.Relay.Types.Connection.ToConnection(topLevelReplies, c);
                 });
@@ -43,7 +45,7 @@ namespace SoundVast.Components.Comment
 
         public override Models.Comment GetById(string id)
         {
-            throw new NotImplementedException();
+            return _commentService.Get(int.Parse(id));
         }
     }
 }

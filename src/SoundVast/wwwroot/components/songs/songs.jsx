@@ -33,7 +33,9 @@ const Songs = ({ songs, loadMore }) => {
               <Song key={node.audioId} footerPlaylist={footerPlaylist} song={node} />)}
           </Grid>
           <SideBar audios={songs.items}>
-            {audioIndex => <Artists artists={songs.items[audioIndex].artists} />}
+            {audioIndex =>
+              <Artists artists={songs.items[audioIndex].artists} className={styles.artists} />
+            }
           </SideBar>
         </InfiniteScroll>
       </div>

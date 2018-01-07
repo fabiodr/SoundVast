@@ -1,15 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { compose, withStateHandlers, setPropTypes } from 'recompose';
 
-import Replies from './repliesContainer';
 import Like from '../rating/like/likeCommentContainer';
 import Dislike from '../rating/dislike/dislikeCommentContainer';
 import Rating from '../rating/audioRating';
-import CommentBox from './commentBoxContainer';
-import FormattedNumberText from '../shared/numbers/formattedNumberText';
-import Button from '../shared/button/button';
 import Flag from '../flag/flag';
+import styles from './comment.less';
 
 const Comment = ({
   user,
@@ -18,51 +14,25 @@ const Comment = ({
   commentId,
   likes,
   dislikes,
-  reply,
-  cancel,
-  showReplyBox,
-  repliesCount,
-  isTopLevelComment,
-  showRepliesButton,
-  showRepliesOnClick,
-  hideRepliesOnClick,
-  audio,
-  replies,
-}) => {
-  let repliesButton;
-
-  // if (isTopLevelComment && repliesCount) {
-  //   repliesButton = showRepliesButton ? (
-  //     <Button onClick={showRepliesOnClick}>
-  //       Show <FormattedNumberText number={repliesCount} singularText="reply" pluralText="replies" />
-  //     </Button>
-  //   ) : (
-  //     <Button onClick={hideRepliesOnClick}>
-  //       Hide <FormattedNumberText number={repliesCount} singularText="reply" pluralText="replies" />
-  //     </Button>
-  //   );
-  // }
-
-  return (
+  children,
+}) => (
+  <div className={styles.comment}>
     <div>
-      <div>
-        <span>{user.userName}</span>
-        <span>{dateAdded}</span>
-      </div>
-      <div>{body}</div>
-      <Rating likes={likes} dislikes={dislikes}>
-        <Like commentId={commentId} />
-        <Dislike commentId={commentId} />
-      </Rating>
-      <Flag modalId="flagComment" id={commentId} />
-      {showReplyBox ? <CommentBox form={`replyBox_${commentId}`} cancelOnClick={cancel} originalCommentId={commentId} audio={audio} /> : (
-        <div role="button" tabIndex={0} onClick={reply}>
-          reply
-        </div>
-      )}
-      {isTopLevelComment ? <Replies data={replies} /> : null}
+      <span className={styles.userName}>{user.userName}</span>
+      <span className={styles.dateAdded}>{dateAdded}</span>
     </div>
-  );
+    <div className={styles.body}>{body}</div>
+    <Rating likes={likes} dislikes={dislikes}>
+      <Like commentId={commentId} />
+      <Dislike commentId={commentId} />
+    </Rating>
+    <Flag modalId="flagComment" id={commentId} />
+    {children}
+  </div>
+);
+
+Comment.defaultProps = {
+  children: null,
 };
 
 Comment.propTypes = {
@@ -74,47 +44,7 @@ Comment.propTypes = {
   dislikes: PropTypes.number.isRequired,
   likes: PropTypes.number.isRequired,
   commentId: PropTypes.number.isRequired,
-  reply: PropTypes.func.isRequired,
-  cancel: PropTypes.func.isRequired,
-  showReplyBox: PropTypes.bool.isRequired,
-  repliesCount: PropTypes.number.isRequired,
-  showRepliesOnClick: PropTypes.func.isRequired,
-  hideRepliesOnClick: PropTypes.func.isRequired,
-  showRepliesButton: PropTypes.bool.isRequired,
-  isTopLevelComment: PropTypes.bool.isRequired,
-  audio: PropTypes.object.isRequired,
-  replies: PropTypes.object.isRequired,
+  children: PropTypes.node,
 };
 
-const stateHandlers = {
-  showRepliesOnClick: (state, props) => () => {
-    props.setReplies(props.id);
-
-    return {
-      showRepliesButton: !state.showRepliesButton,
-    };
-  },
-  hideRepliesOnClick: (state, props) => () => {
-    props.setReplies();
-
-    return {
-      showRepliesButton: !state.showRepliesButton,
-    };
-  },
-  reply: () => () => ({
-    showReplyBox: true,
-  }),
-  cancel: () => () => ({
-    showReplyBox: false,
-  }),
-};
-
-export default compose(
-  setPropTypes({
-    setReplies: PropTypes.func.isRequired,
-  }),
-  withStateHandlers({
-    showReplyBox: false,
-    showRepliesButton: true,
-  }, stateHandlers),
-)(Comment);
+export default Comment;
