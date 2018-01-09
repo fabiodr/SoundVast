@@ -31,13 +31,14 @@ const Replies = ({
         <Reply
           key={node.commentId}
           comment={node}
-        >
-          <ReplyBox
-            rootComment={comment}
-            comment={node}
-            audio={audio}
-          />
-        </Reply>
+          reply={
+            <ReplyBox
+              rootComment={comment}
+              comment={node}
+              audio={audio}
+            />
+          }
+        />
       ))}
     </div>
   </div>

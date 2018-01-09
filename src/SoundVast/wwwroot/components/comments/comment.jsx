@@ -14,25 +14,31 @@ const Comment = ({
   commentId,
   likes,
   dislikes,
-  children,
+  reply,
+  replies,
 }) => (
-  <div className={styles.comment}>
-    <div>
-      <span className={styles.userName}>{user.userName}</span>
-      <span className={styles.dateAdded}>{dateAdded}</span>
+  <div className={styles.commentTree}>
+    <div className={styles.comment}>
+      <div>
+        <span className={styles.userName}>{user.userName}</span>
+        <span className={styles.dateAdded}>{dateAdded}</span>
+      </div>
+      <div className={styles.body}>{body}</div>
+      <div className={styles.controls}>
+        <Rating likes={likes} dislikes={dislikes}>
+          <Like commentId={commentId} />
+          <Dislike commentId={commentId} />
+        </Rating>
+        {reply}
+        <Flag modalId="flagComment" id={commentId} className={styles.flag} />
+      </div>
     </div>
-    <div className={styles.body}>{body}</div>
-    <Rating likes={likes} dislikes={dislikes}>
-      <Like commentId={commentId} />
-      <Dislike commentId={commentId} />
-    </Rating>
-    <Flag modalId="flagComment" id={commentId} />
-    {children}
+    {replies}
   </div>
 );
 
 Comment.defaultProps = {
-  children: null,
+  replies: null,
 };
 
 Comment.propTypes = {
@@ -44,7 +50,8 @@ Comment.propTypes = {
   dislikes: PropTypes.number.isRequired,
   likes: PropTypes.number.isRequired,
   commentId: PropTypes.number.isRequired,
-  children: PropTypes.node,
+  reply: PropTypes.element.isRequired,
+  replies: PropTypes.node,
 };
 
 export default Comment;

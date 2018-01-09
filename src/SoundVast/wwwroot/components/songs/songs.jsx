@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import InfiniteScroll from 'react-infinite-scroller';
 
+import ScrollTracker from '../shared/scroll/scrollTracker';
 import SoundVastTitle from '../shared/title/soundVastTitle';
 import Song from './songContainer';
 import Grid from '../shared/grid/grid';
@@ -21,23 +22,28 @@ const Songs = ({ songs, loadMore }) => {
       <div>
         <AudiosHeader typeUrl="songs" />
         <Filters />
-        <InfiniteScroll
-          loadMore={loadMore}
-          hasMore={songs.pageInfo.hasNextPage}
-          loader={<Loader />}
-          initialLoad={false}
-          className={styles.gridContainer}
-        >
-          <Grid>
-            {songs.edges.map(({ node }) =>
-              <Song key={node.audioId} footerPlaylist={footerPlaylist} song={node} />)}
-          </Grid>
-          <SideBar audios={songs.items}>
-            {audioIndex =>
-              <Artists artists={songs.items[audioIndex].artists} className={styles.artists} />
-            }
-          </SideBar>
-        </InfiniteScroll>
+        <ScrollTracker>
+          {(elementToTrackRef, values) => (
+            <div className={styles.infiniteScrollContainer} ref={elementToTrackRef}>
+              <InfiniteScroll
+                loadMore={loadMore}
+                hasMore={songs.pageInfo.hasNextPage}
+                loader={<Loader />}
+                initialLoad={false}
+                className={styles.gridContainer}
+              >
+                <Grid>
+                  {songs.edges.map(({ node }) =>
+                    <Song key={node.audioId} footerPlaylist={footerPlaylist} song={node} />)}
+                </Grid>
+              </InfiniteScroll>
+              <SideBar isFixed={values.pastTopOfElement} audios={songs.items}>
+                {audioIndex =>
+                  <Artists artists={songs.items[audioIndex].artists} className={styles.artists} />}
+              </SideBar>
+            </div>
+          )}
+        </ScrollTracker>
       </div>
     </SoundVastTitle>
   );

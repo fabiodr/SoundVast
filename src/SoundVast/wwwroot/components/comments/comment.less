@@ -1,8 +1,14 @@
 @import '../styles/colors';
 
-.comment {
+.commentTree {
     margin-top: 7px;
     margin-bottom: 7px;
+}
+
+.comment:hover {
+    .flag {
+        display: initial;
+    }
 }
 
 .userName {
@@ -19,4 +25,14 @@
 .body {
     margin-top: 7px;
     margin-bottom: 3px;
+}
+
+.controls {
+    display: flex;
+    align-items: center;
+}
+
+.flag {
+    margin-left: auto;
+    display: none;
 }

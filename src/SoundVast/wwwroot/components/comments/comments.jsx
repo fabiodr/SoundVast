@@ -3,13 +3,12 @@ import PropTypes from 'prop-types';
 import InfiniteScroll from 'react-infinite-scroller';
 
 import Comment from './commentContainer';
-import styles from './comments.less';
 import Loader from '../shared/loaders/loader';
 import Replies from './repliesContainer';
 import ReplyBox from './replyBoxContainer';
 
 const Comments = ({ audio, loadMore }) => (
-  <div className={styles.comments}>
+  <div>
     <InfiniteScroll
       loadMore={loadMore}
       hasMore={audio.comments.pageInfo.hasNextPage}
@@ -20,14 +19,15 @@ const Comments = ({ audio, loadMore }) => (
         <Comment
           key={node.commentId}
           comment={node}
-        >
-          <ReplyBox
-            rootComment={node}
-            comment={node}
-            audio={audio}
-          />
-          <Replies comment={node} audio={audio} />
-        </Comment>
+          reply={
+            <ReplyBox
+              rootComment={node}
+              comment={node}
+              audio={audio}
+            />
+          }
+          replies={<Replies comment={node} audio={audio} />}
+        />
       ))}
     </InfiniteScroll>
   </div>

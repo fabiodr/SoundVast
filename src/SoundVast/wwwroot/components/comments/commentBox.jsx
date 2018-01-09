@@ -11,10 +11,8 @@ const CommentBox = ({ handleSubmit, form, cancel, saveCommentText, bodyPlacehold
   <form className={styles.commentBox} onSubmit={handleSubmit} action="">
     <Field name="body" component={Textarea} placeholder={bodyPlaceholder} />
 
-    <div className={styles.commentButtonContainer}>
-      <SpinnerSubmit formName={form} styleName="secondary">{saveCommentText}</SpinnerSubmit>
-      <Button onClick={cancel} styleName="secondary">Cancel</Button>
-    </div>
+    <SpinnerSubmit formName={form} styleName="secondary">{saveCommentText}</SpinnerSubmit>
+    <Button onClick={cancel} styleName="secondary">Cancel</Button>
   </form>
 );
 

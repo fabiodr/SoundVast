@@ -5,15 +5,20 @@ import ModalLink from '../shared/modal/modalLinkContainer';
 import FlagIcon from '../icons/flag';
 import styles from './flag.less';
 
-const Flag = ({ modalId, id }) => (
-  <ModalLink modalId={modalId} variables={{ id }}>
+const Flag = ({ modalId, id, className }) => (
+  <ModalLink modalId={modalId} variables={{ id }} className={className}>
     <FlagIcon className={styles.flagIcon} />
   </ModalLink>
 );
 
+Flag.defaultProps = {
+  className: null,
+};
+
 Flag.propTypes = {
   modalId: PropTypes.string.isRequired,
   id: PropTypes.number.isRequired,
+  className: PropTypes.string,
 };
 
 export default Flag;
