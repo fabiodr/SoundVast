@@ -18,7 +18,7 @@ const Comment = ({
   replies,
 }) => (
   <div className={styles.commentTree}>
-    <div className={styles.comment}>
+    <div className={styles.comment} data-component="comment">
       <div>
         <span className={styles.userName}>{user.userName}</span>
         <span className={styles.dateAdded}>{dateAdded}</span>
@@ -46,7 +46,7 @@ Comment.propTypes = {
     userName: PropTypes.string.isRequired,
   }).isRequired,
   dateAdded: PropTypes.string.isRequired,
-  body: PropTypes.string.isRequired,
+  body: PropTypes.node.isRequired,
   dislikes: PropTypes.number.isRequired,
   likes: PropTypes.number.isRequired,
   commentId: PropTypes.number.isRequired,

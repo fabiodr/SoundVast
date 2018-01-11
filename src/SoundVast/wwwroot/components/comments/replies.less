@@ -1,3 +1,5 @@
+@import '../styles/colors.less';
+
 .replies {
     margin-left: 20px;
 }
@@ -6,4 +8,36 @@
     padding: 6px 12px;
     font-size: 12px;
     margin-bottom: 7px;
+}
+
+.userNameContainer {
+    display: flex;
+    align-items: center;
+}
+
+.originalComment {
+    border-left: 2px solid #c5c1ad;
+    padding-left: 8px;
+    color: @grey5;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 4px 0px 10px 0px
+}
+
+.originalCommentExpanded {
+    white-space: normal;
+}
+
+[data-component="comment"]:hover {
+    .expandOriginalCommentButton {
+        visibility: visible;
+    }
+}
+
+.expandOriginalCommentButton {
+    visibility: hidden;
+    margin-left: auto;
+    font-size: 11px;
+    padding: 5px 10px;
 }

@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import pluralize from 'pluralize';
+import { Link } from 'found';
+import classnames from 'classnames';
 
 import Reply from './commentContainer';
 import Button from '../shared/button/button';
@@ -11,26 +13,53 @@ const Replies = ({
   comment,
   replies,
   audio,
-  showReplies,
+  showingReplies,
+  originalCommentExpanded,
   toggleReplies,
+  toggleOriginalCommentOverflow,
 }) => (
   <div>
     {!!replies.totalCount && (
-      !showReplies ? (
-        <Button onClick={toggleReplies} className={styles.toggleReplies}>
-          Show {replies.totalCount} {pluralize('reply', replies.totalCount)}
-        </Button>
-      ) : (
-        <Button onClick={toggleReplies} className={styles.toggleReplies}>
-          Hide {pluralize('reply', replies.totalCount)}
-        </Button>
-      )
+      <Button onClick={toggleReplies} className={styles.toggleReplies}>
+        {!showingReplies ? (
+          <div>
+            Show {replies.totalCount} {pluralize('reply', replies.totalCount)}
+          </div>
+        ) : (
+          <div>
+            Hide {pluralize('reply', replies.totalCount)}
+          </div>
+        )}
+      </Button>
     )}
     <div className={styles.replies}>
       {replies.edges.map(({ node }) => (
         <Reply
           key={node.commentId}
           comment={node}
+          body={
+            <div className={styles.bodyContainer}>
+              <div className={styles.userNameContainer}>
+                <Link to={`/profile/${node.originalComment.user.userName}`}>
+                  @{node.originalComment.user.userName}
+                </Link>
+                <Button
+                  onClick={toggleOriginalCommentOverflow}
+                  className={styles.expandOriginalCommentButton}
+                >
+                  {originalCommentExpanded ? <div>Collapse</div> : <div>Expand</div>}
+                </Button>
+              </div>
+              <blockquote
+                className={classnames(
+                  styles.originalComment,
+                  originalCommentExpanded && styles.originalCommentExpanded)}
+              >
+                {node.originalComment.body}
+              </blockquote>
+              {node.body}
+            </div>
+          }
           reply={
             <ReplyBox
               rootComment={comment}
@@ -55,8 +84,10 @@ Replies.propTypes = {
     })),
   }).isRequired,
   audio: PropTypes.object.isRequired,
-  showReplies: PropTypes.bool.isRequired,
+  showingReplies: PropTypes.bool.isRequired,
+  originalCommentExpanded: PropTypes.bool.isRequired,
   toggleReplies: PropTypes.func.isRequired,
+  toggleOriginalCommentOverflow: PropTypes.func.isRequired,
 };
 
 export default Replies;

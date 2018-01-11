@@ -18,6 +18,7 @@ const fragments = graphql`
         node {
           commentId
           id
+          body
           ...commentContainer_comment
           ...repliesContainer_comment
         }

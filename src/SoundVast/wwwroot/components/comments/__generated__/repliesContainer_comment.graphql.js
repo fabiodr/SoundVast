@@ -17,6 +17,13 @@ export type repliesContainer_comment = {|
       +cursor: string;
       +node: ?{|
         +commentId: number;
+        +body: string;
+        +originalComment: ?{|
+          +body: string;
+          +user: {|
+            +userName: string;
+          |};
+        |};
       |};
     |}>;
     +pageInfo: {|
@@ -114,6 +121,49 @@ const fragment /*: ConcreteFragment*/ = {
                   "alias": null,
                   "args": null,
                   "name": "commentId",
+                  "storageKey": null
+                },
+                {
+                  "kind": "ScalarField",
+                  "alias": null,
+                  "args": null,
+                  "name": "body",
+                  "storageKey": null
+                },
+                {
+                  "kind": "LinkedField",
+                  "alias": null,
+                  "args": null,
+                  "concreteType": "Comment",
+                  "name": "originalComment",
+                  "plural": false,
+                  "selections": [
+                    {
+                      "kind": "ScalarField",
+                      "alias": null,
+                      "args": null,
+                      "name": "body",
+                      "storageKey": null
+                    },
+                    {
+                      "kind": "LinkedField",
+                      "alias": null,
+                      "args": null,
+                      "concreteType": "ApplicationUser",
+                      "name": "user",
+                      "plural": false,
+                      "selections": [
+                        {
+                          "kind": "ScalarField",
+                          "alias": null,
+                          "args": null,
+                          "name": "userName",
+                          "storageKey": null
+                        }
+                      ],
+                      "storageKey": null
+                    }
+                  ],
                   "storageKey": null
                 },
                 {

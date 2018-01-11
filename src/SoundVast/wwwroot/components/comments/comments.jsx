@@ -19,6 +19,7 @@ const Comments = ({ audio, loadMore }) => (
         <Comment
           key={node.commentId}
           comment={node}
+          body={node.body}
           reply={
             <ReplyBox
               rootComment={node}

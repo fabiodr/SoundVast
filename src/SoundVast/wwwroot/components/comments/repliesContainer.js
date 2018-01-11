@@ -20,6 +20,13 @@ const fragments = graphql`
         cursor
         node {
           commentId
+          body
+          originalComment {
+            body
+            user {
+              userName
+            }
+          }
           ...commentContainer_comment
         }
       }
@@ -54,12 +61,18 @@ const connectionConfig = {
 export default compose(
   paginationContainer(fragments, connectionConfig),
   flattenProp('comment'),
-  withStateHandlers({ showReplies: false }, {
-    toggleReplies: ({ showReplies }, { relay, replies }) => () => {
-      relay.refetchConnection(!showReplies ? replies.totalCount : 0);
+  withStateHandlers({
+    showingReplies: false,
+    originalCommentExpanded: false,
+  }, {
+    toggleOriginalCommentOverflow: ({ originalCommentExpanded }) => () => ({
+      originalCommentExpanded: !originalCommentExpanded,
+    }),
+    toggleReplies: ({ showingReplies }, { relay, replies }) => () => {
+      relay.refetchConnection(!showingReplies ? replies.totalCount : 0);
 
       return {
-        showReplies: !showReplies,
+        showingReplies: !showingReplies,
       };
     },
   }),

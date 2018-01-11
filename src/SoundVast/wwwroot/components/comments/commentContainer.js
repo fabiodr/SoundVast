@@ -8,7 +8,6 @@ import getTimeAgo from '../shared/utilities/getTimeAgo';
 const fragments = graphql`
   fragment commentContainer_comment on Comment {
     commentId
-    body
     dateAdded
     likes
     dislikes

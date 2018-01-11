@@ -11,6 +11,7 @@ const mutation = graphql`
   ) {
     comment(input: $input) {
       comment {
+        body
         ...commentContainer_comment
         ...repliesContainer_comment
       },

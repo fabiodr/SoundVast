@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 694e0b566554c3b669e1dd6ec4926573
+ * @relayHash b828a39ceb494d5ace82fd2006b9d490
  */
 
 /* eslint-disable */
@@ -38,6 +38,7 @@ fragment commentsContainer_audio on Audio {
         __typename
         commentId
         id
+        body
         ...commentContainer_comment
         ...repliesContainer_comment
       }
@@ -64,7 +65,6 @@ fragment replyBoxContainer_audio on Audio {
 
 fragment commentContainer_comment on Comment {
   commentId
-  body
   dateAdded
   likes
   dislikes
@@ -84,6 +84,15 @@ fragment repliesContainer_comment on Comment {
       node {
         __typename
         commentId
+        body
+        originalComment {
+          body
+          user {
+            userName
+            id
+          }
+          id
+        }
         ...commentContainer_comment
         id
       }
@@ -404,6 +413,56 @@ const batch /*: ConcreteBatch*/ = {
                                     "storageKey": null
                                   },
                                   {
+                                    "kind": "LinkedField",
+                                    "alias": null,
+                                    "args": null,
+                                    "concreteType": "Comment",
+                                    "name": "originalComment",
+                                    "plural": false,
+                                    "selections": [
+                                      {
+                                        "kind": "ScalarField",
+                                        "alias": null,
+                                        "args": null,
+                                        "name": "body",
+                                        "storageKey": null
+                                      },
+                                      {
+                                        "kind": "LinkedField",
+                                        "alias": null,
+                                        "args": null,
+                                        "concreteType": "ApplicationUser",
+                                        "name": "user",
+                                        "plural": false,
+                                        "selections": [
+                                          {
+                                            "kind": "ScalarField",
+                                            "alias": null,
+                                            "args": null,
+                                            "name": "userName",
+                                            "storageKey": null
+                                          },
+                                          {
+                                            "kind": "ScalarField",
+                                            "alias": null,
+                                            "args": null,
+                                            "name": "id",
+                                            "storageKey": null
+                                          }
+                                        ],
+                                        "storageKey": null
+                                      },
+                                      {
+                                        "kind": "ScalarField",
+                                        "alias": null,
+                                        "args": null,
+                                        "name": "id",
+                                        "storageKey": null
+                                      }
+                                    ],
+                                    "storageKey": null
+                                  },
+                                  {
                                     "kind": "ScalarField",
                                     "alias": null,
                                     "args": null,
@@ -580,7 +639,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query commentsContainerForwardQuery(\n  $id: ID!\n  $count: Int!\n  $cursor: String\n) {\n  node(id: $id) {\n    __typename\n    ...commentsContainer_audio\n    id\n  }\n}\n\nfragment commentsContainer_audio on Audio {\n  id\n  ...commentBoxContainer_audio\n  ...replyBoxContainer_audio\n  comments(first: $count, after: $cursor) {\n    edges {\n      node {\n        __typename\n        commentId\n        id\n        ...commentContainer_comment\n        ...repliesContainer_comment\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n\nfragment commentBoxContainer_audio on Audio {\n  id\n  audioId\n  name\n}\n\nfragment replyBoxContainer_audio on Audio {\n  id\n  audioId\n  name\n}\n\nfragment commentContainer_comment on Comment {\n  commentId\n  body\n  dateAdded\n  likes\n  dislikes\n  user {\n    userName\n    id\n  }\n}\n\nfragment repliesContainer_comment on Comment {\n  commentId\n  id\n  replies(first: 0, after: $cursor) {\n    totalCount\n    edges {\n      cursor\n      node {\n        __typename\n        commentId\n        ...commentContainer_comment\n        id\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+  "text": "query commentsContainerForwardQuery(\n  $id: ID!\n  $count: Int!\n  $cursor: String\n) {\n  node(id: $id) {\n    __typename\n    ...commentsContainer_audio\n    id\n  }\n}\n\nfragment commentsContainer_audio on Audio {\n  id\n  ...commentBoxContainer_audio\n  ...replyBoxContainer_audio\n  comments(first: $count, after: $cursor) {\n    edges {\n      node {\n        __typename\n        commentId\n        id\n        body\n        ...commentContainer_comment\n        ...repliesContainer_comment\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n\nfragment commentBoxContainer_audio on Audio {\n  id\n  audioId\n  name\n}\n\nfragment replyBoxContainer_audio on Audio {\n  id\n  audioId\n  name\n}\n\nfragment commentContainer_comment on Comment {\n  commentId\n  dateAdded\n  likes\n  dislikes\n  user {\n    userName\n    id\n  }\n}\n\nfragment repliesContainer_comment on Comment {\n  commentId\n  id\n  replies(first: 0, after: $cursor) {\n    totalCount\n    edges {\n      cursor\n      node {\n        __typename\n        commentId\n        body\n        originalComment {\n          body\n          user {\n            userName\n            id\n          }\n          id\n        }\n        ...commentContainer_comment\n        id\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
 };
 
 module.exports = batch;

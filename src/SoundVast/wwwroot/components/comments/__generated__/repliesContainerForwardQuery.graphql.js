@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 52abb5c7737fc5ac503a13e8895f8ae1
+ * @relayHash e5bba53871d90fe68655af43eae09a22
  */
 
 /* eslint-disable */
@@ -38,6 +38,15 @@ fragment repliesContainer_comment_yu5n1 on Comment {
       node {
         __typename
         commentId
+        body
+        originalComment {
+          body
+          user {
+            userName
+            id
+          }
+          id
+        }
         ...commentContainer_comment
         id
       }
@@ -51,7 +60,6 @@ fragment repliesContainer_comment_yu5n1 on Comment {
 
 fragment commentContainer_comment on Comment {
   commentId
-  body
   dateAdded
   likes
   dislikes
@@ -263,6 +271,56 @@ const batch /*: ConcreteBatch*/ = {
                             "storageKey": null
                           },
                           {
+                            "kind": "LinkedField",
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "Comment",
+                            "name": "originalComment",
+                            "plural": false,
+                            "selections": [
+                              {
+                                "kind": "ScalarField",
+                                "alias": null,
+                                "args": null,
+                                "name": "body",
+                                "storageKey": null
+                              },
+                              {
+                                "kind": "LinkedField",
+                                "alias": null,
+                                "args": null,
+                                "concreteType": "ApplicationUser",
+                                "name": "user",
+                                "plural": false,
+                                "selections": [
+                                  {
+                                    "kind": "ScalarField",
+                                    "alias": null,
+                                    "args": null,
+                                    "name": "userName",
+                                    "storageKey": null
+                                  },
+                                  {
+                                    "kind": "ScalarField",
+                                    "alias": null,
+                                    "args": null,
+                                    "name": "id",
+                                    "storageKey": null
+                                  }
+                                ],
+                                "storageKey": null
+                              },
+                              {
+                                "kind": "ScalarField",
+                                "alias": null,
+                                "args": null,
+                                "name": "id",
+                                "storageKey": null
+                              }
+                            ],
+                            "storageKey": null
+                          },
+                          {
                             "kind": "ScalarField",
                             "alias": null,
                             "args": null,
@@ -378,7 +436,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query repliesContainerForwardQuery(\n  $id: ID!\n  $count: Int!\n  $cursor: String\n) {\n  node(id: $id) {\n    __typename\n    ...repliesContainer_comment_yu5n1\n    id\n  }\n}\n\nfragment repliesContainer_comment_yu5n1 on Comment {\n  commentId\n  id\n  replies(first: $count, after: $cursor) {\n    totalCount\n    edges {\n      cursor\n      node {\n        __typename\n        commentId\n        ...commentContainer_comment\n        id\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment commentContainer_comment on Comment {\n  commentId\n  body\n  dateAdded\n  likes\n  dislikes\n  user {\n    userName\n    id\n  }\n}\n"
+  "text": "query repliesContainerForwardQuery(\n  $id: ID!\n  $count: Int!\n  $cursor: String\n) {\n  node(id: $id) {\n    __typename\n    ...repliesContainer_comment_yu5n1\n    id\n  }\n}\n\nfragment repliesContainer_comment_yu5n1 on Comment {\n  commentId\n  id\n  replies(first: $count, after: $cursor) {\n    totalCount\n    edges {\n      cursor\n      node {\n        __typename\n        commentId\n        body\n        originalComment {\n          body\n          user {\n            userName\n            id\n          }\n          id\n        }\n        ...commentContainer_comment\n        id\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment commentContainer_comment on Comment {\n  commentId\n  dateAdded\n  likes\n  dislikes\n  user {\n    userName\n    id\n  }\n}\n"
 };
 
 module.exports = batch;

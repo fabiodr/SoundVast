@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 55685c602423cbc85ac1c551c84c6275
+ * @relayHash fd9e9ba9a5de8dcf3aab4126a7640c30
  */
 
 /* eslint-disable */
@@ -20,6 +20,13 @@ export type replyMutationVariables = {|
 export type replyMutationResponse = {|
   +comment: ?{|
     +comment: {|
+      +body: string;
+      +originalComment: ?{|
+        +body: string;
+        +user: {|
+          +userName: string;
+        |};
+      |};
       +replies: ?{|
         +totalCount: ?number;
       |};
@@ -35,6 +42,15 @@ mutation replyMutation(
 ) {
   comment(input: $input) {
     comment {
+      body
+      originalComment {
+        body
+        user {
+          userName
+          id
+        }
+        id
+      }
       ...commentContainer_comment
       replies {
         totalCount
@@ -46,7 +62,6 @@ mutation replyMutation(
 
 fragment commentContainer_comment on Comment {
   commentId
-  body
   dateAdded
   likes
   dislikes
@@ -94,6 +109,49 @@ const batch /*: ConcreteBatch*/ = {
             "name": "comment",
             "plural": false,
             "selections": [
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "body",
+                "storageKey": null
+              },
+              {
+                "kind": "LinkedField",
+                "alias": null,
+                "args": null,
+                "concreteType": "Comment",
+                "name": "originalComment",
+                "plural": false,
+                "selections": [
+                  {
+                    "kind": "ScalarField",
+                    "alias": null,
+                    "args": null,
+                    "name": "body",
+                    "storageKey": null
+                  },
+                  {
+                    "kind": "LinkedField",
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "ApplicationUser",
+                    "name": "user",
+                    "plural": false,
+                    "selections": [
+                      {
+                        "kind": "ScalarField",
+                        "alias": null,
+                        "args": null,
+                        "name": "userName",
+                        "storageKey": null
+                      }
+                    ],
+                    "storageKey": null
+                  }
+                ],
+                "storageKey": null
+              },
               {
                 "kind": "FragmentSpread",
                 "name": "commentContainer_comment",
@@ -167,6 +225,63 @@ const batch /*: ConcreteBatch*/ = {
             "plural": false,
             "selections": [
               {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "body",
+                "storageKey": null
+              },
+              {
+                "kind": "LinkedField",
+                "alias": null,
+                "args": null,
+                "concreteType": "Comment",
+                "name": "originalComment",
+                "plural": false,
+                "selections": [
+                  {
+                    "kind": "ScalarField",
+                    "alias": null,
+                    "args": null,
+                    "name": "body",
+                    "storageKey": null
+                  },
+                  {
+                    "kind": "LinkedField",
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "ApplicationUser",
+                    "name": "user",
+                    "plural": false,
+                    "selections": [
+                      {
+                        "kind": "ScalarField",
+                        "alias": null,
+                        "args": null,
+                        "name": "userName",
+                        "storageKey": null
+                      },
+                      {
+                        "kind": "ScalarField",
+                        "alias": null,
+                        "args": null,
+                        "name": "id",
+                        "storageKey": null
+                      }
+                    ],
+                    "storageKey": null
+                  },
+                  {
+                    "kind": "ScalarField",
+                    "alias": null,
+                    "args": null,
+                    "name": "id",
+                    "storageKey": null
+                  }
+                ],
+                "storageKey": null
+              },
+              {
                 "kind": "LinkedField",
                 "alias": null,
                 "args": null,
@@ -200,13 +315,6 @@ const batch /*: ConcreteBatch*/ = {
                     "alias": null,
                     "args": null,
                     "name": "commentId",
-                    "storageKey": null
-                  },
-                  {
-                    "kind": "ScalarField",
-                    "alias": null,
-                    "args": null,
-                    "name": "body",
                     "storageKey": null
                   },
                   {
@@ -265,7 +373,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "mutation replyMutation(\n  $input: SaveCommentInput!\n) {\n  comment(input: $input) {\n    comment {\n      ...commentContainer_comment\n      replies {\n        totalCount\n      }\n      id\n    }\n  }\n}\n\nfragment commentContainer_comment on Comment {\n  commentId\n  body\n  dateAdded\n  likes\n  dislikes\n  user {\n    userName\n    id\n  }\n}\n"
+  "text": "mutation replyMutation(\n  $input: SaveCommentInput!\n) {\n  comment(input: $input) {\n    comment {\n      body\n      originalComment {\n        body\n        user {\n          userName\n          id\n        }\n        id\n      }\n      ...commentContainer_comment\n      replies {\n        totalCount\n      }\n      id\n    }\n  }\n}\n\nfragment commentContainer_comment on Comment {\n  commentId\n  dateAdded\n  likes\n  dislikes\n  user {\n    userName\n    id\n  }\n}\n"
 };
 
 module.exports = batch;

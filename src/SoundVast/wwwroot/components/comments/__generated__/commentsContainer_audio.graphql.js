@@ -15,6 +15,7 @@ export type commentsContainer_audio = {|
       +node: ?{|
         +commentId: number;
         +id: string;
+        +body: string;
       |};
     |}>;
     +pageInfo: {|
@@ -106,6 +107,13 @@ const fragment /*: ConcreteFragment*/ = {
                   "alias": null,
                   "args": null,
                   "name": "id",
+                  "storageKey": null
+                },
+                {
+                  "kind": "ScalarField",
+                  "alias": null,
+                  "args": null,
+                  "name": "body",
                   "storageKey": null
                 },
                 {

@@ -10,6 +10,13 @@ const mutation = graphql`
   ) {
     comment(input: $input) {
       comment {
+        body
+        originalComment {
+          body
+          user {
+            userName
+          }
+        }
         ...commentContainer_comment
         replies {
           totalCount

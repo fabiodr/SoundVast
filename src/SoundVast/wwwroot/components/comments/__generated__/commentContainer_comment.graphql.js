@@ -10,7 +10,6 @@
 import type {ConcreteFragment} from 'relay-runtime';
 export type commentContainer_comment = {|
   +commentId: number;
-  +body: string;
   +dateAdded: ?any;
   +likes: number;
   +dislikes: number;
@@ -32,13 +31,6 @@ const fragment /*: ConcreteFragment*/ = {
       "alias": null,
       "args": null,
       "name": "commentId",
-      "storageKey": null
-    },
-    {
-      "kind": "ScalarField",
-      "alias": null,
-      "args": null,
-      "name": "body",
       "storageKey": null
     },
     {

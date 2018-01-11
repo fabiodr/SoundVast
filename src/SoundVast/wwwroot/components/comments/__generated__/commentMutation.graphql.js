@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 2d4276cbcb5651ad6bf76a78f41a06fa
+ * @relayHash 3c4342dc13580e77e134ee2b5a60bccc
  */
 
 /* eslint-disable */
@@ -20,7 +20,9 @@ export type commentMutationVariables = {|
 |};
 export type commentMutationResponse = {|
   +comment: ?{|
-    +comment: {| |};
+    +comment: {|
+      +body: string;
+    |};
   |};
 |};
 */
@@ -33,6 +35,7 @@ mutation commentMutation(
 ) {
   comment(input: $input) {
     comment {
+      body
       ...commentContainer_comment
       ...repliesContainer_comment
       id
@@ -42,7 +45,6 @@ mutation commentMutation(
 
 fragment commentContainer_comment on Comment {
   commentId
-  body
   dateAdded
   likes
   dislikes
@@ -62,6 +64,15 @@ fragment repliesContainer_comment on Comment {
       node {
         __typename
         commentId
+        body
+        originalComment {
+          body
+          user {
+            userName
+            id
+          }
+          id
+        }
         ...commentContainer_comment
         id
       }
@@ -117,6 +128,13 @@ const batch /*: ConcreteBatch*/ = {
             "name": "comment",
             "plural": false,
             "selections": [
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "body",
+                "storageKey": null
+              },
               {
                 "kind": "FragmentSpread",
                 "name": "commentContainer_comment",
@@ -186,6 +204,13 @@ const batch /*: ConcreteBatch*/ = {
                 "kind": "ScalarField",
                 "alias": null,
                 "args": null,
+                "name": "body",
+                "storageKey": null
+              },
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
                 "name": "id",
                 "storageKey": null
               },
@@ -198,13 +223,6 @@ const batch /*: ConcreteBatch*/ = {
                     "alias": null,
                     "args": null,
                     "name": "commentId",
-                    "storageKey": null
-                  },
-                  {
-                    "kind": "ScalarField",
-                    "alias": null,
-                    "args": null,
-                    "name": "body",
                     "storageKey": null
                   },
                   {
@@ -326,6 +344,56 @@ const batch /*: ConcreteBatch*/ = {
                                 "storageKey": null
                               },
                               {
+                                "kind": "LinkedField",
+                                "alias": null,
+                                "args": null,
+                                "concreteType": "Comment",
+                                "name": "originalComment",
+                                "plural": false,
+                                "selections": [
+                                  {
+                                    "kind": "ScalarField",
+                                    "alias": null,
+                                    "args": null,
+                                    "name": "body",
+                                    "storageKey": null
+                                  },
+                                  {
+                                    "kind": "LinkedField",
+                                    "alias": null,
+                                    "args": null,
+                                    "concreteType": "ApplicationUser",
+                                    "name": "user",
+                                    "plural": false,
+                                    "selections": [
+                                      {
+                                        "kind": "ScalarField",
+                                        "alias": null,
+                                        "args": null,
+                                        "name": "userName",
+                                        "storageKey": null
+                                      },
+                                      {
+                                        "kind": "ScalarField",
+                                        "alias": null,
+                                        "args": null,
+                                        "name": "id",
+                                        "storageKey": null
+                                      }
+                                    ],
+                                    "storageKey": null
+                                  },
+                                  {
+                                    "kind": "ScalarField",
+                                    "alias": null,
+                                    "args": null,
+                                    "name": "id",
+                                    "storageKey": null
+                                  }
+                                ],
+                                "storageKey": null
+                              },
+                              {
                                 "kind": "ScalarField",
                                 "alias": null,
                                 "args": null,
@@ -444,7 +512,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "mutation commentMutation(\n  $cursor: String\n  $input: SaveCommentInput!\n) {\n  comment(input: $input) {\n    comment {\n      ...commentContainer_comment\n      ...repliesContainer_comment\n      id\n    }\n  }\n}\n\nfragment commentContainer_comment on Comment {\n  commentId\n  body\n  dateAdded\n  likes\n  dislikes\n  user {\n    userName\n    id\n  }\n}\n\nfragment repliesContainer_comment on Comment {\n  commentId\n  id\n  replies(first: 0, after: $cursor) {\n    totalCount\n    edges {\n      cursor\n      node {\n        __typename\n        commentId\n        ...commentContainer_comment\n        id\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+  "text": "mutation commentMutation(\n  $cursor: String\n  $input: SaveCommentInput!\n) {\n  comment(input: $input) {\n    comment {\n      body\n      ...commentContainer_comment\n      ...repliesContainer_comment\n      id\n    }\n  }\n}\n\nfragment commentContainer_comment on Comment {\n  commentId\n  dateAdded\n  likes\n  dislikes\n  user {\n    userName\n    id\n  }\n}\n\nfragment repliesContainer_comment on Comment {\n  commentId\n  id\n  replies(first: 0, after: $cursor) {\n    totalCount\n    edges {\n      cursor\n      node {\n        __typename\n        commentId\n        body\n        originalComment {\n          body\n          user {\n            userName\n            id\n          }\n          id\n        }\n        ...commentContainer_comment\n        id\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
 };
 
 module.exports = batch;
