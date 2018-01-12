@@ -14,8 +14,8 @@ const SideBar = ({ audios, currentAudioId, children, isFixed }) => {
 
   return (
     <div className={classnames(styles.sideBar, isFixed && styles.fixedSideBar)}>
-      <Name name={audio.name} className={styles.name} />
       {children(currentAudioIndex)}
+      <Name name={audio.name} className={styles.name} />
       <div>
         <div className={styles.commentBox}>
           <CommentBox audio={audio} form="commentBox" key="commentBox" />

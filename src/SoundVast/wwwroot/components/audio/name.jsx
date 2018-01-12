@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import styles from './name.less';
 
 const Name = ({ name, className }) => (
-  <div className={classnames(styles.name, className)}>{name}</div>
+  <div title={name} className={classnames(styles.name, className)}>{name}</div>
 );
 
 Name.defaultProps = {

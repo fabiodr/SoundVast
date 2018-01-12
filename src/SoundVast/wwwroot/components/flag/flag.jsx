@@ -6,7 +6,7 @@ import FlagIcon from '../icons/flag';
 import styles from './flag.less';
 
 const Flag = ({ modalId, id, className }) => (
-  <ModalLink modalId={modalId} variables={{ id }} className={className}>
+  <ModalLink title="Report this" modalId={modalId} variables={{ id }} className={className}>
     <FlagIcon className={styles.flagIcon} />
   </ModalLink>
 );

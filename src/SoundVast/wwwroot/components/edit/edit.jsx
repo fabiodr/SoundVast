@@ -6,7 +6,7 @@ import EditIcon from '../icons/edit';
 import styles from './edit.less';
 
 const Edit = ({ modalId, id }) => (
-  <ModalLink modalId={modalId} variables={{ id }}>
+  <ModalLink title="Request changes" modalId={modalId} variables={{ id }}>
     <EditIcon className={styles.editIcon} />
   </ModalLink>
 );

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 
 import Play from '../audio/playContainer';
 import CoverImage from '../audio/coverImage';
@@ -12,22 +13,40 @@ import Artists from '../audio/artists';
 import Flag from '../flag/flag';
 import Edit from '../edit/edit';
 import AddToPlaylist from '../playlist/addToPlaylistContainer';
+import styles from './song.less';
 
 const Song = ({ song, footerPlaylist }) => (
   <div>
+    <div
+      className={classnames(
+        styles.songTitle,
+        !song.artists.length && styles.songTitleNameOnly)
+      }
+    >
+      <Artists artists={song.artists} />
+      <Name className={styles.songName} name={song.name} />
+    </div>
     <Play id={song.audioId} footerPlaylist={footerPlaylist}>
       <CoverImage coverImageUrl={song.coverImageUrl} />
     </Play>
-    <Name name={song.name} />
-    <PlayCount playCount={song.playCount} />
-    <Artists artists={song.artists} />
-    <Rating likes={song.likes} dislikes={song.dislikes}>
-      <Like audioId={song.audioId} />
-      <Dislike audioId={song.audioId} />
-    </Rating>
-    <AddToPlaylist songId={song.audioId} />
-    <Edit modalId="editSong" id={song.audioId} />
-    <Flag modalId="flagAudio" id={song.audioId} />
+    <div className={styles.controls}>
+      <div className={styles.controlsRow}>
+        <PlayCount className={styles.playCount} playCount={song.playCount} />
+        <div className={styles.alignRight}>
+          <AddToPlaylist songId={song.audioId} />
+        </div>
+      </div>
+      <div className={styles.controlsRow}>
+        <Rating likes={song.likes} dislikes={song.dislikes}>
+          <Like audioId={song.audioId} />
+          <Dislike audioId={song.audioId} />
+        </Rating>
+        <div className={styles.alignRight}>
+          <Edit modalId="editSong" id={song.audioId} />
+          <Flag modalId="flagAudio" id={song.audioId} />
+        </div>
+      </div>
+    </div>
   </div>
 );
 

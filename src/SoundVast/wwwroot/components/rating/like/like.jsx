@@ -5,7 +5,7 @@ import LikeIcon from '../../icons/like';
 import styles from './like.less';
 
 const Like = ({ className, onClick }) => (
-  <span className={className} role="button" tabIndex={0} onClick={onClick}>
+  <span title="I like this" className={className} role="button" tabIndex={0} onClick={onClick}>
     <LikeIcon className={styles.likeIcon} />
   </span>
 );
