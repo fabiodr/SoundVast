@@ -5,9 +5,9 @@ import AddToPlaylistIcon from '../icons/addToPlaylistIcon';
 import styles from './addToPlaylist.less';
 
 const AddToPlaylist = ({ onClick }) => (
-  <span title="Add to playlist" role="button" tabIndex={0} onClick={onClick}>
+  <button className={styles.addToPlaylist} title="Add to playlist" onClick={onClick}>
     <AddToPlaylistIcon className={styles.addToPlaylistIcon} />
-  </span>
+  </button>
 );
 
 AddToPlaylist.propTypes = {

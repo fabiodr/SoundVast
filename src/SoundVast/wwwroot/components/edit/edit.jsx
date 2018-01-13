@@ -1,14 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import ModalLink from '../shared/modal/modalLinkContainer';
-import EditIcon from '../icons/edit';
+import ModalButton from '../shared/button/modalButtonContainer';
 import styles from './edit.less';
 
 const Edit = ({ modalId, id }) => (
-  <ModalLink title="Request changes" modalId={modalId} variables={{ id }}>
-    <EditIcon className={styles.editIcon} />
-  </ModalLink>
+  <ModalButton
+    styleName="secondary"
+    className={styles.edit}
+    title="Request changes"
+    modalId={modalId}
+    variables={{ id }}
+  >
+    edit
+  </ModalButton>
 );
 
 Edit.propTypes = {

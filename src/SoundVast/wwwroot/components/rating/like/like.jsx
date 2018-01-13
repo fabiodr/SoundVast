@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 
 import LikeIcon from '../../icons/like';
 import styles from './like.less';
 
 const Like = ({ className, onClick }) => (
-  <span title="I like this" className={className} role="button" tabIndex={0} onClick={onClick}>
+  <button className={classnames(styles.like, className)} title="I like this" onClick={onClick}>
     <LikeIcon className={styles.likeIcon} />
-  </span>
+  </button>
 );
 
 Like.defaultProps = {

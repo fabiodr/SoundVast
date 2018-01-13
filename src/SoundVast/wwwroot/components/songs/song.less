@@ -1,3 +1,5 @@
+@import '../styles/colors.less';
+
 .songTitle {
     height: 30px;
     padding: 5px 0px;
@@ -13,7 +15,7 @@
 
 .controlsRow {
     display: flex;
-    padding: 1px 0px;
+    padding: 3px 0px;
     align-items: center;
 
     a, [role="button"], .playCount {
@@ -27,4 +29,10 @@
 
 .alignRight {
     margin-left: auto;
+    display: flex;
+    align-items: right;
+}
+
+.extraControls button {
+    padding: 3px 5px;
 }

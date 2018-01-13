@@ -5,6 +5,23 @@ body {
     margin: 0;
 }
 
+button {
+    padding: 0;
+    cursor: pointer;
+    border: 0;
+    background-color: transparent;
+}
+
+button svg, a svg {
+    fill: @grey4;
+}
+
+button:hover, a:hover {
+    svg {
+        fill: @grey5;
+    }
+}
+
 a {
     color: @primary;
     cursor: pointer;

@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 
 import DislikeIcon from '../../icons/dislike';
 import styles from './dislike.less';
 
 const Dislike = ({ className, onClick }) => (
-  <span title="I dislike this" className={className} role="button" tabIndex={0} onClick={onClick}>
+  <button className={classnames(styles.dislike, className)} title="I dislike this" onClick={onClick}>
     <DislikeIcon className={styles.dislikeIcon} />
-  </span>
+  </button>
 );
 
 Dislike.defaultProps = {

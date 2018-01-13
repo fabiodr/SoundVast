@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
-import { compose, withHandlers, defaultProps, setPropTypes } from 'recompose';
+import { compose, withHandlers, defaultProps, setPropTypes, mapProps } from 'recompose';
 import PropTypes from 'prop-types';
 
-import ModalLink from './modalLink';
-import { showModal } from './actions';
+import ModalButton from './modalButton';
+import { showModal } from '../modal/actions';
 
 const handlers = {
   onClick: ({ onClick, modalId, variables, dispatch }) => (...args) => {
@@ -24,4 +24,9 @@ export default compose(
   }),
   connect(),
   withHandlers(handlers),
-)(ModalLink);
+  mapProps((props) => {
+    const { dispatch, modalId, variables, ...newProps } = props;
+
+    return newProps;
+  }),
+)(ModalButton);

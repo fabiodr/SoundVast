@@ -1,14 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 
-import ModalLink from '../shared/modal/modalLinkContainer';
-import FlagIcon from '../icons/flag';
+import ModalButton from '../shared/button/modalButtonContainer';
 import styles from './flag.less';
 
 const Flag = ({ modalId, id, className }) => (
-  <ModalLink title="Report this" modalId={modalId} variables={{ id }} className={className}>
-    <FlagIcon className={styles.flagIcon} />
-  </ModalLink>
+  <ModalButton
+    styleName="secondary"
+    className={classnames(styles.flag, className)}
+    title="Report this"
+    modalId={modalId}
+    variables={{ id }}
+  >
+    flag
+  </ModalButton>
 );
 
 Flag.defaultProps = {

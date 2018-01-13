@@ -3,12 +3,12 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
 import styles from '../header.less';
-import ModalLink from '../../shared/modal/modalLinkContainer';
+import ModalButton from '../../shared/button/modalButtonContainer';
 
 const UnAuthorizedList = ({ className }) => (
   <ul className={classnames(styles.outerList, className)}>
-    <li><ModalLink modalId="login">Login</ModalLink></li>
-    <li><ModalLink modalId="register">Register</ModalLink></li>
+    <li><ModalButton modalId="login">Login</ModalButton></li>
+    <li><ModalButton modalId="register">Register</ModalButton></li>
   </ul>
 );
 

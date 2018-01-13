@@ -41,7 +41,7 @@ const Song = ({ song, footerPlaylist }) => (
           <Like audioId={song.audioId} />
           <Dislike audioId={song.audioId} />
         </Rating>
-        <div className={styles.alignRight}>
+        <div className={classnames(styles.alignRight, styles.extraControls)}>
           <Edit modalId="editSong" id={song.audioId} />
           <Flag modalId="flagAudio" id={song.audioId} />
         </div>

@@ -3,7 +3,7 @@ import { Field } from 'redux-form';
 import PropTypes from 'prop-types';
 
 import styles from './login.less';
-import ModalLink from '../../shared/modal/modalLinkContainer';
+import ModalButton from '../../shared/button/modalButtonContainer';
 import FormGroup from '../../shared/form/formGroup';
 import Input from '../../shared/fields/input/input';
 import ValidationErrors from '../../shared/validation/validationErrors';
@@ -27,10 +27,10 @@ const Login = ({ error: errors, handleSubmit, loginProviders }) => (
       </label>
 
       <div className={styles.forgotPasswordLink}>
-        <ModalLink modalId="forgotPassword">Forgotten your password?</ModalLink>
+        <ModalButton modalId="forgotPassword">Forgotten your password?</ModalButton>
       </div>
       <div>
-        Or <ModalLink modalId="register">register</ModalLink> if you don&apos;t have an account.
+        Or <ModalButton modalId="register">register</ModalButton> if you don&apos;t have an account.
       </div>
 
       <br />
