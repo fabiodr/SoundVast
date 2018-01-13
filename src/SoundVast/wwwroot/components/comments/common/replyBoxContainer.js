@@ -21,14 +21,14 @@ const propTypes = {
   rootComment: PropTypes.shape({
     id: PropTypes.string.isRequired,
   }),
-  originalComment: PropTypes.shape({
+  comment: PropTypes.shape({
     commentId: PropTypes.number.isRequired,
   }).isRequired,
 };
 
 const handlers = {
-  onSubmit: ({ audio, rootComment, originalComment }) => (input) => {
-    replyMutation(input, audio, rootComment, originalComment);
+  onSubmit: ({ audio, rootComment, comment }) => (input) => {
+    replyMutation(input, audio, rootComment, comment);
   },
 };
 
@@ -50,6 +50,6 @@ export default compose(
     renderComponent(ReplyButton),
   ),
   withHandlers(handlers),
-  withProps(({ reply }) => ({ form: `replyBox_${reply.commentId}` })),
+  withProps(({ comment }) => ({ form: `replyBox_${comment.commentId}` })),
   reduxForm(),
 )(ReplyBox);

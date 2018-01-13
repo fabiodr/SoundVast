@@ -25,7 +25,7 @@ const Comment = ({
       <CommentControls commentId={commentId} likes={likes} dislikes={dislikes} />
       <ReplyBox
         rootComment={comment}
-        originalComment={comment}
+        comment={comment}
         audio={audio}
       />
     </div>

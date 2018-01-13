@@ -50,7 +50,7 @@ const Reply = ({
     <CommentControls commentId={commentId} likes={likes} dislikes={dislikes} />
     <ReplyBox
       rootComment={rootComment}
-      originalComment={reply}
+      comment={reply}
       audio={audio}
     />
   </div>
