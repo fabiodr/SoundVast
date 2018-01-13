@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Button from '../shared/button/button';
+import Button from '../../shared/button/button';
 import styles from './replyButton.less';
 
 const ReplyButton = ({ reply }) => (

@@ -1,47 +1,41 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Like from '../rating/like/likeCommentContainer';
-import Dislike from '../rating/dislike/dislikeCommentContainer';
-import Rating from '../rating/audioRating';
-import Flag from '../flag/flag';
 import styles from './comment.less';
+import ReplyBox from './common/replyBoxContainer';
+import Replies from './repliesContainer';
+import CommentHeader from './common/commentHeaderContainer';
+import CommentBody from './common/commentBody';
+import CommentControls from './common/commentControls';
 
 const Comment = ({
+  comment,
+  audio,
   user,
   dateAdded,
   body,
   commentId,
   likes,
   dislikes,
-  reply,
-  replies,
 }) => (
   <div className={styles.commentTree}>
-    <div className={styles.comment} data-component="comment">
-      <div>
-        <span className={styles.userName}>{user.userName}</span>
-        <span className={styles.dateAdded}>{dateAdded}</span>
-      </div>
-      <div className={styles.body}>{body}</div>
-      <div className={styles.controls}>
-        <Rating likes={likes} dislikes={dislikes}>
-          <Like commentId={commentId} />
-          <Dislike commentId={commentId} />
-        </Rating>
-        {reply}
-        <Flag modalId="flagComment" id={commentId} className={styles.flag} />
-      </div>
+    <div data-component="comment">
+      <CommentHeader userName={user.userName} dateAdded={dateAdded} />
+      <CommentBody>{body}</CommentBody>
+      <CommentControls commentId={commentId} likes={likes} dislikes={dislikes} />
+      <ReplyBox
+        rootComment={comment}
+        originalComment={comment}
+        audio={audio}
+      />
     </div>
-    {replies}
+    <Replies comment={comment} audio={audio} />
   </div>
 );
 
-Comment.defaultProps = {
-  replies: null,
-};
-
 Comment.propTypes = {
+  comment: PropTypes.object.isRequired,
+  audio: PropTypes.object.isRequired,
   user: PropTypes.shape({
     userName: PropTypes.string.isRequired,
   }).isRequired,
@@ -50,8 +44,6 @@ Comment.propTypes = {
   dislikes: PropTypes.number.isRequired,
   likes: PropTypes.number.isRequired,
   commentId: PropTypes.number.isRequired,
-  reply: PropTypes.element.isRequired,
-  replies: PropTypes.node,
 };
 
 export default Comment;

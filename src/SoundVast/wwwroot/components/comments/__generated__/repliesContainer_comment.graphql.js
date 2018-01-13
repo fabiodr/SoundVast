@@ -9,7 +9,6 @@
 /*::
 import type {ConcreteFragment} from 'relay-runtime';
 export type repliesContainer_comment = {|
-  +commentId: number;
   +id: string;
   +replies: ?{|
     +totalCount: ?number;
@@ -17,13 +16,6 @@ export type repliesContainer_comment = {|
       +cursor: string;
       +node: ?{|
         +commentId: number;
-        +body: string;
-        +originalComment: ?{|
-          +body: string;
-          +user: {|
-            +userName: string;
-          |};
-        |};
       |};
     |}>;
     +pageInfo: {|
@@ -64,13 +56,6 @@ const fragment /*: ConcreteFragment*/ = {
   },
   "name": "repliesContainer_comment",
   "selections": [
-    {
-      "kind": "ScalarField",
-      "alias": null,
-      "args": null,
-      "name": "commentId",
-      "storageKey": null
-    },
     {
       "kind": "ScalarField",
       "alias": null,
@@ -124,51 +109,8 @@ const fragment /*: ConcreteFragment*/ = {
                   "storageKey": null
                 },
                 {
-                  "kind": "ScalarField",
-                  "alias": null,
-                  "args": null,
-                  "name": "body",
-                  "storageKey": null
-                },
-                {
-                  "kind": "LinkedField",
-                  "alias": null,
-                  "args": null,
-                  "concreteType": "Comment",
-                  "name": "originalComment",
-                  "plural": false,
-                  "selections": [
-                    {
-                      "kind": "ScalarField",
-                      "alias": null,
-                      "args": null,
-                      "name": "body",
-                      "storageKey": null
-                    },
-                    {
-                      "kind": "LinkedField",
-                      "alias": null,
-                      "args": null,
-                      "concreteType": "ApplicationUser",
-                      "name": "user",
-                      "plural": false,
-                      "selections": [
-                        {
-                          "kind": "ScalarField",
-                          "alias": null,
-                          "args": null,
-                          "name": "userName",
-                          "storageKey": null
-                        }
-                      ],
-                      "storageKey": null
-                    }
-                  ],
-                  "storageKey": null
-                },
-                {
                   "kind": "FragmentSpread",
-                  "name": "commentContainer_comment",
+                  "name": "replyContainer_reply",
                   "args": null
                 },
                 {

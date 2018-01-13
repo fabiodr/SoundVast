@@ -14,8 +14,6 @@ export type commentsContainer_audio = {|
     +edges: ?$ReadOnlyArray<?{|
       +node: ?{|
         +commentId: number;
-        +id: string;
-        +body: string;
       |};
     |}>;
     +pageInfo: {|
@@ -103,27 +101,8 @@ const fragment /*: ConcreteFragment*/ = {
                   "storageKey": null
                 },
                 {
-                  "kind": "ScalarField",
-                  "alias": null,
-                  "args": null,
-                  "name": "id",
-                  "storageKey": null
-                },
-                {
-                  "kind": "ScalarField",
-                  "alias": null,
-                  "args": null,
-                  "name": "body",
-                  "storageKey": null
-                },
-                {
                   "kind": "FragmentSpread",
                   "name": "commentContainer_comment",
-                  "args": null
-                },
-                {
-                  "kind": "FragmentSpread",
-                  "name": "repliesContainer_comment",
                   "args": null
                 },
                 {

@@ -1,0 +1,38 @@
+@import '../styles/colors';
+
+.reply {
+    margin-top: 7px;
+    margin-bottom: 7px;
+}
+
+.reply:hover {
+    .expandOriginalCommentButton {
+        visibility: visible;
+    }
+}
+
+.userNameContainer {
+    display: flex;
+    align-items: center;
+}
+
+.originalComment {
+    border-left: 2px solid #c5c1ad;
+    padding-left: 8px;
+    color: @grey5;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 4px 0px 10px 0px
+}
+
+.originalCommentExpanded {
+    white-space: normal;
+}
+
+.expandOriginalCommentButton {
+    visibility: hidden;
+    margin-left: auto;
+    font-size: 11px;
+    padding: 5px 10px;
+}

@@ -7,24 +7,20 @@ import SpinnerSubmit from '../shared/form/spinnerSubmit/spinnerSubmitContainer';
 import styles from './commentBox.less';
 import Textarea from '../shared/fields/textarea/textarea';
 
-const CommentBox = ({ handleSubmit, form, cancel, saveCommentText, bodyPlaceholder }) => (
+const CommentBox = ({ handleSubmit, form, cancel }) => (
   <form className={styles.commentBox} onSubmit={handleSubmit} action="">
-    <Field name="body" component={Textarea} placeholder={bodyPlaceholder} />
+    <Field name="body" component={Textarea} placeholder="Add your comment..." />
 
-    <SpinnerSubmit formName={form} styleName="secondary">{saveCommentText}</SpinnerSubmit>
+    <SpinnerSubmit formName={form} styleName="secondary">Comment</SpinnerSubmit>
     <Button onClick={cancel} styleName="secondary">Cancel</Button>
   </form>
 );
 
 CommentBox.defaultProps = {
   cancel: null,
-  saveCommentText: 'Comment',
-  bodyPlaceholder: 'Add your comment...',
 };
 
 CommentBox.propTypes = {
-  saveCommentText: PropTypes.string,
-  bodyPlaceholder: PropTypes.string,
   handleSubmit: PropTypes.func.isRequired,
   form: PropTypes.string.isRequired,
   cancel: PropTypes.func,

@@ -1,12 +1,11 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
 import { compose, withHandlers, setPropTypes, withStateHandlers, branch, renderComponent, withProps } from 'recompose';
 import { fragmentContainer } from 'recompose-relay-modern';
 import { graphql } from 'react-relay';
 
-import CommentBox from './commentBox';
-import replyMutation from './replyMutation';
+import ReplyBox from './replyBox';
+import replyMutation from '../replyMutation';
 import ReplyButton from './replyButton';
 
 const fragments = graphql`
@@ -22,14 +21,14 @@ const propTypes = {
   rootComment: PropTypes.shape({
     id: PropTypes.string.isRequired,
   }),
-  comment: PropTypes.shape({
+  originalComment: PropTypes.shape({
     commentId: PropTypes.number.isRequired,
   }).isRequired,
 };
 
 const handlers = {
-  onSubmit: ({ audio, rootComment, comment }) => (input) => {
-    replyMutation(input, audio, rootComment, comment);
+  onSubmit: ({ audio, rootComment, originalComment }) => (input) => {
+    replyMutation(input, audio, rootComment, originalComment);
   },
 };
 
@@ -51,12 +50,6 @@ export default compose(
     renderComponent(ReplyButton),
   ),
   withHandlers(handlers),
-  withProps(({ comment }) => ({ form: `replyBox_${comment.commentId}` })),
+  withProps(({ reply }) => ({ form: `replyBox_${reply.commentId}` })),
   reduxForm(),
-)(props => (
-  <CommentBox
-    {...props}
-    bodyPlaceholder="Add your reply..."
-    saveCommentText="Reply"
-  />
-));
+)(ReplyBox);

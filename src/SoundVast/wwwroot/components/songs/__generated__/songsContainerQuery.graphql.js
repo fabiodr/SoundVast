@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 52ddd1bf155ebc48ce4acd906ce01b7f
+ * @relayHash f8fcdb4e8258a1f1eaa9bada4ba664cf
  */
 
 /* eslint-disable */
@@ -91,10 +91,8 @@ fragment commentsContainer_audio on Audio {
       node {
         __typename
         commentId
-        id
-        body
         ...commentContainer_comment
-        ...repliesContainer_comment
+        id
       }
       cursor
     }
@@ -112,7 +110,9 @@ fragment replyBoxContainer_audio on Audio {
 }
 
 fragment commentContainer_comment on Comment {
+  id
   commentId
+  body
   dateAdded
   likes
   dislikes
@@ -120,10 +120,10 @@ fragment commentContainer_comment on Comment {
     userName
     id
   }
+  ...repliesContainer_comment
 }
 
 fragment repliesContainer_comment on Comment {
-  commentId
   id
   replies(first: 0, after: $cursor) {
     totalCount
@@ -132,16 +132,7 @@ fragment repliesContainer_comment on Comment {
       node {
         __typename
         commentId
-        body
-        originalComment {
-          body
-          user {
-            userName
-            id
-          }
-          id
-        }
-        ...commentContainer_comment
+        ...replyContainer_reply
         id
       }
     }
@@ -149,6 +140,26 @@ fragment repliesContainer_comment on Comment {
       endCursor
       hasNextPage
     }
+  }
+}
+
+fragment replyContainer_reply on Comment {
+  commentId
+  body
+  dateAdded
+  likes
+  dislikes
+  user {
+    userName
+    id
+  }
+  originalComment {
+    body
+    user {
+      userName
+      id
+    }
+    id
   }
 }
 */
@@ -499,6 +510,52 @@ const batch /*: ConcreteBatch*/ = {
                                         "storageKey": null
                                       },
                                       {
+                                        "kind": "ScalarField",
+                                        "alias": null,
+                                        "args": null,
+                                        "name": "dateAdded",
+                                        "storageKey": null
+                                      },
+                                      {
+                                        "kind": "ScalarField",
+                                        "alias": null,
+                                        "args": null,
+                                        "name": "likes",
+                                        "storageKey": null
+                                      },
+                                      {
+                                        "kind": "ScalarField",
+                                        "alias": null,
+                                        "args": null,
+                                        "name": "dislikes",
+                                        "storageKey": null
+                                      },
+                                      {
+                                        "kind": "LinkedField",
+                                        "alias": null,
+                                        "args": null,
+                                        "concreteType": "ApplicationUser",
+                                        "name": "user",
+                                        "plural": false,
+                                        "selections": [
+                                          {
+                                            "kind": "ScalarField",
+                                            "alias": null,
+                                            "args": null,
+                                            "name": "userName",
+                                            "storageKey": null
+                                          },
+                                          {
+                                            "kind": "ScalarField",
+                                            "alias": null,
+                                            "args": null,
+                                            "name": "id",
+                                            "storageKey": null
+                                          }
+                                        ],
+                                        "storageKey": null
+                                      },
+                                      {
                                         "kind": "LinkedField",
                                         "alias": null,
                                         "args": null,
@@ -536,52 +593,6 @@ const batch /*: ConcreteBatch*/ = {
                                                 "storageKey": null
                                               }
                                             ],
-                                            "storageKey": null
-                                          },
-                                          {
-                                            "kind": "ScalarField",
-                                            "alias": null,
-                                            "args": null,
-                                            "name": "id",
-                                            "storageKey": null
-                                          }
-                                        ],
-                                        "storageKey": null
-                                      },
-                                      {
-                                        "kind": "ScalarField",
-                                        "alias": null,
-                                        "args": null,
-                                        "name": "dateAdded",
-                                        "storageKey": null
-                                      },
-                                      {
-                                        "kind": "ScalarField",
-                                        "alias": null,
-                                        "args": null,
-                                        "name": "likes",
-                                        "storageKey": null
-                                      },
-                                      {
-                                        "kind": "ScalarField",
-                                        "alias": null,
-                                        "args": null,
-                                        "name": "dislikes",
-                                        "storageKey": null
-                                      },
-                                      {
-                                        "kind": "LinkedField",
-                                        "alias": null,
-                                        "args": null,
-                                        "concreteType": "ApplicationUser",
-                                        "name": "user",
-                                        "plural": false,
-                                        "selections": [
-                                          {
-                                            "kind": "ScalarField",
-                                            "alias": null,
-                                            "args": null,
-                                            "name": "userName",
                                             "storageKey": null
                                           },
                                           {
@@ -907,7 +918,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query songsContainerQuery(\n  $count: Int!\n  $cursor: String\n  $genre: String\n  $filter: FilterInput\n) {\n  ...songsContainer\n}\n\nfragment songsContainer on Query {\n  songs(first: $count, after: $cursor, genre: $genre, filter: $filter) {\n    items {\n      artists {\n        name\n        id\n      }\n      ...sideBarContainer_audios\n      id\n    }\n    edges {\n      cursor\n      node {\n        __typename\n        id\n        audioId\n        name\n        artists {\n          name\n          id\n        }\n        coverImageUrl\n        free\n        ...songContainer_song\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n\nfragment sideBarContainer_audios on Audio {\n  audioId\n  name\n  ...commentBoxContainer_audio\n  ...commentsContainer_audio\n}\n\nfragment songContainer_song on Song {\n  audioId\n  name\n  coverImageUrl\n  artists {\n    name\n    id\n  }\n  playCount\n  likes\n  dislikes\n}\n\nfragment commentBoxContainer_audio on Audio {\n  id\n  audioId\n  name\n}\n\nfragment commentsContainer_audio on Audio {\n  id\n  ...commentBoxContainer_audio\n  ...replyBoxContainer_audio\n  comments(first: $count, after: $cursor) {\n    edges {\n      node {\n        __typename\n        commentId\n        id\n        body\n        ...commentContainer_comment\n        ...repliesContainer_comment\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n\nfragment replyBoxContainer_audio on Audio {\n  id\n  audioId\n  name\n}\n\nfragment commentContainer_comment on Comment {\n  commentId\n  dateAdded\n  likes\n  dislikes\n  user {\n    userName\n    id\n  }\n}\n\nfragment repliesContainer_comment on Comment {\n  commentId\n  id\n  replies(first: 0, after: $cursor) {\n    totalCount\n    edges {\n      cursor\n      node {\n        __typename\n        commentId\n        body\n        originalComment {\n          body\n          user {\n            userName\n            id\n          }\n          id\n        }\n        ...commentContainer_comment\n        id\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+  "text": "query songsContainerQuery(\n  $count: Int!\n  $cursor: String\n  $genre: String\n  $filter: FilterInput\n) {\n  ...songsContainer\n}\n\nfragment songsContainer on Query {\n  songs(first: $count, after: $cursor, genre: $genre, filter: $filter) {\n    items {\n      artists {\n        name\n        id\n      }\n      ...sideBarContainer_audios\n      id\n    }\n    edges {\n      cursor\n      node {\n        __typename\n        id\n        audioId\n        name\n        artists {\n          name\n          id\n        }\n        coverImageUrl\n        free\n        ...songContainer_song\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n\nfragment sideBarContainer_audios on Audio {\n  audioId\n  name\n  ...commentBoxContainer_audio\n  ...commentsContainer_audio\n}\n\nfragment songContainer_song on Song {\n  audioId\n  name\n  coverImageUrl\n  artists {\n    name\n    id\n  }\n  playCount\n  likes\n  dislikes\n}\n\nfragment commentBoxContainer_audio on Audio {\n  id\n  audioId\n  name\n}\n\nfragment commentsContainer_audio on Audio {\n  id\n  ...commentBoxContainer_audio\n  ...replyBoxContainer_audio\n  comments(first: $count, after: $cursor) {\n    edges {\n      node {\n        __typename\n        commentId\n        ...commentContainer_comment\n        id\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n\nfragment replyBoxContainer_audio on Audio {\n  id\n  audioId\n  name\n}\n\nfragment commentContainer_comment on Comment {\n  id\n  commentId\n  body\n  dateAdded\n  likes\n  dislikes\n  user {\n    userName\n    id\n  }\n  ...repliesContainer_comment\n}\n\nfragment repliesContainer_comment on Comment {\n  id\n  replies(first: 0, after: $cursor) {\n    totalCount\n    edges {\n      cursor\n      node {\n        __typename\n        commentId\n        ...replyContainer_reply\n        id\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment replyContainer_reply on Comment {\n  commentId\n  body\n  dateAdded\n  likes\n  dislikes\n  user {\n    userName\n    id\n  }\n  originalComment {\n    body\n    user {\n      userName\n      id\n    }\n    id\n  }\n}\n"
 };
 
 module.exports = batch;

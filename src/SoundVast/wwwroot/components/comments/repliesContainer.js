@@ -9,7 +9,6 @@ const fragments = graphql`
   @argumentDefinitions(
     count: { type: "Int", defaultValue: 0 }
   ) {
-    commentId
     id
     replies(
       first: $count
@@ -20,14 +19,7 @@ const fragments = graphql`
         cursor
         node {
           commentId
-          body
-          originalComment {
-            body
-            user {
-              userName
-            }
-          }
-          ...commentContainer_comment
+          ...replyContainer_reply
         }
       }
       pageInfo {
@@ -63,11 +55,7 @@ export default compose(
   flattenProp('comment'),
   withStateHandlers({
     showingReplies: false,
-    originalCommentExpanded: false,
   }, {
-    toggleOriginalCommentOverflow: ({ originalCommentExpanded }) => () => ({
-      originalCommentExpanded: !originalCommentExpanded,
-    }),
     toggleReplies: ({ showingReplies }, { relay, replies }) => () => {
       relay.refetchConnection(!showingReplies ? replies.totalCount : 0);
 

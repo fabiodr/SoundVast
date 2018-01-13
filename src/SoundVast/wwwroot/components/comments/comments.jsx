@@ -4,8 +4,6 @@ import InfiniteScroll from 'react-infinite-scroller';
 
 import Comment from './commentContainer';
 import Loader from '../shared/loaders/loader';
-import Replies from './repliesContainer';
-import ReplyBox from './replyBoxContainer';
 
 const Comments = ({ audio, loadMore }) => (
   <div>
@@ -19,15 +17,7 @@ const Comments = ({ audio, loadMore }) => (
         <Comment
           key={node.commentId}
           comment={node}
-          body={node.body}
-          reply={
-            <ReplyBox
-              rootComment={node}
-              comment={node}
-              audio={audio}
-            />
-          }
-          replies={<Replies comment={node} audio={audio} />}
+          audio={audio}
         />
       ))}
     </InfiniteScroll>

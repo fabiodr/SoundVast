@@ -10,14 +10,7 @@ const mutation = graphql`
   ) {
     comment(input: $input) {
       comment {
-        body
-        originalComment {
-          body
-          user {
-            userName
-          }
-        }
-        ...commentContainer_comment
+        ...replyContainer_reply
         replies {
           totalCount
         }
@@ -45,12 +38,12 @@ const sharedUpdater = (store, rootComment, reply) => {
 
 let tempID = 0;
 
-export default ({ body }, audio, rootComment, comment) => {
+export default ({ body }, audio, rootComment, originalComment) => {
   const variables = {
     input: {
       body,
       audioId: audio.audioId,
-      originalCommentId: comment.commentId,
+      originalCommentId: originalComment.commentId,
     },
   };
 

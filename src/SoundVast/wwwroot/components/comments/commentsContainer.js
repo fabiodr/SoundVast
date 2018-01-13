@@ -17,10 +17,7 @@ const fragments = graphql`
       edges {
         node {
           commentId
-          id
-          body
           ...commentContainer_comment
-          ...repliesContainer_comment
         }
       }
       pageInfo {
