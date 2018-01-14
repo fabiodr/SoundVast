@@ -37,13 +37,6 @@ namespace SoundVast.Data
         {
         }
 
-        public override int SaveChanges()
-        {
-            Ratings.RemoveRange(Ratings.Where(x => x.CommentId == null || x.AudioId == null));
-
-            return base.SaveChanges();
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

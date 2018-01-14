@@ -47,7 +47,7 @@ const Reply = ({
       </blockquote>
       {body}
     </CommentBody>
-    <CommentControls commentId={commentId} likes={likes} dislikes={dislikes} />
+    <CommentControls comment={reply} commentId={commentId} likes={likes} dislikes={dislikes} />
     <ReplyBox
       rootComment={rootComment}
       comment={reply}

@@ -15,8 +15,12 @@ const SVIcon = ({ className, ...props }) => (
   </svg>
 );
 
+SVIcon.defaultProps = {
+  className: null,
+};
+
 SVIcon.propTypes = {
-  className: PropTypes.string.isRequired,
+  className: PropTypes.string,
 };
 
 export default SVIcon;

@@ -78,5 +78,14 @@ namespace SoundVast.Components.Comment
                 _repository.Remove(existingComment);
             }
         }
+
+        public Rating.Models.Rating Rate(int commentId, string userId, bool liked)
+        {
+            var rating = _repository.GetAll().Rate(commentId, userId, liked);
+
+            _repository.Save();
+
+            return rating;
+        }
     }
 }

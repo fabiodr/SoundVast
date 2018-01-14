@@ -7,8 +7,12 @@ const PlayIcon = ({ className, ...props }) => (
   </svg>
 );
 
+PlayIcon.defaultProps = {
+  className: null,
+};
+
 PlayIcon.propTypes = {
-  className: PropTypes.string.isRequired,
+  className: PropTypes.string,
 };
 
 export default PlayIcon;

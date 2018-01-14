@@ -7,8 +7,12 @@ const ReviewIcon = ({ className, ...props }) => (
   </svg>
 );
 
+ReviewIcon.defaultProps = {
+  className: null,
+};
+
 ReviewIcon.propTypes = {
-  className: PropTypes.string.isRequired,
+  className: PropTypes.string,
 };
 
 export default ReviewIcon;

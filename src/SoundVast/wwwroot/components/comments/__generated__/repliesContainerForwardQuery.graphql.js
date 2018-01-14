@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 7451e4525798b9b6eebc55927030de7f
+ * @relayHash e6e67f52e999a61878bd49ddbfd1356b
  */
 
 /* eslint-disable */
@@ -66,6 +66,18 @@ fragment replyContainer_reply on Comment {
     }
     id
   }
+  ...likeCommentContainer_comment
+  ...dislikeCommentContainer_comment
+}
+
+fragment likeCommentContainer_comment on Comment {
+  id
+  commentId
+}
+
+fragment dislikeCommentContainer_comment on Comment {
+  id
+  commentId
 }
 */
 
@@ -428,7 +440,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query repliesContainerForwardQuery(\n  $id: ID!\n  $count: Int!\n  $cursor: String\n) {\n  node(id: $id) {\n    __typename\n    ...repliesContainer_comment_yu5n1\n    id\n  }\n}\n\nfragment repliesContainer_comment_yu5n1 on Comment {\n  id\n  replies(first: $count, after: $cursor) {\n    totalCount\n    edges {\n      cursor\n      node {\n        __typename\n        commentId\n        ...replyContainer_reply\n        id\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment replyContainer_reply on Comment {\n  commentId\n  body\n  dateAdded\n  likes\n  dislikes\n  user {\n    userName\n    id\n  }\n  originalComment {\n    body\n    user {\n      userName\n      id\n    }\n    id\n  }\n}\n"
+  "text": "query repliesContainerForwardQuery(\n  $id: ID!\n  $count: Int!\n  $cursor: String\n) {\n  node(id: $id) {\n    __typename\n    ...repliesContainer_comment_yu5n1\n    id\n  }\n}\n\nfragment repliesContainer_comment_yu5n1 on Comment {\n  id\n  replies(first: $count, after: $cursor) {\n    totalCount\n    edges {\n      cursor\n      node {\n        __typename\n        commentId\n        ...replyContainer_reply\n        id\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment replyContainer_reply on Comment {\n  commentId\n  body\n  dateAdded\n  likes\n  dislikes\n  user {\n    userName\n    id\n  }\n  originalComment {\n    body\n    user {\n      userName\n      id\n    }\n    id\n  }\n  ...likeCommentContainer_comment\n  ...dislikeCommentContainer_comment\n}\n\nfragment likeCommentContainer_comment on Comment {\n  id\n  commentId\n}\n\nfragment dislikeCommentContainer_comment on Comment {\n  id\n  commentId\n}\n"
 };
 
 module.exports = batch;

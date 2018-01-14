@@ -6,9 +6,10 @@ import ScrollTracker from '../shared/scroll/scrollTracker';
 import SoundVastTitle from '../shared/title/soundVastTitle';
 import Song from './songContainer';
 import Grid from '../shared/grid/grid';
+import AudiosContent from '../audio/audiosContentContainer';
 import AudiosHeader from '../audio/audiosHeader';
+import AudiosSubHeader from '../audio/audiosSubHeader';
 import Loader from '../shared/loaders/loader';
-import Filters from '../audio/filtersContainer';
 import convertSongToMedia from '../shared/utilities/convertSongToMedia';
 import SideBar from '../audio/sideBarContainer';
 import styles from './songs.less';
@@ -19,9 +20,9 @@ const Songs = ({ songs, loadMore }) => {
 
   return (
     <SoundVastTitle title="Songs">
-      <div>
+      <AudiosContent>
         <AudiosHeader typeUrl="songs" />
-        <Filters />
+        <AudiosSubHeader />
         <ScrollTracker>
           {(elementToTrackRef, values) => (
             <div className={styles.infiniteScrollContainer} ref={elementToTrackRef}>
@@ -44,7 +45,7 @@ const Songs = ({ songs, loadMore }) => {
             </div>
           )}
         </ScrollTracker>
-      </div>
+      </AudiosContent>
     </SoundVastTitle>
   );
 };

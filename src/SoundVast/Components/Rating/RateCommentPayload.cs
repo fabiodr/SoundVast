@@ -7,6 +7,7 @@ using GraphQL.Relay.Types;
 using GraphQL.Types;
 using Microsoft.AspNetCore.Identity;
 using SoundVast.Components.Audio;
+using SoundVast.Components.Comment;
 using SoundVast.Components.GraphQl;
 using SoundVast.Components.User;
 
@@ -14,11 +15,11 @@ namespace SoundVast.Components.Rating
 {
     public class RateCommentPayload : MutationPayloadGraphType
     {
-        private readonly IRatingService<Comment.Models.Comment> _ratingService;
+        private readonly ICommentService _commentService;
 
-        public RateCommentPayload(IRatingService<Comment.Models.Comment> ratingService)
+        public RateCommentPayload(ICommentService commentService)
         {
-            _ratingService = ratingService;
+            _commentService = commentService;
 
             Name = nameof(RateAudioPayload);
            
@@ -30,7 +31,7 @@ namespace SoundVast.Components.Rating
             var id = inputs.Get<int>("id");
             var liked = inputs.Get<bool>("liked");
             var user = context.UserContext.As<Context>().CurrentUser;
-            var rating = _ratingService.Rate(id, user.Id, liked);
+            var rating = _commentService.Rate(id, user.Id, liked);
 
             return new
             {

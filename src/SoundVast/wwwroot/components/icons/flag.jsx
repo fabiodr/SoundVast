@@ -7,8 +7,12 @@ const FlagIcon = ({ className, ...props }) => (
   </svg>
 );
 
+FlagIcon.defaultProps = {
+  className: null,
+};
+
 FlagIcon.propTypes = {
-  className: PropTypes.string.isRequired,
+  className: PropTypes.string,
 };
 
 export default FlagIcon;

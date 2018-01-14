@@ -1,0 +1,17 @@
+@import '../styles/colors.less';
+
+.toggleSideBar {
+    padding: 5px;
+    border-radius: 2px;
+}
+
+.toggleSideBarIcon {
+    width: 32px;
+    height: 28px;
+}
+
+:global(.showing-side-bar) {
+    .toggleSideBar {
+        background-color: @grey2;
+    }
+}

@@ -92,6 +92,16 @@ const fragment /*: ConcreteFragment*/ = {
       "kind": "FragmentSpread",
       "name": "repliesContainer_comment",
       "args": null
+    },
+    {
+      "kind": "FragmentSpread",
+      "name": "likeCommentContainer_comment",
+      "args": null
+    },
+    {
+      "kind": "FragmentSpread",
+      "name": "dislikeCommentContainer_comment",
+      "args": null
     }
   ],
   "type": "Comment"

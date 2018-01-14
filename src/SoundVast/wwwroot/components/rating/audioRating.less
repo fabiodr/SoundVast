@@ -2,16 +2,18 @@
 
 .rating {
     display: flex;
+    align-items: center;
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: @grey5;
 }
 
-.excellent {
-    color: @green1;
-}
+.likeContainer, .dislikeContainer {
+    display: flex;
+    align-items: center;
+    margin-right: 7px;
 
-.good {
-    color: @green2;
-}
-
-.bad {
-    color: @red1;
+    > button {
+        margin-right: 4px;
+    }
 }

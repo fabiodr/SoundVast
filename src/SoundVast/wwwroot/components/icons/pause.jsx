@@ -8,8 +8,12 @@ const PauseIcon = ({ className, ...props }) => (
   </svg>
 );
 
+PauseIcon.defaultProps = {
+  className: null,
+};
+
 PauseIcon.propTypes = {
-  className: PropTypes.string.isRequired,
+  className: PropTypes.string,
 };
 
 export default PauseIcon;

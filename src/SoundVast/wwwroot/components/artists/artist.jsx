@@ -19,10 +19,12 @@ const Artist = ({ artist, getCurrentPlaylist }) => (
     <Name name={artist.name} />
     <PlayCount playCount={artist.playCount} />
     <Artists artists={artist.artists} />
-    <Rating likes={artist.likes} dislikes={artist.dislikes}>
-      <Like audioId={artist.audioId} />
-      <Dislike audioId={artist.audioId} />
-    </Rating>
+    <Rating
+      likes={artist.likes}
+      dislikes={artist.dislikes}
+      like={<Like audioId={artist.audioId} />}
+      dislike={<Dislike audioId={artist.audioId} />}
+    />
     <AddToPlaylist songId={artist.audioId} />
   </div>
 );

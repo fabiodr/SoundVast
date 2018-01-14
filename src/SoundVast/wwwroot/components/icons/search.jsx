@@ -7,8 +7,12 @@ const SearchIcon = ({ className, ...props }) => (
   </svg>
 );
 
+SearchIcon.defaultProps = {
+  className: null,
+};
+
 SearchIcon.propTypes = {
-  className: PropTypes.string.isRequired,
+  className: PropTypes.string,
 };
 
 export default SearchIcon;

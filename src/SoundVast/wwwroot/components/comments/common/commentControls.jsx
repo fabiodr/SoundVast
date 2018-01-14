@@ -7,12 +7,14 @@ import Rating from '../../rating/audioRating';
 import Flag from '../../flag/flag';
 import styles from './commentControls.less';
 
-const CommentControls = ({ commentId, likes, dislikes }) => (
+const CommentControls = ({ comment, commentId, likes, dislikes }) => (
   <div className={styles.commentControls}>
-    <Rating likes={likes} dislikes={dislikes}>
-      <Like commentId={commentId} />
-      <Dislike commentId={commentId} />
-    </Rating>
+    <Rating
+      likes={likes}
+      dislikes={dislikes}
+      like={<Like comment={comment} />}
+      dislike={<Dislike comment={comment} />}
+    />
     <Flag modalId="flagComment" id={commentId} className={styles.flag} />
   </div>
 );
@@ -21,6 +23,7 @@ CommentControls.propTypes = {
   dislikes: PropTypes.number.isRequired,
   likes: PropTypes.number.isRequired,
   commentId: PropTypes.number.isRequired,
+  comment: PropTypes.object.isRequired,
 };
 
 export default CommentControls;

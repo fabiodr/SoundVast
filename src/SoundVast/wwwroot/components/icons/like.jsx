@@ -7,8 +7,12 @@ const LikeIcon = ({ className, ...props }) => (
   </svg>
 );
 
+LikeIcon.defaultProps = {
+  className: null,
+};
+
 LikeIcon.propTypes = {
-  className: PropTypes.string.isRequired,
+  className: PropTypes.string,
 };
 
 export default LikeIcon;

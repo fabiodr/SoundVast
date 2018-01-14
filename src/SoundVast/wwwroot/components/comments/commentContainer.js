@@ -16,6 +16,8 @@ const fragments = graphql`
       userName
     }
     ...repliesContainer_comment
+    ...likeCommentContainer_comment
+    ...dislikeCommentContainer_comment
   }
 `;
 

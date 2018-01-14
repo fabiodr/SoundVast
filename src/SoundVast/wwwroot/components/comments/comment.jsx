@@ -22,7 +22,7 @@ const Comment = ({
     <div data-component="comment">
       <CommentHeader userName={user.userName} dateAdded={dateAdded} />
       <CommentBody>{body}</CommentBody>
-      <CommentControls commentId={commentId} likes={likes} dislikes={dislikes} />
+      <CommentControls comment={comment} commentId={commentId} likes={likes} dislikes={dislikes} />
       <ReplyBox
         rootComment={comment}
         comment={comment}

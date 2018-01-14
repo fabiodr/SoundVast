@@ -23,8 +23,12 @@ const LogoIcon = ({ className, ...props }) => (
   </svg>
 );
 
+LogoIcon.defaultProps = {
+  className: null,
+};
+
 LogoIcon.propTypes = {
-  className: PropTypes.string.isRequired,
+  className: PropTypes.string,
 };
 
 export default LogoIcon;

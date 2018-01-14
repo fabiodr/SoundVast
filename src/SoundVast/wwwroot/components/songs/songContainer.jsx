@@ -15,6 +15,8 @@ const fragments = graphql`
     playCount
     likes
     dislikes
+    ...likeAudioContainer_audio
+    ...dislikeAudioContainer_audio
   }
 `;
 

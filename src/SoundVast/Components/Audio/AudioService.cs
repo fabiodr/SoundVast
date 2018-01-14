@@ -120,5 +120,14 @@ namespace SoundVast.Components.Audio
 
             return audio;
         }
+
+        public Rating.Models.Rating Rate(int audioId, string userId, bool liked)
+        {
+            var rating = _repository.GetAll().Rate(audioId, userId, liked);
+
+            _repository.Save();
+
+            return rating;
+        }
     }
 }

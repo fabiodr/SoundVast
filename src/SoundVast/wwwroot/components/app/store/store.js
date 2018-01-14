@@ -1,6 +1,5 @@
 import { applyMiddleware, combineReducers, createStore, compose } from 'redux';
 import thunk from 'redux-thunk';
-import { reducer as jPlayers } from 'react-jplayer';
 import { reducer as jPlaylists } from 'react-jplaylist';
 import { reducer as form } from 'redux-form';
 import found from 'found/lib/foundReducer';
@@ -17,6 +16,8 @@ import popup from '../../shared/popup/reducer';
 import upload from '../../upload/reducer';
 import playlist from '../../playlist/reducer';
 import audio from '../../audio/reducer';
+import jPlayers from './jPlayersReducer';
+import normalizeBoolean from '../../shared/utilities/normalizeBoolean';
 
 const historyEnhancer = createHistoryEnhancer({
   protocol: new BrowserProtocol(),
@@ -45,7 +46,11 @@ const reducers = combineReducers({
   audio,
 });
 
-const store = createStore(reducers, middleWare);
+const store = createStore(reducers, {
+  audio: {
+    showingSideBar: normalizeBoolean(localStorage.getItem('showingSideBar')),
+  },
+}, middleWare);
 
 store.dispatch(FarceActions.init());
 

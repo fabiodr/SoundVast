@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash afb51309d4a53977b6b3cd17fb831475
+ * @relayHash 1262a02c7384428f8c48545762009b86
  */
 
 /* eslint-disable */
@@ -52,6 +52,8 @@ fragment commentContainer_comment on Comment {
     id
   }
   ...repliesContainer_comment
+  ...likeCommentContainer_comment
+  ...dislikeCommentContainer_comment
 }
 
 fragment repliesContainer_comment on Comment {
@@ -92,6 +94,18 @@ fragment replyContainer_reply on Comment {
     }
     id
   }
+  ...likeCommentContainer_comment
+  ...dislikeCommentContainer_comment
+}
+
+fragment likeCommentContainer_comment on Comment {
+  id
+  commentId
+}
+
+fragment dislikeCommentContainer_comment on Comment {
+  id
+  commentId
 }
 */
 
@@ -515,7 +529,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "mutation commentMutation(\n  $cursor: String\n  $input: SaveCommentInput!\n) {\n  comment(input: $input) {\n    comment {\n      ...commentContainer_comment\n      ...repliesContainer_comment\n      id\n    }\n  }\n}\n\nfragment commentContainer_comment on Comment {\n  id\n  commentId\n  body\n  dateAdded\n  likes\n  dislikes\n  user {\n    userName\n    id\n  }\n  ...repliesContainer_comment\n}\n\nfragment repliesContainer_comment on Comment {\n  id\n  replies(first: 0, after: $cursor) {\n    totalCount\n    edges {\n      cursor\n      node {\n        __typename\n        commentId\n        ...replyContainer_reply\n        id\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment replyContainer_reply on Comment {\n  commentId\n  body\n  dateAdded\n  likes\n  dislikes\n  user {\n    userName\n    id\n  }\n  originalComment {\n    body\n    user {\n      userName\n      id\n    }\n    id\n  }\n}\n"
+  "text": "mutation commentMutation(\n  $cursor: String\n  $input: SaveCommentInput!\n) {\n  comment(input: $input) {\n    comment {\n      ...commentContainer_comment\n      ...repliesContainer_comment\n      id\n    }\n  }\n}\n\nfragment commentContainer_comment on Comment {\n  id\n  commentId\n  body\n  dateAdded\n  likes\n  dislikes\n  user {\n    userName\n    id\n  }\n  ...repliesContainer_comment\n  ...likeCommentContainer_comment\n  ...dislikeCommentContainer_comment\n}\n\nfragment repliesContainer_comment on Comment {\n  id\n  replies(first: 0, after: $cursor) {\n    totalCount\n    edges {\n      cursor\n      node {\n        __typename\n        commentId\n        ...replyContainer_reply\n        id\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment replyContainer_reply on Comment {\n  commentId\n  body\n  dateAdded\n  likes\n  dislikes\n  user {\n    userName\n    id\n  }\n  originalComment {\n    body\n    user {\n      userName\n      id\n    }\n    id\n  }\n  ...likeCommentContainer_comment\n  ...dislikeCommentContainer_comment\n}\n\nfragment likeCommentContainer_comment on Comment {\n  id\n  commentId\n}\n\nfragment dislikeCommentContainer_comment on Comment {\n  id\n  commentId\n}\n"
 };
 
 module.exports = batch;

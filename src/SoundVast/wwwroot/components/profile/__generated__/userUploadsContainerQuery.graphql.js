@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash e47519ec9962190e287116ac0195ebac
+ * @relayHash 8fea98359f9a6ad849e73bfe7ef37d4c
  */
 
 /* eslint-disable */
@@ -42,6 +42,18 @@ fragment songContainer_song on Song {
   playCount
   likes
   dislikes
+  ...likeAudioContainer_audio
+  ...dislikeAudioContainer_audio
+}
+
+fragment likeAudioContainer_audio on Audio {
+  id
+  audioId
+}
+
+fragment dislikeAudioContainer_audio on Audio {
+  id
+  audioId
 }
 */
 
@@ -192,7 +204,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query userUploadsContainerQuery {\n  user {\n    ...userUploadsContainer_user\n    id\n  }\n}\n\nfragment userUploadsContainer_user on ApplicationUser {\n  uploads {\n    audioId\n    ...songContainer_song\n    id\n  }\n}\n\nfragment songContainer_song on Song {\n  audioId\n  name\n  coverImageUrl\n  artists {\n    name\n    id\n  }\n  playCount\n  likes\n  dislikes\n}\n"
+  "text": "query userUploadsContainerQuery {\n  user {\n    ...userUploadsContainer_user\n    id\n  }\n}\n\nfragment userUploadsContainer_user on ApplicationUser {\n  uploads {\n    audioId\n    ...songContainer_song\n    id\n  }\n}\n\nfragment songContainer_song on Song {\n  audioId\n  name\n  coverImageUrl\n  artists {\n    name\n    id\n  }\n  playCount\n  likes\n  dislikes\n  ...likeAudioContainer_audio\n  ...dislikeAudioContainer_audio\n}\n\nfragment likeAudioContainer_audio on Audio {\n  id\n  audioId\n}\n\nfragment dislikeAudioContainer_audio on Audio {\n  id\n  audioId\n}\n"
 };
 
 module.exports = batch;

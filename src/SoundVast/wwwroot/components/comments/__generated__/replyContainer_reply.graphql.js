@@ -121,6 +121,16 @@ const fragment /*: ConcreteFragment*/ = {
         }
       ],
       "storageKey": null
+    },
+    {
+      "kind": "FragmentSpread",
+      "name": "likeCommentContainer_comment",
+      "args": null
+    },
+    {
+      "kind": "FragmentSpread",
+      "name": "dislikeCommentContainer_comment",
+      "args": null
     }
   ],
   "type": "Comment"

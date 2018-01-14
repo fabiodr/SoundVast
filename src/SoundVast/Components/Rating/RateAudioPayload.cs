@@ -14,11 +14,11 @@ namespace SoundVast.Components.Rating
 {
     public class RateAudioPayload : MutationPayloadGraphType
     {
-        private readonly IRatingService<Audio.Models.Audio> _ratingService;
+        private readonly IAudioService<Audio.Models.Audio> _audioService;
 
-        public RateAudioPayload(IRatingService<Audio.Models.Audio> ratingService)
+        public RateAudioPayload(IAudioService<Audio.Models.Audio> audioService)
         {
-            _ratingService = ratingService;
+            _audioService = audioService;
 
             Name = nameof(RateAudioPayload);
            
@@ -30,7 +30,7 @@ namespace SoundVast.Components.Rating
             var id = inputs.Get<int>("id");
             var liked = inputs.Get<bool>("liked");
             var user = context.UserContext.As<Context>().CurrentUser;
-            var rating = _ratingService.Rate(id, user.Id, liked);
+            var rating = _audioService.Rate(id, user.Id, liked);
 
             return new
             {

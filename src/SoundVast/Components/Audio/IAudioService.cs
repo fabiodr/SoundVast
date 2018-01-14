@@ -20,5 +20,6 @@ namespace SoundVast.Components.Audio
         void Add(T model);
         T Edit(int existingAudioId, T newModel);
         T UpdatePlayCount(int audioId);
+        Rating.Models.Rating Rate(int audioId, string userId, bool liked);
     }
 }

@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash f56e197cc65c91c8185d081e8261afd5
+ * @relayHash 085a14bea5960502ccefa528faadec9e
  */
 
 /* eslint-disable */
@@ -62,6 +62,18 @@ fragment replyContainer_reply on Comment {
     }
     id
   }
+  ...likeCommentContainer_comment
+  ...dislikeCommentContainer_comment
+}
+
+fragment likeCommentContainer_comment on Comment {
+  id
+  commentId
+}
+
+fragment dislikeCommentContainer_comment on Comment {
+  id
+  commentId
 }
 */
 
@@ -323,7 +335,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "mutation replyMutation(\n  $input: SaveCommentInput!\n) {\n  comment(input: $input) {\n    comment {\n      ...replyContainer_reply\n      replies {\n        totalCount\n      }\n      id\n    }\n  }\n}\n\nfragment replyContainer_reply on Comment {\n  commentId\n  body\n  dateAdded\n  likes\n  dislikes\n  user {\n    userName\n    id\n  }\n  originalComment {\n    body\n    user {\n      userName\n      id\n    }\n    id\n  }\n}\n"
+  "text": "mutation replyMutation(\n  $input: SaveCommentInput!\n) {\n  comment(input: $input) {\n    comment {\n      ...replyContainer_reply\n      replies {\n        totalCount\n      }\n      id\n    }\n  }\n}\n\nfragment replyContainer_reply on Comment {\n  commentId\n  body\n  dateAdded\n  likes\n  dislikes\n  user {\n    userName\n    id\n  }\n  originalComment {\n    body\n    user {\n      userName\n      id\n    }\n    id\n  }\n  ...likeCommentContainer_comment\n  ...dislikeCommentContainer_comment\n}\n\nfragment likeCommentContainer_comment on Comment {\n  id\n  commentId\n}\n\nfragment dislikeCommentContainer_comment on Comment {\n  id\n  commentId\n}\n"
 };
 
 module.exports = batch;

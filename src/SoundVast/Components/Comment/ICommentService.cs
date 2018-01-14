@@ -11,5 +11,6 @@ namespace SoundVast.Components.Comment
         void Add(Models.Comment comment);
         void Edit(Models.Comment existingComment, string body);
         void Delete(Models.Comment existingComment);
+        Rating.Models.Rating Rate(int commentId, string userId, bool liked);
     }
 }

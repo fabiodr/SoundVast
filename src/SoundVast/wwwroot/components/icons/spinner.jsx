@@ -26,8 +26,12 @@ const SpinnerIcon = ({ className, ...props }) => (
   </svg>
 );
 
+SpinnerIcon.defaultProps = {
+  className: null,
+};
+
 SpinnerIcon.propTypes = {
-  className: PropTypes.string.isRequired,
+  className: PropTypes.string,
 };
 
 export default SpinnerIcon;

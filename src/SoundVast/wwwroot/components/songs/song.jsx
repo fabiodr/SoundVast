@@ -14,33 +14,38 @@ import Flag from '../flag/flag';
 import Edit from '../edit/edit';
 import AddToPlaylist from '../playlist/addToPlaylistContainer';
 import styles from './song.less';
+import RatingPercent from '../rating/ratingPercent';
 
 const Song = ({ song, footerPlaylist }) => (
   <div>
     <div
       className={classnames(
         styles.songTitle,
-        !song.artists.length && styles.songTitleNameOnly)
-      }
+        !song.artists.length && styles.songTitleNameOnly)}
     >
       <Artists artists={song.artists} />
       <Name className={styles.songName} name={song.name} />
     </div>
-    <Play id={song.audioId} footerPlaylist={footerPlaylist}>
-      <CoverImage coverImageUrl={song.coverImageUrl} />
-    </Play>
+    <div className={styles.coverImageContainer}>
+      <Play id={song.audioId} footerPlaylist={footerPlaylist}>
+        <CoverImage coverImageUrl={song.coverImageUrl} />
+      </Play>
+      <AddToPlaylist className={styles.addToPlaylist} songId={song.audioId} />
+    </div>
     <div className={styles.controls}>
       <div className={styles.controlsRow}>
-        <PlayCount className={styles.playCount} playCount={song.playCount} />
+        <RatingPercent likes={song.likes} dislikes={song.dislikes} />
         <div className={styles.alignRight}>
-          <AddToPlaylist songId={song.audioId} />
+          <Rating
+            likes={song.likes}
+            dislikes={song.dislikes}
+            like={<Like audio={song} />}
+            dislike={<Dislike audio={song} />}
+          />
         </div>
       </div>
       <div className={styles.controlsRow}>
-        <Rating likes={song.likes} dislikes={song.dislikes}>
-          <Like audioId={song.audioId} />
-          <Dislike audioId={song.audioId} />
-        </Rating>
+        <PlayCount className={styles.playCount} playCount={song.playCount} />
         <div className={classnames(styles.alignRight, styles.extraControls)}>
           <Edit modalId="editSong" id={song.audioId} />
           <Flag modalId="flagAudio" id={song.audioId} />

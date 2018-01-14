@@ -1,18 +1,22 @@
-import PropTypes from 'prop-types';
-import { compose, setPropTypes, withHandlers } from 'recompose';
+import { compose, withHandlers } from 'recompose';
+import { fragmentContainer } from 'recompose-relay-modern';
+import { graphql } from 'react-relay';
 
 import Dislike from './dislike';
 import rateAudioMutation from '../rateAudioMutation';
 
-const propTypes = {
-  audioId: PropTypes.number.isRequired,
-};
+const fragments = graphql`
+  fragment dislikeAudioContainer_audio on Audio {
+    id
+    audioId
+  }
+`;
 
 const handlers = {
-  onClick: ({ audioId }) => () => rateAudioMutation(audioId, false),
+  onClick: ({ audio }) => () => rateAudioMutation(audio, false),
 };
 
 export default compose(
-  setPropTypes(propTypes),
+  fragmentContainer(fragments),
   withHandlers(handlers),
 )(Dislike);

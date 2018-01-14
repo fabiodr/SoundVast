@@ -1,18 +1,22 @@
-import PropTypes from 'prop-types';
-import { compose, setPropTypes, withHandlers } from 'recompose';
+import { compose, withHandlers } from 'recompose';
+import { fragmentContainer } from 'recompose-relay-modern';
+import { graphql } from 'react-relay';
 
 import Like from './like';
 import rateCommentMutation from '../rateCommentMutation';
 
-const propTypes = {
-  commentId: PropTypes.number.isRequired,
-};
+const fragments = graphql`
+  fragment likeCommentContainer_comment on Comment {
+    id
+    commentId
+  }
+`;
 
 const handlers = {
-  onClick: ({ commentId }) => () => rateCommentMutation(commentId, true),
+  onClick: ({ comment }) => () => rateCommentMutation(comment, true),
 };
 
 export default compose(
-  setPropTypes(propTypes),
+  fragmentContainer(fragments),
   withHandlers(handlers),
 )(Like);

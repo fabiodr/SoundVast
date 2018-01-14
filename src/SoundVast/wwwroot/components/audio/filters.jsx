@@ -17,8 +17,9 @@ const Filters = ({
   onAfterChange,
   from,
   to,
+  className,
 }) => (
-  <div className={styles.filters}>
+  <div className={className}>
     <div className={styles.filterToggles}>
       <Button onClick={() => filter('newest', true)}>Newest</Button>
       <Button onClick={() => filter('topRated', [from, to])}>Top Rated</Button>
@@ -29,7 +30,7 @@ const Filters = ({
         <TooltipRange
           className={styles.rangeFilter}
           defaultValue={[from, to]}
-          max={20}
+          max={filterMax}
           step={1}
           onAfterChange={onAfterChange}
         />
@@ -50,6 +51,7 @@ Filters.defaultProps = {
   topRated: false,
   mostCommented: false,
   mostPlayed: false,
+  className: null,
 };
 
 Filters.propTypes = {
@@ -61,6 +63,7 @@ Filters.propTypes = {
   mostCommented: PropTypes.bool,
   mostPlayed: PropTypes.bool,
   onAfterChange: PropTypes.func.isRequired,
+  className: PropTypes.string,
 };
 
 export default Filters;

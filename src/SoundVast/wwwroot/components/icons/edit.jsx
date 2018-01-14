@@ -7,8 +7,12 @@ const EditIcon = ({ className, ...props }) => (
   </svg>
 );
 
+EditIcon.defaultProps = {
+  className: null,
+};
+
 EditIcon.propTypes = {
-  className: PropTypes.string.isRequired,
+  className: PropTypes.string,
 };
 
 export default EditIcon;

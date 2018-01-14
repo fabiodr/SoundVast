@@ -16,10 +16,10 @@ const mutation = graphql`
   }
 `;
 
-export default (id, liked) => {
+export default (audio, liked) => {
   const variables = {
     input: {
-      id,
+      id: audio.audioId,
       liked,
     },
   };
@@ -27,5 +27,24 @@ export default (id, liked) => {
   return createMutation(
     mutation,
     variables,
+    null,
+    null,
+    (store) => {
+      const rateAudio = store.getRootField('rateAudio');
+      const rating = rateAudio.getLinkedRecord('rating');
+      const audioRecord = rating.getLinkedRecord('audio');
+
+      if (audioRecord === null) {
+        const audioProxy = store.get(audio.id);
+        const likes = audioProxy.getValue('likes');
+        const dislikes = audioProxy.getValue('dislikes');
+
+        if (liked) {
+          audioProxy.setValue(likes - 1, 'likes');
+        } else {
+          audioProxy.setValue(dislikes - 1, 'dislikes');
+        }
+      }
+    },
   );
 };

@@ -7,8 +7,12 @@ const DislikeIcon = ({ className, ...props }) => (
   </svg>
 );
 
+DislikeIcon.defaultProps = {
+  className: null,
+};
+
 DislikeIcon.propTypes = {
-  className: PropTypes.string.isRequired,
+  className: PropTypes.string,
 };
 
 export default DislikeIcon;

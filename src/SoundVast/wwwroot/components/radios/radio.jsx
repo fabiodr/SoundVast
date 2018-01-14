@@ -14,10 +14,12 @@ const Radio = ({ coverImageUrl, likes, dislikes, name, audioId }) => (
       <CoverImage coverImageUrl={coverImageUrl} />
     </Play>
     <Name name={name} />
-    <Rating likes={likes} dislikes={dislikes}>
-      <Like audioId={audioId} />
-      <Dislike audioId={audioId} />
-    </Rating>
+    <Rating
+      likes={likes}
+      dislikes={dislikes}
+      like={<Like audioId={audioId} />}
+      dislike={<Dislike audioId={audioId} />}
+    />
   </div>
 );
 

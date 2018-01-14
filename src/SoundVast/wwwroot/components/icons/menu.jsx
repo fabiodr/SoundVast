@@ -7,8 +7,12 @@ const MenuIcon = ({ className, ...props }) => (
   </svg>
 );
 
+MenuIcon.defaultProps = {
+  className: null,
+};
+
 MenuIcon.propTypes = {
-  className: PropTypes.string.isRequired,
+  className: PropTypes.string,
 };
 
 export default MenuIcon;

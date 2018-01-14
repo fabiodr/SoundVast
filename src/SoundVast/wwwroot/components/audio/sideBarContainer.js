@@ -1,12 +1,13 @@
-import { compose } from 'recompose';
+import { compose, renderNothing, branch } from 'recompose';
 import { connect } from 'react-redux';
 import { graphql } from 'react-relay';
 import { fragmentContainer } from 'recompose-relay-modern';
 
 import SideBar from './sideBar';
 
-const mapStateToProps = ({ jPlayers }) => ({
+const mapStateToProps = ({ jPlayers, audio }) => ({
   currentAudioId: jPlayers.FooterPlaylist.media.id,
+  showingSideBar: audio.showingSideBar,
 });
 
 const fragments = graphql`
@@ -21,4 +22,8 @@ const fragments = graphql`
 export default compose(
   connect(mapStateToProps),
   fragmentContainer(fragments),
+  branch(
+    props => !props.showingSideBar,
+    renderNothing,
+  ),
 )(SideBar);

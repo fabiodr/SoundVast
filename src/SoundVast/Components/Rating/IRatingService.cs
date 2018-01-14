@@ -6,8 +6,8 @@ using SoundVast.Components.Audio.Models;
 
 namespace SoundVast.Components.Rating
 {
-    public interface IRatingService<T> where T : IRatable
+    public interface IRatingService
     {
-        Models.Rating Rate(int ratableId, string userId, bool liked);
+        Models.Rating Get(int id);
     }
 }
