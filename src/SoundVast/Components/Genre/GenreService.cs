@@ -6,26 +6,32 @@ using System.Linq.Expressions;
 using System.Web;
 using Microsoft.EntityFrameworkCore;
 using SoundVast.Components.Audio;
+using SoundVast.Components.Filter;
 using SoundVast.Components.Genre.Models;
+using SoundVast.Storage.CloudStorage;
 
 namespace SoundVast.Components.Genre
 {
     public class GenreService<T> : IGenreService<T> where T : Models.Genre
     {
         private readonly IRepository<T> _repository;
+        private readonly ICloudStorage _cloudStorage;
 
-        public GenreService(IRepository<T> repository)
+        public GenreService(IRepository<T> repository, ICloudStorage cloudStorage)
         {
             _repository = repository;
+            _cloudStorage = cloudStorage;
         }
 
         public void UpdateCoverImages()
         {
-            var genres = _repository.GetAll();
+            var genres = _repository.GetAll().BuildGenre();
+            var placeholderImageUrl = _cloudStorage.GetBlob(CloudStorageType.Image, "SoundVast").CloudBlockBlob.Uri.AbsoluteUri;
 
             foreach (var genre in genres)
             {
-                var coverImageUrl = genre.AudioGenres.Select(x => x.Audio.CoverImageUrl).FirstOrDefault();
+                var audios = genre.AudioGenres.Select(x => x.Audio);
+                var coverImageUrl = audios.TopRated(0).Select(x => x.CoverImageUrl).FirstOrDefault(x => x != placeholderImageUrl);
 
                 if (coverImageUrl != null)
                 {
@@ -38,7 +44,7 @@ namespace SoundVast.Components.Genre
 
         public IEnumerable<T> GetGenres()
         {
-            return _repository.GetAll().Include(x => x.AudioGenres).ThenInclude(x => x.Genre);
+            return _repository.GetAll();
         }
     }
 }

@@ -10,6 +10,7 @@ using SoundVast.Components.Genre;
 using SoundVast.Components.Genre.Models;
 using SoundVast.Components.Song.Models;
 using SoundVast.Repository;
+using SoundVast.Storage.CloudStorage;
 using SoundVast.Validation;
 
 namespace SoundVast.Components.Genre
@@ -17,10 +18,13 @@ namespace SoundVast.Components.Genre
     public class SongGenreService : GenreService<SongGenre>, ISongGenreService
     {
         private readonly IRepository<SongGenre> _repository;
+        private readonly ICloudStorage _cloudStorage;
 
-        public SongGenreService(IRepository<SongGenre> repository) : base(repository)
+        public SongGenreService(IRepository<SongGenre> repository, ICloudStorage cloudStorage) 
+            : base(repository, cloudStorage)
         {
             _repository = repository;
+            _cloudStorage = cloudStorage;
         }
     }
 }

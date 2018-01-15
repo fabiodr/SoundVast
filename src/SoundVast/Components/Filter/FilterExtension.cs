@@ -9,43 +9,21 @@ namespace SoundVast.Components.Filter
 {
     public static class FilterExtension
     {
-        private static IQueryable<T> FromDateFilter<T>(IQueryable<T> audios, IDateFilter dateFilter) where T : Audio.Models.Audio
+        public static IQueryable<T> TopRated<T>(this IEnumerable<T> audios, int minimumNumberOfRatingsThreshold) where T : Audio.Models.Audio
         {
-            var fromDateTime = DateTime.UtcNow.AddDays(-dateFilter.From);
-            var toDateTime = DateTime.UtcNow.AddDays(-dateFilter.To);
+            var sortedAudios = audios.Where(x => x.Ratings.Count >= minimumNumberOfRatingsThreshold).ToList();
 
-            return audios.Where(x => x.DateAdded < fromDateTime && x.DateAdded > toDateTime);
+            return sortedAudios.AsQueryable().OrderByDescending(x => x.Likes);
         }
 
-        public static IQueryable<T> TopRated<T>(this IQueryable<T> audios, Filter filter) where T : Audio.Models.Audio
+        public static IQueryable<T> MostCommented<T>(this IEnumerable<T> audios) where T : Audio.Models.Audio
         {
-            if (filter == null || !filter.RatingFilter.TopRated) return audios;
-
-            var sortedAudios = audios.Where(x => x.Ratings.Count >= filter.RatingFilter.MinimumNumberOfRatingsThreshold)
-                .ToList().OrderByDescending(x => x.Likes);
-
-            return sortedAudios.AsQueryable();
+            return audios.OrderByDescending(x => x.Comments.Count).AsQueryable();
         }
 
-        public static IQueryable<T> MostCommented<T>(this IQueryable<T> audios, Filter filter) where T : Audio.Models.Audio
+        public static IQueryable<T> MostPlayed<T>(this IEnumerable<T> audios) where T : Audio.Models.Audio
         {
-            if (filter == null || !filter.CommentFilter.MostCommented) return audios;
-
-            return FromDateFilter(audios, filter.CommentFilter).OrderByDescending(x => x.Comments.Count);
+            return audios.OrderByDescending(x => x.PlayCount).AsQueryable();
         }
-
-        public static IQueryable<T> MostPlayed<T>(this IQueryable<T> audios, Filter filter) where T : Audio.Models.Audio
-        {
-            if (filter == null || !filter.PlayedFilter.MostPlayed) return audios;
-
-            return FromDateFilter(audios, filter.PlayedFilter).OrderByDescending(x => x.PlayCount);
-        }
-
-        public static IQueryable<T> Newest<T>(this IQueryable<T> audios, Filter filter) where T : Audio.Models.Audio
-            {
-                if (filter == null || !filter.Newest) return audios;
-            
-                return audios.OrderByDescending(x => x.DateAdded);
-            }
-        }
+    }
 }

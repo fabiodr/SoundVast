@@ -12,9 +12,10 @@ using System;
 namespace SoundVast.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180114220707_weewrew")]
+    partial class weewrew
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -513,7 +514,7 @@ namespace SoundVast.Migrations
 
                     b.Property<bool>("Free");
 
-                    b.Property<DateTimeOffset?>("ReleaseDate")
+                    b.Property<DateTimeOffset>("ReleaseDate")
                         .HasColumnName("Song_ReleaseDate");
 
                     b.HasIndex("AlbumId");

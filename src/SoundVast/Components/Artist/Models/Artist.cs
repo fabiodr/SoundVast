@@ -10,6 +10,7 @@ namespace SoundVast.Components.Artist.Models
 {
     public class Artist : Audio.Models.Audio
     {
+        public virtual YearsActive YearsActive { get; set; }
         public virtual ICollection<ArtistSong> ArtistSongs { get; set; } = new List<ArtistSong>();
         public virtual ICollection<ArtistAlbum> ArtistAlbums { get; set; } = new List<ArtistAlbum>();
     }

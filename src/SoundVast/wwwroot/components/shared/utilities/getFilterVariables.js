@@ -1,21 +1,13 @@
 import normalizeBoolean from './normalizeBoolean';
 
 export default location => ({
-  newest: location.query.newest,
+  newest: normalizeBoolean(location.query.newest),
+  mostCommented: normalizeBoolean(location.query.mostCommented),
+  mostPlayed: normalizeBoolean(location.query.mostPlayed),
+  dateFrom: location.query.dateFrom && new Date(location.query.dateFrom).toISOString(),
+  dateTo: location.query.dateFrom && new Date(location.query.dateTo).toISOString(),
   ratingFilter: {
     topRated: normalizeBoolean(location.query.topRated),
     minimumNumberOfRatingsThreshold: 0,
-    from: location.query.from,
-    to: location.query.to,
-  },
-  commentFilter: {
-    mostCommented: normalizeBoolean(location.query.mostCommented),
-    from: location.query.from,
-    to: location.query.to,
-  },
-  playedFilter: {
-    mostPlayed: normalizeBoolean(location.query.mostPlayed),
-    from: location.query.from,
-    to: location.query.to,
   },
 });

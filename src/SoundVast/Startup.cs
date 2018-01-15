@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -73,7 +74,7 @@ namespace SoundVast
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
-         //   services.AddHangfire(x => x.UseSqlServerStorage(_configuration.GetConnectionString("DefaultConnection")));
+            services.AddHangfire(x => x.UseSqlServerStorage(_configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
                 {
@@ -155,13 +156,15 @@ namespace SoundVast
                 app.UseExceptionHandler("/Home/Error");
             }
 
-         //   app.UseHangfireServer();
-         //   app.UseHangfireDashboard();
+            app.UseHangfireServer();
+            app.UseHangfireDashboard();
             app.UseStaticFiles();
             app.UseAuthentication();
             app.UseSession();
             //   app.UseWebSockets();
             //  app.UseGraphQLEndPoint<AppSchema>("/graphql");
+
+            RecurringJob.AddOrUpdate<ISongGenreService>(x => x.UpdateCoverImages(), Cron.Daily);
 
             app.UseMvc(routes =>
             {
@@ -230,6 +233,7 @@ namespace SoundVast
             builder.RegisterAssemblyTypes(assembly).Where(x => x.Name.EndsWith("Service")).AsImplementedInterfaces();
             builder.RegisterAssemblyTypes(assembly).Where(x => x.Name.EndsWith("Validator")).AsImplementedInterfaces();
 
+         //   builder.RegisterType<GenreService<Genre>>().As<IGenreService<Genre>>();
             builder.RegisterType<AppQuery>();
             builder.RegisterType<AppMutation>();
             builder.RegisterType<FileStorage>().As<IFileStorage>().SingleInstance();

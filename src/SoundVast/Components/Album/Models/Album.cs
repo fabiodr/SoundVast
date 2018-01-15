@@ -12,6 +12,7 @@ namespace SoundVast.Components.Album.Models
 {
     public class Album : Audio.Models.Audio
     {
+        public DateTimeOffset ReleaseDate { get; set; }
         public virtual ICollection<Song.Models.Song> Songs { get; set; } = new List<Song.Models.Song>();
         public virtual ICollection<ArtistAlbum> ArtistAlbums { get; set; } = new List<ArtistAlbum>();
     }

@@ -6,11 +6,11 @@ import CommentsIcon from '../icons/comments';
 import styles from './toggleSideBar.less';
 import Button from '../shared/button/button';
 
-const ToggleSideBar = ({ onClick, className }) => (
+const ToggleSideBar = ({ onClick, className, showingSideBar }) => (
   <Button
     styleName="secondary"
     className={classnames(styles.toggleSideBar, className)}
-    title=""
+    title={showingSideBar ? 'Hide the sidebar' : 'Show the sidebar'}
     onClick={onClick}
   >
     <CommentsIcon className={styles.toggleSideBarIcon} />
@@ -22,6 +22,7 @@ ToggleSideBar.defaultProps = {
 };
 
 ToggleSideBar.propTypes = {
+  showingSideBar: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired,
   className: PropTypes.string,
 };

@@ -42,6 +42,7 @@ namespace SoundVast.Components.Song
             var album = inputs.Get<string>("album");
             var albumId = inputs.Get<int>("albumId");
             var free = inputs.Get<bool>("free");
+            var releaseDate = inputs.Get<DateTime?>("releaseDate");
             var genreIds = inputs.Get("genreIds", new object[0]).Cast<int>().ToList();
             var user = context.UserContext.As<Context>().CurrentUser;
             var placeholderImage = _cloudStorage.GetBlob(CloudStorageType.Image, "SoundVast");
@@ -52,7 +53,8 @@ namespace SoundVast.Components.Song
                 Name = name,
                 Free = free,
                 UserId = user.Id,
-                AlbumId = albumId
+                AlbumId = albumId,
+                ReleaseDate = releaseDate
             };
 
             foreach (var genreId in genreIds)

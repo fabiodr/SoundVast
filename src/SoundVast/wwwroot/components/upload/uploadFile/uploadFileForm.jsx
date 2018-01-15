@@ -6,6 +6,7 @@ import BasicInfo from '../common/basicInfo/basicInfo';
 import NameField from '../../shared/fields/nameField/nameField';
 import ArtistsField from '../../shared/fields/artistsField/artistsField';
 import AlbumField from '../../shared/fields/albumField/albumField';
+import ReleaseDateField from '../../shared/fields/releaseDateField/releaseDateField';
 import SongGenresField from '../../shared/fields/genresField/songGenresFieldContainer';
 import ValidationErrors from '../../shared/validation/validationErrors';
 import Button from '../../shared/button/button';
@@ -31,6 +32,7 @@ const Form = ({
           <NameField id={id} />
           <ArtistsField id={id} />
           <AlbumField id={id} />
+          <ReleaseDateField id={id} />
           <SongGenresField id={id} genres={genres} />
         </BasicInfo>
       </TabPanel>

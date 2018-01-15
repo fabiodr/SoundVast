@@ -34,7 +34,11 @@ const Song = ({ song, footerPlaylist }) => (
     </div>
     <div className={styles.controls}>
       <div className={styles.controlsRow}>
-        <RatingPercent likes={song.likes} dislikes={song.dislikes} />
+        <RatingPercent
+          className={styles.ratingPercent}
+          likes={song.likes}
+          dislikes={song.dislikes}
+        />
         <div className={styles.alignRight}>
           <Rating
             likes={song.likes}

@@ -13,6 +13,7 @@ namespace SoundVast.Components.Song.Models
     public class Song : Audio.Models.Audio
     {
         public bool Free { get; set; } = false;
+        public DateTimeOffset? ReleaseDate { get; set; }
         public int? AlbumId { get; set; }
         public virtual Album.Models.Album Album { get; set; }
         public virtual ICollection<SongPlaylist> SongPlaylists { get; set; } = new List<SongPlaylist>();

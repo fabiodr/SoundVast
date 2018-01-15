@@ -46,9 +46,11 @@ const reducers = combineReducers({
   audio,
 });
 
+const showingSideBar = normalizeBoolean(localStorage.getItem('showingSideBar'));
+
 const store = createStore(reducers, {
   audio: {
-    showingSideBar: normalizeBoolean(localStorage.getItem('showingSideBar')),
+    showingSideBar: showingSideBar === undefined ? true : showingSideBar,
   },
 }, middleWare);
 

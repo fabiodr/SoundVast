@@ -5,11 +5,9 @@ using System.Threading.Tasks;
 
 namespace SoundVast.Components.Filter
 {
-    public class RatingFilter : IDateFilter
+    public class RatingFilter
     {
         public bool TopRated { get; set; }
         public int MinimumNumberOfRatingsThreshold { get; set; }
-        public int From { get; set; }
-        public int To { get; set; }
     }
 }

@@ -13,7 +13,7 @@ namespace SoundVast.Components.Audio
             return query
                 .Include(x => x.AudioGenres).ThenInclude(x => x.Genre)
                 .Include(x => x.User)
-                .Include(x => x.Comments)
+                .Include(x => x.Comments).ThenInclude(x => x.Ratings)
                 .Include(x => x.Ratings);
         }
     }

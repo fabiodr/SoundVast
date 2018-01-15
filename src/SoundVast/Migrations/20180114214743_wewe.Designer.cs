@@ -12,9 +12,10 @@ using System;
 namespace SoundVast.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180114214743_wewe")]
+    partial class wewe
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -485,9 +486,7 @@ namespace SoundVast.Migrations
 
                     b.Property<int?>("YearsActiveId");
 
-                    b.HasIndex("YearsActiveId")
-                        .IsUnique()
-                        .HasFilter("[YearsActiveId] IS NOT NULL");
+                    b.HasIndex("YearsActiveId");
 
                     b.ToTable("Artist");
 
@@ -513,7 +512,7 @@ namespace SoundVast.Migrations
 
                     b.Property<bool>("Free");
 
-                    b.Property<DateTimeOffset?>("ReleaseDate")
+                    b.Property<DateTimeOffset>("ReleaseDate")
                         .HasColumnName("Song_ReleaseDate");
 
                     b.HasIndex("AlbumId");
@@ -755,8 +754,8 @@ namespace SoundVast.Migrations
             modelBuilder.Entity("SoundVast.Components.Artist.Models.Artist", b =>
                 {
                     b.HasOne("SoundVast.Components.Artist.YearsActive", "YearsActive")
-                        .WithOne("Artist")
-                        .HasForeignKey("SoundVast.Components.Artist.Models.Artist", "YearsActiveId");
+                        .WithMany()
+                        .HasForeignKey("YearsActiveId");
                 });
 
             modelBuilder.Entity("SoundVast.Components.Song.Models.Song", b =>

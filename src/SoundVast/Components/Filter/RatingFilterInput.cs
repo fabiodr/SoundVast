@@ -15,8 +15,6 @@ namespace SoundVast.Components.Filter
 
             Field<BooleanGraphType>("TopRated");
             Field<IntGraphType>("MinimumNumberOfRatingsThreshold", "The minimum number of ratings that need to have been applied for this filter to have any effect");
-            Field<IntGraphType>("From", "The days since to start filtering from");
-            Field<IntGraphType>("To", "The days since to start filter to");
         }
     }
 }

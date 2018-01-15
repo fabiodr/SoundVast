@@ -8,13 +8,9 @@ const AudiosContent = ({ children, showingSideBar }) => (
   </div>
 );
 
-AudiosContent.defaultProps = {
-  showingSideBar: true,
-};
-
 AudiosContent.propTypes = {
   children: PropTypes.node.isRequired,
-  showingSideBar: PropTypes.bool,
+  showingSideBar: PropTypes.bool.isRequired,
 };
 
 export default AudiosContent;

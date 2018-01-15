@@ -27,6 +27,16 @@ namespace SoundVast.Components.Song
         {
             var songs = base.GetAudios(genreName, filter).AsQueryable().BuildSong();
 
+            if (filter.DateFrom.HasValue && filter.DateTo.HasValue)
+            {
+                songs = songs.Where(x => x.ReleaseDate > filter.DateFrom && x.ReleaseDate < filter.DateTo);
+            }
+
+            if (filter.Newest)
+            {
+                songs = songs.OrderByDescending(x => x.ReleaseDate);
+            }
+
             return songs;
         }
 

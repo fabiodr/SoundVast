@@ -14,10 +14,12 @@ namespace SoundVast.Components.Filter
             Name = nameof(FilterInput);
             Description = "Provides filtering";
 
-            Field<BooleanGraphType>("Newest", "Filter by date added");
+            Field<BooleanGraphType>("Newest", "Filter by date");
             Field<RatingFilterInput>("RatingFilter", "Filter by likes");
-            Field<CommentFilterInput>("CommentFilter", "Filter by comments");
-            Field<PlayedFilterInput>("PlayedFilter", "Filter by plays");
+            Field<BooleanGraphType>("MostCommented", "Filter by comments");
+            Field<BooleanGraphType>("MostPlayed", "Filter by plays");
+            Field<DateGraphType>("DateFrom", "The start date to start filtering from");
+            Field<DateGraphType>("DateTo", "The end date to end filtering to");
         }
     }
 }

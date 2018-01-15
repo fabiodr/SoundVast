@@ -18,6 +18,7 @@ namespace SoundVast.Components.Song
             Field<ListGraphType<ArtistInput>>("Artists");
             Field<StringGraphType>("Album");
             Field<IntGraphType>("AlbumId", "The existing albums id");
+            Field<DateGraphType>("ReleaseDate");
             Field<BooleanGraphType>("Free");
             Field<NonNullGraphType<StringGraphType>>("CoverImageUrl");
             Field<ListGraphType<IntGraphType>>("GenreIds");

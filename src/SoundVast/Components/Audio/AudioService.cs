@@ -41,10 +41,20 @@ namespace SoundVast.Components.Audio
                 audios = audios.Where(x => x.AudioGenres.Any(z => z.Genre.Name == genreName));
             }
 
-            audios = audios.TopRated(filter);
-            audios = audios.MostCommented(filter);
-            audios = audios.MostPlayed(filter);
-            audios = audios.Newest(filter);
+            if (filter.RatingFilter.TopRated)
+            {
+                audios = audios.TopRated(filter.RatingFilter.MinimumNumberOfRatingsThreshold);
+            }
+
+            if (filter.MostCommented)
+            {
+                audios = audios.MostCommented();
+            }
+
+            if (filter.MostPlayed)
+            {
+                audios = audios.MostPlayed();
+            }
 
             return audios;
         }

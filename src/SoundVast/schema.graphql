@@ -1,5 +1,5 @@
 # source: http://localhost:8080/graphql
-# timestamp: Sun Jan 07 2018 16:39:51 GMT+0100 (W. Europe Standard Time)
+# timestamp: Tue Jan 16 2018 00:46:39 GMT+0100 (W. Europe Standard Time)
 
 input AddSongToPlaylistInput {
   clientMutationId: String
@@ -298,16 +298,6 @@ type Comment implements Node {
   ): CommentPayloadConnection
 }
 
-input CommentFilterInput {
-  mostCommented: Boolean
-
-  # The days since to start filtering from
-  from: Int
-
-  # The days since to start filter to
-  to: Int
-}
-
 # A connection from an object to a list of objects of type `CommentPayload`.
 type CommentPayloadConnection {
   # A count of the total number of objects in this connection, ignoring
@@ -391,17 +381,23 @@ type ExternalLoginConfirmationPayload {
 
 # Provides filtering
 input FilterInput {
-  # Filter by date added
+  # Filter by date
   newest: Boolean
 
   # Filter by likes
   ratingFilter: RatingFilterInput
 
   # Filter by comments
-  commentFilter: CommentFilterInput
+  mostCommented: Boolean
 
   # Filter by plays
-  playedFilter: PlayedFilterInput
+  mostPlayed: Boolean
+
+  # The start date to start filtering from
+  dateFrom: Date
+
+  # The end date to end filtering to
+  dateTo: Date
 }
 
 type Flag implements Node {
@@ -658,16 +654,6 @@ type PageInfo {
   endCursor: String
 }
 
-input PlayedFilterInput {
-  mostPlayed: Boolean
-
-  # The days since to start filtering from
-  from: Int
-
-  # The days since to start filter to
-  to: Int
-}
-
 type Playlist implements Node {
   # The Id of the Playlist
   playlistId: Int!
@@ -842,8 +828,12 @@ input RateInput {
   liked: Boolean!
 }
 
-type Rating {
-  id: ID
+type Rating implements Node {
+  # The Id of the Rating
+  ratingId: Int!
+
+  # The Global Id of the Rating
+  id: ID!
 
   # Whether the user has liked the audio or not
   liked: Boolean!
@@ -863,12 +853,6 @@ input RatingFilterInput {
 
   # The minimum number of ratings that need to have been applied for this filter to have any effect
   minimumNumberOfRatingsThreshold: Int
-
-  # The days since to start filtering from
-  from: Int
-
-  # The days since to start filter to
-  to: Int
 }
 
 input RegisterInput {
@@ -952,6 +936,7 @@ input SaveSongInput {
 
   # The existing albums id
   albumId: Int
+  releaseDate: Date
   free: Boolean
   coverImageUrl: String!
   genreIds: [Int]
@@ -994,6 +979,9 @@ type Song implements Node, Audio {
 
   # The date the user added the song
   dateAdded: Date
+
+  # The date the song was released
+  releaseDate: Date
 
   # The user who uploaded the song
   user: ApplicationUser

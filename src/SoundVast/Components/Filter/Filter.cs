@@ -7,9 +7,11 @@ namespace SoundVast.Components.Filter
 {
     public class Filter
     {
-        public bool Newest { get; set; }
+        public DateTime? DateFrom { get; set; }
+        public DateTime? DateTo { get; set; }
         public RatingFilter RatingFilter { get; set; }
-        public CommentFilter CommentFilter { get; set; }
-        public PlayedFilter PlayedFilter { get; set; }
+        public bool Newest { get; set; }
+        public bool MostCommented { get; set; }
+        public bool MostPlayed { get; set; }
     }
 }
