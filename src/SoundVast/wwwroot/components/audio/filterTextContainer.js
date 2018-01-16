@@ -6,9 +6,9 @@ import normalizeBoolean from '../shared/utilities/normalizeBoolean';
 
 const getCurrentFilterProps = (match) => {
   const filtersProps = [
-    { label: 'Top Rated', filter: normalizeBoolean(match.location.query.topRated) },
-    { label: 'Most Commented', filter: normalizeBoolean(match.location.query.mostCommented) },
-    { label: 'Most Played', filter: normalizeBoolean(match.location.query.mostPlayed) },
+    { label: 'top rated', filter: normalizeBoolean(match.location.query.topRated) },
+    { label: 'most commented', filter: normalizeBoolean(match.location.query.mostCommented) },
+    { label: 'most played', filter: normalizeBoolean(match.location.query.mostPlayed) },
   ];
 
   const filterProps = filtersProps.find(x => x.filter);
@@ -31,11 +31,21 @@ const handlers = {
 
 const createProps = ({ match }) => {
   const currentFilterProps = getCurrentFilterProps(match);
+  const dateFrom = new Date(match.location.query.dateFrom);
+  const dateTo = new Date(match.location.query.dateTo);
 
   return {
     ...currentFilterProps,
-    dateFrom: match.location.query.dateFrom,
-    dateTo: match.location.query.dateTo,
+    dateFromValues: {
+      year: dateFrom.getUTCFullYear(),
+      month: dateFrom.getUTCMonth(),
+      date: dateFrom.getUTCDate(),
+    },
+    dateToValues: {
+      year: dateTo.getUTCFullYear(),
+      month: dateTo.getUTCMonth(),
+      date: dateTo.getUTCDate(),
+    },
   };
 };
 

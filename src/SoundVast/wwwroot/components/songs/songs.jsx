@@ -21,8 +21,8 @@ const Songs = ({ songs, loadMore }) => {
   return (
     <SoundVastTitle title="Songs">
       <AudiosContent>
-        <AudiosHeader typeUrl="songs" />
-        <AudiosSubHeader />
+        <AudiosHeader audioTypeText="songs" />
+        <AudiosSubHeader genresUrl="/genres/songs" />
         <ScrollTracker>
           {(elementToTrackRef, values) => (
             <div className={styles.infiniteScrollContainer} ref={elementToTrackRef}>

@@ -1,20 +1,23 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import styles from './audiosSubHeader.less';
 import Filters from './filtersContainer';
 import ToggleSideBar from './toggleSideBarContainer';
-import FilterText from './filterTextContainer';
 
-const AudiosSubHeader = () => (
+const AudiosSubHeader = ({ genresUrl }) => (
   <div className={styles.audiosSubHeader}>
-    <div className={styles.filtersTextContainer}>
-      <FilterText />
+    <div className={styles.middleColumn}>
+      <Filters className={styles.filters} genresUrl={genresUrl} />
     </div>
-    <Filters className={styles.filters} />
-    <div className={styles.toggleSideBarContainer}>
+    <div className={styles.rightColumn}>
       <ToggleSideBar className={styles.toggleSideBar} />
     </div>
   </div>
 );
+
+AudiosSubHeader.propTypes = {
+  genresUrl: PropTypes.string.isRequired,
+};
 
 export default AudiosSubHeader;

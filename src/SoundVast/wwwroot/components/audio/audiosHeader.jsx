@@ -2,16 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import styles from './audiosHeader.less';
-import LinkButton from '../shared/button/linkButton';
+import FilterText from './filterTextContainer';
 
-const AudiosHeader = ({ typeUrl }) => (
+const AudiosHeader = ({ audioTypeText }) => (
   <div className={styles.audiosHeader}>
-    <LinkButton to={`/genres/${typeUrl}`} styleName="secondary">Genres</LinkButton>
+    <FilterText audioTypeText={audioTypeText} />
   </div>
 );
 
 AudiosHeader.propTypes = {
-  typeUrl: PropTypes.string.isRequired,
+  audioTypeText: PropTypes.string.isRequired,
 };
 
 export default AudiosHeader;
