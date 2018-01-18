@@ -1,22 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'found';
 
 import styles from './genres.less';
+import Button from '../shared/button/button';
 
-const Genre = ({ name, coverImageUrl, url }) => (
-  <Link to={url}>
+const Genre = ({ onClick, name, coverImageUrl }) => (
+  <Button onClick={onClick}>
     <div className={styles.coverImageWrapper}>
       <img className={styles.coverImage} src={coverImageUrl} alt="" />
       <div>{name}</div>
     </div>
-  </Link>
+  </Button>
 );
 
 Genre.propTypes = {
   name: PropTypes.string.isRequired,
   coverImageUrl: PropTypes.string.isRequired,
-  url: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 
 export default Genre;

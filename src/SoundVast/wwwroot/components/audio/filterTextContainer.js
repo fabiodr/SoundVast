@@ -1,36 +1,36 @@
-import { compose, withProps, renderNothing, branch } from 'recompose';
+import { compose, withProps } from 'recompose';
 import { withRouter } from 'found';
 
 import FilterText from './filterText';
 import normalizeBoolean from '../shared/utilities/normalizeBoolean';
 
-const getCurrentFilterProps = (match) => {
-  const filtersProps = [
-    { label: 'top rated', filter: normalizeBoolean(match.location.query.topRated) },
-    { label: 'most commented', filter: normalizeBoolean(match.location.query.mostCommented) },
-    { label: 'most played', filter: normalizeBoolean(match.location.query.mostPlayed) },
+const getQueryFilterLabel = (match) => {
+  const queryFilterLabels = [
+    normalizeBoolean(match.location.query.newest) && 'newest',
+    normalizeBoolean(match.location.query.topRated) && 'top rated',
+    normalizeBoolean(match.location.query.mostCommented) && 'most commented',
+    normalizeBoolean(match.location.query.mostPlayed) && 'most played',
   ];
 
-  const filterProps = filtersProps.find(x => x.filter);
+  const queryFilterLabel = queryFilterLabels.find(x => x);
 
-  return filterProps;
+  return queryFilterLabel;
 };
 
 const createProps = ({
   match,
 }) => {
-  const currentFilterProps = getCurrentFilterProps(match);
+  const queryFilterLabel = getQueryFilterLabel(match);
 
   return {
-    ...currentFilterProps,
+    queryFilterLabel,
+    genreLabel: match.params.genre,
+    hasDateFrom: !!match.location.query.dateFrom,
+    hasDateTo: !!match.location.query.dateTo,
   };
 };
 
 export default compose(
   withRouter,
   withProps(createProps),
-  branch(
-    ({ filter }) => !filter,
-    renderNothing,
-  ),
 )(FilterText);

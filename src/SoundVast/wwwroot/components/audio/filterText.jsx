@@ -5,25 +5,51 @@ import styles from './filterText.less';
 import DateFilter from './dateFilterContainer';
 
 const FilterText = ({
-  label,
+  queryFilterLabel,
+  genreLabel,
   audioTypeText,
+  hasDateFrom,
+  hasDateTo,
 }) => (
-  <div className={styles.filterText}>
-    <span>
-      Sorting by the
-      <span className={styles.label}>
-        &nbsp;{label}&nbsp;
+  queryFilterLabel || genreLabel ? (
+    <div className={styles.filterText}>
+      <span>
+        Sorting
+        {queryFilterLabel && (
+          <span>&nbsp;by the&nbsp;
+            <span className={styles.queryFilterLabel}>
+              {queryFilterLabel}
+            </span>
+          </span>
+        )}
+        &nbsp;{audioTypeText}
+        {genreLabel &&
+          <span>
+            &nbsp;in the <span className={styles.genreLabel}>{genreLabel}</span> genre
+          </span>}
       </span>
-      {audioTypeText} that were released from
-    </span>
-    <DateFilter dateFilterName="dateFrom" />
-    <span>&nbsp;to&nbsp;</span>
-    <DateFilter dateFilterName="dateTo" />
-  </div>
+      {hasDateFrom && (
+        <span>&nbsp;that were released from <DateFilter dateFilterName="dateFrom" /></span>
+      )}
+      {hasDateTo && (
+        <span>&nbsp;to&nbsp;<DateFilter dateFilterName="dateTo" /></span>
+      )}
+    </div>
+  ) : null
 );
 
+FilterText.defaultProps = {
+  genreLabel: null,
+  queryFilterLabel: null,
+  hasDateFrom: false,
+  hasDateTo: false,
+};
+
 FilterText.propTypes = {
-  label: PropTypes.string.isRequired,
+  hasDateFrom: PropTypes.bool,
+  hasDateTo: PropTypes.bool,
+  queryFilterLabel: PropTypes.string,
+  genreLabel: PropTypes.string,
   audioTypeText: PropTypes.string.isRequired,
 };
 

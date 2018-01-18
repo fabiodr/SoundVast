@@ -4,18 +4,17 @@ import PropTypes from 'prop-types';
 import styles from './filters.less';
 import Button from '../shared/button/button';
 import getFormattedDate from '../shared/utilities/getFormattedDate';
-import LinkButton from '../shared/button/linkButton';
 
 const Filters = ({
   filter,
   dateFrom,
   dateTo = getFormattedDate(new Date()),
   className,
-  genresUrl,
+  genresOnClick,
 }) => (
   <div className={className}>
     <div className={styles.filterToggles}>
-      <LinkButton to={genresUrl}>Genres</LinkButton>
+      <Button onClick={genresOnClick}>Genres</Button>
       <Button onClick={() => filter('newest', true)}>Newest</Button>
       <Button onClick={() => filter('topRated', [dateFrom, dateTo])}>Top Rated</Button>
       <Button onClick={() => filter('mostCommented', [dateFrom, dateTo])}>Most Commented</Button>
@@ -31,11 +30,11 @@ Filters.defaultProps = {
 };
 
 Filters.propTypes = {
-  genresUrl: PropTypes.string.isRequired,
   dateFrom: PropTypes.string,
   dateTo: PropTypes.string,
   filter: PropTypes.func.isRequired,
   className: PropTypes.string,
+  genresOnClick: PropTypes.func.isRequired,
 };
 
 export default Filters;

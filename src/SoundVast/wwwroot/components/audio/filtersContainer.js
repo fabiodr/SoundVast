@@ -1,8 +1,13 @@
-import { compose, withHandlers, withProps } from 'recompose';
+import PropTypes from 'prop-types';
+import { compose, withHandlers, withProps, setPropTypes } from 'recompose';
 import { withRouter } from 'found';
 
 import Filters from './filters';
 import normalizeBoolean from '../shared/utilities/normalizeBoolean';
+
+const propTypes = {
+  genresUrl: PropTypes.string.isRequired,
+};
 
 const handlers = {
   filter: ({ router, match }) => (filter, values) => {
@@ -20,6 +25,21 @@ const handlers = {
 
     router.push(locationInformation);
   },
+  genresOnClick: ({ router, match, genresUrl }) => () => {
+    router.push({
+      pathname: genresUrl,
+      state: {
+        filterQueries: {
+          newest: match.location.query.newest,
+          topRated: match.location.query.topRated,
+          mostCommented: match.location.query.mostCommented,
+          mostPlayed: match.location.query.mostPlayed,
+          dateFrom: match.location.query.dateFrom,
+          dateTo: match.location.query.dateTo,
+        },
+      },
+    });
+  },
 };
 
 const createProps = ({ match }) => ({
@@ -31,6 +51,7 @@ const createProps = ({ match }) => ({
 });
 
 export default compose(
+  setPropTypes(propTypes),
   withRouter,
   withHandlers(handlers),
   withProps(createProps),

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Grid from '../shared/grid/grid';
-import Genre from './genre';
+import Genre from './genreContainer';
 
 const Genres = ({ genres, typeUrl }) => (
   <Grid>
