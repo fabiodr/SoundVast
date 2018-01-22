@@ -29,6 +29,7 @@ export default makeRouteConfig(
     <Route path="songs/:genre?" {...songsRouteConfig} />
     <Route path="artists/:genre?" {...artistsRouteConfig} />
     <Route path="radios/:genre?" {...radiosRouteConfig} />
+    <Route path="songs/:searchQuery?" {...songsRouteConfig} />
     <Route path="review" {...songPendingEditContainer} />
     <Route path="upload" {...uploadRouteConfig} />
     <Route path="profile" {...userProfileRouteConfig}>

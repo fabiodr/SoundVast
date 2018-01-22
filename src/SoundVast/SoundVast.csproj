@@ -395,6 +395,10 @@
     <PackageReference Include="GraphQL.Relay" Version="0.4.1" />
     <PackageReference Include="Hangfire" Version="1.6.17" />
     <PackageReference Include="Hangfire.AspNetCore" Version="1.6.17" />
+    <PackageReference Include="Lucene.Net" Version="4.8.0-beta00005" />
+    <PackageReference Include="Lucene.Net.Analysis.Common" Version="4.8.0-beta00005" />
+    <PackageReference Include="Lucene.Net.Queries" Version="4.8.0-beta00005" />
+    <PackageReference Include="Lucene.Net.QueryParser" Version="4.8.0-beta00005" />
     <PackageReference Include="MailKit" Version="1.20.0" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
@@ -414,6 +418,7 @@
   <ItemGroup>
     <Folder Include="Components\Form\" />
     <Folder Include="Components\User\Profile\" />
+    <Folder Include="lucene_index\" />
     <Folder Include="wwwroot\components\app\__generated__\" />
   </ItemGroup>
 

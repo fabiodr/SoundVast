@@ -23,9 +23,9 @@ namespace SoundVast.Components.Song
             _repository = repository;
         }
 
-        public override IEnumerable<Models.Song> GetAudios(string genreName, Filter.Filter filter)
+        public override IEnumerable<Models.Song> GetAudios(string genreName, string searchQuery, Filter.Filter filter)
         {
-            var songs = base.GetAudios(genreName, filter).AsQueryable().BuildSong();
+            var songs = base.GetAudios(genreName, searchQuery, filter).AsQueryable().BuildSong();
 
             if (filter.DateFrom.HasValue && filter.DateTo.HasValue)
             {

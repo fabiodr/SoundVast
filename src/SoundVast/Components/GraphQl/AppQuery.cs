@@ -33,7 +33,7 @@ namespace SoundVast.Components.GraphQl
     public class AppQuery : QueryGraphType
     {
         public AppQuery(ISongService songService, ILiveStreamService liveStreamService, IValidationProvider validationProvider,
-            ISongGenreService songGenreService, ILiveStreamGenreService liveStreamGenreService,
+            IAudioService<Audio.Models.Audio> audioService, ISongGenreService songGenreService, ILiveStreamGenreService liveStreamGenreService,
             ILoggerFactory loggerFactory, IQuoteService quoteService, IPlaylistService playlistService,
             ISongPendingEditService songPendingEditService, ILiveStreamPendingEditService liveStreamPendingEditService,
             SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, IArtistService artistService,
@@ -58,12 +58,14 @@ namespace SoundVast.Components.GraphQl
             Connection<SongPayload>()
                 .Name("songs")
                 .Argument<StringGraphType>("genre", "The genre that the song belongs to")
+                .Argument<StringGraphType>("searchQuery", "The search query to filter the songs against")
                 .Argument<FilterInput>("filter", "The filters to apply to the songs")
                 .Resolve(c =>
                 {                    
                     var genre = c.GetArgument<string>("genre");
+                    var searchQuery = c.GetArgument<string>("searchQuery");
                     var filter = c.GetArgument<Filter.Filter>("filter");
-                    var songs = songService.GetAudios(genre, filter);
+                    var songs = songService.GetAudios(genre, searchQuery, filter);
 
                     return GraphQL.Relay.Types.Connection.ToConnection(songs, c);
                 });
@@ -71,12 +73,14 @@ namespace SoundVast.Components.GraphQl
             Connection<ArtistPayload>()
                 .Name("artists")
                 .Argument<StringGraphType>("genre", "The genre that the artist belongs to")
+                .Argument<StringGraphType>("searchQuery", "The search query to filter the artists against")
                 .Argument<FilterInput>("filter", "The filters to apply to the artists")
                 .Resolve(c =>
                 {
                     var genre = c.GetArgument<string>("genre");
+                    var searchQuery = c.GetArgument<string>("searchQuery");
                     var filter = c.GetArgument<Filter.Filter>("filter");
-                    var artists = artistService.GetAudios(genre, filter);
+                    var artists = artistService.GetAudios(genre, searchQuery, filter);
 
                     return GraphQL.Relay.Types.Connection.ToConnection(artists, c);
                 });
@@ -84,12 +88,14 @@ namespace SoundVast.Components.GraphQl
             Connection<AlbumPayload>()
                 .Name("albums")
                 .Argument<StringGraphType>("genre", "The genre that the album belongs to")
+                .Argument<StringGraphType>("searchQuery", "The search query to filter the albums against")
                 .Argument<FilterInput>("filter", "The filters to apply to the albums")
                 .Resolve(c =>
                 {
                     var genre = c.GetArgument<string>("genre");
+                    var searchQuery = c.GetArgument<string>("searchQuery");
                     var filter = c.GetArgument<Filter.Filter>("filter");
-                    var albums = albumService.GetAudios(genre, filter);
+                    var albums = albumService.GetAudios(genre, searchQuery, filter);
 
                     return GraphQL.Relay.Types.Connection.ToConnection(albums, c);
                 });
@@ -97,13 +103,15 @@ namespace SoundVast.Components.GraphQl
             Connection<LiveStreamPayload>()
                 .Name("liveStreams")
                 .Argument<StringGraphType>("genre", "The genre that the live stream belongs to")
+                .Argument<StringGraphType>("searchQuery", "The search query to filter the liveStreams against")
                 .Argument<FilterInput>("filter", "The filters to apply to the live streams")
                 .Resolve(c =>
                 {
                     var genre = c.GetArgument<string>("genre");
+                    var searchQuery = c.GetArgument<string>("searchQuery");
                     var filter = c.GetArgument<Filter.Filter>("filter");
 
-                    return GraphQL.Relay.Types.Connection.ToConnection(liveStreamService.GetAudios(genre, filter), c);
+                    return GraphQL.Relay.Types.Connection.ToConnection(liveStreamService.GetAudios(genre, searchQuery, filter), c);
                 });
 
             Connection<SongPendingEditPayload>()

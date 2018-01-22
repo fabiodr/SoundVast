@@ -14,6 +14,7 @@ const query = graphql`
     $count: Int!
     $cursor: String
     $genre: String
+    $searchQuery: String
     $filter: FilterInput
   ) {
     ...songsContainer
@@ -26,6 +27,7 @@ const fragments = graphql`
       first: $count
       after: $cursor
       genre: $genre
+      searchQuery: $searchQuery
       filter: $filter
     ) @connection(key: "songsContainer_songs") {
       items {
@@ -62,6 +64,7 @@ const connectionConfig = {
       $count: Int!
       $cursor: String
       $genre: String
+      $searchQuery: String
       $filter: FilterInput
     ) {
       ...songsContainer
@@ -93,9 +96,10 @@ export const routeConfig = {
   Component: SongsContainer,
   query,
   render: ({ props }) => props && <SongsContainer data={props} />,
-  prepareVariables: ({ genre }, { location }) => ({
+  prepareVariables: ({ genre, searchQuery }, { location }) => ({
     count: audiosToLoad,
     genre,
+    searchQuery,
     filter: getFilterVariables(location),
   }),
 };

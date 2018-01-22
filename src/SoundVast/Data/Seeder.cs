@@ -10,11 +10,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.DependencyInjection;
+using SoundVast.Components.Audio;
 using SoundVast.Components.Audio.Models;
 using SoundVast.Components.Genre;
 using SoundVast.Components.Genre.Models;
 using SoundVast.Components.LiveStream.Models;
 using SoundVast.Components.Quote.Models;
+using SoundVast.Components.Search;
 using SoundVast.Components.Song.Models;
 using SoundVast.CustomHelpers;
 using SoundVast.Properties;
@@ -28,6 +30,7 @@ namespace SoundVast.Data
 
         private static IHostingEnvironment _hostingEnvironment;
         private static ICloudStorage _cloudStorage;
+        private static IAudioService<Audio> _audioService;
 
         public static async Task<IWebHost> SeedData(this IWebHost webHost)
         {
@@ -37,6 +40,7 @@ namespace SoundVast.Data
                 {
                     _hostingEnvironment = scope.ServiceProvider.GetRequiredService<IHostingEnvironment>();
                     _cloudStorage = scope.ServiceProvider.GetRequiredService<ICloudStorage>();
+                    _audioService = scope.ServiceProvider.GetRequiredService<IAudioService<Audio>>();
 
                     context.Database.Migrate();
 
@@ -50,6 +54,8 @@ namespace SoundVast.Data
                     SeedGenres<SongGenre>(context, musicGenres);
                     SeedGenres<LiveStreamGenre>(context, liveStreamGenres);
                     SeedQuotes(context);
+
+                    // LuceneSearch.AddOrUpdateLuceneIndex(_audioService.GetAudios());
 
                     //   InitializeCategories<FileStreamCategoryModel>(context, fileStreamCategoryResources, placeHolderImage);
                     //   InitializeCategories<LiveStreamCategoryModel>(context, radioStationCategoryResources, placeHolderImage);

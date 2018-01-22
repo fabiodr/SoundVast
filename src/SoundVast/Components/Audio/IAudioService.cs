@@ -11,7 +11,8 @@ namespace SoundVast.Components.Audio
 {
     public interface IAudioService<T> where T : Models.Audio
     {
-        IEnumerable<T> GetAudios(string genreName, Filter.Filter filter);
+        IEnumerable<T> GetAudios();
+        IEnumerable<T> GetAudios(string genreName, string searchQuery, Filter.Filter filter);
         ICollection<T> GetAudios(int current, int amount);
         IEnumerable<T> GetAudiosForUser(string userId);
         IEnumerable<T> GetUserLikedAudios(string userId);

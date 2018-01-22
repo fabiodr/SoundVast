@@ -19,9 +19,9 @@ namespace SoundVast.Components.Artist
             _repository = repository;
         }
 
-        public override IEnumerable<Models.Artist> GetAudios(string genreName, Filter.Filter filter)
+        public override IEnumerable<Models.Artist> GetAudios(string genreName, string searchQuery, Filter.Filter filter)
         {
-            var artists = base.GetAudios(genreName, filter).AsQueryable().BuildArtist();
+            var artists = base.GetAudios(genreName, searchQuery, filter).AsQueryable().BuildArtist();
 
             return artists;
         }

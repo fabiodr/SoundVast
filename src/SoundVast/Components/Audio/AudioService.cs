@@ -11,6 +11,7 @@ using SoundVast.Components.Filter;
 using SoundVast.Components.Genre.Models;
 using SoundVast.Components.Rating;
 using SoundVast.Components.Rating.Models;
+using SoundVast.Components.Search;
 using SoundVast.Components.Upload;
 using SoundVast.Components.User;
 using SoundVast.CustomHelpers;
@@ -32,9 +33,25 @@ namespace SoundVast.Components.Audio
             _validationProvider = validationProvider;
         }
 
-        public virtual IEnumerable<T> GetAudios(string genreName, Filter.Filter filter)
+        public IEnumerable<T> GetAudios()
         {
-            var audios = _repository.GetAll().BuildAudio();
+            return _repository.GetAll().BuildAudio();
+        }
+
+        public virtual IEnumerable<T> GetAudios(string genreName, string searchQuery, Filter.Filter filter)
+        {
+            IEnumerable<T> audios;
+
+            if (searchQuery != null)
+            {
+                var audioIds = LuceneSearch.SearchAudios(searchQuery);
+
+                audios = audioIds.Select(id => _repository.GetAll().BuildAudio().Single(x => x.Id == id));
+            }
+            else
+            {
+                audios = _repository.GetAll().BuildAudio();
+            }
 
             if (genreName != null)
             {
@@ -97,6 +114,7 @@ namespace SoundVast.Components.Audio
                 _repository.Add(model);
 
                 model.User.ContributionScore += (int)Contribution.Upload;
+                LuceneSearch.AddOrUpdateLuceneIndex(model);
             }
         }
 
