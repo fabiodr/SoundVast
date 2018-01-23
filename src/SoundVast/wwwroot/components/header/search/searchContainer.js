@@ -5,17 +5,18 @@ import { withRouter } from 'found';
 import Search from './search';
 
 const handlers = {
-  onSubmit: ({ router, match }) => (searchQuery) => {
+  onSubmit: ({ router, match }) => ({ search }) => {
     const searchRoutes = [
       'songs/', 'artists/', 'albums/', 'radios/',
     ];
-    const isOnSearchRoute = searchRoutes.some(searchRoute =>
-      match.location.pathname.contains(searchRoute));
+    const isOnAudioRoute = searchRoutes.some(searchRoute =>
+      match.location.pathname.includes(searchRoute));
 
     router.push({
-      pathname: isOnSearchRoute ? match.location.pathname : '/songs',
+      pathname: isOnAudioRoute ? match.location.pathname : '/',
       query: {
-        searchQuery,
+        ...match.location.query,
+        searchQuery: search,
       },
     });
   },

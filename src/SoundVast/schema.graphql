@@ -1,5 +1,5 @@
 # source: http://localhost:8080/graphql
-# timestamp: Tue Jan 16 2018 00:46:39 GMT+0100 (W. Europe Standard Time)
+# timestamp: Tue Jan 23 2018 22:50:52 GMT+0100 (W. Europe Standard Time)
 
 input AddSongToPlaylistInput {
   clientMutationId: String
@@ -738,6 +738,9 @@ type Query {
     # The genre that the song belongs to
     genre: String
 
+    # The search query to filter the songs against
+    searchQuery: String
+
     # The filters to apply to the songs
     filter: FilterInput
   ): SongPayloadConnection
@@ -750,6 +753,9 @@ type Query {
 
     # The genre that the artist belongs to
     genre: String
+
+    # The search query to filter the artists against
+    searchQuery: String
 
     # The filters to apply to the artists
     filter: FilterInput
@@ -764,6 +770,9 @@ type Query {
     # The genre that the album belongs to
     genre: String
 
+    # The search query to filter the albums against
+    searchQuery: String
+
     # The filters to apply to the albums
     filter: FilterInput
   ): AlbumPayloadConnection
@@ -776,6 +785,9 @@ type Query {
 
     # The genre that the live stream belongs to
     genre: String
+
+    # The search query to filter the liveStreams against
+    searchQuery: String
 
     # The filters to apply to the live streams
     filter: FilterInput

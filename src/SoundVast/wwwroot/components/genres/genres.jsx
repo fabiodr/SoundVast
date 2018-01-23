@@ -11,7 +11,7 @@ const Genres = ({ genres, typeUrl }) => (
         key={genre.id}
         name={genre.name}
         coverImageUrl={genre.coverImageUrl}
-        url={`/${typeUrl}/${genre.name}`}
+        url={`/${typeUrl}`}
       />
     ))}
   </Grid>

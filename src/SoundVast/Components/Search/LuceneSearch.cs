@@ -12,8 +12,6 @@ using Lucene.Net.QueryParsers.Classic;
 using Lucene.Net.Util;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.PlatformAbstractions;
-using ParseException = MimeKit.ParseException;
-using QueryParser = Remotion.Linq.Parsing.Structure.QueryParser;
 
 namespace SoundVast.Components.Search
 {
@@ -57,7 +55,7 @@ namespace SoundVast.Components.Search
 
             var doc = new Document
             {
-                new StringField("Id", audio.Id.ToString(), Field.Store.NO),
+                new StringField("Id", audio.Id.ToString(), Field.Store.YES),
                 new TextField("Name", audio.Name, Field.Store.YES)
             };
 
@@ -71,9 +69,9 @@ namespace SoundVast.Components.Search
 
             using (var writer = new IndexWriter(Directory, indexWriterConfig))
             {
-                foreach (var sampleData in audios)
+                foreach (var audio in audios)
                 {
-                    AddToLuceneIndex(sampleData, writer);
+                    AddToLuceneIndex(audio, writer);
                 }
             }
         }
@@ -125,12 +123,12 @@ namespace SoundVast.Components.Search
             return hits.Select(MapLuceneDocumentToId).ToList();
         }
 
-        private static IEnumerable<int> MapLuceneToIdList(IEnumerable<ScoreDoc> hits, Searchable searcher)
+        private static IEnumerable<int> MapLuceneToIdList(IEnumerable<ScoreDoc> hits, IndexSearcher searcher)
         {
             return hits.Select(hit => MapLuceneDocumentToId(searcher.Doc(hit.Doc))).ToList();
         }
 
-        private static Query ParseQuery(string searchQuery, QueryParser parser)
+        private static Query ParseQuery(string searchQuery, QueryParserBase parser)
         {
             Query query;
 
@@ -140,7 +138,7 @@ namespace SoundVast.Components.Search
             }
             catch (ParseException)
             {
-                query = parser.Parse(QueryParser.Escape(searchQuery.Trim()));
+                query = parser.Parse(QueryParserBase.Escape(searchQuery.Trim()));
             }
             return query;
         }
@@ -149,33 +147,34 @@ namespace SoundVast.Components.Search
         {
             if (string.IsNullOrEmpty(searchQuery.Replace("*", "").Replace("?", ""))) return new List<int>();
 
-            using (var searcher = new IndexSearcher(Directory, false))
+            using (var reader = DirectoryReader.Open(Directory))
             {
-                const int hitsLimit = 1000;
-                var analyzer = new StandardAnalyzer(LuceneVersion.LUCENE_48);
-                QueryParser parser;
-                Query query;
-                ScoreDoc[] hits;
-                IEnumerable<int> results;
-
-                if (!string.IsNullOrEmpty(searchField))
+                using (var analyzer = new StandardAnalyzer(LuceneVersion.LUCENE_48))
                 {
-                    parser = new QueryParser(LuceneVersion.LUCENE_48, searchField, analyzer);
+                    var searcher = new IndexSearcher(reader);
+                    const int hitsLimit = 1000;
+                    QueryParser parser;
+                    Query query;
+                    ScoreDoc[] hits;
+                    IEnumerable<int> results;
+
+                    if (!string.IsNullOrEmpty(searchField))
+                    {
+                        parser = new QueryParser(LuceneVersion.LUCENE_48, searchField, analyzer);
+                        query = ParseQuery(searchQuery, parser);
+                        hits = searcher.Search(query, hitsLimit).ScoreDocs;
+                        results = MapLuceneToIdList(hits, searcher);
+
+                        return results;
+                    }
+
+                    parser = new MultiFieldQueryParser(LuceneVersion.LUCENE_48, new[] { "Id", "Name" }, analyzer);
                     query = ParseQuery(searchQuery, parser);
-                    hits = searcher.Search(query, hitsLimit).ScoreDocs;
+                    hits = searcher.Search(query, null, hitsLimit, Sort.RELEVANCE, true, false).ScoreDocs;
                     results = MapLuceneToIdList(hits, searcher);
-                    analyzer.Close();
 
                     return results;
                 }
-
-                parser = new MultiFieldQueryParser(LuceneVersion.LUCENE_48, new[] { "Id", "Name" }, analyzer);
-                query = ParseQuery(searchQuery, parser);
-                hits = searcher.Search(query, null, hitsLimit, Sort.RELEVANCE).ScoreDocs;
-                results = MapLuceneToIdList(hits, searcher);
-                analyzer.Close();
-
-                return results;
             }
         }
 

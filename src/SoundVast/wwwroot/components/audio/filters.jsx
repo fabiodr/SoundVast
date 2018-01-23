@@ -15,10 +15,10 @@ const Filters = ({
   <div className={className}>
     <div className={styles.filterToggles}>
       <Button onClick={genresOnClick}>Genres</Button>
-      <Button onClick={() => filter('newest', true)}>Newest</Button>
-      <Button onClick={() => filter('topRated', [dateFrom, dateTo])}>Top Rated</Button>
-      <Button onClick={() => filter('mostCommented', [dateFrom, dateTo])}>Most Commented</Button>
-      <Button onClick={() => filter('mostPlayed', [dateFrom, dateTo])}>Most Played</Button>
+      <Button onClick={() => filter('newest')}>Newest</Button>
+      <Button onClick={() => filter('topRated', { dateFrom, dateTo })}>Top Rated</Button>
+      <Button onClick={() => filter('mostCommented', { dateFrom, dateTo })}>Most Commented</Button>
+      <Button onClick={() => filter('mostPlayed', { dateFrom, dateTo })}>Most Played</Button>
     </div>
   </div>
 );

@@ -55,7 +55,7 @@ namespace SoundVast.Data
                     SeedGenres<LiveStreamGenre>(context, liveStreamGenres);
                     SeedQuotes(context);
 
-                    // LuceneSearch.AddOrUpdateLuceneIndex(_audioService.GetAudios());
+                    LuceneSearch.AddOrUpdateLuceneIndex(_audioService.GetAudios());
 
                     //   InitializeCategories<FileStreamCategoryModel>(context, fileStreamCategoryResources, placeHolderImage);
                     //   InitializeCategories<LiveStreamCategoryModel>(context, radioStationCategoryResources, placeHolderImage);

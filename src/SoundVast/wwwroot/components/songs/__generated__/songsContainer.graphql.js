@@ -55,6 +55,11 @@ const fragment /*: ConcreteFragment*/ = {
     },
     {
       "kind": "RootArgument",
+      "name": "searchQuery",
+      "type": "String"
+    },
+    {
+      "kind": "RootArgument",
       "name": "filter",
       "type": "FilterInput"
     }
@@ -88,6 +93,12 @@ const fragment /*: ConcreteFragment*/ = {
           "kind": "Variable",
           "name": "genre",
           "variableName": "genre",
+          "type": "String"
+        },
+        {
+          "kind": "Variable",
+          "name": "searchQuery",
+          "variableName": "searchQuery",
           "type": "String"
         }
       ],

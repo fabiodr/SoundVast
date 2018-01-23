@@ -8,7 +8,7 @@ import { actions } from 'react-jplaylist';
 
 import Artists from './artists';
 import { audiosToLoad } from '../shared/utilities/itemsToLoad';
-import getFilterVariables from '../shared/utilities/getFilterVariables';
+import getAudioVariables from '../shared/utilities/getAudioVariables';
 import convertSongToMedia from '../shared/utilities/convertSongToMedia';
 
 const propTypes = {
@@ -122,10 +122,9 @@ export const routeConfig = {
   Component: ArtistsContainer,
   query,
   render: ({ props }) => props && <ArtistsContainer data={props} />,
-  prepareVariables: ({ genre }, { location }) => ({
+  prepareVariables: (_, { location }) => ({
     count: audiosToLoad,
-    genre,
-    filter: getFilterVariables(location),
+    ...getAudioVariables(location),
   }),
 };
 

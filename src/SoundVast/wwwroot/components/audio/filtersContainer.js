@@ -10,32 +10,25 @@ const propTypes = {
 };
 
 const handlers = {
-  filter: ({ router, match }) => (filter, values) => {
-    const locationInformation = {
+  filter: ({ router, match }) => (filter, values = {}) => {
+    const { newest, mostCommented, mostPlayed, topRated, ...queries } = match.location.query;
+
+    router.push({
       pathname: match.location.pathname,
       query: {
+        ...queries,
         [filter]: true,
+        dateFrom: values.dateFrom,
+        dateTo: values.dateTo,
       },
-    };
-
-    if (Array.isArray(values)) {
-      locationInformation.query.dateFrom = values[0];
-      locationInformation.query.dateTo = values[1];
-    }
-
-    router.push(locationInformation);
+    });
   },
   genresOnClick: ({ router, match, genresUrl }) => () => {
     router.push({
       pathname: genresUrl,
       state: {
-        filterQueries: {
-          newest: match.location.query.newest,
-          topRated: match.location.query.topRated,
-          mostCommented: match.location.query.mostCommented,
-          mostPlayed: match.location.query.mostPlayed,
-          dateFrom: match.location.query.dateFrom,
-          dateTo: match.location.query.dateTo,
+        queries: {
+          ...match.location.query,
         },
       },
     });

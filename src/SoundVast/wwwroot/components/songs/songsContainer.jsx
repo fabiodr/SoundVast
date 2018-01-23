@@ -7,7 +7,7 @@ import { actions } from 'react-jplaylist';
 
 import Songs from './songs';
 import { audiosToLoad } from '../shared/utilities/itemsToLoad';
-import getFilterVariables from '../shared/utilities/getFilterVariables';
+import getAudioVariables from '../shared/utilities/getAudioVariables';
 
 const query = graphql`
   query songsContainerQuery(
@@ -96,11 +96,9 @@ export const routeConfig = {
   Component: SongsContainer,
   query,
   render: ({ props }) => props && <SongsContainer data={props} />,
-  prepareVariables: ({ genre, searchQuery }, { location }) => ({
+  prepareVariables: (_, { location }) => ({
     count: audiosToLoad,
-    genre,
-    searchQuery,
-    filter: getFilterVariables(location),
+    ...getAudioVariables(location),
   }),
 };
 
