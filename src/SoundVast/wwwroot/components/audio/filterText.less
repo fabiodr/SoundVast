@@ -4,9 +4,29 @@
     line-height: 1.2em;
     letter-spacing: 1.35px;
     font-size: 17px;
+    position: relative;
 }
 
-.queryFilterLabel, .genreLabel {
+.queryFilterLabel, .genreLabel, .searchQueryLabel, .dateFromLabel, .dateToLabel {
     color: @primary;
     font-weight: bold;
+    position: relative;
+
+    button {
+        position: absolute;
+        font-size: 11px;
+        top: -10px;
+        right: -4px;
+        color: inherit;
+        font-weight: inherit;
+    }
+}
+
+.clearAllFilters {
+    position: absolute;
+    padding: 0px 5px;
+    font-size: 10px;
+    bottom: -15px;
+    left: 0;
+    background-color: transparent;
 }

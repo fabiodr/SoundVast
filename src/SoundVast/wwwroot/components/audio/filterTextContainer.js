@@ -6,13 +6,13 @@ import normalizeBoolean from '../shared/utilities/normalizeBoolean';
 
 const getQueryFilterLabel = (match) => {
   const queryFilterLabels = [
-    normalizeBoolean(match.location.query.newest) && 'newest',
-    normalizeBoolean(match.location.query.topRated) && 'top rated',
-    normalizeBoolean(match.location.query.mostCommented) && 'most commented',
-    normalizeBoolean(match.location.query.mostPlayed) && 'most played',
+    { key: 'newest', label: normalizeBoolean(match.location.query.newest) && 'newest' },
+    { key: 'topRated', label: normalizeBoolean(match.location.query.topRated) && 'top rated' },
+    { key: 'mostCommented', label: normalizeBoolean(match.location.query.mostCommented) && 'most commented' },
+    { key: 'mostPlayed', label: normalizeBoolean(match.location.query.mostPlayed) && 'most played' },
   ];
 
-  const queryFilterLabel = queryFilterLabels.find(x => x);
+  const queryFilterLabel = queryFilterLabels.find(x => x.label);
 
   return queryFilterLabel;
 };
@@ -20,11 +20,12 @@ const getQueryFilterLabel = (match) => {
 const createProps = ({
   match,
 }) => {
-  const queryFilterLabel = getQueryFilterLabel(match);
+  const queryFilterDictionary = getQueryFilterLabel(match);
 
   return {
-    queryFilterLabel,
-    genreLabel: match.params.genre,
+    queryFilterDictionary,
+    genre: match.location.query.genre,
+    searchQuery: match.location.query.searchQuery,
     hasDateFrom: !!match.location.query.dateFrom,
     hasDateTo: !!match.location.query.dateTo,
   };
