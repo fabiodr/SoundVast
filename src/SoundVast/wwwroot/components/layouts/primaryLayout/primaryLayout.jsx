@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import Account from '../../account/account';
 import Header from '../../header/headerContainer';
 import FooterPlaylist from '../../footerPlaylist/footerPlaylistContainer';
-import Content from '../../content/content';
 import styles from './primaryLayout.less';
 import FlagAudioModal from '../../flag/flagAudioModalContainer';
 import FlagCommentModal from '../../flag/flagCommentModalContainer';
@@ -19,9 +18,7 @@ const PrimaryLayout = ({ children, user, loginProviders, ...props }) => {
       <Account loginProviders={loginProviders} />
       <Header user={user} />
       <div className={styles.main}>
-        <Content>
-          {children}
-        </Content>
+        {children}
       </div>
       <FlagAudioModal isAuthorized={isAuthorized} />
       <FlagCommentModal isAuthorized={isAuthorized} />

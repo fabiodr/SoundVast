@@ -1,5 +1,7 @@
 import React from 'react';
 
+import TextContent from '../content/textContent';
+
 const termsAndConditionsText = `
   SoundVast Terms and Conditions of Use
   DEFINITIONS
@@ -63,9 +65,12 @@ const termsAndConditionsText = `
 `;
 
 const TermsAndConditions = () => (
-  <div>
-    {termsAndConditionsText}
-  </div>
+  <TextContent>
+    <h1>Terms and Conditions</h1>
+    <p>
+      {termsAndConditionsText}
+    </p>
+  </TextContent>
 );
 
 export default TermsAndConditions;

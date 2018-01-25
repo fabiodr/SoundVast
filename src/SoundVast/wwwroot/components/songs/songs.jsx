@@ -6,7 +6,7 @@ import ScrollTracker from '../shared/scroll/scrollTracker';
 import SoundVastTitle from '../shared/title/soundVastTitle';
 import Song from './songContainer';
 import Grid from '../shared/grid/grid';
-import AudiosContent from '../audio/audiosContentContainer';
+import AudiosContent from '../content/audiosContentContainer';
 import AudiosHeader from '../audio/audiosHeader';
 import AudiosSubHeader from '../audio/audiosSubHeader';
 import Loader from '../shared/loaders/loader';

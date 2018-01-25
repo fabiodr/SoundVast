@@ -1,5 +1,7 @@
 import React from 'react';
 
+import TextContent from '../content/textContent';
+
 const privacyPolicyText = `
   SoundVast Privacy Policy
   This privacy policy has been compiled to better serve those who are concerned
@@ -97,9 +99,12 @@ const privacyPolicyText = `
 `;
 
 const PrivacyPolicy = () => (
-  <div>
-    {privacyPolicyText}
-  </div>
+  <TextContent>
+    <h1>Privacy Policy</h1>
+    <p>
+      {privacyPolicyText}
+    </p>
+  </TextContent>
 );
 
 export default PrivacyPolicy;
