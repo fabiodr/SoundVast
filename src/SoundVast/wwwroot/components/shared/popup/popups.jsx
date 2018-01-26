@@ -13,6 +13,7 @@ const Popups = ({ popups, hidePopup }) => (
           index={index}
           text={popup.text}
           hidePopup={hidePopup}
+          millisecondsToShow={popup.millisecondsToShow}
         />
       ))}
     </div>)
@@ -24,6 +25,7 @@ Popups.propTypes = {
   popups: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string.isRequired,
     text: PropTypes.string.isRequired,
+    millisecondsToShow: PropTypes.number.isRequired,
   })).isRequired,
 };
 

@@ -13,6 +13,7 @@ import Router from './routing/router';
 import store from './store/store';
 import environment from './environment/environment';
 import ErrorBoundary from './ErrorBoundary';
+import CookieNotice from '../legal/cookieNoticeContainer';
 
 const resolver = new Resolver(environment);
 
@@ -21,6 +22,7 @@ ReactDOM.render((
     <Provider store={store}>
       <div>
         <Router matchContext={{ store }} resolver={resolver} />
+        <CookieNotice />
       </div>
     </Provider>
   </ErrorBoundary>

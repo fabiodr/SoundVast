@@ -1,5 +1,5 @@
 # source: http://localhost:8080/graphql
-# timestamp: Tue Jan 23 2018 22:50:52 GMT+0100 (W. Europe Standard Time)
+# timestamp: Fri Jan 26 2018 01:02:29 GMT+0100 (W. Europe Standard Time)
 
 input AddSongToPlaylistInput {
   clientMutationId: String
@@ -721,7 +721,7 @@ type Query {
   ): Node
   song(
     # The id of the song
-    id: Int
+    id: Int!
   ): Song
   playlist(
     # The id of the playlist

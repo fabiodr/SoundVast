@@ -5,7 +5,7 @@ import styles from './popup.less';
 
 class Popup extends React.Component {
   componentDidMount() {
-    setTimeout(() => this.props.hidePopup(this.props.index), 6000);
+    setTimeout(() => this.props.hidePopup(this.props.index), this.props.millisecondsToShow);
   }
   render() {
     return (
@@ -20,6 +20,7 @@ Popup.propTypes = {
   index: PropTypes.number.isRequired,
   text: PropTypes.string.isRequired,
   hidePopup: PropTypes.func.isRequired,
+  millisecondsToShow: PropTypes.number.isRequired,
 };
 
 export default Popup;

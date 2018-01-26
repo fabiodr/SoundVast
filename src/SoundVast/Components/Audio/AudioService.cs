@@ -91,13 +91,9 @@ namespace SoundVast.Components.Audio
             return _repository.GetAll().Include(x => x.Ratings).Skip(current).Take(amount).ToList();
         }
 
-        public T GetAudio(int? id)
+        public virtual T GetAudio(int id)
         {
-            if (!id.HasValue)
-            {
-                return null;
-            }
-            return _repository.GetAll().BuildAudio().Single(x => x.Id == id.Value);
+            return _repository.GetAll().BuildAudio().Single(x => x.Id == id);
         }
 
         public ICollection<Rating.Models.Rating> GetAudioRatings(int id)

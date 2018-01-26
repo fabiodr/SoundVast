@@ -8,6 +8,7 @@ const reducer = (state = defaultState, action) => {
       const popups = [...state.popups, {
         id: action.id,
         text: action.text,
+        millisecondsToShow: action.millisecondsToShow,
       }];
 
       return {

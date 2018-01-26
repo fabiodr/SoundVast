@@ -3,9 +3,7 @@ import { graphql } from 'react-relay';
 import PrimaryLayout from './primaryLayout';
 
 const query = graphql`
-  query primaryLayoutContainerQuery(
-    $songId: Int
-  ) {
+  query primaryLayoutContainerQuery {
     user {
       ...userButtonContainer_user,
       ...unAuthorizedListContainer_user,
@@ -13,7 +11,6 @@ const query = graphql`
     loginProviders {
       ...socialLoginsContainer_loginProviders,
     }
-    ...editSongModalContainer
   }
 `;
 

@@ -9,47 +9,60 @@
 /*::
 import type {ConcreteFragment} from 'relay-runtime';
 export type editSongModalContainer = {|
-  +user: ?{|
-    +id: ?string;
-  |};
-  +songGenres: ?$ReadOnlyArray<?{| |}>;
-  +song: ?{|
+  +name: string;
+  +coverImageUrl: string;
+  +free: boolean;
+  +artists: ?$ReadOnlyArray<?{|
     +name: string;
-    +coverImageUrl: string;
-    +free: boolean;
-    +genres: ?$ReadOnlyArray<?{|
-      +id: ?string;
-    |}>;
-  |};
+  |}>;
+  +genres: ?$ReadOnlyArray<?{|
+    +id: ?string;
+    +name: string;
+  |}>;
 |};
 */
 
 
 const fragment /*: ConcreteFragment*/ = {
-  "argumentDefinitions": [
-    {
-      "kind": "RootArgument",
-      "name": "songId",
-      "type": "Int"
-    }
-  ],
+  "argumentDefinitions": [],
   "kind": "Fragment",
   "metadata": null,
   "name": "editSongModalContainer",
   "selections": [
     {
+      "kind": "ScalarField",
+      "alias": null,
+      "args": null,
+      "name": "name",
+      "storageKey": null
+    },
+    {
+      "kind": "ScalarField",
+      "alias": null,
+      "args": null,
+      "name": "coverImageUrl",
+      "storageKey": null
+    },
+    {
+      "kind": "ScalarField",
+      "alias": null,
+      "args": null,
+      "name": "free",
+      "storageKey": null
+    },
+    {
       "kind": "LinkedField",
       "alias": null,
       "args": null,
-      "concreteType": "ApplicationUser",
-      "name": "user",
-      "plural": false,
+      "concreteType": "Artist",
+      "name": "artists",
+      "plural": true,
       "selections": [
         {
           "kind": "ScalarField",
           "alias": null,
           "args": null,
-          "name": "id",
+          "name": "name",
           "storageKey": null
         }
       ],
@@ -60,76 +73,28 @@ const fragment /*: ConcreteFragment*/ = {
       "alias": null,
       "args": null,
       "concreteType": "SongGenre",
-      "name": "songGenres",
+      "name": "genres",
       "plural": true,
       "selections": [
         {
-          "kind": "FragmentSpread",
-          "name": "songGenresFieldContainer_genres",
-          "args": null
-        }
-      ],
-      "storageKey": null
-    },
-    {
-      "kind": "LinkedField",
-      "alias": null,
-      "args": [
-        {
-          "kind": "Variable",
+          "kind": "ScalarField",
+          "alias": null,
+          "args": null,
           "name": "id",
-          "variableName": "songId",
-          "type": "Int"
-        }
-      ],
-      "concreteType": "Song",
-      "name": "song",
-      "plural": false,
-      "selections": [
+          "storageKey": null
+        },
         {
           "kind": "ScalarField",
           "alias": null,
           "args": null,
           "name": "name",
           "storageKey": null
-        },
-        {
-          "kind": "ScalarField",
-          "alias": null,
-          "args": null,
-          "name": "coverImageUrl",
-          "storageKey": null
-        },
-        {
-          "kind": "ScalarField",
-          "alias": null,
-          "args": null,
-          "name": "free",
-          "storageKey": null
-        },
-        {
-          "kind": "LinkedField",
-          "alias": null,
-          "args": null,
-          "concreteType": "SongGenre",
-          "name": "genres",
-          "plural": true,
-          "selections": [
-            {
-              "kind": "ScalarField",
-              "alias": null,
-              "args": null,
-              "name": "id",
-              "storageKey": null
-            }
-          ],
-          "storageKey": null
         }
       ],
       "storageKey": null
     }
   ],
-  "type": "Query"
+  "type": "Song"
 };
 
 module.exports = fragment;

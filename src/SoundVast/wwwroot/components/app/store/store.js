@@ -50,7 +50,7 @@ const showingSideBar = normalizeBoolean(localStorage.getItem('showingSideBar'));
 
 const store = createStore(reducers, {
   audio: {
-    showingSideBar: showingSideBar === undefined ? true : showingSideBar,
+    showingSideBar: showingSideBar === null ? true : showingSideBar,
   },
 }, middleWare);
 

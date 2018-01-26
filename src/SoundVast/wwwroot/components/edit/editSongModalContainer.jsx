@@ -1,6 +1,6 @@
 import { SubmissionError, change } from 'redux-form';
 import { graphql } from 'react-relay';
-import { compose, withHandlers, withProps, lifecycle, flattenProp, branch, renderNothing, withState } from 'recompose';
+import { compose, withHandlers, withProps, lifecycle, flattenProp, branch, renderNothing, withStateHandlers } from 'recompose';
 import { refetchContainer } from 'recompose-relay-modern';
 import { connect } from 'react-redux';
 
@@ -30,30 +30,40 @@ const handlers = {
       }),
 };
 
+const stateHandlers = {
+  updatePreviewUrl: () => preview => ({
+    previewUrl: preview,
+  }),
+};
+
 const fragments = graphql`
-  fragment editSongModalContainer on Query {
-    user {
-      id
-    }
-    songGenres {
-      ...songGenresFieldContainer_genres
-    }
-    song(id: $songId) {
+  fragment editSongModalContainer on Song {
+    name
+    coverImageUrl
+    free
+    artists {
       name
-      coverImageUrl
-      free
-      genres {
-        id
-      }
+    }
+    genres {
+      id
+      name
     }
   }
 `;
 
 const query = graphql`
   query editSongModalContainerQuery(
-    $songId: Int
+    $id: ID!
   ) {
-    ...editSongModalContainer
+    user {
+      id
+    }
+    songGenres {
+      ...songGenresFieldContainer_genres
+    }
+    node(id: $id) {
+      ...editSongModalContainer
+    }
   }
 `;
 
@@ -61,8 +71,15 @@ const createProps = ({ user, song, previewUrl }) => ({
   isAuthorized: !!user,
   initialValues: {
     name: song.name,
+    artists: song.artists.map(artist => ({
+      label: artist.name,
+      value: artist.name,
+    })),
     imagePath: song.coverImageUrl,
-    genreId: song.genre.id,
+    genres: song.genres.map(genre => ({
+      id: genre.id,
+      label: genre.name,
+    })),
     free: song.free,
   },
   previewUrl,
@@ -83,7 +100,9 @@ export default compose(
     props => !props.song,
     renderNothing,
   ),
-  withState('previewUrl', 'updatePreviewUrl', ({ song }) => song.coverImageUrl),
+  withStateHandlers(({ song }) => ({
+    previewUrl: song.coverImageUrl,
+  }), stateHandlers),
   withHandlers(handlers),
   withProps(createProps),
 )(EditSongModal);

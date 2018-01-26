@@ -3,11 +3,13 @@ import shortid from 'shortid';
 /**
  *
  * @param {string} text - The text to show in the popup
+ * @param {number} [millisecondsToShow=6000] - The amount of time in milliseconds to show the popup
  */
-export const showPopup = text => ({
+export const showPopup = (text, millisecondsToShow = 6000) => ({
   type: 'SHOW_POPUP',
   text,
   id: shortid.generate(),
+  millisecondsToShow,
 });
 
 /**
