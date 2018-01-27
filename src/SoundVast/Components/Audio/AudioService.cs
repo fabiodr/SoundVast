@@ -46,7 +46,8 @@ namespace SoundVast.Components.Audio
             {
                 var audioIds = LuceneSearch.SearchAudios(searchQuery);
 
-                audios = audioIds.Select(id => _repository.GetAll().BuildAudio().Single(x => x.Id == id));
+                //TODO: Filter by correct type in Lucene search instead
+                audios = audioIds.Select(id => _repository.GetAll().BuildAudio().SingleOrDefault(x => x.Id == id)).Where(x => x != null);
             }
             else
             {
@@ -58,20 +59,24 @@ namespace SoundVast.Components.Audio
                 audios = audios.Where(x => x.AudioGenres.Any(z => z.Genre.Name == genreName));
             }
 
-            if (filter.RatingFilter.TopRated)
+            if (filter != null)
             {
-                audios = audios.TopRated(filter.RatingFilter.MinimumNumberOfRatingsThreshold);
+                if (filter.RatingFilter.TopRated)
+                {
+                    audios = audios.TopRated(filter.RatingFilter.MinimumNumberOfRatingsThreshold);
+                }
+
+                if (filter.MostCommented)
+                {
+                    audios = audios.MostCommented();
+                }
+
+                if (filter.MostPlayed)
+                {
+                    audios = audios.MostPlayed();
+                }
             }
 
-            if (filter.MostCommented)
-            {
-                audios = audios.MostCommented();
-            }
-
-            if (filter.MostPlayed)
-            {
-                audios = audios.MostPlayed();
-            }
 
             return audios;
         }

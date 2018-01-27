@@ -4,8 +4,8 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 import BasicInfo from '../common/basicInfo/basicInfo';
 import NameField from '../../shared/fields/nameField/nameField';
-import ArtistsField from '../../shared/fields/artistsField/artistsField';
-import AlbumField from '../../shared/fields/albumField/albumField';
+import ArtistsField from '../../shared/fields/artistsField/artistsFieldContainer';
+import AlbumField from '../../shared/fields/albumField/albumFieldContainer';
 import ReleaseDateField from '../../shared/fields/releaseDateField/releaseDateField';
 import SongGenresField from '../../shared/fields/genresField/songGenresFieldContainer';
 import ValidationErrors from '../../shared/validation/validationErrors';

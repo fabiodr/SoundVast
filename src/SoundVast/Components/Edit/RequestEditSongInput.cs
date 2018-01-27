@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GraphQL.Relay.Types;
 using GraphQL.Types;
+using SoundVast.Components.Artist;
 
 namespace SoundVast.Components.Edit
 {
@@ -15,8 +16,7 @@ namespace SoundVast.Components.Edit
 
             Field<NonNullGraphType<IntGraphType>>("SongId");
             Field<NonNullGraphType<StringGraphType>>("Name");
-            Field<ListGraphType<StringGraphType>>("Artists");
-            Field<ListGraphType<IntGraphType>>("ArtistIds", "The existing artists ids");
+            Field<ListGraphType<ArtistInput>>("Artists");
             Field<StringGraphType>("Album");
             Field<IntGraphType>("AlbumId", "The existing albums id");
             Field<NonNullGraphType<BooleanGraphType>>("Free");

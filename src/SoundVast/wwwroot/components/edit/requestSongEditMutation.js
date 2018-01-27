@@ -11,7 +11,7 @@ const mutation = graphql`
   }
 `;
 
-export default ({ name, artist, imagePath, genreId, free }, songId) => {
+export default ({ name, artists, imagePath, genres, free }, songId) => {
   const variables = {
     input: {
       songId,

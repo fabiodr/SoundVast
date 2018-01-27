@@ -43,8 +43,13 @@ namespace SoundVast.Components.GraphQl
 
             Field<SongPayload>()
                 .Name("song")
-                .Argument<NonNullGraphType<IntGraphType>>("id", "The id of the song")
-                .Resolve(c => songService.GetAudio(c.GetArgument<int>("id")));
+                .Argument<IntGraphType>("id", "The id of the song")
+                .Resolve(c =>
+                {
+                    var id = c.GetArgument<int?>("id");
+
+                    return id.HasValue ? songService.GetAudio(id.Value) : null;
+                });
 
             Field<PlaylistPayload>()
                 .Name("playlist")

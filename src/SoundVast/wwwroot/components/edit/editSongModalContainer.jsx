@@ -37,23 +37,9 @@ const stateHandlers = {
 };
 
 const fragments = graphql`
-  fragment editSongModalContainer on Song {
-    name
-    coverImageUrl
-    free
-    artists {
-      name
-    }
-    genres {
-      id
-      name
-    }
-  }
-`;
-
-const query = graphql`
-  query editSongModalContainerQuery(
-    $id: ID!
+  fragment editSongModalContainer on Query
+  @argumentDefinitions(
+    songId: { type: "Int", defaultValue: null }
   ) {
     user {
       id
@@ -61,9 +47,26 @@ const query = graphql`
     songGenres {
       ...songGenresFieldContainer_genres
     }
-    node(id: $id) {
-      ...editSongModalContainer
+    song(id: $songId) {
+      name
+      coverImageUrl
+      free
+      artists {
+        name
+      }
+      genres {
+        id
+        name
+      }
     }
+  }
+`;
+
+const query = graphql`
+  query editSongModalContainerQuery(
+    $songId: Int
+  ) {
+    ...editSongModalContainer @arguments(songId: $songId)
   }
 `;
 

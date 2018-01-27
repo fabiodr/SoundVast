@@ -1,25 +1,25 @@
 import React from 'react';
-import { Creatable } from 'react-select';
+import { AsyncCreatable } from 'react-select';
 import PropTypes from 'prop-types';
 
 import ImageOption from '../select/imageOptionContainer';
-import ImageValue from '../select/imageValue';
-
-const options = [];
 
 const AlbumSelectInput = ({
   input,
+  options,
+  loadAlbums,
   ...props
 }) => (
-  <Creatable
+  <AsyncCreatable
     {...props}
     options={options}
     optionComponent={ImageOption}
-    valueComponent={ImageValue}
     placeholder=""
     onChange={value => input.onChange(value)}
     onBlur={() => input.onBlur(input.value)}
     value={input.value}
+    loadOptions={loadAlbums}
+    autoload={false}
   />
 );
 
@@ -29,6 +29,11 @@ AlbumSelectInput.propTypes = {
     onBlur: PropTypes.func.isRequired,
     value: PropTypes.any,
   }).isRequired,
+  options: PropTypes.arrayOf(PropTypes.shape({
+    label: PropTypes.string.isRequired,
+    value: PropTypes.string.isRequired,
+  })).isRequired,
+  loadAlbums: PropTypes.func.isRequired,
 };
 
 export default AlbumSelectInput;

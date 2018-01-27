@@ -31,7 +31,20 @@ const EditSongModal = ({
 EditSongModal.propTypes = {
   initialValues: PropTypes.shape({
     name: PropTypes.string.isRequired,
-    genreId: PropTypes.string.isRequired,
+    artists: PropTypes.arrayOf(
+      PropTypes.shape({
+        label: PropTypes.string.isRequired,
+        value: PropTypes.string.isRequired,
+      }),
+    ).isRequired,
+    imagePath: PropTypes.string.isRequired,
+    genres: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        label: PropTypes.string.isRequired,
+      }),
+    ).isRequired,
+    free: PropTypes.bool.isRequired,
   }).isRequired,
   previewUrl: PropTypes.string.isRequired,
   onSubmit: PropTypes.func.isRequired,

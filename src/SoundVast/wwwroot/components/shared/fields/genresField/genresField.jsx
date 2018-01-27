@@ -4,7 +4,7 @@ import { Field } from 'redux-form';
 
 import GenresSelectInput from './genresSelectInput';
 
-const GenresField = ({ id, genres, label, ...props }) => {
+const GenresField = ({ id, label, genres, ...props }) => {
   const options = genres.map(genre => ({ label: genre.name, value: genre.id }));
 
   return (
@@ -12,12 +12,8 @@ const GenresField = ({ id, genres, label, ...props }) => {
       <Field
         name="genres"
         id={`genres_${id}`}
-        component={values => (
-          <GenresSelectInput
-            {...values}
-            options={options}
-          />
-        )}
+        component={GenresSelectInput}
+        options={options}
         {...props}
       />
     </label>

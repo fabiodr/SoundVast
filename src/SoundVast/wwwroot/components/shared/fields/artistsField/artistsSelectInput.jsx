@@ -1,17 +1,17 @@
 import React from 'react';
-import { Creatable } from 'react-select';
 import PropTypes from 'prop-types';
+import { AsyncCreatable } from 'react-select';
 
 import ImageOption from '../select/imageOptionContainer';
 import ArtistsValue from './artistsValue';
 
-const options = [];
-
 const ArtistsSelectInput = ({
   input,
+  options,
+  loadArtists,
   ...props
 }) => (
-  <Creatable
+  <AsyncCreatable
     {...props}
     options={options}
     optionComponent={ImageOption}
@@ -25,6 +25,8 @@ const ArtistsSelectInput = ({
     onChange={value => input.onChange(value)}
     onBlur={() => input.onBlur(input.value)}
     value={input.value}
+    loadOptions={loadArtists}
+    autoload={false}
   />
 );
 
@@ -34,6 +36,11 @@ ArtistsSelectInput.propTypes = {
     onBlur: PropTypes.func.isRequired,
     value: PropTypes.any,
   }).isRequired,
+  options: PropTypes.arrayOf(PropTypes.shape({
+    label: PropTypes.string.isRequired,
+    value: PropTypes.string.isRequired,
+  })).isRequired,
+  loadArtists: PropTypes.func.isRequired,
 };
 
 

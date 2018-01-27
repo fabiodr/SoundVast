@@ -1,5 +1,5 @@
 # source: http://localhost:8080/graphql
-# timestamp: Fri Jan 26 2018 01:02:29 GMT+0100 (W. Europe Standard Time)
+# timestamp: Sat Jan 27 2018 15:32:17 GMT+0100 (W. Europe Standard Time)
 
 input AddSongToPlaylistInput {
   clientMutationId: String
@@ -62,6 +62,14 @@ type Album implements Node, Audio {
     # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
     first: Int
   ): CommentPayloadConnection
+}
+
+input AlbumInput {
+  # The existing album id
+  id: Int
+
+  # The name of the new album
+  artist: String
 }
 
 # A connection from an object to a list of objects of type `AlbumPayload`.
@@ -721,7 +729,7 @@ type Query {
   ): Node
   song(
     # The id of the song
-    id: Int!
+    id: Int
   ): Song
   playlist(
     # The id of the playlist
@@ -884,10 +892,7 @@ input RequestEditSongInput {
   clientMutationId: String
   songId: Int!
   name: String!
-  artists: [String]
-
-  # The existing artists ids
-  artistIds: [Int]
+  artists: [ArtistInput]
   album: String
 
   # The existing albums id
@@ -944,10 +949,7 @@ input SaveSongInput {
   clientMutationId: String
   name: String!
   artists: [ArtistInput]
-  album: String
-
-  # The existing albums id
-  albumId: Int
+  album: AlbumInput
   releaseDate: Date
   free: Boolean
   coverImageUrl: String!

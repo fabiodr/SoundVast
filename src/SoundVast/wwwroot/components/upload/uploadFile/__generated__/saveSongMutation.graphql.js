@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 8c8aeb07989dfeb22fdfb3098152e130
+ * @relayHash 065946aee7e0b1d6523f242b73f6b70e
  */
 
 /* eslint-disable */
@@ -17,8 +17,10 @@ export type saveSongMutationVariables = {|
       id?: ?number;
       artist?: ?string;
     }>;
-    album?: ?string;
-    albumId?: ?number;
+    album?: ?{
+      id?: ?number;
+      artist?: ?string;
+    };
     releaseDate?: ?any;
     free?: ?boolean;
     coverImageUrl: string;

@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 95449e4671a8dd57c0fac18c7cc1d6b2
+ * @relayHash eb2832a6f5edcf96f38569d92f442272
  */
 
 /* eslint-disable */
@@ -26,6 +26,7 @@ query primaryLayoutContainerQuery {
   loginProviders {
     ...socialLoginsContainer_loginProviders
   }
+  ...editSongModalContainer
 }
 
 fragment userButtonContainer_user on ApplicationUser {
@@ -40,6 +41,35 @@ fragment unAuthorizedListContainer_user on ApplicationUser {
 fragment socialLoginsContainer_loginProviders on LoginProvider {
   name
   displayName
+}
+
+fragment editSongModalContainer on Query {
+  user {
+    id
+  }
+  songGenres {
+    ...songGenresFieldContainer_genres
+    id
+  }
+  song {
+    name
+    coverImageUrl
+    free
+    artists {
+      name
+      id
+    }
+    genres {
+      id
+      name
+    }
+    id
+  }
+}
+
+fragment songGenresFieldContainer_genres on Genre {
+  id
+  name
 }
 */
 
@@ -86,6 +116,11 @@ const batch /*: ConcreteBatch*/ = {
           }
         ],
         "storageKey": null
+      },
+      {
+        "kind": "FragmentSpread",
+        "name": "editSongModalContainer",
+        "args": null
       }
     ],
     "type": "Query"
@@ -162,10 +197,124 @@ const batch /*: ConcreteBatch*/ = {
           }
         ],
         "storageKey": null
+      },
+      {
+        "kind": "LinkedField",
+        "alias": null,
+        "args": null,
+        "concreteType": "SongGenre",
+        "name": "songGenres",
+        "plural": true,
+        "selections": [
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "args": null,
+            "name": "id",
+            "storageKey": null
+          },
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "args": null,
+            "name": "name",
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      },
+      {
+        "kind": "LinkedField",
+        "alias": null,
+        "args": null,
+        "concreteType": "Song",
+        "name": "song",
+        "plural": false,
+        "selections": [
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "args": null,
+            "name": "name",
+            "storageKey": null
+          },
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "args": null,
+            "name": "coverImageUrl",
+            "storageKey": null
+          },
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "args": null,
+            "name": "free",
+            "storageKey": null
+          },
+          {
+            "kind": "LinkedField",
+            "alias": null,
+            "args": null,
+            "concreteType": "Artist",
+            "name": "artists",
+            "plural": true,
+            "selections": [
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "name",
+                "storageKey": null
+              },
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "id",
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
+          },
+          {
+            "kind": "LinkedField",
+            "alias": null,
+            "args": null,
+            "concreteType": "SongGenre",
+            "name": "genres",
+            "plural": true,
+            "selections": [
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "id",
+                "storageKey": null
+              },
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "name",
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
+          },
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "args": null,
+            "name": "id",
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
       }
     ]
   },
-  "text": "query primaryLayoutContainerQuery {\n  user {\n    ...userButtonContainer_user\n    ...unAuthorizedListContainer_user\n    id\n  }\n  loginProviders {\n    ...socialLoginsContainer_loginProviders\n  }\n}\n\nfragment userButtonContainer_user on ApplicationUser {\n  userName\n  contributionScore\n}\n\nfragment unAuthorizedListContainer_user on ApplicationUser {\n  userName\n}\n\nfragment socialLoginsContainer_loginProviders on LoginProvider {\n  name\n  displayName\n}\n"
+  "text": "query primaryLayoutContainerQuery {\n  user {\n    ...userButtonContainer_user\n    ...unAuthorizedListContainer_user\n    id\n  }\n  loginProviders {\n    ...socialLoginsContainer_loginProviders\n  }\n  ...editSongModalContainer\n}\n\nfragment userButtonContainer_user on ApplicationUser {\n  userName\n  contributionScore\n}\n\nfragment unAuthorizedListContainer_user on ApplicationUser {\n  userName\n}\n\nfragment socialLoginsContainer_loginProviders on LoginProvider {\n  name\n  displayName\n}\n\nfragment editSongModalContainer on Query {\n  user {\n    id\n  }\n  songGenres {\n    ...songGenresFieldContainer_genres\n    id\n  }\n  song {\n    name\n    coverImageUrl\n    free\n    artists {\n      name\n      id\n    }\n    genres {\n      id\n      name\n    }\n    id\n  }\n}\n\nfragment songGenresFieldContainer_genres on Genre {\n  id\n  name\n}\n"
 };
 
 module.exports = batch;

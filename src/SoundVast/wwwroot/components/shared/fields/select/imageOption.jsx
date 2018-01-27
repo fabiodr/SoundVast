@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import styles from './imageOption.less';
+
 const ImageOption = ({
   onMouseDown,
   onMouseEnter,
@@ -14,9 +16,16 @@ const ImageOption = ({
     onMouseDown={onMouseDown}
     onMouseEnter={onMouseEnter}
     onMouseMove={onMouseMove}
+    className={styles.imageOption}
   >
-    {option.imageOptionUrl && <img alt="" src={option.imageOptionUrl} />}
-    {children}
+    {option.imageOptionUrl && (
+      <div className={styles.imageContainer}>
+        <img alt="" src={option.imageOptionUrl} />
+      </div>
+    )}
+    <div>
+      {children}
+    </div>
   </div>
 );
 

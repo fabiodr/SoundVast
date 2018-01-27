@@ -19,11 +19,13 @@ namespace SoundVast.Components.Song
     public class SaveSongPayload : MutationPayloadGraphType
     {
         private readonly ISongService _songService;
+        private readonly IArtistService _artistService;
         private readonly ICloudStorage _cloudStorage;
 
-        public SaveSongPayload(ISongService songService, ICloudStorage cloudStorage)
+        public SaveSongPayload(ISongService songService, IArtistService artistService, ICloudStorage cloudStorage)
         {
             _songService = songService;
+            _artistService = artistService;
             _cloudStorage = cloudStorage;
 
             Name = nameof(SaveSongPayload);
@@ -39,8 +41,7 @@ namespace SoundVast.Components.Song
             var coverImageUrl = inputs.Get<string>("coverImageUrl");
             var name = inputs.Get<string>("name");
             var artists = inputs.Get("artists", new object[0]).Select(x => x.As<Dictionary<string, object>>().ToObject<ArtistInput>());
-            var album = inputs.Get<string>("album");
-            var albumId = inputs.Get<int>("albumId");
+            var album = inputs.Get("album", new object()).As<Dictionary<string, object>>().ToObject<AlbumInput>();
             var free = inputs.Get<bool>("free");
             var releaseDate = inputs.Get<DateTime?>("releaseDate");
             var genreIds = inputs.Get("genreIds", new object[0]).Cast<int>().ToList();
@@ -53,7 +54,7 @@ namespace SoundVast.Components.Song
                 Name = name,
                 Free = free,
                 UserId = user.Id,
-                AlbumId = albumId,
+                AlbumId = album.Id,
                 ReleaseDate = releaseDate
             };
 
@@ -62,11 +63,11 @@ namespace SoundVast.Components.Song
                 song.AudioGenres.Add(new AudioGenre { GenreId = genreId });
             }
 
-            if (album != null)
+            if (album.Artist != null)
             {
                 song.Album = new Album.Models.Album
                 {
-                    Name = album,
+                    Name = album.Artist,
                     CoverImageUrl = placeholderImage.CloudBlockBlob.Uri.AbsoluteUri
                 };
 
@@ -90,10 +91,9 @@ namespace SoundVast.Components.Song
                 }
                 else if (artist.Id.HasValue)
                 {
-                    artistModel = new Artist.Models.Artist
-                    {
-                        Id = artist.Id.Value
-                    };
+                    var existingArtist = _artistService.GetAudio(artist.Id.Value);
+
+                    artistModel = existingArtist;
                 }
                 else
                 {
@@ -102,15 +102,24 @@ namespace SoundVast.Components.Song
 
                 foreach (var genreId in genreIds)
                 {
-                   artistModel.AudioGenres.Add(new AudioGenre { GenreId = genreId });
+                    if (artistModel.AudioGenres.All(x => x.GenreId != genreId))
+                    {
+                        artistModel.AudioGenres.Add(new AudioGenre { GenreId = genreId });
+                    }
                 }
 
-                if (album != null)
+                if (song.Album != null)
                 {
-                    artistModel.ArtistAlbums.Add(new ArtistAlbum { Album = song.Album });
+                    if (artistModel.ArtistAlbums.All(x => x.Album.Id != song.Album.Id))
+                    {
+                        artistModel.ArtistAlbums.Add(new ArtistAlbum { Album = song.Album });
+                    }
                 }
 
-                song.ArtistSongs.Add(new ArtistSong { Artist = artistModel });
+                if (song.ArtistSongs.All(x => x.Artist.Id != artistModel.Id))
+                {
+                    song.ArtistSongs.Add(new ArtistSong { Artist = artistModel });
+                }
             }
 
             _songService.Add(song);

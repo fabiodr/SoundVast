@@ -11,6 +11,7 @@ const query = graphql`
     loginProviders {
       ...socialLoginsContainer_loginProviders,
     }
+    ...editSongModalContainer
   }
 `;
 
