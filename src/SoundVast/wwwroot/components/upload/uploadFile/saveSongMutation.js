@@ -19,7 +19,7 @@ export default ({
   artists,
   album,
   imagePath,
-  genres,
+  genres = [],
   releaseDate,
 }) => {
   const variables = {

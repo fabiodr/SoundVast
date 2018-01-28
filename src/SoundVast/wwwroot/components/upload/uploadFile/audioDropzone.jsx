@@ -11,7 +11,7 @@ const AudioDropzone = ({ onDrop, files, genres }) => (
   <div>
     <Dropzone
       className={styles.audioDropzone}
-      title="Upload audio"
+      title="Drag 'n Drop or click to upload"
       accept="audio/*"
       onDrop={onDrop}
     >
@@ -22,9 +22,9 @@ const AudioDropzone = ({ onDrop, files, genres }) => (
         </figure>
       ))}
     </Dropzone>
-    <aside>
+    <div className={styles.files}>
       {files.map((file, i) => (
-        <div key={file.id}>
+        <div key={file.id} className={styles.file}>
           <Progress {...file.progress} />
           <Form
             form={`upload_${file.id}`}
@@ -34,7 +34,7 @@ const AudioDropzone = ({ onDrop, files, genres }) => (
           />
         </div>
       ))}
-    </aside>
+    </div>
   </div>
 );
 

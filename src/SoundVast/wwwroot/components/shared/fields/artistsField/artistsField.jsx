@@ -12,7 +12,8 @@ const ArtistsField = ({ id, label, artists, ...props }) => {
   }));
 
   return (
-    <label htmlFor={`artists_${id}`}>{label}
+    <label htmlFor={`artists_${id}`}>
+      <span>{label}</span>
       <Field
         name="artists"
         id={`artists_${id}`}

@@ -1,5 +1,7 @@
+@import '../../styles/colors.less';
+
 .dropzone {
-    border: 2px dashed #157bf8;
+    border: solid 1px @grey11;
     border-radius: 4px;
     cursor: pointer;
     display: flex;
@@ -15,16 +17,16 @@
 }
 
 .placeholder {
-    color: #88888c;
+    color: @grey4;
     text-align: center;
-    background-color: rgba(255,255,255, .8);
-    border-color: rgba(0,0,0,.1);
-    transition: background-color .2s ease-in-out, border-color .2s ease-in-out;
-    font-size: 14px;
-    border: 1px solid #e5e5e5;
-    padding: 4px;
-    border-radius: 3px;
+    background-color: @grey10;
+    transition: 0.2s ease-in-out;
+    font-size: 1.1;
+    padding: 10px;
+    border-radius: 4px;
+    border: solid 1px transparent;
     z-index: 1;
+    user-select: none;
 }
 
 .placeholderContainer {
@@ -34,5 +36,5 @@
 }
 
 .placeholder:hover {
-    background-color: rgba(255,255,255,1);
+    border-color: @grey7;
 }

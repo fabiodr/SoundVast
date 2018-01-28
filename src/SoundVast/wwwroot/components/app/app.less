@@ -40,3 +40,27 @@ ul {
         box-sizing: border-box;
     }
 }
+
+:global(.react-tabs__tab) {
+    font-size: 13px;
+    margin-left: 7px;
+    margin-right: 7px;
+    font-weight: bold;
+    padding: 10px 20px;
+    color: @primary;
+    letter-spacing: 0.1em;
+    background-color: @grey3;
+    border-bottom: 1px solid @secondary;
+    outline: none;
+    cursor: pointer;
+    transition: background-color 0.5s ease;
+    display: inline-block;
+}
+
+:global(.react-tabs__tab--selected) {
+    background-color: @grey12;
+}
+
+:global(.react-tabs__tab:hover) {
+    background-color: @grey2;
+}

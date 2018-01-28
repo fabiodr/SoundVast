@@ -8,12 +8,13 @@ export const uploadSong = (id, file) => dispatch =>
     progress: (e) => {
       if (e.lengthComputable) {
         const progressPercent = parseInt((e.loaded / e.total) * 100, 10);
+        const message = progressPercent !== 100 ? 'Uploading file...' : 'Upload complete';
 
         dispatch({
           type: 'UPDATE_UPLOAD_PROGRESS',
           progressPercent,
           id,
-          message: 'Uploading file...',
+          message,
         });
       }
     },

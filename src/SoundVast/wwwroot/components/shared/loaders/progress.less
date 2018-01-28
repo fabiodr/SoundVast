@@ -1,0 +1,39 @@
+@import '../../styles/colors.less';
+
+.message {
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: @grey5;
+    margin-bottom: 5px;
+}
+
+.progressContainer {
+    width: 100%;
+    height: 0.2em;
+    display: flex;
+
+    progress {
+        background-color: @grey6;
+        vertical-align: 0;
+        width: inherit;
+        height: inherit;
+    }
+
+    progress::-moz-progress-bar { 
+        background: @primary;
+    }
+
+    progress::-webkit-progress-bar {
+        background: @grey1;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) inset;
+    }
+
+    progress::-webkit-progress-value {
+        background: @primary;
+    }
+
+    progress::-ms-fill { 
+        background: @primary;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) inset;
+    }
+}

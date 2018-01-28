@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 import BasicInfo from '../common/basicInfo/basicInfo';
+import Metadata from '../common/metadata/metadata';
+import FreeField from '../../shared/fields/freeField/freeField';
 import NameField from '../../shared/fields/nameField/nameField';
 import ArtistsField from '../../shared/fields/artistsField/artistsFieldContainer';
 import AlbumField from '../../shared/fields/albumField/albumFieldContainer';
@@ -11,6 +13,7 @@ import SongGenresField from '../../shared/fields/genresField/songGenresFieldCont
 import ValidationErrors from '../../shared/validation/validationErrors';
 import Button from '../../shared/button/button';
 import SpinnerSubmit from '../../shared/form/spinnerSubmit/spinnerSubmitContainer';
+import styles from './uploadFileForm.less';
 
 const Form = ({
   handleSubmit,
@@ -20,12 +23,13 @@ const Form = ({
   removeMusicForm,
   genres,
 }) => (
-  <form onSubmit={handleSubmit} action="">
+  <form className={styles.uploadFileForm} onSubmit={handleSubmit} action="">
     <ValidationErrors errors={errors} />
 
     <Tabs>
       <TabList>
         <Tab>Basic info</Tab>
+        <Tab>Metadata</Tab>
       </TabList>
       <TabPanel>
         <BasicInfo id={id}>
@@ -36,10 +40,17 @@ const Form = ({
           <SongGenresField id={id} genres={genres} />
         </BasicInfo>
       </TabPanel>
+      <TabPanel>
+        <Metadata>
+          <FreeField id={id} />
+        </Metadata>
+      </TabPanel>
     </Tabs>
 
-    <SpinnerSubmit formName={form}>Save</SpinnerSubmit>
-    <Button onClick={removeMusicForm}>Cancel</Button>
+    <div className={styles.buttonsContainer}>
+      <SpinnerSubmit formName={form}>Save</SpinnerSubmit>
+      <Button onClick={removeMusicForm}>Cancel</Button>
+    </div>
   </form>
 );
 

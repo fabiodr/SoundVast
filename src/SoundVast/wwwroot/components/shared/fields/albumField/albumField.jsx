@@ -12,7 +12,8 @@ const AlbumField = ({ id, label, albums, ...props }) => {
   }));
 
   return (
-    <label htmlFor={`album_${id}`}>{label}
+    <label htmlFor={`album_${id}`}>
+      <span>{label}</span>
       <Field
         name="album"
         id={`album_${id}`}

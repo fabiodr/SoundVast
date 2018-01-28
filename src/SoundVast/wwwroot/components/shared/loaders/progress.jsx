@@ -2,10 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import AirbnbPropTypes from 'airbnb-prop-types';
 
+import styles from './progress.less';
+
 const Progress = ({ value, message }) => (
   <div>
-    {message && <div>{message}</div>}
-    <progress value={value} max={100} />
+    {message && <div className={styles.message}>{message}</div>}
+    <div className={styles.progressContainer}>
+      <progress value={value} max={100} />
+    </div>
   </div>
 );
 

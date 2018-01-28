@@ -8,7 +8,7 @@ import PreviewImage from '../previewImage/previewImageContainer';
 
 const BasicInfo = ({ id, children }) => (
   <div className={styles.basicInfo}>
-    <ImageDropzone id={id}>
+    <ImageDropzone className={styles.imageDropzone} id={id}>
       <PreviewImage id={id} />
     </ImageDropzone>
     <FormGroup className={styles.formGroup}>

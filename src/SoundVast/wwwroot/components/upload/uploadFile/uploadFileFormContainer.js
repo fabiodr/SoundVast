@@ -31,6 +31,7 @@ const createProps = ({ title, artist, album, imagePath }) => ({
     album: { label: album, value: album },
     artists: [{ label: artist, value: artist }],
     imagePath,
+    free: true,
   },
 });
 

@@ -8,7 +8,8 @@ const GenresField = ({ id, label, genres, ...props }) => {
   const options = genres.map(genre => ({ label: genre.name, value: genre.id }));
 
   return (
-    <label htmlFor={`genres_${id}`}>{label}
+    <label htmlFor={`genres_${id}`}>
+      <span>{label}</span>
       <Field
         name="genres"
         id={`genres_${id}`}

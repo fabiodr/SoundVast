@@ -8,10 +8,10 @@ import UploadLiveStream from './uploadLiveStream/uploadLiveStreamContainer';
 
 const Upload = ({ songGenres, liveStreamGenres }) => (
   <div className={styles.upload}>
-    <h3>Upload</h3>
+    <div className={styles.title}>Upload your files.</div>
 
     <Tabs>
-      <TabList>
+      <TabList className={styles.tabList}>
         <Tab>From File</Tab>
         <Tab>From Live Stream</Tab>
       </TabList>

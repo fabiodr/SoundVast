@@ -7,7 +7,7 @@ import normalizeBoolean from '../../utilities/normalizeBoolean';
 
 const FreeField = ({ id, label, ...props }) => (
   <div>
-    {label}
+    <span>{label}</span>
     <div>
       <label htmlFor={`free_false_${id}`}>False
         <Field name="free" id={`free_false_${id}`} value={false} component={Input} type="radio" normalize={normalizeBoolean} {...props} />
