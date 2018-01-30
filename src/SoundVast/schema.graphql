@@ -1,5 +1,5 @@
 # source: http://localhost:8080/graphql
-# timestamp: Sat Jan 27 2018 15:32:17 GMT+0100 (W. Europe Standard Time)
+# timestamp: Tue Jan 30 2018 00:52:48 GMT+0100 (W. Europe Standard Time)
 
 input AddSongToPlaylistInput {
   clientMutationId: String
@@ -69,7 +69,7 @@ input AlbumInput {
   id: Int
 
   # The name of the new album
-  artist: String
+  album: String
 }
 
 # A connection from an object to a list of objects of type `AlbumPayload`.
@@ -952,6 +952,7 @@ input SaveSongInput {
   album: AlbumInput
   releaseDate: Date
   free: Boolean
+  tags: [TagInput]
   coverImageUrl: String!
   genreIds: [Int]
 }
@@ -1111,6 +1112,14 @@ type SongPendingEditPayloadEdge {
 
   # The item at the end of the edge
   node: SongPendingEdit
+}
+
+input TagInput {
+  # The existing tag id
+  id: Int
+
+  # The name of the new tag
+  tag: String
 }
 
 input UpdatePlayCountInput {

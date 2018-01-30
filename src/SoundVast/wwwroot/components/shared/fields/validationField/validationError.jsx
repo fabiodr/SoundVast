@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 import styles from './validationError.less';
 
 const Error = ({ error }) => (
-  error !== null ?
+  error && (
     <span className={styles.error}>
       {error}
     </span>
-    : null
+  )
 );
 
 Error.defaultProps = {

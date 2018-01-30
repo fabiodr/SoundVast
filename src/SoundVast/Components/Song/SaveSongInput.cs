@@ -6,6 +6,7 @@ using GraphQL.Relay.Types;
 using GraphQL.Types;
 using SoundVast.Components.Album;
 using SoundVast.Components.Artist;
+using SoundVast.Components.Tag;
 
 namespace SoundVast.Components.Song
 {
@@ -20,6 +21,7 @@ namespace SoundVast.Components.Song
             Field<AlbumInput>("Album");
             Field<DateGraphType>("ReleaseDate");
             Field<BooleanGraphType>("Free");
+            Field<ListGraphType<TagInput>>("Tags");
             Field<NonNullGraphType<StringGraphType>>("CoverImageUrl");
             Field<ListGraphType<IntGraphType>>("GenreIds");
         }

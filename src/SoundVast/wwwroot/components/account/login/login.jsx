@@ -5,26 +5,28 @@ import PropTypes from 'prop-types';
 import styles from './login.less';
 import ModalButton from '../../shared/button/modalButtonContainer';
 import FormGroup from '../../shared/form/formGroup';
-import Input from '../../shared/fields/input/input';
-import ValidationErrors from '../../shared/validation/validationErrors';
+import InputTextField from '../../shared/fields/inputField/inputTextField';
+import InputCheckboxField from '../../shared/fields/inputField/inputCheckboxField';
 import Modal from '../../shared/modal/modalContainer';
 import SocialLogins from '../login/socialLogins/socialLoginsContainer';
 import Button from '../../shared/button/button';
 
-const Login = ({ error: errors, handleSubmit, loginProviders }) => (
+const Login = ({ handleSubmit, loginProviders }) => (
   <Modal title="Login." id="login">
     <SocialLogins loginProviders={loginProviders} />
     <form onSubmit={handleSubmit} action="">
-      <ValidationErrors errors={errors} />
-
       <FormGroup>
-        <Field name="username" component={Input} placeholder="Username" />
-        <Field name="password" component={Input} type="password" placeholder="Password" />
+        <Field name="username" component={InputTextField} placeholder="Username" />
+        <Field name="password" component={InputTextField} type="password" placeholder="Password" />
       </FormGroup>
 
-      <label className={styles.rememberMe} htmlFor="rememberMe">Remember login?
-        <Field name="rememberMe" id="rememberMe" component={Input} type="checkbox" />
-      </label>
+      <Field
+        name="rememberMe"
+        id="rememberMe"
+        component={InputCheckboxField}
+        type="checkbox"
+        label="Remember login?"
+      />
 
       <div className={styles.forgotPasswordLink}>
         <ModalButton modalId="forgotPassword">Forgotten your password?</ModalButton>
@@ -40,14 +42,9 @@ const Login = ({ error: errors, handleSubmit, loginProviders }) => (
   </Modal>
 );
 
-Login.defaultProps = {
-  error: [],
-};
-
 Login.propTypes = {
   loginProviders: PropTypes.arrayOf(PropTypes.object).isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  error: PropTypes.arrayOf(PropTypes.string.isRequired),
 };
 
 export default Login;

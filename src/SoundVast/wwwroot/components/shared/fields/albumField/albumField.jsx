@@ -4,7 +4,7 @@ import { Field } from 'redux-form';
 
 import AlbumSelectInput from './albumSelectInput';
 
-const AlbumField = ({ id, label, albums, ...props }) => {
+const AlbumField = ({ id, albums, ...props }) => {
   const options = albums.map(album => ({
     label: album.name,
     value: album.id,
@@ -13,13 +13,13 @@ const AlbumField = ({ id, label, albums, ...props }) => {
 
   return (
     <label htmlFor={`album_${id}`}>
-      <span>{label}</span>
+      <span>Album</span>
       <Field
+        {...props}
         name="album"
         id={`album_${id}`}
         component={AlbumSelectInput}
         options={options}
-        {...props}
       />
     </label>
   );
@@ -27,7 +27,6 @@ const AlbumField = ({ id, label, albums, ...props }) => {
 
 AlbumField.defaultProps = {
   albums: [],
-  label: 'Album',
   id: 0,
 };
 
@@ -37,7 +36,6 @@ AlbumField.propTypes = {
     name: PropTypes.string.isRequired,
     coverImageUrl: PropTypes.string.isRequired,
   })),
-  label: PropTypes.string,
   id: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number,

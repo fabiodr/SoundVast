@@ -14,9 +14,10 @@ namespace SoundVast.Components.Album
             Name = nameof(AlbumInput);
 
             Field<IntGraphType>("id", "The existing album id");
-            Field<StringGraphType>("Artist", "The name of the new album");
+            Field<StringGraphType>("Album", "The name of the new album");
         }
+
         public int? Id { get; set; }
-        public string Artist { get; set; }
+        public string Album { get; set; }
     }
 }

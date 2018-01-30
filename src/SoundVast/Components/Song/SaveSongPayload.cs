@@ -11,6 +11,7 @@ using SoundVast.Components.Artist;
 using SoundVast.Components.Artist.Models;
 using SoundVast.Components.Audio.Models;
 using SoundVast.Components.GraphQl;
+using SoundVast.Components.Tag;
 using SoundVast.Components.User;
 using SoundVast.Storage.CloudStorage;
 
@@ -21,12 +22,14 @@ namespace SoundVast.Components.Song
         private readonly ISongService _songService;
         private readonly IArtistService _artistService;
         private readonly ICloudStorage _cloudStorage;
+        private readonly ITagService _tagService;
 
-        public SaveSongPayload(ISongService songService, IArtistService artistService, ICloudStorage cloudStorage)
+        public SaveSongPayload(ISongService songService, IArtistService artistService, ICloudStorage cloudStorage, ITagService tagService)
         {
             _songService = songService;
             _artistService = artistService;
             _cloudStorage = cloudStorage;
+            _tagService = tagService;
 
             Name = nameof(SaveSongPayload);
            
@@ -41,6 +44,7 @@ namespace SoundVast.Components.Song
             var coverImageUrl = inputs.Get<string>("coverImageUrl");
             var name = inputs.Get<string>("name");
             var artists = inputs.Get("artists", new object[0]).Select(x => x.As<Dictionary<string, object>>().ToObject<ArtistInput>());
+            var tags = inputs.Get("tags", new object[0]).Select(x => x.As<Dictionary<string, object>>().ToObject<TagInput>());
             var album = inputs.Get("album", new object()).As<Dictionary<string, object>>().ToObject<AlbumInput>();
             var free = inputs.Get<bool>("free");
             var releaseDate = inputs.Get<DateTime?>("releaseDate");
@@ -55,7 +59,7 @@ namespace SoundVast.Components.Song
                 Free = free,
                 UserId = user.Id,
                 AlbumId = album.Id,
-                ReleaseDate = releaseDate
+                ReleaseDate = releaseDate,
             };
 
             foreach (var genreId in genreIds)
@@ -63,17 +67,45 @@ namespace SoundVast.Components.Song
                 song.AudioGenres.Add(new AudioGenre { GenreId = genreId });
             }
 
-            if (album.Artist != null)
+            if (album.Album != null)
             {
                 song.Album = new Album.Models.Album
                 {
-                    Name = album.Artist,
+                    Name = album.Album,
                     CoverImageUrl = placeholderImage.CloudBlockBlob.Uri.AbsoluteUri
                 };
 
                 foreach (var genreId in genreIds)
                 {
                     song.Album.AudioGenres.Add(new AudioGenre { GenreId = genreId });
+                }
+            }
+
+            foreach (var tag in tags)
+            {
+                Tag.Tag tagModel;
+
+                if (tag.Tag != null)
+                {
+                    tagModel = new Tag.Tag
+                    {
+                        Name = tag.Tag
+                    };
+                }
+                else if (tag.Id.HasValue)
+                {
+                    var existingTag = _tagService.GetTag(tag.Id.Value);
+
+                    tagModel = existingTag;
+                }
+                else
+                {
+                    throw new Exception("A tag id or name must be supplied");
+                }
+
+                if (song.AudioTags.All(x => x.Tag.Id != tagModel.Id))
+                {
+                    song.AudioTags.Add(new AudioTag { Tag = tagModel });
                 }
             }
 

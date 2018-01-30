@@ -5,7 +5,7 @@ import { Field } from 'redux-form';
 import Button from '../shared/button/button';
 import SpinnerSubmit from '../shared/form/spinnerSubmit/spinnerSubmitContainer';
 import styles from './commentBox.less';
-import Textarea from '../shared/fields/textarea/textarea';
+import Textarea from '../shared/fields/inputField/inputTextareaField';
 
 const CommentBox = ({ handleSubmit, form, cancel }) => (
   <form className={styles.commentBox} onSubmit={handleSubmit} action="">

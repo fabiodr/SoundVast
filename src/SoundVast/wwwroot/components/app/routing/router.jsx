@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import createConnectedRouter from 'found/lib/createConnectedRouter';
 import createRender from 'found/lib/createRender';
 
-import ValidationErrors from '../../shared/validation/validationErrors';
+import ValidationErrors from '../../shared/fields/validationField/validationErrors';
 
 const RenderError = ({ error, router }) => {
   if (error.data) {

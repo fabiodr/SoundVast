@@ -10,22 +10,19 @@ import ArtistsField from '../../shared/fields/artistsField/artistsFieldContainer
 import AlbumField from '../../shared/fields/albumField/albumFieldContainer';
 import ReleaseDateField from '../../shared/fields/releaseDateField/releaseDateField';
 import SongGenresField from '../../shared/fields/genresField/songGenresFieldContainer';
-import ValidationErrors from '../../shared/validation/validationErrors';
 import Button from '../../shared/button/button';
 import SpinnerSubmit from '../../shared/form/spinnerSubmit/spinnerSubmitContainer';
 import styles from './uploadFileForm.less';
+import TagsField from '../../shared/fields/tagsField/tagsFieldContainer';
 
 const Form = ({
   handleSubmit,
-  errors,
   id,
   form,
   removeMusicForm,
   genres,
 }) => (
   <form className={styles.uploadFileForm} onSubmit={handleSubmit} action="">
-    <ValidationErrors errors={errors} />
-
     <Tabs>
       <TabList>
         <Tab>Basic info</Tab>
@@ -43,6 +40,7 @@ const Form = ({
       <TabPanel>
         <Metadata>
           <FreeField id={id} />
+          <TagsField id={id} />
         </Metadata>
       </TabPanel>
     </Tabs>
@@ -54,17 +52,12 @@ const Form = ({
   </form>
 );
 
-Form.defaultProps = {
-  errors: [],
-};
-
 Form.propTypes = {
   id: PropTypes.string.isRequired,
   form: PropTypes.string.isRequired,
   removeMusicForm: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   genres: PropTypes.arrayOf(PropTypes.object).isRequired,
-  errors: PropTypes.arrayOf(PropTypes.string.isRequired),
 };
 
 export default Form;

@@ -4,7 +4,7 @@ import { Field } from 'redux-form';
 
 import ArtistsSelectInput from './artistsSelectInput';
 
-const ArtistsField = ({ id, label, artists, ...props }) => {
+const ArtistsField = ({ id, artists, ...props }) => {
   const options = artists.map(artist => ({
     label: artist.name,
     value: artist.id,
@@ -13,13 +13,14 @@ const ArtistsField = ({ id, label, artists, ...props }) => {
 
   return (
     <label htmlFor={`artists_${id}`}>
-      <span>{label}</span>
+      <span>Artists</span>
       <Field
+        {...props}
         name="artists"
         id={`artists_${id}`}
         component={ArtistsSelectInput}
         options={options}
-        {...props}
+        normalize={value => (value === '' ? undefined : value)}
       />
     </label>
   );
@@ -27,7 +28,6 @@ const ArtistsField = ({ id, label, artists, ...props }) => {
 
 ArtistsField.defaultProps = {
   artists: [],
-  label: 'Artists',
   id: 0,
 };
 
@@ -37,7 +37,6 @@ ArtistsField.propTypes = {
     name: PropTypes.string.isRequired,
     coverImageUrl: PropTypes.string.isRequired,
   })),
-  label: PropTypes.string,
   id: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number,

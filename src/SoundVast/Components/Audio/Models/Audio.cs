@@ -33,6 +33,7 @@ namespace SoundVast.Components.Audio.Models
         public int Likes => Ratings.Count(x => x.Liked);
         public int Dislikes => Ratings.Count(x => !x.Liked);
         public int PlayCount { get; set; }
+        public virtual ICollection<AudioTag> AudioTags { get; set; } = new List<AudioTag>();
         public virtual ICollection<AudioGenre> AudioGenres { get; set; } = new List<AudioGenre>();
         public virtual ICollection<ApplicationUser> Contributors { get; set; } = new List<ApplicationUser>();
         public virtual ICollection<Rating.Models.Rating> Ratings { get; set; } = new List<Rating.Models.Rating>();

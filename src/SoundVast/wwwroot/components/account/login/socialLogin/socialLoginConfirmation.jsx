@@ -4,12 +4,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 
-import Input from '../../../shared/fields/input/input';
+import InputTextField from '../../../shared/fields/inputField/inputTextField';
 import genericStyles from '../../../shared/generic.less';
-import ValidationErrors from '../../../shared/validation/validationErrors';
 
 const SocialLoginConfirmation = ({
-  error: errors,
   handleSubmit,
   loginProvider,
 }) => (
@@ -17,8 +15,6 @@ const SocialLoginConfirmation = ({
     <h3>Associate your {loginProvider} account.</h3>
 
     <form onSubmit={handleSubmit} action="" method="post">
-      <ValidationErrors errors={errors} />
-
       <h4>Association Form</h4>
 
       <hr />
@@ -29,7 +25,7 @@ const SocialLoginConfirmation = ({
           logging in.
       </p>
       <div className="form-group">
-        <Field name="userName" component={Input} type="userName" placeholder="User name" />
+        <Field name="userName" component={InputTextField} type="userName" placeholder="User name" />
       </div>
       <button className={genericStyles.button}>
         Register
@@ -38,13 +34,8 @@ const SocialLoginConfirmation = ({
   </div>
 );
 
-SocialLoginConfirmation.defaultProps = {
-  error: [],
-};
-
 SocialLoginConfirmation.propTypes = {
   loginProvider: PropTypes.string.isRequired,
-  error: PropTypes.arrayOf(PropTypes.string.isRequired),
   handleSubmit: PropTypes.func.isRequired,
 };
 

@@ -54,6 +54,7 @@ using SoundVast.Components.Quote.Models;
 using SoundVast.Components.Rating;
 using SoundVast.Components.Rating.Models;
 using SoundVast.Components.Song.Models;
+using SoundVast.Components.Tag;
 using SoundVast.Components.Upload;
 using SoundVast.Validation;
 
@@ -258,6 +259,7 @@ namespace SoundVast
             builder.RegisterType<Repository<AudioPendingEdit, ApplicationDbContext>>().As<IRepository<AudioPendingEdit>>();
             builder.RegisterType<Repository<SongPendingEdit, ApplicationDbContext>>().As<IRepository<SongPendingEdit>>();
             builder.RegisterType<Repository<LiveStreamPendingEdit, ApplicationDbContext>>().As<IRepository<LiveStreamPendingEdit>>();
+            builder.RegisterType<Repository<Tag, ApplicationDbContext>>().As<IRepository<Tag>>();
 
             return builder;
         }

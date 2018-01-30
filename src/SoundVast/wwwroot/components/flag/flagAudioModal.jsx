@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 
 import FlagModal from './flagModalContainer';
-import Textarea from '../shared/fields/textarea/textarea';
+import Textarea from '../shared/fields/inputField/inputTextareaField';
 
 const FlagAudioModal = ({ onSubmit, isAuthorized }) => (
   <FlagModal modalId="flagAudio" onSubmit={onSubmit} isAuthorized={isAuthorized}>

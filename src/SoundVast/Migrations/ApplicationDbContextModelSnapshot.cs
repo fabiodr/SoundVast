@@ -230,6 +230,24 @@ namespace SoundVast.Migrations
                     b.ToTable("AudioGenre");
                 });
 
+            modelBuilder.Entity("SoundVast.Components.Audio.Models.AudioTag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("AudioId");
+
+                    b.Property<int>("TagId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AudioId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("AudioTag");
+                });
+
             modelBuilder.Entity("SoundVast.Components.Comment.Models.Comment", b =>
                 {
                     b.Property<int>("Id")
@@ -409,6 +427,19 @@ namespace SoundVast.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Ratings");
+                });
+
+            modelBuilder.Entity("SoundVast.Components.Tag.Tag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tag");
                 });
 
             modelBuilder.Entity("SoundVast.Components.User.ApplicationUser", b =>
@@ -659,6 +690,19 @@ namespace SoundVast.Migrations
                     b.HasOne("SoundVast.Components.Genre.Models.Genre", "Genre")
                         .WithMany("AudioGenres")
                         .HasForeignKey("GenreId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("SoundVast.Components.Audio.Models.AudioTag", b =>
+                {
+                    b.HasOne("SoundVast.Components.Audio.Models.Audio", "Audio")
+                        .WithMany("AudioTags")
+                        .HasForeignKey("AudioId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("SoundVast.Components.Tag.Tag", "Tag")
+                        .WithMany("AudioTags")
+                        .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

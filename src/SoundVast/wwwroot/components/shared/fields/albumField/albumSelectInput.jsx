@@ -3,36 +3,43 @@ import { AsyncCreatable } from 'react-select';
 import PropTypes from 'prop-types';
 
 import ImageOption from '../select/imageOptionContainer';
+import ValidationField from '../validationField/validationField';
 
 const AlbumSelectInput = ({
   input,
   options,
   loadAlbums,
+  meta: { touched, error = [] },
   ...props
 }) => (
-  <AsyncCreatable
-    {...props}
-    options={options}
-    optionComponent={ImageOption}
-    placeholder=""
-    onChange={value => input.onChange(value)}
-    onBlur={() => input.onBlur(input.value)}
-    value={input.value}
-    loadOptions={loadAlbums}
-    autoload={false}
-  />
+  <ValidationField touched={touched} error={error}>
+    <AsyncCreatable
+      {...input}
+      {...props}
+      options={options}
+      optionComponent={ImageOption}
+      placeholder=""
+      loadOptions={loadAlbums}
+      autoload={false}
+    />
+  </ValidationField>
 );
 
 AlbumSelectInput.propTypes = {
   input: PropTypes.shape({
-    onChange: PropTypes.func.isRequired,
-    onBlur: PropTypes.func.isRequired,
-    value: PropTypes.any,
+    name: PropTypes.string.isRequired,
   }).isRequired,
   options: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.string.isRequired,
     value: PropTypes.string.isRequired,
   })).isRequired,
+  meta: PropTypes.shape({
+    touched: PropTypes.bool.isRequired,
+    error: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.arrayOf(PropTypes.string),
+    ]),
+  }).isRequired,
   loadAlbums: PropTypes.func.isRequired,
 };
 

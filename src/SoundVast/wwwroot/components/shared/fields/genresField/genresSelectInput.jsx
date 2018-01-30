@@ -2,32 +2,40 @@ import React from 'react';
 import Select from 'react-select';
 import PropTypes from 'prop-types';
 
+import ValidationField from '../validationField/validationField';
+
 const GenresSelectInput = ({
   input,
   options,
+  meta: { touched, error = [] },
   ...props
 }) => (
-  <Select
-    {...props}
-    options={options}
-    placeholder=""
-    multi
-    onChange={value => input.onChange(value)}
-    onBlur={() => input.onBlur(input.value)}
-    value={input.value}
-  />
+  <ValidationField touched={touched} error={error}>
+    <Select
+      {...input}
+      {...props}
+      options={options}
+      placeholder=""
+      multi
+    />
+  </ValidationField>
 );
 
 GenresSelectInput.propTypes = {
   input: PropTypes.shape({
-    onChange: PropTypes.func.isRequired,
-    onBlur: PropTypes.func.isRequired,
-    value: PropTypes.any,
+    name: PropTypes.string.isRequired,
   }).isRequired,
   options: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.string.isRequired,
     value: PropTypes.string.isRequired,
   })).isRequired,
+  meta: PropTypes.shape({
+    touched: PropTypes.bool.isRequired,
+    error: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.arrayOf(PropTypes.string),
+    ]),
+  }).isRequired,
 };
 
 

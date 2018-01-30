@@ -4,13 +4,10 @@ import PropTypes from 'prop-types';
 
 import genericStyles from '../../shared/generic.less';
 import FormGroup from '../../shared/form/formGroup';
-import Input from '../../shared/fields/input/input';
-import ValidationErrors from '../../shared/validation/validationErrors';
+import Input from '../../shared/fields/inputField/inputTextField';
 
-const ResetPassword = ({ error: errors, handleSubmit }) => (
+const ResetPassword = ({ handleSubmit }) => (
   <form onSubmit={handleSubmit} action="">
-    <ValidationErrors errors={errors} />
-
     <FormGroup>
       <Field name="password" component={Input} type="password" placeholder="Password" />
       <Field name="confirmPassword" component={Input} type="password" placeholder="Confirm password" />
@@ -22,13 +19,8 @@ const ResetPassword = ({ error: errors, handleSubmit }) => (
   </form>
 );
 
-ResetPassword.defaultProps = {
-  error: [],
-};
-
 ResetPassword.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
-  error: PropTypes.arrayOf(PropTypes.string.isRequired),
 };
 
 export default ResetPassword;

@@ -2,22 +2,25 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 
-import Input from '../input/input';
+import InputTextField from '../inputField/inputTextField';
 
-const NameField = ({ id, label, ...props }) => (
+const NameField = ({ id, ...props }) => (
   <label htmlFor={`name_${id}`}>
-    <span>{label} *</span>
-    <Field name="name" id={`name_${id}`} component={Input} {...props} />
+    <span>Name *</span>
+    <Field
+      {...props}
+      name="name"
+      id={`name_${id}`}
+      component={InputTextField}
+    />
   </label>
 );
 
 NameField.defaultProps = {
-  label: 'Name',
   id: 0,
 };
 
 NameField.propTypes = {
-  label: PropTypes.string,
   id: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number,

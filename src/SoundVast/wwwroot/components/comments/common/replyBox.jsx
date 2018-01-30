@@ -5,7 +5,7 @@ import { Field } from 'redux-form';
 import Button from '../../shared/button/button';
 import SpinnerSubmit from '../../shared/form/spinnerSubmit/spinnerSubmitContainer';
 import styles from './replyBox.less';
-import Textarea from '../../shared/fields/textarea/textarea';
+import Textarea from '../../shared/fields/inputField/inputTextareaField';
 
 const ReplyBox = ({ handleSubmit, form, cancel }) => (
   <form className={styles.replyBox} onSubmit={handleSubmit} action="">

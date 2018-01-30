@@ -5,16 +5,13 @@ import { Field } from 'redux-form';
 import Modal from '../../shared/modal/modalContainer';
 import FormGroup from '../../shared/form/formGroup';
 import Button from '../../shared/button/button';
-import Input from '../../shared/fields/input/input';
-import ValidationErrors from '../../shared/validation/validationErrors';
+import InputTextField from '../../shared/fields/inputField/inputTextField';
 
-const ForgotPassword = ({ error: errors, handleSubmit }) => (
+const ForgotPassword = ({ handleSubmit }) => (
   <Modal title="Reset your password." id="forgotPassword">
     <form onSubmit={handleSubmit} action="">
-      <ValidationErrors errors={errors} />
-
       <FormGroup>
-        <Field name="email" component={Input} type="email" placeholder="Email" />
+        <Field name="email" component={InputTextField} type="email" placeholder="Email" />
       </FormGroup>
 
       <Button>
@@ -24,13 +21,8 @@ const ForgotPassword = ({ error: errors, handleSubmit }) => (
   </Modal>
 );
 
-ForgotPassword.defaultProps = {
-  error: [],
-};
-
 ForgotPassword.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
-  error: PropTypes.arrayOf(PropTypes.string.isRequired),
 };
 
 export default ForgotPassword;
