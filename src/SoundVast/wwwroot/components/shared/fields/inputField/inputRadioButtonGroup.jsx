@@ -1,11 +1,13 @@
+/* eslint-disable jsx-a11y/label-has-for */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import ValidationField from '../validationField/validationField';
 
 import styles from './inputRadioButtonGroup.less';
+import InputRadioButton from './inputRadioButton';
 
 const InputRadioButtonGroup = ({
-  icon,
   input,
   meta: { touched, error = [] },
   options,
@@ -14,26 +16,13 @@ const InputRadioButtonGroup = ({
   <ValidationField touched={touched} error={error}>
     <div className={styles.inputRadioButtonGroup} >
       {options.map(option => (
-        <div className={styles.radioButton}>
-          <input
-            {...input}
-            {...props}
-            className={styles.input}
-            type="radio"
-            value={option.value}
-            id={option.id}
-          />
-          <label className={styles.label} htmlFor={option.id}>
-            {option.text}
-          </label>
-        </div>
+        <InputRadioButton key={option.id} input={input} {...props} {...option} />
       ))}
     </div>
   </ValidationField>
 );
 
 InputRadioButtonGroup.propTypes = {
-  icon: PropTypes.node.isRequired,
   input: PropTypes.shape({
     name: PropTypes.string.isRequired,
   }).isRequired,
@@ -46,7 +35,7 @@ InputRadioButtonGroup.propTypes = {
   }).isRequired,
   options: PropTypes.arrayOf(
     PropTypes.shape({
-      text: PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired,
       id: PropTypes.string.isRequired,
       value: PropTypes.any,
     }).isRequired,

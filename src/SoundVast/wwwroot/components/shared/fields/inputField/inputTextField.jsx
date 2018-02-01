@@ -12,8 +12,8 @@ const InputTextField = ({
   <ValidationField touched={touched} error={error}>
     <input
       {...input}
-      {...props}
       className={styles.input}
+      {...props}
     />
   </ValidationField>
 );

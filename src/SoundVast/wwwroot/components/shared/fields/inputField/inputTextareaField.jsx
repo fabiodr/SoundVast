@@ -13,9 +13,9 @@ const Textarea = ({
   <ValidationField touched={touched} error={error}>
     <ResizableTextArea
       {...input}
-      {...props}
       className={styles.textArea}
       onChange={e => input.onChange(e.currentTarget.value)}
+      {...props}
     />
   </ValidationField>
 );

@@ -14,6 +14,7 @@ import Button from '../../shared/button/button';
 import SpinnerSubmit from '../../shared/form/spinnerSubmit/spinnerSubmitContainer';
 import styles from './uploadFileForm.less';
 import TagsField from '../../shared/fields/tagsField/tagsFieldContainer';
+import CopyrightField from '../../shared/fields/copyrightField/copyrightField';
 
 const Form = ({
   handleSubmit,
@@ -41,6 +42,7 @@ const Form = ({
         <Metadata>
           <FreeField id={id} />
           <TagsField id={id} />
+          <CopyrightField id={id} formName={form} />
         </Metadata>
       </TabPanel>
     </Tabs>

@@ -31,6 +31,9 @@ const createProps = ({ title, artist, album, imagePath }) => ({
     album: { label: album, value: album },
     artists: [{ label: artist, value: artist }],
     imagePath,
+    copyright: 'AllRightsReserved',
+    creativeCommonsNoncommercial: true,
+    creativeCommonsRadioButtonGroup: 'Share',
   },
 });
 
