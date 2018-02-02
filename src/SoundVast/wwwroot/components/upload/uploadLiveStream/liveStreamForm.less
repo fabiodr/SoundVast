@@ -1,0 +1,31 @@
+@import '../../styles/colors.less';
+
+.uploadFileForm {
+    label {
+        font-size: 12px;
+        letter-spacing: 0.1em;
+        color: @grey5;
+        margin-bottom: 10px;
+        display: flex;
+        flex-direction: column;
+
+        > span {
+            margin-bottom: 3px;
+        }
+
+        input, :global(.Select-value-label) {
+            font-size: 13.3px;
+        }
+    }
+}
+
+.buttonsContainer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+
+    button {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+}

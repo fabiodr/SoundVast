@@ -1,38 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { AsyncCreatable } from 'react-select';
+import { Creatable } from 'react-select';
 
 import ValidationField from '../validationField/validationField';
 
-const ArtistsSelectInput = ({
+const TagsSelectInput = ({
   input,
-  options,
-  loadTags,
   meta: { touched, error = [] },
   ...props
 }) => (
   <ValidationField touched={touched} error={error}>
-    <AsyncCreatable
+    <Creatable
       {...input}
       {...props}
-      options={options}
       placeholder=""
       multi
-      loadOptions={loadTags}
+      options={[]}
       onBlur={() => input.onBlur(input.value)}
-      autoload={false}
     />
   </ValidationField>
 );
 
-ArtistsSelectInput.propTypes = {
+TagsSelectInput.propTypes = {
   input: PropTypes.shape({
     name: PropTypes.string.isRequired,
+    value: PropTypes.any,
   }).isRequired,
-  options: PropTypes.arrayOf(PropTypes.shape({
-    label: PropTypes.string.isRequired,
-    value: PropTypes.string.isRequired,
-  })).isRequired,
   meta: PropTypes.shape({
     touched: PropTypes.bool.isRequired,
     error: PropTypes.oneOfType([
@@ -40,8 +33,7 @@ ArtistsSelectInput.propTypes = {
       PropTypes.arrayOf(PropTypes.string),
     ]),
   }).isRequired,
-  loadTags: PropTypes.func.isRequired,
 };
 
 
-export default ArtistsSelectInput;
+export default TagsSelectInput;

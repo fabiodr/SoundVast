@@ -5,22 +5,29 @@ const mutation = graphql`
   mutation saveLiveStreamMutation($input: SaveLiveStreamInput!) {
     saveLiveStream(input: $input) {
       liveStream {
-        user {
-          contributionScore
-        }
+        id
       }
-      contributionPoints
     }
   }
 `;
 
-export default ({ name, liveStreamUrl, imagePath, genreId }) => {
+export default ({
+  name,
+  liveStreamUrl,
+  imagePath,
+  genres = [],
+  tags = [],
+}) => {
   const variables = {
     input: {
       coverImageUrl: imagePath,
       name,
       liveStreamUrl,
-      genreId,
+      tags: tags.map(tag => ({
+        id: Number.isInteger(tag.value) ? tag.value : null,
+        tag: typeof (tag.value) === 'string' ? tag.value : null,
+      })),
+      genreIds: genres.map(genre => genre.value),
     },
   };
 

@@ -10,14 +10,15 @@
 import type {ConcreteFragment} from 'relay-runtime';
 export type radiosContainer = {|
   +liveStreams: ?{|
+    +items: ?$ReadOnlyArray<?{| |}>;
     +edges: ?$ReadOnlyArray<?{|
+      +cursor: string;
       +node: ?{|
+        +id: string;
         +audioId: number;
         +name: string;
         +coverImageUrl: string;
         +liveStreamUrl: string;
-        +likes: number;
-        +dislikes: number;
       |};
     |}>;
     +pageInfo: {|
@@ -44,6 +45,16 @@ const fragment /*: ConcreteFragment*/ = {
       "kind": "RootArgument",
       "name": "genre",
       "type": "String"
+    },
+    {
+      "kind": "RootArgument",
+      "name": "searchQuery",
+      "type": "String"
+    },
+    {
+      "kind": "RootArgument",
+      "name": "filter",
+      "type": "FilterInput"
     }
   ],
   "kind": "Fragment",
@@ -67,8 +78,20 @@ const fragment /*: ConcreteFragment*/ = {
       "args": [
         {
           "kind": "Variable",
+          "name": "filter",
+          "variableName": "filter",
+          "type": "FilterInput"
+        },
+        {
+          "kind": "Variable",
           "name": "genre",
           "variableName": "genre",
+          "type": "String"
+        },
+        {
+          "kind": "Variable",
+          "name": "searchQuery",
+          "variableName": "searchQuery",
           "type": "String"
         }
       ],
@@ -80,10 +103,33 @@ const fragment /*: ConcreteFragment*/ = {
           "kind": "LinkedField",
           "alias": null,
           "args": null,
+          "concreteType": "LiveStream",
+          "name": "items",
+          "plural": true,
+          "selections": [
+            {
+              "kind": "FragmentSpread",
+              "name": "sideBarContainer_audios",
+              "args": null
+            }
+          ],
+          "storageKey": null
+        },
+        {
+          "kind": "LinkedField",
+          "alias": null,
+          "args": null,
           "concreteType": "LiveStreamPayloadEdge",
           "name": "edges",
           "plural": true,
           "selections": [
+            {
+              "kind": "ScalarField",
+              "alias": null,
+              "args": null,
+              "name": "cursor",
+              "storageKey": null
+            },
             {
               "kind": "LinkedField",
               "alias": null,
@@ -92,6 +138,13 @@ const fragment /*: ConcreteFragment*/ = {
               "name": "node",
               "plural": false,
               "selections": [
+                {
+                  "kind": "ScalarField",
+                  "alias": null,
+                  "args": null,
+                  "name": "id",
+                  "storageKey": null
+                },
                 {
                   "kind": "ScalarField",
                   "alias": null,
@@ -121,18 +174,9 @@ const fragment /*: ConcreteFragment*/ = {
                   "storageKey": null
                 },
                 {
-                  "kind": "ScalarField",
-                  "alias": null,
-                  "args": null,
-                  "name": "likes",
-                  "storageKey": null
-                },
-                {
-                  "kind": "ScalarField",
-                  "alias": null,
-                  "args": null,
-                  "name": "dislikes",
-                  "storageKey": null
+                  "kind": "FragmentSpread",
+                  "name": "radioContainer_liveStream",
+                  "args": null
                 },
                 {
                   "kind": "ScalarField",
@@ -142,13 +186,6 @@ const fragment /*: ConcreteFragment*/ = {
                   "storageKey": null
                 }
               ],
-              "storageKey": null
-            },
-            {
-              "kind": "ScalarField",
-              "alias": null,
-              "args": null,
-              "name": "cursor",
               "storageKey": null
             }
           ],

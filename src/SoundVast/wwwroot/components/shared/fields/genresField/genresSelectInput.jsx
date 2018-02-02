@@ -17,6 +17,7 @@ const GenresSelectInput = ({
       options={options}
       placeholder=""
       multi
+      onBlur={() => input.onBlur(input.value)}
     />
   </ValidationField>
 );
@@ -24,6 +25,7 @@ const GenresSelectInput = ({
 GenresSelectInput.propTypes = {
   input: PropTypes.shape({
     name: PropTypes.string.isRequired,
+    value: PropTypes.any,
   }).isRequired,
   options: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.string.isRequired,

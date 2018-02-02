@@ -16,8 +16,12 @@ namespace SoundVast.Components.LiveStream
 {
     public class LiveStreamPayload : NodeGraphType<Models.LiveStream>
     {
-        public LiveStreamPayload(ICommentService commentService)
+        private readonly ILiveStreamService _liveStreamService;
+
+        public LiveStreamPayload(ILiveStreamService liveStreamService)
         {
+            _liveStreamService = liveStreamService;
+
             Name = nameof(Models.LiveStream);
 
             Id("audioId", x => x.Id);
@@ -29,18 +33,24 @@ namespace SoundVast.Components.LiveStream
             Field(x => x.PlayCount);
             Field<DateGraphType>("dateAdded", "The date the user added the live stream");
             Field<AccountPayload>("user", "The user who uploaded the live stream");
-            Field<ListGraphType<LiveStreamGenrePayload>>("genres", "The genre the live stream belongs to");
+            Field<ListGraphType<LiveStreamGenrePayload>>("genres", "The genre the live stream belongs to", resolve: c => c.Source.AudioGenres.Select(x => x.Genre));
             Field<ListGraphType<RatingPayload>>("ratings", "The ratings that have been applied by users to this live stream");
             Connection<CommentPayload>()
                 .Name("comments")
-                .Description("The top level comments for the live stream");
+                .Description("The top level comments for the live stream")
+                .Resolve(c =>
+                {
+                    var comments = c.Source.Comments.Where(x => x.IsTopLevelComment);
+
+                    return GraphQL.Relay.Types.Connection.ToConnection(comments, c);
+                });
 
             Interface<AudioInterface>();
         }
 
         public override Models.LiveStream GetById(string id)
         {
-            throw new NotImplementedException();
+            return _liveStreamService.GetAudio(int.Parse(id));
         }
     }
 }

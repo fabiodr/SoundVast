@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GraphQL.Relay.Types;
 using GraphQL.Types;
+using SoundVast.Components.Tag;
 
 namespace SoundVast.Components.LiveStream
 {
@@ -16,7 +17,8 @@ namespace SoundVast.Components.LiveStream
             Field<NonNullGraphType<StringGraphType>>("Name");
             Field<NonNullGraphType<StringGraphType>>("LiveStreamUrl");
             Field<NonNullGraphType<StringGraphType>>("CoverImageUrl");
-            Field<IntGraphType>("GenreId");
+            Field<ListGraphType<TagInput>>("Tags");
+            Field<ListGraphType<IntGraphType>>("GenreIds");
         }
     }
 }

@@ -1,31 +1,47 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import LiveStreamInformation from './liveStreamInformation';
 import Button from '../../shared/button/button';
 import SpinnerSubmit from '../../shared/form/spinnerSubmit/spinnerSubmitContainer';
+import styles from './liveStreamForm.less';
+import BasicInfo from '../common/basicInfo/basicInfo';
+import NameField from '../../shared/fields/nameField/nameField';
+import RadioGenresField from '../../shared/fields/genresField/radioGenresFieldContainer';
+import LiveStreamUrlField from '../../shared/fields/liveStreamUrlField/liveStreamUrlField';
+import TagsField from '../../shared/fields/tagsField/tagsField';
+import CopyrightField from '../../shared/fields/copyrightField/copyrightField';
 
-const Form = ({
+const LiveStreamForm = ({
   handleSubmit,
   id,
   genres,
   form,
   removeLiveStreamForm,
+  change,
 }) => (
-  <form onSubmit={handleSubmit} action="">
-    <LiveStreamInformation id={id} genres={genres} />
+  <form className={styles.liveStreamForm} onSubmit={handleSubmit} action="">
+    <BasicInfo id={id} change={change}>
+      <NameField id={id} />
+      <LiveStreamUrlField id={id} />
+      <RadioGenresField id={id} genres={genres} />
+      <TagsField id={id} />
+      <CopyrightField id={id} formName={form} />
+    </BasicInfo>
 
-    <SpinnerSubmit formName={form}>Save</SpinnerSubmit>
-    <Button onClick={removeLiveStreamForm}>Cancel</Button>
+    <div className={styles.buttonsContainer}>
+      <SpinnerSubmit formName={form}>Save</SpinnerSubmit>
+      <Button onClick={removeLiveStreamForm}>Cancel</Button>
+    </div>
   </form>
 );
 
-Form.propTypes = {
+LiveStreamForm.propTypes = {
   genres: PropTypes.arrayOf(PropTypes.object).isRequired,
   id: PropTypes.string.isRequired,
   form: PropTypes.string.isRequired,
   removeLiveStreamForm: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
+  change: PropTypes.func.isRequired,
 };
 
-export default Form;
+export default LiveStreamForm;

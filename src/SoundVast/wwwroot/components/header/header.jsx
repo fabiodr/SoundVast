@@ -9,7 +9,6 @@ import UserButton from './userButton/userButtonContainer';
 import UnAuthorizedList from './unAuthorizedList/unAuthorizedListContainer';
 import Dropdown from '../shared/dropdown/dropdownContainer';
 import Popups from '../shared/popup/popupsContainer';
-import ReviewIcon from '../icons/review';
 import LinkButton from '../shared/button/linkButton';
 import Button from '../shared/button/button';
 import Search from './search/searchContainer';
@@ -24,9 +23,6 @@ const Header = ({ user, searchOnFocus, searchOnBlur, searchExpanded }) => (
       >
         <SoundVastLogo className={styles.logoIcon} />
       </LinkButton>
-      <LinkButton to="/songs" styleName="secondary" className={styles.navButton}>Songs</LinkButton>
-      <LinkButton to="/artists" styleName="secondary" className={styles.navButton}>Artists</LinkButton>
-      <LinkButton to="/albums" styleName="secondary" className={styles.navButton}>Albums</LinkButton>
       <LinkButton to="/radios" styleName="secondary" className={styles.navButton}>Radios</LinkButton>
       <LinkButton to="/upload" styleName="secondary" className={styles.navButton}>Upload</LinkButton>
       <Search
@@ -38,14 +34,6 @@ const Header = ({ user, searchOnFocus, searchOnBlur, searchExpanded }) => (
       <UserButton user={user} className={styles.navButton} />
       <UnAuthorizedList user={user} className={styles.navButton} />
       <Popups />
-      <LinkButton
-        to="/review"
-        styleName="secondary"
-        className={styles.navButton}
-        title="Review uploads. Help improve the site. Earn points."
-      >
-        <ReviewIcon className={styles.reviewIcon} />
-      </LinkButton>
       <Dropdown
         titleCallback={onClick => (
           <Button className={styles.extraDropdownTitle} styleName="secondary" onClick={onClick}>

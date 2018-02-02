@@ -25,14 +25,18 @@ export const removeCoverImage = index => ({
   index,
 });
 
-export const uploadCoverImage = (id, file) => dispatch =>
+export const uploadCoverImage = (id, file, change) => dispatch =>
   fetch.postForm('/upload/uploadCoverImage')({ file })
-    .then(json => dispatch({
-      type: 'UPDATE_COVER_IMAGE',
-      id,
-      previewUrl: URL.createObjectURL(file),
-      imagePath: json.imagePath,
-    }));
+    .then((json) => {
+      change('imagePath', json.imagePath);
+
+      return dispatch({
+        type: 'UPDATE_COVER_IMAGE',
+        id,
+        previewUrl: URL.createObjectURL(file),
+        imagePath: json.imagePath,
+      });
+    });
 
 const setCoverImagePlaceholder = id => dispatch =>
   fetch.get('/upload/getPlaceholderImage')

@@ -1,9 +1,14 @@
-import { compose, renderNothing, branch } from 'recompose';
+import PropTypes from 'prop-types';
+import { compose, renderNothing, branch, setPropTypes } from 'recompose';
 import { connect } from 'react-redux';
 import { graphql } from 'react-relay';
 import { fragmentContainer } from 'recompose-relay-modern';
 
 import SideBar from './sideBar';
+
+const propTypes = {
+  audios: PropTypes.arrayOf(PropTypes.object).isRequired,
+};
 
 const mapStateToProps = ({ jPlayers, audio }) => ({
   currentAudioId: jPlayers.FooterPlaylist.media.id,
@@ -20,10 +25,11 @@ const fragments = graphql`
 `;
 
 export default compose(
+  setPropTypes(propTypes),
   connect(mapStateToProps),
   fragmentContainer(fragments),
   branch(
-    props => !props.showingSideBar,
+    props => !props.showingSideBar || !props.audios.length,
     renderNothing,
   ),
 )(SideBar);

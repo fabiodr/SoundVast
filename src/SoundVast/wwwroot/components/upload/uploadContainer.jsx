@@ -6,12 +6,6 @@ import Upload from './upload';
 import withAuthorization from '../shared/authorization/withAuthorization';
 import { addLiveStream } from './actions';
 
-const lifecycleFunctions = {
-  componentDidMount() {
-    this.props.addLiveStream();
-  },
-};
-
 const query = graphql`
   query uploadContainerQuery {
     songGenres {
@@ -26,12 +20,22 @@ const query = graphql`
   }
 `;
 
+const mapStateToProps = ({ upload }) => ({
+  liveStreams: upload.liveStreams,
+});
+
 const enhance = compose(
   withAuthorization,
-  connect(null, {
+  connect(mapStateToProps, {
     addLiveStream,
   }),
-  lifecycle(lifecycleFunctions),
+  lifecycle({
+    componentDidMount() {
+      if (!this.props.liveStreams.length) {
+        this.props.addLiveStream();
+      }
+    },
+  }),
 );
 
 const UploadContainer = enhance(Upload);

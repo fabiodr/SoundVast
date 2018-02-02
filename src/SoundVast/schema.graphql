@@ -1,5 +1,5 @@
 # source: http://localhost:8080/graphql
-# timestamp: Tue Jan 30 2018 00:52:48 GMT+0100 (W. Europe Standard Time)
+# timestamp: Fri Feb 02 2018 23:49:04 GMT+0100 (W. Europe Standard Time)
 
 input AddSongToPlaylistInput {
   clientMutationId: String
@@ -934,15 +934,13 @@ input SaveLiveStreamInput {
   name: String!
   liveStreamUrl: String!
   coverImageUrl: String!
-  genreId: Int
+  tags: [TagInput]
+  genreIds: [Int]
 }
 
 type SaveLiveStreamPayload {
   clientMutationId: String
   liveStream: LiveStream!
-
-  # The amount of contribution points the user earns from adding a live stream
-  contributionPoints: Int!
 }
 
 input SaveSongInput {

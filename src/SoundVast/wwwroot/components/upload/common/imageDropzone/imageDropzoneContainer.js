@@ -3,22 +3,19 @@ import { connect } from 'react-redux';
 import { compose, withHandlers, setPropTypes } from 'recompose';
 
 import ImageDropzone from '../../../shared/imageDropzone/imageDropzone';
-import { uploadCoverImage, removeCoverImage } from '../../actions';
+import { uploadCoverImage } from '../../actions';
 
 const handlers = {
-  onDrop: ({ dispatch, id }) => (files) => {
-    dispatch(uploadCoverImage(id, files[0]));
-  },
+  onDrop: ({ dispatch, id, change }) => files => dispatch(uploadCoverImage(id, files[0], change)),
 };
 
 const enhance = compose(
   setPropTypes({
     id: PropTypes.string.isRequired,
+    change: PropTypes.func.isRequired,
   }),
-  connect(null, {
-    // TODO: Implement in component
-    removeFile: removeCoverImage,
-  }),
+  // TODO: Implement removeCoverImage in component
+  connect(),
   withHandlers(handlers),
 );
 

@@ -6,9 +6,9 @@ import FormGroup from '../../../shared/form/formGroup';
 import ImageDropzone from '../imageDropzone/imageDropzoneContainer';
 import PreviewImage from '../previewImage/previewImageContainer';
 
-const BasicInfo = ({ id, children }) => (
+const BasicInfo = ({ id, children, change }) => (
   <div className={styles.basicInfo}>
-    <ImageDropzone className={styles.imageDropzone} id={id}>
+    <ImageDropzone change={change} className={styles.imageDropzone} id={id}>
       <PreviewImage id={id} />
     </ImageDropzone>
     <FormGroup className={styles.formGroup}>
@@ -20,6 +20,7 @@ const BasicInfo = ({ id, children }) => (
 BasicInfo.propTypes = {
   id: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
+  change: PropTypes.func.isRequired,
 };
 
 export default BasicInfo;

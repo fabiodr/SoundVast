@@ -1,19 +1,21 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { compose, withHandlers, withProps } from 'recompose';
+import { compose, withHandlers, flattenProp } from 'recompose';
 import { graphql } from 'react-relay';
 import { paginationContainer } from 'recompose-relay-modern';
 import { actions } from 'react-jplaylist';
 
 import Radios from './radios';
 import { audiosToLoad } from '../shared/utilities/itemsToLoad';
+import getAudioVariables from '../shared/utilities/getAudioVariables';
 
 const query = graphql`
   query radiosContainerQuery(
     $count: Int!
     $cursor: String
     $genre: String
+    $searchQuery: String
+    $filter: FilterInput
   ) {
     ...radiosContainer
   }
@@ -25,15 +27,21 @@ const fragments = graphql`
       first: $count
       after: $cursor
       genre: $genre
+      searchQuery: $searchQuery
+      filter: $filter
     ) @connection(key: "radiosContainer_liveStreams") {
+      items {
+        ...sideBarContainer_audios
+      }
       edges {
+        cursor
         node {
+          id
           audioId
           name
           coverImageUrl
           liveStreamUrl
-          likes
-          dislikes
+          ...radioContainer_liveStream
         }
       }
       pageInfo {
@@ -50,13 +58,16 @@ const connectionConfig = {
       $count: Int!
       $cursor: String
       $genre: String
+      $searchQuery: String
+      $filter: FilterInput
     ) {
       ...radiosContainer
     }
   `,
-  getVariables: (_, { count, cursor }) => ({
+  getVariables: (_, { count, cursor }, fragmentVariables) => ({
     count,
     cursor,
+    filter: fragmentVariables.filter,
   }),
 };
 
@@ -64,60 +75,25 @@ const handlers = {
   loadMore: ({ relay }) => () => relay.loadMore(audiosToLoad),
 };
 
-const createProps = ({ data }) => ({
-  radios: data.liveStreams.edges.map(x => x.node),
-});
-
-class InitializePlaylist extends React.Component {
-  componentDidMount() {
-    this.props.setPlaylist('FooterPlaylist', this.getPlaylist());
-  }
-  getPlaylist = () => this.props.radios.map(radio => ({
-    id: radio.audioId,
-    title: radio.name,
-    sources: {
-      mp3: radio.radioUrl,
-    },
-    poster: radio.coverImageUrl,
-  }))
-  render() {
-    return <Radios {...this.props} />;
-  }
-}
-
-InitializePlaylist.defaultProps = {
-  playlist: [],
-};
-
-InitializePlaylist.propTypes = {
-  setPlaylist: PropTypes.func.isRequired,
-  radios: PropTypes.arrayOf(
-    PropTypes.shape({
-      audioId: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      radioUrl: PropTypes.string,
-      coverImageUrl: PropTypes.string.isRequired,
-      free: PropTypes.bool,
-    }),
-  ).isRequired,
-};
-
 const enhance = compose(
   connect(null, {
     setPlaylist: actions.setPlaylist,
   }),
   paginationContainer(fragments, connectionConfig),
+  flattenProp('data'),
   withHandlers(handlers),
-  withProps(createProps),
 );
 
-const RadiosContainer = enhance(InitializePlaylist);
+const RadiosContainer = enhance(Radios);
 
 export const routeConfig = {
   Component: RadiosContainer,
   query,
   render: ({ props }) => props && <RadiosContainer data={props} />,
-  prepareVariables: ({ genre }) => ({ count: audiosToLoad, genre }),
+  prepareVariables: (_, { location }) => ({
+    count: audiosToLoad,
+    ...getAudioVariables(location),
+  }),
 };
 
 export default RadiosContainer;
