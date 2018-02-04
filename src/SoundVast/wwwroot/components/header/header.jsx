@@ -45,12 +45,14 @@ const Header = ({
       >
         <ul>
           <li>
-            <LinkButton styleName="secondary" to="/copyright">Copyright</LinkButton>
             <LinkButton styleName="secondary" to="/termsAndConditions">Terms/Conditions</LinkButton>
             <LinkButton styleName="secondary" to="/privacyPolicy">Privacy</LinkButton>
           </li>
         </ul>
       </Dropdown>
+      <div className={styles.copyrightNotice}>
+        © {new Date().getFullYear()} SoundVast. All Rights Reserved.
+      </div>
     </nav>
   </header>
 );

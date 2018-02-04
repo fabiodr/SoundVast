@@ -1,0 +1,23 @@
+@import '../../styles/colors.less';
+
+.imageButton {
+  position: relative;
+}
+
+.imageButton:hover {
+  background-color: @grey3;
+
+  .imageOverlay {
+    opacity: 0.2;
+  }
+}
+
+.imageOverlay {
+  opacity: 0;
+  background-color: #a5a3a3;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+}

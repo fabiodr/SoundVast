@@ -8,6 +8,7 @@ const treatAsUTC = (date) => {
 
 export default (startDate, endDate) => {
   const millisecondsPerDay = 24 * 60 * 60 * 1000;
+  const value = (treatAsUTC(endDate) - treatAsUTC(startDate)) / millisecondsPerDay;
 
-  return (treatAsUTC(endDate) - treatAsUTC(startDate)) / millisecondsPerDay;
+  return Number(value).toFixed(0);
 };

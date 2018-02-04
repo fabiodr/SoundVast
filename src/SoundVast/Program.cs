@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using SoundVast.Data;
+using SoundVast.Kestrel;
 
 namespace SoundVast
 {
@@ -23,7 +24,7 @@ namespace SoundVast
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                .UseUrls("http://localhost:8080")
+                .UseKestrel(options => options.ConfigureEndpoints())
                 .Build();
     }
 }

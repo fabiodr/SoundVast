@@ -4,19 +4,17 @@ import PropTypes from 'prop-types';
 import styles from './filterText.less';
 import DateFilter from './dateFilterContainer';
 import RemoveFilter from './removeFilterContainer';
-import ClearAllFilters from './clearAllFiltersContainer';
 
+// TODO: Add clear all filters
 const FilterText = ({
   queryFilterDictionary,
   genre,
   searchQuery,
   audioTypeText,
   hasDateFrom,
-  hasDateTo,
 }) => (
   queryFilterDictionary.key || genre || searchQuery ? (
     <div className={styles.filterText}>
-      <ClearAllFilters className={styles.clearAllFilters} />
       <span>
         Sorting
         {queryFilterDictionary.key && (
@@ -48,19 +46,13 @@ const FilterText = ({
         </span>
       )}
       {hasDateFrom && (
-        <span>&nbsp;that were released from&nbsp;
+        <span>
+          &nbsp;that were added&nbsp;
           <span className={styles.dateFromLabel}>
             <DateFilter dateFilterName="dateFrom" />
             <RemoveFilter name="dateFrom" />
           </span>
-        </span>
-      )}
-      {hasDateTo && (
-        <span>&nbsp;to&nbsp;
-          <span className={styles.dateToLabel}>
-            <DateFilter dateFilterName="dateTo" />
-            <RemoveFilter name="dateTo" />
-          </span>
+          &nbsp;days ago&nbsp;
         </span>
       )}
     </div>
@@ -72,12 +64,10 @@ FilterText.defaultProps = {
   searchQuery: null,
   queryFilterDictionary: {},
   hasDateFrom: false,
-  hasDateTo: false,
 };
 
 FilterText.propTypes = {
   hasDateFrom: PropTypes.bool,
-  hasDateTo: PropTypes.bool,
   queryFilterDictionary: PropTypes.shape({
     key: PropTypes.string,
     label: PropTypes.string,

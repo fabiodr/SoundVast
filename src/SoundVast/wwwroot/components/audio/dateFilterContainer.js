@@ -3,10 +3,19 @@ import { compose, withProps, withStateHandlers, withHandlers, setPropTypes } fro
 import { withRouter } from 'found';
 
 import DateFilter from './dateFilter';
+import daysBetween from '../shared/utilities/daysBetween';
 import getFormattedDate from '../shared/utilities/getFormattedDate';
 
 const propTypes = {
   dateFilterName: PropTypes.string.isRequired,
+};
+
+const daysAgoInputToDateUrl = (daysAgo) => {
+  const date = new Date();
+
+  date.setUTCDate(date.getUTCDate() + daysAgo);
+
+  return getFormattedDate(date);
 };
 
 const handlers = {
@@ -21,51 +30,57 @@ const handlers = {
   },
 };
 
-const yearInputToDateUrl = year => getFormattedDate(new Date(year, 0, 1));
+const secondHandlers = {
+  inputOnBlur: ({ pushDateToUrlQuery }) => (e) => {
+    let value = e.target.value;
+
+    // TODO: change magic numbers to .env file
+    if (value < 0) {
+      value = 0;
+    } else if (value > 100) {
+      value = 100;
+    }
+
+    const date = daysAgoInputToDateUrl(-value);
+
+    pushDateToUrlQuery(date);
+  },
+};
 
 const stateHandlers = {
   sliderOnChange: () => value => ({
-    tempDateYearValue: value,
+    tempDaysValue: value,
   }),
   sliderOnAfterChange: (_, { pushDateToUrlQuery }) => (value) => {
-    const date = yearInputToDateUrl(value);
+    const date = daysAgoInputToDateUrl(-value);
 
     pushDateToUrlQuery(date);
 
     return {
-      tempDateYearValue: null,
+      tempDaysValue: null,
     };
   },
-  inputYearOnChange: (_, { pushDateToUrlQuery }) => (e) => {
-    const value = e.target.value;
-
-    if (value.length < 4) {
-      return {
-        tempDateYearValue: parseInt(value, 10),
-      };
-    } else if (value.length > 4) return null;
-
-    const date = yearInputToDateUrl(value);
-
-    pushDateToUrlQuery(date);
-
-    return null;
-  },
+  inputOnChange: () => e => ({
+    tempDaysValue: e.target.value,
+  }),
 };
 
 const createProps = ({
   match,
-  tempDateYearValue,
+  tempDaysValue,
   dateFilterName,
 }) => {
   const date = new Date(match.location.query[dateFilterName]);
+  let daysBetweenValue = daysBetween(new Date(), date);
+
+  if (daysBetweenValue < 0) {
+    daysBetweenValue *= -1;
+  }
+
+  const daysAgo = tempDaysValue !== null ? tempDaysValue : Number(daysBetweenValue);
 
   return {
-    dateValues: {
-      year: tempDateYearValue || date.getUTCFullYear(),
-      month: date.getUTCMonth(),
-      date: date.getUTCDate(),
-    },
+    daysAgo,
   };
 };
 
@@ -73,6 +88,9 @@ export default compose(
   setPropTypes(propTypes),
   withRouter,
   withHandlers(handlers),
-  withStateHandlers(null, stateHandlers),
+  withHandlers(secondHandlers),
+  withStateHandlers({
+    tempDaysValue: null,
+  }, stateHandlers),
   withProps(createProps),
 )(DateFilter);

@@ -10,7 +10,6 @@ import { routeConfig as resetPasswordRouteConfig } from '../../account/resetPass
 import { routeConfig as radiosRouteConfig } from '../../radios/radiosContainer';
 import { routeConfig as primaryLayoutRouteConfig } from '../../layouts/primaryLayout/primaryLayoutContainer';
 import { routeConfig as genresRouteConfig } from '../../genres/genresContainer';
-import { routeConfig as copyrightRouteConfig } from '../../legal/copyrightContainer';
 import { routeConfig as termsAndConditionsRouteConfig } from '../../legal/termsAndConditionsContainer';
 import { routeConfig as privacyPolicyRouteConfig } from '../../legal/privacyPolicyContainer';
 
@@ -26,7 +25,6 @@ export default makeRouteConfig(
       <Route path="resetPassword" {...resetPasswordRouteConfig} />
       <Route path="confirmEmail/:userId/:token" {...confirmEmailRouteConfig} />
     </Route>
-    <Route path="copyright" {...copyrightRouteConfig} />
     <Route path="termsAndConditions" {...termsAndConditionsRouteConfig} />
     <Route path="privacyPolicy" {...privacyPolicyRouteConfig} />
   </Route>,

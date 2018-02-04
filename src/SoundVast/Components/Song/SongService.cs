@@ -30,23 +30,6 @@ namespace SoundVast.Components.Song
             return song;
         }
 
-        public override IEnumerable<Models.Song> GetAudios(string genreName, string searchQuery, Filter.Filter filter)
-        {
-            var songs = base.GetAudios(genreName, searchQuery, filter).AsQueryable().BuildSong();
-
-            if (filter.DateFrom.HasValue && filter.DateTo.HasValue)
-            {
-                songs = songs.Where(x => x.ReleaseDate > filter.DateFrom && x.ReleaseDate < filter.DateTo);
-            }
-
-            if (filter.Newest)
-            {
-                songs = songs.OrderByDescending(x => x.ReleaseDate);
-            }
-
-            return songs;
-        }
-
         public override Models.Song Edit(int existingAudioId, Models.Song newModel)
         {
             var song = base.Edit(existingAudioId, newModel);

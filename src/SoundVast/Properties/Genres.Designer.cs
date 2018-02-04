@@ -160,7 +160,7 @@ namespace SoundVast.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fold &amp; Singer-Songwriter.
+        ///   Looks up a localized string similar to Folk &amp; Singer-Songwriter.
         /// </summary>
         internal static string FolkAndSingerSongwriter {
             get {

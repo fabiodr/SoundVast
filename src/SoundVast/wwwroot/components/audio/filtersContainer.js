@@ -1,5 +1,4 @@
-import PropTypes from 'prop-types';
-import { compose, withHandlers, withProps, setPropTypes } from 'recompose';
+import { compose, withHandlers, withProps } from 'recompose';
 import { withRouter } from 'found';
 
 import Filters from './filters';
@@ -15,7 +14,6 @@ const handlers = {
         ...queries,
         [filter]: true,
         dateFrom: values.dateFrom,
-        dateTo: values.dateTo,
       },
     });
   },
@@ -26,7 +24,6 @@ const createProps = ({ match }) => ({
   mostCommented: normalizeBoolean(match.location.query.mostCommented),
   mostPlayed: normalizeBoolean(match.location.query.mostPlayed),
   dateFrom: match.location.query.dateFrom,
-  dateTo: match.location.query.dateTo,
 });
 
 export default compose(

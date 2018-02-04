@@ -27,7 +27,6 @@ const createProps = ({
     genre: match.location.query.genre,
     searchQuery: match.location.query.searchQuery,
     hasDateFrom: !!match.location.query.dateFrom,
-    hasDateTo: !!match.location.query.dateTo,
   };
 };
 

@@ -37,6 +37,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Facebook;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.Twitter;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Rewrite;
 using Newtonsoft.Json;
 using SoundVast.Components.Album.Models;
 using SoundVast.Components.Artist.Models;
@@ -95,7 +97,12 @@ namespace SoundVast
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
                 options.Cookie.Name = ".SoundVast";
             });
-           
+
+            services.Configure<MvcOptions>(options =>
+            {
+                options.Filters.Add(new RequireHttpsAttribute());
+            });
+
             services.Configure<DataProtectionTokenProviderOptions>(options =>
             {
                 options.TokenLifespan = TimeSpan.FromMinutes(30);
@@ -157,6 +164,9 @@ namespace SoundVast
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            var options = new RewriteOptions().AddRedirectToHttps();
+
+            app.UseRewriter(options);
             app.UseHangfireServer();
             app.UseHangfireDashboard();
             app.UseStaticFiles();

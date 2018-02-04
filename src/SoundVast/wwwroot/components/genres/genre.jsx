@@ -2,15 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import styles from './genres.less';
-import Button from '../shared/button/button';
+import ImageButton from '../shared/button/imageButton';
+import CoverImage from '../audio/coverImage';
 
 const Genre = ({ onClick, name, coverImageUrl }) => (
-  <Button onClick={onClick}>
-    <div className={styles.coverImageWrapper}>
-      <img className={styles.coverImage} src={coverImageUrl} alt="" />
-      <div>{name}</div>
-    </div>
-  </Button>
+  <ImageButton className={styles.genre} styleName="secondary" onClick={onClick}>
+    <CoverImage coverImageUrl={coverImageUrl} />
+    <div>{name}</div>
+  </ImageButton>
 );
 
 Genre.propTypes = {

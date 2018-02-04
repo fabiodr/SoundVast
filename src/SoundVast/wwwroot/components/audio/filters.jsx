@@ -5,31 +5,38 @@ import styles from './filters.less';
 import Button from '../shared/button/button';
 import getFormattedDate from '../shared/utilities/getFormattedDate';
 
+
 const Filters = ({
   filter,
   dateFrom,
-  dateTo = getFormattedDate(new Date()),
   className,
 }) => (
   <div className={className}>
     <div className={styles.filterToggles}>
       <Button onClick={() => filter('newest')}>Newest</Button>
-      <Button onClick={() => filter('topRated', { dateFrom, dateTo })}>Top Rated</Button>
-      <Button onClick={() => filter('mostCommented', { dateFrom, dateTo })}>Most Commented</Button>
-      <Button onClick={() => filter('mostPlayed', { dateFrom, dateTo })}>Most Played</Button>
+      <Button onClick={() => filter('topRated', { dateFrom })}>Top Rated</Button>
+      <Button onClick={() => filter('mostCommented', { dateFrom })}>Most Commented</Button>
+      <Button onClick={() => filter('mostPlayed', { dateFrom })}>Most Played</Button>
     </div>
   </div>
 );
 
+// TODO: Put -30 in .env file
+const defaultDateFrom = () => {
+  const date = new Date();
+
+  date.setUTCDate(date.getDate() + -30);
+
+  return getFormattedDate(date);
+};
+
 Filters.defaultProps = {
-  dateFrom: '01/01/2000',
-  dateTo: undefined,
+  dateFrom: defaultDateFrom(),
   className: null,
 };
 
 Filters.propTypes = {
   dateFrom: PropTypes.string,
-  dateTo: PropTypes.string,
   filter: PropTypes.func.isRequired,
   className: PropTypes.string,
 };
