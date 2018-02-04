@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash eb2832a6f5edcf96f38569d92f442272
+ * @relayHash 33f5963bc40651f61465f33722cd53bb
  */
 
 /* eslint-disable */
@@ -31,7 +31,6 @@ query primaryLayoutContainerQuery {
 
 fragment userButtonContainer_user on ApplicationUser {
   userName
-  contributionScore
 }
 
 fragment unAuthorizedListContainer_user on ApplicationUser {
@@ -47,8 +46,8 @@ fragment editSongModalContainer on Query {
   user {
     id
   }
-  songGenres {
-    ...songGenresFieldContainer_genres
+  genres {
+    ...genresFieldContainer_genres
     id
   }
   song {
@@ -67,7 +66,7 @@ fragment editSongModalContainer on Query {
   }
 }
 
-fragment songGenresFieldContainer_genres on Genre {
+fragment genresFieldContainer_genres on Genre {
   id
   name
 }
@@ -154,13 +153,6 @@ const batch /*: ConcreteBatch*/ = {
             "kind": "ScalarField",
             "alias": null,
             "args": null,
-            "name": "contributionScore",
-            "storageKey": null
-          },
-          {
-            "kind": "ScalarField",
-            "alias": null,
-            "args": null,
             "name": "id",
             "storageKey": null
           }
@@ -202,8 +194,8 @@ const batch /*: ConcreteBatch*/ = {
         "kind": "LinkedField",
         "alias": null,
         "args": null,
-        "concreteType": "SongGenre",
-        "name": "songGenres",
+        "concreteType": "Genre",
+        "name": "genres",
         "plural": true,
         "selections": [
           {
@@ -214,11 +206,17 @@ const batch /*: ConcreteBatch*/ = {
             "storageKey": null
           },
           {
-            "kind": "ScalarField",
-            "alias": null,
-            "args": null,
-            "name": "name",
-            "storageKey": null
+            "kind": "InlineFragment",
+            "type": "Genre",
+            "selections": [
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "name",
+                "storageKey": null
+              }
+            ]
           }
         ],
         "storageKey": null
@@ -281,7 +279,7 @@ const batch /*: ConcreteBatch*/ = {
             "kind": "LinkedField",
             "alias": null,
             "args": null,
-            "concreteType": "SongGenre",
+            "concreteType": "Genre",
             "name": "genres",
             "plural": true,
             "selections": [
@@ -314,7 +312,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query primaryLayoutContainerQuery {\n  user {\n    ...userButtonContainer_user\n    ...unAuthorizedListContainer_user\n    id\n  }\n  loginProviders {\n    ...socialLoginsContainer_loginProviders\n  }\n  ...editSongModalContainer\n}\n\nfragment userButtonContainer_user on ApplicationUser {\n  userName\n  contributionScore\n}\n\nfragment unAuthorizedListContainer_user on ApplicationUser {\n  userName\n}\n\nfragment socialLoginsContainer_loginProviders on LoginProvider {\n  name\n  displayName\n}\n\nfragment editSongModalContainer on Query {\n  user {\n    id\n  }\n  songGenres {\n    ...songGenresFieldContainer_genres\n    id\n  }\n  song {\n    name\n    coverImageUrl\n    free\n    artists {\n      name\n      id\n    }\n    genres {\n      id\n      name\n    }\n    id\n  }\n}\n\nfragment songGenresFieldContainer_genres on Genre {\n  id\n  name\n}\n"
+  "text": "query primaryLayoutContainerQuery {\n  user {\n    ...userButtonContainer_user\n    ...unAuthorizedListContainer_user\n    id\n  }\n  loginProviders {\n    ...socialLoginsContainer_loginProviders\n  }\n  ...editSongModalContainer\n}\n\nfragment userButtonContainer_user on ApplicationUser {\n  userName\n}\n\nfragment unAuthorizedListContainer_user on ApplicationUser {\n  userName\n}\n\nfragment socialLoginsContainer_loginProviders on LoginProvider {\n  name\n  displayName\n}\n\nfragment editSongModalContainer on Query {\n  user {\n    id\n  }\n  genres {\n    ...genresFieldContainer_genres\n    id\n  }\n  song {\n    name\n    coverImageUrl\n    free\n    artists {\n      name\n      id\n    }\n    genres {\n      id\n      name\n    }\n    id\n  }\n}\n\nfragment genresFieldContainer_genres on Genre {\n  id\n  name\n}\n"
 };
 
 module.exports = batch;

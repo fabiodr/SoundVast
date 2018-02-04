@@ -9,7 +9,7 @@ import { routeConfig as confirmEmailRouteConfig } from '../../account/confirmEma
 import { routeConfig as resetPasswordRouteConfig } from '../../account/resetPassword/resetPasswordContainer';
 import { routeConfig as radiosRouteConfig } from '../../radios/radiosContainer';
 import { routeConfig as primaryLayoutRouteConfig } from '../../layouts/primaryLayout/primaryLayoutContainer';
-import { routeConfig as radioGenresRouteConfig } from '../../genres/radioGenresContainer';
+import { routeConfig as genresRouteConfig } from '../../genres/genresContainer';
 import { routeConfig as copyrightRouteConfig } from '../../legal/copyrightContainer';
 import { routeConfig as termsAndConditionsRouteConfig } from '../../legal/termsAndConditionsContainer';
 import { routeConfig as privacyPolicyRouteConfig } from '../../legal/privacyPolicyContainer';
@@ -19,7 +19,7 @@ export default makeRouteConfig(
     <Route {...radiosRouteConfig} />
     <Route path="radios" {...radiosRouteConfig} />
     <Route path="upload" {...uploadRouteConfig} />
-    <Route path="genres/radios" {...radioGenresRouteConfig} />
+    <Route path="genres" {...genresRouteConfig} />
     <Route path="error/:status" {...errorPageRouteConfig} />
     <Route path="account">
       <Route path="externalLoginCallback/:returnUrl" {...socialLoginCallbackRouteConfig} />

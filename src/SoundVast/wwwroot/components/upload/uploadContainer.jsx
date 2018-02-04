@@ -8,11 +8,8 @@ import { addLiveStream } from './actions';
 
 const query = graphql`
   query uploadContainerQuery {
-    songGenres {
-      ...songGenresFieldContainer_genres
-    }
-    liveStreamGenres {
-      ...radioGenresFieldContainer_genres
+    genres {
+      ...genresFieldContainer_genres
     }
     user {
       ...withAuthorization_user

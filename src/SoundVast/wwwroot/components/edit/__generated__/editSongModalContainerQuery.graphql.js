@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash cd73f9a3d4f832359d5f4acd19e4934b
+ * @relayHash 219dd341cede6b9acc0468b2326c3669
  */
 
 /* eslint-disable */
@@ -24,8 +24,8 @@ fragment editSongModalContainer_1AE3IT on Query {
   user {
     id
   }
-  songGenres {
-    ...songGenresFieldContainer_genres
+  genres {
+    ...genresFieldContainer_genres
     id
   }
   song(id: $songId) {
@@ -44,7 +44,7 @@ fragment editSongModalContainer_1AE3IT on Query {
   }
 }
 
-fragment songGenresFieldContainer_genres on Genre {
+fragment genresFieldContainer_genres on Genre {
   id
   name
 }
@@ -118,8 +118,8 @@ const batch /*: ConcreteBatch*/ = {
         "kind": "LinkedField",
         "alias": null,
         "args": null,
-        "concreteType": "SongGenre",
-        "name": "songGenres",
+        "concreteType": "Genre",
+        "name": "genres",
         "plural": true,
         "selections": [
           {
@@ -130,11 +130,17 @@ const batch /*: ConcreteBatch*/ = {
             "storageKey": null
           },
           {
-            "kind": "ScalarField",
-            "alias": null,
-            "args": null,
-            "name": "name",
-            "storageKey": null
+            "kind": "InlineFragment",
+            "type": "Genre",
+            "selections": [
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "name",
+                "storageKey": null
+              }
+            ]
           }
         ],
         "storageKey": null
@@ -204,7 +210,7 @@ const batch /*: ConcreteBatch*/ = {
             "kind": "LinkedField",
             "alias": null,
             "args": null,
-            "concreteType": "SongGenre",
+            "concreteType": "Genre",
             "name": "genres",
             "plural": true,
             "selections": [
@@ -237,7 +243,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query editSongModalContainerQuery(\n  $songId: Int\n) {\n  ...editSongModalContainer_1AE3IT\n}\n\nfragment editSongModalContainer_1AE3IT on Query {\n  user {\n    id\n  }\n  songGenres {\n    ...songGenresFieldContainer_genres\n    id\n  }\n  song(id: $songId) {\n    name\n    coverImageUrl\n    free\n    artists {\n      name\n      id\n    }\n    genres {\n      id\n      name\n    }\n    id\n  }\n}\n\nfragment songGenresFieldContainer_genres on Genre {\n  id\n  name\n}\n"
+  "text": "query editSongModalContainerQuery(\n  $songId: Int\n) {\n  ...editSongModalContainer_1AE3IT\n}\n\nfragment editSongModalContainer_1AE3IT on Query {\n  user {\n    id\n  }\n  genres {\n    ...genresFieldContainer_genres\n    id\n  }\n  song(id: $songId) {\n    name\n    coverImageUrl\n    free\n    artists {\n      name\n      id\n    }\n    genres {\n      id\n      name\n    }\n    id\n  }\n}\n\nfragment genresFieldContainer_genres on Genre {\n  id\n  name\n}\n"
 };
 
 module.exports = batch;

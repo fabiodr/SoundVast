@@ -1,5 +1,5 @@
 # source: http://localhost:8080/graphql
-# timestamp: Fri Feb 02 2018 23:49:04 GMT+0100 (W. Europe Standard Time)
+# timestamp: Sat Feb 03 2018 18:03:10 GMT+0100 (W. Europe Standard Time)
 
 input AddSongToPlaylistInput {
   clientMutationId: String
@@ -49,7 +49,7 @@ type Album implements Node, Audio {
   user: ApplicationUser
 
   # The genres the album belongs to
-  genres: [SongGenre]
+  genres: [Genre]
 
   # The ratings that have been applied by users to this album
   ratings: [Rating]
@@ -165,7 +165,7 @@ type Artist implements Node, Audio {
   user: ApplicationUser
 
   # The genres the artist belongs to
-  genres: [SongGenre]
+  genres: [Genre]
 
   # The ratings that have been applied by users to this artist
   ratings: [Rating]
@@ -458,7 +458,7 @@ type GenerateResetPasswordTokenPayload {
   passwordResetToken: String
 }
 
-interface Genre {
+type Genre {
   id: ID
   name: String!
 
@@ -477,6 +477,7 @@ type LiveStream implements Node, Audio {
   # The poster image for the live stream
   coverImageUrl: String!
   liveStreamUrl: String!
+  websiteUrl: String!
   likes: Int!
   dislikes: Int!
   playCount: Int!
@@ -488,7 +489,7 @@ type LiveStream implements Node, Audio {
   user: ApplicationUser
 
   # The genre the live stream belongs to
-  genres: [LiveStreamGenre]
+  genres: [Genre]
 
   # The ratings that have been applied by users to this live stream
   ratings: [Rating]
@@ -501,14 +502,6 @@ type LiveStream implements Node, Audio {
     # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
     first: Int
   ): CommentPayloadConnection
-}
-
-type LiveStreamGenre implements Genre {
-  id: ID
-  name: String!
-
-  # The cover image url for this genre
-  coverImageUrl: String!
 }
 
 # A connection from an object to a list of objects of type `LiveStreamPayload`.
@@ -560,7 +553,7 @@ type LiveStreamPendingEdit implements Node, AudioPendingEdit {
   contributor: ApplicationUser
 
   # The genre the live stream belongs to
-  genre: LiveStreamGenre
+  genre: Genre
 
   # The original live stream that this edit is modifying
   audio: LiveStream
@@ -814,8 +807,7 @@ type Query {
     # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
     first: Int
   ): LiveStreamPendingEditPayloadConnection
-  songGenres: [SongGenre]
-  liveStreamGenres: [LiveStreamGenre]
+  genres: [Genre]
   user: ApplicationUser
   externalLoginCallback: ExternalLoginCallbackPayload
   confirmEmail(
@@ -933,6 +925,7 @@ input SaveLiveStreamInput {
   clientMutationId: String
   name: String!
   liveStreamUrl: String!
+  websiteUrl: String!
   coverImageUrl: String!
   tags: [TagInput]
   genreIds: [Int]
@@ -1000,7 +993,7 @@ type Song implements Node, Audio {
   user: ApplicationUser
 
   # The genre the song belongs to
-  genres: [SongGenre]
+  genres: [Genre]
 
   # The ratings that have been applied by users to this song
   ratings: [Rating]
@@ -1013,14 +1006,6 @@ type Song implements Node, Audio {
     # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
     first: Int
   ): CommentPayloadConnection
-}
-
-type SongGenre implements Genre {
-  id: ID
-  name: String!
-
-  # The cover image url for this genre
-  coverImageUrl: String!
 }
 
 # A connection from an object to a list of objects of type `SongPayload`.
@@ -1073,7 +1058,7 @@ type SongPendingEdit implements Node, AudioPendingEdit {
   contributor: ApplicationUser
 
   # The genre the song belongs to
-  genre: SongGenre
+  genre: Genre
 
   # The original song that this edit is modifying
   audio: Song

@@ -12,12 +12,12 @@ using SoundVast.Storage.CloudStorage;
 
 namespace SoundVast.Components.Genre
 {
-    public class GenreService<T> : IGenreService<T> where T : Models.Genre
+    public class GenreService : IGenreService
     {
-        private readonly IRepository<T> _repository;
+        private readonly IRepository<Models.Genre> _repository;
         private readonly ICloudStorage _cloudStorage;
 
-        public GenreService(IRepository<T> repository, ICloudStorage cloudStorage)
+        public GenreService(IRepository<Models.Genre> repository, ICloudStorage cloudStorage)
         {
             _repository = repository;
             _cloudStorage = cloudStorage;
@@ -42,7 +42,7 @@ namespace SoundVast.Components.Genre
             _repository.Save();
         }
 
-        public IEnumerable<T> GetGenres()
+        public IEnumerable<Models.Genre> GetGenres()
         {
             return _repository.GetAll();
         }

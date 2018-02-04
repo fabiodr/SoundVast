@@ -33,8 +33,7 @@ namespace SoundVast.Components.GraphQl
     public class AppQuery : QueryGraphType
     {
         public AppQuery(ISongService songService, ILiveStreamService liveStreamService, IValidationProvider validationProvider,
-            IAudioService<Audio.Models.Audio> audioService, ISongGenreService songGenreService, ILiveStreamGenreService liveStreamGenreService,
-            ILoggerFactory loggerFactory, IQuoteService quoteService, IPlaylistService playlistService,
+            IGenreService genreService, ILoggerFactory loggerFactory, IQuoteService quoteService, IPlaylistService playlistService,
             ISongPendingEditService songPendingEditService, ILiveStreamPendingEditService liveStreamPendingEditService,
             SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, IArtistService artistService,
             IAlbumService albumService)
@@ -127,11 +126,8 @@ namespace SoundVast.Components.GraphQl
                 .Name("liveStreamsPendingEdit")
                 .Resolve(c => GraphQL.Relay.Types.Connection.ToConnection(liveStreamPendingEditService.GetAudiosPendingEdit(), c));
 
-            Field<ListGraphType<SongGenrePayload>>("songGenres",
-                resolve: c => songGenreService.GetGenres());
-
-            Field<ListGraphType<LiveStreamGenrePayload>>("liveStreamGenres",
-                resolve: c => liveStreamGenreService.GetGenres());
+            Field<ListGraphType<GenrePayload>>("genres",
+                resolve: c => genreService.GetGenres());
 
             Field<AccountPayload>()
                 .Name("user")

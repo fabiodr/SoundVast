@@ -7,7 +7,7 @@ import Genres from './genres';
 
 const query = graphql`
   query artistGenresContainerQuery {
-    songGenres {
+    genres {
       ...artistGenresContainer_genres
     }
   }
@@ -31,7 +31,7 @@ export const routeConfig = {
   Component: GenresContainer,
   query,
   render: ({ props }) =>
-    props && <GenresContainer genres={props.songGenres} typeUrl="artists" />,
+    props && <GenresContainer genres={props.genres} typeUrl="artists" />,
 };
 
 export default GenresContainer;

@@ -37,7 +37,7 @@ namespace SoundVast.Components.Artist
                 .Resolve(c => GraphQL.Relay.Types.Connection.ToConnection(c.Source.ArtistAlbums.Select(x => x.Album), c));
             Field<DateGraphType>("dateAdded", "The date the user added the artist");
             Field<AccountPayload>("user", "The user who added the artist");
-            Field<ListGraphType<SongGenrePayload>>("genres", "The genres the artist belongs to", resolve: c => c.Source.AudioGenres.Select(x => x.Genre));
+            Field<ListGraphType<GenrePayload>>("genres", "The genres the artist belongs to", resolve: c => c.Source.AudioGenres.Select(x => x.Genre));
             Field<ListGraphType<RatingPayload>>("ratings", "The ratings that have been applied by users to this artist");
             Connection<CommentPayload>()
                 .Name("comments")
@@ -49,7 +49,7 @@ namespace SoundVast.Components.Artist
                     return GraphQL.Relay.Types.Connection.ToConnection(comments, c);
                 });
 
-            Interface<AudioInterface>();
+             Interface<AudioInterface>();
         }
 
         public override Models.Artist GetById(string id)

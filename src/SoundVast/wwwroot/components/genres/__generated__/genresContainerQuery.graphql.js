@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 7622f7d123f9acbcd942bfee30a81f78
+ * @relayHash d9029d55c6296c5c784ea12cb2ed1bda
  */
 
 /* eslint-disable */
@@ -9,21 +9,21 @@
 
 /*::
 import type {ConcreteBatch} from 'relay-runtime';
-export type artistGenresContainerQueryResponse = {|
+export type genresContainerQueryResponse = {|
   +genres: ?$ReadOnlyArray<?{| |}>;
 |};
 */
 
 
 /*
-query artistGenresContainerQuery {
+query genresContainerQuery {
   genres {
-    ...artistGenresContainer_genres
+    ...genresContainer_genres
     id
   }
 }
 
-fragment artistGenresContainer_genres on Genre {
+fragment genresContainer_genres on Genre {
   id
   name
   coverImageUrl
@@ -35,7 +35,7 @@ const batch /*: ConcreteBatch*/ = {
     "argumentDefinitions": [],
     "kind": "Fragment",
     "metadata": null,
-    "name": "artistGenresContainerQuery",
+    "name": "genresContainerQuery",
     "selections": [
       {
         "kind": "LinkedField",
@@ -47,7 +47,7 @@ const batch /*: ConcreteBatch*/ = {
         "selections": [
           {
             "kind": "FragmentSpread",
-            "name": "artistGenresContainer_genres",
+            "name": "genresContainer_genres",
             "args": null
           }
         ],
@@ -59,11 +59,11 @@ const batch /*: ConcreteBatch*/ = {
   "id": null,
   "kind": "Batch",
   "metadata": {},
-  "name": "artistGenresContainerQuery",
+  "name": "genresContainerQuery",
   "query": {
     "argumentDefinitions": [],
     "kind": "Root",
-    "name": "artistGenresContainerQuery",
+    "name": "genresContainerQuery",
     "operation": "query",
     "selections": [
       {
@@ -106,7 +106,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query artistGenresContainerQuery {\n  genres {\n    ...artistGenresContainer_genres\n    id\n  }\n}\n\nfragment artistGenresContainer_genres on Genre {\n  id\n  name\n  coverImageUrl\n}\n"
+  "text": "query genresContainerQuery {\n  genres {\n    ...genresContainer_genres\n    id\n  }\n}\n\nfragment genresContainer_genres on Genre {\n  id\n  name\n  coverImageUrl\n}\n"
 };
 
 module.exports = batch;

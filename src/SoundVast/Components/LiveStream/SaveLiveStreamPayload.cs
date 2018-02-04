@@ -33,6 +33,7 @@ namespace SoundVast.Components.LiveStream
             var coverImageUrl = inputs.Get<string>("coverImageUrl");
             var name = inputs.Get<string>("name");
             var liveStreamUrl = inputs.Get<string>("liveStreamUrl");
+            var websiteUrl = inputs.Get<string>("websiteUrl");
             var genreIds = inputs.Get("genreIds", new object[0]).Cast<int>().ToList();
             var tags = inputs.Get("tags", new object[0]).Select(x => x.As<Dictionary<string, object>>().ToObject<TagInput>());
             var user = context.UserContext.As<Context>().CurrentUser;
@@ -41,6 +42,7 @@ namespace SoundVast.Components.LiveStream
                 CoverImageUrl = coverImageUrl,
                 Name = name,
                 LiveStreamUrl = liveStreamUrl,
+                WebsiteUrl = websiteUrl,
                 UserId = user.Id
             };
 

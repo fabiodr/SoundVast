@@ -27,7 +27,7 @@ namespace SoundVast.Components.Audio
             Field(x => x.PlayCount);
             Field<DateGraphType>("dateAdded", "The date the user added the audio");
             Field<AccountPayload>("user", "The user who uploaded the audio");
-            Field<ListGraphType<GenreInterface>>("genres", "The genres the audio belongs to", resolve: c => c.Source.AudioGenres.Select(x => x.Genre));
+            Field<ListGraphType<GenrePayload>>("genres", "The genres the audio belongs to", resolve: c => c.Source.AudioGenres.Select(x => x.Genre));
             Field<ListGraphType<RatingPayload>>("ratings", "The ratings that have been applied by users to this audio");
             Connection<CommentPayload>()
                 .Name("comments")

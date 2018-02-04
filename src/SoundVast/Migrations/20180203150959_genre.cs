@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace SoundVast.Migrations
 {
-    public partial class fdsgfr : Migration
+    public partial class genre : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -30,7 +30,6 @@ namespace SoundVast.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     CoverImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -49,6 +48,33 @@ namespace SoundVast.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Quotes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tag",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tag", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "YearsActive",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    EndYear = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    StartYear = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_YearsActive", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -137,26 +163,28 @@ namespace SoundVast.Migrations
                 name: "Audios",
                 columns: table => new
                 {
+                    ReleaseDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    YearsActiveId = table.Column<int>(type: "int", nullable: true),
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     CoverImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DateAdded = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    GenreId = table.Column<int>(type: "int", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PlayCount = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     LiveStreamUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AlbumId = table.Column<int>(type: "int", nullable: true),
-                    Free = table.Column<bool>(type: "bit", nullable: true)
+                    Free = table.Column<bool>(type: "bit", nullable: true),
+                    Song_ReleaseDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Audios", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Audios_Genre_GenreId",
-                        column: x => x.GenreId,
-                        principalTable: "Genre",
+                        name: "FK_Audios_YearsActive_YearsActiveId",
+                        column: x => x.YearsActiveId,
+                        principalTable: "YearsActive",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -165,32 +193,6 @@ namespace SoundVast.Migrations
                         principalTable: "Audios",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AlbumGenre",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    AlbumId = table.Column<int>(type: "int", nullable: false),
-                    SongGenreId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AlbumGenre", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AlbumGenre_Audios_AlbumId",
-                        column: x => x.AlbumId,
-                        principalTable: "Audios",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AlbumGenre_Genre_SongGenreId",
-                        column: x => x.SongGenreId,
-                        principalTable: "Genre",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -217,32 +219,6 @@ namespace SoundVast.Migrations
                         principalTable: "Audios",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ArtistGenre",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ArtistId = table.Column<int>(type: "int", nullable: false),
-                    SongGenreId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ArtistGenre", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ArtistGenre_Audios_ArtistId",
-                        column: x => x.ArtistId,
-                        principalTable: "Audios",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ArtistGenre_Genre_SongGenreId",
-                        column: x => x.SongGenreId,
-                        principalTable: "Genre",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -276,6 +252,58 @@ namespace SoundVast.Migrations
                         principalTable: "Audios",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AudioGenre",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    AudioId = table.Column<int>(type: "int", nullable: false),
+                    GenreId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AudioGenre", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AudioGenre_Audios_AudioId",
+                        column: x => x.AudioId,
+                        principalTable: "Audios",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AudioGenre_Genre_GenreId",
+                        column: x => x.GenreId,
+                        principalTable: "Genre",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AudioTag",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    AudioId = table.Column<int>(type: "int", nullable: false),
+                    TagId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AudioTag", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AudioTag_Audios_AudioId",
+                        column: x => x.AudioId,
+                        principalTable: "Audios",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AudioTag_Tag_TagId",
+                        column: x => x.TagId,
+                        principalTable: "Tag",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -508,16 +536,6 @@ namespace SoundVast.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AlbumGenre_AlbumId",
-                table: "AlbumGenre",
-                column: "AlbumId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AlbumGenre_SongGenreId",
-                table: "AlbumGenre",
-                column: "SongGenreId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ArtistAlbum_AlbumId",
                 table: "ArtistAlbum",
                 column: "AlbumId");
@@ -526,16 +544,6 @@ namespace SoundVast.Migrations
                 name: "IX_ArtistAlbum_ArtistId",
                 table: "ArtistAlbum",
                 column: "ArtistId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ArtistGenre_ArtistId",
-                table: "ArtistGenre",
-                column: "ArtistId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ArtistGenre_SongGenreId",
-                table: "ArtistGenre",
-                column: "SongGenreId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ArtistSong_ArtistId",
@@ -597,9 +605,21 @@ namespace SoundVast.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Audios_GenreId",
-                table: "Audios",
+                name: "IX_AudioGenre_AudioId",
+                table: "AudioGenre",
+                column: "AudioId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AudioGenre_GenreId",
+                table: "AudioGenre",
                 column: "GenreId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Audios_YearsActiveId",
+                table: "Audios",
+                column: "YearsActiveId",
+                unique: true,
+                filter: "[YearsActiveId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Audios_UserId",
@@ -630,6 +650,16 @@ namespace SoundVast.Migrations
                 name: "IX_AudiosPendingEdit_AlbumId",
                 table: "AudiosPendingEdit",
                 column: "AlbumId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AudioTag_AudioId",
+                table: "AudioTag",
+                column: "AudioId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AudioTag_TagId",
+                table: "AudioTag",
+                column: "TagId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comments_AudioId",
@@ -739,13 +769,7 @@ namespace SoundVast.Migrations
                 table: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "AlbumGenre");
-
-            migrationBuilder.DropTable(
                 name: "ArtistAlbum");
-
-            migrationBuilder.DropTable(
-                name: "ArtistGenre");
 
             migrationBuilder.DropTable(
                 name: "ArtistSong");
@@ -766,6 +790,12 @@ namespace SoundVast.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "AudioGenre");
+
+            migrationBuilder.DropTable(
+                name: "AudioTag");
+
+            migrationBuilder.DropTable(
                 name: "Flags");
 
             migrationBuilder.DropTable(
@@ -784,16 +814,22 @@ namespace SoundVast.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "Tag");
+
+            migrationBuilder.DropTable(
                 name: "Comments");
 
             migrationBuilder.DropTable(
                 name: "Playlists");
 
             migrationBuilder.DropTable(
+                name: "Genre");
+
+            migrationBuilder.DropTable(
                 name: "Audios");
 
             migrationBuilder.DropTable(
-                name: "Genre");
+                name: "YearsActive");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

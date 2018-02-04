@@ -10,11 +10,9 @@ const Filters = ({
   dateFrom,
   dateTo = getFormattedDate(new Date()),
   className,
-  genresOnClick,
 }) => (
   <div className={className}>
     <div className={styles.filterToggles}>
-      <Button onClick={genresOnClick}>Genres</Button>
       <Button onClick={() => filter('newest')}>Newest</Button>
       <Button onClick={() => filter('topRated', { dateFrom, dateTo })}>Top Rated</Button>
       <Button onClick={() => filter('mostCommented', { dateFrom, dateTo })}>Most Commented</Button>
@@ -34,7 +32,6 @@ Filters.propTypes = {
   dateTo: PropTypes.string,
   filter: PropTypes.func.isRequired,
   className: PropTypes.string,
-  genresOnClick: PropTypes.func.isRequired,
 };
 
 export default Filters;

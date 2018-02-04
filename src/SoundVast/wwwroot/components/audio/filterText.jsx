@@ -30,7 +30,7 @@ const FilterText = ({
         &nbsp;{audioTypeText}
         {genre &&
           <span>
-            &nbsp;in the
+            &nbsp;in the&nbsp;
             <span className={styles.genreLabel}>
               {genre}
               <RemoveFilter name="genre" />

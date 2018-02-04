@@ -9,11 +9,10 @@ import NameField from '../../shared/fields/nameField/nameField';
 import ArtistsField from '../../shared/fields/artistsField/artistsFieldContainer';
 import AlbumField from '../../shared/fields/albumField/albumFieldContainer';
 import ReleaseDateField from '../../shared/fields/releaseDateField/releaseDateField';
-import SongGenresField from '../../shared/fields/genresField/songGenresFieldContainer';
+import GenresField from '../../shared/fields/genresField/genresFieldContainer';
 import Button from '../../shared/button/button';
 import SpinnerSubmit from '../../shared/form/spinnerSubmit/spinnerSubmitContainer';
 import styles from './uploadFileForm.less';
-import TagsField from '../../shared/fields/tagsField/tagsFieldContainer';
 import CopyrightField from '../../shared/fields/copyrightField/copyrightField';
 
 const Form = ({
@@ -35,13 +34,12 @@ const Form = ({
           <ArtistsField id={id} />
           <AlbumField id={id} />
           <ReleaseDateField id={id} />
-          <SongGenresField id={id} genres={genres} />
+          <GenresField id={id} genres={genres} />
         </BasicInfo>
       </TabPanel>
       <TabPanel>
         <Metadata>
           <FreeField id={id} />
-          <TagsField id={id} />
           <CopyrightField id={id} formName={form} />
         </Metadata>
       </TabPanel>

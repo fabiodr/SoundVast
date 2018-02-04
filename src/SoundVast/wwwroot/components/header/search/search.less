@@ -10,20 +10,11 @@
     border: solid 1px @grey4;
     border-radius: 2px;
     height: 35px;
-    width: 100px;
+    width: 400px;
     box-sizing: border-box;
     transition: width 0.3s;
     padding: 5px;
-}
-
-.searchExpanded {
-    .searchField:focus {
-        width: 400px;
-        padding-right: 50px;
-    }
-    .searchButton {
-        display: flex;
-    }
+    padding-right: 50px;
 }
 
 .searchIcon {
@@ -33,14 +24,13 @@
 }
 
 .searchButton {
-    border-left: solid 2px @grey2;
+    border-left: solid 1px @grey2;
     height: 33px;
     padding: 0 15px;
     border-radius: 1px;
     margin-left: 1px;
     position: absolute;
     right: 1px;
-    display: none;
 }
 
 .searchButton:hover .searchIcon {

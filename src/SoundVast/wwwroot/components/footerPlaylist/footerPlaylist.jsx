@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import JPlayer, {
-  Gui, SeekBar, BufferBar,
-  Poster, Audio, Title, FullScreen, Mute, Play, PlayBar,
-  VolumeBar, Duration, CurrentTime, Download, BrowserUnsupported,
+  Gui,
+  Poster, Audio, Title, FullScreen, Mute, Play,
+  VolumeBar, Download, BrowserUnsupported,
 } from 'react-jplayer';
 import JPlaylist, {
   initializeOptions, Playlist, Shuffle, Next, Previous, Repeat,
@@ -42,14 +42,6 @@ const FooterPlaylist = ({ isPlaylistEmpty }) => {
               <i className="fa fa-repeat" />
             </Repeat>
             <Shuffle><i className="fa fa-random" /></Shuffle>
-            <div className="jp-progress">
-              <SeekBar>
-                <BufferBar />
-                <PlayBar />
-                <CurrentTime />
-                <Duration />
-              </SeekBar>
-            </div>
             <div className="jp-volume-container">
               <Mute>
                 <i className="fa">{/* Icon set in css */}</i>

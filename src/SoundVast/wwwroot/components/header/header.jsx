@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import SoundVastLogo from '../icons/logo';
-import MenuIcon from '../icons/menu';
+import LegalIcon from '../icons/legal';
 import styles from './header.less';
 import UserButton from './userButton/userButtonContainer';
 import UnAuthorizedList from './unAuthorizedList/unAuthorizedListContainer';
@@ -13,7 +13,10 @@ import LinkButton from '../shared/button/linkButton';
 import Button from '../shared/button/button';
 import Search from './search/searchContainer';
 
-const Header = ({ user, searchOnFocus, searchOnBlur, searchExpanded }) => (
+const Header = ({
+  user,
+  genresLocationInformation,
+}) => (
   <header className={classnames(styles.header)}>
     <nav>
       <LinkButton
@@ -24,11 +27,9 @@ const Header = ({ user, searchOnFocus, searchOnBlur, searchExpanded }) => (
         <SoundVastLogo className={styles.logoIcon} />
       </LinkButton>
       <LinkButton to="/radios" styleName="secondary" className={styles.navButton}>Radios</LinkButton>
+      <LinkButton to={genresLocationInformation} styleName="secondary" className={styles.navButton}>Genres</LinkButton>
       <LinkButton to="/upload" styleName="secondary" className={styles.navButton}>Upload</LinkButton>
       <Search
-        searchExpanded={searchExpanded}
-        searchOnFocus={searchOnFocus}
-        searchOnBlur={searchOnBlur}
         className={styles.search}
       />
       <UserButton user={user} className={styles.navButton} />
@@ -36,11 +37,11 @@ const Header = ({ user, searchOnFocus, searchOnBlur, searchExpanded }) => (
       <Popups />
       <Dropdown
         titleCallback={onClick => (
-          <Button className={styles.extraDropdownTitle} styleName="secondary" onClick={onClick}>
-            <MenuIcon className={styles.menuIcon} />
+          <Button className={styles.legalDropdownTitle} styleName="secondary" onClick={onClick}>
+            <LegalIcon className={styles.menuIcon} />
           </Button>
         )}
-        className={classnames(styles.navButton, styles.extraDropdown)}
+        className={classnames(styles.navButton, styles.legalDropdown)}
       >
         <ul>
           <li>
@@ -62,9 +63,9 @@ Header.propTypes = {
   user: PropTypes.shape({
     username: PropTypes.string,
   }),
-  searchOnFocus: PropTypes.func.isRequired,
-  searchOnBlur: PropTypes.func.isRequired,
-  searchExpanded: PropTypes.bool.isRequired,
+  genresLocationInformation: PropTypes.shape({
+    pathname: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default Header;

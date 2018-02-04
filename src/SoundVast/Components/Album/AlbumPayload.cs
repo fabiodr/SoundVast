@@ -38,7 +38,7 @@ namespace SoundVast.Components.Album
                 .Resolve(c => c.Source.ArtistAlbums.Select(x => x.Artist));
             Field<DateGraphType>("dateAdded", "The date the user added the album");
             Field<AccountPayload>("user", "The user who added the album");
-            Field<ListGraphType<SongGenrePayload>>("genres", "The genres the album belongs to", resolve: c => c.Source.AudioGenres.Select(x => x.Genre));
+            Field<ListGraphType<GenrePayload>>("genres", "The genres the album belongs to", resolve: c => c.Source.AudioGenres.Select(x => x.Genre));
             Field<ListGraphType<RatingPayload>>("ratings", "The ratings that have been applied by users to this album");
             Connection<CommentPayload>()
                 .Name("comments")

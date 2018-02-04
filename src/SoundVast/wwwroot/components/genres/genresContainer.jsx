@@ -1,20 +1,20 @@
 import React from 'react';
 import { graphql } from 'react-relay';
-import { compose, withProps } from 'recompose';
+import { compose } from 'recompose';
 import { fragmentContainer } from 'recompose-relay-modern';
 
 import Genres from './genres';
 
 const query = graphql`
-  query radioGenresContainerQuery {
-    liveStreamGenres {
-      ...radioGenresContainer_genres
+  query genresContainerQuery {
+    genres {
+      ...genresContainer_genres
     }
   }
 `;
 
 const fragments = graphql`
-  fragment radioGenresContainer_genres on Genre @relay(plural: true) {
+  fragment genresContainer_genres on Genre @relay(plural: true) {
     id,
     name,
     coverImageUrl
@@ -31,7 +31,7 @@ export const routeConfig = {
   Component: GenresContainer,
   query,
   render: ({ props }) =>
-    props && <GenresContainer genres={props.radioGenres} typeUrl="radios" />,
+    props && <GenresContainer genres={props.genres} typeUrl="radios" />,
 };
 
 export default GenresContainer;

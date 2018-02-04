@@ -14,6 +14,7 @@ const mutation = graphql`
 export default ({
   name,
   liveStreamUrl,
+  websiteUrl,
   imagePath,
   genres = [],
   tags = [],
@@ -23,6 +24,7 @@ export default ({
       coverImageUrl: imagePath,
       name,
       liveStreamUrl,
+      websiteUrl,
       tags: tags.map(tag => ({
         id: Number.isInteger(tag.value) ? tag.value : null,
         tag: typeof (tag.value) === 'string' ? tag.value : null,

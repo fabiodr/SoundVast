@@ -31,7 +31,7 @@ namespace SoundVast.Components.Edit
             Field(x => x.CoverImageUrl).Description("The poster image for the live stream");
             Field(x => x.LiveStreamUrl);
             Field<AccountPayload>("contributor", "The user who requested the edit");
-            Field<LiveStreamGenrePayload>("genre", "The genre the live stream belongs to");
+            Field<GenrePayload>("genre", "The genre the live stream belongs to");
             Field<LiveStreamPayload>("audio", "The original live stream that this edit is modifying");
 
             Interface<AudioPendingEditInterface>();

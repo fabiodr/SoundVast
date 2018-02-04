@@ -10,6 +10,7 @@ const fragments = graphql`
     name
     coverImageUrl
     liveStreamUrl
+    websiteUrl
     playCount
     likes
     dislikes

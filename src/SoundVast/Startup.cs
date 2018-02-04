@@ -165,7 +165,7 @@ namespace SoundVast
             //   app.UseWebSockets();
             //  app.UseGraphQLEndPoint<AppSchema>("/graphql");
 
-            RecurringJob.AddOrUpdate<ISongGenreService>(x => x.UpdateCoverImages(), Cron.Daily);
+            RecurringJob.AddOrUpdate<IGenreService>(x => x.UpdateCoverImages(), Cron.Daily);
 
             app.UseMvc(routes =>
             {
@@ -250,8 +250,6 @@ namespace SoundVast
             builder.RegisterType<Repository<Artist, ApplicationDbContext>>().As<IRepository<Artist>>();
             builder.RegisterType<Repository<Album, ApplicationDbContext>>().As<IRepository<Album>>();
             builder.RegisterType<Repository<Genre, ApplicationDbContext>>().As<IRepository<Genre>>();
-            builder.RegisterType<Repository<SongGenre, ApplicationDbContext>>().As<IRepository<SongGenre>>();
-            builder.RegisterType<Repository<LiveStreamGenre, ApplicationDbContext>>().As<IRepository<LiveStreamGenre>>();
             builder.RegisterType<Repository<Quote, ApplicationDbContext>>().As<IRepository<Quote>>();
             builder.RegisterType<Repository<Comment, ApplicationDbContext>>().As<IRepository<Comment>>();
             builder.RegisterType<Repository<Flag, ApplicationDbContext>>().As<IRepository<Flag>>();

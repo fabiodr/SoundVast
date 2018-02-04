@@ -1,18 +1,22 @@
-﻿using System;
+﻿using GraphQL.Types;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using GraphQL.Types;
 using SoundVast.Components.Audio;
-using SoundVast.Components.Edit.Models;
+using SoundVast.Components.Genre;
+using SoundVast.Components.Genre.Models;
+using SoundVast.Components.LiveStream;
+using SoundVast.Components.Song;
+using SoundVast.Components.Song.Models;
 
 namespace SoundVast.Components.Genre
 {
-    public class GenreInterface : InterfaceGraphType<Models.Genre>
+    public class GenrePayload : ObjectGraphType<Models.Genre>
     {
-        public GenreInterface()
+        public GenrePayload()
         {
-            Name = nameof(Models.Genre);
+            Name = nameof(Genre);
 
             Field<IdGraphType>("id");
             Field(x => x.Name);

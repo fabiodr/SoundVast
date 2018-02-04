@@ -6,8 +6,9 @@ import SpinnerSubmit from '../../shared/form/spinnerSubmit/spinnerSubmitContaine
 import styles from './liveStreamForm.less';
 import BasicInfo from '../common/basicInfo/basicInfo';
 import NameField from '../../shared/fields/nameField/nameField';
-import RadioGenresField from '../../shared/fields/genresField/radioGenresFieldContainer';
+import GenresField from '../../shared/fields/genresField/genresFieldContainer';
 import LiveStreamUrlField from '../../shared/fields/liveStreamUrlField/liveStreamUrlField';
+import WebsiteUrlField from '../../shared/fields/websiteUrlField/websiteUrlField';
 import TagsField from '../../shared/fields/tagsField/tagsField';
 import CopyrightField from '../../shared/fields/copyrightField/copyrightField';
 
@@ -23,7 +24,8 @@ const LiveStreamForm = ({
     <BasicInfo id={id} change={change}>
       <NameField id={id} />
       <LiveStreamUrlField id={id} />
-      <RadioGenresField id={id} genres={genres} />
+      <WebsiteUrlField id={id} />
+      <GenresField id={id} genres={genres} />
       <TagsField id={id} />
       <CopyrightField id={id} formName={form} />
     </BasicInfo>

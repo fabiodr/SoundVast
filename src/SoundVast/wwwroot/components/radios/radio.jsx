@@ -13,46 +13,49 @@ import Flag from '../flag/flag';
 import styles from './radio.less';
 import RatingPercent from '../rating/ratingPercent';
 
-const Radio = ({ liveStream, footerPlaylist }) => (
-  <div>
-    <div className={styles.radioTitle}>
-      <Name className={styles.radioName} name={liveStream.name} />
-    </div>
-    <div className={styles.coverImageContainer}>
-      <Play id={liveStream.audioId} footerPlaylist={footerPlaylist}>
-        <CoverImage coverImageUrl={liveStream.coverImageUrl} />
-      </Play>
-    </div>
-    <div className={styles.controls}>
-      <div className={styles.controlsRow}>
-        <RatingPercent
-          className={styles.ratingPercent}
-          likes={liveStream.likes}
-          dislikes={liveStream.dislikes}
-        />
-        <div className={styles.alignRight}>
-          <Rating
+const Radio = ({ liveStream, footerPlaylist }) => {
+  const name = <Name className={styles.radioName} name={liveStream.name} />;
+
+  return (
+    <div>
+      {liveStream.websiteUrl ? <a href={liveStream.websiteUrl} target="_blank">{name}</a> : <div>{name}</div>}
+      <div className={styles.coverImageContainer}>
+        <Play id={liveStream.audioId} footerPlaylist={footerPlaylist}>
+          <CoverImage coverImageUrl={liveStream.coverImageUrl} />
+        </Play>
+      </div>
+      <div className={styles.controls}>
+        <div className={styles.controlsRow}>
+          <RatingPercent
+            className={styles.ratingPercent}
             likes={liveStream.likes}
             dislikes={liveStream.dislikes}
-            like={<Like audio={liveStream} />}
-            dislike={<Dislike audio={liveStream} />}
           />
+          <div className={styles.alignRight}>
+            <Rating
+              likes={liveStream.likes}
+              dislikes={liveStream.dislikes}
+              like={<Like audio={liveStream} />}
+              dislike={<Dislike audio={liveStream} />}
+            />
+          </div>
         </div>
-      </div>
-      <div className={styles.controlsRow}>
-        <PlayCount className={styles.playCount} playCount={liveStream.playCount} />
-        <div className={classnames(styles.alignRight, styles.extraControls)}>
-          <Flag modalId="flagAudio" id={liveStream.audioId} />
+        <div className={styles.controlsRow}>
+          <PlayCount className={styles.playCount} playCount={liveStream.playCount} />
+          <div className={classnames(styles.alignRight, styles.extraControls)}>
+            <Flag modalId="flagAudio" id={liveStream.audioId} />
+          </div>
         </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 Radio.propTypes = {
   liveStream: PropTypes.shape({
     coverImageUrl: PropTypes.string.isRequired,
     liveStreamUrl: PropTypes.string.isRequired,
+    websiteUrl: PropTypes.string,
     audioId: PropTypes.number.isRequired,
     dislikes: PropTypes.number.isRequired,
     likes: PropTypes.number.isRequired,

@@ -5,7 +5,7 @@ import { graphql } from 'react-relay';
 import GenresField from './genresField';
 
 const fragments = graphql`
-  fragment songGenresFieldContainer_genres on Genre @relay(plural: true) {
+  fragment genresFieldContainer_genres on Genre @relay(plural: true) {
     id,
     name,
   }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace SoundVast.Migrations
 {
-    public partial class rew : Migration
+    public partial class tw : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

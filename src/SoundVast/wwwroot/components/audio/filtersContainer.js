@@ -5,10 +5,6 @@ import { withRouter } from 'found';
 import Filters from './filters';
 import normalizeBoolean from '../shared/utilities/normalizeBoolean';
 
-const propTypes = {
-  genresUrl: PropTypes.string.isRequired,
-};
-
 const handlers = {
   filter: ({ router, match }) => (filter, values = {}) => {
     const { newest, mostCommented, mostPlayed, topRated, ...queries } = match.location.query;
@@ -23,16 +19,6 @@ const handlers = {
       },
     });
   },
-  genresOnClick: ({ router, match, genresUrl }) => () => {
-    router.push({
-      pathname: genresUrl,
-      state: {
-        queries: {
-          ...match.location.query,
-        },
-      },
-    });
-  },
 };
 
 const createProps = ({ match }) => ({
@@ -44,7 +30,6 @@ const createProps = ({ match }) => ({
 });
 
 export default compose(
-  setPropTypes(propTypes),
   withRouter,
   withHandlers(handlers),
   withProps(createProps),

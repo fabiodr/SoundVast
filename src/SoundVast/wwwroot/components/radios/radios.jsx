@@ -21,7 +21,7 @@ const Radios = ({ liveStreams, loadMore }) => {
     <SoundVastTitle title="Radios">
       <AudiosContent>
         <AudiosHeader audioTypeText="radios" />
-        <AudiosSubHeader genresUrl="/genres/radios" />
+        <AudiosSubHeader />
         <ScrollTracker>
           {(elementToTrackRef, values) => (
             <div className={styles.infiniteScrollContainer} ref={elementToTrackRef}>

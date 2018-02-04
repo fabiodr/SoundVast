@@ -25,7 +25,7 @@ namespace SoundVast.Components.Edit
             Field(x => x.Name);
             Field(x => x.CoverImageUrl).Description("The poster image for the audio");
             Field<AccountPayload>("contributor", "The user who requested the edit");
-            Field<GenreInterface>("genre", "The genre the audio belongs to");
+            Field<GenrePayload>("genre", "The genre the audio belongs to");
             Field<AudioInterface>("audio", "The original audio that this edit is modifying");
         }
     }

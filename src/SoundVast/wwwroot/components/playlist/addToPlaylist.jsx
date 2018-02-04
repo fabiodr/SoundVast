@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-import AddToPlaylistIcon from '../icons/addToPlaylistIcon';
+import AddToPlaylistIcon from '../icons/addToPlaylist';
 import styles from './addToPlaylist.less';
 
 const AddToPlaylist = ({ onClick, className }) => (

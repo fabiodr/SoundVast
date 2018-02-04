@@ -7,7 +7,6 @@ import UserButton from './userButton';
 const fragments = graphql`
   fragment userButtonContainer_user on ApplicationUser {
     userName
-    contributionScore
   }
 `;
 

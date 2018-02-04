@@ -44,15 +44,13 @@ namespace SoundVast.Data
 
                     context.Database.Migrate();
 
-                    var musicGenres = MusicGenres.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
-                    var liveStreamGenres = LiveStreamGenres.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
+                    var genres = Genres.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
                     //var radioStationCategoryResources = LiveStreamCategories.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
                     //var placeHolderImage = new ImageFileModel("Placeholder.jpg");
 
                     await SeedImages();
 
-                    SeedGenres<SongGenre>(context, musicGenres);
-                    SeedGenres<LiveStreamGenre>(context, liveStreamGenres);
+                    SeedGenres(context, genres);
                     SeedQuotes(context);
 
                     LuceneSearch.AddOrUpdateLuceneIndex(_audioService.GetAudios());
@@ -100,17 +98,17 @@ namespace SoundVast.Data
             await placeholderImageBlob.UploadFromFileAsync(path, "image/svg+xml");
         }
 
-        public static void SeedGenres<T>(ApplicationDbContext context, DictionaryEntry[] genreResources) where T : Genre, new()
+        public static void SeedGenres(ApplicationDbContext context, DictionaryEntry[] genreResources)
         {
             var placeholderImageBlob = _cloudStorage.GetBlob(CloudStorageType.Image, PlaceholderImageName);
 
-            var genres = genreResources.Select(x => new T
+            var genres = genreResources.Select(x => new Genre
             {
                 Name = (string)x.Value,
                 CoverImageUrl = placeholderImageBlob.CloudBlockBlob.Uri.AbsoluteUri
             });
     
-            context.Set<T>().AddRange(genres.Where(genre => !context.Set<T>().Any(x => x.Name == genre.Name)));
+            context.Set<Genre>().AddRange(genres.Where(genre => !context.Set<Genre>().Any(x => x.Name == genre.Name)));
         }
 
         //public static void InitializeIdentityForEf(ApplicationDbContext context)

@@ -5,7 +5,7 @@ import EditModal from './editModalContainer';
 import NameField from '../shared/fields/nameField/nameField';
 import ArtistsField from '../shared/fields/artistsField/artistsField';
 import FreeField from '../shared/fields/freeField/freeField';
-import SongGenresField from '../shared/fields/genresField/songGenresFieldContainer';
+import GenresField from '../shared/fields/genresField/genresFieldContainer';
 import ImageDropzone from '../shared/imageDropzone/imageDropzone';
 import PreviewImage from '../shared/previewImage/previewImage';
 
@@ -15,12 +15,12 @@ const EditSongModal = ({
   initialValues,
   previewUrl,
   isAuthorized,
-  songGenres,
+  genres,
 }) => (
   <EditModal modalId="editSong" initialValues={initialValues} onSubmit={onSubmit} isAuthorized={isAuthorized}>
     <NameField />
     <ArtistsField />
-    <SongGenresField genres={songGenres} />
+    <GenresField genres={genres} />
     <FreeField />
     <ImageDropzone onDrop={onDrop}>
       <PreviewImage previewUrl={previewUrl} />
@@ -50,7 +50,7 @@ EditSongModal.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   isAuthorized: PropTypes.bool.isRequired,
   onDrop: PropTypes.func.isRequired,
-  songGenres: PropTypes.arrayOf(PropTypes.object).isRequired,
+  genres: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default EditSongModal;

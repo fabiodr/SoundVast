@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace SoundVast.Components.Genre
 {
-    public interface IGenreService<T> where T : Models.Genre
+    public interface IGenreService
     {
-        IEnumerable<T> GetGenres();
+        IEnumerable<Models.Genre> GetGenres();
         void UpdateCoverImages();
     }
 }

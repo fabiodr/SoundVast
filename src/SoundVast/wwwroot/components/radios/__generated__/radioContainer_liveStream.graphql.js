@@ -13,6 +13,7 @@ export type radioContainer_liveStream = {|
   +name: string;
   +coverImageUrl: string;
   +liveStreamUrl: string;
+  +websiteUrl: string;
   +playCount: number;
   +likes: number;
   +dislikes: number;
@@ -52,6 +53,13 @@ const fragment /*: ConcreteFragment*/ = {
       "alias": null,
       "args": null,
       "name": "liveStreamUrl",
+      "storageKey": null
+    },
+    {
+      "kind": "ScalarField",
+      "alias": null,
+      "args": null,
+      "name": "websiteUrl",
       "storageKey": null
     },
     {

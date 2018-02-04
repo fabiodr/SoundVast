@@ -33,7 +33,6 @@ const propTypes = {
       artist: PropTypes.string,
       sources: PropTypes.object.isRequired,
       poster: PropTypes.string.isRequired,
-      free: PropTypes.bool.isRequired,
     }),
   ).isRequired,
 };

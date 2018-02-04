@@ -339,17 +339,12 @@ namespace SoundVast.Migrations
                     b.Property<string>("CoverImageUrl")
                         .IsRequired();
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired();
-
                     b.Property<string>("Name")
                         .IsRequired();
 
                     b.HasKey("Id");
 
-                    b.ToTable("Genre");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Genre");
+                    b.ToTable("Genres");
                 });
 
             modelBuilder.Entity("SoundVast.Components.Playlist.Models.Playlist", b =>
@@ -529,7 +524,10 @@ namespace SoundVast.Migrations
                 {
                     b.HasBaseType("SoundVast.Components.Audio.Models.Audio");
 
-                    b.Property<string>("LiveStreamUrl");
+                    b.Property<string>("LiveStreamUrl")
+                        .IsRequired();
+
+                    b.Property<string>("WebsiteUrl");
 
                     b.ToTable("LiveStream");
 
@@ -578,26 +576,6 @@ namespace SoundVast.Migrations
                     b.ToTable("SongPendingEdit");
 
                     b.HasDiscriminator().HasValue("SongPendingEdit");
-                });
-
-            modelBuilder.Entity("SoundVast.Components.Genre.Models.LiveStreamGenre", b =>
-                {
-                    b.HasBaseType("SoundVast.Components.Genre.Models.Genre");
-
-
-                    b.ToTable("LiveStreamGenre");
-
-                    b.HasDiscriminator().HasValue("LiveStreamGenre");
-                });
-
-            modelBuilder.Entity("SoundVast.Components.Genre.Models.SongGenre", b =>
-                {
-                    b.HasBaseType("SoundVast.Components.Genre.Models.Genre");
-
-
-                    b.ToTable("SongGenre");
-
-                    b.HasDiscriminator().HasValue("SongGenre");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

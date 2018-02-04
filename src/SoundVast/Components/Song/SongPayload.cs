@@ -39,7 +39,7 @@ namespace SoundVast.Components.Song
             Field<DateGraphType>("dateAdded", "The date the user added the song");
             Field<DateGraphType>("releaseDate", "The date the song was released");
             Field<AccountPayload>("user", "The user who uploaded the song");
-            Field<ListGraphType<SongGenrePayload>>("genres", "The genre the song belongs to", resolve: c => c.Source.AudioGenres.Select(x => x.Genre));
+            Field<ListGraphType<GenrePayload>>("genres", "The genre the song belongs to", resolve: c => c.Source.AudioGenres.Select(x => x.Genre));
             Field<ListGraphType<RatingPayload>>("ratings", "The ratings that have been applied by users to this song");
             Connection<CommentPayload>()
                 .Name("comments")

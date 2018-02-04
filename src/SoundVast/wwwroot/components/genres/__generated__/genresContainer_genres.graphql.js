@@ -8,9 +8,10 @@
 
 /*::
 import type {ConcreteFragment} from 'relay-runtime';
-export type songGenresFieldContainer_genres = $ReadOnlyArray<{|
+export type genresContainer_genres = $ReadOnlyArray<{|
   +id: ?string;
   +name: string;
+  +coverImageUrl: string;
 |}>;
 */
 
@@ -21,7 +22,7 @@ const fragment /*: ConcreteFragment*/ = {
   "metadata": {
     "plural": true
   },
-  "name": "songGenresFieldContainer_genres",
+  "name": "genresContainer_genres",
   "selections": [
     {
       "kind": "ScalarField",
@@ -35,6 +36,13 @@ const fragment /*: ConcreteFragment*/ = {
       "alias": null,
       "args": null,
       "name": "name",
+      "storageKey": null
+    },
+    {
+      "kind": "ScalarField",
+      "alias": null,
+      "args": null,
+      "name": "coverImageUrl",
       "storageKey": null
     }
   ],

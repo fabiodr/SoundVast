@@ -1,18 +1,20 @@
-import { compose, withStateHandlers } from 'recompose';
+import { compose, withProps } from 'recompose';
+import { withRouter } from 'found';
 
 import Header from './header';
 
-const stateHandlers = {
-  searchOnFocus: () => () => ({
-    searchExpanded: true,
-  }),
-  searchOnBlur: () => () => ({
-    searchExpanded: false,
-  }),
-};
+const createProps = ({ match }) => ({
+  genresLocationInformation: {
+    pathname: '/genres',
+    state: {
+      queries: {
+        ...match.location.query,
+      },
+    },
+  },
+});
 
 export default compose(
-  withStateHandlers({
-    searchExpanded: false,
-  }, stateHandlers),
+  withRouter,
+  withProps(createProps),
 )(Header);

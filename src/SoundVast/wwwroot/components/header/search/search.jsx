@@ -9,20 +9,15 @@ import Button from '../../shared/button/button';
 
 const Search = ({
   handleSubmit,
-  searchOnFocus,
-  searchOnBlur,
-  searchExpanded,
   className,
 }) => (
   <form
     onSubmit={handleSubmit}
     action=""
-    className={classnames(styles.search, searchExpanded && styles.searchExpanded, className)}
+    className={classnames(styles.search, className)}
   >
     <Field
-      onFocus={searchOnFocus}
-      onBlur={searchOnBlur}
-      placeholder="Search"
+      placeholder="Search..."
       name="search"
       id="search"
       component="input"
@@ -40,9 +35,6 @@ Search.defaultProps = {
 
 Search.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
-  searchOnFocus: PropTypes.func.isRequired,
-  searchOnBlur: PropTypes.func.isRequired,
-  searchExpanded: PropTypes.bool.isRequired,
   className: PropTypes.string,
 };
 

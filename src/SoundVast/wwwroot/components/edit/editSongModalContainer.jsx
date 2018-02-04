@@ -44,8 +44,8 @@ const fragments = graphql`
     user {
       id
     }
-    songGenres {
-      ...songGenresFieldContainer_genres
+    genres {
+      ...genresFieldContainer_genres
     }
     song(id: $songId) {
       name

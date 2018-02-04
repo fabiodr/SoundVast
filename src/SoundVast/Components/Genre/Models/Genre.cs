@@ -6,7 +6,7 @@ using SoundVast.Components.Audio.Models;
 
 namespace SoundVast.Components.Genre.Models
 {
-    public abstract class Genre
+    public class Genre
     {
         [Required]
         public int Id { get; set; }

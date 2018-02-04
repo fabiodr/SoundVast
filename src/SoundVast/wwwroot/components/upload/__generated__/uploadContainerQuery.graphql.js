@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 83e75bc75a3e61dddf05324b8a55fce8
+ * @relayHash 2f4af600d2bc8706a005b01647558bee
  */
 
 /* eslint-disable */
@@ -10,8 +10,7 @@
 /*::
 import type {ConcreteBatch} from 'relay-runtime';
 export type uploadContainerQueryResponse = {|
-  +songGenres: ?$ReadOnlyArray<?{| |}>;
-  +liveStreamGenres: ?$ReadOnlyArray<?{| |}>;
+  +genres: ?$ReadOnlyArray<?{| |}>;
   +user: ?{| |};
 |};
 */
@@ -19,12 +18,8 @@ export type uploadContainerQueryResponse = {|
 
 /*
 query uploadContainerQuery {
-  songGenres {
-    ...songGenresFieldContainer_genres
-    id
-  }
-  liveStreamGenres {
-    ...radioGenresFieldContainer_genres
+  genres {
+    ...genresFieldContainer_genres
     id
   }
   user {
@@ -33,12 +28,7 @@ query uploadContainerQuery {
   }
 }
 
-fragment songGenresFieldContainer_genres on Genre {
-  id
-  name
-}
-
-fragment radioGenresFieldContainer_genres on Genre {
+fragment genresFieldContainer_genres on Genre {
   id
   name
 }
@@ -59,29 +49,13 @@ const batch /*: ConcreteBatch*/ = {
         "kind": "LinkedField",
         "alias": null,
         "args": null,
-        "concreteType": "SongGenre",
-        "name": "songGenres",
+        "concreteType": "Genre",
+        "name": "genres",
         "plural": true,
         "selections": [
           {
             "kind": "FragmentSpread",
-            "name": "songGenresFieldContainer_genres",
-            "args": null
-          }
-        ],
-        "storageKey": null
-      },
-      {
-        "kind": "LinkedField",
-        "alias": null,
-        "args": null,
-        "concreteType": "LiveStreamGenre",
-        "name": "liveStreamGenres",
-        "plural": true,
-        "selections": [
-          {
-            "kind": "FragmentSpread",
-            "name": "radioGenresFieldContainer_genres",
+            "name": "genresFieldContainer_genres",
             "args": null
           }
         ],
@@ -120,8 +94,8 @@ const batch /*: ConcreteBatch*/ = {
         "kind": "LinkedField",
         "alias": null,
         "args": null,
-        "concreteType": "SongGenre",
-        "name": "songGenres",
+        "concreteType": "Genre",
+        "name": "genres",
         "plural": true,
         "selections": [
           {
@@ -132,36 +106,17 @@ const batch /*: ConcreteBatch*/ = {
             "storageKey": null
           },
           {
-            "kind": "ScalarField",
-            "alias": null,
-            "args": null,
-            "name": "name",
-            "storageKey": null
-          }
-        ],
-        "storageKey": null
-      },
-      {
-        "kind": "LinkedField",
-        "alias": null,
-        "args": null,
-        "concreteType": "LiveStreamGenre",
-        "name": "liveStreamGenres",
-        "plural": true,
-        "selections": [
-          {
-            "kind": "ScalarField",
-            "alias": null,
-            "args": null,
-            "name": "id",
-            "storageKey": null
-          },
-          {
-            "kind": "ScalarField",
-            "alias": null,
-            "args": null,
-            "name": "name",
-            "storageKey": null
+            "kind": "InlineFragment",
+            "type": "Genre",
+            "selections": [
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "name",
+                "storageKey": null
+              }
+            ]
           }
         ],
         "storageKey": null
@@ -193,7 +148,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query uploadContainerQuery {\n  songGenres {\n    ...songGenresFieldContainer_genres\n    id\n  }\n  liveStreamGenres {\n    ...radioGenresFieldContainer_genres\n    id\n  }\n  user {\n    ...withAuthorization_user\n    id\n  }\n}\n\nfragment songGenresFieldContainer_genres on Genre {\n  id\n  name\n}\n\nfragment radioGenresFieldContainer_genres on Genre {\n  id\n  name\n}\n\nfragment withAuthorization_user on ApplicationUser {\n  userName\n}\n"
+  "text": "query uploadContainerQuery {\n  genres {\n    ...genresFieldContainer_genres\n    id\n  }\n  user {\n    ...withAuthorization_user\n    id\n  }\n}\n\nfragment genresFieldContainer_genres on Genre {\n  id\n  name\n}\n\nfragment withAuthorization_user on ApplicationUser {\n  userName\n}\n"
 };
 
 module.exports = batch;
