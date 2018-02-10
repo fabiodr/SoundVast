@@ -1,28 +1,37 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 
 import styles from './modal.less';
-import ModalOverlay from './overlay/overlay';
+import Overlay from '../overlay/overlay';
+import CrossIcon from '../../icons/cross';
 
-const Modal = ({ children, title, hideModal }) => (
-  <div>
-    <div className={styles.modal}>
+const Modal = ({
+  children,
+  title,
+  hideModal,
+  className,
+}) => (
+  <Overlay onClick={hideModal}>
+    <div className={classnames(styles.modal, className)}>
       <button onClick={hideModal} className={styles.close}>
-        <span role="img" aria-label="close">
-          ❌
-        </span>
+        <CrossIcon />
       </button>
       <div className={styles.title}>
         {title}
       </div>
       {children}
     </div>
-    <ModalOverlay hideModal={hideModal} />
-  </div>
+  </Overlay>
 );
+
+Modal.defaultProps = {
+  className: null,
+};
 
 Modal.propTypes = {
   children: PropTypes.node.isRequired,
+  className: PropTypes.string,
   title: PropTypes.string.isRequired,
   hideModal: PropTypes.func.isRequired,
 };

@@ -1,9 +1,9 @@
 import React from 'react';
 
-import TextContent from '../content/textContent';
+import PageContent from '../content/pageContent';
 
 const TermsAndConditions = () => (
-  <TextContent>
+  <PageContent>
     <h1>Terms and Conditions</h1>
     <h2>Last Updated: February 10th 2018</h2>
     <p>
@@ -108,7 +108,7 @@ const TermsAndConditions = () => (
         </p>
       </li>
     </ol>
-  </TextContent>
+  </PageContent>
 );
 
 export default TermsAndConditions;

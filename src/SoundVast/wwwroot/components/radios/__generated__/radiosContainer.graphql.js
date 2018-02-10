@@ -10,7 +10,6 @@
 import type {ConcreteFragment} from 'relay-runtime';
 export type radiosContainer = {|
   +liveStreams: ?{|
-    +items: ?$ReadOnlyArray<?{| |}>;
     +edges: ?$ReadOnlyArray<?{|
       +cursor: string;
       +node: ?{|
@@ -103,22 +102,6 @@ const fragment /*: ConcreteFragment*/ = {
           "kind": "LinkedField",
           "alias": null,
           "args": null,
-          "concreteType": "LiveStream",
-          "name": "items",
-          "plural": true,
-          "selections": [
-            {
-              "kind": "FragmentSpread",
-              "name": "sideBarContainer_audios",
-              "args": null
-            }
-          ],
-          "storageKey": null
-        },
-        {
-          "kind": "LinkedField",
-          "alias": null,
-          "args": null,
           "concreteType": "LiveStreamPayloadEdge",
           "name": "edges",
           "plural": true,
@@ -176,6 +159,11 @@ const fragment /*: ConcreteFragment*/ = {
                 {
                   "kind": "FragmentSpread",
                   "name": "radioContainer_liveStream",
+                  "args": null
+                },
+                {
+                  "kind": "FragmentSpread",
+                  "name": "sideBarContainer_audios",
                   "args": null
                 },
                 {

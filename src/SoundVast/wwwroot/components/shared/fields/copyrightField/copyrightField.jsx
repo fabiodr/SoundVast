@@ -4,6 +4,7 @@ import { Field } from 'redux-form';
 
 import InputRadioButtonGroup from '../inputField/inputRadioButtonGroup';
 import CreativeCommonsGroup from './creativeCommonsGroupContainer';
+import styles from './copyrightField.less';
 
 const CopyrightField = ({ id, formName }) => {
   const creativeCommonsValue = 'CreativeCommons';
@@ -13,6 +14,7 @@ const CopyrightField = ({ id, formName }) => {
       <Field
         component={InputRadioButtonGroup}
         name="copyright"
+        groupClassName={styles.radioButtonGroup}
         options={[
           { label: 'All Rights Reserved', id: `allRightsReserved_${id}`, customValue: 'AllRightsReserved' },
           { label: 'Creative Commons', id: `creativeCommons_${id}`, customValue: creativeCommonsValue },

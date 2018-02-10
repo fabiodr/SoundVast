@@ -30,9 +30,6 @@ const fragments = graphql`
       searchQuery: $searchQuery
       filter: $filter
     ) @connection(key: "radiosContainer_liveStreams") {
-      items {
-        ...sideBarContainer_audios
-      }
       edges {
         cursor
         node {
@@ -42,6 +39,7 @@ const fragments = graphql`
           coverImageUrl
           liveStreamUrl
           ...radioContainer_liveStream
+          ...sideBarContainer_audios
         }
       }
       pageInfo {

@@ -2,19 +2,19 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import ValidationField from '../validationField/validationField';
 
-import styles from './inputRadioButtonGroup.less';
+import ValidationField from '../validationField/validationField';
 import InputRadioButton from './inputRadioButton';
 
 const InputRadioButtonGroup = ({
   input,
   meta: { touched, error = [] },
   options,
+  groupClassName,
   ...props
 }) => (
   <ValidationField touched={touched} error={error}>
-    <div className={styles.inputRadioButtonGroup} >
+    <div className={groupClassName} >
       {options.map(option => (
         <InputRadioButton key={option.id} input={input} {...props} {...option} />
       ))}
@@ -40,6 +40,7 @@ InputRadioButtonGroup.propTypes = {
       value: PropTypes.any,
     }).isRequired,
   ).isRequired,
+  groupClassName: PropTypes.string.isRequired,
 };
 
 export default InputRadioButtonGroup;

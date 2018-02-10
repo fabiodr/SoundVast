@@ -8,9 +8,9 @@ import ErrorPage from './errorPage';
 const createProps = ({ status }) => {
   switch (status) {
     case 404:
-      return { error: 'The page could not be found' };
+      return { error: 'The page could not be found.' };
     default:
-      return { error: 'A general error occured' };
+      return { error: 'An unknown error has occured ¯\\_(ツ)_/¯. We have been notified of the error and have sent Kanye West to investigate it.' };
   }
 };
 

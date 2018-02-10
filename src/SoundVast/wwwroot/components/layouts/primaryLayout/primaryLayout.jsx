@@ -7,14 +7,15 @@ import FooterPlaylist from '../../footerPlaylist/footerPlaylistContainer';
 import styles from './primaryLayout.less';
 import FlagAudioModal from '../../flag/flagAudioModalContainer';
 import FlagCommentModal from '../../flag/flagCommentModalContainer';
-import EditSongModal from '../../edit/editSongModalContainer';
 import PlaylistModal from '../../playlist/playlistModalContainer';
+import CookieNotice from '../../legal/cookieNoticeContainer';
+import PrimaryLayoutErrorBoundary from './primaryLayoutErrorBoundary';
 
-const PrimaryLayout = ({ children, user, loginProviders, ...props }) => {
+const PrimaryLayout = ({ children, user, loginProviders }) => {
   const isAuthorized = user !== null;
 
   return (
-    <div>
+    <PrimaryLayoutErrorBoundary>
       <Account loginProviders={loginProviders} />
       <Header user={user} />
       <div className={styles.main}>
@@ -22,16 +23,15 @@ const PrimaryLayout = ({ children, user, loginProviders, ...props }) => {
       </div>
       <FlagAudioModal isAuthorized={isAuthorized} />
       <FlagCommentModal isAuthorized={isAuthorized} />
-      <EditSongModal data={props} />
       <PlaylistModal isAuthorized={isAuthorized} />
       <FooterPlaylist />
-    </div>
+      <CookieNotice />
+    </PrimaryLayoutErrorBoundary>
   );
 };
 
 PrimaryLayout.defaultProps = {
   children: null,
-  editSongModal: null,
   user: null,
 };
 

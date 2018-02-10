@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { Resolver } from 'found-relay';
 import 'react-jplaylist/src/less/skins/sleek.less';
@@ -12,18 +11,13 @@ import './app.less';
 import Router from './routing/router';
 import store from './store/store';
 import environment from './environment/environment';
-import ErrorBoundary from './ErrorBoundary';
-import CookieNotice from '../legal/cookieNoticeContainer';
 
 const resolver = new Resolver(environment);
 
-ReactDOM.render((
-  <ErrorBoundary>
-    <Provider store={store}>
-      <div>
-        <Router matchContext={{ store }} resolver={resolver} />
-        <CookieNotice />
-      </div>
-    </Provider>
-  </ErrorBoundary>
-), document.getElementById('app'));
+const App = () => (
+  <Provider store={store}>
+    <Router matchContext={{ store }} resolver={resolver} />
+  </Provider>
+);
+
+export default App;

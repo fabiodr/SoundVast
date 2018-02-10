@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import styles from './errorPage.less';
+
 const ErrorPage = ({ status, error, quotation }) => (
-  <div>
-    <h1>{status}</h1>
-    <div>{error}</div>
-    <div>{quotation}</div>
+  <div className={styles.errorPage}>
+    <h1>Error {status}</h1>
+    <div className={styles.error}>{error}</div>
+    <blockquote>{quotation}</blockquote>
   </div>
 );
 

@@ -29,7 +29,7 @@ module.exports = {
   context: __dirname,
   devtool,
   entry: {
-    app: './wwwroot/components/app/app.jsx',
+    app: './wwwroot/components/app/appContainer.jsx',
     graphiQl: './wwwroot/components/_config/graphiQl/graphiQl.jsx',
     vendor: [
       'react',

@@ -1,10 +1,9 @@
 import React from 'react';
 
-import TextContent from '../content/textContent';
-
+import PageContent from '../content/pageContent';
 
 const PrivacyPolicy = () => (
-  <TextContent>
+  <PageContent>
     <h1>Privacy Policy</h1>
     <h2>Last Updated: February 10th 2018</h2>
     <p>
@@ -173,7 +172,7 @@ const PrivacyPolicy = () => (
         </p>
       </li>
     </ol>
-  </TextContent>
+  </PageContent>
 );
 
 export default PrivacyPolicy;

@@ -37,7 +37,10 @@ const Radios = ({ liveStreams, loadMore }) => {
                     <Radio key={node.audioId} footerPlaylist={footerPlaylist} liveStream={node} />)}
                 </Grid>
               </InfiniteScroll>
-              <SideBar isFixed={values.pastTopOfElement} audios={liveStreams.items} />
+              <SideBar
+                isFixed={values.pastTopOfElement}
+                audios={liveStreams.edges.map(x => x.node)}
+              />
             </div>
           )}
         </ScrollTracker>
@@ -48,7 +51,6 @@ const Radios = ({ liveStreams, loadMore }) => {
 
 Radios.propTypes = {
   liveStreams: PropTypes.shape({
-    items: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
     pageInfo: PropTypes.shape({
       hasNextPage: PropTypes.bool.isRequired,
     }).isRequired,
