@@ -1,38 +1,39 @@
 @import '../../styles/colors';
 
 .search {
-    display: flex;
-    align-items: center;
-    position: relative;
+  display: flex;
+  align-items: center;
+  position: relative;
 }
 
 .searchField {
-    border: solid 1px @grey4;
-    border-radius: 2px;
-    height: 35px;
-    width: 400px;
-    box-sizing: border-box;
-    transition: width 0.3s;
-    padding: 5px;
-    padding-right: 50px;
+  border: solid 1px @grey4;
+  border-radius: 2px;
+  height: 35px;
+  box-sizing: border-box;
+  transition: width 0.3s;
+  padding: 5px;
+  padding-right: 50px;
+  flex: 1;
+  min-width: inherit;
 }
 
 .searchIcon {
-    width: 14px;
-    height: 14px;
-    fill: @grey4;
+  width: 14px;
+  height: 14px;
+  fill: @grey4;
 }
 
 .searchButton {
-    border-left: solid 1px @grey2;
-    height: 33px;
-    padding: 0 15px;
-    border-radius: 1px;
-    margin-left: 1px;
-    position: absolute;
-    right: 1px;
+  border-left: solid 1px @grey2;
+  height: 33px;
+  padding: 0 15px;
+  border-radius: 1px;
+  margin-left: 1px;
+  position: absolute;
+  right: 1px;
 }
 
 .searchButton:hover .searchIcon {
-    fill: @grey5;
+  fill: @grey5;
 }

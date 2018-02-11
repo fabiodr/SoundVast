@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-import SoundVastLogoIcon from '../icons/logo';
-import LegalIcon from '../icons/legal';
+import SoundVastSmallLogoIcon from '../icons/logoSmall';
+import MenuIcon from '../icons/menu';
 import styles from './header.less';
 import UserButton from './userButton/userButtonContainer';
 import UnAuthorizedList from './unAuthorizedList/unAuthorizedListContainer';
@@ -11,13 +11,13 @@ import Dropdown from '../shared/dropdown/dropdownContainer';
 import Popups from '../shared/popup/popupsContainer';
 import Button from '../shared/button/button';
 import Search from './search/searchContainer';
-import LinkButton from '../shared/button/linkButton';
 import HeaderGenreLink from './headerGenreLinkContainer';
 import HeaderUploadLink from './headerUploadLink';
 import HeaderTermsLink from './headerTermsLink';
 import HeaderPrivacyLink from './headerPrivacyLink';
+import LinkButton from '../shared/button/linkButton';
 
-const Header = ({
+const MobileHeader = ({
   user,
 }) => (
   <header className={styles.header}>
@@ -27,25 +27,27 @@ const Header = ({
         styleName="secondary"
         className={classnames(styles.navButton, styles.logoContainer)}
       >
-        <SoundVastLogoIcon className={styles.logoIcon} />
+        <SoundVastSmallLogoIcon className={styles.smallLogoIcon} />
       </LinkButton>
-      <HeaderGenreLink />
-      <HeaderUploadLink />
       <Search
         className={styles.search}
       />
-      <UserButton user={user} className={styles.navButton} />
-      <UnAuthorizedList user={user} className={styles.navButton} />
       <Popups />
       <Dropdown
         titleCallback={onClick => (
           <Button className={styles.dropdownTitle} styleName="secondary" onClick={onClick}>
-            <LegalIcon className={styles.legalIcon} />
+            <MenuIcon className={styles.menuIcon} />
           </Button>
         )}
-        className={styles.navButton}
+        className={classnames(styles.navButton, styles.dropdown)}
       >
         <ul>
+          <li>
+            <UserButton user={user} className={styles.navButton} />
+            <UnAuthorizedList user={user} className={styles.navButton} />
+            <HeaderGenreLink />
+            <HeaderUploadLink />
+          </li>
           <li>
             <HeaderTermsLink />
             <HeaderPrivacyLink />
@@ -56,14 +58,14 @@ const Header = ({
   </header>
 );
 
-Header.defaultProps = {
+MobileHeader.defaultProps = {
   user: null,
 };
 
-Header.propTypes = {
+MobileHeader.propTypes = {
   user: PropTypes.shape({
     username: PropTypes.string,
   }),
 };
 
-export default Header;
+export default MobileHeader;

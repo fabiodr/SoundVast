@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 
 import Account from '../../account/account';
 import Header from '../../header/headerContainer';
@@ -10,23 +11,42 @@ import FlagCommentModal from '../../flag/flagCommentModalContainer';
 import PlaylistModal from '../../playlist/playlistModalContainer';
 import CookieNotice from '../../legal/cookieNoticeContainer';
 import PrimaryLayoutErrorBoundary from './primaryLayoutErrorBoundary';
+import DisplayType from '../../shared/displayType';
 
-const PrimaryLayout = ({ children, user, loginProviders }) => {
+const PrimaryLayout = ({
+  children,
+  user,
+  loginProviders,
+}) => {
   const isAuthorized = user !== null;
 
   return (
-    <PrimaryLayoutErrorBoundary>
-      <Account loginProviders={loginProviders} />
-      <Header user={user} />
-      <div className={styles.main}>
-        {children}
-      </div>
-      <FlagAudioModal isAuthorized={isAuthorized} />
-      <FlagCommentModal isAuthorized={isAuthorized} />
-      <PlaylistModal isAuthorized={isAuthorized} />
-      <FooterPlaylist />
-      <CookieNotice />
-    </PrimaryLayoutErrorBoundary>
+    <DisplayType>
+      {(displayType) => {
+        const displayTypeClassName = classnames(
+          displayType.isMobile && 'mobile',
+          displayType.isTablet && 'tablet',
+          displayType.isDesktop && 'desktop',
+        );
+
+        return (
+          <div className={displayTypeClassName}>
+            <PrimaryLayoutErrorBoundary>
+              <Account loginProviders={loginProviders} />
+              <Header user={user} />
+              <div className={styles.main}>
+                {children}
+              </div>
+              <FlagAudioModal isAuthorized={isAuthorized} />
+              <FlagCommentModal isAuthorized={isAuthorized} />
+              <PlaylistModal isAuthorized={isAuthorized} />
+              <FooterPlaylist />
+              <CookieNotice />
+            </PrimaryLayoutErrorBoundary>
+          </div>
+        );
+      }}
+    </DisplayType>
   );
 };
 

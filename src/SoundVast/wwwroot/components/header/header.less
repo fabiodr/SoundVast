@@ -3,14 +3,12 @@
 .header {
   border-bottom: solid 1px @grey1;
   top: 0;
-  width: 100%;
   display: flex;
-  justify-content: center;
 
   nav {
-    position: relative;
-    width: 60%;
     display: flex;
+    width: 100%;
+    justify-content: center;
 
     > a {
       display: flex;
@@ -20,13 +18,8 @@
   }
 }
 
-.navButton {
-  margin-left: 2px;
-  margin-right: 2px;
-}
-
-.logoLink {
-  padding: 5px 10px;
+.logoContainer {
+  display: flex;
 }
 
 .logoIcon {
@@ -34,34 +27,22 @@
   height: 43px;
 }
 
-.menuIcon, .reviewIcon {
+.smallLogoIcon {
+  height: 43px;
+  width: 43px;
+}
+
+.menuIcon, .legalIcon, .reviewIcon {
   width: 23px;
   height: 23px;
 }
 
-.legalDropdown {
-  li {
-    > a {
-      border-bottom: solid 1px @grey2;
-    }
-  }
-}
-
-.legalDropdownTitle {
+.dropdownTitle {
   height: 100%;
 }
 
 .search {
-  margin-left: 10px;
-  margin-right: 40px;
-}
-
-.copyrightNotice {
-  white-space: nowrap;
-  display: flex;
-  color: @grey4;
-  font-size: 12px;
-  align-items: center;
-  margin-left: 10px;
-  margin-right: 10px;
+  margin: 0 10px;
+  flex-basis: 400px;
+  min-width: 115px;
 }

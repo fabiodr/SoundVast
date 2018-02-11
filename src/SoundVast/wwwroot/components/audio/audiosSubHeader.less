@@ -1,19 +1,49 @@
+
+
 .audiosSubHeader {
-    display: flex;
+  display: flex;
 }
 
 .audiosSubHeader:before {
-    content: '';
-    flex: 1;
+  content: '';
+  flex: 1;
+}
+
+.rightColumn {
+  margin-left: 20px;
 }
 
 .middleColumn, .rightColumn {
-    display: flex;
-    flex: 1;
+  display: flex;
+  flex: 1;
+  align-items: center;
 }
 
-.toggleSideBar {
-    margin-left: auto;
-    margin-top: 5px;
-    margin-right: 10px;
+.subHeaderIcons {
+  display: flex;
+  margin-left: auto;
+
+  > div {
+    margin: 0px 10px;
+  }
+
+  svg {
+    width: 32px;
+    height: 28px;
+  }
+}
+
+.filterToggles {
+  ul {
+    display: flex;
+    justify-content: center;
+    white-space: nowrap;
+  
+    button {
+        font-size: 13px;
+        margin-left: 7px;
+        margin-right: 7px;
+        font-weight: bold;
+    }  
+  }
 }

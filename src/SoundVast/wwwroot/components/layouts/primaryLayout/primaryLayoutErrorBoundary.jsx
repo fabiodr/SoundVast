@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'recompose';
 import { withRouter } from 'found';
 
-class AppErrorBoundary extends React.Component {
+class PrimaryLayoutErrorBoundary extends React.Component {
   componentDidCatch() {
     this.props.router.push('/error/500');
   }
@@ -16,11 +16,11 @@ class AppErrorBoundary extends React.Component {
   }
 }
 
-AppErrorBoundary.propTypes = {
+PrimaryLayoutErrorBoundary.propTypes = {
   router: PropTypes.object.isRequired,
   children: PropTypes.node.isRequired,
 };
 
 export default compose(
   withRouter,
-)(AppErrorBoundary);
+)(PrimaryLayoutErrorBoundary);

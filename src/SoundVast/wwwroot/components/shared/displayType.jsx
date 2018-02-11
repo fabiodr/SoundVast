@@ -1,0 +1,63 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+
+import {
+  breakpointMobile,
+  breakpointTablet,
+} from '../styles/sizes';
+
+class DisplayType extends React.Component {
+  state = {
+    displayType: 'desktop',
+  }
+
+  componentDidMount() {
+    window.addEventListener('resize', this.updateDisplayType);
+    this.updateDisplayType();
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateDisplayType);
+  }
+
+  getDisplayType = (windowWidth) => {
+    if (windowWidth < breakpointMobile.value) {
+      return 'mobile';
+    }
+
+    if (windowWidth < breakpointTablet.value) {
+      return 'tablet';
+    }
+
+    return 'desktop';
+  }
+
+  updateDisplayType = () => {
+    const windowWidth = document.body.getBoundingClientRect().width;
+    const displayType = this.getDisplayType(windowWidth);
+
+    if (displayType !== this.state.displayType) {
+      this.setState({ displayType });
+    }
+  }
+
+  render() {
+    const displayType = {
+      isMobile: this.state.displayType === 'mobile',
+      isTablet: this.state.displayType === 'tablet',
+      isDesktop: this.state.displayType === 'desktop',
+    };
+
+    return (
+      <div>
+        {this.props.children(displayType)}
+      </div>
+    );
+  }
+}
+
+DisplayType.propTypes = {
+  children: PropTypes.func.isRequired,
+};
+
+export default DisplayType;

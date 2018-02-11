@@ -1,20 +1,13 @@
-import { compose, withProps } from 'recompose';
-import { withRouter } from 'found';
+import { compose, branch, renderComponent } from 'recompose';
 
 import Header from './header';
-
-const createProps = ({ match }) => ({
-  genresLocationInformation: {
-    pathname: '/genres',
-    state: {
-      queries: {
-        ...match.location.query,
-      },
-    },
-  },
-});
+import withDisplayType from '../shared/withDisplayType';
+import MobileHeader from './mobileHeader';
 
 export default compose(
-  withRouter,
-  withProps(createProps),
+  withDisplayType,
+  branch(
+    ({ displayType }) => displayType.isMobile,
+    renderComponent(MobileHeader),
+  ),
 )(Header);

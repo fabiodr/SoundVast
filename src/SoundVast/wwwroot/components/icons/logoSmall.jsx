@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const SVIcon = ({ className, ...props }) => (
+const LogoSmall = ({ className, ...props }) => (
   <svg className={className} {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 520" height="520" width="520" xmlSpace="preserve" id="svg2" version="1.1">
     <metadata id="metadata8" />
     <defs id="defs6" />
@@ -15,12 +15,12 @@ const SVIcon = ({ className, ...props }) => (
   </svg>
 );
 
-SVIcon.defaultProps = {
+LogoSmall.defaultProps = {
   className: null,
 };
 
-SVIcon.propTypes = {
+LogoSmall.propTypes = {
   className: PropTypes.string,
 };
 
-export default SVIcon;
+export default LogoSmall;

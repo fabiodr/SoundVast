@@ -1,7 +1,7 @@
 import React from 'react';
 import { setDisplayName, wrapDisplayName, compose } from 'recompose';
 
-import ErrorBoundary from './ErrorBoundary';
+import ErrorBoundary from './errorBoundary';
 
 const withErrorBoundary = errorOutput => (Component) => {
   const ErrorBoundaryWrapper = props => (
