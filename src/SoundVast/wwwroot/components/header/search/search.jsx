@@ -17,13 +17,13 @@ const Search = ({
     className={classnames(styles.search, className)}
   >
     <Field
-      placeholder="Search..."
+      placeholder="Search"
       name="search"
       id="search"
       component="input"
       className={styles.searchField}
     />
-    <Button styleName="secondary" className={styles.searchButton}>
+    <Button title="Search" styleName="secondary" className={styles.searchButton}>
       <SearchIcon className={styles.searchIcon} />
     </Button>
   </form>

@@ -4,6 +4,7 @@
   display: flex;
   align-items: center;
   position: relative;
+  min-width: 30px;
 }
 
 .searchField {
@@ -16,6 +17,16 @@
   padding-right: 50px;
   flex: 1;
   min-width: inherit;
+}
+
+@media only screen and (max-width: 370px) {
+  .searchButton {
+    display: none;
+  }
+
+  .searchField {
+    padding-right: 5px;
+  }
 }
 
 .searchIcon {

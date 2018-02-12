@@ -4,6 +4,8 @@ import classnames from 'classnames';
 
 import SoundVastSmallLogoIcon from '../icons/logoSmall';
 import MenuIcon from '../icons/menu';
+import UploadIcon from '../icons/upload';
+import GenreIcon from '../icons/stack';
 import styles from './header.less';
 import UserButton from './userButton/userButtonContainer';
 import UnAuthorizedList from './unAuthorizedList/unAuthorizedListContainer';
@@ -13,29 +15,31 @@ import Button from '../shared/button/button';
 import Search from './search/searchContainer';
 import HeaderGenreLink from './headerGenreLinkContainer';
 import HeaderUploadLink from './headerUploadLink';
+import HeaderHomeLink from './headerHomeLink';
 import HeaderTermsLink from './headerTermsLink';
 import HeaderPrivacyLink from './headerPrivacyLink';
-import LinkButton from '../shared/button/linkButton';
 
 const MobileHeader = ({
   user,
 }) => (
   <header className={styles.header}>
     <nav>
-      <LinkButton
-        to="/"
-        styleName="secondary"
-        className={classnames(styles.navButton, styles.logoContainer)}
-      >
+      <HeaderHomeLink>
         <SoundVastSmallLogoIcon className={styles.smallLogoIcon} />
-      </LinkButton>
+      </HeaderHomeLink>
+      <HeaderGenreLink title="Genres">
+        <GenreIcon className={styles.genreIcon} />
+      </HeaderGenreLink>
+      <HeaderUploadLink title="Upload">
+        <UploadIcon className={styles.uploadIcon} />
+      </HeaderUploadLink>
       <Search
         className={styles.search}
       />
       <Popups />
       <Dropdown
         titleCallback={onClick => (
-          <Button className={styles.dropdownTitle} styleName="secondary" onClick={onClick}>
+          <Button title="Misc" className={styles.dropdownTitle} styleName="secondary" onClick={onClick}>
             <MenuIcon className={styles.menuIcon} />
           </Button>
         )}
@@ -45,8 +49,6 @@ const MobileHeader = ({
           <li>
             <UserButton user={user} className={styles.navButton} />
             <UnAuthorizedList user={user} className={styles.navButton} />
-            <HeaderGenreLink />
-            <HeaderUploadLink />
           </li>
           <li>
             <HeaderTermsLink />

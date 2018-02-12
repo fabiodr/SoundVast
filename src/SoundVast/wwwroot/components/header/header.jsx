@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
 
 import SoundVastLogoIcon from '../icons/logo';
 import LegalIcon from '../icons/legal';
@@ -11,26 +10,22 @@ import Dropdown from '../shared/dropdown/dropdownContainer';
 import Popups from '../shared/popup/popupsContainer';
 import Button from '../shared/button/button';
 import Search from './search/searchContainer';
-import LinkButton from '../shared/button/linkButton';
 import HeaderGenreLink from './headerGenreLinkContainer';
 import HeaderUploadLink from './headerUploadLink';
 import HeaderTermsLink from './headerTermsLink';
 import HeaderPrivacyLink from './headerPrivacyLink';
+import HeaderHomeLink from './headerHomeLink';
 
 const Header = ({
   user,
 }) => (
   <header className={styles.header}>
     <nav>
-      <LinkButton
-        to="/"
-        styleName="secondary"
-        className={classnames(styles.navButton, styles.logoContainer)}
-      >
+      <HeaderHomeLink>
         <SoundVastLogoIcon className={styles.logoIcon} />
-      </LinkButton>
-      <HeaderGenreLink />
-      <HeaderUploadLink />
+      </HeaderHomeLink>
+      <HeaderGenreLink>Genres</HeaderGenreLink>
+      <HeaderUploadLink>Upload</HeaderUploadLink>
       <Search
         className={styles.search}
       />
@@ -39,7 +34,7 @@ const Header = ({
       <Popups />
       <Dropdown
         titleCallback={onClick => (
-          <Button className={styles.dropdownTitle} styleName="secondary" onClick={onClick}>
+          <Button title="Legal" className={styles.dropdownTitle} styleName="secondary" onClick={onClick}>
             <LegalIcon className={styles.legalIcon} />
           </Button>
         )}

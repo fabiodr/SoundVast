@@ -20,6 +20,7 @@
 
 .logoContainer {
   display: flex;
+  position: relative;
 }
 
 .logoIcon {
@@ -32,7 +33,12 @@
   width: 43px;
 }
 
-.menuIcon, .legalIcon, .reviewIcon {
+.menuIcon,
+.legalIcon,
+.reviewIcon,
+.uploadIcon,
+.userIcon,
+.genreIcon {
   width: 23px;
   height: 23px;
 }
@@ -44,5 +50,11 @@
 .search {
   margin: 0 10px;
   flex-basis: 400px;
-  min-width: 115px;
+}
+
+.beta {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  font-size: 12px;
 }
