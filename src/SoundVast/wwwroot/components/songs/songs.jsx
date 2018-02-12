@@ -29,7 +29,7 @@ const Songs = ({ songs, loadMore }) => {
               <InfiniteScroll
                 loadMore={loadMore}
                 hasMore={songs.pageInfo.hasNextPage}
-                loader={<Loader />}
+                loader={<Loader key={0} />}
                 initialLoad={false}
                 className={styles.gridContainer}
               >

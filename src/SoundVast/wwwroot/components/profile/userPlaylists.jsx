@@ -10,7 +10,7 @@ const UserPlaylists = ({ playlists, loadMore, getCurrentPlaylist }) => (
   <InfiniteScroll
     loadMore={loadMore}
     hasMore={playlists.pageInfo.hasNextPage}
-    loader={<Loader />}
+    loader={<Loader key={0} />}
     initialLoad={false}
   >
     <Grid>

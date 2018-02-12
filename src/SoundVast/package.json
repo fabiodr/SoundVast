@@ -132,6 +132,7 @@
   "dependencies": {
     "airbnb-prop-types": "^2.7.0",
     "classnames": "^2.2.5",
+    "dotenv": "^5.0.0",
     "es6-promise": "^4.1.0",
     "farce": "^0.2.1",
     "fetch-intercept": "^2.2.3",

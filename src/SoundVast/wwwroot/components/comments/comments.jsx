@@ -10,7 +10,7 @@ const Comments = ({ audio, loadMore }) => (
     <InfiniteScroll
       loadMore={loadMore}
       hasMore={audio.comments.pageInfo.hasNextPage}
-      loader={<Loader />}
+      loader={<Loader key={0} />}
       initialLoad={false}
     >
       {audio.comments.edges.map(({ node }) => (

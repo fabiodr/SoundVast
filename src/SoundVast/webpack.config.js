@@ -2,6 +2,9 @@
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const fs = require('fs');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 const dev = process.env.NODE_ENV !== 'production';
 const plugins = [
@@ -11,6 +14,12 @@ const plugins = [
   }),
   new ExtractTextPlugin({
     filename: '[name].bundle.css',
+  }),
+  new Webpack.DefinePlugin({
+    __DEV__: dev,
+    'process.env': {
+      ENABLE_UPLOAD: JSON.stringify(process.env.ENABLE_UPLOAD),
+    },
   }),
 ];
 let devtool = null;

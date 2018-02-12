@@ -17,7 +17,7 @@ const Artists = ({ artists, loadMore, getCurrentPlaylist }) => (
       <InfiniteScroll
         loadMore={loadMore}
         hasMore={artists.pageInfo.hasNextPage}
-        loader={<Loader />}
+        loader={<Loader key={0} />}
         initialLoad={false}
       >
         <Grid>

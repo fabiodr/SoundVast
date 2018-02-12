@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { compose, branch, renderNothing } from 'recompose';
 
 import LinkButton from '../shared/button/linkButton';
 import styles from './header.less';
@@ -24,4 +25,9 @@ HeaderUploadLink.propTypes = {
   title: PropTypes.string,
 };
 
-export default HeaderUploadLink;
+export default compose(
+  branch(
+    () => !JSON.parse(process.env.ENABLE_UPLOAD),
+    renderNothing,
+  ),
+)(HeaderUploadLink);

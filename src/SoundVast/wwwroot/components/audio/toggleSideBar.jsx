@@ -10,7 +10,7 @@ const ToggleSideBar = ({ onClick, className, showingSideBar }) => (
   <Button
     styleName="secondary"
     className={classnames(styles.toggleSideBar, className)}
-    title={showingSideBar ? 'Hide the sidebar' : 'Show the sidebar'}
+    title={showingSideBar ? 'Hide comments' : 'Show comments'}
     onClick={onClick}
   >
     <CommentsIcon className={styles.toggleSideBarIcon} />
