@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import SoundVastLogoIcon from '../icons/logo';
 import LegalIcon from '../icons/legal';
 import styles from './header.less';
-import UserButton from './userButton/userButtonContainer';
 import UnAuthorizedList from './unAuthorizedList/unAuthorizedListContainer';
 import Dropdown from '../shared/dropdown/dropdownContainer';
 import Popups from '../shared/popup/popupsContainer';
@@ -15,6 +14,7 @@ import HeaderUploadLink from './headerUploadLink';
 import HeaderTermsLink from './headerTermsLink';
 import HeaderPrivacyLink from './headerPrivacyLink';
 import HeaderHomeLink from './headerHomeLink';
+import Logout from '../account/logout/logoutContainer';
 
 const Header = ({
   user,
@@ -29,8 +29,17 @@ const Header = ({
       <Search
         className={styles.search}
       />
-      <UserButton user={user} className={styles.navButton} />
-      <UnAuthorizedList user={user} className={styles.navButton} />
+      <Dropdown
+        titleCallback={onClick => (
+          <Button className={styles.dropdownTitle} styleName="secondary" onClick={onClick}>
+            {user.userName}
+          </Button>
+        )}
+        className={styles.navButton}
+      >
+        <Logout />
+        <UnAuthorizedList user={user} className={styles.navButton} />
+      </Dropdown>
       <Popups />
       <Dropdown
         titleCallback={onClick => (
@@ -40,12 +49,8 @@ const Header = ({
         )}
         className={styles.navButton}
       >
-        <ul>
-          <li>
-            <HeaderTermsLink />
-            <HeaderPrivacyLink />
-          </li>
-        </ul>
+        <HeaderTermsLink />
+        <HeaderPrivacyLink />
       </Dropdown>
     </nav>
   </header>

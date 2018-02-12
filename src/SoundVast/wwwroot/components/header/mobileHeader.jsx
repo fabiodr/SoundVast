@@ -1,23 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
 
 import SoundVastSmallLogoIcon from '../icons/logoSmall';
-import MenuIcon from '../icons/menu';
+import UserIcon from '../icons/user';
 import UploadIcon from '../icons/upload';
 import GenreIcon from '../icons/stack';
 import styles from './header.less';
-import UserButton from './userButton/userButtonContainer';
-import UnAuthorizedList from './unAuthorizedList/unAuthorizedListContainer';
-import Dropdown from '../shared/dropdown/dropdownContainer';
 import Popups from '../shared/popup/popupsContainer';
-import Button from '../shared/button/button';
 import Search from './search/searchContainer';
 import HeaderGenreLink from './headerGenreLinkContainer';
 import HeaderUploadLink from './headerUploadLink';
 import HeaderHomeLink from './headerHomeLink';
+import Dropdown from '../shared/dropdown/dropdownContainer';
+import Button from '../shared/button/button';
+import Logout from '../account/logout/logoutContainer';
 import HeaderTermsLink from './headerTermsLink';
 import HeaderPrivacyLink from './headerPrivacyLink';
+import UnAuthorizedList from './unAuthorizedList/unAuthorizedListContainer';
 
 const MobileHeader = ({
   user,
@@ -36,32 +35,26 @@ const MobileHeader = ({
       <Search
         className={styles.search}
       />
-      <Popups />
       <Dropdown
         titleCallback={onClick => (
-          <Button title="Misc" className={styles.dropdownTitle} styleName="secondary" onClick={onClick}>
-            <MenuIcon className={styles.menuIcon} />
+          <Button title={user.userName} className={styles.dropdownTitle} styleName="secondary" onClick={onClick}>
+            <UserIcon className={styles.userIcon} />
           </Button>
         )}
-        className={classnames(styles.navButton, styles.dropdown)}
+        className={styles.navButton}
       >
-        <ul>
-          <li>
-            <UserButton user={user} className={styles.navButton} />
-            <UnAuthorizedList user={user} className={styles.navButton} />
-          </li>
-          <li>
-            <HeaderTermsLink />
-            <HeaderPrivacyLink />
-          </li>
-        </ul>
+        <Logout />
+        <UnAuthorizedList user={user} className={styles.navButton} />
+        <HeaderTermsLink />
+        <HeaderPrivacyLink />
       </Dropdown>
+      <Popups />
     </nav>
   </header>
 );
 
 MobileHeader.defaultProps = {
-  user: null,
+  user: {},
 };
 
 MobileHeader.propTypes = {

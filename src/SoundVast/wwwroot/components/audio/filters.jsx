@@ -8,14 +8,12 @@ const Filters = ({
   filter,
   dateFrom,
   styleName,
-}) => (
-  <ul>
-    <li><Button styleName={styleName} onClick={() => filter('newest')}>Newest</Button></li>
-    <li><Button styleName={styleName} onClick={() => filter('topRated', { dateFrom })}>Top Rated</Button></li>
-    <li><Button styleName={styleName} onClick={() => filter('mostCommented', { dateFrom })}>Most Commented</Button></li>
-    <li><Button styleName={styleName} onClick={() => filter('mostPlayed', { dateFrom })}>Most Played</Button></li>
-  </ul>
-);
+}) => [
+  <Button key={0} styleName={styleName} onClick={() => filter('newest')}>Newest</Button>,
+  <Button key={1} styleName={styleName} onClick={() => filter('topRated', { dateFrom })}>Top Rated</Button>,
+  <Button key={2} styleName={styleName} onClick={() => filter('mostCommented', { dateFrom })}>Most Commented</Button>,
+  <Button key={3} styleName={styleName} onClick={() => filter('mostPlayed', { dateFrom })}>Most Played</Button>,
+];
 
 // TODO: Put -30 in .env file
 const defaultDateFrom = () => {

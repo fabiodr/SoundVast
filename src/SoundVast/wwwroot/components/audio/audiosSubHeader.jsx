@@ -8,15 +8,16 @@ import Dropdown from '../shared/dropdown/dropdownContainer';
 import Button from '../shared/button/button';
 import SortIcon from '../icons/sort';
 
+/* eslint-disable react/no-array-index-key */
 const AudiosSubHeader = () => (
   <DisplayType>
     {displayType => (
       <div className={styles.audiosSubHeader}>
         <div className={styles.middleColumn}>
           {!displayType.isMobile && (
-            <div className={styles.filterToggles}>
-              <Filters />
-            </div>
+            <ul className={styles.filterToggles}>
+              {React.Children.toArray(<Filters />).map((filter, i) => <li key={i}>{filter}</li>)}
+            </ul>
           )}
         </div>
         <div className={styles.rightColumn}>

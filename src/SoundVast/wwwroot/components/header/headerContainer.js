@@ -1,13 +1,26 @@
 import { compose, branch, renderComponent } from 'recompose';
+import { graphql } from 'react-relay';
+import { fragmentContainer } from 'recompose-relay-modern';
 
 import Header from './header';
 import withDisplayType from '../shared/withDisplayType';
 import MobileHeader from './mobileHeader';
 
-export default compose(
+const fragments = graphql`
+  fragment headerContainer_user on ApplicationUser {
+    userName
+  }
+`;
+
+const enhance = compose(
+  fragmentContainer(fragments),
   withDisplayType,
   branch(
     ({ displayType }) => displayType.isMobile,
     renderComponent(MobileHeader),
   ),
-)(Header);
+);
+
+const HeaderContainer = enhance(Header);
+
+export default HeaderContainer;

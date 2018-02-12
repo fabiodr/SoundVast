@@ -5,7 +5,7 @@ import PrimaryLayout from './primaryLayout';
 const query = graphql`
   query primaryLayoutContainerQuery {
     user {
-      ...userButtonContainer_user,
+      ...headerContainer_user,
       ...unAuthorizedListContainer_user,
     }
     loginProviders {

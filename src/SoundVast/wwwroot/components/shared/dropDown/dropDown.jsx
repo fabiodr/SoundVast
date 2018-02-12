@@ -26,7 +26,9 @@ const Dropdown = ({
         }}
         onClick={() => setDropdownVisibility(false)}
       >
-        {children}
+        <ul>
+          {React.Children.map(children, child => <li>{child}</li>)}
+        </ul>
       </div>
       : null}
   </div>
