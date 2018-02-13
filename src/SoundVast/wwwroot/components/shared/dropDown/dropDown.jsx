@@ -16,21 +16,20 @@ const Dropdown = ({
     className={classnames(styles.dropdown, className)}
   >
     {titleCallback(() => setDropdownVisibility(!isDropdownVisible))}
-    {isDropdownVisible ?
-      <div
-        role="button"
-        tabIndex={0}
-        onMouseDown={(e) => {
-          e.stopPropagation();
-          e.preventDefault();
-        }}
-        onClick={() => setDropdownVisibility(false)}
-      >
-        <ul>
-          {React.Children.map(children, child => <li>{child}</li>)}
-        </ul>
-      </div>
-      : null}
+    <div
+      role="button"
+      tabIndex={0}
+      onMouseDown={(e) => {
+        e.stopPropagation();
+        e.preventDefault();
+      }}
+      onClick={() => setDropdownVisibility(false)}
+      className={classnames(!isDropdownVisible && styles.hide)}
+    >
+      <ul>
+        {React.Children.map(children, child => <li>{child}</li>)}
+      </ul>
+    </div>
   </div>
 );
 

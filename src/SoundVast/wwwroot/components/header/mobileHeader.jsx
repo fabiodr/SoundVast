@@ -16,10 +16,10 @@ import Button from '../shared/button/button';
 import Logout from '../account/logout/logoutContainer';
 import HeaderTermsLink from './headerTermsLink';
 import HeaderPrivacyLink from './headerPrivacyLink';
-import UnAuthorizedList from './unAuthorizedList/unAuthorizedListContainer';
+import ModalButton from '../shared/button/modalButtonContainer';
 
 const MobileHeader = ({
-  user,
+  userName,
 }) => (
   <header className={styles.header}>
     <nav>
@@ -37,14 +37,16 @@ const MobileHeader = ({
       />
       <Dropdown
         titleCallback={onClick => (
-          <Button title={user.userName} className={styles.dropdownTitle} styleName="secondary" onClick={onClick}>
+          <Button title={userName} className={styles.dropdownTitle} styleName="secondary" onClick={onClick}>
             <UserIcon className={styles.userIcon} />
           </Button>
         )}
         className={styles.navButton}
       >
-        <Logout />
-        <UnAuthorizedList user={user} className={styles.navButton} />
+        {userName ? <Logout /> : [
+          <ModalButton key={0} modalId="login">Login</ModalButton>,
+          <ModalButton key={1} modalId="register">Register</ModalButton>,
+        ]}
         <HeaderTermsLink />
         <HeaderPrivacyLink />
       </Dropdown>
@@ -54,13 +56,11 @@ const MobileHeader = ({
 );
 
 MobileHeader.defaultProps = {
-  user: {},
+  userName: null,
 };
 
 MobileHeader.propTypes = {
-  user: PropTypes.shape({
-    username: PropTypes.string,
-  }),
+  userName: PropTypes.string,
 };
 
 export default MobileHeader;

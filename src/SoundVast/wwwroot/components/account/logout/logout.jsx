@@ -1,19 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import SpinnerSubmit from '../../shared/form/spinnerSubmit/spinnerSubmitContainer';
+import Button from '../../shared/button/button';
 
-const Logout = ({ handleSubmit, form }) => (
+const Logout = ({ handleSubmit }) => (
   <form onSubmit={handleSubmit} action="">
-    <SpinnerSubmit formName={form} styleName="secondary">
+    <Button styleName="secondary">
       Logout
-    </SpinnerSubmit>
+    </Button>
   </form>
 );
 
 Logout.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
-  form: PropTypes.string.isRequired,
 };
 
 export default Logout;

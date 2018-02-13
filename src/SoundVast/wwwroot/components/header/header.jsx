@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import SoundVastLogoIcon from '../icons/logo';
 import LegalIcon from '../icons/legal';
 import styles from './header.less';
-import UnAuthorizedList from './unAuthorizedList/unAuthorizedListContainer';
 import Dropdown from '../shared/dropdown/dropdownContainer';
 import Popups from '../shared/popup/popupsContainer';
 import Button from '../shared/button/button';
+import ModalButton from '../shared/button/modalButtonContainer';
 import Search from './search/searchContainer';
 import HeaderGenreLink from './headerGenreLinkContainer';
 import HeaderUploadLink from './headerUploadLink';
@@ -17,7 +17,7 @@ import HeaderHomeLink from './headerHomeLink';
 import Logout from '../account/logout/logoutContainer';
 
 const Header = ({
-  user,
+  userName,
 }) => (
   <header className={styles.header}>
     <nav>
@@ -29,17 +29,20 @@ const Header = ({
       <Search
         className={styles.search}
       />
-      <Dropdown
-        titleCallback={onClick => (
-          <Button className={styles.dropdownTitle} styleName="secondary" onClick={onClick}>
-            {user.userName}
-          </Button>
-        )}
-        className={styles.navButton}
-      >
-        <Logout />
-        <UnAuthorizedList user={user} className={styles.navButton} />
-      </Dropdown>
+      {userName ? (
+        <Dropdown
+          titleCallback={onClick => (
+            <Button className={styles.dropdownTitle} styleName="secondary" onClick={onClick}>
+              {userName}
+            </Button>
+          )}
+          className={styles.navButton}
+        >
+          <Logout />
+        </Dropdown>)
+        : [<ModalButton key={0} styleName="secondary" className={styles.navButton} modalId="login">Login</ModalButton>,
+          <ModalButton key={1} styleName="secondary" className={styles.navButton} modalId="register">Register</ModalButton>,
+        ]}
       <Popups />
       <Dropdown
         titleCallback={onClick => (
@@ -57,13 +60,11 @@ const Header = ({
 );
 
 Header.defaultProps = {
-  user: null,
+  userName: null,
 };
 
 Header.propTypes = {
-  user: PropTypes.shape({
-    username: PropTypes.string,
-  }),
+  userName: PropTypes.string,
 };
 
 export default Header;
