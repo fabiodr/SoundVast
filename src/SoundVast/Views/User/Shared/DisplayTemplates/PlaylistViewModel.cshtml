@@ -1,6 +1,0 @@
-﻿@model PlaylistViewModel
-
-<a asp-action="Playlist" asp-controller="Audio" data-url="@Url.Action("Playlist", "Audio", new { id = Model.Id })" class="cover-image single-image playlist-cover" style="width: 50px; height: 50px;">
-    <img src="@Model.ImageViewModel.ImagePath" />
-</a>
-<label asp-for="Name"></label>

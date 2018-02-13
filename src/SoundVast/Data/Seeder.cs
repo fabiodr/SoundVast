@@ -45,8 +45,6 @@ namespace SoundVast.Data
                     context.Database.Migrate();
 
                     var genres = Genres.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
-                    //var radioStationCategoryResources = LiveStreamCategories.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
-                    //var placeHolderImage = new ImageFileModel("Placeholder.jpg");
 
                     await SeedImages();
 
@@ -55,32 +53,12 @@ namespace SoundVast.Data
 
                     LuceneSearch.AddOrUpdateLuceneIndex(_audioService.GetAudios());
 
-                    //   InitializeCategories<FileStreamCategoryModel>(context, fileStreamCategoryResources, placeHolderImage);
-                    //   InitializeCategories<LiveStreamCategoryModel>(context, radioStationCategoryResources, placeHolderImage);
-                    //InitializeIdentityForEf(context);
-
                     context.SaveChanges();
                 }
             }
 
             return webHost;
         }
-
-        //private static void InitializeQuotes(ApplicationDbContext context)
-        //{
-        //    var quoteResources = Quotes.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
-        //    var quotes = quoteResources.Select(x => new Quote { Quotation = (string)x.Value });
-
-        //    context.Quotes.AddRange(quotes.Where(quote => !context.Quotes.Any(x => x.Quotation == quote.Quotation)));
-        //}
-
-        //public static void InitializeCategories<T>(ApplicationDbContext context, DictionaryEntry[] categoryResources, ImageFileModel imageFile)
-        //        where T : CategoryModel
-        //{
-        //    var categories = categoryResources.Select(x => (T)Activator.CreateInstance(typeof(T), new object[] { x.Value, imageFile }));
-
-        //    context.Set<T>().AddRange(categories.Where(category => !context.Set<T>().Any(x => x.Name == category.Name)));
-        //}
 
         public static void SeedQuotes(ApplicationDbContext context)
         {
@@ -148,31 +126,4 @@ namespace SoundVast.Data
         //    }
         //}
     }
-    //internal sealed class Configuration : DbMigrationsConfiguration<ApplicationDbContext>
-    //{
-    //    public Configuration()
-    //    {
-    //        AutomaticMigrationsEnabled = true;
-
-    //       //New timeout in seconds
-    //       CommandTimeout = 60;
-    //    }
-
-    //    protected override void Seed(ApplicationDbContext context)
-    //    {
-    //        base.Seed(context);
-
-    //        var fileStreamCategoryResources = FileStreamCategories.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
-    //        var radioStationCategoryResources = LiveStreamCategories.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
-    //        var placeHolderImage = new ImageFile("Placeholder-Genres.jpg");
-
-    //        InitializeQuotes(context);
-    //        InitializeCategories<FileStreamCategory>(context, fileStreamCategoryResources, placeHolderImage);
-    //        InitializeCategories<LiveStreamCategory>(context, radioStationCategoryResources, placeHolderImage);
-    //        //InitializeIdentityForEf(context);
-
-    //        context.SaveChanges();
-    //    }
-
-    //}
 }

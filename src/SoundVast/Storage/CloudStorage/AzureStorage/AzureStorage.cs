@@ -12,7 +12,7 @@ using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace SoundVast.Storage.CloudStorage.AzureStorage
 {
-    public class AzureStorage : ICloudStorage
+    public class AzureStorage
     {
         public IDictionary<CloudStorageType, CloudBlobContainer> CloudBlobContainers { get; set; } = new Dictionary<CloudStorageType, CloudBlobContainer>();
 
@@ -34,14 +34,11 @@ namespace SoundVast.Storage.CloudStorage.AzureStorage
             }
         }
 
-        public ICloudBlob GetBlob(CloudStorageType cloudStorageType, string fileName)
+        public CloudBlockBlob GetBlob(CloudStorageType cloudStorageType, string fileName)
         {
-            var azureBlob = new AzureBlob
-            {
-                CloudBlockBlob = CloudBlobContainers[cloudStorageType].GetBlockBlobReference(fileName)
-            };
+            var blob = CloudBlobContainers[cloudStorageType].GetBlockBlobReference(fileName);
 
-            return azureBlob;
+            return blob;
         }
     }
 }

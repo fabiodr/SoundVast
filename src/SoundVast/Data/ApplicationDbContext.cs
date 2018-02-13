@@ -25,13 +25,11 @@ namespace SoundVast.Data
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Rating> Ratings { get; set; }
-        public DbSet<Playlist> Playlists { get; set; }
         public DbSet<Flag> Flags { get; set; }
         public DbSet<Quote> Quotes { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Audio> Audios { get; set; }
         public DbSet<Genre> Genres { get; set; }
-        public DbSet<AudioPendingEdit> AudiosPendingEdit { get; set; }
 
         public ApplicationDbContext(DbContextOptions options)
             : base(options)
@@ -42,12 +40,7 @@ namespace SoundVast.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Song>();
             modelBuilder.Entity<LiveStream>();
-            modelBuilder.Entity<Artist>();
-            modelBuilder.Entity<Album>();
-            modelBuilder.Entity<SongPendingEdit>();
-            modelBuilder.Entity<LiveStreamPendingEdit>();
             modelBuilder.Entity<Genre>();
             modelBuilder.Entity<Audio>().HasMany(x => x.Ratings).WithOne(x => x.Audio);
             modelBuilder.Entity<Comment>().HasMany(x => x.Ratings).WithOne(x => x.Comment);
