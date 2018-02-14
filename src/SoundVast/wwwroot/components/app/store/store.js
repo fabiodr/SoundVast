@@ -14,7 +14,6 @@ import routeConfig from '../routing/routeConfig';
 import modal from '../../shared/modal/reducer';
 import popup from '../../shared/popup/reducer';
 import upload from '../../upload/reducer';
-import playlist from '../../playlist/reducer';
 import audio from '../../audio/reducer';
 import jPlayers from './jPlayersReducer';
 import normalizeBoolean from '../../shared/utilities/normalizeBoolean';
@@ -42,7 +41,6 @@ const reducers = combineReducers({
   form,
   popup,
   upload,
-  playlist,
   audio,
 });
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using SoundVast.QueryOptions;
 using SoundVast.Repository;
 
 namespace SoundVast.Components.Tag

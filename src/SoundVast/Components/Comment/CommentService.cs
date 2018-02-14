@@ -2,13 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using SoundVast.QueryOptions;
 using SoundVast.Repository;
 using Microsoft.EntityFrameworkCore;
 using SoundVast.Components.Comment.Models;
 using SoundVast.Components.Rating;
 using SoundVast.Components.User;
-using SoundVast.CustomHelpers;
 using SoundVast.Validation;
 
 namespace SoundVast.Components.Comment
@@ -23,20 +21,6 @@ namespace SoundVast.Components.Comment
             _validationProvider = validationProvider;
             _repository = repository;
         }
-
-        //public ICollection<Comment> GetSortedCommentsForAudio<TKey>(int audioId, int pageNumber, OrderingOption<Comment, TKey> orderingOption)
-        //{
-        //    var startIndex = (pageNumber - 1) * Comment.CommentsPerPage;
-        //    var comments = _repository.GetAll().Include(x => x.User).Include(x => x.Replies).ForAudio(audioId)
-        //        .Where(x => x.OriginalComment == null).WithOrdering(orderingOption);
-
-        //    foreach (var comment in comments)
-        //    {
-        //        comment.Replies = comment.Replies.Take(Comment.RepliesToLoadInitially).ToList();
-        //    }
-
-        //    return comments.Skip(startIndex).Take(Comment.CommentsPerPage).ToList();
-        //}
 
         public Models.Comment Get(int id)
         {

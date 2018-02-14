@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Azure;
 using Microsoft.WindowsAzure.Storage;
 using System.Configuration;
 using Microsoft.AspNetCore.Hosting;
@@ -12,7 +11,7 @@ using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace SoundVast.Storage.CloudStorage.AzureStorage
 {
-    public class AzureStorage
+    public class AzureStorage : ICloudStorage
     {
         public IDictionary<CloudStorageType, CloudBlobContainer> CloudBlobContainers { get; set; } = new Dictionary<CloudStorageType, CloudBlobContainer>();
 

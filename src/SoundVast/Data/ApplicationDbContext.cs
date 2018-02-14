@@ -6,19 +6,14 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using SoundVast.Components;
-using SoundVast.Components.Album.Models;
-using SoundVast.Components.Artist.Models;
 using SoundVast.Components.Audio.Models;
 using SoundVast.Components.Comment.Models;
-using SoundVast.Components.Edit.Models;
 using SoundVast.Components.Flag.Models;
 using SoundVast.Components.Genre.Models;
 using SoundVast.Components.LiveStream.Models;
-using SoundVast.Components.Playlist.Models;
 using SoundVast.Components.Quote.Models;
 using SoundVast.Components.Rating.Models;
 using SoundVast.Components.User;
-using SoundVast.Components.Song.Models;
 
 namespace SoundVast.Data
 {

@@ -8,7 +8,6 @@ import FooterPlaylist from '../../footerPlaylist/footerPlaylistContainer';
 import styles from './primaryLayout.less';
 import FlagAudioModal from '../../flag/flagAudioModalContainer';
 import FlagCommentModal from '../../flag/flagCommentModalContainer';
-import PlaylistModal from '../../playlist/playlistModalContainer';
 import CookieNotice from '../../legal/cookieNoticeContainer';
 import PrimaryLayoutErrorBoundary from './primaryLayoutErrorBoundary';
 import DisplayType from '../../shared/displayType';
@@ -39,7 +38,6 @@ const PrimaryLayout = ({
               </div>
               <FlagAudioModal isAuthorized={isAuthorized} />
               <FlagCommentModal isAuthorized={isAuthorized} />
-              <PlaylistModal isAuthorized={isAuthorized} />
               <FooterPlaylist />
               <CookieNotice />
             </PrimaryLayoutErrorBoundary>

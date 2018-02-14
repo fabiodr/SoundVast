@@ -7,7 +7,7 @@ import Search from './search';
 const handlers = {
   onSubmit: ({ router, match }) => ({ search }) => {
     const searchRoutes = [
-      'songs/', 'artists/', 'albums/', 'radios/',
+      'radios/',
     ];
     const isOnAudioRoute = searchRoutes.some(searchRoute =>
       match.location.pathname.includes(searchRoute));

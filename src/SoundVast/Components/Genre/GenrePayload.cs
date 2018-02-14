@@ -7,8 +7,6 @@ using SoundVast.Components.Audio;
 using SoundVast.Components.Genre;
 using SoundVast.Components.Genre.Models;
 using SoundVast.Components.LiveStream;
-using SoundVast.Components.Song;
-using SoundVast.Components.Song.Models;
 
 namespace SoundVast.Components.Genre
 {

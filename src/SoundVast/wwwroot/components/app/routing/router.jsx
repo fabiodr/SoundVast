@@ -19,7 +19,6 @@ RenderError.propTypes = {
   error: PropTypes.shape({
     status: PropTypes.number.isRequired,
   }).isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
   router: PropTypes.object.isRequired,
 };
 

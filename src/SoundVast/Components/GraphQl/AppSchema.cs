@@ -7,7 +7,6 @@ using GraphQL.Types;
 using SoundVast.Components.Genre;
 using SoundVast.Components.LiveStream;
 using SoundVast.Components.Rating;
-using SoundVast.Components.Song;
 
 namespace SoundVast.Components.GraphQl
 {

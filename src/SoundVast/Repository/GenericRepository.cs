@@ -5,7 +5,6 @@ using System.Web;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
-using SoundVast.CustomHelpers;
 using SoundVast.Data;
 
 namespace SoundVast.Repository
@@ -14,9 +13,7 @@ namespace SoundVast.Repository
     {
         IQueryable<T> GetAll();
         T Get(int id);
-        T Get(string id);
         IQueryable<T> Include(params Expression<Func<T, object>>[] paths);
-        void LoadProperties(T entity);
         void Add(T item);
         void Remove(T item);
         void RemoveRange(IEnumerable<T> items);
@@ -52,11 +49,6 @@ namespace SoundVast.Repository
             return Context.Set<T>().Find(id);
         }
 
-        public virtual T Get(string id)
-        {
-            return Context.Set<T>().Find(id);
-        }
-
         public IQueryable<T> Include(params Expression<Func<T, object>>[] paths)
         {
             var query = Context.Set<T>().AsQueryable();
@@ -74,16 +66,6 @@ namespace SoundVast.Repository
             }
 
             Save();
-        }
-
-        public virtual void LoadProperties(T entity)
-        {
-            var updatedEntity = Context.Set<T>().Update(entity);
-
-            foreach (var reference in updatedEntity.Navigations)
-            {
-                reference.Load();
-            }
         }
 
         public void RemoveRange(IEnumerable<T> items)

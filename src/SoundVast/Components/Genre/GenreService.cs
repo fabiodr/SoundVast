@@ -26,7 +26,7 @@ namespace SoundVast.Components.Genre
         public void UpdateCoverImages()
         {
             var genres = _repository.GetAll().BuildGenre();
-            var placeholderImageUrl = _cloudStorage.GetBlob(CloudStorageType.Image, "SoundVast").CloudBlockBlob.Uri.AbsoluteUri;
+            var placeholderImageUrl = _cloudStorage.GetBlob(CloudStorageType.Image, "SoundVast").Uri.AbsoluteUri;
 
             foreach (var genre in genres)
             {

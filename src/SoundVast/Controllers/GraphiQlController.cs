@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Autofac;
 using Microsoft.AspNetCore.Mvc;
 using SoundVast.Components.Account;
-using SoundVast.Components.Account.ViewModels;
 
 namespace SoundVast.Controllers
 {

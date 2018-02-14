@@ -6,7 +6,6 @@ const query = graphql`
   query primaryLayoutContainerQuery {
     user {
       ...headerContainer_user,
-      ...unAuthorizedListContainer_user,
     }
     loginProviders {
       ...socialLoginsContainer_loginProviders,

@@ -17,7 +17,6 @@ using SoundVast.Repository;
 using SoundVast.Services;
 using SoundVast.Storage.CloudStorage;
 using SoundVast.Storage.CloudStorage.AzureStorage;
-using SoundVast.Storage.FileStorage;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SpaServices.Webpack;
@@ -40,22 +39,17 @@ using Microsoft.AspNetCore.Authentication.Twitter;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite;
 using Newtonsoft.Json;
-using SoundVast.Components.Album.Models;
-using SoundVast.Components.Artist.Models;
 using SoundVast.Components.Audio;
 using SoundVast.Components.Audio.Models;
 using SoundVast.Components.Comment.Models;
-using SoundVast.Components.Edit.Models;
 using SoundVast.Components.Flag.Models;
 using SoundVast.Components.Genre;
 using SoundVast.Components.Genre.Models;
 using SoundVast.Components.GraphQl;
 using SoundVast.Components.LiveStream.Models;
-using SoundVast.Components.Playlist.Models;
 using SoundVast.Components.Quote.Models;
 using SoundVast.Components.Rating;
 using SoundVast.Components.Rating.Models;
-using SoundVast.Components.Song.Models;
 using SoundVast.Components.Tag;
 using SoundVast.Components.Upload;
 using SoundVast.Validation;
@@ -111,9 +105,6 @@ namespace SoundVast
             services.AddMvc().AddJsonOptions(x => x.SerializerSettings.ReferenceLoopHandling =
                 ReferenceLoopHandling.Ignore);
             services.AddMemoryCache();
-            //  services.AddGraphQLHttpTransport<AppSchema>();
-            // services.AddGraphQLWebSocketsTransport<AppSchema>();
-            // services.AddGraphQL();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(o => o.LoginPath = new PathString("/login"))
@@ -172,8 +163,6 @@ namespace SoundVast
             app.UseStaticFiles();
             app.UseAuthentication();
             app.UseSession();
-            //   app.UseWebSockets();
-            //  app.UseGraphQLEndPoint<AppSchema>("/graphql");
 
             RecurringJob.AddOrUpdate<IGenreService>(x => x.UpdateCoverImages(), Cron.Daily);
 
@@ -244,29 +233,19 @@ namespace SoundVast
             builder.RegisterAssemblyTypes(assembly).Where(x => x.Name.EndsWith("Service")).AsImplementedInterfaces();
             builder.RegisterAssemblyTypes(assembly).Where(x => x.Name.EndsWith("Validator")).AsImplementedInterfaces();
 
-         //   builder.RegisterType<GenreService<Genre>>().As<IGenreService<Genre>>();
             builder.RegisterType<AppQuery>();
             builder.RegisterType<AppMutation>();
-            builder.RegisterType<FileStorage>().As<IFileStorage>().SingleInstance();
             builder.RegisterType<ValidationProvider>().As<IValidationProvider>().InstancePerLifetimeScope();
             builder.RegisterType<AuthMessageSender>().As<IEmailSender>();
             builder.RegisterType<AuthMessageSender>().As<ISmsSender>();
-            builder.RegisterType<AzureBlob>().As<ICloudBlob>();
             builder.RegisterType<AudioService<Audio>>().AsImplementedInterfaces();
             builder.RegisterType<Repository<Rating, ApplicationDbContext>>().As<IRepository<Rating>>();
             builder.RegisterType<Repository<Audio, ApplicationDbContext>>().As<IRepository<Audio>>();
-            builder.RegisterType<Repository<Song, ApplicationDbContext>>().As<IRepository<Song>>();
             builder.RegisterType<Repository<LiveStream, ApplicationDbContext>>().As<IRepository<LiveStream>>();
-            builder.RegisterType<Repository<Artist, ApplicationDbContext>>().As<IRepository<Artist>>();
-            builder.RegisterType<Repository<Album, ApplicationDbContext>>().As<IRepository<Album>>();
             builder.RegisterType<Repository<Genre, ApplicationDbContext>>().As<IRepository<Genre>>();
             builder.RegisterType<Repository<Quote, ApplicationDbContext>>().As<IRepository<Quote>>();
             builder.RegisterType<Repository<Comment, ApplicationDbContext>>().As<IRepository<Comment>>();
             builder.RegisterType<Repository<Flag, ApplicationDbContext>>().As<IRepository<Flag>>();
-            builder.RegisterType<Repository<Playlist, ApplicationDbContext>>().As<IRepository<Playlist>>();
-            builder.RegisterType<Repository<AudioPendingEdit, ApplicationDbContext>>().As<IRepository<AudioPendingEdit>>();
-            builder.RegisterType<Repository<SongPendingEdit, ApplicationDbContext>>().As<IRepository<SongPendingEdit>>();
-            builder.RegisterType<Repository<LiveStreamPendingEdit, ApplicationDbContext>>().As<IRepository<LiveStreamPendingEdit>>();
             builder.RegisterType<Repository<Tag, ApplicationDbContext>>().As<IRepository<Tag>>();
 
             return builder;

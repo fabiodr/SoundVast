@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.WindowsAzure.Storage.Blob;
 using SoundVast.Components.Audio;
 using SoundVast.Components.Audio.Models;
 using SoundVast.Components.Genre;
@@ -17,8 +18,6 @@ using SoundVast.Components.Genre.Models;
 using SoundVast.Components.LiveStream.Models;
 using SoundVast.Components.Quote.Models;
 using SoundVast.Components.Search;
-using SoundVast.Components.Song.Models;
-using SoundVast.CustomHelpers;
 using SoundVast.Properties;
 using SoundVast.Storage.CloudStorage;
 
@@ -71,9 +70,11 @@ namespace SoundVast.Data
         private static async Task SeedImages()
         {
             var placeholderImageBlob = _cloudStorage.GetBlob(CloudStorageType.Image, PlaceholderImageName);
-            var path = Path.Combine(_hostingEnvironment.WebRootPath, "images/logo/icon/SV_Icon.svg");
+            var path = Path.Combine(_hostingEnvironment.WebRootPath, "images/logo/SV_Icon.svg");
 
-            await placeholderImageBlob.UploadFromFileAsync(path, "image/svg+xml");
+            placeholderImageBlob.Properties.ContentType = "image/svg+xml";
+
+            await placeholderImageBlob.UploadFromFileAsync(path);
         }
 
         public static void SeedGenres(ApplicationDbContext context, DictionaryEntry[] genreResources)
@@ -83,7 +84,7 @@ namespace SoundVast.Data
             var genres = genreResources.Select(x => new Genre
             {
                 Name = (string)x.Value,
-                CoverImageUrl = placeholderImageBlob.CloudBlockBlob.Uri.AbsoluteUri
+                CoverImageUrl = placeholderImageBlob.Uri.AbsoluteUri
             });
     
             context.Set<Genre>().AddRange(genres.Where(genre => !context.Set<Genre>().Any(x => x.Name == genre.Name)));

@@ -2,7 +2,6 @@ import React from 'react';
 import { Field } from 'redux-form';
 import PropTypes from 'prop-types';
 
-import genericStyles from '../../shared/generic.less';
 import FormGroup from '../../shared/form/formGroup';
 import Input from '../../shared/fields/inputField/inputTextField';
 

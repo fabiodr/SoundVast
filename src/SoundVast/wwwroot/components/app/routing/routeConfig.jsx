@@ -4,7 +4,7 @@ import Route from 'found/lib/Route';
 
 import { routeConfig as errorPageRouteConfig } from '../../errorPage/errorPageContainer';
 import { routeConfig as uploadRouteConfig } from '../../upload/uploadContainer';
-import { routeConfig as socialLoginCallbackRouteConfig } from '../../account/login/socialLogin//socialLoginCallbackContainer';
+import { routeConfig as socialLoginCallbackRouteConfig } from '../../account/login/socialLogin/socialLoginCallbackContainer';
 import { routeConfig as confirmEmailRouteConfig } from '../../account/confirmEmail/confirmEmailContainer';
 import { routeConfig as resetPasswordRouteConfig } from '../../account/resetPassword/resetPasswordContainer';
 import { routeConfig as radiosRouteConfig } from '../../radios/radiosContainer';

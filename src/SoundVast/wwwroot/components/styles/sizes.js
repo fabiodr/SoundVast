@@ -4,4 +4,4 @@ const sizes = {
   breakpointDesktop: { value: 1200, unit: 'px' },
 };
 
-module.exports = sizes;
+export default sizes;

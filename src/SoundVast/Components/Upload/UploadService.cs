@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using ByteSizeLib;
+using Microsoft.WindowsAzure.Storage.Blob;
 using SoundVast.Storage.CloudStorage;
 
 namespace SoundVast.Components.Upload
@@ -23,7 +24,11 @@ namespace SoundVast.Components.Upload
 
             _uploadValidator.ValidateUploadCoverImage(fileSize.MegaBytes);
 
-            await blob.UploadFromStreamAsync(stream, contentType);
+            blob.Properties.ContentType = contentType;
+
+            await blob.UploadFromStreamAsync(stream);
+
+            stream.Close();
         }
     }
 }

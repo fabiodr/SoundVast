@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Http.Headers;
 using System.Text;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using GraphQL;
 using GraphQL.Types;
@@ -16,9 +14,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Newtonsoft.Json;
 using SoundVast.Components.GraphQl.Models;
-using SoundVast.Components.Song;
 using SoundVast.Components.User;
-using SoundVast.CustomHelpers;
 using SoundVast.Validation;
 
 namespace SoundVast.Components.GraphQl

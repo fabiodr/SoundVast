@@ -6,7 +6,6 @@ using GraphQL;
 using GraphQL.Relay.Types;
 using GraphQL.Types;
 using SoundVast.Components.GraphQl;
-using SoundVast.Components.Song;
 using SoundVast.Components.User;
 
 namespace SoundVast.Components.Audio

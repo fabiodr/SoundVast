@@ -14,17 +14,10 @@ using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using SoundVast.Components.Account;
-using SoundVast.Components.Album;
-using SoundVast.Components.Artist;
-using SoundVast.Components.Audio;
-using SoundVast.Components.Comment;
-using SoundVast.Components.Edit;
 using SoundVast.Components.Filter;
 using SoundVast.Components.Genre;
 using SoundVast.Components.LiveStream;
-using SoundVast.Components.Playlist;
 using SoundVast.Components.Quote;
-using SoundVast.Components.Song;
 using SoundVast.Components.User;
 using SoundVast.Validation;
 
@@ -32,77 +25,15 @@ namespace SoundVast.Components.GraphQl
 {
     public class AppQuery : QueryGraphType
     {
-        public AppQuery(ISongService songService, ILiveStreamService liveStreamService, IValidationProvider validationProvider,
-            IGenreService genreService, ILoggerFactory loggerFactory, IQuoteService quoteService, IPlaylistService playlistService,
-            ISongPendingEditService songPendingEditService, ILiveStreamPendingEditService liveStreamPendingEditService,
-            SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, IArtistService artistService,
-            IAlbumService albumService)
+        public AppQuery(ILiveStreamService liveStreamService, IValidationProvider validationProvider,
+            IGenreService genreService, ILoggerFactory loggerFactory, IQuoteService quoteService,
+            SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         {
             var logger = loggerFactory.CreateLogger<AppQuery>();
-
-            Field<SongPayload>()
-                .Name("song")
-                .Argument<IntGraphType>("id", "The id of the song")
-                .Resolve(c =>
-                {
-                    var id = c.GetArgument<int?>("id");
-
-                    return id.HasValue ? songService.GetAudio(id.Value) : null;
-                });
-
-            Field<PlaylistPayload>()
-                .Name("playlist")
-                .Argument<NonNullGraphType<IntGraphType>>("id", "The id of the playlist")
-                .Resolve(c => playlistService.GetPlaylist(c.GetArgument<int>("id")));
 
             Field<QuotePayload>()
                 .Name("quote")
                 .Resolve(c => quoteService.GetRandomQuote());
-
-            Connection<SongPayload>()
-                .Name("songs")
-                .Argument<StringGraphType>("genre", "The genre that the song belongs to")
-                .Argument<StringGraphType>("searchQuery", "The search query to filter the songs against")
-                .Argument<FilterInput>("filter", "The filters to apply to the songs")
-                .Resolve(c =>
-                {                    
-                    var genre = c.GetArgument<string>("genre");
-                    var searchQuery = c.GetArgument<string>("searchQuery");
-                    var filter = c.GetArgument<Filter.Filter>("filter");
-                    var songs = songService.GetAudios(genre, searchQuery, filter);
-
-                    return GraphQL.Relay.Types.Connection.ToConnection(songs, c);
-                });
-
-            Connection<ArtistPayload>()
-                .Name("artists")
-                .Argument<StringGraphType>("genre", "The genre that the artist belongs to")
-                .Argument<StringGraphType>("searchQuery", "The search query to filter the artists against")
-                .Argument<FilterInput>("filter", "The filters to apply to the artists")
-                .Resolve(c =>
-                {
-                    var genre = c.GetArgument<string>("genre");
-                    var searchQuery = c.GetArgument<string>("searchQuery");
-                    var filter = c.GetArgument<Filter.Filter>("filter");
-                    var artists = artistService.GetAudios(genre, searchQuery, filter);
-
-                    return GraphQL.Relay.Types.Connection.ToConnection(artists, c);
-                });
-
-            Connection<AlbumPayload>()
-                .Name("albums")
-                .Argument<StringGraphType>("genre", "The genre that the album belongs to")
-                .Argument<StringGraphType>("searchQuery", "The search query to filter the albums against")
-                .Argument<FilterInput>("filter", "The filters to apply to the albums")
-                .Resolve(c =>
-                {
-                    var genre = c.GetArgument<string>("genre");
-                    var searchQuery = c.GetArgument<string>("searchQuery");
-                    var filter = c.GetArgument<Filter.Filter>("filter");
-                    var albums = albumService.GetAudios(genre, searchQuery, filter);
-
-                    return GraphQL.Relay.Types.Connection.ToConnection(albums, c);
-                });
 
             Connection<LiveStreamPayload>()
                 .Name("liveStreams")
@@ -117,14 +48,6 @@ namespace SoundVast.Components.GraphQl
 
                     return GraphQL.Relay.Types.Connection.ToConnection(liveStreamService.GetAudios(genre, searchQuery, filter), c);
                 });
-
-            Connection<SongPendingEditPayload>()
-                .Name("songsPendingEdit")
-                .Resolve(c => GraphQL.Relay.Types.Connection.ToConnection(songPendingEditService.GetAudiosPendingEdit(), c));
-
-            Connection<LiveStreamPendingEditPayload>()
-                .Name("liveStreamsPendingEdit")
-                .Resolve(c => GraphQL.Relay.Types.Connection.ToConnection(liveStreamPendingEditService.GetAudiosPendingEdit(), c));
 
             Field<ListGraphType<GenrePayload>>("genres",
                 resolve: c => genreService.GetGenres());

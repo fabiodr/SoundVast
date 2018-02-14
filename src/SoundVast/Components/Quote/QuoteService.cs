@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using SoundVast.Components.Quote.Models;
-using SoundVast.QueryOptions;
 using SoundVast.Repository;
 
 namespace SoundVast.Components.Quote

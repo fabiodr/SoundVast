@@ -14,10 +14,8 @@ using SoundVast.Components.Rating.Models;
 using SoundVast.Components.Search;
 using SoundVast.Components.Upload;
 using SoundVast.Components.User;
-using SoundVast.CustomHelpers;
 using SoundVast.Repository;
 using SoundVast.Storage.CloudStorage;
-using SoundVast.Utilities;
 using SoundVast.Validation;
 
 namespace SoundVast.Components.Audio
@@ -81,29 +79,9 @@ namespace SoundVast.Components.Audio
             return audios;
         }
 
-        public IEnumerable<T> GetAudiosForUser(string userId)
-        {
-            return _repository.GetAll().BuildAudio().Where(x => x.UserId == userId);
-        }
-
-        public IEnumerable<T> GetUserLikedAudios(string userId)
-        {
-            return _repository.GetAll().BuildAudio().Where(x => x.Ratings.Any(z => z.Liked && z.UserId == userId));
-        }
-
-        public ICollection<T> GetAudios(int current, int amount)
-        {
-            return _repository.GetAll().Include(x => x.Ratings).Skip(current).Take(amount).ToList();
-        }
-
         public virtual T GetAudio(int id)
         {
             return _repository.GetAll().BuildAudio().Single(x => x.Id == id);
-        }
-
-        public ICollection<Rating.Models.Rating> GetAudioRatings(int id)
-        {
-            return _repository.GetAll().Include(x => x.Ratings).Single(x => x.Id == id).Ratings;
         }
 
         public void Add(T model)
@@ -114,29 +92,8 @@ namespace SoundVast.Components.Audio
             {
                 _repository.Add(model);
 
-                model.User.ContributionScore += (int)Contribution.Upload;
                 LuceneSearch.AddOrUpdateLuceneIndex(model);
             }
-        }
-
-        public virtual T Edit(int existingAudioId, T newModel)
-        {
-            _validationProvider.Validate(newModel);
-
-            if (!_validationProvider.HasErrors)
-            {
-                var audio = _repository.Get(existingAudioId);
-
-                audio.CoverImageUrl = newModel.CoverImageUrl;
-                audio.Name = newModel.Name;
-                audio.UserId = newModel.UserId;
-
-                _repository.Save();
-
-                return audio;
-            }
-
-            return null;
         }
 
         public T UpdatePlayCount(int audioId)

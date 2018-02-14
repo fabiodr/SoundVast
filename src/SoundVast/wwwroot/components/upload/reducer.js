@@ -1,5 +1,4 @@
 const defaultState = {
-  audioFiles: [],
   liveStreams: [],
   coverImages: {},
 };
@@ -14,17 +13,6 @@ const removeForm = (forms, index) => {
 
 export default (state = defaultState, action) => {
   switch (action.type) {
-    case 'ADD_AUDIO_FILE': {
-      return {
-        ...state,
-        audioFiles: state.audioFiles.concat([action.audioFile]),
-      };
-    }
-    case 'REMOVE_MUSIC_FORM':
-      return {
-        ...state,
-        audioFiles: removeForm(state.audioFiles, action.index),
-      };
     case 'UPDATE_COVER_IMAGE': {
       const coverImages = { ...state.coverImages };
 
@@ -46,20 +34,6 @@ export default (state = defaultState, action) => {
       return {
         ...state,
         coverImages,
-      };
-    }
-    case 'UPDATE_UPLOAD_PROGRESS': {
-      const audioFiles = [...state.audioFiles];
-      const audioFile = audioFiles.find(x => x.id === action.id);
-
-      audioFile.progress = {
-        value: action.progressPercent,
-        message: action.message,
-      };
-
-      return {
-        ...state,
-        audioFiles,
       };
     }
     case 'ADD_LIVE_STREAM':

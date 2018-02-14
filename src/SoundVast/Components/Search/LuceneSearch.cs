@@ -18,7 +18,6 @@ namespace SoundVast.Components.Search
     // TODO: Remove index on delete. Clear indexes on schema change.
     public class LuceneSearch
     {
-
         private static readonly string LuceneDir = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "lucene_index");
         private static FSDirectory _directoryTemp;
        

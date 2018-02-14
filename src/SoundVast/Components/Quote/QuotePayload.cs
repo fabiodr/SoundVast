@@ -8,7 +8,6 @@ using GraphQL.Types.Relay.DataObjects;
 using SoundVast.Components.Audio;
 using SoundVast.Components.Genre;
 using SoundVast.Components.Rating;
-using SoundVast.Components.Song.Models;
 using SoundVast.Components.User;
 
 namespace SoundVast.Components.Quote

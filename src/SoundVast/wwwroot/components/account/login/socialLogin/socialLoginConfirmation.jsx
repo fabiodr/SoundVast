@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 
 import InputTextField from '../../../shared/fields/inputField/inputTextField';
-import genericStyles from '../../../shared/generic.less';
 
 const SocialLoginConfirmation = ({
   handleSubmit,

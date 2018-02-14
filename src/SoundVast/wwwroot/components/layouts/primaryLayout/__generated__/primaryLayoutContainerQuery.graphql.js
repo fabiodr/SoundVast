@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 84be6be7a5f5a01ab5558a3b92236045
+ * @relayHash 2e35c156f7c13cd2f47c197c873368ca
  */
 
 /* eslint-disable */
@@ -20,7 +20,6 @@ export type primaryLayoutContainerQueryResponse = {|
 query primaryLayoutContainerQuery {
   user {
     ...headerContainer_user
-    ...unAuthorizedListContainer_user
     id
   }
   loginProviders {
@@ -29,10 +28,6 @@ query primaryLayoutContainerQuery {
 }
 
 fragment headerContainer_user on ApplicationUser {
-  userName
-}
-
-fragment unAuthorizedListContainer_user on ApplicationUser {
   userName
 }
 
@@ -60,11 +55,6 @@ const batch /*: ConcreteBatch*/ = {
           {
             "kind": "FragmentSpread",
             "name": "headerContainer_user",
-            "args": null
-          },
-          {
-            "kind": "FragmentSpread",
-            "name": "unAuthorizedListContainer_user",
             "args": null
           }
         ],
@@ -157,7 +147,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query primaryLayoutContainerQuery {\n  user {\n    ...headerContainer_user\n    ...unAuthorizedListContainer_user\n    id\n  }\n  loginProviders {\n    ...socialLoginsContainer_loginProviders\n  }\n}\n\nfragment headerContainer_user on ApplicationUser {\n  userName\n}\n\nfragment unAuthorizedListContainer_user on ApplicationUser {\n  userName\n}\n\nfragment socialLoginsContainer_loginProviders on LoginProvider {\n  name\n  displayName\n}\n"
+  "text": "query primaryLayoutContainerQuery {\n  user {\n    ...headerContainer_user\n    id\n  }\n  loginProviders {\n    ...socialLoginsContainer_loginProviders\n  }\n}\n\nfragment headerContainer_user on ApplicationUser {\n  userName\n}\n\nfragment socialLoginsContainer_loginProviders on LoginProvider {\n  name\n  displayName\n}\n"
 };
 
 module.exports = batch;

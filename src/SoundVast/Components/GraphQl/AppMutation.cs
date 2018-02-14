@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using GraphQL;
 using GraphQL.Relay.Types;
 using GraphQL.Types;
-using SoundVast.Components.Song;
 using SoundVast.Validation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
@@ -16,11 +15,9 @@ using Newtonsoft.Json.Linq;
 using SoundVast.Components.Account;
 using SoundVast.Components.Audio;
 using SoundVast.Components.Comment;
-using SoundVast.Components.Edit;
 using SoundVast.Components.Email;
 using SoundVast.Components.Flag;
 using SoundVast.Components.LiveStream;
-using SoundVast.Components.Playlist;
 using SoundVast.Components.Rating;
 using SoundVast.Components.Upload;
 using SoundVast.Components.User;
@@ -34,7 +31,6 @@ namespace SoundVast.Components.GraphQl
         public AppMutation()
         {
             Mutation<UpdatePlayCountInput, UpdatePlayCountPayload>("updatePlayCount");
-            Mutation<SaveSongInput, SaveSongPayload>("saveSong").AddPermission(AuthorizedPermission);
             Mutation<SaveLiveStreamInput, SaveLiveStreamPayload>("saveLiveStream").AddPermission(AuthorizedPermission);
             Mutation<RateInput, RateAudioPayload>("rateAudio").AddPermission(AuthorizedPermission);
             Mutation<RateInput, RateCommentPayload>("rateComment").AddPermission(AuthorizedPermission);
@@ -48,10 +44,6 @@ namespace SoundVast.Components.GraphQl
             Mutation<SaveCommentInput, SaveCommentPayload>("comment").AddPermission(AuthorizedPermission);
             Mutation<FlagAudioInput, FlagObjectPayload>("flagAudio").AddPermission(AuthorizedPermission);
             Mutation<FlagCommentInput, FlagObjectPayload>("flagComment").AddPermission(AuthorizedPermission);
-            Mutation<RequestEditSongInput, RequestEditSongPayload>("requestSongEdit").AddPermission(AuthorizedPermission);
-            Mutation<EditSongInput, EditSongPayload>("editSong").AddPermission(AuthorizedPermission);
-            Mutation<CreatePlaylistInput, CreatePlaylstPayload>("createPlaylist").AddPermission(AuthorizedPermission);
-            Mutation<AddSongToPlaylistInput, AddSongToPlaylistPayload>("addSongToPlaylist").AddPermission(AuthorizedPermission);
         }
     }
 }
