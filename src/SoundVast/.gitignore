@@ -1,5 +1,6 @@
 # Config
 *.env
+**/azurekeyvault.json
 
 # Logs
 logs

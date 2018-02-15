@@ -100,7 +100,6 @@ namespace SoundVast.Data
         //    var roleManager = HttpContext.Current.GetOwinContext().Get<ApplicationRoleManager>();
         //    const string name = "Yoshimiii";
         //    const string email = "martino1995@blueyonder.co.uk";
-        //    const string password = "***REMOVED***";
         //    const string roleName = "Admin";
 
         //    //Create Role Admin if it does not exist

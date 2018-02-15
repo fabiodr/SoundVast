@@ -17,7 +17,7 @@ namespace SoundVast.Storage.CloudStorage.AzureStorage
 
         public AzureStorage(IConfiguration configuration)
         {
-            var storageAccount = CloudStorageAccount.Parse(configuration["ConnectionStrings:StorageConnectionString"]);
+            var storageAccount = CloudStorageAccount.Parse(configuration.GetConnectionString("StorageConnectionString"));
             var blobClient = storageAccount.CreateCloudBlobClient();
 
             foreach (CloudStorageType cloudStorageType in Enum.GetValues(typeof(CloudStorageType)))

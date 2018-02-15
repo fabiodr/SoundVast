@@ -61,7 +61,7 @@ namespace SoundVast.Kestrel
                 }
             }
         }
-
+        
         private static X509Certificate2 LoadCertificate(EndpointConfiguration config, IHostingEnvironment environment)
         {
             if (config.StoreName != null && config.StoreLocation != null)
@@ -71,8 +71,7 @@ namespace SoundVast.Kestrel
                     store.Open(OpenFlags.ReadOnly);
                     var certificate = store.Certificates.Find(
                         X509FindType.FindBySubjectName,
-                        config.Host,
-                        validOnly: !environment.IsDevelopment());
+                        config.Host, false);
 
                     if (certificate.Count == 0)
                     {

@@ -1,7 +1,7 @@
 {
   "name": "soundvast",
   "version": "1.0.0",
-  "description": "Audio Streaming Music Website",
+  "description": "Radio Live Streaming Website",
   "author": "Martin Dawson <u1356770@gmail.com>",
   "repository": {
     "type": "git",
@@ -12,15 +12,19 @@
   },
   "keywords": [
     "soundvast",
+    "sound",
+    "sounds",
     "audio",
-    "video",
+    "radio",
     "streaming"
   ],
   "homepage": "https://github.com/MartinDawson/SoundVast",
   "license": "ISC",
   "scripts": {
-    "start": "npm-run-all --parallel dotnet-run relay-compiler:watch",
-    "dotnet-run": "cross-env ASPNETCORE_ENVIRONMENT=Development dotnet run",
+    "start": "npm-run-all --parallel dotnet-development relay-compiler:watch",
+    "production": "npm-run-all --parallel dotnet-production relay-compiler:watch",
+    "dotnet-development": "cross-env ASPNETCORE_ENVIRONMENT=Development dotnet run",
+    "dotnet-production": "cross-env ASPNETCORE_ENVIRONMENT=Production dotnet run",
     "relay-compiler": "relay-compiler --src ./wwwroot/components --schema schema.graphql --extensions=js --extensions=jsx",
     "relay-compiler:watch": "npm run relay-compiler -- --watch",
     "get-schema:dev": "graphql get-schema dev",
