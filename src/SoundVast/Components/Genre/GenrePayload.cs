@@ -12,13 +12,17 @@ namespace SoundVast.Components.Genre
 {
     public class GenrePayload : ObjectGraphType<Models.Genre>
     {
+        private readonly ICloudStorage _cloudStorage;
+
         public GenrePayload()
         {
+            _cloudStorage = cloudStorage;
             Name = nameof(Genre);
 
             Field<IdGraphType>("id");
             Field(x => x.Name);
-            Field(x => x.CoverImageUrl).Description("The cover image url for this genre");
+            Field<StringGraphType>("coverImageUrl", "The cover image url for the genre", 
+                resolve: c => _cloudStorage.GetBlob(CloudStorageType.Image, c.Source.CoverImageName));
         }
     }
 }

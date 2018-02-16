@@ -26,16 +26,16 @@ namespace SoundVast.Components.Genre
         public void UpdateCoverImages()
         {
             var genres = _repository.GetAll().BuildGenre();
-            var placeholderImageUrl = _cloudStorage.GetBlob(CloudStorageType.Image, "SoundVast").Uri.AbsoluteUri;
+            var placeholderImageName = "SoundVast";
 
             foreach (var genre in genres)
             {
                 var audios = genre.AudioGenres.Select(x => x.Audio);
-                var coverImageUrl = audios.TopRated(0).Select(x => x.CoverImageUrl).FirstOrDefault(x => x != placeholderImageUrl);
+                var coverImageName = audios.TopRated(0).Select(x => x.CoverImageName).FirstOrDefault(x => x != placeholderImageName);
 
-                if (coverImageUrl != null)
+                if (coverImageName != null)
                 {
-                    genre.CoverImageUrl = coverImageUrl;
+                    genre.CoverImageName = coverImageName;
                 }
             }
 
