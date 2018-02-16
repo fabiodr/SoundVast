@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Azure.KeyVault;
@@ -12,8 +13,6 @@ namespace SoundVast
 {
     public class Program
     {
-        private static string GetKeyVaultEndpoint() => Environment.GetEnvironmentVariable("KEYVAULT_ENDPOINT");
-
         public static void Main(string[] args)
         {
             var webHost = BuildWebHost(args).SeedData();
@@ -25,21 +24,24 @@ namespace SoundVast
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration((ctx, builder) =>
-                {
-                    var keyVaultEndpoint = GetKeyVaultEndpoint();
-                    if (!string.IsNullOrEmpty(keyVaultEndpoint))
-                    {
-                        var azureServiceTokenProvider = new AzureServiceTokenProvider();
-                        var keyVaultClient = new KeyVaultClient(
-                            new KeyVaultClient.AuthenticationCallback(
-                                azureServiceTokenProvider.KeyVaultTokenCallback));
-                        builder.AddAzureKeyVault(
-                            keyVaultEndpoint, keyVaultClient, new DefaultKeyVaultSecretManager());
-                    }
-                })
+                .ConfigureAppConfiguration(ConfigConfiguration)
                 .UseStartup<Startup>()
                 .UseKestrel(options => options.ConfigureEndpoints())
                 .Build();
+
+        private static void ConfigConfiguration(WebHostBuilderContext webHostBuilderContext, IConfigurationBuilder configurationBuilder)
+        {
+            configurationBuilder.SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("azurekeyvault.json", false, true)
+                .AddEnvironmentVariables();
+
+            var config = configurationBuilder.Build();
+
+            configurationBuilder.AddAzureKeyVault(
+                $"https://{config["azureKeyVault:vault"]}.vault.azure.net/",
+                config["azureKeyVault:clientId"],
+                config["azureKeyVault:clientSecret"]
+            );
+        }
     }
 }

@@ -12,20 +12,13 @@
       "commandName": "IISExpress",
       "launchBrowser": true,
       "launchUrl": "https://localhost:8080/",
-      "applicationUrl": "https://localhost:8080/",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Production",
-        "KEYVAULT_ENDPOINT": "https://soundvast.vault.azure.net/"
-      }
+      "applicationUrl": "https://localhost:8080/"
     },
     "SoundVast": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "https://localhost:8080",
-      "applicationUrl": "https://localhost:8080/",
-      "environmentVariables": {
-        "KEYVAULT_ENDPOINT": "https://soundvast.vault.azure.net/"
-      }
+      "applicationUrl": "https://localhost:8080/"
     }
   }
 }
