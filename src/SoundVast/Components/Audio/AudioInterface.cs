@@ -13,14 +13,18 @@ namespace SoundVast.Components.Audio
 {
     public class AudioInterface : InterfaceGraphType<Models.Audio>
     {
+        private readonly ICloudStorage _cloudStorage;
+
         public AudioInterface()
         {
+            _cloudStorage = cloudStorage;
             Name = nameof(Models.Audio);
 
             Field<IdGraphType>("id");
             Field(x => x.Id).Name("audioId");
             Field(x => x.Name);
-            Field(x => x.CoverImageUrl).Description("The poster image for the audio");
+            Field<StringGraphType>("coverImageUrl", "The cover image url for the audio", 
+                resolve: c => _cloudStorage.GetBlob(CloudStorageType.Image, c.Source.CoverImageName));
             Field(x => x.Likes);
             Field(x => x.Dislikes);
             Field(x => x.PlayCount);

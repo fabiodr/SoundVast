@@ -79,12 +79,10 @@ namespace SoundVast.Data
 
         public static void SeedGenres(ApplicationDbContext context, DictionaryEntry[] genreResources)
         {
-            var placeholderImageBlob = _cloudStorage.GetBlob(CloudStorageType.Image, PlaceholderImageName);
-
             var genres = genreResources.Select(x => new Genre
             {
                 Name = (string)x.Value,
-                CoverImageUrl = placeholderImageBlob.Uri.AbsoluteUri
+                CoverImageName = PlaceholderImageName
             });
     
             context.Set<Genre>().AddRange(genres.Where(genre => !context.Set<Genre>().Any(x => x.Name == genre.Name)));

@@ -25,7 +25,8 @@ namespace SoundVast.Components.LiveStream
 
             Id("audioId", x => x.Id);
             Field(x => x.Name);
-            Field(x => x.CoverImageUrl).Description("The poster image for the live stream");
+            Field<StringGraphType>("coverImageUrl", "The cover image url for the live stream", 
+                resolve: c => _cloudStorage.GetBlob(CloudStorageType.Image, c.Source.CoverImageName));
             Field(x => x.LiveStreamUrl);
             Field(x => x.WebsiteUrl);
             Field(x => x.Likes);
