@@ -37,9 +37,10 @@ namespace SoundVast.Components.LiveStream
             var genreIds = inputs.Get("genreIds", new object[0]).Cast<int>().ToList();
             var tags = inputs.Get("tags", new object[0]).Select(x => x.As<Dictionary<string, object>>().ToObject<TagInput>());
             var user = context.UserContext.As<Context>().CurrentUser;
+            //TODO: change coverImageUrl to coverImageName
             var liveStream = new Models.LiveStream
             {
-                CoverImageUrl = coverImageUrl,
+                // CoverImageUrl = coverImageUrl,
                 Name = name,
                 LiveStreamUrl = liveStreamUrl,
                 WebsiteUrl = websiteUrl,

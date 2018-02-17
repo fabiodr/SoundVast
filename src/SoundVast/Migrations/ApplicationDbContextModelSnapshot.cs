@@ -134,7 +134,7 @@ namespace SoundVast.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("CoverImageUrl")
+                    b.Property<string>("CoverImageName")
                         .IsRequired();
 
                     b.Property<DateTimeOffset>("DateAdded");
@@ -250,7 +250,7 @@ namespace SoundVast.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("CoverImageUrl")
+                    b.Property<string>("CoverImageName")
                         .IsRequired();
 
                     b.Property<string>("Name")

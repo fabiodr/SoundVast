@@ -10,6 +10,7 @@ using SoundVast.Components.Comment;
 using SoundVast.Components.Genre;
 using SoundVast.Components.Rating;
 using SoundVast.Components.User;
+using SoundVast.Storage.CloudStorage;
 
 namespace SoundVast.Components.LiveStream
 {
@@ -17,7 +18,7 @@ namespace SoundVast.Components.LiveStream
     {
         private readonly ILiveStreamService _liveStreamService;
 
-        public LiveStreamPayload(ILiveStreamService liveStreamService)
+        public LiveStreamPayload(ILiveStreamService liveStreamService, ICloudStorage cloudStorage)
         {
             _liveStreamService = liveStreamService;
 
@@ -26,7 +27,7 @@ namespace SoundVast.Components.LiveStream
             Id("audioId", x => x.Id);
             Field(x => x.Name);
             Field<StringGraphType>("coverImageUrl", "The cover image url for the live stream", 
-                resolve: c => _cloudStorage.GetBlob(CloudStorageType.Image, c.Source.CoverImageName));
+                resolve: c => cloudStorage.GetBlob(CloudStorageType.Image, c.Source.CoverImageName).Uri.AbsoluteUri);
             Field(x => x.LiveStreamUrl);
             Field(x => x.WebsiteUrl);
             Field(x => x.Likes);

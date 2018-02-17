@@ -8,23 +8,21 @@ using SoundVast.Components.Comment;
 using SoundVast.Components.Genre;
 using SoundVast.Components.Rating;
 using SoundVast.Components.User;
+using SoundVast.Storage.CloudStorage;
 
 namespace SoundVast.Components.Audio
 {
     public class AudioInterface : InterfaceGraphType<Models.Audio>
     {
-        private readonly ICloudStorage _cloudStorage;
-
-        public AudioInterface()
+        public AudioInterface(ICloudStorage cloudStorage)
         {
-            _cloudStorage = cloudStorage;
             Name = nameof(Models.Audio);
 
             Field<IdGraphType>("id");
             Field(x => x.Id).Name("audioId");
             Field(x => x.Name);
             Field<StringGraphType>("coverImageUrl", "The cover image url for the audio", 
-                resolve: c => _cloudStorage.GetBlob(CloudStorageType.Image, c.Source.CoverImageName));
+                resolve: c => cloudStorage.GetBlob(CloudStorageType.Image, c.Source.CoverImageName).Uri.AbsoluteUri);
             Field(x => x.Likes);
             Field(x => x.Dislikes);
             Field(x => x.PlayCount);

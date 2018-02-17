@@ -7,6 +7,7 @@
     <OutputType>Exe</OutputType>
     <PackageId>SoundVast</PackageId>
     <UserSecretsId>aspnet-SoundVast-3ec4d738-ff3f-4379-9b2d-6ff6e59dee40</UserSecretsId>
+    <MvcRazorExcludeRefAssembliesFromPublish>false</MvcRazorExcludeRefAssembliesFromPublish>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Properties\PublishProfiles\SoundVast - FTP.pubxml" />
     <None Remove="Properties\PublishProfiles\SoundVast - Web Deploy.pubxml" />
   </ItemGroup>
 

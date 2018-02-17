@@ -12,8 +12,8 @@ using System;
 namespace SoundVast.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180203165657_tas")]
-    partial class tas
+    [Migration("20180216220128_coverImageName")]
+    partial class coverImageName
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -130,66 +130,12 @@ namespace SoundVast.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("SoundVast.Components.Artist.Models.ArtistAlbum", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("AlbumId");
-
-                    b.Property<int?>("ArtistId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AlbumId");
-
-                    b.HasIndex("ArtistId");
-
-                    b.ToTable("ArtistAlbum");
-                });
-
-            modelBuilder.Entity("SoundVast.Components.Artist.Models.ArtistSong", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("ArtistId");
-
-                    b.Property<int?>("SongId");
-
-                    b.Property<int?>("SongPendingEditId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ArtistId");
-
-                    b.HasIndex("SongId");
-
-                    b.HasIndex("SongPendingEditId");
-
-                    b.ToTable("ArtistSong");
-                });
-
-            modelBuilder.Entity("SoundVast.Components.Artist.YearsActive", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTimeOffset>("EndYear");
-
-                    b.Property<DateTimeOffset>("StartYear");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("YearsActive");
-                });
-
             modelBuilder.Entity("SoundVast.Components.Audio.Models.Audio", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("CoverImageUrl")
+                    b.Property<string>("CoverImageName")
                         .IsRequired();
 
                     b.Property<DateTimeOffset>("DateAdded");
@@ -278,38 +224,6 @@ namespace SoundVast.Migrations
                     b.ToTable("Comments");
                 });
 
-            modelBuilder.Entity("SoundVast.Components.Edit.Models.AudioPendingEdit", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("AudioId");
-
-                    b.Property<string>("ContributorId")
-                        .IsRequired();
-
-                    b.Property<string>("CoverImageUrl");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired();
-
-                    b.Property<int?>("GenreId");
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AudioId");
-
-                    b.HasIndex("ContributorId");
-
-                    b.HasIndex("GenreId");
-
-                    b.ToTable("AudiosPendingEdit");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("AudioPendingEdit");
-                });
-
             modelBuilder.Entity("SoundVast.Components.Flag.Models.Flag", b =>
                 {
                     b.Property<int>("Id")
@@ -337,7 +251,7 @@ namespace SoundVast.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("CoverImageUrl")
+                    b.Property<string>("CoverImageName")
                         .IsRequired();
 
                     b.Property<string>("Name")
@@ -346,46 +260,6 @@ namespace SoundVast.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Genres");
-                });
-
-            modelBuilder.Entity("SoundVast.Components.Playlist.Models.Playlist", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Name")
-                        .IsRequired();
-
-                    b.Property<string>("UserId")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Playlists");
-                });
-
-            modelBuilder.Entity("SoundVast.Components.Playlist.Models.SongPlaylist", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int?>("PlaylistId");
-
-                    b.Property<int>("SongId");
-
-                    b.Property<string>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PlaylistId");
-
-                    b.HasIndex("SongId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("SongPlaylist");
                 });
 
             modelBuilder.Entity("SoundVast.Components.Quote.Models.Quote", b =>
@@ -450,8 +324,6 @@ namespace SoundVast.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
-                    b.Property<int>("ContributionScore");
-
                     b.Property<string>("Email")
                         .HasMaxLength(256);
 
@@ -495,87 +367,18 @@ namespace SoundVast.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("SoundVast.Components.Album.Models.Album", b =>
-                {
-                    b.HasBaseType("SoundVast.Components.Audio.Models.Audio");
-
-                    b.Property<DateTimeOffset>("ReleaseDate");
-
-                    b.ToTable("Album");
-
-                    b.HasDiscriminator().HasValue("Album");
-                });
-
-            modelBuilder.Entity("SoundVast.Components.Artist.Models.Artist", b =>
-                {
-                    b.HasBaseType("SoundVast.Components.Audio.Models.Audio");
-
-                    b.Property<int?>("YearsActiveId");
-
-                    b.HasIndex("YearsActiveId")
-                        .IsUnique()
-                        .HasFilter("[YearsActiveId] IS NOT NULL");
-
-                    b.ToTable("Artist");
-
-                    b.HasDiscriminator().HasValue("Artist");
-                });
-
             modelBuilder.Entity("SoundVast.Components.LiveStream.Models.LiveStream", b =>
                 {
                     b.HasBaseType("SoundVast.Components.Audio.Models.Audio");
 
-                    b.Property<string>("LiveStreamUrl");
+                    b.Property<string>("LiveStreamUrl")
+                        .IsRequired();
 
                     b.Property<string>("WebsiteUrl");
 
                     b.ToTable("LiveStream");
 
                     b.HasDiscriminator().HasValue("LiveStream");
-                });
-
-            modelBuilder.Entity("SoundVast.Components.Song.Models.Song", b =>
-                {
-                    b.HasBaseType("SoundVast.Components.Audio.Models.Audio");
-
-                    b.Property<int?>("AlbumId");
-
-                    b.Property<bool>("Free");
-
-                    b.Property<DateTimeOffset?>("ReleaseDate")
-                        .HasColumnName("Song_ReleaseDate");
-
-                    b.HasIndex("AlbumId");
-
-                    b.ToTable("Song");
-
-                    b.HasDiscriminator().HasValue("Song");
-                });
-
-            modelBuilder.Entity("SoundVast.Components.Edit.Models.LiveStreamPendingEdit", b =>
-                {
-                    b.HasBaseType("SoundVast.Components.Edit.Models.AudioPendingEdit");
-
-                    b.Property<string>("LiveStreamUrl");
-
-                    b.ToTable("LiveStreamPendingEdit");
-
-                    b.HasDiscriminator().HasValue("LiveStreamPendingEdit");
-                });
-
-            modelBuilder.Entity("SoundVast.Components.Edit.Models.SongPendingEdit", b =>
-                {
-                    b.HasBaseType("SoundVast.Components.Edit.Models.AudioPendingEdit");
-
-                    b.Property<int?>("AlbumId");
-
-                    b.Property<bool>("Free");
-
-                    b.HasIndex("AlbumId");
-
-                    b.ToTable("SongPendingEdit");
-
-                    b.HasDiscriminator().HasValue("SongPendingEdit");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -621,34 +424,6 @@ namespace SoundVast.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("SoundVast.Components.Artist.Models.ArtistAlbum", b =>
-                {
-                    b.HasOne("SoundVast.Components.Album.Models.Album", "Album")
-                        .WithMany("ArtistAlbums")
-                        .HasForeignKey("AlbumId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("SoundVast.Components.Artist.Models.Artist", "Artist")
-                        .WithMany("ArtistAlbums")
-                        .HasForeignKey("ArtistId");
-                });
-
-            modelBuilder.Entity("SoundVast.Components.Artist.Models.ArtistSong", b =>
-                {
-                    b.HasOne("SoundVast.Components.Artist.Models.Artist", "Artist")
-                        .WithMany("ArtistSongs")
-                        .HasForeignKey("ArtistId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("SoundVast.Components.Song.Models.Song", "Song")
-                        .WithMany("ArtistSongs")
-                        .HasForeignKey("SongId");
-
-                    b.HasOne("SoundVast.Components.Edit.Models.SongPendingEdit")
-                        .WithMany("ArtistSongs")
-                        .HasForeignKey("SongPendingEditId");
                 });
 
             modelBuilder.Entity("SoundVast.Components.Audio.Models.Audio", b =>
@@ -700,23 +475,6 @@ namespace SoundVast.Migrations
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("SoundVast.Components.Edit.Models.AudioPendingEdit", b =>
-                {
-                    b.HasOne("SoundVast.Components.Audio.Models.Audio", "Audio")
-                        .WithMany()
-                        .HasForeignKey("AudioId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("SoundVast.Components.User.ApplicationUser", "Contributor")
-                        .WithMany()
-                        .HasForeignKey("ContributorId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("SoundVast.Components.Genre.Models.Genre", "Genre")
-                        .WithMany()
-                        .HasForeignKey("GenreId");
-                });
-
             modelBuilder.Entity("SoundVast.Components.Flag.Models.Flag", b =>
                 {
                     b.HasOne("SoundVast.Components.Audio.Models.Audio", "Audio")
@@ -726,30 +484,6 @@ namespace SoundVast.Migrations
                     b.HasOne("SoundVast.Components.Comment.Models.Comment", "Comment")
                         .WithMany()
                         .HasForeignKey("CommentId");
-                });
-
-            modelBuilder.Entity("SoundVast.Components.Playlist.Models.Playlist", b =>
-                {
-                    b.HasOne("SoundVast.Components.User.ApplicationUser", "User")
-                        .WithMany("Playlists")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("SoundVast.Components.Playlist.Models.SongPlaylist", b =>
-                {
-                    b.HasOne("SoundVast.Components.Playlist.Models.Playlist", "Playlist")
-                        .WithMany("SongPlaylists")
-                        .HasForeignKey("PlaylistId");
-
-                    b.HasOne("SoundVast.Components.Song.Models.Song", "Song")
-                        .WithMany("SongPlaylists")
-                        .HasForeignKey("SongId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("SoundVast.Components.User.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("SoundVast.Components.Rating.Models.Rating", b =>
@@ -772,27 +506,6 @@ namespace SoundVast.Migrations
                     b.HasOne("SoundVast.Components.Audio.Models.Audio")
                         .WithMany("Contributors")
                         .HasForeignKey("AudioId");
-                });
-
-            modelBuilder.Entity("SoundVast.Components.Artist.Models.Artist", b =>
-                {
-                    b.HasOne("SoundVast.Components.Artist.YearsActive", "YearsActive")
-                        .WithOne("Artist")
-                        .HasForeignKey("SoundVast.Components.Artist.Models.Artist", "YearsActiveId");
-                });
-
-            modelBuilder.Entity("SoundVast.Components.Song.Models.Song", b =>
-                {
-                    b.HasOne("SoundVast.Components.Album.Models.Album", "Album")
-                        .WithMany("Songs")
-                        .HasForeignKey("AlbumId");
-                });
-
-            modelBuilder.Entity("SoundVast.Components.Edit.Models.SongPendingEdit", b =>
-                {
-                    b.HasOne("SoundVast.Components.Album.Models.Album", "Album")
-                        .WithMany()
-                        .HasForeignKey("AlbumId");
                 });
 #pragma warning restore 612, 618
         }

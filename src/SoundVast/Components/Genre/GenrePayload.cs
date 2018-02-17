@@ -7,22 +7,20 @@ using SoundVast.Components.Audio;
 using SoundVast.Components.Genre;
 using SoundVast.Components.Genre.Models;
 using SoundVast.Components.LiveStream;
+using SoundVast.Storage.CloudStorage;
 
 namespace SoundVast.Components.Genre
 {
     public class GenrePayload : ObjectGraphType<Models.Genre>
     {
-        private readonly ICloudStorage _cloudStorage;
-
-        public GenrePayload()
+        public GenrePayload(ICloudStorage cloudStorage)
         {
-            _cloudStorage = cloudStorage;
             Name = nameof(Genre);
 
             Field<IdGraphType>("id");
             Field(x => x.Name);
             Field<StringGraphType>("coverImageUrl", "The cover image url for the genre", 
-                resolve: c => _cloudStorage.GetBlob(CloudStorageType.Image, c.Source.CoverImageName));
+                resolve: c => cloudStorage.GetBlob(CloudStorageType.Image, c.Source.CoverImageName).Uri.AbsoluteUri);
         }
     }
 }
