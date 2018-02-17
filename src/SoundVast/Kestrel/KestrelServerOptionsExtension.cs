@@ -71,7 +71,7 @@ namespace SoundVast.Kestrel
                     store.Open(OpenFlags.ReadOnly);
                     var certificate = store.Certificates.Find(
                         X509FindType.FindBySubjectName,
-                        config.Host, false);
+                        config.Host, !environment.IsDevelopment());
 
                     if (certificate.Count == 0)
                     {
