@@ -36,7 +36,7 @@ const sharedUpdater = (store, rootComment, reply) => {
   ConnectionHandler.insertEdgeAfter(connection, edge);
 };
 
-let tempID = 0;
+const tempID = 0;
 
 export default ({ body }, audio, rootComment, originalComment) => {
   const variables = {

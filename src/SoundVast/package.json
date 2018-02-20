@@ -21,17 +21,17 @@
   "homepage": "https://github.com/MartinDawson/SoundVast",
   "license": "ISC",
   "scripts": {
-    "start": "npm-run-all --parallel dotnet-development relay-compiler:watch",
-    "production": "npm-run-all --parallel dotnet-production relay-compiler:watch",
-    "dotnet-development": "cross-env ASPNETCORE_ENVIRONMENT=Development dotnet run",
-    "dotnet-production": "cross-env ASPNETCORE_ENVIRONMENT=Production dotnet run",
+    "start": "npm-run-all --parallel development relay-compiler:watch",
+    "development": "cross-env ASPNETCORE_ENVIRONMENT=Development dotnet run",
+    "production": "cross-env ASPNETCORE_ENVIRONMENT=Production dotnet run",
     "relay-compiler": "relay-compiler --src ./wwwroot/components --schema schema.graphql --extensions=js --extensions=jsx",
     "relay-compiler:watch": "npm run relay-compiler -- --watch",
     "get-schema:dev": "graphql get-schema dev",
     "lint": "eslint --fix --ext .jsx,.js wwwroot/components",
     "test:unit": "cross-env NODE_ENV=test jest",
     "packages": "david",
-    "packages:update": "david update"
+    "packages:update": "david update",
+    "build": "cross-env NODE_ENV=production webpack"
   },
   "jest": {
     "testRegex": "(/__tests__/.*|(\\.|/)(test|integration))\\.jsx?$",
@@ -129,6 +129,7 @@
     "redux-mock-store": "^1.2.3",
     "require-hacker": "^3.0.1",
     "style-loader": "^0.18.2",
+    "uglifyjs-webpack-plugin": "^1.2.0",
     "url-search-params-polyfill": "^2.0.0",
     "webpack": "^2.2.0",
     "webpack-dev-server": "^2.4.1"

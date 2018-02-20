@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
@@ -16,7 +17,6 @@ namespace SoundVast.Kestrel
         public static void ConfigureEndpoints(this KestrelServerOptions options)
         {
             var configuration = options.ApplicationServices.GetRequiredService<IConfiguration>();
-            var environment = options.ApplicationServices.GetRequiredService<IHostingEnvironment>();
 
             var endpoints = configuration.GetSection("HttpServer:Endpoints")
                 .GetChildren()
@@ -54,7 +54,7 @@ namespace SoundVast.Kestrel
                         {
                             if (config.Scheme == "https")
                             {
-                                var certificate = LoadCertificate(config, environment);
+                                var certificate = LoadCertificate(config);
                                 listenOptions.UseHttps(certificate);
                             }
                         });
@@ -62,7 +62,7 @@ namespace SoundVast.Kestrel
             }
         }
         
-        private static X509Certificate2 LoadCertificate(EndpointConfiguration config, IHostingEnvironment environment)
+        private static X509Certificate2 LoadCertificate(EndpointConfiguration config)
         {
             if (config.StoreName != null && config.StoreLocation != null)
             {
@@ -71,7 +71,7 @@ namespace SoundVast.Kestrel
                     store.Open(OpenFlags.ReadOnly);
                     var certificate = store.Certificates.Find(
                         X509FindType.FindBySubjectName,
-                        config.Host, !environment.IsDevelopment());
+                        config.Host, false);
 
                     if (certificate.Count == 0)
                     {

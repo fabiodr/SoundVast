@@ -1,7 +1,4 @@
-import jsmediatags from 'jsmediatags/dist/jsmediatags';
 import shortid from 'shortid';
-
-import trimFileExtension from '../shared/utilities/trimFileExtension';
 
 export const removeCoverImage = index => ({
   type: 'REMOVE_PREVIEW_IMAGE',

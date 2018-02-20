@@ -18,7 +18,8 @@ const FilterText = ({
       <span>
         Sorting
         {queryFilterDictionary.key && (
-          <span>&nbsp;by the&nbsp;
+          <span>
+            &nbsp;by the&nbsp;
             <span className={styles.queryFilterLabel}>
               {queryFilterDictionary.label}
               <RemoveFilter name={queryFilterDictionary.key} />

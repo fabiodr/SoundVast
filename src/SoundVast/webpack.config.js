@@ -3,33 +3,35 @@ const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const fs = require('fs');
 const dotenv = require('dotenv');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 dotenv.config();
 
-const dev = process.env.NODE_ENV !== 'production';
+const isInDev = process.env.NODE_ENV !== 'production';
+
 const plugins = [
   new Webpack.optimize.CommonsChunkPlugin({
     name: 'vendor',
     filename: 'vendor.bundle.js',
+    minChunks: ({ resource }) => /node_modules/.test(resource),
   }),
   new ExtractTextPlugin({
     filename: '[name].bundle.css',
   }),
   new Webpack.DefinePlugin({
-    __DEV__: dev,
+    __DEV__: isInDev,
     'process.env': {
+      NODE_ENV: JSON.stringify(process.env.NODE_ENV),
       ENABLE_UPLOAD: JSON.stringify(process.env.ENABLE_UPLOAD),
     },
   }),
 ];
-let devtool = null;
+let devtool = false;
 
-if (!dev) {
-  plugins.push([
-    new Webpack.optimize.DedupePlugin(),
-    new Webpack.optimize.OccurenceOrderPlugin(),
-    new Webpack.optimize.UglifyJsPlugin(),
-  ]);
+if (!isInDev) {
+  plugins.push(
+    new UglifyJsPlugin(),
+  );
 } else {
   devtool = 'inline-sourcemap';
 }
@@ -40,15 +42,10 @@ module.exports = {
   entry: {
     app: './wwwroot/components/app/appContainer.jsx',
     graphiQl: './wwwroot/components/_config/graphiQl/graphiQl.jsx',
-    vendor: [
-      'react',
-      'react-dom',
-      'found',
-    ],
   },
   output: {
     path: path.resolve(__dirname, 'wwwroot/build/'),
-    publicPath: '/wwwroot/build/',
+    publicPath: '/build/',
     filename: '[name].bundle.js',
   },
   module: {

@@ -12,7 +12,7 @@ const ResetPassword = ({ handleSubmit }) => (
       <Field name="confirmPassword" component={Input} type="password" placeholder="Confirm password" />
     </FormGroup>
 
-    <button className={genericStyles.button}>
+    <button>
       Reset Password
     </button>
   </form>

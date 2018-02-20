@@ -12,10 +12,7 @@
       "commandName": "IISExpress",
       "launchBrowser": true,
       "launchUrl": "https://localhost:8080/",
-      "applicationUrl": "https://localhost:8080/",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      "applicationUrl": "https://localhost:8080/"
     },
     "SoundVast": {
       "commandName": "Project",

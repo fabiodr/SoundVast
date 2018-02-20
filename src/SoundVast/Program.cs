@@ -31,6 +31,8 @@ namespace SoundVast
 
         private static void ConfigConfiguration(WebHostBuilderContext webHostBuilderContext, IConfigurationBuilder configurationBuilder)
         {
+            if (webHostBuilderContext.HostingEnvironment.IsDevelopment()) return;
+
             configurationBuilder.SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("azurekeyvault.json", false, true)
                 .AddEnvironmentVariables();

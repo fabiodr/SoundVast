@@ -75,7 +75,6 @@
   <ItemGroup>
     <Folder Include="Components\Form\" />
     <Folder Include="Components\User\Profile\" />
-    <Folder Include="Migrations\" />
     <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
 

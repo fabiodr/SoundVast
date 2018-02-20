@@ -26,7 +26,7 @@ const SocialLoginConfirmation = ({
       <div className="form-group">
         <Field name="userName" component={InputTextField} type="userName" placeholder="User name" />
       </div>
-      <button className={genericStyles.button}>
+      <button>
         Register
       </button>
     </form>

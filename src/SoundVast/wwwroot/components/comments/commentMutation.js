@@ -30,7 +30,7 @@ const sharedUpdater = (store, audio, comment) => {
   ConnectionHandler.insertEdgeAfter(connection, edge);
 };
 
-let tempID = 0;
+const tempID = 0;
 
 export default ({ body }, audio) => {
   const variables = {
