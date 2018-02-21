@@ -1,9 +1,9 @@
 ﻿const Webpack = require('webpack');
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const fs = require('fs');
 const dotenv = require('dotenv');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 dotenv.config();
 
@@ -31,6 +31,9 @@ let devtool = false;
 if (!isInDev) {
   plugins.push(
     new UglifyJsPlugin(),
+    new OptimizeCssAssetsPlugin({
+      cssProcessorOptions: { discardComments: { removeAll: true } },
+    }),
   );
 } else {
   devtool = 'inline-sourcemap';
@@ -54,8 +57,6 @@ module.exports = {
         test: /\.jsx?$/,
         include: [
           path.resolve(__dirname, 'wwwroot/components'),
-          fs.realpathSync(`${__dirname}/node_modules/react-jplayer`),
-          fs.realpathSync(`${__dirname}/node_modules/react-jplaylist`),
         ],
         loader: 'babel-loader',
       },
@@ -97,7 +98,7 @@ module.exports = {
             loader: 'postcss-loader',
             options: {
               config: {
-                path: './postcss.config.js',
+                path: path.resolve(__dirname, 'postcss.config.js'),
               },
             },
           }, {
