@@ -23,7 +23,6 @@
   "scripts": {
     "start": "npm-run-all --parallel development relay-compiler:watch",
     "development": "cross-env ASPNETCORE_ENVIRONMENT=Development dotnet run",
-    "production": "cross-env ASPNETCORE_ENVIRONMENT=Production dotnet run",
     "relay-compiler": "relay-compiler --src ./wwwroot/components --schema schema.graphql --extensions=js --extensions=jsx",
     "relay-compiler:watch": "npm run relay-compiler -- --watch",
     "get-schema:dev": "graphql get-schema dev",

@@ -140,27 +140,20 @@ namespace SoundVast
             loggerFactory.AddConsole(_configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            var environment = env.EnvironmentName.ToLower();
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
                 app.UseBrowserLink();
+                app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
+                {
+                    ConfigFile = "./webpack.config.js"
+                });
             }
             else
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-
-            app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
-            {
-                ConfigFile = "./webpack.config.js",
-                EnvironmentVariables = new Dictionary<string, string>
-                {
-                    { "NODE_ENV", environment }
-                }
-            });
 
             var options = new RewriteOptions().AddRedirectToHttps();
 
@@ -214,7 +207,7 @@ namespace SoundVast
 
                     var service = context.ResolveOptional(valType) ?? context.ResolveOptional(baseValType);
 
-                    return (IValidator) service;
+                    return (IValidator)service;
                 };
             });
 
