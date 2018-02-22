@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import ModalButton from '../shared/button/modalButtonContainer';
 import SoundVastSmallLogoIcon from '../icons/logoSmall';
 import UserIcon from '../icons/user';
 import UploadIcon from '../icons/upload';
@@ -16,7 +17,7 @@ import Button from '../shared/button/button';
 import Logout from '../account/logout/logoutContainer';
 import HeaderTermsLink from './headerTermsLink';
 import HeaderPrivacyLink from './headerPrivacyLink';
-import ModalButton from '../shared/button/modalButtonContainer';
+import HeaderImprintLink from './headerImprintLink';
 
 const MobileHeader = ({
   userName,
@@ -49,6 +50,7 @@ const MobileHeader = ({
         ]}
         <HeaderTermsLink />
         <HeaderPrivacyLink />
+        <HeaderImprintLink />
       </Dropdown>
       <Popups />
     </nav>

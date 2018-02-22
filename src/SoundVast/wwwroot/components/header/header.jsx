@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import Logout from '../account/logout/logoutContainer';
 import SoundVastLogoIcon from '../icons/logo';
 import LegalIcon from '../icons/legal';
 import styles from './header.less';
@@ -13,8 +14,8 @@ import HeaderGenreLink from './headerGenreLinkContainer';
 import HeaderUploadLink from './headerUploadLink';
 import HeaderTermsLink from './headerTermsLink';
 import HeaderPrivacyLink from './headerPrivacyLink';
+import HeaderImprintLink from './headerImprintLink';
 import HeaderHomeLink from './headerHomeLink';
-import Logout from '../account/logout/logoutContainer';
 
 const Header = ({
   userName,
@@ -54,6 +55,7 @@ const Header = ({
       >
         <HeaderTermsLink />
         <HeaderPrivacyLink />
+        <HeaderImprintLink />
       </Dropdown>
     </nav>
   </header>

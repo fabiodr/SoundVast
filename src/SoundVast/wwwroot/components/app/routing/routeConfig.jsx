@@ -12,6 +12,7 @@ import { routeConfig as primaryLayoutRouteConfig } from '../../layouts/primaryLa
 import { routeConfig as genresRouteConfig } from '../../genres/genresContainer';
 import { routeConfig as termsAndConditionsRouteConfig } from '../../legal/termsAndConditionsContainer';
 import { routeConfig as privacyPolicyRouteConfig } from '../../legal/privacyPolicyContainer';
+import { routeConfig as imprintRouteConfig } from '../../legal/imprintContainer';
 
 export default makeRouteConfig(
   <Route path="/" {...primaryLayoutRouteConfig}>
@@ -27,5 +28,6 @@ export default makeRouteConfig(
     </Route>
     <Route path="termsAndConditions" {...termsAndConditionsRouteConfig} />
     <Route path="privacyPolicy" {...privacyPolicyRouteConfig} />
+    <Route path="imprint" {...imprintRouteConfig} />
   </Route>,
 );
