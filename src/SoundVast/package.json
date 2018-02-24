@@ -88,7 +88,6 @@
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-2": "^6.22.0",
     "babel-register": "^6.18.0",
-    "cross-env": "^5.0.0",
     "css-loader": "^0.28.4",
     "css-modules-require-hook": "^4.0.6",
     "david": "^11.0.0",
@@ -131,12 +130,12 @@
     "style-loader": "^0.18.2",
     "uglifyjs-webpack-plugin": "^1.2.0",
     "url-search-params-polyfill": "^2.0.0",
-    "webpack": "^2.2.0",
     "webpack-dev-server": "^2.4.1"
   },
   "dependencies": {
     "airbnb-prop-types": "^2.7.0",
     "classnames": "^2.2.5",
+    "cross-env": "^5.0.0",
     "dotenv": "^5.0.0",
     "es6-promise": "^4.1.0",
     "farce": "^0.2.1",
@@ -173,6 +172,7 @@
     "redux-thunk": "^2.2.0",
     "relay-compiler": "^1.4.1",
     "relay-runtime": "^1.4.1",
-    "shortid": "^2.2.8"
+    "shortid": "^2.2.8",
+    "webpack": "^2.2.0"
   }
 }
