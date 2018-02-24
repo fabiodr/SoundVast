@@ -24,6 +24,8 @@
   <ItemGroup>
     <None Remove="Properties\PublishProfiles\SoundVast - FTP.pubxml" />
     <None Remove="Properties\PublishProfiles\SoundVast - Web Deploy.pubxml" />
+    <None Remove="Properties\PublishProfiles\SoundVast-staging - FTP.pubxml" />
+    <None Remove="Properties\PublishProfiles\SoundVast-staging - Web Deploy.pubxml" />
   </ItemGroup>
 
   <ItemGroup>
