@@ -4,6 +4,7 @@ import classnames from 'classnames';
 
 import LinkButton from '../shared/button/linkButton';
 import styles from './header.less';
+import Popups from '../shared/popup/popupsContainer';
 
 const HeaderHomeLink = ({ children }) => (
   <LinkButton
@@ -14,6 +15,9 @@ const HeaderHomeLink = ({ children }) => (
   >
     {children}
     <span className={styles.beta}>beta</span>
+    <div className={styles.popupsContainer}>
+      <Popups />
+    </div>
   </LinkButton>
 );
 

@@ -7,7 +7,6 @@ import UserIcon from '../icons/user';
 import UploadIcon from '../icons/upload';
 import GenreIcon from '../icons/stack';
 import styles from './header.less';
-import Popups from '../shared/popup/popupsContainer';
 import Search from './search/searchContainer';
 import HeaderGenreLink from './headerGenreLinkContainer';
 import HeaderUploadLink from './headerUploadLink';
@@ -52,7 +51,6 @@ const MobileHeader = ({
         <HeaderPrivacyLink />
         <HeaderImprintLink />
       </Dropdown>
-      <Popups />
     </nav>
   </header>
 );

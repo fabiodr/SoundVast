@@ -155,7 +155,9 @@ namespace SoundVast
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            var options = new RewriteOptions().AddRedirectToHttps();
+            var options = new RewriteOptions();
+
+            options.AddRedirectToHttps();
 
             app.UseRewriter(options);
             app.UseHangfireServer();
