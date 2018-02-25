@@ -5,7 +5,7 @@ import classnames from 'classnames';
 
 import SearchIcon from '../../icons/search';
 import styles from './search.less';
-import Button from '../../shared/button/button';
+import Button from '../../shared/button/buttonContainer';
 
 const Search = ({
   handleSubmit,

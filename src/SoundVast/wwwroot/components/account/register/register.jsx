@@ -7,7 +7,7 @@ import InputTextField from '../../shared/fields/inputField/inputTextField';
 import ModalButton from '../../shared/button/modalButtonContainer';
 import Modal from '../../shared/modal/modalContainer';
 import SocialLogins from '../login/socialLogins/socialLoginsContainer';
-import Button from '../../shared/button/button';
+import Button from '../../shared/button/buttonContainer';
 import ValidationErrors from '../../shared/fields/validationField/validationErrors';
 
 const Register = ({ handleSubmit, loginProviders, error }) => (
@@ -26,7 +26,7 @@ const Register = ({ handleSubmit, loginProviders, error }) => (
         Or <ModalButton type="button" styleName="tertiary" modalId="login">login</ModalButton> if you already have an account.
       </div>
 
-      <Button className={styles.registerButton}>Register</Button>
+      <Button styleName="primary" className={styles.registerButton}>Register</Button>
     </form>
   </Modal>
 );

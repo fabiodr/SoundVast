@@ -7,7 +7,7 @@ const mutation = graphql`
   ) {
     login(input: $input) {
       user {
-        id,
+        userId,
         userName
       }
     }

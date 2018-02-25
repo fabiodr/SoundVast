@@ -11,16 +11,21 @@ using SoundVast.Components.User;
 
 namespace SoundVast.Components.Account
 {
-    public class AccountPayload : ObjectGraphType<ApplicationUser>
+    public class AccountPayload : NodeGraphType<ApplicationUser>
     {
         public AccountPayload()
         {
             Name = nameof(ApplicationUser);
 
-            Field<IdGraphType>("Id");
+            Id("userId", x => x.Id);
             Field(x => x.UserName);
             Field(x => x.Email);
             Field(x => x.EmailConfirmed);
+        }
+
+        public override ApplicationUser GetById(string id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

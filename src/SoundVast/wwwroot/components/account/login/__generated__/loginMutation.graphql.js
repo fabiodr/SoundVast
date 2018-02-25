@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash be514f043ad8add9f3427f1358ed272a
+ * @relayHash 3c1af8a39a782b49e854b4a0beeb5439
  */
 
 /* eslint-disable */
@@ -20,7 +20,7 @@ export type loginMutationVariables = {|
 export type loginMutationResponse = {|
   +login: ?{|
     +user: ?{|
-      +id: ?string;
+      +userId: string;
       +userName: string;
     |};
   |};
@@ -34,8 +34,9 @@ mutation loginMutation(
 ) {
   login(input: $input) {
     user {
-      id
+      userId
       userName
+      id
     }
   }
 }
@@ -82,7 +83,7 @@ const batch /*: ConcreteBatch*/ = {
                 "kind": "ScalarField",
                 "alias": null,
                 "args": null,
-                "name": "id",
+                "name": "userId",
                 "storageKey": null
               },
               {
@@ -145,7 +146,7 @@ const batch /*: ConcreteBatch*/ = {
                 "kind": "ScalarField",
                 "alias": null,
                 "args": null,
-                "name": "id",
+                "name": "userId",
                 "storageKey": null
               },
               {
@@ -153,6 +154,13 @@ const batch /*: ConcreteBatch*/ = {
                 "alias": null,
                 "args": null,
                 "name": "userName",
+                "storageKey": null
+              },
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "id",
                 "storageKey": null
               }
             ],
@@ -163,7 +171,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "mutation loginMutation(\n  $input: LoginInput!\n) {\n  login(input: $input) {\n    user {\n      id\n      userName\n    }\n  }\n}\n"
+  "text": "mutation loginMutation(\n  $input: LoginInput!\n) {\n  login(input: $input) {\n    user {\n      userId\n      userName\n      id\n    }\n  }\n}\n"
 };
 
 module.exports = batch;

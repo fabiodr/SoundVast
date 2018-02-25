@@ -6,11 +6,10 @@ import FlagModal from './flagModalContainer';
 import InputRadioButtonGroup from '../shared/fields/inputField/inputRadioButtonGroup';
 import styles from './flagCommentModal.less';
 
-const FlagCommentModal = ({ onSubmit, isAuthorized }) => (
+const FlagCommentModal = ({ onSubmit }) => (
   <FlagModal
     modalId="flagComment"
     onSubmit={onSubmit}
-    isAuthorized={isAuthorized}
   >
     <Field
       component={InputRadioButtonGroup}
@@ -25,7 +24,6 @@ const FlagCommentModal = ({ onSubmit, isAuthorized }) => (
 
 FlagCommentModal.propTypes = {
   onSubmit: PropTypes.func.isRequired,
-  isAuthorized: PropTypes.bool.isRequired,
 };
 
 export default FlagCommentModal;

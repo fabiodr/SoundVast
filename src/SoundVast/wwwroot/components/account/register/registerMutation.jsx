@@ -13,7 +13,7 @@ const mutation = graphql`
   ) {
     register(input: $input) {
       user {
-        id,
+        userId,
       },
       emailConfirmationToken
     }
@@ -34,7 +34,7 @@ export default ({ username, password, email }) => {
     variables,
   ).then(({ register }) => {
     const emailMessage = renderEmail(
-      <ConfirmEmail confirmEmailLink={`${window.location.origin}/account/confirmEmail/${register.user.id}/${register.emailConfirmationToken}`} />,
+      <ConfirmEmail confirmEmailLink={`${window.location.origin}/account/confirmEmail/${register.user.userId}/${register.emailConfirmationToken}`} />,
     );
     const subject = 'Confirm your email';
 

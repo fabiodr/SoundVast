@@ -5,7 +5,7 @@ import Filters from './filtersContainer';
 import ToggleSideBar from './toggleSideBarContainer';
 import DisplayType from '../shared/displayType';
 import Dropdown from '../shared/dropdown/dropdownContainer';
-import Button from '../shared/button/button';
+import Button from '../shared/button/buttonContainer';
 import SortIcon from '../icons/sort';
 
 /* eslint-disable react/no-array-index-key */

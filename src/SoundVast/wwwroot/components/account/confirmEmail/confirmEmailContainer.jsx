@@ -26,6 +26,6 @@ const render = (route) => {
 
 export const routeConfig = {
   query,
-  prepareVariables: ({ userId, token }) => ({ userId, token }),
+  prepareVariables: ({ userId, token }) => {debugger; return ({ userId, token }) },
   render: route => withRouteValidation(route)(render),
 };

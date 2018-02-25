@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { compose, setPropTypes, branch, renderComponent } from 'recompose';
 
 import styles from './spinnerButton.less';
-import Button from '../button/button';
+import Button from '../button/buttonContainer';
 import SpinnerIcon from '../../icons/spinner';
 
 const SpinnerButton = ({ ...props }) => (

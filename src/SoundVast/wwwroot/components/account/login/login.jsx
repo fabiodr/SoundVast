@@ -8,7 +8,7 @@ import InputTextField from '../../shared/fields/inputField/inputTextField';
 import InputCheckboxField from '../../shared/fields/inputField/inputCheckboxField';
 import Modal from '../../shared/modal/modalContainer';
 import SocialLogins from '../login/socialLogins/socialLoginsContainer';
-import Button from '../../shared/button/button';
+import Button from '../../shared/button/buttonContainer';
 import ValidationErrors from '../../shared/fields/validationField/validationErrors';
 
 const Login = ({ handleSubmit, loginProviders, error }) => (
@@ -35,7 +35,7 @@ const Login = ({ handleSubmit, loginProviders, error }) => (
         Or <ModalButton type="button" styleName="tertiary" modalId="register">register</ModalButton> if you don&apos;t have an account.
       </div>
 
-      <Button className={styles.loginButton}>Login</Button>
+      <Button styleName="primary" className={styles.loginButton}>Login</Button>
     </form>
   </Modal>
 );

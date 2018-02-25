@@ -6,7 +6,7 @@ import SoundVastLogoIcon from '../icons/logo';
 import LegalIcon from '../icons/legal';
 import styles from './header.less';
 import Dropdown from '../shared/dropdown/dropdownContainer';
-import Button from '../shared/button/button';
+import Button from '../shared/button/buttonContainer';
 import ModalButton from '../shared/button/modalButtonContainer';
 import Search from './search/searchContainer';
 import HeaderGenreLink from './headerGenreLinkContainer';

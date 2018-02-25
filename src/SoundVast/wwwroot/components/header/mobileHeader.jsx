@@ -12,7 +12,7 @@ import HeaderGenreLink from './headerGenreLinkContainer';
 import HeaderUploadLink from './headerUploadLink';
 import HeaderHomeLink from './headerHomeLink';
 import Dropdown from '../shared/dropdown/dropdownContainer';
-import Button from '../shared/button/button';
+import Button from '../shared/button/buttonContainer';
 import Logout from '../account/logout/logoutContainer';
 import HeaderTermsLink from './headerTermsLink';
 import HeaderPrivacyLink from './headerPrivacyLink';

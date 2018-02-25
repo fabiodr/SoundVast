@@ -4,7 +4,7 @@ import classnames from 'classnames';
 
 import CommentsIcon from '../icons/comments';
 import styles from './toggleSideBar.less';
-import Button from '../shared/button/button';
+import Button from '../shared/button/buttonContainer';
 
 const ToggleSideBar = ({ onClick, className, showingSideBar }) => (
   <Button

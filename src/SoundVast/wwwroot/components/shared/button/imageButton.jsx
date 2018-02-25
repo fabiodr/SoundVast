@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-import Button from './button';
+import Button from './buttonContainer';
 import styles from './imageButton.less';
 
 const ImageButton = ({ children, onClick, className, ...props }) => (
-  <Button onClick={onClick} className={classnames(styles.imageButton, className)} {...props}>
+  <Button styleName="primary" onClick={onClick} className={classnames(styles.imageButton, className)} {...props}>
     {children}
     <div className={styles.imageOverlay} />
   </Button>

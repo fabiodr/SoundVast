@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 2e35c156f7c13cd2f47c197c873368ca
+ * @relayHash 29e0f606e4420fbc3fe331818c2b3f4e
  */
 
 /* eslint-disable */
@@ -10,7 +10,10 @@
 /*::
 import type {ConcreteBatch} from 'relay-runtime';
 export type primaryLayoutContainerQueryResponse = {|
-  +user: ?{| |};
+  +user: ?{|
+    +userId: string;
+    +userName: string;
+  |};
   +loginProviders: ?$ReadOnlyArray<?{| |}>;
 |};
 */
@@ -19,16 +22,13 @@ export type primaryLayoutContainerQueryResponse = {|
 /*
 query primaryLayoutContainerQuery {
   user {
-    ...headerContainer_user
+    userId
+    userName
     id
   }
   loginProviders {
     ...socialLoginsContainer_loginProviders
   }
-}
-
-fragment headerContainer_user on ApplicationUser {
-  userName
 }
 
 fragment socialLoginsContainer_loginProviders on LoginProvider {
@@ -53,9 +53,18 @@ const batch /*: ConcreteBatch*/ = {
         "plural": false,
         "selections": [
           {
-            "kind": "FragmentSpread",
-            "name": "headerContainer_user",
-            "args": null
+            "kind": "ScalarField",
+            "alias": null,
+            "args": null,
+            "name": "userId",
+            "storageKey": null
+          },
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "args": null,
+            "name": "userName",
+            "storageKey": null
           }
         ],
         "storageKey": null
@@ -97,6 +106,13 @@ const batch /*: ConcreteBatch*/ = {
         "name": "user",
         "plural": false,
         "selections": [
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "args": null,
+            "name": "userId",
+            "storageKey": null
+          },
           {
             "kind": "ScalarField",
             "alias": null,
@@ -147,7 +163,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query primaryLayoutContainerQuery {\n  user {\n    ...headerContainer_user\n    id\n  }\n  loginProviders {\n    ...socialLoginsContainer_loginProviders\n  }\n}\n\nfragment headerContainer_user on ApplicationUser {\n  userName\n}\n\nfragment socialLoginsContainer_loginProviders on LoginProvider {\n  name\n  displayName\n}\n"
+  "text": "query primaryLayoutContainerQuery {\n  user {\n    userId\n    userName\n    id\n  }\n  loginProviders {\n    ...socialLoginsContainer_loginProviders\n  }\n}\n\nfragment socialLoginsContainer_loginProviders on LoginProvider {\n  name\n  displayName\n}\n"
 };
 
 module.exports = batch;

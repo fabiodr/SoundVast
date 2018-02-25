@@ -82,6 +82,7 @@ namespace SoundVast
                     options.Password.RequiredLength = 0;
                     // Allow all characters
                     options.User.AllowedUserNameCharacters = string.Empty;
+                    options.User.RequireUniqueEmail = true;
                 })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();

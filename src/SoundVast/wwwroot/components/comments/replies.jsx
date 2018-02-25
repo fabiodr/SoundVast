@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import pluralize from 'pluralize';
 
 import Reply from './replyContainer';
-import Button from '../shared/button/button';
+import Button from '../shared/button/buttonContainer';
 import styles from './replies.less';
 
 const Replies = ({
@@ -15,7 +15,7 @@ const Replies = ({
 }) => (
   <div>
     {!!replies.totalCount && (
-      <Button onClick={toggleReplies} className={styles.toggleReplies}>
+      <Button styleName="primary" onClick={toggleReplies} className={styles.toggleReplies}>
         {!showingReplies ? (
           <div>
             Show {replies.totalCount} {pluralize('reply', replies.totalCount)}

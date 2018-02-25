@@ -9,16 +9,15 @@ const FlagModal = ({
   modalId,
   handleSubmit,
   form,
-  isAuthorized,
   children,
   className,
 }) => (
-  <Modal authRequired title="Flag." id={modalId} isAuthorized={isAuthorized} className={className}>
+  <Modal authRequired title="Flag." id={modalId} className={className}>
     <form onSubmit={handleSubmit} action="">
       <div className={styles.fields}>
         {children}
       </div>
-      <SpinnerSubmit formName={form}>Flag</SpinnerSubmit>
+      <SpinnerSubmit styleName="primary" formName={form}>Flag</SpinnerSubmit>
     </form>
   </Modal>
 );
@@ -32,7 +31,6 @@ FlagModal.propTypes = {
   children: PropTypes.node.isRequired,
   form: PropTypes.string.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  isAuthorized: PropTypes.bool.isRequired,
   className: PropTypes.string,
 };
 
