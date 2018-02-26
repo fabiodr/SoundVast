@@ -24,20 +24,13 @@ namespace SoundVast.Storage.CloudStorage.AzureStorage
             {
                 var cloudBlobContainer = blobClient.GetContainerReference(cloudStorageType.ToString().ToLower());
                 cloudBlobContainer.CreateIfNotExistsAsync().Wait();
-                cloudBlobContainer.SetPermissionsAsync(new BlobContainerPermissions
-                {
-                    PublicAccess = BlobContainerPublicAccessType.Container
-                }).Wait();
-
                 CloudBlobContainers.Add(cloudStorageType, cloudBlobContainer);
             }
-        }
 
-        public CloudBlockBlob GetBlob(CloudStorageType cloudStorageType, string fileName)
-        {
-            var blob = CloudBlobContainers[cloudStorageType].GetBlockBlobReference(fileName);
-
-            return blob;
+            CloudBlobContainers[CloudStorageType.Image].SetPermissionsAsync(new BlobContainerPermissions
+            {
+                PublicAccess = BlobContainerPublicAccessType.Container
+            }).Wait();
         }
     }
 }

@@ -14,6 +14,7 @@ using ByteSizeLib;
 using Microsoft.AspNetCore.Identity;
 using SoundVast.Components.Audio.Models;
 using SoundVast.Validation;
+using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace SoundVast.Components.Upload
 {
@@ -30,7 +31,7 @@ namespace SoundVast.Components.Upload
 
         public IActionResult GetPlaceholderImage()
         {
-            var placeholderImage = _cloudStorage.GetBlob(CloudStorageType.Image, "SoundVast");
+            var placeholderImage = _cloudStorage.CloudBlobContainers[CloudStorageType.Image].GetBlockBlobReference("SoundVast");
 
             return Ok(new
             {
@@ -41,11 +42,11 @@ namespace SoundVast.Components.Upload
         [HttpPost]
         public async Task<IActionResult> UploadCoverImage(IFormFile file)
         {
-            var imageBlob = _cloudStorage.GetBlob(CloudStorageType.Image, file.FileName);
+            CloudBlockBlob imageBlob;
 
             try
             {
-                await _uploadService.UploadCoverImage(imageBlob, file.OpenReadStream(), file.ContentType);
+                imageBlob = await _uploadService.UploadCoverImage(file);
             }
             catch (ValidationException e)
             {

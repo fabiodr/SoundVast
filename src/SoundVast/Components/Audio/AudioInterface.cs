@@ -22,7 +22,7 @@ namespace SoundVast.Components.Audio
             Field(x => x.Id).Name("audioId");
             Field(x => x.Name);
             Field<StringGraphType>("coverImageUrl", "The cover image url for the audio", 
-                resolve: c => cloudStorage.GetBlob(CloudStorageType.Image, c.Source.CoverImageName).Uri.AbsoluteUri);
+                resolve: c => cloudStorage.CloudBlobContainers[CloudStorageType.Image].GetBlockBlobReference(c.Source.CoverImageName).Uri.AbsoluteUri);
             Field(x => x.Likes);
             Field(x => x.Dislikes);
             Field(x => x.PlayCount);

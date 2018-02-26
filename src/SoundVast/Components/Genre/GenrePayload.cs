@@ -20,7 +20,7 @@ namespace SoundVast.Components.Genre
             Field<IdGraphType>("id");
             Field(x => x.Name);
             Field<StringGraphType>("coverImageUrl", "The cover image url for the genre", 
-                resolve: c => cloudStorage.GetBlob(CloudStorageType.Image, c.Source.CoverImageName).Uri.AbsoluteUri);
+                resolve: c => cloudStorage.CloudBlobContainers[CloudStorageType.Image].GetBlockBlobReference(c.Source.CoverImageName).Uri.AbsoluteUri);
         }
     }
 }

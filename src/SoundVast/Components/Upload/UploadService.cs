@@ -6,29 +6,41 @@ using System.Threading.Tasks;
 using ByteSizeLib;
 using Microsoft.WindowsAzure.Storage.Blob;
 using SoundVast.Storage.CloudStorage;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.AspNetCore.Http;
 
 namespace SoundVast.Components.Upload
 {
     public class UploadService : IUploadService
     {
+        private readonly ICloudStorage _cloudStorage;
         private readonly IUploadValidator _uploadValidator;
 
-        public UploadService(IUploadValidator uploadValidator)
+        public UploadService(ICloudStorage cloudStorage, IUploadValidator uploadValidator)
         {
             _uploadValidator = uploadValidator;
+            _cloudStorage = cloudStorage;
         }
 
-        public async Task UploadCoverImage(ICloudBlob blob, Stream stream, string contentType)
+        public async Task<CloudBlockBlob> UploadCoverImage(IFormFile file)
         {
-            var fileSize = ByteSize.FromBytes(stream.Length);
+            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file.FileName);
+            var extension = Path.GetExtension(file.FileName);
+            var blobName = $"{fileNameWithoutExtension}_{Guid.NewGuid().ToString()}{extension}";
+            var blob = _cloudStorage.CloudBlobContainers[CloudStorageType.Image].GetBlockBlobReference(blobName);
 
-            _uploadValidator.ValidateUploadCoverImage(fileSize.MegaBytes);
+            using (var stream = file.OpenReadStream())
+            {
+                var fileSize = ByteSize.FromBytes(stream.Length);
 
-            blob.Properties.ContentType = contentType;
+                _uploadValidator.ValidateUploadCoverImage(fileSize.MegaBytes);
 
-            await blob.UploadFromStreamAsync(stream);
+                blob.Properties.ContentType = file.ContentType;
 
-            stream.Close();
+                await blob.UploadFromStreamAsync(stream);
+            }
+
+            return blob;
         }
     }
 }

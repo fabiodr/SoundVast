@@ -69,7 +69,7 @@ namespace SoundVast.Data
 
         private static async Task SeedImages()
         {
-            var placeholderImageBlob = _cloudStorage.GetBlob(CloudStorageType.Image, PlaceholderImageName);
+            var placeholderImageBlob = _cloudStorage.CloudBlobContainers[CloudStorageType.Image].GetBlockBlobReference(PlaceholderImageName);
             var path = Path.Combine(_hostingEnvironment.WebRootPath, "images/logo/SV_Icon.svg");
 
             placeholderImageBlob.Properties.ContentType = "image/svg+xml";
