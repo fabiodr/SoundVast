@@ -5,12 +5,12 @@ import { fragmentContainer } from 'recompose-relay-modern';
 
 import ErrorPage from './errorPage';
 
-const createProps = ({ status }) => {
+const createProps = ({ status, error }) => {
   switch (status) {
     case 404:
       return { error: 'The page could not be found.' };
     default:
-      return { error: 'An unknown error has occured ¯\\_(ツ)_/¯. We have been notified of the error and have sent Kanye West to investigate it.' };
+      return { error };
   }
 };
 
@@ -38,7 +38,11 @@ const ErrorPageContainer = enhance(ErrorPage);
 
 export const routeConfig = {
   render: ({ props }) => props && (
-    <ErrorPageContainer status={parseInt(props.params.status, 10)} quote={props.quote} />
+    <ErrorPageContainer
+      status={parseInt(props.params.status, 10)}
+      quote={props.quote}
+      error={props.location.state.error}
+    />
   ),
   query,
 };

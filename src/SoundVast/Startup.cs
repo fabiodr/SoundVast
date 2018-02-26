@@ -82,6 +82,7 @@ namespace SoundVast
                     options.Password.RequiredLength = 0;
                     // Allow all characters
                     options.User.AllowedUserNameCharacters = string.Empty;
+                    options.User.RequireUniqueEmail = true;
                 })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
@@ -155,7 +156,9 @@ namespace SoundVast
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            var options = new RewriteOptions().AddRedirectToHttps();
+            var options = new RewriteOptions();
+
+            options.AddRedirectToHttps();
 
             app.UseRewriter(options);
             app.UseHangfireServer();

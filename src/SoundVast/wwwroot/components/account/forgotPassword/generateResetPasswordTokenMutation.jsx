@@ -12,7 +12,7 @@ const mutation = graphql`
   ) {
     generateResetPasswordToken(input: $input) {
       user {
-        id,
+        userId,
       },
       passwordResetToken
     }
@@ -33,7 +33,7 @@ export default ({ email }) => {
     const emailMessage = renderEmail(
       <ResetPasswordEmail
         resetPasswordLink={`${window.location.origin}/account/ResetPassword?token=${generateResetPasswordToken.passwordResetToken}
-          &userId=${generateResetPasswordToken.user.id}`}
+          &userId=${generateResetPasswordToken.user.userId}`}
       />,
     );
     const subject = 'Reset your password';

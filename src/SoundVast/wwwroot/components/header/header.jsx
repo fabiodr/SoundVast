@@ -6,8 +6,7 @@ import SoundVastLogoIcon from '../icons/logo';
 import LegalIcon from '../icons/legal';
 import styles from './header.less';
 import Dropdown from '../shared/dropdown/dropdownContainer';
-import Popups from '../shared/popup/popupsContainer';
-import Button from '../shared/button/button';
+import Button from '../shared/button/buttonContainer';
 import ModalButton from '../shared/button/modalButtonContainer';
 import Search from './search/searchContainer';
 import HeaderGenreLink from './headerGenreLinkContainer';
@@ -41,10 +40,14 @@ const Header = ({
         >
           <Logout />
         </Dropdown>)
-        : [<ModalButton key={0} styleName="secondary" className={styles.navButton} modalId="login">Login</ModalButton>,
-          <ModalButton key={1} styleName="secondary" className={styles.navButton} modalId="register">Register</ModalButton>,
-        ]}
-      <Popups />
+        : [
+          <ModalButton key={0} styleName="secondary" className={styles.navButton} modalId="login">
+            Login
+          </ModalButton>,
+          <ModalButton key={1} styleName="secondary" className={styles.navButton} modalId="register">
+            Register
+          </ModalButton>]
+      }
       <Dropdown
         titleCallback={onClick => (
           <Button title="Legal" className={styles.dropdownTitle} styleName="secondary" onClick={onClick}>

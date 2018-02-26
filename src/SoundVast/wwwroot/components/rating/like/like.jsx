@@ -4,11 +4,12 @@ import classnames from 'classnames';
 
 import LikeIcon from '../../icons/like';
 import styles from './like.less';
+import Button from '../../shared/button/buttonContainer';
 
 const Like = ({ className, onClick }) => (
-  <button className={classnames(styles.like, className)} title="I like this" onClick={onClick}>
+  <Button authRequired className={classnames(styles.like, className)} title="I like this" onClick={onClick}>
     <LikeIcon className={styles.likeIcon} />
-  </button>
+  </Button>
 );
 
 Like.defaultProps = {

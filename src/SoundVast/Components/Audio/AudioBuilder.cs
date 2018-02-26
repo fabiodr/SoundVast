@@ -14,6 +14,7 @@ namespace SoundVast.Components.Audio
                 .Include(x => x.AudioGenres).ThenInclude(x => x.Genre)
                 .Include(x => x.User)
                 .Include(x => x.Comments).ThenInclude(x => x.Ratings)
+                .Include(x => x.Comments).ThenInclude(x => x.User)
                 .Include(x => x.Ratings);
         }
     }

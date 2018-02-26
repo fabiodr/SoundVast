@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 4e533555ceb3e0136d94cd41c3b5bace
+ * @relayHash 40ee8adaa090022be7d24a5251c44568
  */
 
 /* eslint-disable */
@@ -18,7 +18,7 @@ export type generateResetPasswordTokenMutationVariables = {|
 export type generateResetPasswordTokenMutationResponse = {|
   +generateResetPasswordToken: ?{|
     +user: ?{|
-      +id: ?string;
+      +userId: string;
     |};
     +passwordResetToken: ?string;
   |};
@@ -32,6 +32,7 @@ mutation generateResetPasswordTokenMutation(
 ) {
   generateResetPasswordToken(input: $input) {
     user {
+      userId
       id
     }
     passwordResetToken
@@ -80,7 +81,7 @@ const batch /*: ConcreteBatch*/ = {
                 "kind": "ScalarField",
                 "alias": null,
                 "args": null,
-                "name": "id",
+                "name": "userId",
                 "storageKey": null
               }
             ],
@@ -143,6 +144,13 @@ const batch /*: ConcreteBatch*/ = {
                 "kind": "ScalarField",
                 "alias": null,
                 "args": null,
+                "name": "userId",
+                "storageKey": null
+              },
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
                 "name": "id",
                 "storageKey": null
               }
@@ -161,7 +169,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "mutation generateResetPasswordTokenMutation(\n  $input: GenerateResetPasswordTokenInput!\n) {\n  generateResetPasswordToken(input: $input) {\n    user {\n      id\n    }\n    passwordResetToken\n  }\n}\n"
+  "text": "mutation generateResetPasswordTokenMutation(\n  $input: GenerateResetPasswordTokenInput!\n) {\n  generateResetPasswordToken(input: $input) {\n    user {\n      userId\n      id\n    }\n    passwordResetToken\n  }\n}\n"
 };
 
 module.exports = batch;

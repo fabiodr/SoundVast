@@ -14,51 +14,42 @@ import DisplayType from '../../shared/displayType';
 
 const PrimaryLayout = ({
   children,
-  user,
   loginProviders,
-}) => {
-  const isAuthorized = user !== null;
+}) => (
+  <DisplayType>
+    {(displayType) => {
+      const displayTypeClassName = classnames(
+        displayType.isMobile && 'mobile',
+        displayType.isTablet && 'tablet',
+        displayType.isDesktop && 'desktop',
+      );
 
-  return (
-    <DisplayType>
-      {(displayType) => {
-        const displayTypeClassName = classnames(
-          displayType.isMobile && 'mobile',
-          displayType.isTablet && 'tablet',
-          displayType.isDesktop && 'desktop',
-        );
-
-        return (
-          <div className={displayTypeClassName}>
-            <PrimaryLayoutErrorBoundary>
-              <Account loginProviders={loginProviders} />
-              <Header user={user} />
-              <div className={styles.main}>
-                {children}
-              </div>
-              <FlagAudioModal isAuthorized={isAuthorized} />
-              <FlagCommentModal isAuthorized={isAuthorized} />
-              <FooterPlaylist />
-              <CookieNotice />
-            </PrimaryLayoutErrorBoundary>
-          </div>
-        );
-      }}
-    </DisplayType>
-  );
-};
+      return (
+        <div className={displayTypeClassName}>
+          <PrimaryLayoutErrorBoundary>
+            <Account loginProviders={loginProviders} />
+            <Header />
+            <div className={styles.main}>
+              {children}
+            </div>
+            <FlagAudioModal />
+            <FlagCommentModal />
+            <FooterPlaylist />
+            <CookieNotice />
+          </PrimaryLayoutErrorBoundary>
+        </div>
+      );
+    }}
+  </DisplayType>
+);
 
 PrimaryLayout.defaultProps = {
   children: null,
-  user: null,
 };
 
 PrimaryLayout.propTypes = {
   children: PropTypes.node,
   loginProviders: PropTypes.arrayOf(PropTypes.object).isRequired,
-  user: PropTypes.shape({
-    username: PropTypes.string,
-  }),
 };
 
 export default PrimaryLayout;

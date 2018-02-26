@@ -5,13 +5,16 @@ import classnames from 'classnames';
 import styles from './button.less';
 
 const Button = ({ children, styleName, className, ...props }) => (
-  <button {...props} className={classnames(styles.button, styles[styleName], className)}>
+  <button
+    {...props}
+    className={classnames(styles.button, styleName && styles[styleName], className)}
+  >
     {children}
   </button>
 );
 
 Button.defaultProps = {
-  styleName: 'primary',
+  styleName: null,
   className: null,
 };
 

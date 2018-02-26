@@ -15,7 +15,7 @@ const InputCheckboxField = ({
   ...props
 }) => (
   <ValidationField touched={touched} error={error}>
-    <div className={styles.inputCheckboxField}>
+    <label className={styles.inputCheckboxField} htmlFor={id}>
       <input
         {...input}
         className={styles.input}
@@ -27,12 +27,8 @@ const InputCheckboxField = ({
       <label className={styles.customCheckbox} htmlFor={id}>
         <CheckmarkIcon />
       </label>
-      <div>
-        <label htmlFor={id}>
-          {label}
-        </label>
-      </div>
-    </div>
+      {label}
+    </label>
   </ValidationField>
 );
 

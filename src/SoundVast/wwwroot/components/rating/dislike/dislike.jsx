@@ -4,11 +4,12 @@ import classnames from 'classnames';
 
 import DislikeIcon from '../../icons/dislike';
 import styles from './dislike.less';
+import Button from '../../shared/button/buttonContainer';
 
 const Dislike = ({ className, onClick }) => (
-  <button className={classnames(styles.dislike, className)} title="I dislike this" onClick={onClick}>
+  <Button authRequired className={classnames(styles.dislike, className)} title="I dislike this" onClick={onClick}>
     <DislikeIcon className={styles.dislikeIcon} />
-  </button>
+  </Button>
 );
 
 Dislike.defaultProps = {

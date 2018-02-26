@@ -2,11 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import ValidationError from './validationError';
-import styles from './validationErrors.less';
 
 const Errors = ({ errors }) => (
   errors.length ? (
-    <div className={styles.errors}>
+    <div>
       {errors.map(error => <ValidationError key={error} error={error} />)}
     </div>
   ) : null

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Button from '../../shared/button/button';
+import Button from '../../shared/button/buttonContainer';
 import SpinnerSubmit from '../../shared/form/spinnerSubmit/spinnerSubmitContainer';
 import styles from './liveStreamForm.less';
 import BasicInfo from '../common/basicInfo/basicInfo';
@@ -32,7 +32,7 @@ const LiveStreamForm = ({
 
     <div className={styles.buttonsContainer}>
       <SpinnerSubmit formName={form}>Save</SpinnerSubmit>
-      <Button onClick={removeLiveStreamForm}>Cancel</Button>
+      <Button styleName="primary" onClick={removeLiveStreamForm}>Cancel</Button>
     </div>
   </form>
 );

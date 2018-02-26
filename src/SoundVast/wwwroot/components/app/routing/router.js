@@ -1,18 +1,14 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import createConnectedRouter from 'found/lib/createConnectedRouter';
 import createRender from 'found/lib/createRender';
 
-import ValidationErrors from '../../shared/fields/validationField/validationErrors';
-
 const RenderError = ({ error, router }) => {
-  if (error.data) {
-    return <ValidationErrors errors={error.data} />;
-  }
-
-  router.replace(`/error/${error.status}`);
-
-  return null;
+  router.replace({
+    pathname: `/error/${error.status}`,
+    state: {
+      error: error.data,
+    },
+  });
 };
 
 RenderError.propTypes = {

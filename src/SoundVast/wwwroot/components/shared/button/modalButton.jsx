@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Button from './button';
+import Button from './buttonContainer';
 
 const ModalButton = ({ children, onClick, className, ...props }) => (
-  <Button onClick={onClick} className={className} {...props}>
+  <Button styleName="primary" onClick={onClick} className={className} {...props}>
     {children}
   </Button>
 );

@@ -1,21 +1,17 @@
-import { compose, branch, renderComponent, flattenProp } from 'recompose';
-import { graphql } from 'react-relay';
-import { fragmentContainer } from 'recompose-relay-modern';
+import { compose, branch, renderComponent } from 'recompose';
+import { connect } from 'react-redux';
 
 import Header from './header';
 import withDisplayType from '../shared/withDisplayType';
 import MobileHeader from './mobileHeader';
 
-const fragments = graphql`
-  fragment headerContainer_user on ApplicationUser {
-    userName
-  }
-`;
+const mapStateToProps = ({ app }) => ({
+  userName: app.user.userName,
+});
 
 const enhance = compose(
-  fragmentContainer(fragments),
+  connect(mapStateToProps),
   withDisplayType,
-  flattenProp('user'),
   branch(
     ({ displayType }) => displayType.isMobile,
     renderComponent(MobileHeader),

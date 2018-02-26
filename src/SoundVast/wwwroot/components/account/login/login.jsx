@@ -4,47 +4,52 @@ import PropTypes from 'prop-types';
 
 import styles from './login.less';
 import ModalButton from '../../shared/button/modalButtonContainer';
-import FormGroup from '../../shared/form/formGroup';
 import InputTextField from '../../shared/fields/inputField/inputTextField';
 import InputCheckboxField from '../../shared/fields/inputField/inputCheckboxField';
 import Modal from '../../shared/modal/modalContainer';
 import SocialLogins from '../login/socialLogins/socialLoginsContainer';
-import Button from '../../shared/button/button';
+import Button from '../../shared/button/buttonContainer';
+import ValidationErrors from '../../shared/fields/validationField/validationErrors';
 
-const Login = ({ handleSubmit, loginProviders }) => (
+const Login = ({ handleSubmit, loginProviders, error }) => (
   <Modal title="Login." id="login">
     <SocialLogins loginProviders={loginProviders} />
+    <ValidationErrors errors={error} />
     <form onSubmit={handleSubmit} action="">
-      <FormGroup>
+      <div className={styles.fields}>
         <Field name="username" component={InputTextField} placeholder="Username" />
         <Field name="password" component={InputTextField} type="password" placeholder="Password" />
-      </FormGroup>
-
-      <Field
-        name="rememberMe"
-        id="rememberMe"
-        component={InputCheckboxField}
-        type="checkbox"
-        label="Remember login?"
-      />
+        <Field
+          name="rememberMe"
+          id="rememberMe"
+          component={InputCheckboxField}
+          type="checkbox"
+          label="Remember login?"
+        />
+      </div>
 
       <div className={styles.forgotPasswordLink}>
-        <ModalButton modalId="forgotPassword">Forgotten your password?</ModalButton>
+        <ModalButton type="button" styleName="tertiary" modalId="forgotPassword">Reset your password</ModalButton> if you have forgotten it.
       </div>
-      <div>
-        Or <ModalButton modalId="register">register</ModalButton> if you don&apos;t have an account.
+      <div className={styles.registerAccountLink}>
+        Or <ModalButton type="button" styleName="tertiary" modalId="register">register</ModalButton> if you don&apos;t have an account.
       </div>
 
-      <br />
-
-      <Button>Login</Button>
+      <Button styleName="primary" className={styles.loginButton}>Login</Button>
     </form>
   </Modal>
 );
 
+Login.defaultProps = {
+  error: [],
+};
+
 Login.propTypes = {
   loginProviders: PropTypes.arrayOf(PropTypes.object).isRequired,
   handleSubmit: PropTypes.func.isRequired,
+  error: PropTypes.arrayOf(
+    PropTypes.string.isRequired,
+  ),
 };
 
 export default Login;

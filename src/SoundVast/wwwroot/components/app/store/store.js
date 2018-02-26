@@ -10,13 +10,14 @@ import queryMiddleware from 'farce/lib/queryMiddleware';
 import createMatchEnhancer from 'found/lib/createMatchEnhancer';
 import Matcher from 'found/lib/Matcher';
 
+import normalizeBoolean from '../../shared/utilities/normalizeBoolean';
 import routeConfig from '../routing/routeConfig';
 import modal from '../../shared/modal/reducer';
 import popup from '../../shared/popup/reducer';
 import upload from '../../upload/reducer';
 import audio from '../../audio/reducer';
 import jPlayers from './jPlayersReducer';
-import normalizeBoolean from '../../shared/utilities/normalizeBoolean';
+import app from '../reducer';
 
 const historyEnhancer = createHistoryEnhancer({
   protocol: new BrowserProtocol(),
@@ -42,6 +43,7 @@ const reducers = combineReducers({
   popup,
   upload,
   audio,
+  app,
 });
 
 const showingSideBar = normalizeBoolean(localStorage.getItem('showingSideBar'));

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 
-import Button from '../../shared/button/button';
+import Button from '../../shared/button/buttonContainer';
 import SpinnerSubmit from '../../shared/form/spinnerSubmit/spinnerSubmitContainer';
 import styles from './replyBox.less';
 import Textarea from '../../shared/fields/inputField/inputTextareaField';
@@ -11,8 +11,8 @@ const ReplyBox = ({ handleSubmit, form, cancel }) => (
   <form className={styles.replyBox} onSubmit={handleSubmit} action="">
     <Field name="body" component={Textarea} placeholder="Add your reply..." />
 
-    <SpinnerSubmit formName={form} styleName="secondary">Reply</SpinnerSubmit>
-    <Button onClick={cancel} styleName="secondary">Cancel</Button>
+    <SpinnerSubmit authRequired formName={form} styleName="secondary">Reply</SpinnerSubmit>
+    <Button type="button" onClick={cancel} styleName="secondary">Cancel</Button>
   </form>
 );
 

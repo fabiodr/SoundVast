@@ -4,7 +4,7 @@ import { Link } from 'found';
 import classnames from 'classnames';
 
 import styles from './reply.less';
-import Button from '../shared/button/button';
+import Button from '../shared/button/buttonContainer';
 import ReplyBox from './common/replyBoxContainer';
 import CommentHeader from './common/commentHeaderContainer';
 import CommentBody from './common/commentBody';
@@ -32,6 +32,7 @@ const Reply = ({
           @{originalComment.user.userName}
         </Link>
         <Button
+          styleName="primary"
           onClick={toggleOriginalCommentOverflow}
           className={styles.expandOriginalCommentButton}
         >
