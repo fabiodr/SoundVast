@@ -11,9 +11,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Components\Form\**" />
     <Compile Remove="wwwroot\js\**" />
+    <Content Remove="Components\Form\**" />
     <Content Remove="wwwroot\js\**" />
+    <EmbeddedResource Remove="Components\Form\**" />
     <EmbeddedResource Remove="wwwroot\js\**" />
+    <None Remove="Components\Form\**" />
     <None Remove="wwwroot\js\**" />
   </ItemGroup>
 
@@ -30,7 +34,6 @@
 
   <ItemGroup>
     <Content Include=".vscode\launch.json" />
-    <Content Include="Components\Form\FormController.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -75,7 +78,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Components\Form\" />
     <Folder Include="Components\User\Profile\" />
     <Folder Include="Migrations\" />
     <Folder Include="Properties\PublishProfiles\" />
