@@ -26,17 +26,17 @@ const PrimaryLayout = ({
 
       return (
         <div className={displayTypeClassName}>
+          <Account loginProviders={loginProviders} />
+          <Header />
           <PrimaryLayoutErrorBoundary>
-            <Account loginProviders={loginProviders} />
-            <Header />
             <div className={styles.main}>
               {children}
             </div>
-            <FlagAudioModal />
-            <FlagCommentModal />
-            <FooterPlaylist />
-            <CookieNotice />
           </PrimaryLayoutErrorBoundary>
+          <FlagAudioModal />
+          <FlagCommentModal />
+          <FooterPlaylist />
+          <CookieNotice />
         </div>
       );
     }}
