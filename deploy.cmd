@@ -85,10 +85,6 @@ pushd "%DEPLOYMENT_TARGET%"
 call :ExecuteCmd yarn install --production
 IF !ERRORLEVEL! NEQ 0 goto error
 
-echo Building client scripts
-call :ExecuteCmd yarn run build --config webpack.config.js
-popd
-
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 goto end
 
