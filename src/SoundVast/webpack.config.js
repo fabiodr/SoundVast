@@ -4,6 +4,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const dotenv = require('dotenv');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const HTMLPlugin = require('html-webpack-plugin');
 
 dotenv.config();
 
@@ -24,6 +25,12 @@ const plugins = [
       NODE_ENV: JSON.stringify(process.env.NODE_ENV),
       ENABLE_UPLOAD: JSON.stringify(process.env.ENABLE_UPLOAD),
     },
+  }),
+  new HTMLPlugin({
+    title: 'SoundVast',
+    hash: true,
+    favicon: './wwwroot/favicon.ico',
+    template: './wwwroot/components/app/app.ejs',
   }),
 ];
 let devtool = false;
