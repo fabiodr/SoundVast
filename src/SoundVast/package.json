@@ -107,7 +107,6 @@
     "jest": "^21.2.1",
     "jsdoc": "^3.5.5",
     "less": "^2.7.2",
-    "npm-run-all": "^4.1.1",
     "nyc": "^11.0.3",
     "pre-commit": "^1.2.2",
     "proxyquire": "^1.8.0",
@@ -118,6 +117,7 @@
     "webpack-dev-server": "^2.4.1"
   },
   "dependencies": {
+    "npm-run-all": "^4.1.1",
     "airbnb-prop-types": "^2.7.0",
     "autoprefixer": "^7.1.1",
     "babel-core": "^6.26.0",
