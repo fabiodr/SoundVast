@@ -12,7 +12,7 @@ export const disableBodyScroll = () => {
   }
 };
 
-export const enableBodyScroll = () => {
+export const resetBodyScroll = () => {
   if (typeof window !== 'undefined') {
     document.body.style.overflow = '';
 

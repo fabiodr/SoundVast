@@ -1,9 +1,19 @@
-export const showModal = (id, variables) => ({
-  type: 'SHOW_MODAL',
-  id,
-  variables,
-});
+import { resetBodyScroll, disableBodyScroll } from '../utilities/scrollLock';
 
-export const hideModal = () => ({
-  type: 'HIDE_MODAL',
-});
+export const showModal = (id, variables) => {
+  disableBodyScroll();
+
+  return {
+    type: 'SHOW_MODAL',
+    id,
+    variables,
+  };
+};
+
+export const hideModal = () => {
+  resetBodyScroll();
+
+  return {
+    type: 'HIDE_MODAL',
+  };
+};

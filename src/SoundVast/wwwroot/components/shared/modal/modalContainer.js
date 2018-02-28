@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 
 import Modal from './modal';
 import { hideModal, showModal } from './actions';
-import { enableBodyScroll, disableBodyScroll } from '../utilities/scrollLock';
 
 const mapStateToProps = ({ modal, app }, { id }) => ({
   isCurrentModal: modal.currentModal === id,
@@ -14,12 +13,6 @@ const mapStateToProps = ({ modal, app }, { id }) => ({
 const mergeProps = (stateProps, dispatchProps, ownProps) => {
   if ((ownProps.authRequired && !stateProps.isAuthorized) && stateProps.isCurrentModal) {
     dispatchProps.showModal('login');
-  }
-
-  if (stateProps.isCurrentModal) {
-    disableBodyScroll();
-  } else {
-    enableBodyScroll();
   }
 
   return {
