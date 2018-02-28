@@ -28,6 +28,10 @@ const plugins = [
 ];
 let devtool = false;
 
+const entry = {
+  app: './wwwroot/components/app/appContainer.jsx',
+};
+
 if (!isInDev) {
   plugins.push(
     new UglifyJsPlugin(),
@@ -37,15 +41,13 @@ if (!isInDev) {
   );
 } else {
   devtool = 'inline-sourcemap';
+  entry.graphiQl = './wwwroot/components/_config/graphiQl/graphiQl.jsx';
 }
 
 module.exports = {
   context: __dirname,
   devtool,
-  entry: {
-    app: './wwwroot/components/app/appContainer.jsx',
-    graphiQl: './wwwroot/components/_config/graphiQl/graphiQl.jsx',
-  },
+  entry,
   output: {
     path: path.resolve(__dirname, 'wwwroot/build/'),
     publicPath: '/build/',
