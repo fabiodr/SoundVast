@@ -66,7 +66,13 @@ SET MSBUILD_PATH=%ProgramFiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe
 
 echo Handling ASP.NET Core Web Application deployment.
 
-call :ExecuteCmd nuget.exe restore -packagesavemode nuspec ""
+call :ExecuteCmd nuget.exe restore "%DEPLOYMENT_SOURCE%\SoundVast.sln"
+IF !ERRORLEVEL! NEQ 0 goto error
+
+call :ExecuteCmd dotnet publish "src/SoundVast" --output "%DEPLOYMENT_TEMP%" --configuration Release
+IF !ERRORLEVEL! NEQ 0 goto error
+
+call :ExecuteCmd "%KUDU_SYNC_CMD%" -v 50 -f "%DEPLOYMENT_TEMP%" -t "%DEPLOYMENT_TARGET%" -n "%NEXT_MANIFEST_PATH%" -p "%PREVIOUS_MANIFEST_PATH%" -i ".git;.hg;.deployment;deploy.cmd"
 IF !ERRORLEVEL! NEQ 0 goto error
 
 call :SelectNodeVersion
@@ -75,21 +81,13 @@ echo Verifying Yarn Install.
 call :ExecuteCmd !NPM_CMD! install yarn -g
 
 echo Installing Yarn Packages.
-IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
-  pushd "%DEPLOYMENT_TARGET%"
-  call :ExecuteCmd yarn install --production
-  IF !ERRORLEVEL! NEQ 0 goto error
-  popd
-)
+pushd "%DEPLOYMENT_TARGET%"
+call :ExecuteCmd yarn install --production
+IF !ERRORLEVEL! NEQ 0 goto error
 
 echo Building client scripts
-call :ExecuteCmd yarn run build
-
-call :ExecuteCmd dotnet publish "" --output "%DEPLOYMENT_TEMP%" --configuration Release
-IF !ERRORLEVEL! NEQ 0 goto error
-
-call :ExecuteCmd "%KUDU_SYNC_CMD%" -v 50 -f "%DEPLOYMENT_TEMP%" -t "%DEPLOYMENT_TARGET%" -n "%NEXT_MANIFEST_PATH%" -p "%PREVIOUS_MANIFEST_PATH%" -i ".git;.hg;.deployment;deploy.cmd"
-IF !ERRORLEVEL! NEQ 0 goto error
+call :ExecuteCmd yarn run build --config webpack.config.js
+popd
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 goto end
