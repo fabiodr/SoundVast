@@ -29,8 +29,8 @@ const plugins = [
   new HTMLPlugin({
     title: 'SoundVast',
     hash: true,
-    favicon: './wwwroot/favicon.ico',
-    template: './wwwroot/components/app/app.ejs',
+    favicon: path.resolve(__dirname, 'wwwroot/favicon.ico'),
+    template: path.resolve(__dirname, 'wwwroot/components/app/app.ejs'),
   }),
 ];
 let devtool = false;
