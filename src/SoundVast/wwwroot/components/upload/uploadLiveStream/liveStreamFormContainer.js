@@ -5,19 +5,27 @@ import { connect } from 'react-redux';
 import LiveStreamForm from './liveStreamForm';
 import audioValidation from '../../shared/validation/audioValidation';
 import saveLiveStreamMutation from './saveLiveStreamMutation';
-import { removeLiveStreamForm } from '../actions';
+import { uploadCoverImage, removeLiveStreamForm } from '../actions';
 
 const mapDispatchToProps = (dispatch, { index }) => ({
   removeLiveStreamForm: () => dispatch(removeLiveStreamForm(index)),
+  uploadCoverImage,
 });
 
 const handlers = {
-  onSubmit: () => input => saveLiveStreamMutation(input),
+  onSubmit: () => (input) => {
+    if (input.coverImage) {
+      uploadCoverImage(input.coverImage).then((coverImageUrl) => {
+        saveLiveStreamMutation(input, coverImageUrl);
+      });
+    } else {
+      saveLiveStreamMutation(input);
+    }
+  },
 };
 
-const createProps = ({ imagePath }) => ({
+const createProps = () => ({
   initialValues: {
-    imagePath,
     copyright: 'AllRightsReserved',
     creativeCommonsNoncommercial: true,
     creativeCommonsRadioButtonGroup: 'Share',

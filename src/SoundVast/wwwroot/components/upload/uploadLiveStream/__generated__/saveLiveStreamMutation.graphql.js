@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash ca547848f0c45fb4c23b1a71e53fe0f8
+ * @relayHash 7841e2a81f7c9b3934ca7b79c3e4f813
  */
 
 /* eslint-disable */
@@ -15,7 +15,7 @@ export type saveLiveStreamMutationVariables = {|
     name: string;
     liveStreamUrl: string;
     websiteUrl: string;
-    coverImageUrl: string;
+    coverImageUrl?: ?string;
     tags?: ?$ReadOnlyArray<?{
       id?: ?number;
       tag?: ?string;

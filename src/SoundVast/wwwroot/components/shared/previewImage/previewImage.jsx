@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const PreviewImage = ({ previewUrl }) => (
-  <img alt="" src={previewUrl} />
+const PreviewImage = ({ previewUrl, imagePlaceholderUrl }) => (
+  <img alt="" src={previewUrl || imagePlaceholderUrl} />
 );
 
 PreviewImage.defaultProps = {
@@ -11,6 +11,7 @@ PreviewImage.defaultProps = {
 
 PreviewImage.propTypes = {
   previewUrl: PropTypes.string,
+  imagePlaceholderUrl: PropTypes.string.isRequired,
 };
 
 export default PreviewImage;

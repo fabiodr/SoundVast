@@ -17,11 +17,13 @@ namespace SoundVast.Components.LiveStream
     {
         private readonly ILiveStreamService _liveStreamService;
         private readonly ITagService _tagService;
+        private readonly ICloudStorage _cloudStorage;
 
-        public SaveLiveStreamPayload(ILiveStreamService liveService, ITagService tagService)
+        public SaveLiveStreamPayload(ILiveStreamService liveService, ITagService tagService, ICloudStorage cloudStorage)
         {
             _liveStreamService = liveService;
             _tagService = tagService;
+            _cloudStorage = cloudStorage;
 
             Name = nameof(SaveLiveStreamPayload);
 
@@ -37,6 +39,13 @@ namespace SoundVast.Components.LiveStream
             var genreIds = inputs.Get("genreIds", new object[0]).Cast<int>().ToList();
             var tags = inputs.Get("tags", new object[0]).Select(x => x.As<Dictionary<string, object>>().ToObject<TagInput>());
             var user = context.UserContext.As<Context>().CurrentUser;
+            var placeholderImage = _cloudStorage.CloudBlobContainers[CloudStorageType.Image].GetBlockBlobReference("SoundVast");
+
+            if (coverImageUrl == null)
+            {
+                coverImageUrl = placeholderImage.Uri.AbsoluteUri;
+            }
+
             //TODO: change coverImageUrl to coverImageName
             var liveStream = new Models.LiveStream
             {

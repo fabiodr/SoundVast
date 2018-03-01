@@ -929,7 +929,7 @@ input SaveLiveStreamInput {
   name: String!
   liveStreamUrl: String!
   websiteUrl: String!
-  coverImageUrl: String!
+  coverImageUrl: String
   tags: [TagInput]
   genreIds: [Int]
 }

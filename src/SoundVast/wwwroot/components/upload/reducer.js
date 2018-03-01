@@ -18,7 +18,7 @@ export default (state = defaultState, action) => {
 
       coverImages[action.id] = {
         previewUrl: action.previewUrl,
-        imagePath: action.imagePath,
+        imagePlaceholderUrl: action.imagePlaceholderUrl,
       };
 
       return {

@@ -4,8 +4,9 @@ import { compose, flattenProp, setPropTypes } from 'recompose';
 
 import PreviewImage from '../../../shared/previewImage/previewImage';
 
-const mapStateToProps = ({ upload }, { id }) => ({
+const mapStateToProps = ({ app, upload }, { id }) => ({
   coverImage: upload.coverImages[id],
+  imagePlaceholderUrl: app.imagePlaceholderUrl,
 });
 
 const propTypes = {

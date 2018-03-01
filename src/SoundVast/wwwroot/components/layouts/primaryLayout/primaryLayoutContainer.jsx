@@ -2,7 +2,7 @@ import React from 'react';
 import { graphql } from 'react-relay';
 
 import PrimaryLayout from './primaryLayout';
-import { setUser } from '../../app/actions';
+import { setUser, setCoverImagePlaceholder } from '../../app/actions';
 
 const query = graphql`
   query primaryLayoutContainerQuery {
@@ -23,6 +23,7 @@ export const routeConfig = {
   query,
   render: (route) => { // eslint-disable-line react/prop-types
     if (route.props) {
+      route.props.context.store.dispatch(setCoverImagePlaceholder());
       route.props.context.store.dispatch(setUser(route.props.user));
 
       return <PrimaryLayout loginProviders={route.props.loginProviders} />;
