@@ -13,7 +13,7 @@ import store from './store/store';
 import environment from './environment/environment';
 
 const resolver = new Resolver(environment);
-
+console.log("test");
 const App = () => (
   <Provider store={store}>
     <Router matchContext={{ store }} resolver={resolver} />
