@@ -42,7 +42,7 @@ const Header = ({
         </Dropdown>)
         : [
           <ModalButton key={0} styleName="secondary" className={styles.navButton} modalId="login">
-            Login
+            Logind
           </ModalButton>,
           <ModalButton key={1} styleName="secondary" className={styles.navButton} modalId="register">
             Register
@@ -50,7 +50,7 @@ const Header = ({
       }
       <Dropdown
         titleCallback={onClick => (
-          <Button title="Legald" className={styles.dropdownTitle} styleName="secondary" onClick={onClick}>
+          <Button title="Legal" className={styles.dropdownTitle} styleName="secondary" onClick={onClick}>
             <LegalIcon className={styles.legalIcon} />
           </Button>
         )}
