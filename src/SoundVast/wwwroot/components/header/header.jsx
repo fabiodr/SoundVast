@@ -50,7 +50,7 @@ const Header = ({
       }
       <Dropdown
         titleCallback={onClick => (
-          <Button title="Legal" className={styles.dropdownTitle} styleName="secondary" onClick={onClick}>
+          <Button title="Legald" className={styles.dropdownTitle} styleName="secondary" onClick={onClick}>
             <LegalIcon className={styles.legalIcon} />
           </Button>
         )}
