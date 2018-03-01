@@ -32,7 +32,7 @@
     "packages": "david",
     "packages:update": "david update",
     "clean": "rimraf ./wwwroot/build",
-    "build-client": "cross-env NODE_ENV=production webpack",
+    "build-client": "cross-env NODE_ENV=production webpack -p",
     "build": "npm-run-all --sequential clean build-client"
   },
   "jest": {
