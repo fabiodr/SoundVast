@@ -56,8 +56,8 @@ module.exports = {
   devtool,
   entry,
   output: {
-    path: path.resolve(__dirname, 'wwwroot/build/'),
-    publicPath: '/build/',
+    path: path.resolve(__dirname, 'wwwroot/dist/'),
+    publicPath: '/dist/',
     filename: '[name].bundle.js',
   },
   module: {
