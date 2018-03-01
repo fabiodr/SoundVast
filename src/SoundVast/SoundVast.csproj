@@ -33,16 +33,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="wwwroot\build\**" />
     <Content Include=".vscode\launch.json" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="App.config" />
     <None Include="Components\LiveStream\LiveStreamPayload.cs" />
-    <None Include="wwwroot\build\app.bundle.js" />
-    <None Include="wwwroot\build\vendor.bundle.js" />
-    <None Include="wwwroot\favicons\safari-pinned-tab.svg" />
     <None Update="Areas\**\Views">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
