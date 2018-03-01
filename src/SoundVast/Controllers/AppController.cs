@@ -11,7 +11,7 @@ namespace SoundVast.Controllers
         [Produces("text/html")]
         public IActionResult Index()
         {
-            return View("~/wwwroot/build/indedx.html");
+            return View("~/wwwroot/build/index.html");
         }
   }
 }
