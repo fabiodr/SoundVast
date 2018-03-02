@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using ByteSizeLib;
 using Microsoft.WindowsAzure.Storage.Blob;
 using SoundVast.Storage.CloudStorage;
-using Microsoft.WindowsAzure.Storage;
 using Microsoft.AspNetCore.Http;
+using ImageResizer;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace SoundVast.Components.Upload
 {
@@ -20,6 +20,21 @@ namespace SoundVast.Components.Upload
         {
             _uploadValidator = uploadValidator;
             _cloudStorage = cloudStorage;
+        }
+
+        public Stream ResizeImage(IFormFile file, int maxWidth)
+        {
+            var settings = new ResizeSettings
+            {
+                MaxWidth = maxWidth,
+                Format = "jpg"
+            };
+
+            var stream = new MemoryStream();
+
+            ImageBuilder.Current.Build(file, stream, settings);
+
+            return stream;
         }
 
         public async Task<CloudBlockBlob> UploadCoverImage(IFormFile file)
