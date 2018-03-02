@@ -42,7 +42,7 @@ const Header = ({
         </Dropdown>)
         : [
           <ModalButton key={0} styleName="secondary" className={styles.navButton} modalId="login">
-            Logind
+            Logindd
           </ModalButton>,
           <ModalButton key={1} styleName="secondary" className={styles.navButton} modalId="register">
             Register
