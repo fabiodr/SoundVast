@@ -14,13 +14,9 @@ const mapDispatchToProps = (dispatch, { index }) => ({
 
 const handlers = {
   onSubmit: () => (input) => {
-    if (input.coverImage) {
-      uploadCoverImage(input.coverImage).then((coverImageUrl) => {
-        saveLiveStreamMutation(input, coverImageUrl);
-      });
-    } else {
-      saveLiveStreamMutation(input);
-    }
+    uploadCoverImage(input.coverImage).then((coverImageName) => {
+      saveLiveStreamMutation(input, coverImageName);
+    });
   },
 };
 

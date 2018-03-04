@@ -20,8 +20,6 @@ type Album implements Node, Audio {
   id: ID!
   name: String!
 
-  # The poster image for the album
-  coverImageUrl: String!
   likes: Int!
   dislikes: Int!
   playCount: Int!
@@ -47,6 +45,9 @@ type Album implements Node, Audio {
 
   # The user who added the album
   user: ApplicationUser
+
+  # The different dimention images for the cover image
+  coverImages: [Image]
 
   # The genres the album belongs to
   genres: [Genre]
@@ -141,8 +142,6 @@ type Artist implements Node, Audio {
   id: ID!
   name: String!
 
-  # The poster image for the artist
-  coverImageUrl: String!
   likes: Int!
   dislikes: Int!
   playCount: Int!
@@ -166,6 +165,9 @@ type Artist implements Node, Audio {
 
   # The user who added the artist
   user: ApplicationUser
+
+  # The different dimention images for the cover image
+  coverImages: [Image]
 
   # The genres the artist belongs to
   genres: [Genre]
@@ -229,8 +231,6 @@ interface Audio {
   audioId: Int!
   name: String!
 
-  # The poster image for the audio
-  coverImageUrl: String!
   likes: Int!
   dislikes: Int!
   playCount: Int!
@@ -240,6 +240,9 @@ interface Audio {
 
   # The user who uploaded the audio
   user: ApplicationUser
+
+  # The different dimention images for the cover image
+  coverImages: [Image]
 
   # The genres the audio belongs to
   genres: [Genre]
@@ -465,8 +468,16 @@ type Genre {
   id: ID
   name: String!
 
-  # The cover image url for this genre
-  coverImageUrl: String!
+  # The different dimention images for the cover image
+  coverImages: [Image]
+}
+
+type Image {
+  # The dimention of the image
+  dimention: String!
+
+  # The absolute image url
+  imageUrl: String!
 }
 
 type LiveStream implements Node, Audio {
@@ -477,8 +488,6 @@ type LiveStream implements Node, Audio {
   id: ID!
   name: String!
 
-  # The poster image for the live stream
-  coverImageUrl: String!
   liveStreamUrl: String!
   websiteUrl: String!
   likes: Int!
@@ -490,6 +499,9 @@ type LiveStream implements Node, Audio {
 
   # The user who uploaded the live stream
   user: ApplicationUser
+
+  # The different dimention images for the cover image
+  coverImages: [Image]
 
   # The genre the live stream belongs to
   genres: [Genre]
@@ -929,7 +941,7 @@ input SaveLiveStreamInput {
   name: String!
   liveStreamUrl: String!
   websiteUrl: String!
-  coverImageUrl: String
+  coverImageUrl: String!
   tags: [TagInput]
   genreIds: [Int]
 }
@@ -978,8 +990,6 @@ type Song implements Node, Audio {
   id: ID!
   name: String!
 
-  # The poster image for the song
-  coverImageUrl: String!
   artists: [Artist]
   free: Boolean!
   likes: Int!
@@ -994,6 +1004,9 @@ type Song implements Node, Audio {
 
   # The user who uploaded the song
   user: ApplicationUser
+
+  # The different dimention images for the cover image
+  coverImages: [Image]
 
   # The genre the song belongs to
   genres: [Genre]

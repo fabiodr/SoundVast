@@ -7,6 +7,8 @@ namespace SoundVast.Storage.CloudStorage
 {
     public enum CloudStorageType
     {
-        Image
+        Image,
+        RawImage,
+        AppImage,
     }
 }

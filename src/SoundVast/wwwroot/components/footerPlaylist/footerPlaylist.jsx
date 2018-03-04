@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import JPlayer, {
   Gui,
-  Poster, Audio, Title, FullScreen, Mute, Play,
-  VolumeBar, Download, BrowserUnsupported,
+  Poster, Audio, Title, Mute, Play,
+  VolumeBar, BrowserUnsupported,
 } from 'react-jplayer';
 import JPlaylist, {
   initializeOptions, Playlist, Shuffle, Next, Previous, Repeat,
@@ -29,7 +29,7 @@ const FooterPlaylist = ({ isPlaylistEmpty }) => {
   });
 
   return (
-    <JPlaylist id={jPlayerOptions.id}>
+    <JPlaylist keyBindings={{ fullScreen: { fn: Function.prototype } }} id={jPlayerOptions.id}>
       <JPlayer className={jPlayerClassName}>
         <Audio />
         <Gui>
@@ -61,8 +61,6 @@ const FooterPlaylist = ({ isPlaylistEmpty }) => {
               </Playlist>
               <TogglePlaylist><i className="fa fa-ellipsis-h" /></TogglePlaylist>
             </div>
-            <FullScreen><i className="fa fa-expand" /></FullScreen>
-            <Download><i className="fa fa-download" /></Download>
             <div className="jp-title-container">
               <Poster />
               <Title />

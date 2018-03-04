@@ -17,6 +17,8 @@ using SoundVast.Components.User;
 using SoundVast.Repository;
 using SoundVast.Storage.CloudStorage;
 using SoundVast.Validation;
+using Microsoft.WindowsAzure.Storage.Blob;
+using SoundVast.Components.LiveStream.Models;
 
 namespace SoundVast.Components.Audio
 {
@@ -24,11 +26,21 @@ namespace SoundVast.Components.Audio
     {
         private readonly IRepository<T> _repository;
         private readonly IValidationProvider _validationProvider;
+        private readonly ICloudStorage _cloudStorage;
+        private IRepository<LiveStream.Models.LiveStream> repository;
+        private IValidationProvider validationProvider;
 
-        public AudioService(IRepository<T> repository, IValidationProvider validationProvider)
+        public AudioService(IRepository<T> repository, IValidationProvider validationProvider, ICloudStorage cloudStorage)
         {
             _repository = repository;
             _validationProvider = validationProvider;
+            _cloudStorage = cloudStorage;
+        }
+
+        public AudioService(IRepository<LiveStream.Models.LiveStream> repository, IValidationProvider validationProvider)
+        {
+            this.repository = repository;
+            this.validationProvider = validationProvider;
         }
 
         public IEnumerable<T> GetAudios()

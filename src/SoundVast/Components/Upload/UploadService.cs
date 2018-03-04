@@ -5,9 +5,10 @@ using ByteSizeLib;
 using Microsoft.WindowsAzure.Storage.Blob;
 using SoundVast.Storage.CloudStorage;
 using Microsoft.AspNetCore.Http;
-using ImageResizer;
-using System.Drawing;
-using System.Drawing.Imaging;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
+using SixLabors.Primitives;
+using System.Collections.Generic;
 
 namespace SoundVast.Components.Upload
 {
@@ -22,40 +23,53 @@ namespace SoundVast.Components.Upload
             _cloudStorage = cloudStorage;
         }
 
-        public Stream ResizeImage(IFormFile file, int maxWidth)
+        public Stream ResizeImage(Stream stream, Size size)
         {
-            var settings = new ResizeSettings
-            {
-                MaxWidth = maxWidth,
-                Format = "jpg"
-            };
+            stream.Position = 0;
 
-            var stream = new MemoryStream();
+            var image = Image.Load(stream);
+            var resizeOptions = new ResizeOptions { Size = size };
+            var resizedImage = image.Clone(x => x.Resize(resizeOptions).BackgroundColor(Rgba32.White));
+            var newStream = new MemoryStream();
 
-            ImageBuilder.Current.Build(file, stream, settings);
+            resizedImage.SaveAsJpeg(newStream);
 
-            return stream;
+            newStream.Position = 0;
+
+            return newStream;
         }
-
-        public async Task<CloudBlockBlob> UploadCoverImage(IFormFile file)
+ 
+        public async Task<string> UploadCoverImage(string fileName, Stream stream, string contentType)
         {
-            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file.FileName);
-            var extension = Path.GetExtension(file.FileName);
-            var blobName = $"{fileNameWithoutExtension}_{Guid.NewGuid().ToString()}{extension}";
-            var blob = _cloudStorage.CloudBlobContainers[CloudStorageType.Image].GetBlockBlobReference(blobName);
+            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
+            var newFileName = $"{fileNameWithoutExtension}_{Guid.NewGuid().ToString()}";
 
-            using (var stream = file.OpenReadStream())
+            _uploadValidator.ValidateUploadCoverImage(ByteSize.FromBytes(stream.Length).MegaBytes);
+
+            //TODO: Put raw image in archive storage
+            var blobName = $"{newFileName}{Path.GetExtension(fileName)}";
+            var blob = _cloudStorage.CloudBlobContainers[CloudStorageType.RawImage].GetBlockBlobReference(blobName);
+
+            blob.Properties.ContentType = contentType;
+
+            await blob.UploadFromStreamAsync(stream);
+
+            foreach (var size in Audio.Image.CoverImageSizes)
             {
-                var fileSize = ByteSize.FromBytes(stream.Length);
+                using (var newStream = ResizeImage(stream, size.Value))
+                {
+                    var resizedBlobName = $"{newFileName}_{size.Key}.jpg";
+                    var resizedBlob = _cloudStorage.CloudBlobContainers[CloudStorageType.Image].GetBlockBlobReference(resizedBlobName);
 
-                _uploadValidator.ValidateUploadCoverImage(fileSize.MegaBytes);
+                    _uploadValidator.ValidateUploadCoverImage(ByteSize.FromBytes(newStream.Length).MegaBytes);
 
-                blob.Properties.ContentType = file.ContentType;
+                    resizedBlob.Properties.ContentType = "image/jpeg";
 
-                await blob.UploadFromStreamAsync(stream);
+                    await resizedBlob.UploadFromStreamAsync(newStream);
+                }
             }
 
-            return blob;
+            return newFileName;
         }
     }
 }

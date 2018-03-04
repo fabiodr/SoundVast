@@ -7,7 +7,7 @@ import { previewImage } from '../../actions';
 
 const handlers = {
   onDrop: ({ dispatch, id, change }) => (files) => {
-    change('coverImage', files[0]);
+    change('coverImageContainer', files[0]);
     dispatch(previewImage(id, files[0]));
   },
 };

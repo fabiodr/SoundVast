@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import Play from '../audio/playContainer';
-import CoverImage from '../audio/coverImage';
+import CoverImage from '../audio/coverImageContainer';
 import Rating from '../rating/audioRating';
 import Like from '../rating/like/likeAudioContainer';
 import Dislike from '../rating/dislike/dislikeAudioContainer';
@@ -21,7 +21,7 @@ const Radio = ({ liveStream, footerPlaylist }) => {
       {liveStream.websiteUrl ? <a href={liveStream.websiteUrl} target="_blank">{name}</a> : <div>{name}</div>}
       <div className={styles.coverImageContainer}>
         <Play id={liveStream.audioId} footerPlaylist={footerPlaylist}>
-          <CoverImage coverImageUrl={liveStream.coverImageUrl} />
+          <CoverImage coverImages={liveStream.coverImages} />
         </Play>
       </div>
       <div className={styles.controls}>
@@ -53,7 +53,12 @@ const Radio = ({ liveStream, footerPlaylist }) => {
 
 Radio.propTypes = {
   liveStream: PropTypes.shape({
-    coverImageUrl: PropTypes.string.isRequired,
+    coverImages: PropTypes.arrayOf(
+      PropTypes.shape({
+        dimention: PropTypes.string.isRequired,
+        imageUrl: PropTypes.string.isRequired,
+      }).isRequired,
+    ).isRequired,
     liveStreamUrl: PropTypes.string.isRequired,
     websiteUrl: PropTypes.string,
     audioId: PropTypes.number.isRequired,

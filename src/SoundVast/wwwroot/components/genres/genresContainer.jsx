@@ -17,7 +17,10 @@ const fragments = graphql`
   fragment genresContainer_genres on Genre @relay(plural: true) {
     id,
     name,
-    coverImageUrl
+    coverImages {
+      dimention
+      imageUrl
+    }
   }
 `;
 

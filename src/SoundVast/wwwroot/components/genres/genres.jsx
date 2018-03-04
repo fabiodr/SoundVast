@@ -10,7 +10,7 @@ const Genres = ({ genres, typeUrl }) => (
       <Genre
         key={genre.id}
         name={genre.name}
-        coverImageUrl={genre.coverImageUrl}
+        coverImages={genre.coverImages}
         url={`/${typeUrl}`}
       />
     ))}
@@ -22,7 +22,10 @@ Genres.propTypes = {
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
-      coverImageUrl: PropTypes.string.isRequired,
+      coverImages: PropTypes.arrayOf({
+        dimention: PropTypes.string.isRequired,
+        imageUrl: PropTypes.string.isRequired,
+      }).isRequired,
     }),
   ).isRequired,
   typeUrl: PropTypes.string.isRequired,

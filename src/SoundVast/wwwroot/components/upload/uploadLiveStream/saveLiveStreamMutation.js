@@ -15,13 +15,12 @@ export default ({
   name,
   liveStreamUrl,
   websiteUrl,
-  coverImageUrl,
   genres = [],
   tags = [],
-}) => {
+}, coverImageName) => {
   const variables = {
     input: {
-      coverImageUrl,
+      coverImageName,
       name,
       liveStreamUrl,
       websiteUrl,

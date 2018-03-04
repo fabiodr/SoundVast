@@ -13,7 +13,7 @@ export const previewImage = (id, file) => dispatch => dispatch({
 
 export const uploadCoverImage = file =>
   fetch.postForm('/upload/uploadCoverImage')({ file })
-    .then(json => json.imagePath);
+    .then(json => json.coverImageName);
 
 export const removeLiveStreamForm = index => ({
   type: 'REMOVE_LIVE_STREAM_FORM',

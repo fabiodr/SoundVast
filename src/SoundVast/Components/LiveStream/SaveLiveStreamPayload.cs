@@ -32,24 +32,18 @@ namespace SoundVast.Components.LiveStream
 
         public override object MutateAndGetPayload(MutationInputs inputs, ResolveFieldContext<object> context)
         {
-            var coverImageUrl = inputs.Get<string>("coverImageUrl");
             var name = inputs.Get<string>("name");
+            var coverImageName = inputs.Get<string>("coverImageName");
             var liveStreamUrl = inputs.Get<string>("liveStreamUrl");
             var websiteUrl = inputs.Get<string>("websiteUrl");
             var genreIds = inputs.Get("genreIds", new object[0]).Cast<int>().ToList();
             var tags = inputs.Get("tags", new object[0]).Select(x => x.As<Dictionary<string, object>>().ToObject<TagInput>());
             var user = context.UserContext.As<Context>().CurrentUser;
-            var placeholderImage = _cloudStorage.CloudBlobContainers[CloudStorageType.Image].GetBlockBlobReference("SoundVast");
+            var placeholderImage = _cloudStorage.CloudBlobContainers[CloudStorageType.AppImage].GetBlockBlobReference(Audio.Image.PlaceholderImageName);
 
-            if (coverImageUrl == null)
-            {
-                coverImageUrl = placeholderImage.Uri.AbsoluteUri;
-            }
-
-            //TODO: change coverImageUrl to coverImageName
             var liveStream = new Models.LiveStream
             {
-                // CoverImageUrl = coverImageUrl,
+                CoverImageName = coverImageName,
                 Name = name,
                 LiveStreamUrl = liveStreamUrl,
                 WebsiteUrl = websiteUrl,

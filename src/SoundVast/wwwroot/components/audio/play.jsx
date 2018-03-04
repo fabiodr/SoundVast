@@ -6,7 +6,7 @@ import AirbnbPropTypes from 'airbnb-prop-types';
 import PauseIcon from '../icons/pause';
 import PlayIcon from '../icons/play';
 import styles from './play.less';
-import CoverImage from '../audio/coverImage';
+import CoverImage from '../audio/coverImageContainer';
 
 class Play extends React.Component {
   constructor() {

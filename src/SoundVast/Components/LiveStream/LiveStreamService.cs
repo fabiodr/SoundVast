@@ -7,13 +7,14 @@ using SoundVast.Components.Genre.Models;
 using SoundVast.Components.LiveStream.Models;
 using SoundVast.Repository;
 using SoundVast.Validation;
+using SoundVast.Storage.CloudStorage;
 
 namespace SoundVast.Components.LiveStream
 {
     public class LiveStreamService : AudioService<Models.LiveStream>, ILiveStreamService
     {
-        public LiveStreamService(IRepository<Models.LiveStream> repository, IValidationProvider validationProvider)
-            : base(repository, validationProvider)
+        public LiveStreamService(IRepository<Models.LiveStream> repository, IValidationProvider validationProvider, ICloudStorage cloudStorage)
+            : base(repository, validationProvider, cloudStorage)
         {
         }
 

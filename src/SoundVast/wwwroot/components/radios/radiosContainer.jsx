@@ -36,7 +36,10 @@ const fragments = graphql`
           id
           audioId
           name
-          coverImageUrl
+          coverImages {
+            dimention
+            imageUrl
+          }
           liveStreamUrl
           ...radioContainer_liveStream
           ...sideBarContainer_audios

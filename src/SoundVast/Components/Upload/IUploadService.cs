@@ -11,6 +11,6 @@ namespace SoundVast.Components.Upload
 {
     public interface IUploadService
     {
-        Task<CloudBlockBlob> UploadCoverImage(IFormFile file);
+        Task<string> UploadCoverImage(string fileName, Stream stream, string contentType);
     }
 }

@@ -16,7 +16,10 @@ export type radiosContainer = {|
         +id: string;
         +audioId: number;
         +name: string;
-        +coverImageUrl: string;
+        +coverImages: ?$ReadOnlyArray<?{|
+          +dimention: string;
+          +imageUrl: string;
+        |}>;
         +liveStreamUrl: string;
       |};
     |}>;
@@ -143,10 +146,28 @@ const fragment /*: ConcreteFragment*/ = {
                   "storageKey": null
                 },
                 {
-                  "kind": "ScalarField",
+                  "kind": "LinkedField",
                   "alias": null,
                   "args": null,
-                  "name": "coverImageUrl",
+                  "concreteType": "Image",
+                  "name": "coverImages",
+                  "plural": true,
+                  "selections": [
+                    {
+                      "kind": "ScalarField",
+                      "alias": null,
+                      "args": null,
+                      "name": "dimention",
+                      "storageKey": null
+                    },
+                    {
+                      "kind": "ScalarField",
+                      "alias": null,
+                      "args": null,
+                      "name": "imageUrl",
+                      "storageKey": null
+                    }
+                  ],
                   "storageKey": null
                 },
                 {

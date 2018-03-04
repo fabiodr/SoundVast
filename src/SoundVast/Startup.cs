@@ -59,19 +59,27 @@ namespace SoundVast
     public class Startup
     {
         private readonly IConfiguration _configuration;
+        private readonly IHostingEnvironment _env;
 
-        public Startup(IConfiguration configuration, ILoggerFactory loggerFactory)
+        public Startup(IConfiguration configuration, ILoggerFactory loggerFactory, IHostingEnvironment env)
         {
             _configuration = configuration;
             loggerFactory.CreateLogger<Startup>();
+            _env = env;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            var connectionStringName = "DefaultConnection";
+
+            if (_env.IsStaging())
+            {
+                connectionStringName = "StagingConnection";
+            }
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
-            services.AddHangfire(x => x.UseSqlServerStorage(_configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(_configuration.GetConnectionString(connectionStringName)));
+            services.AddHangfire(x => x.UseSqlServerStorage(_configuration.GetConnectionString(connectionStringName)));
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
                 {
@@ -194,7 +202,15 @@ namespace SoundVast
 
         private ContainerBuilder RegisterServices()
         {
-            var azureStorage = new AzureStorage(_configuration);
+            var connectionStringName = "StorageConnectionString";
+
+            if (_env.IsStaging())
+            {
+                connectionStringName = "StagingStorageConnectionString";
+            }
+
+            var storageConnectionString = _configuration.GetConnectionString(connectionStringName);
+            var azureStorage = new AzureStorage(storageConnectionString);
             var builder = new ContainerBuilder();
             var assembly = Assembly.GetExecutingAssembly();
 

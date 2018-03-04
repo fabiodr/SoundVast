@@ -17,7 +17,7 @@ namespace SoundVast.Components.LiveStream
             Field<NonNullGraphType<StringGraphType>>("Name");
             Field<NonNullGraphType<StringGraphType>>("LiveStreamUrl");
             Field<NonNullGraphType<StringGraphType>>("WebsiteUrl");
-            Field<StringGraphType>("CoverImageUrl");
+            Field<NonNullGraphType<StringGraphType>>("CoverImageName");
             Field<ListGraphType<TagInput>>("Tags");
             Field<ListGraphType<IntGraphType>>("GenreIds");
         }

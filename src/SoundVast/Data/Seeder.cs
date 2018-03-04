@@ -20,16 +20,17 @@ using SoundVast.Components.Quote.Models;
 using SoundVast.Components.Search;
 using SoundVast.Properties;
 using SoundVast.Storage.CloudStorage;
+using SoundVast.Components.Upload;
+using Microsoft.AspNetCore.Http;
 
 namespace SoundVast.Data
 {
     public static class Seeder
     {
-        private const string PlaceholderImageName = "SoundVast";
-
         private static IHostingEnvironment _hostingEnvironment;
         private static ICloudStorage _cloudStorage;
         private static IAudioService<Audio> _audioService;
+        private static IUploadService _uploadService;
 
         public static async Task<IWebHost> SeedData(this IWebHost webHost)
         {
@@ -40,6 +41,7 @@ namespace SoundVast.Data
                     _hostingEnvironment = scope.ServiceProvider.GetRequiredService<IHostingEnvironment>();
                     _cloudStorage = scope.ServiceProvider.GetRequiredService<ICloudStorage>();
                     _audioService = scope.ServiceProvider.GetRequiredService<IAudioService<Audio>>();
+                    _uploadService = scope.ServiceProvider.GetRequiredService<IUploadService>();
 
                     context.Database.Migrate();
 
@@ -69,10 +71,11 @@ namespace SoundVast.Data
 
         private static async Task SeedImages()
         {
-            var placeholderImageBlob = _cloudStorage.CloudBlobContainers[CloudStorageType.Image].GetBlockBlobReference(PlaceholderImageName);
+            var contentType = "image/svg+xml";
             var path = Path.Combine(_hostingEnvironment.WebRootPath, "images/logo/SV_Icon.svg");
+            var placeholderImageBlob = _cloudStorage.CloudBlobContainers[CloudStorageType.AppImage].GetBlockBlobReference(Image.PlaceholderImageName);
 
-            placeholderImageBlob.Properties.ContentType = "image/svg+xml";
+            placeholderImageBlob.Properties.ContentType = contentType;
 
             await placeholderImageBlob.UploadFromFileAsync(path);
         }
@@ -82,7 +85,7 @@ namespace SoundVast.Data
             var genres = genreResources.Select(x => new Genre
             {
                 Name = (string)x.Value,
-                CoverImageName = PlaceholderImageName
+                CoverImageName = Path.GetFileNameWithoutExtension(Image.PlaceholderImageName)
             });
     
             context.Set<Genre>().AddRange(genres.Where(genre => !context.Set<Genre>().Any(x => x.Name == genre.Name)));

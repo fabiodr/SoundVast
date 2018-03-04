@@ -11,28 +11,30 @@ using SoundVast.Components.Genre;
 using SoundVast.Components.Rating;
 using SoundVast.Components.User;
 using SoundVast.Storage.CloudStorage;
+using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace SoundVast.Components.LiveStream
 {
     public class LiveStreamPayload : NodeGraphType<Models.LiveStream>
     {
         private readonly ILiveStreamService _liveStreamService;
+        private readonly ICloudStorage _cloudStorage;
 
         public LiveStreamPayload(ILiveStreamService liveStreamService, ICloudStorage cloudStorage)
         {
             _liveStreamService = liveStreamService;
+            _cloudStorage = cloudStorage;
 
             Name = nameof(Models.LiveStream);
 
             Id("audioId", x => x.Id);
             Field(x => x.Name);
-            Field<StringGraphType>("coverImageUrl", "The cover image url for the live stream", 
-                resolve: c => cloudStorage.CloudBlobContainers[CloudStorageType.Image].GetBlockBlobReference(c.Source.CoverImageName).Uri.AbsoluteUri);
             Field(x => x.LiveStreamUrl);
             Field(x => x.WebsiteUrl);
             Field(x => x.Likes);
             Field(x => x.Dislikes);
             Field(x => x.PlayCount);
+            Field<ListGraphType<ImagePayload>>("coverImages", "The different dimention images for the cover image", resolve: GetCoverImages);
             Field<DateGraphType>("dateAdded", "The date the user added the live stream");
             Field<AccountPayload>("user", "The user who uploaded the live stream");
             Field<ListGraphType<GenrePayload>>("genres", "The genre the live stream belongs to", resolve: c => c.Source.AudioGenres.Select(x => x.Genre));
@@ -53,6 +55,26 @@ namespace SoundVast.Components.LiveStream
         public override Models.LiveStream GetById(string id)
         {
             return _liveStreamService.GetAudio(int.Parse(id));
+        }
+
+        private async Task<object> GetCoverImages(ResolveFieldContext<Models.LiveStream> c)
+        {
+            var container = _cloudStorage.CloudBlobContainers[CloudStorageType.Image];
+            var segmentedBlobs = await container.ListBlobsSegmentedAsync(c.Source.CoverImageName, null);
+            var blobs = segmentedBlobs.Results.OfType<CloudBlockBlob>();
+            var coverImageUrls = blobs.Select(x => x.Uri.AbsoluteUri);
+            var images = Image.CoverImageSizes.Select(x =>
+            {
+                var coverImageUrl = coverImageUrls.Single(z => z.Contains(x.Key));
+
+                return new Image
+                {
+                    Dimention = x.Key,
+                    ImageUrl = coverImageUrl,
+                };
+            });
+
+            return images;
         }
     }
 }

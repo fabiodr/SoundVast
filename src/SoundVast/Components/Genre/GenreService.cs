@@ -26,7 +26,7 @@ namespace SoundVast.Components.Genre
         public void UpdateCoverImages()
         {
             var genres = _repository.GetAll().BuildGenre();
-            var placeholderImageName = "SoundVast";
+            var placeholderImageName = Image.PlaceholderImageName;
 
             foreach (var genre in genres)
             {

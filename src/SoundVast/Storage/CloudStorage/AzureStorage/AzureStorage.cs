@@ -15,9 +15,9 @@ namespace SoundVast.Storage.CloudStorage.AzureStorage
     {
         public IDictionary<CloudStorageType, CloudBlobContainer> CloudBlobContainers { get; set; } = new Dictionary<CloudStorageType, CloudBlobContainer>();
 
-        public AzureStorage(IConfiguration configuration)
+        public AzureStorage(string storageConnectionString)
         {
-            var storageAccount = CloudStorageAccount.Parse(configuration.GetConnectionString("StorageConnectionString"));
+            var storageAccount = CloudStorageAccount.Parse(storageConnectionString);
             var blobClient = storageAccount.CreateCloudBlobClient();
 
             foreach (CloudStorageType cloudStorageType in Enum.GetValues(typeof(CloudStorageType)))
@@ -28,6 +28,11 @@ namespace SoundVast.Storage.CloudStorage.AzureStorage
             }
 
             CloudBlobContainers[CloudStorageType.Image].SetPermissionsAsync(new BlobContainerPermissions
+            {
+                PublicAccess = BlobContainerPublicAccessType.Container
+            }).Wait();
+
+            CloudBlobContainers[CloudStorageType.AppImage].SetPermissionsAsync(new BlobContainerPermissions
             {
                 PublicAccess = BlobContainerPublicAccessType.Container
             }).Wait();

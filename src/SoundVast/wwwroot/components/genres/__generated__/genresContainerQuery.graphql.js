@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash d9029d55c6296c5c784ea12cb2ed1bda
+ * @relayHash 6eea55e261c1c4ea5c90295ad5793829
  */
 
 /* eslint-disable */
@@ -26,7 +26,10 @@ query genresContainerQuery {
 fragment genresContainer_genres on Genre {
   id
   name
-  coverImageUrl
+  coverImages {
+    dimention
+    imageUrl
+  }
 }
 */
 
@@ -93,10 +96,28 @@ const batch /*: ConcreteBatch*/ = {
                 "storageKey": null
               },
               {
-                "kind": "ScalarField",
+                "kind": "LinkedField",
                 "alias": null,
                 "args": null,
-                "name": "coverImageUrl",
+                "concreteType": "Image",
+                "name": "coverImages",
+                "plural": true,
+                "selections": [
+                  {
+                    "kind": "ScalarField",
+                    "alias": null,
+                    "args": null,
+                    "name": "dimention",
+                    "storageKey": null
+                  },
+                  {
+                    "kind": "ScalarField",
+                    "alias": null,
+                    "args": null,
+                    "name": "imageUrl",
+                    "storageKey": null
+                  }
+                ],
                 "storageKey": null
               }
             ]
@@ -106,7 +127,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query genresContainerQuery {\n  genres {\n    ...genresContainer_genres\n    id\n  }\n}\n\nfragment genresContainer_genres on Genre {\n  id\n  name\n  coverImageUrl\n}\n"
+  "text": "query genresContainerQuery {\n  genres {\n    ...genresContainer_genres\n    id\n  }\n}\n\nfragment genresContainer_genres on Genre {\n  id\n  name\n  coverImages {\n    dimention\n    imageUrl\n  }\n}\n"
 };
 
 module.exports = batch;
