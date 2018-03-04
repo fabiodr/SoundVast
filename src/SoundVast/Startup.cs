@@ -71,15 +71,9 @@ namespace SoundVast
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            var connectionStringName = "DefaultConnection";
-
-            if (_env.IsStaging())
-            {
-                connectionStringName = "StagingConnection";
-            }
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(_configuration.GetConnectionString(connectionStringName)));
-            services.AddHangfire(x => x.UseSqlServerStorage(_configuration.GetConnectionString(connectionStringName)));
+                options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
+            services.AddHangfire(x => x.UseSqlServerStorage(_configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
                 {
@@ -149,14 +143,10 @@ namespace SoundVast
             loggerFactory.AddConsole(_configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            if (env.IsStaging() || env.IsDevelopment())
+            if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
-            }
-
-            if (env.IsDevelopment())
-            {
                 app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
                 {
                     ConfigFile = "./webpack.config.js"
@@ -206,14 +196,7 @@ namespace SoundVast
 
         private ContainerBuilder RegisterServices()
         {
-            var connectionStringName = "StorageConnectionString";
-
-            if (_env.IsStaging())
-            {
-                connectionStringName = "StagingStorageConnectionString";
-            }
-
-            var storageConnectionString = _configuration.GetConnectionString(connectionStringName);
+            var storageConnectionString = _configuration.GetConnectionString("StorageConnectionString");
             var azureStorage = new AzureStorage(storageConnectionString);
             var builder = new ContainerBuilder();
             var assembly = Assembly.GetExecutingAssembly();

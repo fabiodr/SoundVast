@@ -39,10 +39,16 @@ namespace SoundVast
 
             var config = configurationBuilder.Build();
 
+            var azureKeyVaultName = "azureKeyVault";
+
+            if (webHostBuilderContext.HostingEnvironment.IsStaging()) {
+                azureKeyVaultName = "stagingAzureKeyVault";
+            }
+
             configurationBuilder.AddAzureKeyVault(
-                $"https://{config["azureKeyVault:vault"]}.vault.azure.net/",
-                config["azureKeyVault:clientId"],
-                config["azureKeyVault:clientSecret"]
+                $"https://{config[$"{azureKeyVaultName}:vault"]}.vault.azure.net/",
+                config[$"{azureKeyVaultName}:clientId"],
+                config[$"{azureKeyVaultName}:clientSecret"]
             );
         }
     }
