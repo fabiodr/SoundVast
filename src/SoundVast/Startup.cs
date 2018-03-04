@@ -149,15 +149,19 @@ namespace SoundVast
             loggerFactory.AddConsole(_configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            if (env.IsDevelopment())
+            if (env.IsStaging() || env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
-                app.UseBrowserLink();
+            }
+
+            if (env.IsDevelopment())
+            {
                 app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
                 {
                     ConfigFile = "./webpack.config.js"
                 });
+                app.UseBrowserLink();
             }
             else
             {
