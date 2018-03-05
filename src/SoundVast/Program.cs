@@ -41,7 +41,8 @@ namespace SoundVast
 
             var azureKeyVaultName = "azureKeyVault";
 
-            if (webHostBuilderContext.HostingEnvironment.IsStaging()) {
+            if (webHostBuilderContext.HostingEnvironment.IsStaging())
+            {
                 azureKeyVaultName = "stagingAzureKeyVault";
             }
 
