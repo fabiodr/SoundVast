@@ -69,10 +69,11 @@ namespace SoundVast.Kestrel
             {
                 using (var store = new X509Store(config.StoreName, Enum.Parse<StoreLocation>(config.StoreLocation)))
                 {
+                    var validOnly = !environment.IsDevelopment();
                     store.Open(OpenFlags.ReadOnly);
                     var certificate = store.Certificates.Find(
                         X509FindType.FindBySubjectName,
-                        config.Host, !environment.IsDevelopment());
+                        config.Host, validOnly);
 
                     if (certificate.Count == 0)
                     {
