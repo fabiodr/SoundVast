@@ -143,10 +143,14 @@ namespace SoundVast
             loggerFactory.AddConsole(_configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            if (env.IsDevelopment())
+            if (!env.IsProduction())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
+            }
+
+            if (env.IsDevelopment())
+            {
                 app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
                 {
                     ConfigFile = "./webpack.config.js"
