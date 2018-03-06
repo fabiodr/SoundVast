@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 68d74965c1b2a302cd953859361f9a24
+ * @relayHash e47656e089d5ff764f2e2892e5cf14c0
  */
 
 /* eslint-disable */
@@ -8,21 +8,21 @@
 'use strict';
 
 /*::
-import type {ConcreteBatch} from 'relay-runtime';
+import type { ConcreteRequest } from 'relay-runtime';
 export type flagCommentMutationVariables = {|
   input: {
-    clientMutationId?: ?string;
-    commentId: number;
-    reason: string;
-    additionalDetails?: ?string;
-  };
+    clientMutationId?: ?string,
+    commentId: number,
+    reason: string,
+    additionalDetails?: ?string,
+  },
 |};
 export type flagCommentMutationResponse = {|
   +flagComment: ?{|
     +flag: ?{|
-      +id: string;
-    |};
-  |};
+      +id: string,
+    |},
+  |},
 |};
 */
 
@@ -39,115 +39,75 @@ mutation flagCommentMutation(
 }
 */
 
-const batch /*: ConcreteBatch*/ = {
-  "fragment": {
-    "argumentDefinitions": [
+const node/*: ConcreteRequest*/ = (function(){
+var v0 = [
+  {
+    "kind": "LocalArgument",
+    "name": "input",
+    "type": "FlagCommentInput!",
+    "defaultValue": null
+  }
+],
+v1 = [
+  {
+    "kind": "LinkedField",
+    "alias": null,
+    "name": "flagComment",
+    "storageKey": null,
+    "args": [
       {
-        "kind": "LocalArgument",
+        "kind": "Variable",
         "name": "input",
-        "type": "FlagCommentInput!",
-        "defaultValue": null
+        "variableName": "input",
+        "type": "FlagCommentInput!"
       }
     ],
-    "kind": "Fragment",
-    "metadata": null,
-    "name": "flagCommentMutation",
+    "concreteType": "FlagObjectPayload",
+    "plural": false,
     "selections": [
       {
         "kind": "LinkedField",
         "alias": null,
-        "args": [
-          {
-            "kind": "Variable",
-            "name": "input",
-            "variableName": "input",
-            "type": "FlagCommentInput!"
-          }
-        ],
-        "concreteType": "FlagObjectPayload",
-        "name": "flagComment",
+        "name": "flag",
+        "storageKey": null,
+        "args": null,
+        "concreteType": "Flag",
         "plural": false,
         "selections": [
           {
-            "kind": "LinkedField",
+            "kind": "ScalarField",
             "alias": null,
+            "name": "id",
             "args": null,
-            "concreteType": "Flag",
-            "name": "flag",
-            "plural": false,
-            "selections": [
-              {
-                "kind": "ScalarField",
-                "alias": null,
-                "args": null,
-                "name": "id",
-                "storageKey": null
-              }
-            ],
             "storageKey": null
           }
-        ],
-        "storageKey": null
-      }
-    ],
-    "type": "Mutation"
-  },
-  "id": null,
-  "kind": "Batch",
-  "metadata": {},
-  "name": "flagCommentMutation",
-  "query": {
-    "argumentDefinitions": [
-      {
-        "kind": "LocalArgument",
-        "name": "input",
-        "type": "FlagCommentInput!",
-        "defaultValue": null
-      }
-    ],
-    "kind": "Root",
-    "name": "flagCommentMutation",
-    "operation": "mutation",
-    "selections": [
-      {
-        "kind": "LinkedField",
-        "alias": null,
-        "args": [
-          {
-            "kind": "Variable",
-            "name": "input",
-            "variableName": "input",
-            "type": "FlagCommentInput!"
-          }
-        ],
-        "concreteType": "FlagObjectPayload",
-        "name": "flagComment",
-        "plural": false,
-        "selections": [
-          {
-            "kind": "LinkedField",
-            "alias": null,
-            "args": null,
-            "concreteType": "Flag",
-            "name": "flag",
-            "plural": false,
-            "selections": [
-              {
-                "kind": "ScalarField",
-                "alias": null,
-                "args": null,
-                "name": "id",
-                "storageKey": null
-              }
-            ],
-            "storageKey": null
-          }
-        ],
-        "storageKey": null
+        ]
       }
     ]
+  }
+];
+return {
+  "kind": "Request",
+  "operationKind": "mutation",
+  "name": "flagCommentMutation",
+  "id": null,
+  "text": "mutation flagCommentMutation(\n  $input: FlagCommentInput!\n) {\n  flagComment(input: $input) {\n    flag {\n      id\n    }\n  }\n}\n",
+  "metadata": {},
+  "fragment": {
+    "kind": "Fragment",
+    "name": "flagCommentMutation",
+    "type": "Mutation",
+    "metadata": null,
+    "argumentDefinitions": v0,
+    "selections": v1
   },
-  "text": "mutation flagCommentMutation(\n  $input: FlagCommentInput!\n) {\n  flagComment(input: $input) {\n    flag {\n      id\n    }\n  }\n}\n"
+  "operation": {
+    "kind": "Operation",
+    "name": "flagCommentMutation",
+    "argumentDefinitions": v0,
+    "selections": v1
+  }
 };
-
-module.exports = batch;
+})();
+(node/*: any*/).hash = '9d288ff1030cabec275c09408d37e2b9';
+module.exports = node;

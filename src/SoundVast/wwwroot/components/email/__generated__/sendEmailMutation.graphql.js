@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 6aeea5a2b005fac8adc3221739b20a92
+ * @relayHash b62923633b548c4cef7af643b2046f9f
  */
 
 /* eslint-disable */
@@ -8,19 +8,19 @@
 'use strict';
 
 /*::
-import type {ConcreteBatch} from 'relay-runtime';
+import type { ConcreteRequest } from 'relay-runtime';
 export type sendEmailMutationVariables = {|
   input: {
-    clientMutationId?: ?string;
-    email: string;
-    message: string;
-    subject: string;
-  };
+    clientMutationId?: ?string,
+    email: string,
+    message: string,
+    subject: string,
+  },
 |};
 export type sendEmailMutationResponse = {|
   +sendEmail: ?{|
-    +clientMutationId: ?string;
-  |};
+    +clientMutationId: ?string,
+  |},
 |};
 */
 
@@ -35,93 +35,64 @@ mutation sendEmailMutation(
 }
 */
 
-const batch /*: ConcreteBatch*/ = {
-  "fragment": {
-    "argumentDefinitions": [
+const node/*: ConcreteRequest*/ = (function(){
+var v0 = [
+  {
+    "kind": "LocalArgument",
+    "name": "input",
+    "type": "SendEmailInput!",
+    "defaultValue": null
+  }
+],
+v1 = [
+  {
+    "kind": "LinkedField",
+    "alias": null,
+    "name": "sendEmail",
+    "storageKey": null,
+    "args": [
       {
-        "kind": "LocalArgument",
+        "kind": "Variable",
         "name": "input",
-        "type": "SendEmailInput!",
-        "defaultValue": null
+        "variableName": "input",
+        "type": "SendEmailInput!"
       }
     ],
-    "kind": "Fragment",
-    "metadata": null,
-    "name": "sendEmailMutation",
+    "concreteType": "SendEmailPayload",
+    "plural": false,
     "selections": [
       {
-        "kind": "LinkedField",
+        "kind": "ScalarField",
         "alias": null,
-        "args": [
-          {
-            "kind": "Variable",
-            "name": "input",
-            "variableName": "input",
-            "type": "SendEmailInput!"
-          }
-        ],
-        "concreteType": "SendEmailPayload",
-        "name": "sendEmail",
-        "plural": false,
-        "selections": [
-          {
-            "kind": "ScalarField",
-            "alias": null,
-            "args": null,
-            "name": "clientMutationId",
-            "storageKey": null
-          }
-        ],
-        "storageKey": null
-      }
-    ],
-    "type": "Mutation"
-  },
-  "id": null,
-  "kind": "Batch",
-  "metadata": {},
-  "name": "sendEmailMutation",
-  "query": {
-    "argumentDefinitions": [
-      {
-        "kind": "LocalArgument",
-        "name": "input",
-        "type": "SendEmailInput!",
-        "defaultValue": null
-      }
-    ],
-    "kind": "Root",
-    "name": "sendEmailMutation",
-    "operation": "mutation",
-    "selections": [
-      {
-        "kind": "LinkedField",
-        "alias": null,
-        "args": [
-          {
-            "kind": "Variable",
-            "name": "input",
-            "variableName": "input",
-            "type": "SendEmailInput!"
-          }
-        ],
-        "concreteType": "SendEmailPayload",
-        "name": "sendEmail",
-        "plural": false,
-        "selections": [
-          {
-            "kind": "ScalarField",
-            "alias": null,
-            "args": null,
-            "name": "clientMutationId",
-            "storageKey": null
-          }
-        ],
+        "name": "clientMutationId",
+        "args": null,
         "storageKey": null
       }
     ]
+  }
+];
+return {
+  "kind": "Request",
+  "operationKind": "mutation",
+  "name": "sendEmailMutation",
+  "id": null,
+  "text": "mutation sendEmailMutation(\n  $input: SendEmailInput!\n) {\n  sendEmail(input: $input) {\n    clientMutationId\n  }\n}\n",
+  "metadata": {},
+  "fragment": {
+    "kind": "Fragment",
+    "name": "sendEmailMutation",
+    "type": "Mutation",
+    "metadata": null,
+    "argumentDefinitions": v0,
+    "selections": v1
   },
-  "text": "mutation sendEmailMutation(\n  $input: SendEmailInput!\n) {\n  sendEmail(input: $input) {\n    clientMutationId\n  }\n}\n"
+  "operation": {
+    "kind": "Operation",
+    "name": "sendEmailMutation",
+    "argumentDefinitions": v0,
+    "selections": v1
+  }
 };
-
-module.exports = batch;
+})();
+(node/*: any*/).hash = '2583db11f4bdd7ec1cc1897e34300e1c';
+module.exports = node;

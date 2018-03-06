@@ -7,44 +7,47 @@
 'use strict';
 
 /*::
-import type {ConcreteFragment} from 'relay-runtime';
+import type { ConcreteFragment } from 'relay-runtime';
+import type { FragmentReference } from 'relay-runtime';
+declare export opaque type commentBoxContainer_audio$ref: FragmentReference;
 export type commentBoxContainer_audio = {|
-  +id: ?string;
-  +audioId: number;
-  +name: string;
+  +id: ?string,
+  +audioId: number,
+  +name: string,
+  +$refType: commentBoxContainer_audio$ref,
 |};
 */
 
 
-const fragment /*: ConcreteFragment*/ = {
-  "argumentDefinitions": [],
+const node/*: ConcreteFragment*/ = {
   "kind": "Fragment",
-  "metadata": null,
   "name": "commentBoxContainer_audio",
+  "type": "Audio",
+  "metadata": null,
+  "argumentDefinitions": [],
   "selections": [
     {
       "kind": "ScalarField",
       "alias": null,
-      "args": null,
       "name": "id",
+      "args": null,
       "storageKey": null
     },
     {
       "kind": "ScalarField",
       "alias": null,
-      "args": null,
       "name": "audioId",
+      "args": null,
       "storageKey": null
     },
     {
       "kind": "ScalarField",
       "alias": null,
-      "args": null,
       "name": "name",
+      "args": null,
       "storageKey": null
     }
-  ],
-  "type": "Audio"
+  ]
 };
-
-module.exports = fragment;
+(node/*: any*/).hash = '1ae318806747ed5c84d0ceda4ecf8a50';
+module.exports = node;

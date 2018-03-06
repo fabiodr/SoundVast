@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash ca547848f0c45fb4c23b1a71e53fe0f8
+ * @relayHash 1c674411ce4cd02c4355815396ac584c
  */
 
 /* eslint-disable */
@@ -8,27 +8,27 @@
 'use strict';
 
 /*::
-import type {ConcreteBatch} from 'relay-runtime';
+import type { ConcreteRequest } from 'relay-runtime';
 export type saveLiveStreamMutationVariables = {|
   input: {
-    clientMutationId?: ?string;
-    name: string;
-    liveStreamUrl: string;
-    websiteUrl: string;
-    coverImageUrl: string;
+    clientMutationId?: ?string,
+    name: string,
+    liveStreamUrl: string,
+    websiteUrl: string,
+    coverImageName: string,
     tags?: ?$ReadOnlyArray<?{
-      id?: ?number;
-      tag?: ?string;
-    }>;
-    genreIds?: ?$ReadOnlyArray<?number>;
-  };
+      id?: ?number,
+      tag?: ?string,
+    }>,
+    genreIds?: ?$ReadOnlyArray<?number>,
+  },
 |};
 export type saveLiveStreamMutationResponse = {|
   +saveLiveStream: ?{|
     +liveStream: {|
-      +id: string;
-    |};
-  |};
+      +id: string,
+    |},
+  |},
 |};
 */
 
@@ -45,115 +45,75 @@ mutation saveLiveStreamMutation(
 }
 */
 
-const batch /*: ConcreteBatch*/ = {
-  "fragment": {
-    "argumentDefinitions": [
+const node/*: ConcreteRequest*/ = (function(){
+var v0 = [
+  {
+    "kind": "LocalArgument",
+    "name": "input",
+    "type": "SaveLiveStreamInput!",
+    "defaultValue": null
+  }
+],
+v1 = [
+  {
+    "kind": "LinkedField",
+    "alias": null,
+    "name": "saveLiveStream",
+    "storageKey": null,
+    "args": [
       {
-        "kind": "LocalArgument",
+        "kind": "Variable",
         "name": "input",
-        "type": "SaveLiveStreamInput!",
-        "defaultValue": null
+        "variableName": "input",
+        "type": "SaveLiveStreamInput!"
       }
     ],
-    "kind": "Fragment",
-    "metadata": null,
-    "name": "saveLiveStreamMutation",
+    "concreteType": "SaveLiveStreamPayload",
+    "plural": false,
     "selections": [
       {
         "kind": "LinkedField",
         "alias": null,
-        "args": [
-          {
-            "kind": "Variable",
-            "name": "input",
-            "variableName": "input",
-            "type": "SaveLiveStreamInput!"
-          }
-        ],
-        "concreteType": "SaveLiveStreamPayload",
-        "name": "saveLiveStream",
+        "name": "liveStream",
+        "storageKey": null,
+        "args": null,
+        "concreteType": "LiveStream",
         "plural": false,
         "selections": [
           {
-            "kind": "LinkedField",
+            "kind": "ScalarField",
             "alias": null,
+            "name": "id",
             "args": null,
-            "concreteType": "LiveStream",
-            "name": "liveStream",
-            "plural": false,
-            "selections": [
-              {
-                "kind": "ScalarField",
-                "alias": null,
-                "args": null,
-                "name": "id",
-                "storageKey": null
-              }
-            ],
             "storageKey": null
           }
-        ],
-        "storageKey": null
-      }
-    ],
-    "type": "Mutation"
-  },
-  "id": null,
-  "kind": "Batch",
-  "metadata": {},
-  "name": "saveLiveStreamMutation",
-  "query": {
-    "argumentDefinitions": [
-      {
-        "kind": "LocalArgument",
-        "name": "input",
-        "type": "SaveLiveStreamInput!",
-        "defaultValue": null
-      }
-    ],
-    "kind": "Root",
-    "name": "saveLiveStreamMutation",
-    "operation": "mutation",
-    "selections": [
-      {
-        "kind": "LinkedField",
-        "alias": null,
-        "args": [
-          {
-            "kind": "Variable",
-            "name": "input",
-            "variableName": "input",
-            "type": "SaveLiveStreamInput!"
-          }
-        ],
-        "concreteType": "SaveLiveStreamPayload",
-        "name": "saveLiveStream",
-        "plural": false,
-        "selections": [
-          {
-            "kind": "LinkedField",
-            "alias": null,
-            "args": null,
-            "concreteType": "LiveStream",
-            "name": "liveStream",
-            "plural": false,
-            "selections": [
-              {
-                "kind": "ScalarField",
-                "alias": null,
-                "args": null,
-                "name": "id",
-                "storageKey": null
-              }
-            ],
-            "storageKey": null
-          }
-        ],
-        "storageKey": null
+        ]
       }
     ]
+  }
+];
+return {
+  "kind": "Request",
+  "operationKind": "mutation",
+  "name": "saveLiveStreamMutation",
+  "id": null,
+  "text": "mutation saveLiveStreamMutation(\n  $input: SaveLiveStreamInput!\n) {\n  saveLiveStream(input: $input) {\n    liveStream {\n      id\n    }\n  }\n}\n",
+  "metadata": {},
+  "fragment": {
+    "kind": "Fragment",
+    "name": "saveLiveStreamMutation",
+    "type": "Mutation",
+    "metadata": null,
+    "argumentDefinitions": v0,
+    "selections": v1
   },
-  "text": "mutation saveLiveStreamMutation(\n  $input: SaveLiveStreamInput!\n) {\n  saveLiveStream(input: $input) {\n    liveStream {\n      id\n    }\n  }\n}\n"
+  "operation": {
+    "kind": "Operation",
+    "name": "saveLiveStreamMutation",
+    "argumentDefinitions": v0,
+    "selections": v1
+  }
 };
-
-module.exports = batch;
+})();
+(node/*: any*/).hash = '774677ca15a0af19c0f55607c8a9a571';
+module.exports = node;

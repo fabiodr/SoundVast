@@ -7,34 +7,41 @@
 'use strict';
 
 /*::
-import type {ConcreteFragment} from 'relay-runtime';
+import type { ConcreteFragment } from 'relay-runtime';
+type commentBoxContainer_audio$ref = any;
+type commentsContainer_audio$ref = any;
+import type { FragmentReference } from 'relay-runtime';
+declare export opaque type sideBarContainer_audios$ref: FragmentReference;
 export type sideBarContainer_audios = $ReadOnlyArray<{|
-  +audioId: number;
-  +name: string;
+  +audioId: number,
+  +name: string,
+  +$fragmentRefs: (commentBoxContainer_audio$ref & commentsContainer_audio$ref),
+  +$refType: sideBarContainer_audios$ref,
 |}>;
 */
 
 
-const fragment /*: ConcreteFragment*/ = {
-  "argumentDefinitions": [],
+const node/*: ConcreteFragment*/ = {
   "kind": "Fragment",
+  "name": "sideBarContainer_audios",
+  "type": "Audio",
   "metadata": {
     "plural": true
   },
-  "name": "sideBarContainer_audios",
+  "argumentDefinitions": [],
   "selections": [
     {
       "kind": "ScalarField",
       "alias": null,
-      "args": null,
       "name": "audioId",
+      "args": null,
       "storageKey": null
     },
     {
       "kind": "ScalarField",
       "alias": null,
-      "args": null,
       "name": "name",
+      "args": null,
       "storageKey": null
     },
     {
@@ -47,8 +54,7 @@ const fragment /*: ConcreteFragment*/ = {
       "name": "commentsContainer_audio",
       "args": null
     }
-  ],
-  "type": "Audio"
+  ]
 };
-
-module.exports = fragment;
+(node/*: any*/).hash = '3b9bdbe9facd9e5f54821515130b4d8e';
+module.exports = node;

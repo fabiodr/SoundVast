@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 29e0f606e4420fbc3fe331818c2b3f4e
+ * @relayHash 87cc9cc7657065d664247ee645025560
  */
 
 /* eslint-disable */
@@ -8,13 +8,17 @@
 'use strict';
 
 /*::
-import type {ConcreteBatch} from 'relay-runtime';
+import type { ConcreteRequest } from 'relay-runtime';
+type socialLoginsContainer_loginProviders$ref = any;
+export type primaryLayoutContainerQueryVariables = {| |};
 export type primaryLayoutContainerQueryResponse = {|
   +user: ?{|
-    +userId: string;
-    +userName: string;
-  |};
-  +loginProviders: ?$ReadOnlyArray<?{| |}>;
+    +userId: string,
+    +userName: string,
+  |},
+  +loginProviders: ?$ReadOnlyArray<?{|
+    +$fragmentRefs: socialLoginsContainer_loginProviders$ref,
+  |}>,
 |};
 */
 
@@ -37,44 +41,55 @@ fragment socialLoginsContainer_loginProviders on LoginProvider {
 }
 */
 
-const batch /*: ConcreteBatch*/ = {
+const node/*: ConcreteRequest*/ = (function(){
+var v0 = {
+  "kind": "ScalarField",
+  "alias": null,
+  "name": "userId",
+  "args": null,
+  "storageKey": null
+},
+v1 = {
+  "kind": "ScalarField",
+  "alias": null,
+  "name": "userName",
+  "args": null,
+  "storageKey": null
+};
+return {
+  "kind": "Request",
+  "operationKind": "query",
+  "name": "primaryLayoutContainerQuery",
+  "id": null,
+  "text": "query primaryLayoutContainerQuery {\n  user {\n    userId\n    userName\n    id\n  }\n  loginProviders {\n    ...socialLoginsContainer_loginProviders\n  }\n}\n\nfragment socialLoginsContainer_loginProviders on LoginProvider {\n  name\n  displayName\n}\n",
+  "metadata": {},
   "fragment": {
-    "argumentDefinitions": [],
     "kind": "Fragment",
-    "metadata": null,
     "name": "primaryLayoutContainerQuery",
+    "type": "Query",
+    "metadata": null,
+    "argumentDefinitions": [],
     "selections": [
       {
         "kind": "LinkedField",
         "alias": null,
+        "name": "user",
+        "storageKey": null,
         "args": null,
         "concreteType": "ApplicationUser",
-        "name": "user",
         "plural": false,
         "selections": [
-          {
-            "kind": "ScalarField",
-            "alias": null,
-            "args": null,
-            "name": "userId",
-            "storageKey": null
-          },
-          {
-            "kind": "ScalarField",
-            "alias": null,
-            "args": null,
-            "name": "userName",
-            "storageKey": null
-          }
-        ],
-        "storageKey": null
+          v0,
+          v1
+        ]
       },
       {
         "kind": "LinkedField",
         "alias": null,
+        "name": "loginProviders",
+        "storageKey": null,
         "args": null,
         "concreteType": "LoginProvider",
-        "name": "loginProviders",
         "plural": true,
         "selections": [
           {
@@ -82,88 +97,63 @@ const batch /*: ConcreteBatch*/ = {
             "name": "socialLoginsContainer_loginProviders",
             "args": null
           }
-        ],
-        "storageKey": null
+        ]
       }
-    ],
-    "type": "Query"
+    ]
   },
-  "id": null,
-  "kind": "Batch",
-  "metadata": {},
-  "name": "primaryLayoutContainerQuery",
-  "query": {
-    "argumentDefinitions": [],
-    "kind": "Root",
+  "operation": {
+    "kind": "Operation",
     "name": "primaryLayoutContainerQuery",
-    "operation": "query",
+    "argumentDefinitions": [],
     "selections": [
       {
         "kind": "LinkedField",
         "alias": null,
+        "name": "user",
+        "storageKey": null,
         "args": null,
         "concreteType": "ApplicationUser",
-        "name": "user",
         "plural": false,
         "selections": [
+          v0,
+          v1,
           {
             "kind": "ScalarField",
             "alias": null,
-            "args": null,
-            "name": "userId",
-            "storageKey": null
-          },
-          {
-            "kind": "ScalarField",
-            "alias": null,
-            "args": null,
-            "name": "userName",
-            "storageKey": null
-          },
-          {
-            "kind": "ScalarField",
-            "alias": null,
-            "args": null,
             "name": "id",
+            "args": null,
             "storageKey": null
           }
-        ],
-        "storageKey": null
+        ]
       },
       {
         "kind": "LinkedField",
         "alias": null,
+        "name": "loginProviders",
+        "storageKey": null,
         "args": null,
         "concreteType": "LoginProvider",
-        "name": "loginProviders",
         "plural": true,
         "selections": [
           {
-            "kind": "InlineFragment",
-            "type": "LoginProvider",
-            "selections": [
-              {
-                "kind": "ScalarField",
-                "alias": null,
-                "args": null,
-                "name": "name",
-                "storageKey": null
-              },
-              {
-                "kind": "ScalarField",
-                "alias": null,
-                "args": null,
-                "name": "displayName",
-                "storageKey": null
-              }
-            ]
+            "kind": "ScalarField",
+            "alias": null,
+            "name": "name",
+            "args": null,
+            "storageKey": null
+          },
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "name": "displayName",
+            "args": null,
+            "storageKey": null
           }
-        ],
-        "storageKey": null
+        ]
       }
     ]
-  },
-  "text": "query primaryLayoutContainerQuery {\n  user {\n    userId\n    userName\n    id\n  }\n  loginProviders {\n    ...socialLoginsContainer_loginProviders\n  }\n}\n\nfragment socialLoginsContainer_loginProviders on LoginProvider {\n  name\n  displayName\n}\n"
+  }
 };
-
-module.exports = batch;
+})();
+(node/*: any*/).hash = 'ca481fd2f8d5bd6ab9e8868f5aebf740';
+module.exports = node;

@@ -7,28 +7,31 @@
 'use strict';
 
 /*::
-import type {ConcreteFragment} from 'relay-runtime';
+import type { ConcreteFragment } from 'relay-runtime';
+import type { FragmentReference } from 'relay-runtime';
+declare export opaque type errorPageContainer_quote$ref: FragmentReference;
 export type errorPageContainer_quote = {|
-  +quotation: string;
+  +quotation: string,
+  +$refType: errorPageContainer_quote$ref,
 |};
 */
 
 
-const fragment /*: ConcreteFragment*/ = {
-  "argumentDefinitions": [],
+const node/*: ConcreteFragment*/ = {
   "kind": "Fragment",
-  "metadata": null,
   "name": "errorPageContainer_quote",
+  "type": "Quote",
+  "metadata": null,
+  "argumentDefinitions": [],
   "selections": [
     {
       "kind": "ScalarField",
       "alias": null,
-      "args": null,
       "name": "quotation",
+      "args": null,
       "storageKey": null
     }
-  ],
-  "type": "Quote"
+  ]
 };
-
-module.exports = fragment;
+(node/*: any*/).hash = '73dce55de9428e3812216dfd7765db53';
+module.exports = node;

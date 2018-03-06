@@ -21,17 +21,16 @@ const CoverImage = ({ coverImages, imagePlaceholderUrl, className }) => {
 CoverImage.defaultProps = {
   className: null,
   coverImages: null,
+  imagePlaceholderUrl: null,
 };
 
 CoverImage.propTypes = {
   className: PropTypes.string,
-  coverImages: PropTypes.arrayOf(
-    PropTypes.shape({
-      dimention: PropTypes.string.isRequired,
-      imageUrl: PropTypes.string.isRequired,
-    }).isRequired,
-  ),
-  imagePlaceholderUrl: PropTypes.string.isRequired,
+  coverImages: PropTypes.arrayOf(PropTypes.shape({
+    dimention: PropTypes.string.isRequired,
+    imageUrl: PropTypes.string.isRequired,
+  }).isRequired),
+  imagePlaceholderUrl: PropTypes.string,
 };
 
 export default CoverImage;

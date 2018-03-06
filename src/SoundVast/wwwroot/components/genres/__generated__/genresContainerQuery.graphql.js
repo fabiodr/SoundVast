@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 6eea55e261c1c4ea5c90295ad5793829
+ * @relayHash a2818107a7add2485ca7a90edc586c6a
  */
 
 /* eslint-disable */
@@ -8,9 +8,13 @@
 'use strict';
 
 /*::
-import type {ConcreteBatch} from 'relay-runtime';
+import type { ConcreteRequest } from 'relay-runtime';
+type genresContainer_genres$ref = any;
+export type genresContainerQueryVariables = {| |};
 export type genresContainerQueryResponse = {|
-  +genres: ?$ReadOnlyArray<?{| |}>;
+  +genres: ?$ReadOnlyArray<?{|
+    +$fragmentRefs: genresContainer_genres$ref,
+  |}>,
 |};
 */
 
@@ -33,19 +37,27 @@ fragment genresContainer_genres on Genre {
 }
 */
 
-const batch /*: ConcreteBatch*/ = {
+const node/*: ConcreteRequest*/ = {
+  "kind": "Request",
+  "operationKind": "query",
+  "name": "genresContainerQuery",
+  "id": null,
+  "text": "query genresContainerQuery {\n  genres {\n    ...genresContainer_genres\n    id\n  }\n}\n\nfragment genresContainer_genres on Genre {\n  id\n  name\n  coverImages {\n    dimention\n    imageUrl\n  }\n}\n",
+  "metadata": {},
   "fragment": {
-    "argumentDefinitions": [],
     "kind": "Fragment",
-    "metadata": null,
     "name": "genresContainerQuery",
+    "type": "Query",
+    "metadata": null,
+    "argumentDefinitions": [],
     "selections": [
       {
         "kind": "LinkedField",
         "alias": null,
+        "name": "genres",
+        "storageKey": null,
         "args": null,
         "concreteType": "Genre",
-        "name": "genres",
         "plural": true,
         "selections": [
           {
@@ -53,81 +65,67 @@ const batch /*: ConcreteBatch*/ = {
             "name": "genresContainer_genres",
             "args": null
           }
-        ],
-        "storageKey": null
+        ]
       }
-    ],
-    "type": "Query"
+    ]
   },
-  "id": null,
-  "kind": "Batch",
-  "metadata": {},
-  "name": "genresContainerQuery",
-  "query": {
-    "argumentDefinitions": [],
-    "kind": "Root",
+  "operation": {
+    "kind": "Operation",
     "name": "genresContainerQuery",
-    "operation": "query",
+    "argumentDefinitions": [],
     "selections": [
       {
         "kind": "LinkedField",
         "alias": null,
+        "name": "genres",
+        "storageKey": null,
         "args": null,
         "concreteType": "Genre",
-        "name": "genres",
         "plural": true,
         "selections": [
           {
             "kind": "ScalarField",
             "alias": null,
-            "args": null,
             "name": "id",
+            "args": null,
             "storageKey": null
           },
           {
-            "kind": "InlineFragment",
-            "type": "Genre",
+            "kind": "ScalarField",
+            "alias": null,
+            "name": "name",
+            "args": null,
+            "storageKey": null
+          },
+          {
+            "kind": "LinkedField",
+            "alias": null,
+            "name": "coverImages",
+            "storageKey": null,
+            "args": null,
+            "concreteType": "Image",
+            "plural": true,
             "selections": [
               {
                 "kind": "ScalarField",
                 "alias": null,
+                "name": "dimention",
                 "args": null,
-                "name": "name",
                 "storageKey": null
               },
               {
-                "kind": "LinkedField",
+                "kind": "ScalarField",
                 "alias": null,
+                "name": "imageUrl",
                 "args": null,
-                "concreteType": "Image",
-                "name": "coverImages",
-                "plural": true,
-                "selections": [
-                  {
-                    "kind": "ScalarField",
-                    "alias": null,
-                    "args": null,
-                    "name": "dimention",
-                    "storageKey": null
-                  },
-                  {
-                    "kind": "ScalarField",
-                    "alias": null,
-                    "args": null,
-                    "name": "imageUrl",
-                    "storageKey": null
-                  }
-                ],
                 "storageKey": null
               }
             ]
           }
-        ],
-        "storageKey": null
+        ]
       }
     ]
-  },
-  "text": "query genresContainerQuery {\n  genres {\n    ...genresContainer_genres\n    id\n  }\n}\n\nfragment genresContainer_genres on Genre {\n  id\n  name\n  coverImages {\n    dimention\n    imageUrl\n  }\n}\n"
+  }
 };
-
-module.exports = batch;
+(node/*: any*/).hash = '5f09f5de5e9bc82202b993d79c9cc721';
+module.exports = node;

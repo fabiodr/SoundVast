@@ -7,101 +7,108 @@
 'use strict';
 
 /*::
-import type {ConcreteFragment} from 'relay-runtime';
+import type { ConcreteFragment } from 'relay-runtime';
+type dislikeAudioContainer_audio$ref = any;
+type likeAudioContainer_audio$ref = any;
+import type { FragmentReference } from 'relay-runtime';
+declare export opaque type radioContainer_liveStream$ref: FragmentReference;
 export type radioContainer_liveStream = {|
-  +audioId: number;
-  +name: string;
+  +audioId: number,
+  +name: string,
   +coverImages: ?$ReadOnlyArray<?{|
-    +dimention: string;
-    +imageUrl: string;
-  |}>;
-  +liveStreamUrl: string;
-  +websiteUrl: string;
-  +playCount: number;
-  +likes: number;
-  +dislikes: number;
+    +dimention: string,
+    +imageUrl: string,
+  |}>,
+  +liveStreamUrl: string,
+  +websiteUrl: string,
+  +playCount: number,
+  +likes: number,
+  +dislikes: number,
+  +$fragmentRefs: (likeAudioContainer_audio$ref & dislikeAudioContainer_audio$ref),
+  +$refType: radioContainer_liveStream$ref,
 |};
 */
 
 
-const fragment /*: ConcreteFragment*/ = {
-  "argumentDefinitions": [],
+const node/*: ConcreteFragment*/ = {
   "kind": "Fragment",
-  "metadata": null,
   "name": "radioContainer_liveStream",
+  "type": "LiveStream",
+  "metadata": null,
+  "argumentDefinitions": [],
   "selections": [
     {
       "kind": "ScalarField",
       "alias": null,
-      "args": null,
       "name": "audioId",
+      "args": null,
       "storageKey": null
     },
     {
       "kind": "ScalarField",
       "alias": null,
-      "args": null,
       "name": "name",
+      "args": null,
       "storageKey": null
     },
     {
       "kind": "LinkedField",
       "alias": null,
+      "name": "coverImages",
+      "storageKey": null,
       "args": null,
       "concreteType": "Image",
-      "name": "coverImages",
       "plural": true,
       "selections": [
         {
           "kind": "ScalarField",
           "alias": null,
-          "args": null,
           "name": "dimention",
+          "args": null,
           "storageKey": null
         },
         {
           "kind": "ScalarField",
           "alias": null,
-          "args": null,
           "name": "imageUrl",
+          "args": null,
           "storageKey": null
         }
-      ],
-      "storageKey": null
+      ]
     },
     {
       "kind": "ScalarField",
       "alias": null,
-      "args": null,
       "name": "liveStreamUrl",
+      "args": null,
       "storageKey": null
     },
     {
       "kind": "ScalarField",
       "alias": null,
-      "args": null,
       "name": "websiteUrl",
+      "args": null,
       "storageKey": null
     },
     {
       "kind": "ScalarField",
       "alias": null,
-      "args": null,
       "name": "playCount",
+      "args": null,
       "storageKey": null
     },
     {
       "kind": "ScalarField",
       "alias": null,
-      "args": null,
       "name": "likes",
+      "args": null,
       "storageKey": null
     },
     {
       "kind": "ScalarField",
       "alias": null,
-      "args": null,
       "name": "dislikes",
+      "args": null,
       "storageKey": null
     },
     {
@@ -114,8 +121,7 @@ const fragment /*: ConcreteFragment*/ = {
       "name": "dislikeAudioContainer_audio",
       "args": null
     }
-  ],
-  "type": "LiveStream"
+  ]
 };
-
-module.exports = fragment;
+(node/*: any*/).hash = 'eb9766ea2aabc7c75050e9680cb8edb5';
+module.exports = node;

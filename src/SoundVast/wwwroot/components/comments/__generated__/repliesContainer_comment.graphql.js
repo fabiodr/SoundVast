@@ -7,27 +7,47 @@
 'use strict';
 
 /*::
-import type {ConcreteFragment} from 'relay-runtime';
+import type { ConcreteFragment } from 'relay-runtime';
+type replyContainer_reply$ref = any;
+import type { FragmentReference } from 'relay-runtime';
+declare export opaque type repliesContainer_comment$ref: FragmentReference;
 export type repliesContainer_comment = {|
-  +id: string;
+  +id: string,
   +replies: ?{|
-    +totalCount: ?number;
+    +totalCount: ?number,
     +edges: ?$ReadOnlyArray<?{|
-      +cursor: string;
+      +cursor: string,
       +node: ?{|
-        +commentId: number;
-      |};
-    |}>;
+        +commentId: number,
+        +$fragmentRefs: replyContainer_reply$ref,
+      |},
+    |}>,
     +pageInfo: {|
-      +endCursor: ?string;
-      +hasNextPage: boolean;
-    |};
-  |};
+      +endCursor: ?string,
+      +hasNextPage: boolean,
+    |},
+  |},
+  +$refType: repliesContainer_comment$ref,
 |};
 */
 
 
-const fragment /*: ConcreteFragment*/ = {
+const node/*: ConcreteFragment*/ = {
+  "kind": "Fragment",
+  "name": "repliesContainer_comment",
+  "type": "Comment",
+  "metadata": {
+    "connection": [
+      {
+        "count": "count",
+        "cursor": "cursor",
+        "direction": "forward",
+        "path": [
+          "replies"
+        ]
+      }
+    ]
+  },
   "argumentDefinitions": [
     {
       "kind": "LocalArgument",
@@ -41,71 +61,60 @@ const fragment /*: ConcreteFragment*/ = {
       "type": "String"
     }
   ],
-  "kind": "Fragment",
-  "metadata": {
-    "connection": [
-      {
-        "count": "count",
-        "cursor": "cursor",
-        "direction": "forward",
-        "path": [
-          "replies"
-        ]
-      }
-    ]
-  },
-  "name": "repliesContainer_comment",
   "selections": [
     {
       "kind": "ScalarField",
       "alias": null,
-      "args": null,
       "name": "id",
+      "args": null,
       "storageKey": null
     },
     {
       "kind": "LinkedField",
       "alias": "replies",
+      "name": "__repliesContainer_replies_connection",
+      "storageKey": null,
       "args": null,
       "concreteType": "CommentPayloadConnection",
-      "name": "__repliesContainer_replies_connection",
       "plural": false,
       "selections": [
         {
           "kind": "ScalarField",
           "alias": null,
-          "args": null,
           "name": "totalCount",
+          "args": null,
           "storageKey": null
         },
         {
           "kind": "LinkedField",
           "alias": null,
+          "name": "edges",
+          "storageKey": null,
           "args": null,
           "concreteType": "CommentPayloadEdge",
-          "name": "edges",
           "plural": true,
           "selections": [
             {
               "kind": "ScalarField",
               "alias": null,
-              "args": null,
               "name": "cursor",
+              "args": null,
               "storageKey": null
             },
             {
               "kind": "LinkedField",
               "alias": null,
+              "name": "node",
+              "storageKey": null,
               "args": null,
               "concreteType": "Comment",
-              "name": "node",
               "plural": false,
               "selections": [
                 {
                   "kind": "ScalarField",
                   "alias": null,
-                  "args": null,
                   "name": "commentId",
+                  "args": null,
                   "storageKey": null
                 },
                 {
@@ -116,46 +125,42 @@ const fragment /*: ConcreteFragment*/ = {
                 {
                   "kind": "ScalarField",
                   "alias": null,
-                  "args": null,
                   "name": "__typename",
+                  "args": null,
                   "storageKey": null
                 }
-              ],
-              "storageKey": null
+              ]
             }
-          ],
-          "storageKey": null
+          ]
         },
         {
           "kind": "LinkedField",
           "alias": null,
+          "name": "pageInfo",
+          "storageKey": null,
           "args": null,
           "concreteType": "PageInfo",
-          "name": "pageInfo",
           "plural": false,
           "selections": [
             {
               "kind": "ScalarField",
               "alias": null,
-              "args": null,
               "name": "endCursor",
+              "args": null,
               "storageKey": null
             },
             {
               "kind": "ScalarField",
               "alias": null,
-              "args": null,
               "name": "hasNextPage",
+              "args": null,
               "storageKey": null
             }
-          ],
-          "storageKey": null
+          ]
         }
-      ],
-      "storageKey": null
+      ]
     }
-  ],
-  "type": "Comment"
+  ]
 };
-
-module.exports = fragment;
+(node/*: any*/).hash = 'fdc786d8b022830fe9c3755960b5e2d2';
+module.exports = node;

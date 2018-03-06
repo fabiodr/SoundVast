@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 732a381b72f1f84dafc4e05d63aeffca
+ * @relayHash eda14a2366ac0186874303d3e4bd5a00
  */
 
 /* eslint-disable */
@@ -8,12 +8,12 @@
 'use strict';
 
 /*::
-import type {ConcreteBatch} from 'relay-runtime';
+import type { ConcreteRequest } from 'relay-runtime';
 export type logoutAccountMutationVariables = {| |};
 export type logoutAccountMutationResponse = {|
   +logout: ?{|
-    +clientMutationId: ?string;
-  |};
+    +clientMutationId: ?string,
+  |},
 |};
 */
 
@@ -26,65 +26,49 @@ mutation logoutAccountMutation {
 }
 */
 
-const batch /*: ConcreteBatch*/ = {
-  "fragment": {
-    "argumentDefinitions": [],
-    "kind": "Fragment",
-    "metadata": null,
-    "name": "logoutAccountMutation",
+const node/*: ConcreteRequest*/ = (function(){
+var v0 = [
+  {
+    "kind": "LinkedField",
+    "alias": null,
+    "name": "logout",
+    "storageKey": null,
+    "args": null,
+    "concreteType": "LogoutPayload",
+    "plural": false,
     "selections": [
       {
-        "kind": "LinkedField",
+        "kind": "ScalarField",
         "alias": null,
+        "name": "clientMutationId",
         "args": null,
-        "concreteType": "LogoutPayload",
-        "name": "logout",
-        "plural": false,
-        "selections": [
-          {
-            "kind": "ScalarField",
-            "alias": null,
-            "args": null,
-            "name": "clientMutationId",
-            "storageKey": null
-          }
-        ],
-        "storageKey": null
-      }
-    ],
-    "type": "Mutation"
-  },
-  "id": null,
-  "kind": "Batch",
-  "metadata": {},
-  "name": "logoutAccountMutation",
-  "query": {
-    "argumentDefinitions": [],
-    "kind": "Root",
-    "name": "logoutAccountMutation",
-    "operation": "mutation",
-    "selections": [
-      {
-        "kind": "LinkedField",
-        "alias": null,
-        "args": null,
-        "concreteType": "LogoutPayload",
-        "name": "logout",
-        "plural": false,
-        "selections": [
-          {
-            "kind": "ScalarField",
-            "alias": null,
-            "args": null,
-            "name": "clientMutationId",
-            "storageKey": null
-          }
-        ],
         "storageKey": null
       }
     ]
+  }
+];
+return {
+  "kind": "Request",
+  "operationKind": "mutation",
+  "name": "logoutAccountMutation",
+  "id": null,
+  "text": "mutation logoutAccountMutation {\n  logout {\n    clientMutationId\n  }\n}\n",
+  "metadata": {},
+  "fragment": {
+    "kind": "Fragment",
+    "name": "logoutAccountMutation",
+    "type": "Mutation",
+    "metadata": null,
+    "argumentDefinitions": [],
+    "selections": v0
   },
-  "text": "mutation logoutAccountMutation {\n  logout {\n    clientMutationId\n  }\n}\n"
+  "operation": {
+    "kind": "Operation",
+    "name": "logoutAccountMutation",
+    "argumentDefinitions": [],
+    "selections": v0
+  }
 };
-
-module.exports = batch;
+})();
+(node/*: any*/).hash = 'd649bd8f5ba9f869ffbeb91181fcf39f';
+module.exports = node;

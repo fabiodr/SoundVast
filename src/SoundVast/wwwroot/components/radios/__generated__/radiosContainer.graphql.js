@@ -7,31 +7,52 @@
 'use strict';
 
 /*::
-import type {ConcreteFragment} from 'relay-runtime';
+import type { ConcreteFragment } from 'relay-runtime';
+type radioContainer_liveStream$ref = any;
+type sideBarContainer_audios$ref = any;
+import type { FragmentReference } from 'relay-runtime';
+declare export opaque type radiosContainer$ref: FragmentReference;
 export type radiosContainer = {|
   +liveStreams: ?{|
     +edges: ?$ReadOnlyArray<?{|
-      +cursor: string;
+      +cursor: string,
       +node: ?{|
-        +id: string;
-        +audioId: number;
-        +name: string;
+        +id: string,
+        +audioId: number,
+        +name: string,
         +coverImages: ?$ReadOnlyArray<?{|
-          +dimention: string;
-          +imageUrl: string;
-        |}>;
-        +liveStreamUrl: string;
-      |};
-    |}>;
+          +dimention: string,
+          +imageUrl: string,
+        |}>,
+        +liveStreamUrl: string,
+        +$fragmentRefs: (radioContainer_liveStream$ref & sideBarContainer_audios$ref),
+      |},
+    |}>,
     +pageInfo: {|
-      +hasNextPage: boolean;
-    |};
-  |};
+      +hasNextPage: boolean,
+    |},
+  |},
+  +$refType: radiosContainer$ref,
 |};
 */
 
 
-const fragment /*: ConcreteFragment*/ = {
+const node/*: ConcreteFragment*/ = {
+  "kind": "Fragment",
+  "name": "radiosContainer",
+  "type": "Query",
+  "metadata": {
+    "connection": [
+      {
+        "count": "count",
+        "cursor": "cursor",
+        "direction": "forward",
+        "path": [
+          "liveStreams"
+        ]
+      }
+    ]
+  },
   "argumentDefinitions": [
     {
       "kind": "RootArgument",
@@ -59,24 +80,12 @@ const fragment /*: ConcreteFragment*/ = {
       "type": "FilterInput"
     }
   ],
-  "kind": "Fragment",
-  "metadata": {
-    "connection": [
-      {
-        "count": "count",
-        "cursor": "cursor",
-        "direction": "forward",
-        "path": [
-          "liveStreams"
-        ]
-      }
-    ]
-  },
-  "name": "radiosContainer",
   "selections": [
     {
       "kind": "LinkedField",
       "alias": "liveStreams",
+      "name": "__radiosContainer_liveStreams_connection",
+      "storageKey": null,
       "args": [
         {
           "kind": "Variable",
@@ -98,83 +107,84 @@ const fragment /*: ConcreteFragment*/ = {
         }
       ],
       "concreteType": "LiveStreamPayloadConnection",
-      "name": "__radiosContainer_liveStreams_connection",
       "plural": false,
       "selections": [
         {
           "kind": "LinkedField",
           "alias": null,
+          "name": "edges",
+          "storageKey": null,
           "args": null,
           "concreteType": "LiveStreamPayloadEdge",
-          "name": "edges",
           "plural": true,
           "selections": [
             {
               "kind": "ScalarField",
               "alias": null,
-              "args": null,
               "name": "cursor",
+              "args": null,
               "storageKey": null
             },
             {
               "kind": "LinkedField",
               "alias": null,
+              "name": "node",
+              "storageKey": null,
               "args": null,
               "concreteType": "LiveStream",
-              "name": "node",
               "plural": false,
               "selections": [
                 {
                   "kind": "ScalarField",
                   "alias": null,
-                  "args": null,
                   "name": "id",
+                  "args": null,
                   "storageKey": null
                 },
                 {
                   "kind": "ScalarField",
                   "alias": null,
-                  "args": null,
                   "name": "audioId",
+                  "args": null,
                   "storageKey": null
                 },
                 {
                   "kind": "ScalarField",
                   "alias": null,
-                  "args": null,
                   "name": "name",
+                  "args": null,
                   "storageKey": null
                 },
                 {
                   "kind": "LinkedField",
                   "alias": null,
+                  "name": "coverImages",
+                  "storageKey": null,
                   "args": null,
                   "concreteType": "Image",
-                  "name": "coverImages",
                   "plural": true,
                   "selections": [
                     {
                       "kind": "ScalarField",
                       "alias": null,
-                      "args": null,
                       "name": "dimention",
+                      "args": null,
                       "storageKey": null
                     },
                     {
                       "kind": "ScalarField",
                       "alias": null,
-                      "args": null,
                       "name": "imageUrl",
+                      "args": null,
                       "storageKey": null
                     }
-                  ],
-                  "storageKey": null
+                  ]
                 },
                 {
                   "kind": "ScalarField",
                   "alias": null,
-                  "args": null,
                   "name": "liveStreamUrl",
+                  "args": null,
                   "storageKey": null
                 },
                 {
@@ -190,46 +200,42 @@ const fragment /*: ConcreteFragment*/ = {
                 {
                   "kind": "ScalarField",
                   "alias": null,
-                  "args": null,
                   "name": "__typename",
+                  "args": null,
                   "storageKey": null
                 }
-              ],
-              "storageKey": null
+              ]
             }
-          ],
-          "storageKey": null
+          ]
         },
         {
           "kind": "LinkedField",
           "alias": null,
+          "name": "pageInfo",
+          "storageKey": null,
           "args": null,
           "concreteType": "PageInfo",
-          "name": "pageInfo",
           "plural": false,
           "selections": [
             {
               "kind": "ScalarField",
               "alias": null,
-              "args": null,
               "name": "hasNextPage",
+              "args": null,
               "storageKey": null
             },
             {
               "kind": "ScalarField",
               "alias": null,
-              "args": null,
               "name": "endCursor",
+              "args": null,
               "storageKey": null
             }
-          ],
-          "storageKey": null
+          ]
         }
-      ],
-      "storageKey": null
+      ]
     }
-  ],
-  "type": "Query"
+  ]
 };
-
-module.exports = fragment;
+(node/*: any*/).hash = '094e2ef1f941675782f75bde7accbbc5';
+module.exports = node;

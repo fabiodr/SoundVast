@@ -1,386 +1,150 @@
-# source: http://localhost:8080/graphql
-# timestamp: Sat Feb 03 2018 18:03:10 GMT+0100 (W. Europe Standard Time)
+# source: https://localhost:8080/graphql
+# timestamp: Wed Mar 07 2018 00:26:13 GMT+0100 (W. Europe Standard Time)
 
-input AddSongToPlaylistInput {
-  clientMutationId: String
-  playlistId: Int!
-  songId: Int!
-}
-
-type AddSongToPlaylistPayload {
-  clientMutationId: String
-  playlist: Playlist
-}
-
-type Album implements Node, Audio {
-  # The Id of the Album
-  audioId: Int!
-
-  # The Global Id of the Album
-  id: ID!
-  name: String!
-
-  likes: Int!
-  dislikes: Int!
-  playCount: Int!
-  songs(
-    # Only look at connected edges with cursors greater than the value of `after`.
-    after: String
-
-    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
-    first: Int
-  ): SongPayloadConnection
-
-  # The artists who worked on this album
-  artists(
-    # Only look at connected edges with cursors greater than the value of `after`.
-    after: String
-
-    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
-    first: Int
-  ): ArtistPayloadConnection
-
-  # The date the user added the album
-  dateAdded: Date
-
-  # The user who added the album
-  user: ApplicationUser
-
-  # The different dimention images for the cover image
-  coverImages: [Image]
-
-  # The genres the album belongs to
-  genres: [Genre]
-
-  # The ratings that have been applied by users to this album
-  ratings: [Rating]
-
-  # The top level comments for the album
-  comments(
-    # Only look at connected edges with cursors greater than the value of `after`.
-    after: String
-
-    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
-    first: Int
-  ): CommentPayloadConnection
-}
-
-input AlbumInput {
-  # The existing album id
-  id: Int
-
-  # The name of the new album
-  album: String
-}
-
-# A connection from an object to a list of objects of type `AlbumPayload`.
-type AlbumPayloadConnection {
-  # A count of the total number of objects in this connection, ignoring
-  # pagination. This allows a client to fetch the first five objects by passing
-  # "5" as the argument to `first`, then fetch the total count so it could display
-  # "5 of 83", for example. In cases where we employ infinite scrolling or don't
-  # have an exact count of entries, this field will return `null`.
-  totalCount: Int
-
-  # Information to aid in pagination.
-  pageInfo: PageInfo!
-
-  # Information to aid in pagination.
-  edges: [AlbumPayloadEdge]
-
-  # A list of all of the objects returned in the connection. This is a convenience
-  # field provided for quickly exploring the API; rather than querying for "{
-  # edges { node } }" when no edge data is needed, this field can be used instead.
-  # Note that when clients like Relay need to fetch the "cursor" field on the edge
-  # to enable efficient pagination, this shortcut cannot be used, and the full "{
-  # edges { node } } " version should be used instead.
-  items: [Album]
-}
-
-# An edge in a connection from an object to another object of type `AlbumPayload`.
-type AlbumPayloadEdge {
-  # A cursor for use in pagination
-  cursor: String!
-
-  # The item at the end of the edge
-  node: Album
-}
-
-type ApplicationUser {
-  # The Id of the ApplicationUser
+type ApplicationUser implements Node {
+  """The Id of the ApplicationUser"""
   userId: String!
 
-  id: ID
+  """The Global Id of the ApplicationUser"""
+  id: ID!
   userName: String!
   email: String!
   emailConfirmed: Boolean!
-
-  # The score that the user has earned from contributing
-  contributionScore: Int!
-
-  # The playlists that the user has created.
-  playlists(
-    # Only look at connected edges with cursors greater than the value of `after`.
-    after: String
-
-    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
-    first: Int
-  ): PlaylistPayloadConnection
-
-  # The songs that the user has uploaded
-  uploads: [Song]
-
-  # The songs that the user has liked
-  likedSongs: [Song]
-}
-
-type Artist implements Node, Audio {
-  # The Id of the Artist
-  audioId: Int!
-
-  # The Global Id of the Artist
-  id: ID!
-  name: String!
-
-  likes: Int!
-  dislikes: Int!
-  playCount: Int!
-  songs(
-    # Only look at connected edges with cursors greater than the value of `after`.
-    after: String
-
-    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
-    first: Int
-  ): SongPayloadConnection
-  albums(
-    # Only look at connected edges with cursors greater than the value of `after`.
-    after: String
-
-    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
-    first: Int
-  ): AlbumPayloadConnection
-
-  # The date the user added the artist
-  dateAdded: Date
-
-  # The user who added the artist
-  user: ApplicationUser
-
-  # The different dimention images for the cover image
-  coverImages: [Image]
-
-  # The genres the artist belongs to
-  genres: [Genre]
-
-  # The ratings that have been applied by users to this artist
-  ratings: [Rating]
-
-  # The top level comments for the artist
-  comments(
-    # Only look at connected edges with cursors greater than the value of `after`.
-    after: String
-
-    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
-    first: Int
-  ): CommentPayloadConnection
-}
-
-input ArtistInput {
-  # The existing artist id
-  id: Int
-
-  # The name of the new artist
-  artist: String
-}
-
-# A connection from an object to a list of objects of type `ArtistPayload`.
-type ArtistPayloadConnection {
-  # A count of the total number of objects in this connection, ignoring
-  # pagination. This allows a client to fetch the first five objects by passing
-  # "5" as the argument to `first`, then fetch the total count so it could display
-  # "5 of 83", for example. In cases where we employ infinite scrolling or don't
-  # have an exact count of entries, this field will return `null`.
-  totalCount: Int
-
-  # Information to aid in pagination.
-  pageInfo: PageInfo!
-
-  # Information to aid in pagination.
-  edges: [ArtistPayloadEdge]
-
-  # A list of all of the objects returned in the connection. This is a convenience
-  # field provided for quickly exploring the API; rather than querying for "{
-  # edges { node } }" when no edge data is needed, this field can be used instead.
-  # Note that when clients like Relay need to fetch the "cursor" field on the edge
-  # to enable efficient pagination, this shortcut cannot be used, and the full "{
-  # edges { node } } " version should be used instead.
-  items: [Artist]
-}
-
-# An edge in a connection from an object to another object of type `ArtistPayload`.
-type ArtistPayloadEdge {
-  # A cursor for use in pagination
-  cursor: String!
-
-  # The item at the end of the edge
-  node: Artist
 }
 
 interface Audio {
   id: ID
   audioId: Int!
   name: String!
-
   likes: Int!
   dislikes: Int!
   playCount: Int!
 
-  # The date the user added the audio
-  dateAdded: Date
-
-  # The user who uploaded the audio
-  user: ApplicationUser
-
-  # The different dimention images for the cover image
+  """The different dimention images for the cover image"""
   coverImages: [Image]
 
-  # The genres the audio belongs to
+  """The date the user added the audio"""
+  dateAdded: Date
+
+  """The user who uploaded the audio"""
+  user: ApplicationUser
+
+  """The genres the audio belongs to"""
   genres: [Genre]
 
-  # The ratings that have been applied by users to this audio
+  """The ratings that have been applied by users to this audio"""
   ratings: [Rating]
 
-  # The top level comments for the audio
+  """The top level comments for the audio"""
   comments(
-    # Only look at connected edges with cursors greater than the value of `after`.
+    """
+    Only look at connected edges with cursors greater than the value of `after`.
+    """
     after: String
 
-    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
+    """
+    Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
+    """
     first: Int
   ): CommentPayloadConnection
 }
 
-interface AudioPendingEdit {
-  id: ID
-  audioPendingEditId: Int!
-  name: String!
-
-  # The poster image for the audio
-  coverImageUrl: String!
-
-  # The user who requested the edit
-  contributor: ApplicationUser
-
-  # The genre the audio belongs to
-  genre: Genre
-
-  # The original audio that this edit is modifying
-  audio: Audio
-}
-
 type Comment implements Node {
-  # The Id of the Comment
+  """The Id of the Comment"""
   commentId: Int!
 
-  # The Global Id of the Comment
+  """The Global Id of the Comment"""
   id: ID!
   likes: Int!
   dislikes: Int!
 
-  # The body of the comment
+  """The body of the comment"""
   body: String!
 
-  # The date when the comment was made
+  """The date when the comment was made"""
   dateAdded: Date
 
-  # The user who added the comment
+  """The user who added the comment"""
   user: ApplicationUser!
 
-  # The audio that the comment was added to
+  """The audio that the comment was added to"""
   audio: Audio!
 
-  # The original comment that this is a reply to
+  """The original comment that this is a reply to"""
   originalComment: Comment
 
-  # The reply tree for the top level comments
+  """The reply tree for the top level comments"""
   replies(
-    # Only look at connected edges with cursors greater than the value of `after`.
+    """
+    Only look at connected edges with cursors greater than the value of `after`.
+    """
     after: String
 
-    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
+    """
+    Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
+    """
     first: Int
   ): CommentPayloadConnection
 }
 
-# A connection from an object to a list of objects of type `CommentPayload`.
+"""
+A connection from an object to a list of objects of type `CommentPayload`.
+"""
 type CommentPayloadConnection {
-  # A count of the total number of objects in this connection, ignoring
-  # pagination. This allows a client to fetch the first five objects by passing
-  # "5" as the argument to `first`, then fetch the total count so it could display
-  # "5 of 83", for example. In cases where we employ infinite scrolling or don't
-  # have an exact count of entries, this field will return `null`.
+  """
+  A count of the total number of objects in this connection, ignoring
+  pagination. This allows a client to fetch the first five objects by passing
+  "5" as the argument to `first`, then fetch the total count so it could display
+  "5 of 83", for example. In cases where we employ infinite scrolling or don't
+  have an exact count of entries, this field will return `null`.
+  """
   totalCount: Int
 
-  # Information to aid in pagination.
+  """Information to aid in pagination."""
   pageInfo: PageInfo!
 
-  # Information to aid in pagination.
+  """Information to aid in pagination."""
   edges: [CommentPayloadEdge]
 
-  # A list of all of the objects returned in the connection. This is a convenience
-  # field provided for quickly exploring the API; rather than querying for "{
-  # edges { node } }" when no edge data is needed, this field can be used instead.
-  # Note that when clients like Relay need to fetch the "cursor" field on the edge
-  # to enable efficient pagination, this shortcut cannot be used, and the full "{
-  # edges { node } } " version should be used instead.
+  """
+  A list of all of the objects returned in the connection. This is a convenience
+  field provided for quickly exploring the API; rather than querying for "{
+  edges { node } }" when no edge data is needed, this field can be used instead.
+  Note that when clients like Relay need to fetch the "cursor" field on the edge
+  to enable efficient pagination, this shortcut cannot be used, and the full "{
+  edges { node } } " version should be used instead.
+  """
   items: [Comment]
 }
 
-# An edge in a connection from an object to another object of type `CommentPayload`.
+"""
+An edge in a connection from an object to another object of type `CommentPayload`.
+"""
 type CommentPayloadEdge {
-  # A cursor for use in pagination
+  """A cursor for use in pagination"""
   cursor: String!
 
-  # The item at the end of the edge
+  """The item at the end of the edge"""
   node: Comment
 }
 
-input CreatePlaylistInput {
-  clientMutationId: String
-  name: String!
-}
-
-type CreatePlaylstPayload {
-  clientMutationId: String
-  playlist: Playlist
-}
-
-# The `Date` scalar type represents a timestamp provided in UTC. `Date` expects
-# timestamps to be formatted in accordance with the
-# [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) standard.
+"""
+The `Date` scalar type represents a timestamp provided in UTC. `Date` expects
+timestamps to be formatted in accordance with the
+[ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) standard.
+"""
 scalar Date
 
 scalar Decimal
 
-input EditSongInput {
-  clientMutationId: String
-  pendingSongId: Int!
-  editAccepted: Boolean!
-}
-
-type EditSongPayload {
-  clientMutationId: String
-  song: Song!
-}
-
 type ExternalLoginCallbackPayload {
-  # The existing logged in user
+  """The existing logged in user"""
   user: ApplicationUser
 
-  # The current login provider, i.e facebook, twitter, google etc
+  """The current login provider, i.e facebook, twitter, google etc"""
   loginProvider: String
 
-  # The new users user name
+  """The new users user name"""
   userName: String
 }
 
@@ -393,44 +157,44 @@ type ExternalLoginConfirmationPayload {
   clientMutationId: String
 }
 
-# Provides filtering
+"""Provides filtering"""
 input FilterInput {
-  # Filter by date
+  """Filter by date"""
   newest: Boolean
 
-  # Filter by likes
+  """Filter by likes"""
   ratingFilter: RatingFilterInput
 
-  # Filter by comments
+  """Filter by comments"""
   mostCommented: Boolean
 
-  # Filter by plays
+  """Filter by plays"""
   mostPlayed: Boolean
 
-  # The start date to start filtering from
+  """The start date to start filtering from"""
   dateFrom: Date
 
-  # The end date to end filtering to
+  """The end date to end filtering to"""
   dateTo: Date
 }
 
 type Flag implements Node {
-  # The Id of the Flag
+  """The Id of the Flag"""
   flagId: Int!
 
-  # The Global Id of the Flag
+  """The Global Id of the Flag"""
   id: ID!
 
-  # Any additional details for why the user flagged
+  """Any additional details for why the user flagged"""
   additionalDetails: String!
 
-  # The reason why the user flagged
+  """The reason why the user flagged"""
   reason: String!
 
-  # The audio that the user flagged
+  """The audio that the user flagged"""
   audio: Audio
 
-  # The comment that the user flagged
+  """The comment that the user flagged"""
   comment: Comment
 }
 
@@ -468,143 +232,99 @@ type Genre {
   id: ID
   name: String!
 
-  # The different dimention images for the cover image
+  """The different dimention images for the cover image"""
   coverImages: [Image]
 }
 
 type Image {
-  # The dimention of the image
+  """The dimention of the image"""
   dimention: String!
 
-  # The absolute image url
+  """The absolute image url"""
   imageUrl: String!
 }
 
-type LiveStream implements Node, Audio {
-  # The Id of the LiveStream
+type LiveStream implements Node & Audio {
+  """The Id of the LiveStream"""
   audioId: Int!
 
-  # The Global Id of the LiveStream
+  """The Global Id of the LiveStream"""
   id: ID!
   name: String!
-
   liveStreamUrl: String!
   websiteUrl: String!
   likes: Int!
   dislikes: Int!
   playCount: Int!
 
-  # The date the user added the live stream
-  dateAdded: Date
-
-  # The user who uploaded the live stream
-  user: ApplicationUser
-
-  # The different dimention images for the cover image
+  """The different dimention images for the cover image"""
   coverImages: [Image]
 
-  # The genre the live stream belongs to
+  """The date the user added the live stream"""
+  dateAdded: Date
+
+  """The user who uploaded the live stream"""
+  user: ApplicationUser
+
+  """The genre the live stream belongs to"""
   genres: [Genre]
 
-  # The ratings that have been applied by users to this live stream
+  """The ratings that have been applied by users to this live stream"""
   ratings: [Rating]
 
-  # The top level comments for the live stream
+  """The top level comments for the live stream"""
   comments(
-    # Only look at connected edges with cursors greater than the value of `after`.
+    """
+    Only look at connected edges with cursors greater than the value of `after`.
+    """
     after: String
 
-    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
+    """
+    Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
+    """
     first: Int
   ): CommentPayloadConnection
 }
 
-# A connection from an object to a list of objects of type `LiveStreamPayload`.
+"""
+A connection from an object to a list of objects of type `LiveStreamPayload`.
+"""
 type LiveStreamPayloadConnection {
-  # A count of the total number of objects in this connection, ignoring
-  # pagination. This allows a client to fetch the first five objects by passing
-  # "5" as the argument to `first`, then fetch the total count so it could display
-  # "5 of 83", for example. In cases where we employ infinite scrolling or don't
-  # have an exact count of entries, this field will return `null`.
+  """
+  A count of the total number of objects in this connection, ignoring
+  pagination. This allows a client to fetch the first five objects by passing
+  "5" as the argument to `first`, then fetch the total count so it could display
+  "5 of 83", for example. In cases where we employ infinite scrolling or don't
+  have an exact count of entries, this field will return `null`.
+  """
   totalCount: Int
 
-  # Information to aid in pagination.
+  """Information to aid in pagination."""
   pageInfo: PageInfo!
 
-  # Information to aid in pagination.
+  """Information to aid in pagination."""
   edges: [LiveStreamPayloadEdge]
 
-  # A list of all of the objects returned in the connection. This is a convenience
-  # field provided for quickly exploring the API; rather than querying for "{
-  # edges { node } }" when no edge data is needed, this field can be used instead.
-  # Note that when clients like Relay need to fetch the "cursor" field on the edge
-  # to enable efficient pagination, this shortcut cannot be used, and the full "{
-  # edges { node } } " version should be used instead.
+  """
+  A list of all of the objects returned in the connection. This is a convenience
+  field provided for quickly exploring the API; rather than querying for "{
+  edges { node } }" when no edge data is needed, this field can be used instead.
+  Note that when clients like Relay need to fetch the "cursor" field on the edge
+  to enable efficient pagination, this shortcut cannot be used, and the full "{
+  edges { node } } " version should be used instead.
+  """
   items: [LiveStream]
 }
 
-# An edge in a connection from an object to another object of type `LiveStreamPayload`.
+"""
+An edge in a connection from an object to another object of type `LiveStreamPayload`.
+"""
 type LiveStreamPayloadEdge {
-  # A cursor for use in pagination
+  """A cursor for use in pagination"""
   cursor: String!
 
-  # The item at the end of the edge
+  """The item at the end of the edge"""
   node: LiveStream
-}
-
-type LiveStreamPendingEdit implements Node, AudioPendingEdit {
-  # The Id of the LiveStreamPendingEdit
-  audioPendingEditId: Int!
-
-  # The Global Id of the LiveStreamPendingEdit
-  id: ID!
-  name: String!
-
-  # The poster image for the live stream
-  coverImageUrl: String!
-  liveStreamUrl: String!
-
-  # The user who requested the edit
-  contributor: ApplicationUser
-
-  # The genre the live stream belongs to
-  genre: Genre
-
-  # The original live stream that this edit is modifying
-  audio: LiveStream
-}
-
-# A connection from an object to a list of objects of type `LiveStreamPendingEditPayload`.
-type LiveStreamPendingEditPayloadConnection {
-  # A count of the total number of objects in this connection, ignoring
-  # pagination. This allows a client to fetch the first five objects by passing
-  # "5" as the argument to `first`, then fetch the total count so it could display
-  # "5 of 83", for example. In cases where we employ infinite scrolling or don't
-  # have an exact count of entries, this field will return `null`.
-  totalCount: Int
-
-  # Information to aid in pagination.
-  pageInfo: PageInfo!
-
-  # Information to aid in pagination.
-  edges: [LiveStreamPendingEditPayloadEdge]
-
-  # A list of all of the objects returned in the connection. This is a convenience
-  # field provided for quickly exploring the API; rather than querying for "{
-  # edges { node } }" when no edge data is needed, this field can be used instead.
-  # Note that when clients like Relay need to fetch the "cursor" field on the edge
-  # to enable efficient pagination, this shortcut cannot be used, and the full "{
-  # edges { node } } " version should be used instead.
-  items: [LiveStreamPendingEdit]
-}
-
-# An edge in a connection from an object to another object of type `LiveStreamPendingEditPayload`.
-type LiveStreamPendingEditPayloadEdge {
-  # A cursor for use in pagination
-  cursor: String!
-
-  # The item at the end of the edge
-  node: LiveStreamPendingEdit
 }
 
 input LoginInput {
@@ -630,7 +350,6 @@ type LogoutPayload {
 
 type Mutation {
   updatePlayCount(input: UpdatePlayCountInput!): UpdatePlayCountPayload
-  saveSong(input: SaveSongInput!): SaveSongPayload
   saveLiveStream(input: SaveLiveStreamInput!): SaveLiveStreamPayload
   rateAudio(input: RateInput!): RateAudioPayload
   rateComment(input: RateInput!): RateAudioPayload
@@ -644,202 +363,73 @@ type Mutation {
   comment(input: SaveCommentInput!): SaveCommentPayload
   flagAudio(input: FlagAudioInput!): FlagObjectPayload
   flagComment(input: FlagCommentInput!): FlagObjectPayload
-  requestSongEdit(input: RequestEditSongInput!): RequestEditSongPayload
-  editSong(input: EditSongInput!): EditSongPayload
-  createPlaylist(input: CreatePlaylistInput!): CreatePlaylstPayload
-  addSongToPlaylist(input: AddSongToPlaylistInput!): AddSongToPlaylistPayload
 }
 
 interface Node {
-  # Global node Id
+  """Global node Id"""
   id: ID
 }
 
-# Information about pagination in a connection.
+"""Information about pagination in a connection."""
 type PageInfo {
-  # When paginating forwards, are there more items?
+  """When paginating forwards, are there more items?"""
   hasNextPage: Boolean!
 
-  # When paginating backwards, are there more items?
+  """When paginating backwards, are there more items?"""
   hasPreviousPage: Boolean!
 
-  # When paginating backwards, the cursor to continue.
+  """When paginating backwards, the cursor to continue."""
   startCursor: String
 
-  # When paginating forwards, the cursor to continue.
+  """When paginating forwards, the cursor to continue."""
   endCursor: String
 }
 
-type Playlist implements Node {
-  # The Id of the Playlist
-  playlistId: Int!
-
-  # The Global Id of the Playlist
-  id: ID!
-
-  # The name that the user gave the playlist
-  name: String!
-
-  # The cover image url for the playlist. Set to the first song in it.
-  coverImageUrl: String
-
-  # The user who created the playlist
-  user: ApplicationUser!
-
-  # The songs in the playlist.
-  songs(
-    # Only look at connected edges with cursors greater than the value of `after`.
-    after: String
-
-    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
-    first: Int
-  ): SongPayloadConnection
-}
-
-# A connection from an object to a list of objects of type `PlaylistPayload`.
-type PlaylistPayloadConnection {
-  # A count of the total number of objects in this connection, ignoring
-  # pagination. This allows a client to fetch the first five objects by passing
-  # "5" as the argument to `first`, then fetch the total count so it could display
-  # "5 of 83", for example. In cases where we employ infinite scrolling or don't
-  # have an exact count of entries, this field will return `null`.
-  totalCount: Int
-
-  # Information to aid in pagination.
-  pageInfo: PageInfo!
-
-  # Information to aid in pagination.
-  edges: [PlaylistPayloadEdge]
-
-  # A list of all of the objects returned in the connection. This is a convenience
-  # field provided for quickly exploring the API; rather than querying for "{
-  # edges { node } }" when no edge data is needed, this field can be used instead.
-  # Note that when clients like Relay need to fetch the "cursor" field on the edge
-  # to enable efficient pagination, this shortcut cannot be used, and the full "{
-  # edges { node } } " version should be used instead.
-  items: [Playlist]
-}
-
-# An edge in a connection from an object to another object of type `PlaylistPayload`.
-type PlaylistPayloadEdge {
-  # A cursor for use in pagination
-  cursor: String!
-
-  # The item at the end of the edge
-  node: Playlist
-}
-
 type Query {
-  # Fetches an object given its global Id
+  """Fetches an object given its global Id"""
   node(
-    # The global Id of the object
+    """The global Id of the object"""
     id: ID!
   ): Node
-  song(
-    # The id of the song
-    id: Int
-  ): Song
-  playlist(
-    # The id of the playlist
-    id: Int!
-  ): Playlist
   quote: Quote
-  songs(
-    # Only look at connected edges with cursors greater than the value of `after`.
-    after: String
-
-    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
-    first: Int
-
-    # The genre that the song belongs to
-    genre: String
-
-    # The search query to filter the songs against
-    searchQuery: String
-
-    # The filters to apply to the songs
-    filter: FilterInput
-  ): SongPayloadConnection
-  artists(
-    # Only look at connected edges with cursors greater than the value of `after`.
-    after: String
-
-    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
-    first: Int
-
-    # The genre that the artist belongs to
-    genre: String
-
-    # The search query to filter the artists against
-    searchQuery: String
-
-    # The filters to apply to the artists
-    filter: FilterInput
-  ): ArtistPayloadConnection
-  albums(
-    # Only look at connected edges with cursors greater than the value of `after`.
-    after: String
-
-    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
-    first: Int
-
-    # The genre that the album belongs to
-    genre: String
-
-    # The search query to filter the albums against
-    searchQuery: String
-
-    # The filters to apply to the albums
-    filter: FilterInput
-  ): AlbumPayloadConnection
   liveStreams(
-    # Only look at connected edges with cursors greater than the value of `after`.
+    """
+    Only look at connected edges with cursors greater than the value of `after`.
+    """
     after: String
 
-    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
+    """
+    Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
+    """
     first: Int
 
-    # The genre that the live stream belongs to
+    """The genre that the live stream belongs to"""
     genre: String
 
-    # The search query to filter the liveStreams against
+    """The search query to filter the liveStreams against"""
     searchQuery: String
 
-    # The filters to apply to the live streams
+    """The filters to apply to the live streams"""
     filter: FilterInput
   ): LiveStreamPayloadConnection
-  songsPendingEdit(
-    # Only look at connected edges with cursors greater than the value of `after`.
-    after: String
-
-    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
-    first: Int
-  ): SongPendingEditPayloadConnection
-  liveStreamsPendingEdit(
-    # Only look at connected edges with cursors greater than the value of `after`.
-    after: String
-
-    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
-    first: Int
-  ): LiveStreamPendingEditPayloadConnection
   genres: [Genre]
   user: ApplicationUser
   externalLoginCallback: ExternalLoginCallbackPayload
   confirmEmail(
-    # The id of the user
+    """The id of the user"""
     userId: String!
 
-    # The unique code to verify the email
+    """The unique code to verify the email"""
     token: String!
   ): Boolean
   loginProviders: [LoginProvider]
 }
 
 type Quote implements Node {
-  # The Id of the Quote
+  """The Id of the Quote"""
   quoteId: Int!
 
-  # The Global Id of the Quote
+  """The Global Id of the Quote"""
   id: ID!
   quotation: String!
 }
@@ -856,29 +446,31 @@ input RateInput {
 }
 
 type Rating implements Node {
-  # The Id of the Rating
+  """The Id of the Rating"""
   ratingId: Int!
 
-  # The Global Id of the Rating
+  """The Global Id of the Rating"""
   id: ID!
 
-  # Whether the user has liked the audio or not
+  """Whether the user has liked the audio or not"""
   liked: Boolean!
 
-  # The user that rated the audio
+  """The user that rated the audio"""
   user: ApplicationUser
 
-  # The audio that was rated by the user
+  """The audio that was rated by the user"""
   audio: Audio
 
-  # The comment that was rated by the user
+  """The comment that was rated by the user"""
   comment: Comment
 }
 
 input RatingFilterInput {
   topRated: Boolean
 
-  # The minimum number of ratings that need to have been applied for this filter to have any effect
+  """
+  The minimum number of ratings that need to have been applied for this filter to have any effect
+  """
   minimumNumberOfRatingsThreshold: Int
 }
 
@@ -893,24 +485,6 @@ type RegisterPayload {
   clientMutationId: String
   user: ApplicationUser
   emailConfirmationToken: String
-}
-
-input RequestEditSongInput {
-  clientMutationId: String
-  songId: Int!
-  name: String!
-  artists: [ArtistInput]
-  album: String
-
-  # The existing albums id
-  albumId: Int
-  free: Boolean!
-  coverImageUrl: String!
-  genreId: Int
-}
-
-type RequestEditSongPayload {
-  clientMutationId: String
 }
 
 input ResetPasswordInput {
@@ -941,7 +515,7 @@ input SaveLiveStreamInput {
   name: String!
   liveStreamUrl: String!
   websiteUrl: String!
-  coverImageUrl: String!
+  coverImageName: String!
   tags: [TagInput]
   genreIds: [Int]
 }
@@ -949,26 +523,6 @@ input SaveLiveStreamInput {
 type SaveLiveStreamPayload {
   clientMutationId: String
   liveStream: LiveStream!
-}
-
-input SaveSongInput {
-  clientMutationId: String
-  name: String!
-  artists: [ArtistInput]
-  album: AlbumInput
-  releaseDate: Date
-  free: Boolean
-  tags: [TagInput]
-  coverImageUrl: String!
-  genreIds: [Int]
-}
-
-type SaveSongPayload {
-  clientMutationId: String
-  song: Song!
-
-  # The amount of contribution points the user earns from uploading a song
-  contributionPoints: Int!
 }
 
 input SendEmailInput {
@@ -982,142 +536,11 @@ type SendEmailPayload {
   clientMutationId: String
 }
 
-type Song implements Node, Audio {
-  # The Id of the Song
-  audioId: Int!
-
-  # The Global Id of the Song
-  id: ID!
-  name: String!
-
-  artists: [Artist]
-  free: Boolean!
-  likes: Int!
-  dislikes: Int!
-  playCount: Int!
-
-  # The date the user added the song
-  dateAdded: Date
-
-  # The date the song was released
-  releaseDate: Date
-
-  # The user who uploaded the song
-  user: ApplicationUser
-
-  # The different dimention images for the cover image
-  coverImages: [Image]
-
-  # The genre the song belongs to
-  genres: [Genre]
-
-  # The ratings that have been applied by users to this song
-  ratings: [Rating]
-
-  # The top level comments for the song
-  comments(
-    # Only look at connected edges with cursors greater than the value of `after`.
-    after: String
-
-    # Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
-    first: Int
-  ): CommentPayloadConnection
-}
-
-# A connection from an object to a list of objects of type `SongPayload`.
-type SongPayloadConnection {
-  # A count of the total number of objects in this connection, ignoring
-  # pagination. This allows a client to fetch the first five objects by passing
-  # "5" as the argument to `first`, then fetch the total count so it could display
-  # "5 of 83", for example. In cases where we employ infinite scrolling or don't
-  # have an exact count of entries, this field will return `null`.
-  totalCount: Int
-
-  # Information to aid in pagination.
-  pageInfo: PageInfo!
-
-  # Information to aid in pagination.
-  edges: [SongPayloadEdge]
-
-  # A list of all of the objects returned in the connection. This is a convenience
-  # field provided for quickly exploring the API; rather than querying for "{
-  # edges { node } }" when no edge data is needed, this field can be used instead.
-  # Note that when clients like Relay need to fetch the "cursor" field on the edge
-  # to enable efficient pagination, this shortcut cannot be used, and the full "{
-  # edges { node } } " version should be used instead.
-  items: [Song]
-}
-
-# An edge in a connection from an object to another object of type `SongPayload`.
-type SongPayloadEdge {
-  # A cursor for use in pagination
-  cursor: String!
-
-  # The item at the end of the edge
-  node: Song
-}
-
-type SongPendingEdit implements Node, AudioPendingEdit {
-  # The Id of the SongPendingEdit
-  audioPendingEditId: Int!
-
-  # The Global Id of the SongPendingEdit
-  id: ID!
-  name: String!
-
-  # The poster image for the song
-  coverImageUrl: String!
-  artists: [Artist]
-  free: Boolean!
-
-  # The user who requested the edit
-  contributor: ApplicationUser
-
-  # The genre the song belongs to
-  genre: Genre
-
-  # The original song that this edit is modifying
-  audio: Song
-}
-
-# A connection from an object to a list of objects of type `SongPendingEditPayload`.
-type SongPendingEditPayloadConnection {
-  # A count of the total number of objects in this connection, ignoring
-  # pagination. This allows a client to fetch the first five objects by passing
-  # "5" as the argument to `first`, then fetch the total count so it could display
-  # "5 of 83", for example. In cases where we employ infinite scrolling or don't
-  # have an exact count of entries, this field will return `null`.
-  totalCount: Int
-
-  # Information to aid in pagination.
-  pageInfo: PageInfo!
-
-  # Information to aid in pagination.
-  edges: [SongPendingEditPayloadEdge]
-
-  # A list of all of the objects returned in the connection. This is a convenience
-  # field provided for quickly exploring the API; rather than querying for "{
-  # edges { node } }" when no edge data is needed, this field can be used instead.
-  # Note that when clients like Relay need to fetch the "cursor" field on the edge
-  # to enable efficient pagination, this shortcut cannot be used, and the full "{
-  # edges { node } } " version should be used instead.
-  items: [SongPendingEdit]
-}
-
-# An edge in a connection from an object to another object of type `SongPendingEditPayload`.
-type SongPendingEditPayloadEdge {
-  # A cursor for use in pagination
-  cursor: String!
-
-  # The item at the end of the edge
-  node: SongPendingEdit
-}
-
 input TagInput {
-  # The existing tag id
+  """The existing tag id"""
   id: Int
 
-  # The name of the new tag
+  """The name of the new tag"""
   tag: String
 }
 

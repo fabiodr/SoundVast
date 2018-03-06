@@ -7,28 +7,31 @@
 'use strict';
 
 /*::
-import type {ConcreteFragment} from 'relay-runtime';
+import type { ConcreteFragment } from 'relay-runtime';
+import type { FragmentReference } from 'relay-runtime';
+declare export opaque type withAuthorization_user$ref: FragmentReference;
 export type withAuthorization_user = {|
-  +userName: string;
+  +userName: string,
+  +$refType: withAuthorization_user$ref,
 |};
 */
 
 
-const fragment /*: ConcreteFragment*/ = {
-  "argumentDefinitions": [],
+const node/*: ConcreteFragment*/ = {
   "kind": "Fragment",
-  "metadata": null,
   "name": "withAuthorization_user",
+  "type": "ApplicationUser",
+  "metadata": null,
+  "argumentDefinitions": [],
   "selections": [
     {
       "kind": "ScalarField",
       "alias": null,
-      "args": null,
       "name": "userName",
+      "args": null,
       "storageKey": null
     }
-  ],
-  "type": "ApplicationUser"
+  ]
 };
-
-module.exports = fragment;
+(node/*: any*/).hash = '694c448701ff443fa8d9c9388efda4d2';
+module.exports = node;

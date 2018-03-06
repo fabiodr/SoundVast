@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 46bc57e23d9b807496cb668446fdf9ae
+ * @relayHash d07dab946591695cd3e23e1492dbd50d
  */
 
 /* eslint-disable */
@@ -8,23 +8,23 @@
 'use strict';
 
 /*::
-import type {ConcreteBatch} from 'relay-runtime';
+import type { ConcreteRequest } from 'relay-runtime';
 export type rateCommentMutationVariables = {|
   input: {
-    clientMutationId?: ?string;
-    id: number;
-    liked: boolean;
-  };
+    clientMutationId?: ?string,
+    id: number,
+    liked: boolean,
+  },
 |};
 export type rateCommentMutationResponse = {|
   +rateComment: ?{|
     +rating: ?{|
       +comment: ?{|
-        +likes: number;
-        +dislikes: number;
-      |};
-    |};
-  |};
+        +likes: number,
+        +dislikes: number,
+      |},
+    |},
+  |},
 |};
 */
 
@@ -46,165 +46,140 @@ mutation rateCommentMutation(
 }
 */
 
-const batch /*: ConcreteBatch*/ = {
-  "fragment": {
-    "argumentDefinitions": [
-      {
-        "kind": "LocalArgument",
-        "name": "input",
-        "type": "RateInput!",
-        "defaultValue": null
-      }
-    ],
-    "kind": "Fragment",
-    "metadata": null,
-    "name": "rateCommentMutation",
-    "selections": [
-      {
-        "kind": "LinkedField",
-        "alias": null,
-        "args": [
-          {
-            "kind": "Variable",
-            "name": "input",
-            "variableName": "input",
-            "type": "RateInput!"
-          }
-        ],
-        "concreteType": "RateAudioPayload",
-        "name": "rateComment",
-        "plural": false,
-        "selections": [
-          {
-            "kind": "LinkedField",
-            "alias": null,
-            "args": null,
-            "concreteType": "Rating",
-            "name": "rating",
-            "plural": false,
-            "selections": [
-              {
-                "kind": "LinkedField",
-                "alias": null,
-                "args": null,
-                "concreteType": "Comment",
-                "name": "comment",
-                "plural": false,
-                "selections": [
-                  {
-                    "kind": "ScalarField",
-                    "alias": null,
-                    "args": null,
-                    "name": "likes",
-                    "storageKey": null
-                  },
-                  {
-                    "kind": "ScalarField",
-                    "alias": null,
-                    "args": null,
-                    "name": "dislikes",
-                    "storageKey": null
-                  }
-                ],
-                "storageKey": null
-              }
-            ],
-            "storageKey": null
-          }
-        ],
-        "storageKey": null
-      }
-    ],
-    "type": "Mutation"
-  },
-  "id": null,
-  "kind": "Batch",
-  "metadata": {},
+const node/*: ConcreteRequest*/ = (function(){
+var v0 = [
+  {
+    "kind": "LocalArgument",
+    "name": "input",
+    "type": "RateInput!",
+    "defaultValue": null
+  }
+],
+v1 = [
+  {
+    "kind": "Variable",
+    "name": "input",
+    "variableName": "input",
+    "type": "RateInput!"
+  }
+],
+v2 = {
+  "kind": "ScalarField",
+  "alias": null,
+  "name": "likes",
+  "args": null,
+  "storageKey": null
+},
+v3 = {
+  "kind": "ScalarField",
+  "alias": null,
+  "name": "dislikes",
+  "args": null,
+  "storageKey": null
+},
+v4 = {
+  "kind": "ScalarField",
+  "alias": null,
+  "name": "id",
+  "args": null,
+  "storageKey": null
+};
+return {
+  "kind": "Request",
+  "operationKind": "mutation",
   "name": "rateCommentMutation",
-  "query": {
-    "argumentDefinitions": [
-      {
-        "kind": "LocalArgument",
-        "name": "input",
-        "type": "RateInput!",
-        "defaultValue": null
-      }
-    ],
-    "kind": "Root",
+  "id": null,
+  "text": "mutation rateCommentMutation(\n  $input: RateInput!\n) {\n  rateComment(input: $input) {\n    rating {\n      comment {\n        likes\n        dislikes\n        id\n      }\n      id\n    }\n  }\n}\n",
+  "metadata": {},
+  "fragment": {
+    "kind": "Fragment",
     "name": "rateCommentMutation",
-    "operation": "mutation",
+    "type": "Mutation",
+    "metadata": null,
+    "argumentDefinitions": v0,
     "selections": [
       {
         "kind": "LinkedField",
         "alias": null,
-        "args": [
-          {
-            "kind": "Variable",
-            "name": "input",
-            "variableName": "input",
-            "type": "RateInput!"
-          }
-        ],
-        "concreteType": "RateAudioPayload",
         "name": "rateComment",
+        "storageKey": null,
+        "args": v1,
+        "concreteType": "RateAudioPayload",
         "plural": false,
         "selections": [
           {
             "kind": "LinkedField",
             "alias": null,
+            "name": "rating",
+            "storageKey": null,
             "args": null,
             "concreteType": "Rating",
-            "name": "rating",
             "plural": false,
             "selections": [
               {
                 "kind": "LinkedField",
                 "alias": null,
+                "name": "comment",
+                "storageKey": null,
                 "args": null,
                 "concreteType": "Comment",
-                "name": "comment",
                 "plural": false,
                 "selections": [
-                  {
-                    "kind": "ScalarField",
-                    "alias": null,
-                    "args": null,
-                    "name": "likes",
-                    "storageKey": null
-                  },
-                  {
-                    "kind": "ScalarField",
-                    "alias": null,
-                    "args": null,
-                    "name": "dislikes",
-                    "storageKey": null
-                  },
-                  {
-                    "kind": "ScalarField",
-                    "alias": null,
-                    "args": null,
-                    "name": "id",
-                    "storageKey": null
-                  }
-                ],
-                "storageKey": null
-              },
-              {
-                "kind": "ScalarField",
-                "alias": null,
-                "args": null,
-                "name": "id",
-                "storageKey": null
+                  v2,
+                  v3
+                ]
               }
-            ],
-            "storageKey": null
+            ]
           }
-        ],
-        "storageKey": null
+        ]
       }
     ]
   },
-  "text": "mutation rateCommentMutation(\n  $input: RateInput!\n) {\n  rateComment(input: $input) {\n    rating {\n      comment {\n        likes\n        dislikes\n        id\n      }\n      id\n    }\n  }\n}\n"
+  "operation": {
+    "kind": "Operation",
+    "name": "rateCommentMutation",
+    "argumentDefinitions": v0,
+    "selections": [
+      {
+        "kind": "LinkedField",
+        "alias": null,
+        "name": "rateComment",
+        "storageKey": null,
+        "args": v1,
+        "concreteType": "RateAudioPayload",
+        "plural": false,
+        "selections": [
+          {
+            "kind": "LinkedField",
+            "alias": null,
+            "name": "rating",
+            "storageKey": null,
+            "args": null,
+            "concreteType": "Rating",
+            "plural": false,
+            "selections": [
+              {
+                "kind": "LinkedField",
+                "alias": null,
+                "name": "comment",
+                "storageKey": null,
+                "args": null,
+                "concreteType": "Comment",
+                "plural": false,
+                "selections": [
+                  v2,
+                  v3,
+                  v4
+                ]
+              },
+              v4
+            ]
+          }
+        ]
+      }
+    ]
+  }
 };
-
-module.exports = batch;
+})();
+(node/*: any*/).hash = '1fbdf224ea3e3217477663c373c3e91f';
+module.exports = node;

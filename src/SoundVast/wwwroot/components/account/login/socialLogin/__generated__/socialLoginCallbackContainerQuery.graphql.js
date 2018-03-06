@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 7058a402cc1005b70e48865c98bb5d60
+ * @relayHash 3ab43324c83f548676088ea31634f54b
  */
 
 /* eslint-disable */
@@ -8,15 +8,16 @@
 'use strict';
 
 /*::
-import type {ConcreteBatch} from 'relay-runtime';
+import type { ConcreteRequest } from 'relay-runtime';
+export type socialLoginCallbackContainerQueryVariables = {| |};
 export type socialLoginCallbackContainerQueryResponse = {|
   +externalLoginCallback: ?{|
-    +loginProvider: ?string;
-    +userName: ?string;
+    +loginProvider: ?string,
+    +userName: ?string,
     +user: ?{|
-      +userName: string;
-    |};
-  |};
+      +userName: string,
+    |},
+  |},
 |};
 */
 
@@ -34,122 +35,102 @@ query socialLoginCallbackContainerQuery {
 }
 */
 
-const batch /*: ConcreteBatch*/ = {
-  "fragment": {
-    "argumentDefinitions": [],
-    "kind": "Fragment",
-    "metadata": null,
-    "name": "socialLoginCallbackContainerQuery",
-    "selections": [
-      {
-        "kind": "LinkedField",
-        "alias": null,
-        "args": null,
-        "concreteType": "ExternalLoginCallbackPayload",
-        "name": "externalLoginCallback",
-        "plural": false,
-        "selections": [
-          {
-            "kind": "ScalarField",
-            "alias": null,
-            "args": null,
-            "name": "loginProvider",
-            "storageKey": null
-          },
-          {
-            "kind": "ScalarField",
-            "alias": null,
-            "args": null,
-            "name": "userName",
-            "storageKey": null
-          },
-          {
-            "kind": "LinkedField",
-            "alias": null,
-            "args": null,
-            "concreteType": "ApplicationUser",
-            "name": "user",
-            "plural": false,
-            "selections": [
-              {
-                "kind": "ScalarField",
-                "alias": null,
-                "args": null,
-                "name": "userName",
-                "storageKey": null
-              }
-            ],
-            "storageKey": null
-          }
-        ],
-        "storageKey": null
-      }
-    ],
-    "type": "Query"
-  },
-  "id": null,
-  "kind": "Batch",
-  "metadata": {},
+const node/*: ConcreteRequest*/ = (function(){
+var v0 = {
+  "kind": "ScalarField",
+  "alias": null,
+  "name": "loginProvider",
+  "args": null,
+  "storageKey": null
+},
+v1 = {
+  "kind": "ScalarField",
+  "alias": null,
+  "name": "userName",
+  "args": null,
+  "storageKey": null
+};
+return {
+  "kind": "Request",
+  "operationKind": "query",
   "name": "socialLoginCallbackContainerQuery",
-  "query": {
-    "argumentDefinitions": [],
-    "kind": "Root",
+  "id": null,
+  "text": "query socialLoginCallbackContainerQuery {\n  externalLoginCallback {\n    loginProvider\n    userName\n    user {\n      userName\n      id\n    }\n  }\n}\n",
+  "metadata": {},
+  "fragment": {
+    "kind": "Fragment",
     "name": "socialLoginCallbackContainerQuery",
-    "operation": "query",
+    "type": "Query",
+    "metadata": null,
+    "argumentDefinitions": [],
     "selections": [
       {
         "kind": "LinkedField",
         "alias": null,
+        "name": "externalLoginCallback",
+        "storageKey": null,
         "args": null,
         "concreteType": "ExternalLoginCallbackPayload",
-        "name": "externalLoginCallback",
         "plural": false,
         "selections": [
-          {
-            "kind": "ScalarField",
-            "alias": null,
-            "args": null,
-            "name": "loginProvider",
-            "storageKey": null
-          },
-          {
-            "kind": "ScalarField",
-            "alias": null,
-            "args": null,
-            "name": "userName",
-            "storageKey": null
-          },
+          v0,
+          v1,
           {
             "kind": "LinkedField",
             "alias": null,
+            "name": "user",
+            "storageKey": null,
             "args": null,
             "concreteType": "ApplicationUser",
-            "name": "user",
             "plural": false,
             "selections": [
-              {
-                "kind": "ScalarField",
-                "alias": null,
-                "args": null,
-                "name": "userName",
-                "storageKey": null
-              },
-              {
-                "kind": "ScalarField",
-                "alias": null,
-                "args": null,
-                "name": "id",
-                "storageKey": null
-              }
-            ],
-            "storageKey": null
+              v1
+            ]
           }
-        ],
-        "storageKey": null
+        ]
       }
     ]
   },
-  "text": "query socialLoginCallbackContainerQuery {\n  externalLoginCallback {\n    loginProvider\n    userName\n    user {\n      userName\n      id\n    }\n  }\n}\n"
+  "operation": {
+    "kind": "Operation",
+    "name": "socialLoginCallbackContainerQuery",
+    "argumentDefinitions": [],
+    "selections": [
+      {
+        "kind": "LinkedField",
+        "alias": null,
+        "name": "externalLoginCallback",
+        "storageKey": null,
+        "args": null,
+        "concreteType": "ExternalLoginCallbackPayload",
+        "plural": false,
+        "selections": [
+          v0,
+          v1,
+          {
+            "kind": "LinkedField",
+            "alias": null,
+            "name": "user",
+            "storageKey": null,
+            "args": null,
+            "concreteType": "ApplicationUser",
+            "plural": false,
+            "selections": [
+              v1,
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "name": "id",
+                "args": null,
+                "storageKey": null
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
 };
-
-module.exports = batch;
+})();
+(node/*: any*/).hash = 'fe4ee4d91512d8642c795a9d221e1549';
+module.exports = node;

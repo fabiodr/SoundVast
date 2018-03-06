@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 1eaa95b2153f5604c63d56b2b7b68e15
+ * @relayHash 0e5b5c32e1594a2c0acbc521e3cfe837
  */
 
 /* eslint-disable */
@@ -8,9 +8,13 @@
 'use strict';
 
 /*::
-import type {ConcreteBatch} from 'relay-runtime';
+import type { ConcreteRequest } from 'relay-runtime';
+type errorPageContainer_quote$ref = any;
+export type errorPageContainerQueryVariables = {| |};
 export type errorPageContainerQueryResponse = {|
-  +quote: ?{| |};
+  +quote: ?{|
+    +$fragmentRefs: errorPageContainer_quote$ref,
+  |},
 |};
 */
 
@@ -28,19 +32,27 @@ fragment errorPageContainer_quote on Quote {
 }
 */
 
-const batch /*: ConcreteBatch*/ = {
+const node/*: ConcreteRequest*/ = {
+  "kind": "Request",
+  "operationKind": "query",
+  "name": "errorPageContainerQuery",
+  "id": null,
+  "text": "query errorPageContainerQuery {\n  quote {\n    ...errorPageContainer_quote\n    id\n  }\n}\n\nfragment errorPageContainer_quote on Quote {\n  quotation\n}\n",
+  "metadata": {},
   "fragment": {
-    "argumentDefinitions": [],
     "kind": "Fragment",
-    "metadata": null,
     "name": "errorPageContainerQuery",
+    "type": "Query",
+    "metadata": null,
+    "argumentDefinitions": [],
     "selections": [
       {
         "kind": "LinkedField",
         "alias": null,
+        "name": "quote",
+        "storageKey": null,
         "args": null,
         "concreteType": "Quote",
-        "name": "quote",
         "plural": false,
         "selections": [
           {
@@ -48,50 +60,42 @@ const batch /*: ConcreteBatch*/ = {
             "name": "errorPageContainer_quote",
             "args": null
           }
-        ],
-        "storageKey": null
+        ]
       }
-    ],
-    "type": "Query"
+    ]
   },
-  "id": null,
-  "kind": "Batch",
-  "metadata": {},
-  "name": "errorPageContainerQuery",
-  "query": {
-    "argumentDefinitions": [],
-    "kind": "Root",
+  "operation": {
+    "kind": "Operation",
     "name": "errorPageContainerQuery",
-    "operation": "query",
+    "argumentDefinitions": [],
     "selections": [
       {
         "kind": "LinkedField",
         "alias": null,
+        "name": "quote",
+        "storageKey": null,
         "args": null,
         "concreteType": "Quote",
-        "name": "quote",
         "plural": false,
         "selections": [
           {
             "kind": "ScalarField",
             "alias": null,
-            "args": null,
             "name": "quotation",
+            "args": null,
             "storageKey": null
           },
           {
             "kind": "ScalarField",
             "alias": null,
-            "args": null,
             "name": "id",
+            "args": null,
             "storageKey": null
           }
-        ],
-        "storageKey": null
+        ]
       }
     ]
-  },
-  "text": "query errorPageContainerQuery {\n  quote {\n    ...errorPageContainer_quote\n    id\n  }\n}\n\nfragment errorPageContainer_quote on Quote {\n  quotation\n}\n"
+  }
 };
-
-module.exports = batch;
+(node/*: any*/).hash = '5c037a36fe5fa0e1d695b500b47a0319';
+module.exports = node;

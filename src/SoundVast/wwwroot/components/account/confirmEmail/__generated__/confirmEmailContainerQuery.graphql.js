@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 083acc7ad9ff60eee906a568235e494e
+ * @relayHash 1baedeb0c9f6a2f93c5a77382cd2930b
  */
 
 /* eslint-disable */
@@ -8,9 +8,13 @@
 'use strict';
 
 /*::
-import type {ConcreteBatch} from 'relay-runtime';
+import type { ConcreteRequest } from 'relay-runtime';
+export type confirmEmailContainerQueryVariables = {|
+  userId: string,
+  token: string,
+|};
 export type confirmEmailContainerQueryResponse = {|
-  +confirmEmail: ?boolean;
+  +confirmEmail: ?boolean,
 |};
 */
 
@@ -24,95 +28,65 @@ query confirmEmailContainerQuery(
 }
 */
 
-const batch /*: ConcreteBatch*/ = {
-  "fragment": {
-    "argumentDefinitions": [
+const node/*: ConcreteRequest*/ = (function(){
+var v0 = [
+  {
+    "kind": "LocalArgument",
+    "name": "userId",
+    "type": "String!",
+    "defaultValue": null
+  },
+  {
+    "kind": "LocalArgument",
+    "name": "token",
+    "type": "String!",
+    "defaultValue": null
+  }
+],
+v1 = [
+  {
+    "kind": "ScalarField",
+    "alias": null,
+    "name": "confirmEmail",
+    "args": [
       {
-        "kind": "LocalArgument",
-        "name": "userId",
-        "type": "String!",
-        "defaultValue": null
+        "kind": "Variable",
+        "name": "token",
+        "variableName": "token",
+        "type": "String!"
       },
       {
-        "kind": "LocalArgument",
-        "name": "token",
-        "type": "String!",
-        "defaultValue": null
+        "kind": "Variable",
+        "name": "userId",
+        "variableName": "userId",
+        "type": "String!"
       }
     ],
-    "kind": "Fragment",
-    "metadata": null,
-    "name": "confirmEmailContainerQuery",
-    "selections": [
-      {
-        "kind": "ScalarField",
-        "alias": null,
-        "args": [
-          {
-            "kind": "Variable",
-            "name": "token",
-            "variableName": "token",
-            "type": "String!"
-          },
-          {
-            "kind": "Variable",
-            "name": "userId",
-            "variableName": "userId",
-            "type": "String!"
-          }
-        ],
-        "name": "confirmEmail",
-        "storageKey": null
-      }
-    ],
-    "type": "Query"
-  },
-  "id": null,
-  "kind": "Batch",
-  "metadata": {},
+    "storageKey": null
+  }
+];
+return {
+  "kind": "Request",
+  "operationKind": "query",
   "name": "confirmEmailContainerQuery",
-  "query": {
-    "argumentDefinitions": [
-      {
-        "kind": "LocalArgument",
-        "name": "userId",
-        "type": "String!",
-        "defaultValue": null
-      },
-      {
-        "kind": "LocalArgument",
-        "name": "token",
-        "type": "String!",
-        "defaultValue": null
-      }
-    ],
-    "kind": "Root",
+  "id": null,
+  "text": "query confirmEmailContainerQuery(\n  $userId: String!\n  $token: String!\n) {\n  confirmEmail(userId: $userId, token: $token)\n}\n",
+  "metadata": {},
+  "fragment": {
+    "kind": "Fragment",
     "name": "confirmEmailContainerQuery",
-    "operation": "query",
-    "selections": [
-      {
-        "kind": "ScalarField",
-        "alias": null,
-        "args": [
-          {
-            "kind": "Variable",
-            "name": "token",
-            "variableName": "token",
-            "type": "String!"
-          },
-          {
-            "kind": "Variable",
-            "name": "userId",
-            "variableName": "userId",
-            "type": "String!"
-          }
-        ],
-        "name": "confirmEmail",
-        "storageKey": null
-      }
-    ]
+    "type": "Query",
+    "metadata": null,
+    "argumentDefinitions": v0,
+    "selections": v1
   },
-  "text": "query confirmEmailContainerQuery(\n  $userId: String!\n  $token: String!\n) {\n  confirmEmail(userId: $userId, token: $token)\n}\n"
+  "operation": {
+    "kind": "Operation",
+    "name": "confirmEmailContainerQuery",
+    "argumentDefinitions": v0,
+    "selections": v1
+  }
 };
-
-module.exports = batch;
+})();
+(node/*: any*/).hash = '59e890fe35a1a383a61957bc73b11822';
+module.exports = node;

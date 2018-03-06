@@ -7,36 +7,39 @@
 'use strict';
 
 /*::
-import type {ConcreteFragment} from 'relay-runtime';
+import type { ConcreteFragment } from 'relay-runtime';
+import type { FragmentReference } from 'relay-runtime';
+declare export opaque type likeCommentContainer_comment$ref: FragmentReference;
 export type likeCommentContainer_comment = {|
-  +id: string;
-  +commentId: number;
+  +id: string,
+  +commentId: number,
+  +$refType: likeCommentContainer_comment$ref,
 |};
 */
 
 
-const fragment /*: ConcreteFragment*/ = {
-  "argumentDefinitions": [],
+const node/*: ConcreteFragment*/ = {
   "kind": "Fragment",
-  "metadata": null,
   "name": "likeCommentContainer_comment",
+  "type": "Comment",
+  "metadata": null,
+  "argumentDefinitions": [],
   "selections": [
     {
       "kind": "ScalarField",
       "alias": null,
-      "args": null,
       "name": "id",
+      "args": null,
       "storageKey": null
     },
     {
       "kind": "ScalarField",
       "alias": null,
-      "args": null,
       "name": "commentId",
+      "args": null,
       "storageKey": null
     }
-  ],
-  "type": "Comment"
+  ]
 };
-
-module.exports = fragment;
+(node/*: any*/).hash = '08e91605a4850f2a3bc50538e41ae156';
+module.exports = node;
