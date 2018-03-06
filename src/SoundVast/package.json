@@ -19,7 +19,7 @@
     "streaming"
   ],
   "homepage": "https://github.com/MartinDawson/SoundVast",
-  "license": "All Rights Reserved",
+  "license": "UNLICENSED",
   "scripts": {
     "prestart": "cross-env NODE_ENV=development webpack",
     "start": "npm-run-all --parallel development relay-compiler:watch",
