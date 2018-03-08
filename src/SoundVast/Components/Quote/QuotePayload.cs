@@ -12,7 +12,7 @@ using SoundVast.Components.User;
 
 namespace SoundVast.Components.Quote
 {
-    public class QuotePayload : NodeGraphType<Models.Quote>
+    public class QuotePayload : GraphQL.Relay.Types.Temp.NodeGraphType<Models.Quote>
     {
         public QuotePayload()
         {

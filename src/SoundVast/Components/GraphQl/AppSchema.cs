@@ -16,9 +16,11 @@ namespace SoundVast.Components.GraphQl
         {
             var query = (AppQuery)resolveType(typeof(AppQuery));
             var mutation = (AppMutation)resolveType(typeof(AppMutation));
+            var subscription = (AppSubscription)resolveType(typeof(AppSubscription));
 
             Query = query;
             Mutation = mutation;
+            Subscription = subscription;
         }
     }
 }

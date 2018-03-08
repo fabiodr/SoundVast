@@ -27,6 +27,11 @@ namespace SoundVast.Components.Comment
             return _repository.GetAll().BuildComment().Single(x => x.Id == id);
         }
 
+        public IEnumerable<Models.Comment> GetComments()
+        {
+            return _repository.GetAll().BuildComment();
+        }
+
         public void Add(Models.Comment comment)
         {
             _validationProvider.Validate(comment);

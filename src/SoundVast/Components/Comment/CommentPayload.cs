@@ -13,7 +13,7 @@ using SoundVast.Components.User;
 
 namespace SoundVast.Components.Comment
 {
-    public class CommentPayload : NodeGraphType<Models.Comment>
+    public class CommentPayload : GraphQL.Relay.Types.Temp.NodeGraphType<Models.Comment>
     {
         private readonly ICommentService _commentService;
 
@@ -38,7 +38,7 @@ namespace SoundVast.Components.Comment
                 {
                     var topLevelReplies = c.Source.TopLevelReplies(c.Source);
 
-                    return GraphQL.Relay.Types.Connection.ToConnection(topLevelReplies, c);
+                    return ConnectionUtils.ToConnection(topLevelReplies, c);
                 });
         }
 

@@ -46,7 +46,7 @@ namespace SoundVast.Components.GraphQl
                     var searchQuery = c.GetArgument<string>("searchQuery");
                     var filter = c.GetArgument<Filter.Filter>("filter");
 
-                    return GraphQL.Relay.Types.Connection.ToConnection(liveStreamService.GetAudios(genre, searchQuery, filter), c);
+                    return ConnectionUtils.ToConnection(liveStreamService.GetAudios(genre, searchQuery, filter), c);
                 });
 
             Field<ListGraphType<GenrePayload>>("genres",

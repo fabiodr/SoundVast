@@ -1,5 +1,11 @@
 # source: https://localhost:8080/graphql
-# timestamp: Wed Mar 07 2018 00:26:13 GMT+0100 (W. Europe Standard Time)
+# timestamp: Fri Mar 09 2018 00:07:57 GMT+0100 (W. Europe Standard Time)
+
+schema {
+  query: Query
+  mutation: Mutation
+  subscription: AppSubscription
+}
 
 type ApplicationUser implements Node {
   """The Id of the ApplicationUser"""
@@ -10,6 +16,10 @@ type ApplicationUser implements Node {
   userName: String!
   email: String!
   emailConfirmed: Boolean!
+}
+
+type AppSubscription {
+  commentAdded: Comment
 }
 
 interface Audio {
@@ -40,12 +50,12 @@ interface Audio {
     """
     Only look at connected edges with cursors greater than the value of `after`.
     """
-    after: String
+    after: String = null
 
     """
     Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
     """
-    first: Int
+    first: Int = null
   ): CommentPayloadConnection
 }
 
@@ -78,12 +88,12 @@ type Comment implements Node {
     """
     Only look at connected edges with cursors greater than the value of `after`.
     """
-    after: String
+    after: String = null
 
     """
     Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
     """
-    first: Int
+    first: Int = null
   ): CommentPayloadConnection
 }
 
@@ -149,7 +159,7 @@ type ExternalLoginCallbackPayload {
 }
 
 input ExternalLoginConfirmationInput {
-  clientMutationId: String
+  clientMutationId: String = null
   userName: String!
 }
 
@@ -160,22 +170,22 @@ type ExternalLoginConfirmationPayload {
 """Provides filtering"""
 input FilterInput {
   """Filter by date"""
-  newest: Boolean
+  newest: Boolean = null
 
   """Filter by likes"""
-  ratingFilter: RatingFilterInput
+  ratingFilter: RatingFilterInput = null
 
   """Filter by comments"""
-  mostCommented: Boolean
+  mostCommented: Boolean = null
 
   """Filter by plays"""
-  mostPlayed: Boolean
+  mostPlayed: Boolean = null
 
   """The start date to start filtering from"""
-  dateFrom: Date
+  dateFrom: Date = null
 
   """The end date to end filtering to"""
-  dateTo: Date
+  dateTo: Date = null
 }
 
 type Flag implements Node {
@@ -199,17 +209,17 @@ type Flag implements Node {
 }
 
 input FlagAudioInput {
-  clientMutationId: String
+  clientMutationId: String = null
   audioId: Int!
   reason: String!
-  additionalDetails: String
+  additionalDetails: String = null
 }
 
 input FlagCommentInput {
-  clientMutationId: String
+  clientMutationId: String = null
   commentId: Int!
   reason: String!
-  additionalDetails: String
+  additionalDetails: String = null
 }
 
 type FlagObjectPayload {
@@ -218,7 +228,7 @@ type FlagObjectPayload {
 }
 
 input GenerateResetPasswordTokenInput {
-  clientMutationId: String
+  clientMutationId: String = null
   email: String!
 }
 
@@ -277,12 +287,12 @@ type LiveStream implements Node & Audio {
     """
     Only look at connected edges with cursors greater than the value of `after`.
     """
-    after: String
+    after: String = null
 
     """
     Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
     """
-    first: Int
+    first: Int = null
   ): CommentPayloadConnection
 }
 
@@ -328,10 +338,10 @@ type LiveStreamPayloadEdge {
 }
 
 input LoginInput {
-  clientMutationId: String
+  clientMutationId: String = null
   username: String!
   password: String!
-  rememberMe: Boolean
+  rememberMe: Boolean = null
 }
 
 type LoginPayload {
@@ -396,21 +406,21 @@ type Query {
     """
     Only look at connected edges with cursors greater than the value of `after`.
     """
-    after: String
+    after: String = null
 
     """
     Specifies the number of edges to return starting from `after` or the first entry if `after` is not specified.
     """
-    first: Int
+    first: Int = null
 
     """The genre that the live stream belongs to"""
-    genre: String
+    genre: String = null
 
     """The search query to filter the liveStreams against"""
-    searchQuery: String
+    searchQuery: String = null
 
     """The filters to apply to the live streams"""
-    filter: FilterInput
+    filter: FilterInput = null
   ): LiveStreamPayloadConnection
   genres: [Genre]
   user: ApplicationUser
@@ -440,7 +450,7 @@ type RateAudioPayload {
 }
 
 input RateInput {
-  clientMutationId: String
+  clientMutationId: String = null
   id: Int!
   liked: Boolean!
 }
@@ -466,16 +476,16 @@ type Rating implements Node {
 }
 
 input RatingFilterInput {
-  topRated: Boolean
+  topRated: Boolean = null
 
   """
   The minimum number of ratings that need to have been applied for this filter to have any effect
   """
-  minimumNumberOfRatingsThreshold: Int
+  minimumNumberOfRatingsThreshold: Int = null
 }
 
 input RegisterInput {
-  clientMutationId: String
+  clientMutationId: String = null
   username: String!
   email: String!
   password: String!
@@ -488,7 +498,7 @@ type RegisterPayload {
 }
 
 input ResetPasswordInput {
-  clientMutationId: String
+  clientMutationId: String = null
   password: String!
   userId: String!
   token: String!
@@ -499,10 +509,10 @@ type ResetPasswordPayload {
 }
 
 input SaveCommentInput {
-  clientMutationId: String
+  clientMutationId: String = null
   body: String!
   audioId: Int!
-  originalCommentId: Int
+  originalCommentId: Int = null
 }
 
 type SaveCommentPayload {
@@ -511,13 +521,13 @@ type SaveCommentPayload {
 }
 
 input SaveLiveStreamInput {
-  clientMutationId: String
+  clientMutationId: String = null
   name: String!
   liveStreamUrl: String!
   websiteUrl: String!
   coverImageName: String!
-  tags: [TagInput]
-  genreIds: [Int]
+  tags: [TagInput] = null
+  genreIds: [Int] = null
 }
 
 type SaveLiveStreamPayload {
@@ -526,7 +536,7 @@ type SaveLiveStreamPayload {
 }
 
 input SendEmailInput {
-  clientMutationId: String
+  clientMutationId: String = null
   email: String!
   message: String!
   subject: String!
@@ -538,14 +548,14 @@ type SendEmailPayload {
 
 input TagInput {
   """The existing tag id"""
-  id: Int
+  id: Int = null
 
   """The name of the new tag"""
-  tag: String
+  tag: String = null
 }
 
 input UpdatePlayCountInput {
-  clientMutationId: String
+  clientMutationId: String = null
   audioId: Int!
 }
 

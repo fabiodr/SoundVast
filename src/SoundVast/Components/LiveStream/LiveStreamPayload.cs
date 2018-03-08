@@ -15,7 +15,7 @@ using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace SoundVast.Components.LiveStream
 {
-    public class LiveStreamPayload : NodeGraphType<Models.LiveStream>
+    public class LiveStreamPayload : GraphQL.Relay.Types.Temp.NodeGraphType<Models.LiveStream>
     {
         private readonly ILiveStreamService _liveStreamService;
         private readonly ICloudStorage _cloudStorage;
@@ -46,7 +46,7 @@ namespace SoundVast.Components.LiveStream
                 {
                     var comments = c.Source.Comments.Where(x => x.IsTopLevelComment);
 
-                    return GraphQL.Relay.Types.Connection.ToConnection(comments, c);
+                    return ConnectionUtils.ToConnection(comments, c);
                 });
 
             Interface<AudioInterface>();

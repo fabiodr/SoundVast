@@ -16,7 +16,7 @@ using SoundVast.Components.User;
 
 namespace SoundVast.Components.Flag
 {
-    public class FlagPayload : NodeGraphType<Models.Flag>
+    public class FlagPayload : GraphQL.Relay.Types.Temp.NodeGraphType<Models.Flag>
     {
         public FlagPayload()
         {

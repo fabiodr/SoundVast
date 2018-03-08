@@ -11,6 +11,7 @@ using SoundVast.Components.User;
 using SoundVast.Storage.CloudStorage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using SoundVast.Components.Audio.Models;
+using GraphQL.Relay.Types;
 
 namespace SoundVast.Components.Audio
 {
@@ -42,7 +43,7 @@ namespace SoundVast.Components.Audio
                 {
                     var comments = c.Source.Comments.Where(x => x.IsTopLevelComment);
 
-                    return GraphQL.Relay.Types.Connection.ToConnection(comments, c);
+                    return ConnectionUtils.ToConnection(comments, c);
                 });
         }
 

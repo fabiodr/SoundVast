@@ -11,7 +11,7 @@ using SoundVast.Components.User;
 
 namespace SoundVast.Components.Account
 {
-    public class AccountPayload : NodeGraphType<ApplicationUser>
+    public class AccountPayload : GraphQL.Relay.Types.Temp.NodeGraphType<ApplicationUser>
     {
         public AccountPayload()
         {

@@ -11,7 +11,7 @@ using SoundVast.Components.User;
 
 namespace SoundVast.Components.Rating
 {
-    public class RatingPayload : NodeGraphType<Models.Rating>
+    public class RatingPayload : GraphQL.Relay.Types.Temp.NodeGraphType<Models.Rating>
     {
         private readonly IRatingService _ratingService;
 

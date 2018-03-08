@@ -53,6 +53,9 @@ using SoundVast.Components.Rating.Models;
 using SoundVast.Components.Tag;
 using SoundVast.Components.Upload;
 using SoundVast.Validation;
+using GraphQL.Server.Transports.AspNetCore;
+using GraphQL.Server.Transports.WebSockets;
+using GraphQL.Server.Transports.WebSockets.Events;
 
 namespace SoundVast
 {
@@ -104,7 +107,8 @@ namespace SoundVast
             {
                 options.TokenLifespan = TimeSpan.FromMinutes(30);
             });
-
+            services.AddGraphQLHttp();
+            services.AddGraphQLWebSocket<AppSchema>();
             services.AddMvc().AddJsonOptions(x => x.SerializerSettings.ReferenceLoopHandling =
                 ReferenceLoopHandling.Ignore);
             services.AddMemoryCache();
@@ -172,6 +176,8 @@ namespace SoundVast
             app.UseStaticFiles();
             app.UseAuthentication();
             app.UseSession();
+            app.UseWebSockets();
+            app.UseGraphQLWebSocket<AppSchema>(new GraphQLWebSocketsOptions());
 
             RecurringJob.AddOrUpdate<IGenreService>(x => x.UpdateCoverImages(), Cron.Daily);
 
@@ -235,7 +241,6 @@ namespace SoundVast
                     return resolvedType.As<IGraphType>();
                 });
             });
-
             builder.RegisterAssemblyTypes(assembly).AsClosedTypesOf(typeof(NodeGraphType<>));
             builder.RegisterAssemblyTypes(assembly).AsClosedTypesOf(typeof(ObjectGraphType<>));
             builder.RegisterAssemblyTypes(assembly).AsClosedTypesOf(typeof(Validator<>));
@@ -244,8 +249,10 @@ namespace SoundVast
             builder.RegisterAssemblyTypes(assembly).Where(x => x.Name.EndsWith("Service")).AsImplementedInterfaces();
             builder.RegisterAssemblyTypes(assembly).Where(x => x.Name.EndsWith("Validator")).AsImplementedInterfaces();
 
+            builder.RegisterType<SimpleEventAggregator>().As<IEventAggregator>();
             builder.RegisterType<AppQuery>();
             builder.RegisterType<AppMutation>();
+            builder.RegisterType<AppSubscription>();
             builder.RegisterType<ValidationProvider>().As<IValidationProvider>().InstancePerLifetimeScope();
             builder.RegisterType<AuthMessageSender>().As<IEmailSender>();
             builder.RegisterType<AuthMessageSender>().As<ISmsSender>();
