@@ -7,41 +7,29 @@ import Comments from '../comments/commentsContainer';
 import styles from './sideBar.less';
 import Name from '../audio/name';
 
-const SideBar = ({ audios, currentAudioId, children, isFixed }) => {
-  const newAudioId = currentAudioId || audios[0].audioId;
-  const currentAudioIndex = audios.findIndex(({ audioId }) => audioId === newAudioId);
-  const audio = audios[currentAudioIndex];
-
-  return (
-    <div className={classnames(styles.sideBar, isFixed && styles.fixedSideBar)}>
-      {children(currentAudioIndex)}
-      <Name name={audio.name} className={styles.name} />
-      <div>
-        <div className={styles.commentBox}>
-          <CommentBox audio={audio} form="commentBox" key="commentBox" />
-        </div>
+const SideBar = ({ audio, isFixed }) => (
+  <div className={classnames(styles.sideBar, isFixed && styles.fixedSideBar)}>
+    <Name name={audio.name} className={styles.name} />
+    <div>
+      <div className={styles.commentBox}>
         {/* https://github.com/erikras/redux-form/issues/2886 */}
-        <Comments audio={audio} />
+        <CommentBox audio={audio} form="commentBox" key="commentBox" />
       </div>
+      <Comments audio={audio} />
     </div>
-  );
-};
+  </div>
+);
 
 SideBar.defaultProps = {
-  currentAudioId: null,
-  children: Function.prototype,
+  isFixed: false,
 };
 
 SideBar.propTypes = {
-  audios: PropTypes.arrayOf(
-    PropTypes.shape({
-      audioId: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-    }).isRequired,
-  ).isRequired,
-  currentAudioId: PropTypes.number,
-  children: PropTypes.func,
-  isFixed: PropTypes.bool.isRequired,
+  audio: PropTypes.shape({
+    audioId: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+  }).isRequired,
+  isFixed: PropTypes.bool,
 };
 
 export default SideBar;

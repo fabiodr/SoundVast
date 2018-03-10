@@ -8,7 +8,7 @@ class DisplayType extends React.Component {
     displayType: 'desktop',
   }
 
-  componentDidMount() {
+  componentWillMount() {
     window.addEventListener('resize', this.updateDisplayType);
     this.updateDisplayType();
   }
@@ -45,11 +45,7 @@ class DisplayType extends React.Component {
       isDesktop: this.state.displayType === 'desktop',
     };
 
-    return (
-      <div>
-        {this.props.children(displayType)}
-      </div>
-    );
+    return this.props.children(displayType);
   }
 }
 

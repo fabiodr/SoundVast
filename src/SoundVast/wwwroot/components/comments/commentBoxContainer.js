@@ -30,7 +30,9 @@ export default compose(
   }),
   fragmentContainer(fragments),
   withHandlers(handlers),
-  reduxForm(),
+  reduxForm({
+    destroyOnUnmount: false,
+  }),
   withHandlers({
     cancel: ({ reset, cancel }) => (...args) => {
       reset();

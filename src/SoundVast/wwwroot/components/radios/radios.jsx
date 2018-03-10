@@ -21,29 +21,37 @@ const Radios = ({ liveStreams, loadMore }) => {
     <SoundVastTitle title="Radios">
       <AudiosContent>
         <AudiosHeader audioTypeText="radios" />
-        <AudiosSubHeader />
-        <ScrollTracker>
-          {(elementToTrackRef, values) => (
-            <div className={styles.infiniteScrollContainer} ref={elementToTrackRef}>
-              <InfiniteScroll
-                loadMore={loadMore}
-                hasMore={liveStreams.pageInfo.hasNextPage}
-                loader={<Loader key={0} />}
-                initialLoad={false}
-                className={styles.gridContainer}
-              >
-                <Grid>
-                  {liveStreams.edges.map(({ node }) =>
-                    <Radio key={node.audioId} footerPlaylist={footerPlaylist} liveStream={node} />)}
-                </Grid>
-              </InfiniteScroll>
-              <SideBar
-                isFixed={values.pastTopOfElement}
-                audios={liveStreams.edges.map(x => x.node)}
-              />
-            </div>
-          )}
-        </ScrollTracker>
+        <div className={styles.radiosBody}>
+          <AudiosSubHeader />
+          <ScrollTracker>
+            {(elementToTrackRef, values) => (
+              <div className={styles.infiniteScrollContainer} ref={elementToTrackRef}>
+                <InfiniteScroll
+                  loadMore={loadMore}
+                  hasMore={liveStreams.pageInfo.hasNextPage}
+                  loader={<Loader key={0} />}
+                  initialLoad={false}
+                  className={styles.gridContainer}
+                >
+                  <Grid cellClassName={styles.gridCellClassName}>
+                    {liveStreams.edges.map(({ node }, i) => (
+                      <Radio
+                        key={node.audioId}
+                        isFirstLiveStream={i === 0}
+                        footerPlaylist={footerPlaylist}
+                        liveStream={node}
+                      />
+                    ))}
+                  </Grid>
+                </InfiniteScroll>
+                <SideBar
+                  isFixed={values.pastTopOfElement}
+                  audios={liveStreams.edges.map(x => x.node)}
+                />
+              </div>
+            )}
+          </ScrollTracker>
+        </div>
       </AudiosContent>
     </SoundVastTitle>
   );

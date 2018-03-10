@@ -12,8 +12,9 @@ import Name from '../audio/name';
 import Flag from '../flag/flag';
 import styles from './radio.less';
 import RatingPercent from '../rating/ratingPercent';
+import SideBar from '../audio/mobileSideBarContainer';
 
-const Radio = ({ liveStream, footerPlaylist }) => {
+const Radio = ({ isFirstLiveStream, liveStream, footerPlaylist }) => {
   const name = <Name className={styles.radioName} name={liveStream.name} />;
 
   return (
@@ -47,6 +48,10 @@ const Radio = ({ liveStream, footerPlaylist }) => {
           </div>
         </div>
       </div>
+      <SideBar
+        audio={liveStream}
+        isFirstLiveStream={isFirstLiveStream}
+      />
     </div>
   );
 };
@@ -67,6 +72,7 @@ Radio.propTypes = {
     name: PropTypes.string.isRequired,
     playCount: PropTypes.number.isRequired,
   }).isRequired,
+  isFirstLiveStream: PropTypes.bool.isRequired,
   footerPlaylist: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,

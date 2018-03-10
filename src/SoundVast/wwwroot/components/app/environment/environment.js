@@ -4,14 +4,16 @@ import {
   RecordSource,
   Store,
 } from 'relay-runtime';
+import { SubscriptionClient } from 'subscriptions-transport-ws';
 import { setEnviroment } from 'recompose-relay-modern';
 
-const network = Network.create((operation, variables) =>
+const fetchQuery = (operation, variables) =>
   fetch('/graphql', {
     method: 'post',
     credentials: 'same-origin',
     headers: {
-      'content-type': 'application/json',
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       query: operation.text,
@@ -25,8 +27,19 @@ const network = Network.create((operation, variables) =>
       }
 
       return Promise.resolve(json);
-    }));
+    });
 
+const setupSubscription = (config, variables, cacheConfig, observer) => {
+  const query = config.text;
+
+  const subscriptionClient = new SubscriptionClient(`wss://${window.location.host}/graphql`, { reconnect: true });
+
+  subscriptionClient.subscribe({ query, variables }, (error, result) => {
+    observer.onNext({ data: result });
+  });
+};
+
+const network = Network.create(fetchQuery, setupSubscription);
 const source = new RecordSource();
 const store = new Store(source);
 const environment = new Environment({

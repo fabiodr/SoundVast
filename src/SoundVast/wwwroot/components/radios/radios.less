@@ -3,8 +3,29 @@
     margin-top: 20px;
 }
 
-:global(.showing-side-bar) {
+:global(.desktop) :global(.showing-side-bar),
+:global(.tablet) :global(.showing-side-bar) {
     .gridContainer {
         width: 70%;
     }
 }
+
+@media only screen and (max-width: 1100px) {
+  :global(.desktop) :global(.showing-side-bar),
+  :global(.tablet) :global(.showing-side-bar) {
+    .gridContainer {
+      width: 65%;
+    }
+  }
+}
+
+:global(.mobile) {
+  .gridCellClassName {
+    flex-basis: 400px;
+  }
+}
+
+.radiosBody {
+  padding: 0 15px;
+}
+

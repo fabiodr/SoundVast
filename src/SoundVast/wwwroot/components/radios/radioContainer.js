@@ -19,6 +19,7 @@ const fragments = graphql`
     dislikes
     ...likeAudioContainer_audio
     ...dislikeAudioContainer_audio
+    ...mobileSideBarContainer_audio
   }
 `;
 

@@ -1,10 +1,11 @@
 import PropTypes from 'prop-types';
-import { compose, renderNothing, branch, setPropTypes } from 'recompose';
+import { compose, renderNothing, branch, setPropTypes, withProps } from 'recompose';
 import { connect } from 'react-redux';
 import { graphql } from 'react-relay';
 import { fragmentContainer } from 'recompose-relay-modern';
 
 import SideBar from './sideBar';
+import withDisplayType from '../shared/withDisplayType';
 
 const propTypes = {
   audios: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -24,12 +25,24 @@ const fragments = graphql`
   }
 `;
 
+const createProps = ({ currentAudioId, audios }) => {
+  const newAudioId = currentAudioId || audios[0].audioId;
+  const currentAudioIndex = audios.findIndex(({ audioId }) => audioId === newAudioId);
+  const audio = audios[currentAudioIndex];
+
+  return {
+    audio,
+  };
+};
+
 export default compose(
   setPropTypes(propTypes),
-  connect(mapStateToProps),
+  withDisplayType,
   fragmentContainer(fragments),
+  connect(mapStateToProps),
   branch(
-    props => !props.showingSideBar || !props.audios.length,
+    props => props.displayType.isMobile || !props.showingSideBar,
     renderNothing,
   ),
+  withProps(createProps),
 )(SideBar);

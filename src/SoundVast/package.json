@@ -179,6 +179,7 @@
     "rimraf": "^2.6.2",
     "shortid": "^2.2.8",
     "style-loader": "^0.20.2",
+    "subscriptions-transport-ws": "0.8.3",
     "uglifyjs-webpack-plugin": "^1.2.0",
     "webpack": "^3.1.0"
   }

@@ -3,10 +3,39 @@
     padding-right: 10px;
     position: relative;
     right: 0;
+    background-color: white;
+    box-sizing: border-box;
+}
+
+:global(.mobile) {
+  .sideBar {
+    max-height: 500px;
+    overflow-y: scroll;
+    padding-top: 10px;
+    margin-top: 12px;
+  }
+
+  .name {
+    display: none;
+  }
+}
+
+:global(.desktop),
+:global(.tablet) {
+  .sideBar {
     max-width: 30%;
     min-width: 30%;
-    background-color: white;    
-    box-sizing: border-box;
+  }
+}
+
+@media only screen and (max-width: 1100px) {
+  :global(.desktop),
+  :global(.tablet) {
+    .sideBar {
+      min-width: 35%;
+      max-width: 35%;
+    }
+  }
 }
 
 .commentBox {

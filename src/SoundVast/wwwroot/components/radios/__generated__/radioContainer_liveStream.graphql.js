@@ -10,6 +10,7 @@
 import type { ConcreteFragment } from 'relay-runtime';
 type dislikeAudioContainer_audio$ref = any;
 type likeAudioContainer_audio$ref = any;
+type mobileSideBarContainer_audio$ref = any;
 import type { FragmentReference } from 'relay-runtime';
 declare export opaque type radioContainer_liveStream$ref: FragmentReference;
 export type radioContainer_liveStream = {|
@@ -24,7 +25,7 @@ export type radioContainer_liveStream = {|
   +playCount: number,
   +likes: number,
   +dislikes: number,
-  +$fragmentRefs: (likeAudioContainer_audio$ref & dislikeAudioContainer_audio$ref),
+  +$fragmentRefs: (likeAudioContainer_audio$ref & dislikeAudioContainer_audio$ref & mobileSideBarContainer_audio$ref),
   +$refType: radioContainer_liveStream$ref,
 |};
 */
@@ -40,14 +41,14 @@ const node/*: ConcreteFragment*/ = {
     {
       "kind": "ScalarField",
       "alias": null,
-      "name": "audioId",
+      "name": "playCount",
       "args": null,
       "storageKey": null
     },
     {
       "kind": "ScalarField",
       "alias": null,
-      "name": "name",
+      "name": "audioId",
       "args": null,
       "storageKey": null
     },
@@ -93,7 +94,7 @@ const node/*: ConcreteFragment*/ = {
     {
       "kind": "ScalarField",
       "alias": null,
-      "name": "playCount",
+      "name": "name",
       "args": null,
       "storageKey": null
     },
@@ -120,8 +121,13 @@ const node/*: ConcreteFragment*/ = {
       "kind": "FragmentSpread",
       "name": "dislikeAudioContainer_audio",
       "args": null
+    },
+    {
+      "kind": "FragmentSpread",
+      "name": "mobileSideBarContainer_audio",
+      "args": null
     }
   ]
 };
-(node/*: any*/).hash = 'eb9766ea2aabc7c75050e9680cb8edb5';
+(node/*: any*/).hash = '8745d6e7f09437770dfb6d1330902ad3';
 module.exports = node;

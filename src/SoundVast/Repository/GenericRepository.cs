@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using SoundVast.Data;
+using System.Reactive.Linq;
 
 namespace SoundVast.Repository
 {
