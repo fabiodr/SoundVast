@@ -11,8 +11,7 @@ namespace SoundVast.Components.Audio
         public static string PlaceholderImageName = "SoundVast.svg";
         public static IDictionary<string, Size> CoverImageSizes = new Dictionary<string, Size>
         {
-            { "w=280", new Size() { Width = 280 } },
-            { "w=415", new Size() { Width = 415 } },
+            { "310x200", new Size() { Width = 310, Height = 200 } },
         };
 
         public string Dimention { get; set; }

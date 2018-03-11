@@ -6,5 +6,5 @@ export default radio => ({
   sources: {
     mp3: radio.liveStreamUrl,
   },
-  poster: convertImagesToSources(radio.coverImages)['w=280'],
+  poster: convertImagesToSources(radio.coverImages)['310x200'],
 });

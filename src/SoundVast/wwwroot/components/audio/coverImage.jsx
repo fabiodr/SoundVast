@@ -11,8 +11,7 @@ const CoverImage = ({ coverImages, imagePlaceholderUrl, className }) => {
   return (
     <picture>
       {coverImages ? [
-        <source key={0} srcSet={sources['w=280']} media="(min-width: 670px)" />,
-        <img key={1} alt="" src={sources['w=415']} className={classnames(styles.coverImage, className)} />,
+        <img key={1} alt="" src={sources['310x200']} className={classnames(styles.coverImage, className)} />,
       ] : <img alt="" src={imagePlaceholderUrl} className={classnames(styles.coverImage, className)} />}
     </picture>
   );

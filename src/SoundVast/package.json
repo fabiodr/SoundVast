@@ -57,7 +57,8 @@
     "> 3%",
     "last 2 Chrome versions",
     "last 2 Firefox versions",
-    "edge >= 12"
+    "edge >= 12",
+    "Explorer 11"
   ],
   "nyc": {
     "extension": [

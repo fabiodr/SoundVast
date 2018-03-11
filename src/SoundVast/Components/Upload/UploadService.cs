@@ -28,7 +28,7 @@ namespace SoundVast.Components.Upload
             stream.Position = 0;
 
             var image = Image.Load(stream);
-            var resizeOptions = new ResizeOptions { Size = size };
+            var resizeOptions = new ResizeOptions { Size = size, Mode = ResizeMode.Stretch };
             var resizedImage = image.Clone(x => x.Resize(resizeOptions).BackgroundColor(Rgba32.White));
             var newStream = new MemoryStream();
 
@@ -38,8 +38,8 @@ namespace SoundVast.Components.Upload
 
             return newStream;
         }
- 
-        public async Task<string> UploadCoverImage(string fileName, Stream stream, string contentType)
+
+        public async Task<string> UploadRawImage(string fileName, Stream stream, string contentType)
         {
             var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
             var newFileName = $"{fileNameWithoutExtension}_{Guid.NewGuid().ToString()}";
@@ -52,13 +52,22 @@ namespace SoundVast.Components.Upload
 
             blob.Properties.ContentType = contentType;
 
+            stream.Position = 0;
+
             await blob.UploadFromStreamAsync(stream);
+
+            return newFileName;
+        }
+
+        public async Task ResizeAndUploadImages(string fileName, Stream stream)
+        {
+            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
 
             foreach (var size in Audio.Image.CoverImageSizes)
             {
                 using (var newStream = ResizeImage(stream, size.Value))
                 {
-                    var resizedBlobName = $"{newFileName}_{size.Key}.jpg";
+                    var resizedBlobName = $"{fileNameWithoutExtension}_{size.Key}.jpg";
                     var resizedBlob = _cloudStorage.CloudBlobContainers[CloudStorageType.Image].GetBlockBlobReference(resizedBlobName);
 
                     _uploadValidator.ValidateUploadCoverImage(ByteSize.FromBytes(newStream.Length).MegaBytes);
@@ -68,6 +77,13 @@ namespace SoundVast.Components.Upload
                     await resizedBlob.UploadFromStreamAsync(newStream);
                 }
             }
+        }
+
+        public async Task<string> UploadCoverImage(string fileName, Stream stream, string contentType)
+        {
+            var newFileName = await UploadRawImage(fileName, stream, contentType);
+
+            await ResizeAndUploadImages(newFileName, stream);
 
             return newFileName;
         }
