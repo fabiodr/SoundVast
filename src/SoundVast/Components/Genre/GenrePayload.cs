@@ -24,16 +24,17 @@ namespace SoundVast.Components.Genre
 
             Field<IdGraphType>("id");
             Field(x => x.Name);
+            Field(x => x.Type);
             Field<ListGraphType<ImagePayload>>("coverImages", "The different dimention images for the cover image", resolve: GetCoverImages);
         }
 
         private async Task<object> GetCoverImages(ResolveFieldContext<Models.Genre> c)
         {
             var container = _cloudStorage.CloudBlobContainers[CloudStorageType.Image];
-            var segmentedBlobs = await container.ListBlobsSegmentedAsync(c.Source.CoverImageName, null);
 
-            if (segmentedBlobs.Results.Any())
+            if (c.Source.CoverImageName != null)
             {
+                var segmentedBlobs = await container.ListBlobsSegmentedAsync(c.Source.CoverImageName, null);
                 var blobs = segmentedBlobs.Results.OfType<CloudBlockBlob>();
                 var coverImageUrls = blobs.Select(x => x.Uri.AbsoluteUri);
                 var images = Image.CoverImageSizes.Select(x =>
@@ -48,6 +49,7 @@ namespace SoundVast.Components.Genre
                 });
 
                 return images;
+
             }
 
             return null;

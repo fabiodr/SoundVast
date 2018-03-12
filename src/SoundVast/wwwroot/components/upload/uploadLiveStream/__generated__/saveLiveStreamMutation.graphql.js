@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 1c674411ce4cd02c4355815396ac584c
+ * @relayHash 8440ad6c7997113af02dd37be1815953
  */
 
 /* eslint-disable */
@@ -14,13 +14,14 @@ export type saveLiveStreamMutationVariables = {|
     clientMutationId?: ?string,
     name: string,
     liveStreamUrl: string,
-    websiteUrl: string,
     coverImageName: string,
+    websiteUrl?: ?string,
+    country?: ?string,
     tags?: ?$ReadOnlyArray<?{
       id?: ?number,
       tag?: ?string,
     }>,
-    genreIds?: ?$ReadOnlyArray<?number>,
+    genreIds?: ?$ReadOnlyArray<?string>,
   },
 |};
 export type saveLiveStreamMutationResponse = {|

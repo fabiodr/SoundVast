@@ -31,6 +31,7 @@ namespace SoundVast.Data
         private static ICloudStorage _cloudStorage;
         private static IAudioService<Audio> _audioService;
         private static IUploadService _uploadService;
+        private static IGenreService _genreService;
 
         public static async Task<IWebHost> SeedData(this IWebHost webHost)
         {
@@ -42,15 +43,20 @@ namespace SoundVast.Data
                     _cloudStorage = scope.ServiceProvider.GetRequiredService<ICloudStorage>();
                     _audioService = scope.ServiceProvider.GetRequiredService<IAudioService<Audio>>();
                     _uploadService = scope.ServiceProvider.GetRequiredService<IUploadService>();
+                    _genreService = scope.ServiceProvider.GetRequiredService<IGenreService>();
 
                     context.Database.Migrate();
 
-                    var genres = Genres.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
+                    var musicGenres = MusicGenres.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
+                    var otherGenres = OtherGenres.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
 
                     await SeedImages();
 
-                    SeedGenres(context, genres);
+                    SeedMusicGenres(context, musicGenres);
+                    SeedOtherGenres(context, otherGenres);
                     SeedQuotes(context);
+
+                    _genreService.UpdateCoverImages();
 
                     LuceneSearch.AddOrUpdateLuceneIndex(_audioService.GetAudios());
 
@@ -80,51 +86,28 @@ namespace SoundVast.Data
             await placeholderImageBlob.UploadFromFileAsync(path);
         }
 
-        public static void SeedGenres(ApplicationDbContext context, DictionaryEntry[] genreResources)
+        public static void SeedMusicGenres(ApplicationDbContext context, DictionaryEntry[] musicGenreResources)
         {
-            var genres = genreResources.Select(x => new Genre
+            var musicGenres = musicGenreResources.Select(x => new Genre
             {
+                Id = (string)x.Key,
                 Name = (string)x.Value,
-                CoverImageName = Path.GetFileNameWithoutExtension(Image.PlaceholderImageName)
+                Type = GenreName.Music,
             });
     
-            context.Set<Genre>().AddRange(genres.Where(genre => !context.Set<Genre>().Any(x => x.Name == genre.Name)));
+            context.Set<Genre>().AddRange(musicGenres.Where(genre => !context.Set<Genre>().Any(x => x.Id == genre.Id)));
         }
 
-        //public static void InitializeIdentityForEf(ApplicationDbContext context)
-        //{
-        //    //If we are running through a commandline then don't execute because there is no HttpContext.Current
-        //    if (HttpContext.Current == null)
-        //        return;
+        public static void SeedOtherGenres(ApplicationDbContext context, DictionaryEntry[] otherGenreResources)
+        {
+            var otherGenres = otherGenreResources.Select(x => new Genre
+            {
+                Id = (string)x.Key,
+                Name = (string)x.Value,
+                Type = GenreName.Other,
+            });
 
-        //    var userManager = HttpContext.Current.GetOwinContext().GetUserManager<UserManager<>>();
-        //    var roleManager = HttpContext.Current.GetOwinContext().Get<ApplicationRoleManager>();
-        //    const string name = "Yoshimiii";
-        //    const string email = "martino1995@blueyonder.co.uk";
-        //    const string roleName = "Admin";
-
-        //    //Create Role Admin if it does not exist
-        //    var role = roleManager.FindByName(roleName);
-        //    if (role == null)
-        //    {
-        //        role = new IdentityRole(roleName);
-        //        var roleresult = roleManager.Create(role);
-        //    }
-
-        //    var user = userManager.FindByName(name);
-        //    if (user == null)
-        //    {
-        //        user = new User { UserName = name, Email = email };
-        //        var result = userManager.Create(user, password);
-        //        result = userManager.SetLockoutEnabled(user.Id, false);
-        //    }
-
-        //    // Add user admin to Role Admin if not already added
-        //    var rolesForUser = userManager.GetRoles(user.Id);
-        //    if (!rolesForUser.Contains(role.Name))
-        //    {
-        //        var result = userManager.AddToRole(user.Id, role.Name);
-        //    }
-        //}
+            context.Set<Genre>().AddRange(otherGenres.Where(genre => !context.Set<Genre>().Any(x => x.Id == genre.Id)));
+        }
     }
 }

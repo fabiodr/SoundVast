@@ -82,22 +82,30 @@
 
   <ItemGroup>
     <Folder Include="Components\User\Profile\" />
-    <Folder Include="Migrations\" />
     <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Properties\Genres.Designer.cs">
+    <Compile Update="Properties\MusicGenres.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>Genres.resx</DependentUpon>
+      <DependentUpon>MusicGenres.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Properties\OtherGenres.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>OtherGenres.resx</DependentUpon>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Properties\Genres.resx">
+    <EmbeddedResource Update="Properties\MusicGenres.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Genres.Designer.cs</LastGenOutput>
+      <LastGenOutput>MusicGenres.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\OtherGenres.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>OtherGenres.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

@@ -36,7 +36,8 @@ namespace SoundVast.Components.LiveStream
             var coverImageName = inputs.Get<string>("coverImageName");
             var liveStreamUrl = inputs.Get<string>("liveStreamUrl");
             var websiteUrl = inputs.Get<string>("websiteUrl");
-            var genreIds = inputs.Get("genreIds", new object[0]).Cast<int>().ToList();
+            var country = inputs.Get<string>("country");
+            var genreIds = inputs.Get("genreIds", new object[0]).Cast<string>().ToList();
             var tags = inputs.Get("tags", new object[0]).Select(x => x.As<Dictionary<string, object>>().ToObject<TagInput>());
             var user = context.UserContext.As<Context>().CurrentUser;
             var placeholderImage = _cloudStorage.CloudBlobContainers[CloudStorageType.AppImage].GetBlockBlobReference(Audio.Image.PlaceholderImageName);
@@ -47,6 +48,7 @@ namespace SoundVast.Components.LiveStream
                 Name = name,
                 LiveStreamUrl = liveStreamUrl,
                 WebsiteUrl = websiteUrl,
+                Country = country,
                 UserId = user.Id
             };
 

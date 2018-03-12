@@ -1,5 +1,5 @@
 # source: https://localhost:8080/graphql
-# timestamp: Fri Mar 09 2018 00:07:57 GMT+0100 (W. Europe Standard Time)
+# timestamp: Mon Mar 12 2018 19:05:00 GMT+0100 (W. Europe Standard Time)
 
 schema {
   query: Query
@@ -241,6 +241,7 @@ type GenerateResetPasswordTokenPayload {
 type Genre {
   id: ID
   name: String!
+  type: String!
 
   """The different dimention images for the cover image"""
   coverImages: [Image]
@@ -266,6 +267,7 @@ type LiveStream implements Node & Audio {
   likes: Int!
   dislikes: Int!
   playCount: Int!
+  country: String!
 
   """The different dimention images for the cover image"""
   coverImages: [Image]
@@ -524,10 +526,11 @@ input SaveLiveStreamInput {
   clientMutationId: String = null
   name: String!
   liveStreamUrl: String!
-  websiteUrl: String!
   coverImageName: String!
+  websiteUrl: String = null
+  country: String = null
   tags: [TagInput] = null
-  genreIds: [Int] = null
+  genreIds: [String] = null
 }
 
 type SaveLiveStreamPayload {

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import styles from './genres.less';
+import styles from './genre.less';
 import ImageButton from '../shared/button/imageButton';
 import CoverImage from '../audio/coverImageContainer';
 

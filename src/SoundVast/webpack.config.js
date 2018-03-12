@@ -48,7 +48,6 @@ if (!isInDev) {
   );
 } else {
   devtool = 'inline-sourcemap';
-  entry.graphiQl = './wwwroot/components/_config/graphiQl/graphiQl.jsx';
 }
 
 module.exports = {

@@ -34,6 +34,7 @@ namespace SoundVast.Components.LiveStream
             Field(x => x.Likes);
             Field(x => x.Dislikes);
             Field(x => x.PlayCount);
+            Field(x => x.Country);
             Field<ListGraphType<ImagePayload>>("coverImages", "The different dimention images for the cover image", resolve: GetCoverImages);
             Field<DateGraphType>("dateAdded", "The date the user added the live stream");
             Field<AccountPayload>("user", "The user who uploaded the live stream");

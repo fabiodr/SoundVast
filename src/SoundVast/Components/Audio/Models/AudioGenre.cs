@@ -13,7 +13,7 @@ namespace SoundVast.Components.Audio.Models
         public int Id { get; set; }
         public int AudioId { get; set; }
         public virtual Audio Audio { get; set; }
-        public int GenreId { get; set; }
+        public string GenreId { get; set; }
         public virtual Genre.Models.Genre Genre { get; set; }
     }
 }

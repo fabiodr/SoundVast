@@ -11,6 +11,7 @@ import LiveStreamUrlField from '../../shared/fields/liveStreamUrlField/liveStrea
 import WebsiteUrlField from '../../shared/fields/websiteUrlField/websiteUrlField';
 import TagsField from '../../shared/fields/tagsField/tagsField';
 import CopyrightField from '../../shared/fields/copyrightField/copyrightField';
+import CountryField from '../../shared/fields/countryField/countryField';
 
 const LiveStreamForm = ({
   handleSubmit,
@@ -26,6 +27,7 @@ const LiveStreamForm = ({
       <LiveStreamUrlField id={id} />
       <WebsiteUrlField id={id} />
       <GenresField id={id} genres={genres} />
+      <CountryField id={id} />
       <TagsField id={id} />
       <CopyrightField id={id} formName={form} />
     </BasicInfo>
