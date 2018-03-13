@@ -82,6 +82,7 @@
 
   <ItemGroup>
     <Folder Include="Components\User\Profile\" />
+    <Folder Include="Migrations\" />
     <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
 
