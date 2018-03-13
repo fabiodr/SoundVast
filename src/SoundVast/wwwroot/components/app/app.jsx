@@ -1,8 +1,8 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { Resolver } from 'found-relay';
-import 'react-jplaylist/src/less/skins/sleek.less';
-import 'react-jplaylist/src/less/controls/iconControls.less';
+import 'react-jplaylist/dist/css/skins/sleek.css';
+import 'react-jplaylist/dist/css/controls/iconControls.css';
 import 'react-select/dist/react-select.css';
 import 'rc-slider/assets/index.css';
 
