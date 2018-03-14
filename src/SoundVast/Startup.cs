@@ -77,7 +77,7 @@ namespace SoundVast
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
             services.AddHangfire(x => x.UseSqlServerStorage(_configuration.GetConnectionString("DefaultConnection")));
-
+            services.AddApplicationInsightsTelemetry(_configuration["ApplicationInsights:InstrumentationKey"]);
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
                 {
                     options.Password.RequireDigit = false;
