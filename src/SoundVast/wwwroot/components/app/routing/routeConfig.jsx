@@ -18,7 +18,7 @@ export default makeRouteConfig(
   <Route path="/" {...primaryLayoutRouteConfig}>
     <Route {...radiosRouteConfig} />
     <Route path="radios" {...radiosRouteConfig} />
-    <Route path="upload" {...uploadRouteConfig} />
+    {JSON.parse(process.env.ENABLE_UPLOAD) && <Route path="upload" {...uploadRouteConfig} />}
     <Route path="genres" {...genresRouteConfig} />
     <Route path="error/:status" {...errorPageRouteConfig} />
     <Route path="account">

@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import InfiniteScroll from 'react-infinite-scroller';
+import { Helmet } from 'react-helmet';
 
 import ScrollTracker from '../shared/scroll/scrollTracker';
-import SoundVastTitle from '../shared/title/soundVastTitle';
 import Radio from './radioContainer';
 import Grid from '../shared/grid/grid';
 import AudiosContent from '../content/audiosContentContainer';
@@ -18,7 +18,11 @@ const Radios = ({ liveStreams, loadMore }) => {
   const footerPlaylist = liveStreams.edges.map(({ node }) => convertRadioToMedia(node));
 
   return (
-    <SoundVastTitle title="Radios">
+    <div>
+      <Helmet>
+        <title title="Free online radio stations, live streams and playlists" />
+        <meta name="description" content="50,000+ of the best radio stations and streams with live comments. Listen for free." />
+      </Helmet>
       <AudiosContent>
         <AudiosHeader audioTypeText="radios" />
         <div className={styles.radiosBody}>
@@ -53,7 +57,7 @@ const Radios = ({ liveStreams, loadMore }) => {
           </ScrollTracker>
         </div>
       </AudiosContent>
-    </SoundVastTitle>
+    </div>
   );
 };
 

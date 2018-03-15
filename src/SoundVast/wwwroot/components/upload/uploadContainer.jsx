@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { compose, lifecycle, branch, renderNothing } from 'recompose';
+import { compose, lifecycle } from 'recompose';
 import { graphql } from 'react-relay';
 
 import Upload from './upload';
@@ -33,10 +33,6 @@ const enhance = compose(
       }
     },
   }),
-  branch(
-    () => !JSON.parse(process.env.ENABLE_UPLOAD),
-    renderNothing,
-  ),
 );
 
 const UploadContainer = enhance(Upload);
