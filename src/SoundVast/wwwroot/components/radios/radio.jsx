@@ -22,7 +22,7 @@ const Radio = ({ isFirstLiveStream, liveStream, footerPlaylist }) => {
       {liveStream.websiteUrl ? <a href={liveStream.websiteUrl} target="_blank">{name}</a> : <div>{name}</div>}
       <div className={styles.coverImageContainer}>
         <Play id={liveStream.audioId} footerPlaylist={footerPlaylist}>
-          <CoverImage coverImages={liveStream.coverImages} />
+          <CoverImage name={liveStream.name} coverImages={liveStream.coverImages} />
         </Play>
       </div>
       <div className={styles.controls}>

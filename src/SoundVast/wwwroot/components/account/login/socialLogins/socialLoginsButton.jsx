@@ -10,7 +10,7 @@ const SocialLoginsButton = ({ name, displayName }) => (
     name="provider"
     title={`Log in using your ${displayName} account`}
   >
-    <img src={`/images/loginProviders/${name}_40.png`} alt={displayName} />
+    <img src={`/images/loginProviders/${name}_40.png`} alt={`${displayName} login`} />
   </button>
 );
 

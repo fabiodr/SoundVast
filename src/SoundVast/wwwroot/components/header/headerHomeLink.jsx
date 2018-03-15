@@ -11,7 +11,6 @@ const HeaderHomeLink = ({ children }) => (
     to="/"
     styleName="secondary"
     className={classnames(styles.navButton, styles.logoContainer)}
-    title="Home"
   >
     {children}
     <span className={styles.beta}>beta</span>

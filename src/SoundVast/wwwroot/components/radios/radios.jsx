@@ -18,46 +18,44 @@ const Radios = ({ liveStreams, loadMore }) => {
   const footerPlaylist = liveStreams.edges.map(({ node }) => convertRadioToMedia(node));
 
   return (
-    <div>
+    <AudiosContent>
       <Helmet>
-        <title title="Free online radio stations, live streams and playlists" />
+        <title>Radio stations | Free online radios, live streams and playlists</title>
         <meta name="description" content="50,000+ of the best radio stations and streams with live comments. Listen for free." />
       </Helmet>
-      <AudiosContent>
-        <AudiosHeader audioTypeText="radios" />
-        <div className={styles.radiosBody}>
-          <AudiosSubHeader />
-          <ScrollTracker>
-            {(elementToTrackRef, values) => (
-              <div className={styles.infiniteScrollContainer} ref={elementToTrackRef}>
-                <InfiniteScroll
-                  loadMore={loadMore}
-                  hasMore={liveStreams.pageInfo.hasNextPage}
-                  loader={<Loader key={0} />}
-                  initialLoad={false}
-                  className={styles.gridContainer}
-                >
-                  <Grid cellClassName={styles.gridCellClassName}>
-                    {liveStreams.edges.map(({ node }, i) => (
-                      <Radio
-                        key={node.audioId}
-                        isFirstLiveStream={i === 0}
-                        footerPlaylist={footerPlaylist}
-                        liveStream={node}
-                      />
-                    ))}
-                  </Grid>
-                </InfiniteScroll>
-                <SideBar
-                  isFixed={values.pastTopOfElement}
-                  audios={liveStreams.edges.map(x => x.node)}
-                />
-              </div>
-            )}
-          </ScrollTracker>
-        </div>
-      </AudiosContent>
-    </div>
+      <AudiosHeader audioTypeText="radios" />
+      <div className={styles.radiosBody}>
+        <AudiosSubHeader />
+        <ScrollTracker>
+          {(elementToTrackRef, values) => (
+            <div className={styles.infiniteScrollContainer} ref={elementToTrackRef}>
+              <InfiniteScroll
+                loadMore={loadMore}
+                hasMore={liveStreams.pageInfo.hasNextPage}
+                loader={<Loader key={0} />}
+                initialLoad={false}
+                className={styles.gridContainer}
+              >
+                <Grid cellClassName={styles.gridCellClassName}>
+                  {liveStreams.edges.map(({ node }, i) => (
+                    <Radio
+                      key={node.audioId}
+                      isFirstLiveStream={i === 0}
+                      footerPlaylist={footerPlaylist}
+                      liveStream={node}
+                    />
+                  ))}
+                </Grid>
+              </InfiniteScroll>
+              <SideBar
+                isFixed={values.pastTopOfElement}
+                audios={liveStreams.edges.map(x => x.node)}
+              />
+            </div>
+          )}
+        </ScrollTracker>
+      </div>
+    </AudiosContent>
   );
 };
 

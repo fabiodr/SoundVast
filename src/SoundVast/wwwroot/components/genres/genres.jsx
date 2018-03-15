@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
 
 import Grid from '../shared/grid/grid';
 import Genre from './genreContainer';
@@ -8,6 +9,10 @@ import styles from './genres.less';
 
 const Genres = ({ genres, typeUrl }) => (
   <div className={styles.genres}>
+    <Helmet>
+      <title>Genres | 30+ genres such as pop, rock etc. for the categories you love</title>
+      <meta name="description" content="Filter by genre to find only the radio stations that fit your taste in music." />
+    </Helmet>
     {Object.keys(genres).map(key => (
       <div key={key}>
         <div className={styles.genresTitle}>{genreType[key]} genres</div>

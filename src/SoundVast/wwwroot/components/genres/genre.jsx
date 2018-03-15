@@ -7,7 +7,7 @@ import CoverImage from '../audio/coverImageContainer';
 
 const Genre = ({ onClick, name, coverImages }) => (
   <ImageButton className={styles.genre} styleName="secondary" onClick={onClick}>
-    <CoverImage coverImages={coverImages} />
+    <CoverImage name={name} coverImages={coverImages} />
     <div>{name}</div>
   </ImageButton>
 );

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 const LogoSmall = ({ className, ...props }) => (
   <svg className={className} {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 520" height="520" width="520" xmlSpace="preserve" id="svg2" version="1.1">
+    <title>SoundVast</title>
     <metadata id="metadata8" />
     <defs id="defs6" />
     <g transform="matrix(1.3333333,0,0,-1.3333333,0,520)" id="g10">

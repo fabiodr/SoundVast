@@ -5,14 +5,14 @@ import classnames from 'classnames';
 import convertImagesToSources from '../shared/utilities/convertImagesToSources';
 import styles from './coverImage.less';
 
-const CoverImage = ({ coverImages, imagePlaceholderUrl, className }) => {
+const CoverImage = ({ coverImages, imagePlaceholderUrl, className, name }) => {
   const sources = convertImagesToSources(coverImages);
 
   return (
     <picture>
       {coverImages ? [
-        <img key={1} alt="" src={sources['310x200']} className={classnames(styles.coverImage, className)} />,
-      ] : <img alt="" src={imagePlaceholderUrl} className={classnames(styles.coverImage, className)} />}
+        <img key={1} alt={name} src={sources['310x200']} className={classnames(styles.coverImage, className)} />,
+      ] : <img alt={name} src={imagePlaceholderUrl} className={classnames(styles.coverImage, className)} />}
     </picture>
   );
 };
@@ -30,6 +30,7 @@ CoverImage.propTypes = {
     imageUrl: PropTypes.string.isRequired,
   }).isRequired),
   imagePlaceholderUrl: PropTypes.string,
+  name: PropTypes.string.isRequired,
 };
 
 export default CoverImage;
