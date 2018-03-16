@@ -6,12 +6,14 @@ import Grid from '../shared/grid/grid';
 import Genre from './genreContainer';
 import genreType from './genreType';
 import styles from './genres.less';
+import preferredUrl from '../shared/utilities/preferredUrl';
 
 const Genres = ({ genres, typeUrl }) => (
   <div className={styles.genres}>
     <Helmet>
       <title>Genres | 30+ genres such as pop, rock etc. for the categories you love</title>
       <meta name="description" content="Filter by genre to find only the radio stations that fit your taste in music." />
+      <link rel="canonical" href={`${preferredUrl}/genres`} />
     </Helmet>
     {Object.keys(genres).map(key => (
       <div key={key}>

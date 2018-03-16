@@ -13,6 +13,7 @@ import Loader from '../shared/loaders/loader';
 import convertRadioToMedia from '../shared/utilities/convertRadioToMedia';
 import SideBar from '../audio/sideBarContainer';
 import styles from './radios.less';
+import preferredUrl from '../shared/utilities/preferredUrl';
 
 const Radios = ({ liveStreams, loadMore }) => {
   const footerPlaylist = liveStreams.edges.map(({ node }) => convertRadioToMedia(node));
@@ -20,8 +21,9 @@ const Radios = ({ liveStreams, loadMore }) => {
   return (
     <AudiosContent>
       <Helmet>
-        <title>Radio stations | Free online radios, live streams and playlists</title>
-        <meta name="description" content="50,000+ of the best radio stations and streams with live comments. Listen for free." />
+        <title>Radio stations | Free online radios, podcasts and playlists - SoundVast</title>
+        <meta name="description" content="50,000+ of the best radio stations and streams with live comments. Listen for free on SoundVast.com." />
+        <link rel="canonical" href={preferredUrl} />
       </Helmet>
       <AudiosHeader audioTypeText="radios" />
       <div className={styles.radiosBody}>

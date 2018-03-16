@@ -9,7 +9,7 @@ const HTMLPlugin = require('html-webpack-plugin');
 
 dotenv.config();
 
-const isInDev = process.env.NODE_ENV !== 'production';
+const isInProduction = process.env.NODE_ENV !== 'production';
 
 const plugins = [
   new Webpack.optimize.CommonsChunkPlugin({
@@ -21,7 +21,7 @@ const plugins = [
     filename: '[name].bundle.css',
   }),
   new Webpack.DefinePlugin({
-    __DEV__: isInDev,
+    __DEV__: !isInProduction,
     'process.env': {
       NODE_ENV: JSON.stringify(process.env.NODE_ENV),
       ENABLE_UPLOAD: JSON.stringify(process.env.ENABLE_UPLOAD),
@@ -32,6 +32,7 @@ const plugins = [
     hash: true,
     favicon: path.resolve(__dirname, 'wwwroot/favicon.ico'),
     template: path.resolve(__dirname, 'wwwroot/components/app/app.ejs'),
+    env: process.env.NODE_ENV,
   }),
 ];
 let devtool = false;
@@ -40,7 +41,7 @@ const entry = {
   app: './wwwroot/components/app/appContainer.jsx',
 };
 
-if (!isInDev) {
+if (isInProduction) {
   plugins.push(
     new UglifyJsPlugin(),
     new OptimizeCssAssetsPlugin({

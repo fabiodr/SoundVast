@@ -17,7 +17,7 @@ import { routeConfig as imprintRouteConfig } from '../../legal/imprintContainer'
 export default makeRouteConfig(
   <Route path="/" {...primaryLayoutRouteConfig}>
     <Route {...radiosRouteConfig} />
-    <Route path="radios" {...radiosRouteConfig} />
+    <Route path="radio-stations" {...radiosRouteConfig} />
     {JSON.parse(process.env.ENABLE_UPLOAD) && <Route path="upload" {...uploadRouteConfig} />}
     <Route path="genres" {...genresRouteConfig} />
     <Route path="error/:status" {...errorPageRouteConfig} />
