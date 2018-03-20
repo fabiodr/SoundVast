@@ -8008,9 +8008,9 @@ react-helmet@^5.2.0:
     prop-types "^15.5.4"
     react-side-effect "^1.1.0"
 
-react-html-email@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/react-html-email/-/react-html-email-3.0.0.tgz#a5a51b78271a33daf9b14638e9e4c5df93f691aa"
+react-html-email-browser@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/react-html-email-browser/-/react-html-email-browser-3.0.1.tgz#fad73cbf3ba0483bc479048d653fd0968bde4ed1"
   dependencies:
     prop-types "^15.5.10"
 

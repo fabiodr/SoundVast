@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { A } from 'react-html-email';
+import { A } from 'react-html-email-browser';
 
 import Email from '../email';
 

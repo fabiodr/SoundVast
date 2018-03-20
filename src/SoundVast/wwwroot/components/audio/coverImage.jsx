@@ -9,11 +9,9 @@ const CoverImage = ({ coverImages, imagePlaceholderUrl, className, name }) => {
   const sources = convertImagesToSources(coverImages);
 
   return (
-    <picture>
-      {coverImages ? [
-        <img key={1} alt={name} src={sources['310x200']} className={classnames(styles.coverImage, className)} />,
-      ] : <img alt={name} src={imagePlaceholderUrl} className={classnames(styles.coverImage, className)} />}
-    </picture>
+    coverImages ? (
+      <img alt={name} src={sources['310x200']} className={classnames(styles.coverImage, className)} />
+    ) : <img alt={name} src={imagePlaceholderUrl} className={classnames(styles.coverImage, className)} />
   );
 };
 

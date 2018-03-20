@@ -1,6 +1,5 @@
 import React from 'react';
 import { graphql } from 'react-relay';
-import { renderEmail } from 'react-html-email';
 import { createMutation } from 'recompose-relay-modern';
 
 import ConfirmEmail from '../../email/confirmEmail/confirmEmail';

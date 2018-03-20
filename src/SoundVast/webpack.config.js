@@ -9,7 +9,7 @@ const HTMLPlugin = require('html-webpack-plugin');
 
 dotenv.config();
 
-const isInProduction = process.env.NODE_ENV !== 'production';
+const isInProduction = process.env.NODE_ENV === 'production';
 
 const plugins = [
   new Webpack.optimize.CommonsChunkPlugin({

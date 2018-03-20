@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Email, Item, Image } from 'react-html-email';
+import { Email, Item, Image } from 'react-html-email-browser';
 
 const SharedEmail = ({ title, children }) => (
   <Email title={title}>

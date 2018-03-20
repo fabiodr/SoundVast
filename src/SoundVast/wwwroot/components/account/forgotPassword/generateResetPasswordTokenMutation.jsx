@@ -1,6 +1,6 @@
 import React from 'react';
 import { graphql } from 'react-relay';
-import { renderEmail } from 'react-html-email';
+import { renderEmail } from 'react-html-email-browser';
 import { createMutation } from 'recompose-relay-modern';
 
 import ResetPasswordEmail from '../../email/resetPasswordEmail/resetPasswordEmail';

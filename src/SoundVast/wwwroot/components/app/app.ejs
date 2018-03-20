@@ -9,13 +9,13 @@
 
       gtag('config', 'UA-115758636-1');
     </script>
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Map,Set,Promise,Object.assign,Array.prototype.find,Array.prototype.findIndex"></script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <% if (htmlWebpackPlugin.options.env !== 'production') { %>
       <meta name="robots" content="noindex, nofollow" />
     <% } %>
     <title><%= htmlWebpackPlugin.options.title %></title>
-
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
   </head>
   <body>

@@ -55,7 +55,7 @@ using SoundVast.Components.Upload;
 using SoundVast.Validation;
 using GraphQL.Server.Transports.AspNetCore;
 using GraphQL.Server.Transports.WebSockets;
-using GraphQL.Server.Transports.WebSockets.Events;
+using GraphQL.Server.Transports.Subscriptions.Abstractions;
 
 namespace SoundVast
 {
@@ -109,6 +109,11 @@ namespace SoundVast
             });
             services.AddGraphQLHttp();
             services.AddGraphQLWebSocket<AppSchema>();
+            services.Configure<ExecutionOptions<AppSchema>>(options =>
+            {
+                options.EnableMetrics = true;
+                options.ExposeExceptions = true;
+            });
             services.AddMvc().AddJsonOptions(x => x.SerializerSettings.ReferenceLoopHandling =
                 ReferenceLoopHandling.Ignore);
             services.AddMemoryCache();
@@ -249,7 +254,6 @@ namespace SoundVast
             builder.RegisterAssemblyTypes(assembly).Where(x => x.Name.EndsWith("Service")).AsImplementedInterfaces();
             builder.RegisterAssemblyTypes(assembly).Where(x => x.Name.EndsWith("Validator")).AsImplementedInterfaces();
 
-            builder.RegisterType<SimpleEventAggregator>().As<IEventAggregator>();
             builder.RegisterType<AppQuery>();
             builder.RegisterType<AppMutation>();
             builder.RegisterType<AppSubscription>();
@@ -265,6 +269,7 @@ namespace SoundVast
             builder.RegisterType<Repository<Comment, ApplicationDbContext>>().As<IRepository<Comment>>();
             builder.RegisterType<Repository<Flag, ApplicationDbContext>>().As<IRepository<Flag>>();
             builder.RegisterType<Repository<Tag, ApplicationDbContext>>().As<IRepository<Tag>>();
+            builder.RegisterType<LogMessagesListener>().As<IOperationMessageListener>().SingleInstance();
 
             return builder;
         }
