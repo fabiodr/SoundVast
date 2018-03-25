@@ -24,7 +24,10 @@ export type radiosContainer = {|
           +dimention: string,
           +imageUrl: string,
         |}>,
-        +liveStreamUrl: string,
+        +streamDatas: ?$ReadOnlyArray<?{|
+          +liveStreamUrl: string,
+          +contentType: string,
+        |}>,
         +$fragmentRefs: (radioContainer_liveStream$ref & sideBarContainer_audios$ref),
       |},
     |}>,
@@ -181,11 +184,29 @@ const node/*: ConcreteFragment*/ = {
                   ]
                 },
                 {
-                  "kind": "ScalarField",
+                  "kind": "LinkedField",
                   "alias": null,
-                  "name": "liveStreamUrl",
+                  "name": "streamDatas",
+                  "storageKey": null,
                   "args": null,
-                  "storageKey": null
+                  "concreteType": "StreamData",
+                  "plural": true,
+                  "selections": [
+                    {
+                      "kind": "ScalarField",
+                      "alias": null,
+                      "name": "liveStreamUrl",
+                      "args": null,
+                      "storageKey": null
+                    },
+                    {
+                      "kind": "ScalarField",
+                      "alias": null,
+                      "name": "contentType",
+                      "args": null,
+                      "storageKey": null
+                    }
+                  ]
                 },
                 {
                   "kind": "FragmentSpread",
@@ -237,5 +258,5 @@ const node/*: ConcreteFragment*/ = {
     }
   ]
 };
-(node/*: any*/).hash = '094e2ef1f941675782f75bde7accbbc5';
+(node/*: any*/).hash = '76c0b8e7d91d65c9c1d543a0f079e9a8';
 module.exports = node;

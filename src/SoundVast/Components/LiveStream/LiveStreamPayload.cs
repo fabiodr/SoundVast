@@ -12,6 +12,7 @@ using SoundVast.Components.Rating;
 using SoundVast.Components.User;
 using SoundVast.Storage.CloudStorage;
 using Microsoft.WindowsAzure.Storage.Blob;
+using SoundVast.Components.LiveStream.Models;
 
 namespace SoundVast.Components.LiveStream
 {
@@ -29,17 +30,15 @@ namespace SoundVast.Components.LiveStream
 
             Id("audioId", x => x.Id);
             Field(x => x.Name);
-            Field(x => x.LiveStreamUrl);
-            Field(x => x.WebsiteUrl);
+            Field(x => x.WebsiteUrl, nullable: true);
             Field(x => x.Likes);
             Field(x => x.Dislikes);
-            Field(x => x.PlayCount);
             Field(x => x.Country);
             Field<ListGraphType<ImagePayload>>("coverImages", "The different dimention images for the cover image", resolve: GetCoverImages);
             Field<DateGraphType>("dateAdded", "The date the user added the live stream");
-            Field<AccountPayload>("user", "The user who uploaded the live stream");
             Field<ListGraphType<GenrePayload>>("genres", "The genre the live stream belongs to", resolve: c => c.Source.AudioGenres.Select(x => x.Genre));
             Field<ListGraphType<RatingPayload>>("ratings", "The ratings that have been applied by users to this live stream");
+            Field<ListGraphType<StreamDataPayload>>("streamDatas");
             Connection<CommentPayload>()
                 .Name("comments")
                 .Description("The top level comments for the live stream")
@@ -60,6 +59,8 @@ namespace SoundVast.Components.LiveStream
 
         private async Task<object> GetCoverImages(ResolveFieldContext<Models.LiveStream> c)
         {
+            if (c.Source.CoverImageName == null) return null;
+
             var container = _cloudStorage.CloudBlobContainers[CloudStorageType.Image];
             var segmentedBlobs = await container.ListBlobsSegmentedAsync(c.Source.CoverImageName, null);
             var blobs = segmentedBlobs.Results.OfType<CloudBlockBlob>();

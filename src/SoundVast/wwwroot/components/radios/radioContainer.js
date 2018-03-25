@@ -12,9 +12,7 @@ const fragments = graphql`
       dimention
       imageUrl
     }
-    liveStreamUrl
     websiteUrl
-    playCount
     likes
     dislikes
     ...likeAudioContainer_audio

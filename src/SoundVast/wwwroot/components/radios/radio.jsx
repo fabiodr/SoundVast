@@ -7,7 +7,6 @@ import CoverImage from '../audio/coverImageContainer';
 import Rating from '../rating/audioRating';
 import Like from '../rating/like/likeAudioContainer';
 import Dislike from '../rating/dislike/dislikeAudioContainer';
-import PlayCount from '../audio/playCount';
 import Name from '../audio/name';
 import Flag from '../flag/flag';
 import styles from './radio.less';
@@ -42,7 +41,6 @@ const Radio = ({ isFirstLiveStream, liveStream, footerPlaylist }) => {
           </div>
         </div>
         <div className={styles.controlsRow}>
-          <PlayCount className={styles.playCount} playCount={liveStream.playCount} />
           <div className={classnames(styles.alignRight, styles.extraControls)}>
             <Flag modalId="flagAudio" id={liveStream.audioId} />
           </div>
@@ -63,24 +61,24 @@ Radio.propTypes = {
         dimention: PropTypes.string.isRequired,
         imageUrl: PropTypes.string.isRequired,
       }).isRequired,
-    ).isRequired,
-    liveStreamUrl: PropTypes.string.isRequired,
+    ),
     websiteUrl: PropTypes.string,
     audioId: PropTypes.number.isRequired,
     dislikes: PropTypes.number.isRequired,
     likes: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
-    playCount: PropTypes.number.isRequired,
   }).isRequired,
   isFirstLiveStream: PropTypes.bool.isRequired,
   footerPlaylist: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
       title: PropTypes.string.isRequired,
-      sources: PropTypes.shape({
-        mp3: PropTypes.string.isRequired,
-      }).isRequired,
-      poster: PropTypes.string.isRequired,
+      sources: PropTypes.arrayOf(
+        PropTypes.shape({
+          mp3: PropTypes.string.isRequired,
+        }).isRequired,
+      ).isRequired,
+      poster: PropTypes.string,
     }),
   ).isRequired,
 };

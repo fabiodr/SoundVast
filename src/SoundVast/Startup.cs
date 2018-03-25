@@ -269,6 +269,7 @@ namespace SoundVast
             builder.RegisterType<Repository<Comment, ApplicationDbContext>>().As<IRepository<Comment>>();
             builder.RegisterType<Repository<Flag, ApplicationDbContext>>().As<IRepository<Flag>>();
             builder.RegisterType<Repository<Tag, ApplicationDbContext>>().As<IRepository<Tag>>();
+            builder.RegisterType<Repository<StreamData, ApplicationDbContext>>().As<IRepository<StreamData>>();
             builder.RegisterType<LogMessagesListener>().As<IOperationMessageListener>().SingleInstance();
 
             return builder;

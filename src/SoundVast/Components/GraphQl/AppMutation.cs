@@ -30,7 +30,6 @@ namespace SoundVast.Components.GraphQl
 
         public AppMutation()
         {
-            Mutation<UpdatePlayCountInput, UpdatePlayCountPayload>("updatePlayCount");
             Mutation<SaveLiveStreamInput, SaveLiveStreamPayload>("saveLiveStream").AddPermission(AuthorizedPermission);
             Mutation<RateInput, RateAudioPayload>("rateAudio").AddPermission(AuthorizedPermission);
             Mutation<RateInput, RateCommentPayload>("rateComment").AddPermission(AuthorizedPermission);

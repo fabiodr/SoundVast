@@ -46,16 +46,15 @@ namespace SoundVast.Components.LiveStream
             {
                 CoverImageName = coverImageName,
                 Name = name,
-                LiveStreamUrl = liveStreamUrl,
+              //  LiveStreamUrl = liveStreamUrl,
                 WebsiteUrl = websiteUrl,
                 Country = country,
-                UserId = user.Id
             };
 
-            foreach (var genreId in genreIds)
-            {
-                liveStream.AudioGenres.Add(new AudioGenre { GenreId = genreId });
-            }
+            //foreach (var genreId in genreIds)
+            //{
+            //    liveStream.AudioGenres.Add(new AudioGenre { GenreId = genreId });
+            //}
 
             foreach (var tag in tags)
             {

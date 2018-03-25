@@ -20,10 +20,5 @@ namespace SoundVast.Components.Filter
         {
             return audios.OrderByDescending(x => x.Comments.Count).AsQueryable();
         }
-
-        public static IQueryable<T> MostPlayed<T>(this IEnumerable<T> audios) where T : Audio.Models.Audio
-        {
-            return audios.OrderByDescending(x => x.PlayCount).AsQueryable();
-        }
     }
 }

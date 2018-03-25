@@ -80,11 +80,6 @@ namespace SoundVast.Components.Audio
                 {
                     audios = audios.MostCommented();
                 }
-
-                if (filter.MostPlayed)
-                {
-                    audios = audios.MostPlayed();
-                }
             }
 
 
@@ -106,17 +101,6 @@ namespace SoundVast.Components.Audio
 
                 LuceneSearch.AddOrUpdateLuceneIndex(model);
             }
-        }
-
-        public T UpdatePlayCount(int audioId)
-        {
-            var audio = _repository.Get(audioId);
-
-            audio.PlayCount++;
-
-            _repository.Save();
-
-            return audio;
         }
 
         public Rating.Models.Rating Rate(int audioId, string userId, bool liked)

@@ -15,24 +15,16 @@ namespace SoundVast.Components.Audio.Models
 {
     public abstract class Audio : IRatable
     {
-        protected Audio()
-        {
-            DateAdded = DateTime.UtcNow;
-        }
-
         [Required]
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }
-        [Required]
         public string CoverImageName { get; set; }
         [Required]
         public DateTimeOffset DateAdded { get; set; }
-        public string UserId { get; set; }
-        public ApplicationUser User { get; set; }
+        public string Description { get; set; }
         public int Likes => Ratings.Count(x => x.Liked);
         public int Dislikes => Ratings.Count(x => !x.Liked);
-        public int PlayCount { get; set; }
         public virtual ICollection<AudioTag> AudioTags { get; set; } = new List<AudioTag>();
         public virtual ICollection<AudioGenre> AudioGenres { get; set; } = new List<AudioGenre>();
         public virtual ICollection<ApplicationUser> Contributors { get; set; } = new List<ApplicationUser>();

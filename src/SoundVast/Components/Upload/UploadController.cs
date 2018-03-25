@@ -41,29 +41,29 @@ namespace SoundVast.Components.Upload
             });
         }
 
-        [HttpPost]
-        public async Task<IActionResult> UploadCoverImage(IFormFile file)
-        {
-            string coverImageName;
+        //[HttpPost]
+        //public async Task<IActionResult> UploadCoverImage(IFormFile file)
+        //{
+        //    string coverImageName;
 
-            try
-            {
-                using (var stream = file.OpenReadStream())
-                {
-                    coverImageName = await _uploadService.UploadCoverImage(file.FileName, stream, file.ContentType);
-                }
-            }
-            catch (ValidationException e)
-            {
-                ModelState.AddModelErrors(e);
+        //    try
+        //    {
+        //        using (var stream = file.OpenReadStream())
+        //        {
+        //            coverImageName = await _uploadService.UploadCoverImage(file.FileName, stream, file.ContentType);
+        //        }
+        //    }
+        //    catch (ValidationException e)
+        //    {
+        //        ModelState.AddModelErrors(e);
 
-                return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ConvertErrorsToJson());
-            }
+        //        return StatusCode((int)HttpStatusCode.BadRequest, ModelState.ConvertErrorsToJson());
+        //    }
 
-            return Ok(new
-            {
-                coverImageName
-            });
-        }
+        //    return Ok(new
+        //    {
+        //        coverImageName
+        //    });
+        //}
     }
 }

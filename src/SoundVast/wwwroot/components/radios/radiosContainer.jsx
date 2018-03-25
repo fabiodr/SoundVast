@@ -40,7 +40,10 @@ const fragments = graphql`
             dimention
             imageUrl
           }
-          liveStreamUrl
+          streamDatas {
+            liveStreamUrl
+            contentType
+          }
           ...radioContainer_liveStream
           ...sideBarContainer_audios
         }

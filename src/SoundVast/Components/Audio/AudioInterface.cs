@@ -30,10 +30,8 @@ namespace SoundVast.Components.Audio
             Field(x => x.Name);
             Field(x => x.Likes);
             Field(x => x.Dislikes);
-            Field(x => x.PlayCount);
             Field<ListGraphType<ImagePayload>>("coverImages", "The different dimention images for the cover image", resolve: GetCoverImages);
             Field<DateGraphType>("dateAdded", "The date the user added the audio");
-            Field<AccountPayload>("user", "The user who uploaded the audio");
             Field<ListGraphType<GenrePayload>>("genres", "The genres the audio belongs to", resolve: c => c.Source.AudioGenres.Select(x => x.Genre));
             Field<ListGraphType<RatingPayload>>("ratings", "The ratings that have been applied by users to this audio");
             Connection<CommentPayload>()
@@ -49,6 +47,8 @@ namespace SoundVast.Components.Audio
 
         private async Task<object> GetCoverImages(ResolveFieldContext<Models.Audio> c)
         {
+            if (c.Source.CoverImageName == null) return null;
+        
             var container = _cloudStorage.CloudBlobContainers[CloudStorageType.Image];
             var segmentedBlobs = await container.ListBlobsSegmentedAsync(c.Source.CoverImageName, null);
             var blobs = segmentedBlobs.Results.OfType<CloudBlockBlob>();

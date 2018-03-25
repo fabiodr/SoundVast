@@ -1,6 +1,7 @@
 import { applyMiddleware, combineReducers, createStore, compose } from 'redux';
 import thunk from 'redux-thunk';
 import { reducer as jPlaylists } from 'react-jplaylist';
+import { reducer as jPlayers } from 'react-jplayer';
 import { reducer as form } from 'redux-form';
 import found from 'found/lib/foundReducer';
 import FarceActions from 'farce/lib/Actions';
@@ -16,7 +17,6 @@ import modal from '../../shared/modal/reducer';
 import popup from '../../shared/popup/reducer';
 import upload from '../../upload/reducer';
 import audio from '../../audio/reducer';
-import jPlayers from './jPlayersReducer';
 import app from '../reducer';
 
 const historyEnhancer = createHistoryEnhancer({

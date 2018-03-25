@@ -1,5 +1,5 @@
 # source: https://localhost:8080/graphql
-# timestamp: Mon Mar 12 2018 19:05:00 GMT+0100 (W. Europe Standard Time)
+# timestamp: Sun Mar 25 2018 18:32:24 GMT+0200 (W. Europe Daylight Time)
 
 schema {
   query: Query
@@ -28,16 +28,12 @@ interface Audio {
   name: String!
   likes: Int!
   dislikes: Int!
-  playCount: Int!
 
   """The different dimention images for the cover image"""
   coverImages: [Image]
 
   """The date the user added the audio"""
   dateAdded: Date
-
-  """The user who uploaded the audio"""
-  user: ApplicationUser
 
   """The genres the audio belongs to"""
   genres: [Genre]
@@ -241,7 +237,6 @@ type GenerateResetPasswordTokenPayload {
 type Genre {
   id: ID
   name: String!
-  type: String!
 
   """The different dimention images for the cover image"""
   coverImages: [Image]
@@ -262,11 +257,9 @@ type LiveStream implements Node & Audio {
   """The Global Id of the LiveStream"""
   id: ID!
   name: String!
-  liveStreamUrl: String!
   websiteUrl: String!
   likes: Int!
   dislikes: Int!
-  playCount: Int!
   country: String!
 
   """The different dimention images for the cover image"""
@@ -275,14 +268,12 @@ type LiveStream implements Node & Audio {
   """The date the user added the live stream"""
   dateAdded: Date
 
-  """The user who uploaded the live stream"""
-  user: ApplicationUser
-
   """The genre the live stream belongs to"""
   genres: [Genre]
 
   """The ratings that have been applied by users to this live stream"""
   ratings: [Rating]
+  streamDatas: [StreamData]
 
   """The top level comments for the live stream"""
   comments(
@@ -361,7 +352,6 @@ type LogoutPayload {
 }
 
 type Mutation {
-  updatePlayCount(input: UpdatePlayCountInput!): UpdatePlayCountPayload
   saveLiveStream(input: SaveLiveStreamInput!): SaveLiveStreamPayload
   rateAudio(input: RateInput!): RateAudioPayload
   rateComment(input: RateInput!): RateAudioPayload
@@ -549,20 +539,21 @@ type SendEmailPayload {
   clientMutationId: String
 }
 
+type StreamData implements Node {
+  """The Id of the StreamData"""
+  streamDataId: Int!
+
+  """The Global Id of the StreamData"""
+  id: ID!
+  liveStreamUrl: String!
+  contentType: String!
+  bitrate: Int
+}
+
 input TagInput {
   """The existing tag id"""
   id: Int = null
 
   """The name of the new tag"""
   tag: String = null
-}
-
-input UpdatePlayCountInput {
-  clientMutationId: String = null
-  audioId: Int!
-}
-
-type UpdatePlayCountPayload {
-  clientMutationId: String
-  audio: Audio!
 }

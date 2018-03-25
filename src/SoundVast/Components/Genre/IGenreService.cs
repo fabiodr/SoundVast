@@ -11,5 +11,6 @@ namespace SoundVast.Components.Genre
     {
         IEnumerable<Models.Genre> GetGenres();
         void UpdateCoverImages();
+        void Add(Models.Genre model);
     }
 }

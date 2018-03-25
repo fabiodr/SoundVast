@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash e06cf7ede3edceb1dc21f65061bd7b66
+ * @relayHash a2818107a7add2485ca7a90edc586c6a
  */
 
 /* eslint-disable */
@@ -30,7 +30,6 @@ query genresContainerQuery {
 fragment genresContainer_genres on Genre {
   id
   name
-  type
   coverImages {
     dimention
     imageUrl
@@ -43,7 +42,7 @@ const node/*: ConcreteRequest*/ = {
   "operationKind": "query",
   "name": "genresContainerQuery",
   "id": null,
-  "text": "query genresContainerQuery {\n  genres {\n    ...genresContainer_genres\n    id\n  }\n}\n\nfragment genresContainer_genres on Genre {\n  id\n  name\n  type\n  coverImages {\n    dimention\n    imageUrl\n  }\n}\n",
+  "text": "query genresContainerQuery {\n  genres {\n    ...genresContainer_genres\n    id\n  }\n}\n\nfragment genresContainer_genres on Genre {\n  id\n  name\n  coverImages {\n    dimention\n    imageUrl\n  }\n}\n",
   "metadata": {},
   "fragment": {
     "kind": "Fragment",
@@ -95,13 +94,6 @@ const node/*: ConcreteRequest*/ = {
             "kind": "ScalarField",
             "alias": null,
             "name": "name",
-            "args": null,
-            "storageKey": null
-          },
-          {
-            "kind": "ScalarField",
-            "alias": null,
-            "name": "type",
             "args": null,
             "storageKey": null
           },

@@ -25,6 +25,7 @@ namespace SoundVast.Data
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Audio> Audios { get; set; }
         public DbSet<Genre> Genres { get; set; }
+        public DbSet<StreamData> StreamData { get; set; }
 
         public ApplicationDbContext(DbContextOptions options)
             : base(options)
@@ -35,7 +36,7 @@ namespace SoundVast.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<LiveStream>();
+            modelBuilder.Entity<LiveStream>().Property(x => x.Id).ValueGeneratedNever();
             modelBuilder.Entity<Genre>();
             modelBuilder.Entity<Audio>().HasMany(x => x.Ratings).WithOne(x => x.Audio);
             modelBuilder.Entity<Comment>().HasMany(x => x.Ratings).WithOne(x => x.Comment);

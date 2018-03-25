@@ -25,49 +25,50 @@ namespace SoundVast.Components.Upload
 
         public Stream ResizeImage(Stream stream, Size size)
         {
-            stream.Position = 0;
-
-            var image = Image.Load(stream);
-            var resizeOptions = new ResizeOptions { Size = size, Mode = ResizeMode.Stretch };
-            var resizedImage = image.Clone(x => x.Resize(resizeOptions).BackgroundColor(Rgba32.White));
             var newStream = new MemoryStream();
 
-            resizedImage.SaveAsJpeg(newStream);
+            using (var image = Image.Load(stream))
+            {
+                var resizeOptions = new ResizeOptions { Size = size, Mode = ResizeMode.Stretch };
+
+                image.Mutate(x => x.Resize(resizeOptions).BackgroundColor(Rgba32.White));
+                image.SaveAsJpeg(newStream, new SixLabors.ImageSharp.Formats.Jpeg.JpegEncoder { Quality = 90 });
+            }
 
             newStream.Position = 0;
 
             return newStream;
         }
 
-        public async Task<string> UploadRawImage(string fileName, Stream stream, string contentType)
+        public async Task<string> UploadRawImage(string path, MemoryStream memoryStream, string contentType)
         {
-            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
+            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(path);
             var newFileName = $"{fileNameWithoutExtension}_{Guid.NewGuid().ToString()}";
 
-            _uploadValidator.ValidateUploadCoverImage(ByteSize.FromBytes(stream.Length).MegaBytes);
+            _uploadValidator.ValidateUploadCoverImage(ByteSize.FromBytes(memoryStream.Length).MegaBytes);
 
             //TODO: Put raw image in archive storage
-            var blobName = $"{newFileName}{Path.GetExtension(fileName)}";
+            var blobName = $"{newFileName}{Path.GetExtension(path)}";
             var blob = _cloudStorage.CloudBlobContainers[CloudStorageType.RawImage].GetBlockBlobReference(blobName);
 
             blob.Properties.ContentType = contentType;
 
-            stream.Position = 0;
+            await blob.UploadFromStreamAsync(memoryStream);
 
-            await blob.UploadFromStreamAsync(stream);
+            memoryStream.Position = 0;
 
             return newFileName;
         }
 
-        public async Task ResizeAndUploadImages(string fileName, Stream stream)
+        public async Task<string> ResizeAndUploadImages(string path, Stream stream)
         {
-            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
+            var fileName = Path.GetFileNameWithoutExtension(path);
 
             foreach (var size in Audio.Image.CoverImageSizes)
             {
                 using (var newStream = ResizeImage(stream, size.Value))
                 {
-                    var resizedBlobName = $"{fileNameWithoutExtension}_{size.Key}.jpg";
+                    var resizedBlobName = $"{fileName}_{size.Key}.jpg";
                     var resizedBlob = _cloudStorage.CloudBlobContainers[CloudStorageType.Image].GetBlockBlobReference(resizedBlobName);
 
                     _uploadValidator.ValidateUploadCoverImage(ByteSize.FromBytes(newStream.Length).MegaBytes);
@@ -77,15 +78,15 @@ namespace SoundVast.Components.Upload
                     await resizedBlob.UploadFromStreamAsync(newStream);
                 }
             }
+
+            return fileName;
         }
 
-        public async Task<string> UploadCoverImage(string fileName, Stream stream, string contentType)
+        public async Task<string> UploadCoverImage(string path, MemoryStream memoryStream, string contentType)
         {
-            var newFileName = await UploadRawImage(fileName, stream, contentType);
+            var newFileName = await UploadRawImage(path, memoryStream, contentType);
 
-            await ResizeAndUploadImages(newFileName, stream);
-
-            return newFileName;
+            return await ResizeAndUploadImages(newFileName, memoryStream);
         }
     }
 }

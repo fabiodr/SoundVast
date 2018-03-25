@@ -20,9 +20,7 @@ export type radioContainer_liveStream = {|
     +dimention: string,
     +imageUrl: string,
   |}>,
-  +liveStreamUrl: string,
   +websiteUrl: string,
-  +playCount: number,
   +likes: number,
   +dislikes: number,
   +$fragmentRefs: (likeAudioContainer_audio$ref & dislikeAudioContainer_audio$ref & mobileSideBarContainer_audio$ref),
@@ -41,14 +39,14 @@ const node/*: ConcreteFragment*/ = {
     {
       "kind": "ScalarField",
       "alias": null,
-      "name": "playCount",
+      "name": "audioId",
       "args": null,
       "storageKey": null
     },
     {
       "kind": "ScalarField",
       "alias": null,
-      "name": "audioId",
+      "name": "name",
       "args": null,
       "storageKey": null
     },
@@ -80,21 +78,7 @@ const node/*: ConcreteFragment*/ = {
     {
       "kind": "ScalarField",
       "alias": null,
-      "name": "liveStreamUrl",
-      "args": null,
-      "storageKey": null
-    },
-    {
-      "kind": "ScalarField",
-      "alias": null,
       "name": "websiteUrl",
-      "args": null,
-      "storageKey": null
-    },
-    {
-      "kind": "ScalarField",
-      "alias": null,
-      "name": "name",
       "args": null,
       "storageKey": null
     },
@@ -129,5 +113,5 @@ const node/*: ConcreteFragment*/ = {
     }
   ]
 };
-(node/*: any*/).hash = '8745d6e7f09437770dfb6d1330902ad3';
+(node/*: any*/).hash = 'faf6d5b8b295947f9e7996edd1ba9c5d';
 module.exports = node;

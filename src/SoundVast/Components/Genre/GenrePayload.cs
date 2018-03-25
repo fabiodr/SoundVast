@@ -24,7 +24,6 @@ namespace SoundVast.Components.Genre
 
             Field<IdGraphType>("id");
             Field(x => x.Name);
-            Field(x => x.Type);
             Field<ListGraphType<ImagePayload>>("coverImages", "The different dimention images for the cover image", resolve: GetCoverImages);
         }
 

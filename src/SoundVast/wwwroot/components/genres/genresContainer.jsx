@@ -18,7 +18,6 @@ const fragments = graphql`
   fragment genresContainer_genres on Genre @relay(plural: true) {
     id,
     name,
-    type,
     coverImages {
       dimention
       imageUrl
@@ -26,21 +25,8 @@ const fragments = graphql`
   }
 `;
 
-const createProps = ({ genres }) => {
-  const sortedGenres = {};
-
-  Object.keys(genreType).forEach((key) => {
-    sortedGenres[key] = genres.filter(x => x.type === genreType[key]);
-  });
-
-  return {
-    genres: sortedGenres,
-  };
-};
-
 const enhance = compose(
   fragmentContainer(fragments),
-  withProps(createProps),
 );
 
 const GenresContainer = enhance(Genres);
@@ -49,7 +35,7 @@ export const routeConfig = {
   Component: GenresContainer,
   query,
   render: ({ props }) =>
-    props && <GenresContainer genres={props.genres} typeUrl="radios" />,
+    props && <GenresContainer genres={props.genres} />,
 };
 
 export default GenresContainer;

@@ -15,15 +15,22 @@ namespace SoundVast.Components.Genre.Models
 
     public class Genre
     {
-        [Key]
         [Required]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public string Id { get; set; }
+        public int Id { get; set; }
         [Required]
         public string Name { get; set; }
+        public string Description { get; set; }
+        public string Position { get; set; }
+        public string Urlid { get; set; }
         [Required]
-        public string Type { get; set; }
+        public string Slug { get; set; }
         public string CoverImageName { get; set; }
-        public virtual ICollection<AudioGenre> AudioGenres { get; set; }
+        [Required]
+        public DateTimeOffset DateAdded { get; set; }
+        [Required]
+        public DateTimeOffset DateUpdated { get; set; }
+        public virtual ICollection<Genre> ChildGenres { get; set; } = new List<Genre>();
+        public virtual ICollection<AudioGenre> AudioGenres { get; set; } = new List<AudioGenre>();
     }
 }

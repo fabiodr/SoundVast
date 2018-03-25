@@ -70,6 +70,12 @@ Radios.propTypes = {
       PropTypes.shape({
         node: PropTypes.shape({
           audioId: PropTypes.number.isRequired,
+          streamDatas: PropTypes.arrayOf(
+            PropTypes.shape({
+              liveStreamUrl: PropTypes.string.isRequired,
+              contentType: PropTypes.string,
+            }).isRequired,
+          ).isRequired,
         }),
       }),
     ),

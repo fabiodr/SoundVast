@@ -13,8 +13,8 @@ namespace SoundVast.Components.Upload
     public interface IUploadService
     {
         Stream ResizeImage(Stream stream, Size size);
-        Task<string> UploadRawImage(string fileName, Stream stream, string contentType);
-        Task ResizeAndUploadImages(string fileNameWithoutExtension, Stream stream);
-        Task<string> UploadCoverImage(string fileName, Stream stream, string contentType);
+        Task<string> UploadRawImage(string path, MemoryStream memoryStream, string contentType);
+        Task<string> ResizeAndUploadImages(string path, Stream stream);
+        Task<string> UploadCoverImage(string path, MemoryStream memoryStream, string contentType);
     }
 }

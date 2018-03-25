@@ -31,8 +31,12 @@ const propTypes = {
       id: PropTypes.number.isRequired,
       title: PropTypes.string.isRequired,
       artist: PropTypes.string,
-      sources: PropTypes.object.isRequired,
-      poster: PropTypes.string.isRequired,
+      sources: PropTypes.arrayOf(
+        PropTypes.shape({
+          mp3: PropTypes.string.isRequired,
+        }).isRequired,
+      ).isRequired,
+      poster: PropTypes.string,
     }),
   ).isRequired,
 };

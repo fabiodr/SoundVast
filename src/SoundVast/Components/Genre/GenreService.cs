@@ -7,7 +7,6 @@ using System.Web;
 using Microsoft.EntityFrameworkCore;
 using SoundVast.Components.Audio;
 using SoundVast.Components.Filter;
-using SoundVast.Components.Genre.Models;
 using SoundVast.Storage.CloudStorage;
 
 namespace SoundVast.Components.Genre
@@ -37,6 +36,11 @@ namespace SoundVast.Components.Genre
             }
 
             _repository.Save();
+        }
+
+        public void Add(Models.Genre model)
+        {
+            _repository.Add(model);
         }
 
         public IEnumerable<Models.Genre> GetGenres()

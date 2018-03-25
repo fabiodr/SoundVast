@@ -17,19 +17,19 @@ namespace SoundVast.Components.GraphQl
 
             return new EnterLeaveListener(_ =>
             {
-                _.Match<Field>(fieldAst =>
-                {
-                    var fieldDef = context.TypeInfo.GetFieldDef();
+                //_.Match<Field>(fieldAst =>
+                //{
+                //    var fieldDef = context.TypeInfo.GetFieldDef();
 
-                    if (fieldDef.RequiresPermissions() && !loggedIn)
-                    {
-                        context.ReportError(new ValidationError(
-                            context.OriginalQuery,
-                            "auth-required",
-                            "You must be logged in to run this query.",
-                            fieldAst));
-                    }
-                });
+                //    if (fieldDef.RequiresPermissions() && !loggedIn)
+                //    {
+                //        context.ReportError(new ValidationError(
+                //            context.OriginalQuery,
+                //            "auth-required",
+                //            "You must be logged in to run this query.",
+                //            fieldAst));
+                //    }
+                //});
             });
         }
     }
