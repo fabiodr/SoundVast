@@ -6,10 +6,11 @@ export default (radio) => {
   return {
     id: radio.audioId,
     title: radio.name,
-    sources: radio.streamDatas.map(streamData => ({
-      src: streamData.liveStreamUrl,
-      contentType: streamData.contentType,
-    })),
+    sources: {
+      mp3: radio.streamDatas.map(streamData => ({
+        src: streamData.liveStreamUrl,
+      })),
+    },
     poster: poster !== null ? poster['310x200'] : null,
   };
 };

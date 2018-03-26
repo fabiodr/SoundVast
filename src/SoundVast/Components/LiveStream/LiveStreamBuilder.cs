@@ -10,7 +10,7 @@ namespace SoundVast.Components.LiveStream
     {
         public static IQueryable<T> BuildLiveStream<T>(this IQueryable<T> query) where T : Models.LiveStream
         {
-            return query;
+            return query.Include(x => x.StreamDatas);
         }
     }
 }

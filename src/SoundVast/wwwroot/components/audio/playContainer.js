@@ -31,11 +31,13 @@ const propTypes = {
       id: PropTypes.number.isRequired,
       title: PropTypes.string.isRequired,
       artist: PropTypes.string,
-      sources: PropTypes.arrayOf(
-        PropTypes.shape({
-          mp3: PropTypes.string.isRequired,
-        }).isRequired,
-      ).isRequired,
+      sources: PropTypes.shape({
+        mp3: PropTypes.arrayOf(
+          PropTypes.shape({
+            src: PropTypes.string.isRequired,
+          }).isRequired,
+        ).isRequired,
+      }),
       poster: PropTypes.string,
     }),
   ).isRequired,

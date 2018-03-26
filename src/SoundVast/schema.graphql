@@ -1,5 +1,5 @@
 # source: https://localhost:8080/graphql
-# timestamp: Sun Mar 25 2018 18:32:24 GMT+0200 (W. Europe Daylight Time)
+# timestamp: Mon Mar 26 2018 23:54:46 GMT+0200 (W. Europe Daylight Time)
 
 schema {
   query: Query
@@ -257,7 +257,7 @@ type LiveStream implements Node & Audio {
   """The Global Id of the LiveStream"""
   id: ID!
   name: String!
-  websiteUrl: String!
+  websiteUrl: String
   likes: Int!
   dislikes: Int!
   country: String!
@@ -546,7 +546,7 @@ type StreamData implements Node {
   """The Global Id of the StreamData"""
   id: ID!
   liveStreamUrl: String!
-  contentType: String!
+  contentType: String
   bitrate: Int
 }
 

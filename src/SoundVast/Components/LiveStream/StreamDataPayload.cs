@@ -25,7 +25,7 @@ namespace SoundVast.Components.LiveStream
 
             Id(x => x.Id);
             Field(x => x.LiveStreamUrl);
-            Field(x => x.ContentType);
+            Field(x => x.ContentType, nullable: true);
             Field(x => x.Bitrate, nullable: true);
         }
 
