@@ -63,8 +63,8 @@ namespace SoundVast.Data
                     var otherGenres = OtherGenres.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
 
                     await SeedImages();
-               //    await SeedGenres(context);
-               //    await SeedLiveStreams();
+                    await SeedGenres(context);
+                    await SeedLiveStreams();
                     SeedQuotes(context);
 
                     _genreService.UpdateCoverImages();
@@ -86,18 +86,19 @@ namespace SoundVast.Data
 
             using (var client = new HttpClient())
             {
-                HttpResponseMessage response;
+                IEnumerable<StationDirbleDto> stationDtos;
                 var page = 1;
 
                 do
                 {
-                    response = await client.GetAsync(DIRBLE_API_ADDRESS + $"stations?token={devKey}&per_page=30&page={page}");
+                    var response = await client.GetAsync(DIRBLE_API_ADDRESS + $"stations?token={devKey}&per_page=30&page={page}");
 
                     response.EnsureSuccessStatusCode();
-                    
+
                     var stream = await response.Content.ReadAsStreamAsync();
                     var json = await new StreamReader(stream).ReadToEndAsync();
-                    var stationDtos = JsonConvert.DeserializeObject<IEnumerable<StationDirbleDto>>(json);
+
+                    stationDtos = JsonConvert.DeserializeObject<IEnumerable<StationDirbleDto>>(json);
 
                     foreach (var stationDto in stationDtos)
                     {
@@ -163,7 +164,7 @@ namespace SoundVast.Data
                     }
 
                     page++;
-                } while (page < 30);
+                } while (stationDtos.Any());
             }
         }
 

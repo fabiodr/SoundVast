@@ -15,11 +15,9 @@ namespace SoundVast.Components.Upload
     public class UploadService : IUploadService
     {
         private readonly ICloudStorage _cloudStorage;
-        private readonly IUploadValidator _uploadValidator;
 
-        public UploadService(ICloudStorage cloudStorage, IUploadValidator uploadValidator)
+        public UploadService(ICloudStorage cloudStorage)
         {
-            _uploadValidator = uploadValidator;
             _cloudStorage = cloudStorage;
         }
 
@@ -45,8 +43,6 @@ namespace SoundVast.Components.Upload
             var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(path);
             var newFileName = $"{fileNameWithoutExtension}_{Guid.NewGuid().ToString()}";
 
-            _uploadValidator.ValidateUploadCoverImage(ByteSize.FromBytes(memoryStream.Length).MegaBytes);
-
             //TODO: Put raw image in archive storage
             var blobName = $"{newFileName}{Path.GetExtension(path)}";
             var blob = _cloudStorage.CloudBlobContainers[CloudStorageType.RawImage].GetBlockBlobReference(blobName);
@@ -70,8 +66,6 @@ namespace SoundVast.Components.Upload
                 {
                     var resizedBlobName = $"{fileName}_{size.Key}.jpg";
                     var resizedBlob = _cloudStorage.CloudBlobContainers[CloudStorageType.Image].GetBlockBlobReference(resizedBlobName);
-
-                    _uploadValidator.ValidateUploadCoverImage(ByteSize.FromBytes(newStream.Length).MegaBytes);
 
                     resizedBlob.Properties.ContentType = "image/jpeg";
 

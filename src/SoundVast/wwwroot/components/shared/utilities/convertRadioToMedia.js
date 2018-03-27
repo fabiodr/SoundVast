@@ -7,9 +7,7 @@ export default (radio) => {
     id: radio.audioId,
     title: radio.name,
     sources: {
-      mp3: radio.streamDatas.map(streamData => ({
-        src: streamData.liveStreamUrl,
-      })),
+      mp3: radio.streamDatas.map(streamData => streamData.liveStreamUrl),
     },
     poster: poster !== null ? poster['310x200'] : null,
   };

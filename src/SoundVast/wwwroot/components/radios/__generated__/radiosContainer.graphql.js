@@ -26,7 +26,7 @@ export type radiosContainer = {|
         |}>,
         +streamDatas: ?$ReadOnlyArray<?{|
           +liveStreamUrl: string,
-          +contentType: string,
+          +contentType: ?string,
         |}>,
         +$fragmentRefs: (radioContainer_liveStream$ref & sideBarContainer_audios$ref),
       |},

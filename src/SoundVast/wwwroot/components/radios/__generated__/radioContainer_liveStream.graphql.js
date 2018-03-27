@@ -20,7 +20,7 @@ export type radioContainer_liveStream = {|
     +dimention: string,
     +imageUrl: string,
   |}>,
-  +websiteUrl: string,
+  +websiteUrl: ?string,
   +likes: number,
   +dislikes: number,
   +$fragmentRefs: (likeAudioContainer_audio$ref & dislikeAudioContainer_audio$ref & mobileSideBarContainer_audio$ref),

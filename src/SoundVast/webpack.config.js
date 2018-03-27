@@ -5,7 +5,7 @@ const dotenv = require('dotenv');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const HTMLPlugin = require('html-webpack-plugin');
-const fs = require('fs');
+// const fs = require('fs');
 
 dotenv.config();
 
@@ -67,8 +67,8 @@ module.exports = {
         test: /\.jsx?$/,
         include: [
           path.resolve(__dirname, 'wwwroot/components'),
-          fs.realpathSync(`${__dirname}/node_modules/react-jplayer`),
-          fs.realpathSync(`${__dirname}/node_modules/react-jplaylist`),
+          // fs.realpathSync(`${__dirname}/node_modules/react-jplayer`),
+          // fs.realpathSync(`${__dirname}/node_modules/react-jplaylist`),
         ],
         loader: 'babel-loader',
       },

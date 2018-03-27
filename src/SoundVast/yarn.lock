@@ -7893,7 +7893,7 @@ react-jplayer-utils@latest:
     react-redux "^5.0.4"
     recompose "^0.25.0"
 
-react-jplayer@latest:
+react-jplayer@^7.0.0:
   version "7.1.3"
   resolved "https://registry.yarnpkg.com/react-jplayer/-/react-jplayer-7.1.3.tgz#2fb59d4f676214639010408d88ccd26332e00616"
   dependencies:
@@ -7906,16 +7906,29 @@ react-jplayer@latest:
     recompose "^0.24.0"
     screenfull "^3.0.2"
 
-react-jplaylist@latest:
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/react-jplaylist/-/react-jplaylist-3.1.3.tgz#3c5c02953c5f7ce7155c33631213215eab6447bd"
+react-jplayer@^7.2.0:
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/react-jplayer/-/react-jplayer-7.2.0.tgz#2521fb3c29f12adcb0ab26fbe7ec0309ea3f9b47"
+  dependencies:
+    classnames "^2.2.5"
+    lodash.merge "^4.6.0"
+    prop-types "^15.5.8"
+    react "^15.4.1"
+    react-jplayer-utils latest
+    react-motion "^0.5.0"
+    recompose "^0.24.0"
+    screenfull "^3.0.2"
+
+react-jplaylist@^3.1.4:
+  version "3.1.4"
+  resolved "https://registry.yarnpkg.com/react-jplaylist/-/react-jplaylist-3.1.4.tgz#643be38b1ec996c5f0c11c45c069bb1ba37a79f7"
   dependencies:
     classnames "^2.2.5"
     lodash.maxby "^4.6.0"
     lodash.merge "^4.6.0"
     prop-types "^15.5.8"
     react "^15.4.1"
-    react-jplayer latest
+    react-jplayer "^7.0.0"
     react-jplayer-utils latest
     react-redux "^5.0.2"
     recompose "^0.25.0"
