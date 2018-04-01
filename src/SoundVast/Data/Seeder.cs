@@ -29,12 +29,13 @@ using Newtonsoft.Json;
 using SoundVast.Components.LiveStream;
 using System.Net;
 using Microsoft.AspNetCore.StaticFiles;
+using SoundVast.Utilities;
+using SoundVast.Components.Dirble;
 
 namespace SoundVast.Data
 {
     public static class Seeder
     {
-        public static string DIRBLE_API_ADDRESS = "http://api.dirble.com/v2/";
         private static IHostingEnvironment _env;
         private static IConfiguration _configuration;
         private static ICloudStorage _cloudStorage;
@@ -42,6 +43,7 @@ namespace SoundVast.Data
         private static ILiveStreamService _liveStreamService;
         private static IUploadService _uploadService;
         private static IGenreService _genreService;
+        private static IDirble _dirble;
 
         public static async Task<IWebHost> SeedData(this IWebHost webHost)
         {
@@ -56,6 +58,7 @@ namespace SoundVast.Data
                     _uploadService = scope.ServiceProvider.GetRequiredService<IUploadService>();
                     _genreService = scope.ServiceProvider.GetRequiredService<IGenreService>();
                     _liveStreamService = scope.ServiceProvider.GetRequiredService<ILiveStreamService>();
+                    _dirble = scope.ServiceProvider.GetRequiredService<IDirble>();
 
                     context.Database.Migrate();
 
@@ -63,13 +66,13 @@ namespace SoundVast.Data
                     var otherGenres = OtherGenres.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>().ToArray();
 
                     await SeedImages();
-                    await SeedGenres(context);
-                    await SeedLiveStreams();
+                    //  await SeedGenres(context);
+                    //  await SeedLiveStreams();
                     SeedQuotes(context);
 
                     _genreService.UpdateCoverImages();
 
-                    LuceneSearch.AddOrUpdateLuceneIndex(_audioService.GetAudios());
+                    // LuceneSearch.AddOrUpdateLuceneIndex(_audioService.GetAudios());
 
                     context.SaveChanges();
                 }
@@ -80,27 +83,18 @@ namespace SoundVast.Data
 
         public static async Task SeedLiveStreams()
         {
-            var devKey = _configuration["DirbleAPIKey"];
+            IEnumerable<StationDirbleDto> stationDtos;
+            var page = 1;
 
-            if (devKey == null) return;
-
-            using (var client = new HttpClient())
+            do
             {
-                IEnumerable<StationDirbleDto> stationDtos;
-                var page = 1;
+                stationDtos = await _dirble.GetStations(page);
 
-                do
+                foreach (var stationDto in stationDtos)
                 {
-                    var response = await client.GetAsync(DIRBLE_API_ADDRESS + $"stations?token={devKey}&per_page=30&page={page}");
+                    var liveStreamExists = _liveStreamService.GetLiveStream(stationDto.Id) != null;
 
-                    response.EnsureSuccessStatusCode();
-
-                    var stream = await response.Content.ReadAsStreamAsync();
-                    var json = await new StreamReader(stream).ReadToEndAsync();
-
-                    stationDtos = JsonConvert.DeserializeObject<IEnumerable<StationDirbleDto>>(json);
-
-                    foreach (var stationDto in stationDtos)
+                    if (!liveStreamExists)
                     {
                         string coverImageName = null;
 
@@ -119,7 +113,12 @@ namespace SoundVast.Data
                                             memoryStream.Position = 0;
 
                                             new FileExtensionContentTypeProvider().TryGetContentType(stationDto.Image.Url, out string contentType);
-                                            coverImageName = await _uploadService.UploadCoverImage(stationDto.Image.Url, memoryStream, contentType);
+
+                                            try
+                                            {
+                                                coverImageName = await _uploadService.UploadCoverImage(stationDto.Image.Url, memoryStream, contentType);
+                                            }
+                                            catch (Exception) { }
                                         }
                                     }
                                 }
@@ -163,9 +162,10 @@ namespace SoundVast.Data
                         _liveStreamService.Add(liveStream);
                     }
 
-                    page++;
-                } while (stationDtos.Any());
-            }
+                }
+
+                page++;
+            } while (stationDtos.Any());
         }
 
         public static void SeedQuotes(ApplicationDbContext context)
@@ -189,54 +189,44 @@ namespace SoundVast.Data
 
         public static async Task SeedGenres(ApplicationDbContext context)
         {
-            var devKey = _configuration["DirbleAPIKey"];
+            var genreDtos = await _dirble.GetCategoriesInTreeView();
 
-            if (devKey == null) return;
-
-            using (var client = new HttpClient())
+            Genre GetGenre(GenreDirbleDto genreDto)
             {
-                var response = await client.GetAsync(DIRBLE_API_ADDRESS + $"categories/tree?token={devKey}");
-                var stream = await response.Content.ReadAsStreamAsync();
-                var json = await new StreamReader(stream).ReadToEndAsync();
-                var genreDtos = JsonConvert.DeserializeObject<IEnumerable<GenreDirbleDto>>(json);
-
-                Genre GetGenre (GenreDirbleDto genreDto)
+                var genre = new Genre
                 {
-                    var genre = new Genre
-                    {
-                        Id = genreDto.Id,
-                        Name = genreDto.Title,
-                        Description = String.IsNullOrWhiteSpace(genreDto.Description) ? null : genreDto.Description,
-                        Slug = genreDto.Slug,
-                        Urlid = String.IsNullOrWhiteSpace(genreDto.Urlid) ? null : genreDto.Urlid,
-                        DateAdded = DateTimeOffset.Parse(genreDto.CreatedAt),
-                        DateUpdated = DateTimeOffset.Parse(genreDto.UpdatedAt),
-                        Position = genreDto.Position,
-                    };
-
-                    return genre;
+                    Id = genreDto.Id,
+                    Name = genreDto.Title,
+                    Description = String.IsNullOrWhiteSpace(genreDto.Description) ? null : genreDto.Description,
+                    Slug = genreDto.Slug,
+                    Urlid = String.IsNullOrWhiteSpace(genreDto.Urlid) ? null : genreDto.Urlid,
+                    DateAdded = DateTimeOffset.Parse(genreDto.CreatedAt),
+                    DateUpdated = DateTimeOffset.Parse(genreDto.UpdatedAt),
+                    Position = genreDto.Position,
                 };
 
-                void AddChildGenres(Genre genre, GenreDirbleDto genreDto)
+                return genre;
+            };
+
+            void AddChildGenres(Genre genre, GenreDirbleDto genreDto)
+            {
+                foreach (var child in genreDto.Children)
                 {
-                    foreach (var child in genreDto.Children)
-                    {
-                        var childGenre = GetGenre(child);
+                    var childGenre = GetGenre(child);
 
-                        genre.ChildGenres.Add(childGenre);
+                    genre.ChildGenres.Add(childGenre);
 
-                        AddChildGenres(childGenre, child);
-                    }
+                    AddChildGenres(childGenre, child);
                 }
+            }
 
-                foreach (var genreDto in genreDtos)
-                {
-                    var genre = GetGenre(genreDto);
+            foreach (var genreDto in genreDtos)
+            {
+                var genre = GetGenre(genreDto);
 
-                    AddChildGenres(genre, genreDto);
+                AddChildGenres(genre, genreDto);
 
-                    _genreService.Add(genre);
-                }
+                _genreService.Add(genre);
             }
         }
     }

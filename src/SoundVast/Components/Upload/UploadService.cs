@@ -40,8 +40,7 @@ namespace SoundVast.Components.Upload
 
         public async Task<string> UploadRawImage(string path, MemoryStream memoryStream, string contentType)
         {
-            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(path);
-            var newFileName = $"{fileNameWithoutExtension}_{Guid.NewGuid().ToString()}";
+            var newFileName = $"{Guid.NewGuid().ToString()}";
 
             //TODO: Put raw image in archive storage
             var blobName = $"{newFileName}{Path.GetExtension(path)}";

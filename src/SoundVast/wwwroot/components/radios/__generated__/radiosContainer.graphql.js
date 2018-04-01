@@ -17,19 +17,17 @@ export type radiosContainer = {|
     +edges: ?$ReadOnlyArray<?{|
       +cursor: string,
       +node: ?{|
-        +id: string,
         +audioId: number,
-        +name: string,
-        +coverImages: ?$ReadOnlyArray<?{|
-          +dimention: string,
-          +imageUrl: string,
-        |}>,
-        +streamDatas: ?$ReadOnlyArray<?{|
-          +liveStreamUrl: string,
-          +contentType: ?string,
-        |}>,
         +$fragmentRefs: (radioContainer_liveStream$ref & sideBarContainer_audios$ref),
       |},
+    |}>,
+    +items: ?$ReadOnlyArray<?{|
+      +audioId: number,
+      +name: string,
+      +streamDatas: ?$ReadOnlyArray<?{|
+        +liveStreamUrl: string,
+      |}>,
+      +coverImageUrl: ?string,
     |}>,
     +pageInfo: {|
       +hasNextPage: boolean,
@@ -40,7 +38,15 @@ export type radiosContainer = {|
 */
 
 
-const node/*: ConcreteFragment*/ = {
+const node/*: ConcreteFragment*/ = (function(){
+var v0 = {
+  "kind": "ScalarField",
+  "alias": null,
+  "name": "audioId",
+  "args": null,
+  "storageKey": null
+};
+return {
   "kind": "Fragment",
   "name": "radiosContainer",
   "type": "Query",
@@ -137,77 +143,7 @@ const node/*: ConcreteFragment*/ = {
               "concreteType": "LiveStream",
               "plural": false,
               "selections": [
-                {
-                  "kind": "ScalarField",
-                  "alias": null,
-                  "name": "id",
-                  "args": null,
-                  "storageKey": null
-                },
-                {
-                  "kind": "ScalarField",
-                  "alias": null,
-                  "name": "audioId",
-                  "args": null,
-                  "storageKey": null
-                },
-                {
-                  "kind": "ScalarField",
-                  "alias": null,
-                  "name": "name",
-                  "args": null,
-                  "storageKey": null
-                },
-                {
-                  "kind": "LinkedField",
-                  "alias": null,
-                  "name": "coverImages",
-                  "storageKey": null,
-                  "args": null,
-                  "concreteType": "Image",
-                  "plural": true,
-                  "selections": [
-                    {
-                      "kind": "ScalarField",
-                      "alias": null,
-                      "name": "dimention",
-                      "args": null,
-                      "storageKey": null
-                    },
-                    {
-                      "kind": "ScalarField",
-                      "alias": null,
-                      "name": "imageUrl",
-                      "args": null,
-                      "storageKey": null
-                    }
-                  ]
-                },
-                {
-                  "kind": "LinkedField",
-                  "alias": null,
-                  "name": "streamDatas",
-                  "storageKey": null,
-                  "args": null,
-                  "concreteType": "StreamData",
-                  "plural": true,
-                  "selections": [
-                    {
-                      "kind": "ScalarField",
-                      "alias": null,
-                      "name": "liveStreamUrl",
-                      "args": null,
-                      "storageKey": null
-                    },
-                    {
-                      "kind": "ScalarField",
-                      "alias": null,
-                      "name": "contentType",
-                      "args": null,
-                      "storageKey": null
-                    }
-                  ]
-                },
+                v0,
                 {
                   "kind": "FragmentSpread",
                   "name": "radioContainer_liveStream",
@@ -226,6 +162,50 @@ const node/*: ConcreteFragment*/ = {
                   "storageKey": null
                 }
               ]
+            }
+          ]
+        },
+        {
+          "kind": "LinkedField",
+          "alias": null,
+          "name": "items",
+          "storageKey": null,
+          "args": null,
+          "concreteType": "LiveStream",
+          "plural": true,
+          "selections": [
+            v0,
+            {
+              "kind": "ScalarField",
+              "alias": null,
+              "name": "name",
+              "args": null,
+              "storageKey": null
+            },
+            {
+              "kind": "LinkedField",
+              "alias": null,
+              "name": "streamDatas",
+              "storageKey": null,
+              "args": null,
+              "concreteType": "StreamData",
+              "plural": true,
+              "selections": [
+                {
+                  "kind": "ScalarField",
+                  "alias": null,
+                  "name": "liveStreamUrl",
+                  "args": null,
+                  "storageKey": null
+                }
+              ]
+            },
+            {
+              "kind": "ScalarField",
+              "alias": null,
+              "name": "coverImageUrl",
+              "args": null,
+              "storageKey": null
             }
           ]
         },
@@ -258,5 +238,6 @@ const node/*: ConcreteFragment*/ = {
     }
   ]
 };
-(node/*: any*/).hash = '76c0b8e7d91d65c9c1d543a0f079e9a8';
+})();
+(node/*: any*/).hash = 'e42027f6b1f0117a8bac4f9da55a9472';
 module.exports = node;

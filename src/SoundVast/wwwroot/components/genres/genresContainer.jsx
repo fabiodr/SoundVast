@@ -1,10 +1,9 @@
 import React from 'react';
 import { graphql } from 'react-relay';
-import { compose, withProps } from 'recompose';
+import { compose } from 'recompose';
 import { fragmentContainer } from 'recompose-relay-modern';
 
 import Genres from './genres';
-import genreType from './genreType';
 
 const query = graphql`
   query genresContainerQuery {
@@ -18,10 +17,7 @@ const fragments = graphql`
   fragment genresContainer_genres on Genre @relay(plural: true) {
     id,
     name,
-    coverImages {
-      dimention
-      imageUrl
-    }
+    coverImageUrl
   }
 `;
 

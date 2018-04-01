@@ -7919,9 +7919,9 @@ react-jplayer@^7.2.0:
     recompose "^0.24.0"
     screenfull "^3.0.2"
 
-react-jplaylist@^3.1.4:
-  version "3.1.4"
-  resolved "https://registry.yarnpkg.com/react-jplaylist/-/react-jplaylist-3.1.4.tgz#643be38b1ec996c5f0c11c45c069bb1ba37a79f7"
+react-jplaylist@^3.1.5:
+  version "3.1.5"
+  resolved "https://registry.yarnpkg.com/react-jplaylist/-/react-jplaylist-3.1.5.tgz#0d85967bc418ea5b09fbe5e87149f7d2c5fffb62"
   dependencies:
     classnames "^2.2.5"
     lodash.maxby "^4.6.0"

@@ -25,6 +25,7 @@ const plugins = [
     'process.env': {
       NODE_ENV: JSON.stringify(process.env.NODE_ENV),
       ENABLE_UPLOAD: JSON.stringify(process.env.ENABLE_UPLOAD),
+      DIRBLE_API_KEY: JSON.stringify(process.env.DIRBLE_API_KEY),
     },
   }),
   new HTMLPlugin({

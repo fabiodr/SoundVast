@@ -4,7 +4,6 @@ import { Helmet } from 'react-helmet';
 
 import Grid from '../shared/grid/grid';
 import Genre from './genreContainer';
-import genreType from './genreType';
 import styles from './genres.less';
 import preferredUrl from '../shared/utilities/preferredUrl';
 
@@ -20,7 +19,7 @@ const Genres = ({ genres }) => (
         <Genre
           key={genre.id}
           name={genre.name}
-          coverImages={genre.coverImages}
+          coverImageUrl={genre.coverImageUrl}
           url="radios"
         />
       ))}
@@ -33,10 +32,7 @@ Genres.propTypes = {
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
-      coverImages: PropTypes.arrayOf({
-        dimention: PropTypes.string.isRequired,
-        imageUrl: PropTypes.string.isRequired,
-      }),
+      coverImageUrl: PropTypes.string,
     }),
   ).isRequired,
 };

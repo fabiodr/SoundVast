@@ -12,12 +12,16 @@
 
   <ItemGroup>
     <Compile Remove="Components\Form\**" />
+    <Compile Remove="Components\User\Profile\**" />
     <Compile Remove="wwwroot\js\**" />
     <Content Remove="Components\Form\**" />
+    <Content Remove="Components\User\Profile\**" />
     <Content Remove="wwwroot\js\**" />
     <EmbeddedResource Remove="Components\Form\**" />
+    <EmbeddedResource Remove="Components\User\Profile\**" />
     <EmbeddedResource Remove="wwwroot\js\**" />
     <None Remove="Components\Form\**" />
+    <None Remove="Components\User\Profile\**" />
     <None Remove="wwwroot\js\**" />
   </ItemGroup>
 
@@ -84,7 +88,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Components\User\Profile\" />
     <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
 

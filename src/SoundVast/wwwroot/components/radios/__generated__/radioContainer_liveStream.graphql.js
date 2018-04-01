@@ -16,10 +16,7 @@ declare export opaque type radioContainer_liveStream$ref: FragmentReference;
 export type radioContainer_liveStream = {|
   +audioId: number,
   +name: string,
-  +coverImages: ?$ReadOnlyArray<?{|
-    +dimention: string,
-    +imageUrl: string,
-  |}>,
+  +coverImageUrl: ?string,
   +websiteUrl: ?string,
   +likes: number,
   +dislikes: number,
@@ -51,29 +48,11 @@ const node/*: ConcreteFragment*/ = {
       "storageKey": null
     },
     {
-      "kind": "LinkedField",
+      "kind": "ScalarField",
       "alias": null,
-      "name": "coverImages",
-      "storageKey": null,
+      "name": "coverImageUrl",
       "args": null,
-      "concreteType": "Image",
-      "plural": true,
-      "selections": [
-        {
-          "kind": "ScalarField",
-          "alias": null,
-          "name": "dimention",
-          "args": null,
-          "storageKey": null
-        },
-        {
-          "kind": "ScalarField",
-          "alias": null,
-          "name": "imageUrl",
-          "args": null,
-          "storageKey": null
-        }
-      ]
+      "storageKey": null
     },
     {
       "kind": "ScalarField",
@@ -113,5 +92,5 @@ const node/*: ConcreteFragment*/ = {
     }
   ]
 };
-(node/*: any*/).hash = 'faf6d5b8b295947f9e7996edd1ba9c5d';
+(node/*: any*/).hash = 'bdf0b8bcd87003c93d485c4fb60ef809';
 module.exports = node;

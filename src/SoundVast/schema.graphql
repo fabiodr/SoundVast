@@ -1,5 +1,5 @@
 # source: https://localhost:8080/graphql
-# timestamp: Mon Mar 26 2018 23:54:46 GMT+0200 (W. Europe Daylight Time)
+# timestamp: Sun Apr 01 2018 19:55:49 GMT+0200 (W. Europe Daylight Time)
 
 schema {
   query: Query
@@ -29,8 +29,8 @@ interface Audio {
   likes: Int!
   dislikes: Int!
 
-  """The different dimention images for the cover image"""
-  coverImages: [Image]
+  """The cover image url"""
+  coverImageUrl: String
 
   """The date the user added the audio"""
   dateAdded: Date
@@ -165,23 +165,8 @@ type ExternalLoginConfirmationPayload {
 
 """Provides filtering"""
 input FilterInput {
-  """Filter by date"""
+  """Filter by newest"""
   newest: Boolean = null
-
-  """Filter by likes"""
-  ratingFilter: RatingFilterInput = null
-
-  """Filter by comments"""
-  mostCommented: Boolean = null
-
-  """Filter by plays"""
-  mostPlayed: Boolean = null
-
-  """The start date to start filtering from"""
-  dateFrom: Date = null
-
-  """The end date to end filtering to"""
-  dateTo: Date = null
 }
 
 type Flag implements Node {
@@ -238,16 +223,8 @@ type Genre {
   id: ID
   name: String!
 
-  """The different dimention images for the cover image"""
-  coverImages: [Image]
-}
-
-type Image {
-  """The dimention of the image"""
-  dimention: String!
-
-  """The absolute image url"""
-  imageUrl: String!
+  """The cover image url"""
+  coverImageUrl: String
 }
 
 type LiveStream implements Node & Audio {
@@ -262,8 +239,8 @@ type LiveStream implements Node & Audio {
   dislikes: Int!
   country: String!
 
-  """The different dimention images for the cover image"""
-  coverImages: [Image]
+  """The cover image url"""
+  coverImageUrl: String
 
   """The date the user added the live stream"""
   dateAdded: Date
@@ -465,15 +442,6 @@ type Rating implements Node {
 
   """The comment that was rated by the user"""
   comment: Comment
-}
-
-input RatingFilterInput {
-  topRated: Boolean = null
-
-  """
-  The minimum number of ratings that need to have been applied for this filter to have any effect
-  """
-  minimumNumberOfRatingsThreshold: Int = null
 }
 
 input RegisterInput {

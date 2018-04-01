@@ -8,10 +8,7 @@ const fragments = graphql`
   fragment radioContainer_liveStream on LiveStream {
     audioId
     name
-    coverImages {
-      dimention
-      imageUrl
-    }
+    coverImageUrl
     websiteUrl
     likes
     dislikes

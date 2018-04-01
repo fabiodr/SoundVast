@@ -5,25 +5,20 @@ import styles from './genre.less';
 import ImageButton from '../shared/button/imageButton';
 import CoverImage from '../audio/coverImageContainer';
 
-const Genre = ({ onClick, name, coverImages }) => (
+const Genre = ({ onClick, name, coverImageUrl }) => (
   <ImageButton className={styles.genre} styleName="secondary" onClick={onClick}>
-    <CoverImage name={name} coverImages={coverImages} />
+    <CoverImage name={name} coverImageUrl={coverImageUrl} />
     <div>{name}</div>
   </ImageButton>
 );
 
 Genre.defaultProps = {
-  coverImages: null,
+  coverImageUrl: null,
 };
 
 Genre.propTypes = {
   name: PropTypes.string.isRequired,
-  coverImages: PropTypes.arrayOf(
-    PropTypes.shape({
-      dimention: PropTypes.string.isRequired,
-      imageUrl: PropTypes.string.isRequired,
-    }).isRequired,
-  ),
+  coverImageUrl: PropTypes.string,
   onClick: PropTypes.func.isRequired,
 };
 

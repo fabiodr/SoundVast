@@ -43,12 +43,17 @@ namespace SoundVast.Components.Audio
             this.validationProvider = validationProvider;
         }
 
+        public int GetCount()
+        {
+            return _repository.GetAll().Count();
+        }
+
         public IEnumerable<T> GetAudios()
         {
             return _repository.GetAll().BuildAudio();
         }
 
-        public virtual IEnumerable<T> GetAudios(string genreName, string searchQuery, Filter.Filter filter)
+        public virtual IEnumerable<T> GetAudios(string genreName, string searchQuery)
         {
             IEnumerable<T> audios;
 
@@ -69,26 +74,7 @@ namespace SoundVast.Components.Audio
                 audios = audios.Where(x => x.AudioGenres.Any(z => z.Genre.Name == genreName));
             }
 
-            if (filter != null)
-            {
-                if (filter.RatingFilter.TopRated)
-                {
-                    audios = audios.TopRated(filter.RatingFilter.MinimumNumberOfRatingsThreshold);
-                }
-
-                if (filter.MostCommented)
-                {
-                    audios = audios.MostCommented();
-                }
-            }
-
-
             return audios;
-        }
-
-        public virtual T GetAudio(int id)
-        {
-            return _repository.GetAll().BuildAudio().Single(x => x.Id == id);
         }
 
         public void Add(T model)

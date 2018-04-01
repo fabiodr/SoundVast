@@ -6,17 +6,17 @@ import { actions as jPlayerActions } from 'react-jplayer';
 
 import Play from './play';
 
-const mapStateToProps = ({ jPlayers }, { id }) => ({
+const mapStateToProps = ({ jPlayers, jPlaylists }, { id }) => ({
   paused: jPlayers.FooterPlaylist.paused,
   isCurrent: jPlayers.FooterPlaylist.media.id === id,
+  playlist: jPlaylists.FooterPlaylist.playlist,
 });
 
 const handlers = {
-  onClick: ({ dispatch, isCurrent, paused, footerPlaylist, id }) => () => {
+  onClick: ({ dispatch, isCurrent, paused, id, playlist }) => () => {
     if (paused || !isCurrent) {
-      const index = footerPlaylist.findIndex(x => x.id === id);
+      const index = playlist.findIndex(x => x.id === id);
 
-      dispatch(actions.setPlaylist('FooterPlaylist', footerPlaylist));
       dispatch(actions.play('FooterPlaylist', index));
     } else {
       dispatch(jPlayerActions.pause('FooterPlaylist'));
@@ -26,21 +26,6 @@ const handlers = {
 
 const propTypes = {
   id: PropTypes.number.isRequired,
-  footerPlaylist: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      title: PropTypes.string.isRequired,
-      artist: PropTypes.string,
-      sources: PropTypes.shape({
-        mp3: PropTypes.arrayOf(
-          PropTypes.shape({
-            src: PropTypes.string.isRequired,
-          }).isRequired,
-        ).isRequired,
-      }),
-      poster: PropTypes.string,
-    }),
-  ).isRequired,
 };
 
 export default compose(

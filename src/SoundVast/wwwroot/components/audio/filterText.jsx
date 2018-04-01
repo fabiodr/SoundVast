@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import styles from './filterText.less';
-import DateFilter from './dateFilterContainer';
 import RemoveFilter from './removeFilterContainer';
 
 // TODO: Add clear all filters
@@ -11,7 +10,6 @@ const FilterText = ({
   genre,
   searchQuery,
   audioTypeText,
-  hasDateFrom,
 }) => (
   queryFilterDictionary.key || genre || searchQuery ? (
     <div className={styles.filterText}>
@@ -46,16 +44,6 @@ const FilterText = ({
           </span>
         </span>
       )}
-      {hasDateFrom && (
-        <span>
-          &nbsp;that were added&nbsp;
-          <span className={styles.dateFromLabel}>
-            <DateFilter dateFilterName="dateFrom" />
-            <RemoveFilter name="dateFrom" />
-          </span>
-          &nbsp;days ago&nbsp;
-        </span>
-      )}
     </div>
   ) : null
 );
@@ -64,11 +52,9 @@ FilterText.defaultProps = {
   genre: null,
   searchQuery: null,
   queryFilterDictionary: {},
-  hasDateFrom: false,
 };
 
 FilterText.propTypes = {
-  hasDateFrom: PropTypes.bool,
   queryFilterDictionary: PropTypes.shape({
     key: PropTypes.string,
     label: PropTypes.string,

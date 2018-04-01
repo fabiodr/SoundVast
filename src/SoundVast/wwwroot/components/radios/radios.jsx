@@ -10,56 +10,50 @@ import AudiosContent from '../content/audiosContentContainer';
 import AudiosHeader from '../audio/audiosHeader';
 import AudiosSubHeader from '../audio/audiosSubHeader';
 import Loader from '../shared/loaders/loader';
-import convertRadioToMedia from '../shared/utilities/convertRadioToMedia';
 import SideBar from '../audio/sideBarContainer';
 import styles from './radios.less';
 import preferredUrl from '../shared/utilities/preferredUrl';
 
-const Radios = ({ liveStreams, loadMore }) => {
-  const footerPlaylist = liveStreams.edges.map(({ node }) => convertRadioToMedia(node));
-
-  return (
-    <AudiosContent>
-      <Helmet>
-        <title>Radio stations | Free online radios, podcasts and playlists - SoundVast</title>
-        <meta name="description" content="50,000+ of the best radio stations and streams with live comments. Listen for free on SoundVast.com." />
-        <link rel="canonical" href={preferredUrl} />
-      </Helmet>
-      <AudiosHeader audioTypeText="radios" />
-      <div className={styles.radiosBody}>
-        <AudiosSubHeader />
-        <ScrollTracker>
-          {(elementToTrackRef, values) => (
-            <div className={styles.infiniteScrollContainer} ref={elementToTrackRef}>
-              <InfiniteScroll
-                loadMore={loadMore}
-                hasMore={liveStreams.pageInfo.hasNextPage}
-                loader={<Loader key={0} />}
-                initialLoad={false}
-                className={styles.gridContainer}
-              >
-                <Grid cellClassName={styles.gridCellClassName}>
-                  {liveStreams.edges.map(({ node }, i) => (
-                    <Radio
-                      key={node.audioId}
-                      isFirstLiveStream={i === 0}
-                      footerPlaylist={footerPlaylist}
-                      liveStream={node}
-                    />
-                  ))}
-                </Grid>
-              </InfiniteScroll>
-              <SideBar
-                isFixed={values.pastTopOfElement}
-                audios={liveStreams.edges.map(x => x.node)}
-              />
-            </div>
-          )}
-        </ScrollTracker>
-      </div>
-    </AudiosContent>
-  );
-};
+const Radios = ({ liveStreams, loadMore }) => (
+  <AudiosContent>
+    <Helmet>
+      <title>Radio stations | Free online radios, podcasts and playlists - SoundVast</title>
+      <meta name="description" content="50,000+ of the best radio stations and streams with live comments. Listen for free on SoundVast.com." />
+      <link rel="canonical" href={preferredUrl} />
+    </Helmet>
+    <AudiosHeader audioTypeText="radios" />
+    <div className={styles.radiosBody}>
+      <AudiosSubHeader />
+      <ScrollTracker>
+        {(elementToTrackRef, values) => (
+          <div className={styles.infiniteScrollContainer} ref={elementToTrackRef}>
+            <InfiniteScroll
+              loadMore={loadMore}
+              hasMore={liveStreams.pageInfo.hasNextPage}
+              loader={<Loader key={0} />}
+              initialLoad={false}
+              className={styles.gridContainer}
+            >
+              <Grid cellClassName={styles.gridCellClassName}>
+                {liveStreams.edges.map(({ node }, i) => (
+                  <Radio
+                    key={node.audioId}
+                    isFirstLiveStream={i === 0}
+                    liveStream={node}
+                  />
+                ))}
+              </Grid>
+            </InfiniteScroll>
+            <SideBar
+              isFixed={values.pastTopOfElement}
+              audios={liveStreams.edges.map(x => x.node)}
+            />
+          </div>
+        )}
+      </ScrollTracker>
+    </div>
+  </AudiosContent>
+);
 
 Radios.propTypes = {
   liveStreams: PropTypes.shape({
@@ -70,12 +64,6 @@ Radios.propTypes = {
       PropTypes.shape({
         node: PropTypes.shape({
           audioId: PropTypes.number.isRequired,
-          streamDatas: PropTypes.arrayOf(
-            PropTypes.shape({
-              liveStreamUrl: PropTypes.string.isRequired,
-              contentType: PropTypes.string,
-            }).isRequired,
-          ).isRequired,
         }),
       }),
     ),

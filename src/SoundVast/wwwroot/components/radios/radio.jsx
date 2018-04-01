@@ -12,25 +12,22 @@ import Flag from '../flag/flag';
 import styles from './radio.less';
 import RatingPercent from '../rating/ratingPercent';
 import SideBar from '../audio/mobileSideBarContainer';
+import Listeners from './listenersContainer';
 
-const Radio = ({ isFirstLiveStream, liveStream, footerPlaylist }) => {
+const Radio = ({ isFirstLiveStream, liveStream }) => {
   const name = <Name className={styles.radioName} name={liveStream.name} />;
 
   return (
     <div>
       {liveStream.websiteUrl ? <a href={liveStream.websiteUrl} target="_blank">{name}</a> : <div>{name}</div>}
       <div className={styles.coverImageContainer}>
-        <Play id={liveStream.audioId} footerPlaylist={footerPlaylist}>
-          <CoverImage name={liveStream.name} coverImages={liveStream.coverImages} />
+        <Play id={liveStream.audioId}>
+          <CoverImage name={liveStream.name} coverImageUrl={liveStream.coverImageUrl} />
         </Play>
       </div>
       <div className={styles.controls}>
         <div className={styles.controlsRow}>
-          <RatingPercent
-            className={styles.ratingPercent}
-            likes={liveStream.likes}
-            dislikes={liveStream.dislikes}
-          />
+          <Listeners id={liveStream.audioId} />
           <div className={styles.alignRight}>
             <Rating
               likes={liveStream.likes}
@@ -41,6 +38,11 @@ const Radio = ({ isFirstLiveStream, liveStream, footerPlaylist }) => {
           </div>
         </div>
         <div className={styles.controlsRow}>
+          <RatingPercent
+            className={styles.ratingPercent}
+            likes={liveStream.likes}
+            dislikes={liveStream.dislikes}
+          />
           <div className={classnames(styles.alignRight, styles.extraControls)}>
             <Flag modalId="flagAudio" id={liveStream.audioId} />
           </div>
@@ -56,12 +58,7 @@ const Radio = ({ isFirstLiveStream, liveStream, footerPlaylist }) => {
 
 Radio.propTypes = {
   liveStream: PropTypes.shape({
-    coverImages: PropTypes.arrayOf(
-      PropTypes.shape({
-        dimention: PropTypes.string.isRequired,
-        imageUrl: PropTypes.string.isRequired,
-      }).isRequired,
-    ),
+    coverImageUrl: PropTypes.string,
     websiteUrl: PropTypes.string,
     audioId: PropTypes.number.isRequired,
     dislikes: PropTypes.number.isRequired,
@@ -69,20 +66,6 @@ Radio.propTypes = {
     name: PropTypes.string.isRequired,
   }).isRequired,
   isFirstLiveStream: PropTypes.bool.isRequired,
-  footerPlaylist: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      title: PropTypes.string.isRequired,
-      sources: PropTypes.shape({
-        mp3: PropTypes.arrayOf(
-          PropTypes.shape({
-            src: PropTypes.string.isRequired,
-          }).isRequired,
-        ).isRequired,
-      }),
-      poster: PropTypes.string,
-    }),
-  ).isRequired,
 };
 
 export default Radio;

@@ -1,13 +1,14 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { compose, withHandlers, flattenProp } from 'recompose';
+import { compose, withHandlers, flattenProp, lifecycle } from 'recompose';
 import { graphql } from 'react-relay';
 import { paginationContainer } from 'recompose-relay-modern';
+import { connect } from 'react-redux';
 import { actions } from 'react-jplaylist';
 
 import Radios from './radios';
 import { audiosToLoad } from '../shared/utilities/itemsToLoad';
 import getAudioVariables from '../shared/utilities/getAudioVariables';
+import convertRadioToMedia from '../shared/utilities/convertRadioToMedia';
 
 const query = graphql`
   query radiosContainerQuery(
@@ -33,20 +34,18 @@ const fragments = graphql`
       edges {
         cursor
         node {
-          id
           audioId
-          name
-          coverImages {
-            dimention
-            imageUrl
-          }
-          streamDatas {
-            liveStreamUrl
-            contentType
-          }
           ...radioContainer_liveStream
           ...sideBarContainer_audios
         }
+      }
+      items {
+        audioId
+        name
+        streamDatas {
+          liveStreamUrl
+        }
+        coverImageUrl
       }
       pageInfo {
         hasNextPage
@@ -75,17 +74,41 @@ const connectionConfig = {
   }),
 };
 
-const handlers = {
-  loadMore: ({ relay }) => () => relay.loadMore(audiosToLoad),
+const handlersFactory = () => {
+  let shouldLoadMore = true;
+
+  return {
+    loadMore: ({ relay }) => () => {
+      if (shouldLoadMore) {
+        shouldLoadMore = false;
+        relay.loadMore(audiosToLoad, () => {
+          shouldLoadMore = true;
+        });
+      }
+    },
+  };
 };
 
 const enhance = compose(
   connect(null, {
+    add: actions.add,
     setPlaylist: actions.setPlaylist,
   }),
   paginationContainer(fragments, connectionConfig),
   flattenProp('data'),
-  withHandlers(handlers),
+  withHandlers(handlersFactory),
+  lifecycle({
+    componentDidMount() {
+      const playlist = this.props.liveStreams.items.map(item => convertRadioToMedia(item));
+
+      this.props.setPlaylist('FooterPlaylist', playlist);
+    },
+    componentDidUpdate(prevProps) {
+      if (this.props.liveStreams.items !== prevProps.liveStreams.items) {
+        this.props.liveStreams.items.forEach(item => this.props.add('FooterPlaylist', convertRadioToMedia(item)));
+      }
+    },
+  }),
 );
 
 const RadiosContainer = enhance(Radios);

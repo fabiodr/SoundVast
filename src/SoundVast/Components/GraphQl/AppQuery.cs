@@ -20,6 +20,8 @@ using SoundVast.Components.LiveStream;
 using SoundVast.Components.Quote;
 using SoundVast.Components.User;
 using SoundVast.Validation;
+using GraphQL.Types.Relay.DataObjects;
+using GraphQL.Relay.Utilities;
 
 namespace SoundVast.Components.GraphQl
 {
@@ -45,8 +47,18 @@ namespace SoundVast.Components.GraphQl
                     var genre = c.GetArgument<string>("genre");
                     var searchQuery = c.GetArgument<string>("searchQuery");
                     var filter = c.GetArgument<Filter.Filter>("filter");
+                    var offset = ConnectionUtils.OffsetOrDefault(c.After, 0);
+                    var page = ((offset + 1) / c.First.Value) + 2;
 
-                    return ConnectionUtils.ToConnection(liveStreamService.GetAudios(genre, searchQuery, filter), c);
+                    if (filter.Newest)
+                    {
+                        var liveStreams = liveStreamService.GetLiveStreams(c.First.Value * page, genre, searchQuery);
+
+                        return ConnectionUtils.ToConnection(liveStreams, c);
+                    }
+
+                    return liveStreamService.GetPopularLiveStreams(page, genre, searchQuery)
+                            .ContinueWith(x => ConnectionUtils.ToConnection(x.Result, c));
                 });
 
             Field<ListGraphType<GenrePayload>>("genres",
@@ -58,7 +70,7 @@ namespace SoundVast.Components.GraphQl
 
             Field<ExternalLoginCallbackPayload>()
                 .Name("externalLoginCallback")
-                .Resolve(new Func<ResolveFieldContext<object>, Task<object>>(async c =>
+                .ResolveAsync(async c =>
                 {
                     var info = await signInManager.GetExternalLoginInfoAsync();
                     if (info == null)
@@ -87,14 +99,14 @@ namespace SoundVast.Components.GraphQl
                         loginProvider = info.LoginProvider,
                         userName
                     };
-                }));
+                });
 
 
             Field<BooleanGraphType>()
                 .Name("confirmEmail")
                 .Argument<NonNullGraphType<StringGraphType>>("userId", "The id of the user")
                 .Argument<NonNullGraphType<StringGraphType>>("token", "The unique code to verify the email")
-                .Resolve(new Func<ResolveFieldContext<object>, Task<IEnumerable<AuthenticationScheme>>>(async c =>
+                .ResolveAsync(async c =>
                 {
                     var userId = c.GetArgument<string>("userId");
                     var token = c.GetArgument<string>("token");
@@ -115,16 +127,16 @@ namespace SoundVast.Components.GraphQl
                     }
 
                     return null;
-                }));
+                });
 
             Field<ListGraphType<LoginProvidersPayload>>()
                 .Name("loginProviders")
-                .Resolve(new Func<ResolveFieldContext<object>, Task<IEnumerable<AuthenticationScheme>>>(async c =>
+                .ResolveAsync(async c =>
                 {
                     var providers = await signInManager.GetExternalAuthenticationSchemesAsync();
 
                     return providers;
-                }));
+                });
         }
     }
 }

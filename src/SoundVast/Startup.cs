@@ -56,6 +56,8 @@ using SoundVast.Validation;
 using GraphQL.Server.Transports.AspNetCore;
 using GraphQL.Server.Transports.WebSockets;
 using GraphQL.Server.Transports.Subscriptions.Abstractions;
+using SoundVast.Utilities;
+using SoundVast.Components.Dirble;
 
 namespace SoundVast
 {
@@ -271,6 +273,7 @@ namespace SoundVast
             builder.RegisterType<Repository<Tag, ApplicationDbContext>>().As<IRepository<Tag>>();
             builder.RegisterType<Repository<StreamData, ApplicationDbContext>>().As<IRepository<StreamData>>();
             builder.RegisterType<LogMessagesListener>().As<IOperationMessageListener>().SingleInstance();
+            builder.RegisterType<Dirble>().As<IDirble>();
 
             return builder;
         }

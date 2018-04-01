@@ -30,7 +30,7 @@ namespace SoundVast.Components.Audio
             Field(x => x.Name);
             Field(x => x.Likes);
             Field(x => x.Dislikes);
-            Field<ListGraphType<ImagePayload>>("coverImages", "The different dimention images for the cover image", resolve: GetCoverImages);
+            Field<StringGraphType>("coverImageUrl", "The cover image url", resolve: GetCoverImageUrl);
             Field<DateGraphType>("dateAdded", "The date the user added the audio");
             Field<ListGraphType<GenrePayload>>("genres", "The genres the audio belongs to", resolve: c => c.Source.AudioGenres.Select(x => x.Genre));
             Field<ListGraphType<RatingPayload>>("ratings", "The ratings that have been applied by users to this audio");
@@ -45,26 +45,11 @@ namespace SoundVast.Components.Audio
                 });
         }
 
-        private async Task<object> GetCoverImages(ResolveFieldContext<Models.Audio> c)
+        private object GetCoverImageUrl(ResolveFieldContext<Models.Audio> c)
         {
             if (c.Source.CoverImageName == null) return null;
-        
-            var container = _cloudStorage.CloudBlobContainers[CloudStorageType.Image];
-            var segmentedBlobs = await container.ListBlobsSegmentedAsync(c.Source.CoverImageName, null);
-            var blobs = segmentedBlobs.Results.OfType<CloudBlockBlob>();
-            var coverImageUrls = blobs.Select(x => x.Uri.AbsoluteUri);
-            var images = Image.CoverImageSizes.Select(x =>
-            {
-                var coverImageUrl = coverImageUrls.Single(z => z.Contains(x.Key));
 
-                return new Image
-                {
-                    Dimention = x.Key,
-                    ImageUrl = coverImageUrl,
-                };
-            });
-
-            return images;
+            return $"{_cloudStorage.CloudBlobContainers[CloudStorageType.Image].Uri.AbsoluteUri}/{c.Source.CoverImageName}";
         }
     }
 }

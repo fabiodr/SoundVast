@@ -30,7 +30,7 @@ namespace SoundVast.Components.Genre
             foreach (var genre in genres)
             {
                 var audios = genre.AudioGenres.Select(x => x.Audio);
-                var coverImageName = audios.TopRated(0).Select(x => x.CoverImageName).FirstOrDefault();
+                var coverImageName = audios.Select(x => x.CoverImageName).FirstOrDefault();
 
                 genre.CoverImageName = coverImageName;
             }

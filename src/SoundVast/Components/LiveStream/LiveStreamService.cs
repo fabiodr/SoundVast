@@ -8,31 +8,60 @@ using SoundVast.Components.LiveStream.Models;
 using SoundVast.Repository;
 using SoundVast.Validation;
 using SoundVast.Storage.CloudStorage;
+using SoundVast.Utilities;
+using SoundVast.Components.Dirble;
 
 namespace SoundVast.Components.LiveStream
 {
     public class LiveStreamService : AudioService<Models.LiveStream>, ILiveStreamService
     {
-        public LiveStreamService(IRepository<Models.LiveStream> repository, IValidationProvider validationProvider, ICloudStorage cloudStorage)
+        private IRepository<Models.LiveStream> _repository;
+        private IDirble _dirble;
+
+        public LiveStreamService(IRepository<Models.LiveStream> repository, 
+            IValidationProvider validationProvider, ICloudStorage cloudStorage, IDirble dirble)
             : base(repository, validationProvider, cloudStorage)
         {
+            _repository = repository;
+            _dirble = dirble;
         }
 
-        public override IEnumerable<Models.LiveStream> GetAudios(string genreName, string searchQuery, Filter.Filter filter)
+        public Models.LiveStream GetLiveStream(int id)
         {
-            var liveStreams = base.GetAudios(genreName, searchQuery, filter).AsQueryable().BuildLiveStream();
+            return _repository.GetAll().BuildLiveStream().SingleOrDefault(x => x.Id == id);
+        }
 
-            if (filter.DateFrom.HasValue)
+        public async Task<IEnumerable<Models.LiveStream>> GetPopularLiveStreams(int page, string genreName, string searchQuery)
+        {
+            var liveStreams = GetAudios(genreName, searchQuery).AsQueryable().BuildLiveStream();
+            var popularLivestreams = new List<Models.LiveStream>();
+            var pageToFetch = 1;
+
+            while (pageToFetch <= page)
             {
-                liveStreams = liveStreams.Where(x => x.DateAdded > filter.DateFrom);
+                var stationDtos = await _dirble.GetPopularStations(pageToFetch, TimeSpan.FromMinutes(20), 30);
+
+                foreach (var stationDto in stationDtos)
+                {
+                    var station = GetLiveStream(stationDto.Id);
+
+                    if (station != null)
+                    {
+                        popularLivestreams.Add(station);
+                    }
+                }
+
+                pageToFetch++;
             }
 
-            if (filter.Newest)
-            {
-                liveStreams = liveStreams.OrderByDescending(x => x.DateAdded);
-            }
+            return popularLivestreams;
+        }
 
-            return liveStreams;
+        public IEnumerable<Models.LiveStream> GetLiveStreams(int count, string genreName, string searchQuery)
+        {
+            var liveStreams = GetAudios(genreName, searchQuery).AsQueryable().BuildLiveStream();
+
+            return liveStreams.Take(count);
         }
     }
 }

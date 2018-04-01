@@ -13,10 +13,7 @@ declare export opaque type genresContainer_genres$ref: FragmentReference;
 export type genresContainer_genres = $ReadOnlyArray<{|
   +id: ?string,
   +name: string,
-  +coverImages: ?$ReadOnlyArray<?{|
-    +dimention: string,
-    +imageUrl: string,
-  |}>,
+  +coverImageUrl: ?string,
   +$refType: genresContainer_genres$ref,
 |}>;
 */
@@ -46,31 +43,13 @@ const node/*: ConcreteFragment*/ = {
       "storageKey": null
     },
     {
-      "kind": "LinkedField",
+      "kind": "ScalarField",
       "alias": null,
-      "name": "coverImages",
-      "storageKey": null,
+      "name": "coverImageUrl",
       "args": null,
-      "concreteType": "Image",
-      "plural": true,
-      "selections": [
-        {
-          "kind": "ScalarField",
-          "alias": null,
-          "name": "dimention",
-          "args": null,
-          "storageKey": null
-        },
-        {
-          "kind": "ScalarField",
-          "alias": null,
-          "name": "imageUrl",
-          "args": null,
-          "storageKey": null
-        }
-      ]
+      "storageKey": null
     }
   ]
 };
-(node/*: any*/).hash = '6e718021ac36e0f770ddd2b3391b5341';
+(node/*: any*/).hash = '21052cb41ea24e514092f92c7658b7e0';
 module.exports = node;
