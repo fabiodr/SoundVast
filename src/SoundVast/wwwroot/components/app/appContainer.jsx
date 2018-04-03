@@ -12,7 +12,13 @@ import './app.less';
 import App from './app';
 import commentSubscription from '../comments/commentSubscription';
 
-const enhance = compose();
+const enhance = compose(
+  lifecycle({
+    componentDidMount() {
+      commentSubscription();
+    },
+  }),
+);
 
 const AppContainer = enhance(App);
 

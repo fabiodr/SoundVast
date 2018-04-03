@@ -19,57 +19,57 @@ using SoundVast.Validation;
 
 namespace SoundVast.Components.GraphQl
 {
-    [Route("graphql")]
-    public class GraphQlController : Controller
-    {
-        private readonly AppSchema _schema;
-        private readonly IValidationProvider _validationProvider;
-        private readonly UserManager<ApplicationUser> _userManager;
+    //[Route("graphql")]
+    //public class GraphQlController : Controller
+    //{
+    //    private readonly AppSchema _schema;
+    //    private readonly IValidationProvider _validationProvider;
+    //    private readonly UserManager<ApplicationUser> _userManager;
 
-        public GraphQlController(AppSchema schema, IValidationProvider validationProvider,
-            UserManager<ApplicationUser> userManager)
-        {
-            _schema = schema;
-            _validationProvider = validationProvider;
-            _userManager = userManager;
-        }
+    //    public GraphQlController(AppSchema schema, IValidationProvider validationProvider,
+    //        UserManager<ApplicationUser> userManager)
+    //    {
+    //        _schema = schema;
+    //        _validationProvider = validationProvider;
+    //        _userManager = userManager;
+    //    }
 
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody]GraphQlQuery graphQlQuery)
-        {
-            var inputs = graphQlQuery.Variables.ToInputs();
-            var context = new Context
-            {
-                CurrentUser = await _userManager.GetUserAsync(HttpContext.User),
-                HttpContext = HttpContext
-            };
-            var validationRules = new List<IValidationRule>
-            {
-                new RequiresAuthValidationRule(),
-            }.Concat(DocumentValidator.CoreRules());
-            var executionResult = await new DocumentExecuter().ExecuteAsync(options =>
-            {
-                options.Schema = _schema;
-                options.Query = graphQlQuery.Query;
-                options.Inputs = inputs;
-                options.UserContext = context;
-                options.ValidationRules = validationRules;
-            });
+    //    [HttpPost]
+    //    public async Task<IActionResult> Post([FromBody]GraphQlQuery graphQlQuery)
+    //    {
+    //        var inputs = graphQlQuery.Variables.ToInputs();
+    //        var context = new Context
+    //        {
+    //            CurrentUser = await _userManager.GetUserAsync(HttpContext.User),
+    //            HttpContext = HttpContext
+    //        };
+    //        var validationRules = new List<IValidationRule>
+    //        {
+    //            new RequiresAuthValidationRule(),
+    //        }.Concat(DocumentValidator.CoreRules());
+    //        var executionResult = await new DocumentExecuter().ExecuteAsync(options =>
+    //        {
+    //            options.Schema = _schema;
+    //            options.Query = graphQlQuery.Query;
+    //            options.Inputs = inputs;
+    //            options.UserContext = context;
+    //            options.ValidationRules = validationRules;
+    //        });
 
-            if (_validationProvider.HasErrors)
-            {
-                return BadRequest(new
-                {
-                    errors = _validationProvider.ValidationErrors
-                });
-            }
+    //        if (_validationProvider.HasErrors)
+    //        {
+    //            return BadRequest(new
+    //            {
+    //                errors = _validationProvider.ValidationErrors
+    //            });
+    //        }
 
-            if (executionResult?.Errors?.Count > 0)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, executionResult.Errors);
-            }
+    //        if (executionResult?.Errors?.Count > 0)
+    //        {
+    //            return StatusCode((int)HttpStatusCode.InternalServerError, executionResult.Errors);
+    //        }
 
-            return Ok(executionResult);
-        }
-    }
+    //        return Ok(executionResult);
+    //    }
+    //}
 }

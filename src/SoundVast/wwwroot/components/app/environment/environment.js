@@ -17,7 +17,7 @@ const fetchQuery = (operation, variables) =>
     },
     body: JSON.stringify({
       query: operation.text,
-      variables: JSON.stringify(variables),
+      variables,
     }),
   }).then(response => response.json())
     .then((json) => {

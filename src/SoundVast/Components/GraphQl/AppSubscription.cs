@@ -1,6 +1,10 @@
-﻿using GraphQL.Resolvers;
+﻿using GraphQL;
+using GraphQL.Resolvers;
+using GraphQL.Server.Transports.Subscriptions.Abstractions;
 using GraphQL.Subscription;
 using GraphQL.Types;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 using SoundVast.Components.Comment;
 using System;
 using System.Collections.Generic;
@@ -23,9 +27,10 @@ namespace SoundVast.Components.GraphQl
                     return (Comment.Models.Comment)c.Source;
                 }),
                 Subscriber = new EventStreamResolver<Comment.Models.Comment>(c => {
-                    var comments = commentService.GetComments().ToList();
+                    var comments = commentService.GetComments();
+                    var observableComments = comments.ToObservable();
 
-                    return comments.ToObservable();
+                    return observableComments;
                 }),
             });
         }

@@ -58,6 +58,7 @@ using GraphQL.Server.Transports.WebSockets;
 using GraphQL.Server.Transports.Subscriptions.Abstractions;
 using SoundVast.Utilities;
 using SoundVast.Components.Dirble;
+using System.Threading.Tasks;
 
 namespace SoundVast
 {
@@ -154,14 +155,10 @@ namespace SoundVast
             loggerFactory.AddConsole(_configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            if (!env.IsProduction())
+            if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
-            }
-
-            if (env.IsDevelopment())
-            {
                 app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
                 {
                     ConfigFile = "./webpack.config.js"
@@ -177,6 +174,18 @@ namespace SoundVast
 
             options.AddRedirectToHttps();
 
+            async Task<object> BuildUserContext(HttpContext c)
+            {
+                var userManager = app.ApplicationServices.GetRequiredService<UserManager<ApplicationUser>>();
+                var currentUser = await userManager.GetUserAsync(c.User);
+
+                return new Context
+                {
+                    CurrentUser = currentUser,
+                    HttpContext = c
+                };
+            }
+
             app.UseRewriter(options);
             app.UseHangfireServer();
             app.UseHangfireDashboard();
@@ -185,6 +194,7 @@ namespace SoundVast
             app.UseSession();
             app.UseWebSockets();
             app.UseGraphQLWebSocket<AppSchema>(new GraphQLWebSocketsOptions());
+            app.UseGraphQLHttp<AppSchema>(new GraphQLHttpOptions() { BuildUserContext = BuildUserContext });
 
             RecurringJob.AddOrUpdate<IGenreService>(x => x.UpdateCoverImages(), Cron.Daily);
 
