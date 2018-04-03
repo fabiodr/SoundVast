@@ -35,6 +35,7 @@ namespace SoundVast
 
             configurationBuilder
                 .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", false, true)
                 .AddEnvironmentVariables();
 
             var config = configurationBuilder.Build();
