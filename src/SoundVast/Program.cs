@@ -33,21 +33,15 @@ namespace SoundVast
         {
             if (webHostBuilderContext.HostingEnvironment.IsDevelopment()) return;
 
-            configurationBuilder.SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("azurekeyvault.json", false, true)
+            configurationBuilder
+                .SetBasePath(Directory.GetCurrentDirectory())
                 .AddEnvironmentVariables();
 
             var config = configurationBuilder.Build();
-
             var azureKeyVaultName = "azureKeyVault";
 
-            if (webHostBuilderContext.HostingEnvironment.IsStaging())
-            {
-                azureKeyVaultName = "stagingAzureKeyVault";
-            }
-
             configurationBuilder.AddAzureKeyVault(
-                $"https://{config[$"{azureKeyVaultName}:vault"]}.vault.azure.net/",
+                config[$"{azureKeyVaultName}:vaultUrl"],
                 config[$"{azureKeyVaultName}:clientId"],
                 config[$"{azureKeyVaultName}:clientSecret"]
             );

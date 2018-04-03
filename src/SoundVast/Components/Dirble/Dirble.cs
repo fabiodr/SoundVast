@@ -24,7 +24,7 @@ namespace SoundVast.Components.Dirble
         public Dirble(ILoggerFactory loggerFactory, IConfiguration configuration, IMemoryCache cache)
         {
             _logger = loggerFactory.CreateLogger<Dirble>();
-            _key = configuration["DIRBLE_API_KEY"];
+            _key = configuration["DirbleAPIKey"];
             _cache = cache;
         }
 

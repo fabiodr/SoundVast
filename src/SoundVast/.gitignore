@@ -1,6 +1,8 @@
 # Config
 *.env
 **/azurekeyvault.json
+**/appsettings.Production.json
+**/appsettings.Staging.json
 
 # Logs
 logs

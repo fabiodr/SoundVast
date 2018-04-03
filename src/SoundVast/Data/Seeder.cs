@@ -92,9 +92,9 @@ namespace SoundVast.Data
 
                 foreach (var stationDto in stationDtos)
                 {
-                    var liveStreamExists = _liveStreamService.GetLiveStream(stationDto.Id) != null;
+                    var existingLiveStream = _liveStreamService.GetLiveStream(stationDto.Id);
 
-                    if (!liveStreamExists)
+                    if (existingLiveStream != null)
                     {
                         string coverImageName = null;
 
